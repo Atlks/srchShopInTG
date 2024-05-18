@@ -67,8 +67,8 @@ namespace 缅甸商家
 
 
 
-            //  testCls.test();
-           // timerCls.xiawucha();
+             testCls.test();
+        
             //分类枚举
             botClient.StartReceiving(updateHandler: HandleUpdateAsync, pollingErrorHandler: HandlePollingErrorAsync, receiverOptions: new ReceiverOptions()
             {
@@ -506,151 +506,20 @@ namespace 缅甸商家
                         return;
                     }
 
-                    //回调告知怎么添加和修改商家信息
-                    if (update.CallbackQuery!.Data?.Contains("AddMerchant")==true || update.CallbackQuery!.Data?.Contains("Update")==true)
-                    {
-                        if (!isAdminer)
-                        {
-                            try
-                            {
-                                await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "本功能仅供左道管理员使用", true);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine("告诉别人怎么评价时出错:" + e.Message);
-                            }
-                            return;
-                        }
+                   
 
-                        text = string.Empty;
-                        text = @"⚠️@" + update.CallbackQuery.From.Username + " (" + update.CallbackQuery.From.FirstName + update.CallbackQuery.From.LastName + ")";
-                        text += "严格按照指定格式和(英文半角符号)符号编辑,否则编辑失败!\n\n";
-
-                        //按钮回调(添加商家)
-                        if (update.CallbackQuery.Data.Contains("AddMerchant"))
-                        {
-                            text += @"<b>✏️ 添加商家文本格式</b> 
-<blockquote>城市园区名字:这里输入商家名称
-商家名称:这里输入商家名称
-商家分类:这是分类编号,详见底部分类编号
-商家关键词:这里输入商家关键词,每个关键词用空格隔开
-开始营业时间:00:00:00
-打烊收摊时间:23:00:00
-Telegram:可多个账号,用空格隔开
-Telegram群组:可多个账号,用空格隔开
-Whatsapp:可多个账号,用空格隔开
-Line:可多个账号,用空格隔开
-Signal:可多个账号,用空格隔开
-微信:可多个账号,用空格隔开
-电话:可多个账号,用空格隔开
-商家菜单:这里输入菜单
-</blockquote>
-<b>商家分类编码:</b>
-餐馆美食:<code>0</code>
-奶茶饮品:<code>1</code>
-水果店:<code>2</code>
-电子手机电脑店:<code>3</code>
-理发/美甲/美容/医美/纹身:<code>4</code>
-兑换典当:<code>5</code>
-按摩/会所/KTV/酒吧:<code>6</code>
-超市/商店/菜市场:<code>7</code>
-车辆相关:<code>8</code>
-仓库/快递/物流/跑腿:<code>9</code>
-医院/诊所/牙科:<code>10</code>
-酒店宾馆住宿:<code>11</code>
-黄金首饰:<code>12</code>
-服装/鞋包:<code>13</code>
-宠物店:<code>14</code>
-物业:<code>15</code>";
-                        }
-                        //按钮回调(修改商家信息)
-                        else if (update.CallbackQuery.Data.Contains("Update"))
-                        {
-                            text += @"<b>✏️ 编辑商家格式(@商家联系方式信息,回复以下格式即可修改,一次只能修改一个字段)</b> 
-
-修改商家名称
-<blockquote>商家名称=这里输入商家名称</blockquote>
-
-修改商家分类
-<blockquote>商家分类=这是分类编号,详见底部分类编号</blockquote>
-
-修改商家关键词
-<blockquote>商家关键词=这里输入商家关键词,每个关键词用空格隔开</blockquote>
-
-修改开始营业时间
-<blockquote>开始营业时间=00:00:00</blockquote>
-
-修改打烊收摊时间
-<blockquote>打烊收摊时间=23:00:00</blockquote>
-
-修改Telegram
-<blockquote>Telegram=可多个账号,用空格隔开</blockquote>
-
-修改Telegram群组
-<blockquote>Telegram群组=可多个账号,用空格隔开</blockquote>
-
-修改Whatsapp
-<blockquote>Whatsapp=可多个账号,用空格隔开</blockquote>
-
-修改Line
-<blockquote>Line=可多个账号,用空格隔开</blockquote>
-
-修改Signal
-<blockquote>Signal=可多个账号,用空格隔开</blockquote>
-
-修改微信
-<blockquote>微信=可多个账号,用空格隔开</blockquote>
-
-修改电话
-<blockquote>电话=可多个账号,用空格隔开</blockquote>
-
-修改商家菜单
-<blockquote>商家菜单=这里输入菜单</blockquote>
-
-<b>商家分类编码:</b>
-餐馆美食:<code>0</code>
-奶茶饮品:<code>1</code>
-水果店:<code>2</code>
-电子手机电脑店:<code>3</code>
-理发/美甲/美容/医美/纹身:<code>4</code>
-兑换典当:<code>5</code>
-按摩/会所/KTV/酒吧:<code>6</code>
-超市/商店/菜市场:<code>7</code>
-车辆相关:<code>8</code>
-仓库/快递/物流/跑腿:<code>9</code>
-医院/诊所/牙科:<code>10</code>
-酒店宾馆住宿:<code>11</code>
-黄金首饰:<code>12</code>
-服装/鞋包:<code>13</code>
-宠物店:<code>14</code>
-物业:<code>15</code>";
-                        }
-
-                        Message? msg = null;
-                        try
-                        {
-                            msg = await botClient.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, text, update.CallbackQuery.Message.MessageThreadId, parseMode: ParseMode.Html, null, false, null, false);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("返回按钮添加商家回调出错:" + ex.Message);
-                        }
-
-                        return;
-                    }
-
-                    if (update?.CallbackQuery.Message?.ReplyToMessage?.From?.Id != update?.CallbackQuery.From.Id)
-                    {
-                        try
-                        {
-                            await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "您无权点击别人的搜索结果!", true);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("告诉对方您无权点击时出错:" + e.Message);
-                        }
-                        return;
-                    }
+                    //if (update?.CallbackQuery.Message?.ReplyToMessage?.From?.Id != update?.CallbackQuery.From.Id)
+                    //{
+                    //    try
+                    //    {
+                    //        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "您无权点击别人的搜索结果!", true);
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        Console.WriteLine("告诉对方您无权点击时出错:" + e.Message);
+                    //    }
+                    //    return;
+                    //}
                 }
 
 
@@ -713,6 +582,139 @@ Signal:可多个账号,用空格隔开
             }, cancellationToken);
         }
 
+
+        //回调告知怎么添加和修改商家信息
+        //                    if (update.CallbackQuery!.Data?.Contains("AddMerchant")==true || update.CallbackQuery!.Data?.Contains("Update")==true)
+        //                    {
+        //                        if (!isAdminer)
+        //                        {
+        //                            try
+        //                            {
+        //                                await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "本功能仅供左道管理员使用", true);
+        //                            }
+        //                            catch (Exception e)
+        //                            {
+        //                                Console.WriteLine("告诉别人怎么评价时出错:" + e.Message);
+        //                            }
+        //                            return;
+        //                        }
+
+        //                        text = string.Empty;
+        //                        text = @"⚠️@" + update.CallbackQuery.From.Username + " (" + update.CallbackQuery.From.FirstName + update.CallbackQuery.From.LastName + ")";
+        //                        text += "严格按照指定格式和(英文半角符号)符号编辑,否则编辑失败!\n\n";
+
+        //                        //按钮回调(添加商家)
+        //                        if (update.CallbackQuery.Data.Contains("AddMerchant"))
+        //                        {
+        //                            text += @"<b>✏️ 添加商家文本格式</b> 
+        //<blockquote>城市园区名字:这里输入商家名称
+        //商家名称:这里输入商家名称
+        //商家分类:这是分类编号,详见底部分类编号
+        //商家关键词:这里输入商家关键词,每个关键词用空格隔开
+        //开始营业时间:00:00:00
+        //打烊收摊时间:23:00:00
+        //Telegram:可多个账号,用空格隔开
+        //Telegram群组:可多个账号,用空格隔开
+        //Whatsapp:可多个账号,用空格隔开
+        //Line:可多个账号,用空格隔开
+        //Signal:可多个账号,用空格隔开
+        //微信:可多个账号,用空格隔开
+        //电话:可多个账号,用空格隔开
+        //商家菜单:这里输入菜单
+        //</blockquote>
+        //<b>商家分类编码:</b>
+        //餐馆美食:<code>0</code>
+        //奶茶饮品:<code>1</code>
+        //水果店:<code>2</code>
+        //电子手机电脑店:<code>3</code>
+        //理发/美甲/美容/医美/纹身:<code>4</code>
+        //兑换典当:<code>5</code>
+        //按摩/会所/KTV/酒吧:<code>6</code>
+        //超市/商店/菜市场:<code>7</code>
+        //车辆相关:<code>8</code>
+        //仓库/快递/物流/跑腿:<code>9</code>
+        //医院/诊所/牙科:<code>10</code>
+        //酒店宾馆住宿:<code>11</code>
+        //黄金首饰:<code>12</code>
+        //服装/鞋包:<code>13</code>
+        //宠物店:<code>14</code>
+        //物业:<code>15</code>";
+        //                        }
+        //                        //按钮回调(修改商家信息)
+        //                        else if (update.CallbackQuery.Data.Contains("Update"))
+        //                        {
+        //                            text += @"<b>✏️ 编辑商家格式(@商家联系方式信息,回复以下格式即可修改,一次只能修改一个字段)</b> 
+
+        //修改商家名称
+        //<blockquote>商家名称=这里输入商家名称</blockquote>
+
+        //修改商家分类
+        //<blockquote>商家分类=这是分类编号,详见底部分类编号</blockquote>
+
+        //修改商家关键词
+        //<blockquote>商家关键词=这里输入商家关键词,每个关键词用空格隔开</blockquote>
+
+        //修改开始营业时间
+        //<blockquote>开始营业时间=00:00:00</blockquote>
+
+        //修改打烊收摊时间
+        //<blockquote>打烊收摊时间=23:00:00</blockquote>
+
+        //修改Telegram
+        //<blockquote>Telegram=可多个账号,用空格隔开</blockquote>
+
+        //修改Telegram群组
+        //<blockquote>Telegram群组=可多个账号,用空格隔开</blockquote>
+
+        //修改Whatsapp
+        //<blockquote>Whatsapp=可多个账号,用空格隔开</blockquote>
+
+        //修改Line
+        //<blockquote>Line=可多个账号,用空格隔开</blockquote>
+
+        //修改Signal
+        //<blockquote>Signal=可多个账号,用空格隔开</blockquote>
+
+        //修改微信
+        //<blockquote>微信=可多个账号,用空格隔开</blockquote>
+
+        //修改电话
+        //<blockquote>电话=可多个账号,用空格隔开</blockquote>
+
+        //修改商家菜单
+        //<blockquote>商家菜单=这里输入菜单</blockquote>
+
+        //<b>商家分类编码:</b>
+        //餐馆美食:<code>0</code>
+        //奶茶饮品:<code>1</code>
+        //水果店:<code>2</code>
+        //电子手机电脑店:<code>3</code>
+        //理发/美甲/美容/医美/纹身:<code>4</code>
+        //兑换典当:<code>5</code>
+        //按摩/会所/KTV/酒吧:<code>6</code>
+        //超市/商店/菜市场:<code>7</code>
+        //车辆相关:<code>8</code>
+        //仓库/快递/物流/跑腿:<code>9</code>
+        //医院/诊所/牙科:<code>10</code>
+        //酒店宾馆住宿:<code>11</code>
+        //黄金首饰:<code>12</code>
+        //服装/鞋包:<code>13</code>
+        //宠物店:<code>14</code>
+        //物业:<code>15</code>";
+        //                        }
+
+        //                        Message? msg = null;
+        //                        try
+        //                        {
+        //                            msg = await botClient.SendTextMessageAsync(update.CallbackQuery.Message.Chat.Id, text, update.CallbackQuery.Message.MessageThreadId, parseMode: ParseMode.Html, null, false, null, false);
+        //                        }
+        //                        catch (Exception ex)
+        //                        {
+        //                            Console.WriteLine("返回按钮添加商家回调出错:" + ex.Message);
+        //                        }
+
+        //                        return;
+        //                    }
 
         //qry shaojia
         //获取列表,或者是返回至列表
@@ -827,9 +829,9 @@ Signal:可多个账号,用空格隔开
 
             if (pageBtn.Count != 0)
                 results.Add([.. pageBtn]);
-
+            //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
             results.Add([
-                    InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
+                   
                 InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", "https://t.me/share/url?url=https://t.me/ZuoDaoMianDian&text=给大家推荐一个可以搜索商家联系方式的群!")
                 ]);
 
@@ -1252,12 +1254,14 @@ Signal:可多个账号,用空格隔开
                 }
             }
 
+
+            //[
+            //   InlineKeyboardButton.WithCallbackData("➕ 添加商家", "AddMerchant"),
+            //   InlineKeyboardButton.WithCallbackData("⚙ 修改信息", "Update"),
+            //   ],
             // 发送带有按钮的消息
             List<List<InlineKeyboardButton>> menu = [
-                [
-                InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant"),
-                InlineKeyboardButton.WithCallbackData( "⚙ 修改信息",  "Update"),
-                ],
+               
                  [
                      InlineKeyboardButton.WithCallbackData( "打分",  "null"),
                      InlineKeyboardButton.WithCallbackData( "1",  $"Merchant?id={guid}&score=1"),

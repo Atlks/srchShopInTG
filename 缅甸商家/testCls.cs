@@ -24,16 +24,19 @@ namespace 缅甸商家
             //搜索关键词  Merchant.json to citys
 
            // wucan();
-           timerCls.  xiawucha();
+          // timerCls.  xiawucha();
+          if(System.IO.File.Exists("c:/teststart.txt"))
+             timerCls.xiawucha();
+          //  timerCls.renqi();
 
         }
 
- 
 
-      
 
-     
-    
+
+
+
+
     }
 
 }

@@ -49,6 +49,7 @@ namespace 缅甸商家
 
     public class Merchant
     {
+        public int ord { get; set; } = 0;
         public string Guid { get; set; } = null!;
         /// <summary>
         /// 分类枚举
