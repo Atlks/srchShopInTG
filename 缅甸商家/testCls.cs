@@ -1,6 +1,7 @@
 ﻿
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
@@ -26,17 +27,73 @@ namespace 缅甸商家
            // wucan();
           // timerCls.  xiawucha();
           if(System.IO.File.Exists("c:/teststart.txt"))
-             timerCls.xiawucha();
+            {
+                   timerCls.xiawucha();
+              //   timerCls.actSj();
+                //   addData();
+
+             //   findd();
+            }
+           
           //  timerCls.renqi();
 
         }
 
+        private static void findd()
+        {
+            long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+            var users_txt = System.IO.File.ReadAllText("db.json");
+
+            showSpanTime(timestamp, "readFile");
+
+            JsonSerializerSettings settings = new JsonSerializerSettings();
+            settings.DefaultValueHandling = DefaultValueHandling.Ignore;
+            JArray rows = JsonConvert.DeserializeObject<JArray>(users_txt, settings);
+            showSpanTime(timestamp, "delzobj");
+            var results = (from   jo in rows
+                           where jo.Value<int>("key") == 10
+                           select jo).ToList();
+
+           
+            Console.WriteLine(JsonConvert.SerializeObject(results));
+
+
+            string showtitle = "spatime(ms):";
+            showSpanTime(timestamp, showtitle);
+
+        }
+
+        private static void showSpanTime(long timestamp, string showtitle)
+        {
+            long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long spantime = (timestamp_end - timestamp);
+
+            Console.WriteLine(showtitle + spantime);
+        }
+
+        private static void addData()
+        {
+ 
+            long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
 
 
+            List<object> data = new List<object>();
+            for (int i = 0;i<100*10000;i++)
+            {
+                Hashtable ht= new Hashtable();
+                ht.Add("key", i);
+                ht.Add("value"+i, i);
+                data.Add(ht);
+            }
+            System.IO.File.WriteAllText("db.json", JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
 
+            long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long spantime = (   timestamp_end- timestamp);
+            Console.WriteLine("spatime(ms):" + spantime);
 
-
+        }
     }
 
 }

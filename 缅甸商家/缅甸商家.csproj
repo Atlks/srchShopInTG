@@ -15,4 +15,12 @@
     <PackageReference Include="Telegram.Bot" Version="20.0.0-alpha.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\0prj\缅甸商家\缅甸商家\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\0prj\缅甸商家\缅甸商家\.editorconfig" />
+  </ItemGroup>
+
 </Project>

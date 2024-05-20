@@ -21,10 +21,10 @@ namespace 缅甸商家
 {
     internal class Program
     {
-       // static readonly TelegramBotClient botClient = new("6632267612:AAFehZabvm7lS7IGRFkmtweBM_AS9uJuBSs");
-        public static readonly TelegramBotClient botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0");
+        public static   TelegramBotClient botClient = new("6632267612:AAFehZabvm7lS7IGRFkmtweBM_AS9uJuBSs");
+         
         //左道群
-        public static readonly long groupId = -1002040239665; // - 1001613022200;
+        public static   long groupId = -1001613022200; 
         //机器人创建者Id
         static readonly long botCreatorId = 6091395167;
         //加入的聊天Ids
@@ -40,7 +40,16 @@ namespace 缅甸商家
         public static Dictionary<long, User> _users = [];
         static async Task Main(string[] args)
         {
-         ////ini()   
+
+            #region 构造函数
+
+            if (System.IO.File.Exists("c:/teststart.txt"))
+            {
+                       botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0");
+                      groupId = -1002040239665; // - 1001613022200;
+
+            }
+                ////ini()   
             foreach (var category in Enum.GetValues(typeof(Category)))
             {
                 Category enumValue = (Category)category;
@@ -48,7 +57,7 @@ namespace 缅甸商家
                 _categoryKeyValue.Add((int)enumValue, description);
             }
 
-          
+
 
             //读取加入的群Ids           
             chatIds = [.. System.IO.File.ReadAllLines("chatIds.txt")];
@@ -63,12 +72,13 @@ namespace 缅甸商家
             var merchants = await System.IO.File.ReadAllTextAsync("Merchant.json");
             if (!string.IsNullOrEmpty(merchants))
                 _citys = JsonConvert.DeserializeObject<HashSet<City>>(merchants)!;
-            ////ini  finish
+            ////ini（）  finish
+             #endregion
 
 
 
-             testCls.test();
-        
+            testCls.test();
+
             //分类枚举
             botClient.StartReceiving(updateHandler: HandleUpdateAsync, pollingErrorHandler: HandlePollingErrorAsync, receiverOptions: new ReceiverOptions()
             {
@@ -81,31 +91,9 @@ namespace 缅甸商家
                 ThrowPendingUpdates = true,
             });
 
+            timerCls. setTimerTask();
 
-            //早餐店6点推送   午餐店11点推送推送   下午茶(水果/奶茶)店16点推送   晚餐店18点推送    娱乐消遣/酒店推送21点推送   活动商家(每小时推送)   物业(跟随每个商家推送)    每日人气榜单(每日夜间0:00推送)
-            //_ = Task.Run(async () =>
-            //{
-            //    while (true)
-            //    {
-            //        var now = DateTime.Now;
-
-            //        await Task.Delay(1000);
-            //    }
-            //});
-
-
-            //设置定时间隔(毫秒为单位)
-                      int interval = 3000;
-            System.Timers.Timer timer = new System.Timers.Timer(interval);
-                      //设置执行一次（false）还是一直执行(true)
-             timer.AutoReset = true;
-                                  //设置是否执行System.Timers.Timer.Elapsed事件
-             timer.Enabled = true;
-                                 //绑定Elapsed事件
-             timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerUp);
-            timer.Start();
-
-            #warning 循环账号是否过期了
+#warning 循环账号是否过期了
 
             Console.ReadKey();
         }
@@ -122,6 +110,8 @@ namespace 缅甸商家
 
                 var isAdminer = update.Message?.From?.Username == "GroupAnonymousBot" || update.CallbackQuery?.From?.Id == 5743211645;
                 var text = update?.Message?.Text;
+
+                #region @回复了商家详情信息
                 //@回复了商家详情信息
                 if (!string.IsNullOrEmpty(update?.Message?.Text)
                 && update?.Message?.ReplyToMessage?.From?.Username == "ZuoDao_MianDianShangJiaBot"
@@ -317,8 +307,10 @@ namespace 缅甸商家
                     }
                     return;
                 }
+                #endregion
 
                 //添加商家信息
+                #region 添加商家信息
                 if (isAdminer
                 && update?.Message != null
                 && update?.Message?.Text?.Contains("打烊收摊时间") == true
@@ -475,10 +467,13 @@ namespace 缅甸商家
                     return;
 
                 }
+                #endregion
 
+
+                #region 提示他人可搜索联系方式
                 //提示他人可搜索联系方式
                 ///    _contactType = ["商家联系方式", "商家飞机"];
-                
+
                 if (update?.Message != null && !string.IsNullOrEmpty(text) && _contactType.Any(u => text.Contains(u)))
                 {
                     try
@@ -490,6 +485,8 @@ namespace 缅甸商家
                         Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
                     }
                 }
+                #endregion
+
 
                 if (update?.Type is UpdateType.CallbackQuery)
                 {
@@ -523,9 +520,10 @@ namespace 缅甸商家
                 }
 
 
+                #region sezrch
                 //search   
-             //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
-             //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
+                //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
+                //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
                 {
                     //查询或者翻页,或者返回至列表
                     if (update.Type is UpdateType.Message
@@ -542,6 +540,10 @@ namespace 缅甸商家
                     }
                 }
 
+                #endregion
+
+
+                #region add chatids
                 long chatId = -1;
                 switch (update!.Type)
                 {
@@ -579,6 +581,8 @@ namespace 缅甸商家
 
                 if (chatId != -1)
                     AddChatIds(chatId);
+
+                #endregion
             }, cancellationToken);
         }
 
@@ -1543,7 +1547,7 @@ namespace 缅甸商家
 
         }
 
-        //获取上级目录名称
+        //获取上级目录名称 dep
         static string GetParentDirectory(string filePath)
         {
             // 使用Path.GetDirectoryName方法获取文件路径的上一级目录

@@ -8,6 +8,35 @@ namespace 缅甸商家
 {
     internal class timerCls
     {
+
+
+        public static void setTimerTask()
+        {
+            //活动商家(每小时推送)   物业(跟随每个商家推送) 
+            //早餐店6点推送   午餐店11点推送推送   下午茶(水果/奶茶)店16点推送   晚餐店18点推送    娱乐消遣/酒店推送21点推送   活动商家(每小时推送)   物业(跟随每个商家推送)    每日人气榜单(每日夜间0:00推送)
+            //_ = Task.Run(async () =>
+            //{
+            //    while (true)
+            //    {
+            //        var now = DateTime.Now;
+
+            //        await Task.Delay(1000);
+            //    }
+            //});
+
+
+            //设置定时间隔(毫秒为单位)
+            int interval = 5000;
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            //设置执行一次（false）还是一直执行(true)
+            timer.AutoReset = true;
+            //设置是否执行System.Timers.Timer.Elapsed事件
+            timer.Enabled = true;
+            //绑定Elapsed事件
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerUp);
+            timer.Start();
+        }
+
         internal static void TimerUp(object? sender, ElapsedEventArgs e)
         {
 
@@ -49,6 +78,17 @@ namespace 缅甸商家
             }
 
 
+            //下午差
+            //18,wecan,wancan()
+              xwcF = $"tmrlg/wecanPushLog{Convert.ToString(now.Month) + now.Day}.json";
+            if (now.Hour == 18 && (!System.IO.File.Exists(xwcF)))
+            {
+                System.IO.File.WriteAllText(xwcF, "pushlog");
+                // do something
+                wucan();
+            }
+
+
             //娱乐
             var ylF = $"tmrlg/yulePushLog{Convert.ToString(now.Month) + now.Day}.json";
             if (now.Hour == 21 && (!System.IO.File.Exists(xwcF) ) )
@@ -68,6 +108,44 @@ namespace 缅甸商家
                 // do something
                 renqi();
             }
+
+            //#huodong 商家
+
+            rqF = $"tmrlg/actShjPushLog{Convert.ToString(now.Month) + now.Day+ Convert.ToString(now.Hour)}.json";
+            if (  (!System.IO.File.Exists(rqF)))
+            {
+                System.IO.File.WriteAllText(rqF, "pushlog");
+                // do something
+                actSj();
+            }
+        }
+
+        public static void actSj()
+        {
+            List<InlineKeyboardButton[]> results = [];
+            results = (from c in Program._citys
+                       from ca in c.Address
+                       from am in ca.Merchant
+                       orderby am.Views descending
+                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+            //count = results.Count;
+
+
+            results = rdmList(results);
+
+            results = results.Skip(0 * 10).Take(5).ToList();
+            Program.botClient.SendTextMessageAsync(
+                     Program.groupId,
+                     "活动商家",
+                     parseMode: ParseMode.Html,
+                     replyMarkup: new InlineKeyboardMarkup(results),
+                     protectContent: false,
+                     disableWebPagePreview: true);
+        }
+
+        private static void wancan()
+        {
+            throw new NotImplementedException();
         }
 
         public static void renqi()
@@ -100,7 +178,7 @@ namespace 缅甸商家
 
             Program.botClient.SendTextMessageAsync(
                        Program.groupId,
-                       "娱乐推荐",
+                       "激动的心，颤抖的手,又到了娱乐时间啦",
                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false,
@@ -114,7 +192,7 @@ namespace 缅甸商家
 
             Program.botClient.SendTextMessageAsync(
                        Program.groupId,
-                       "早餐推荐",
+                       "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦",
                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false,
@@ -171,17 +249,12 @@ namespace 缅甸商家
                            orderby am.Views descending
                            select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
                 //count = results.Count;
-                foreach(InlineKeyboardButton[] btn in results)
+                foreach (InlineKeyboardButton[] btn in results)
                 {
 
                 }
 
-                Random rng = new Random();
-
-                results22 = results.OrderBy(x => rng.Next()).ToList();
-
-
-
+                results22 = rdmList(results);
 
                 results22 = results22.Skip(0 * 10).Take(5).ToList();
             }
@@ -189,8 +262,17 @@ namespace 缅甸商家
             return results22;
         }
 
+        private static List<InlineKeyboardButton[]> rdmList(List<InlineKeyboardButton[]> results)
+        {
+            List<InlineKeyboardButton[]> results22;
+            Random rng = new Random();
 
-        public static List<InlineKeyboardButton[]> qryFrmShangjiaOrdbyViewDesc()
+            results22 = results.OrderBy(x => rng.Next()).ToList();
+            return results22;
+        }
+
+        //dep
+        public static List<InlineKeyboardButton[]> qryFrmShangjiaOrdbyViewDesc__DEP()
         {
 
             List<InlineKeyboardButton[]> results = [];
