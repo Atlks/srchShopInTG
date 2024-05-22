@@ -44,3 +44,7 @@ D:\0prj\缅甸商家\缅甸商家\obj\Debug\net8.0\refint\缅甸商家.dll
 D:\0prj\缅甸商家\缅甸商家\obj\Debug\net8.0\缅甸商家.pdb
 D:\0prj\缅甸商家\缅甸商家\obj\Debug\net8.0\缅甸商家.genruntimeconfig.cache
 D:\0prj\缅甸商家\缅甸商家\obj\Debug\net8.0\ref\缅甸商家.dll
+D:\0prj\缅甸商家\缅甸商家\bin\Debug\net8.0\runtimes\linux-x64\native\libsqlite3.so
+D:\0prj\缅甸商家\缅甸商家\bin\Debug\net8.0\runtimes\osx-x64\native\libsqlite3.dylib
+D:\0prj\缅甸商家\缅甸商家\bin\Debug\net8.0\runtimes\win7-x64\native\sqlite3.dll
+D:\0prj\缅甸商家\缅甸商家\bin\Debug\net8.0\runtimes\win7-x86\native\sqlite3.dll

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "dRmUr0wLjeHlfnlNyWwgQO9raHwtaO4j+9d73bdHoPwsef6AQ0ezqJ6yLxdhQogpik8Cv8f/rD7UXGYEg5bNbA==",
+  "dgSpecHash": "rIMea1R773HqyNAYOMBcwnSCZ8a59DPdz1q4Z3iXoxIVIBRTE/0YTK06TOH6KKttCM7C0BYCcN0u/FwrAOj8Ig==",
   "success": true,
   "projectFilePath": "D:\\0prj\\缅甸商家\\缅甸商家\\缅甸商家.csproj",
   "expectedPackageFiles": [
@@ -31,6 +31,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.14.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.04-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.ubuntu.16.10-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\sqlite\\3.13.0\\sqlite.3.13.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.appcontext\\4.3.0\\system.appcontext.4.3.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.buffers\\4.3.0\\system.buffers.4.3.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\system.collections\\4.3.0\\system.collections.4.3.0.nupkg.sha512",

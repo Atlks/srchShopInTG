@@ -1,14 +1,16 @@
-﻿using System.Timers;
+﻿using Microsoft.VisualBasic;
+using System.Timers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using 缅甸商家.lib;
 
 namespace 缅甸商家
 {
     internal class timerCls
     {
-
+       
 
         public static void setTimerTask()
         {
@@ -33,11 +35,11 @@ namespace 缅甸商家
             //设置是否执行System.Timers.Timer.Elapsed事件
             timer.Enabled = true;
             //绑定Elapsed事件
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerUp);
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerEvt);
             timer.Start();
         }
 
-        internal static void TimerUp(object? sender, ElapsedEventArgs e)
+        internal static void TimerEvt(object? sender, ElapsedEventArgs e)
         {
 
             System.IO.Directory.CreateDirectory("tmrlg");
@@ -63,7 +65,7 @@ namespace 缅甸商家
                 Console.WriteLine("push luch time。");
                 System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
                 //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
-                wucan();
+                z_wucan();
 
             }
 
@@ -74,7 +76,7 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(xwcF, "pushlog");
                 // do something
-                xiawucha();
+                z_xiawucha();
             }
 
 
@@ -85,7 +87,7 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(xwcF, "pushlog");
                 // do something
-                wucan();
+                z18_wancan();
             }
 
 
@@ -95,7 +97,7 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(ylF, "pushlog");
                 // do something
-                yule();
+                z21_yule();
             }
 
 
@@ -106,7 +108,7 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(rqF, "pushlog");
                 // do something
-                renqi();
+                z_renqi();
             }
 
             //#huodong 商家
@@ -116,40 +118,64 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(rqF, "pushlog");
                 // do something
-                actSj();
+                z_actSj();
             }
         }
 
-        public static void actSj()
+        public static void z_actSj()
         {
             List<InlineKeyboardButton[]> results = [];
             results = (from c in Program._citys
                        from ca in c.Address
                        from am in ca.Merchant
                        orderby am.Views descending
-                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
             //count = results.Count;
 
 
-            results = rdmList(results);
+            results = arrCls. rdmList< InlineKeyboardButton[]>(results);
 
             results = results.Skip(0 * 10).Take(5).ToList();
-            Program.botClient.SendTextMessageAsync(
-                     Program.groupId,
-                     "活动商家",
-                     parseMode: ParseMode.Html,
-                     replyMarkup: new InlineKeyboardMarkup(results),
-                     protectContent: false,
-                     disableWebPagePreview: true);
+
+
+            
+                       string Path = "今日促销商家.gif";
+            var zaocanTxt = "——————————————";
+
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+
+
+            //Program.botClient.SendTextMessageAsync(
+            //         Program.groupId,
+            //         "活动商家",
+            //         parseMode: ParseMode.Html,
+            //         replyMarkup: new InlineKeyboardMarkup(results),
+            //         protectContent: false,
+            //         disableWebPagePreview: true);
         }
 
-        private static void wancan()
-        {
-            throw new NotImplementedException();
-        }
+        //private static void wancan()
+        //{
+        //    throw new NotImplementedException();
+        //}
 
-        public static void renqi()
+        public static void z_renqi()
         {
+
+            
+
+                   string Path = "今日商家人气榜.gif";
+            var zaocanTxt = "...";
+
+        
+
             var s = "";
             List<InlineKeyboardButton[]> results = [];
  
@@ -158,31 +184,54 @@ namespace 缅甸商家
                        from am in ca.Merchant
                            //   where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
                        orderby am.Views descending
-                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
 
-            Program.botClient.SendTextMessageAsync(
-                       Program.groupId,
-                       "人气榜",
-                       parseMode: ParseMode.Html,
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false,
-                       disableWebPagePreview: true);
+                       protectContent: false);
+
+
+            //Program.botClient.SendTextMessageAsync(
+            //           Program.groupId,
+            //           "人气榜",
+            //           parseMode: ParseMode.Html,
+            //           replyMarkup: new InlineKeyboardMarkup(results),
+            //           protectContent: false,
+            //           disableWebPagePreview: true);
         }
 
-        public static void yule()
+        public static void z21_yule()
         {
-            var s = "娱乐 ktv 水疗";
+            var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
 
-            Program.botClient.SendTextMessageAsync(
-                       Program.groupId,
-                       "激动的心，颤抖的手,又到了娱乐时间啦",
-                       parseMode: ParseMode.Html,
+
+            string Path = "娱乐消遣.gif";
+            var zaocanTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
+
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false,
-                       disableWebPagePreview: true);
+                       protectContent: false);
+
+            //Program.botClient.SendTextMessageAsync(
+            //           Program.groupId,
+            //           "",
+            //           parseMode: ParseMode.Html,
+            //           replyMarkup: new InlineKeyboardMarkup(results),
+            //           protectContent: false,
+            //           disableWebPagePreview: true);
         }
 
         public static void zaocan()
@@ -190,41 +239,98 @@ namespace 缅甸商家
             var s = "早餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
 
-            Program.botClient.SendTextMessageAsync(
-                       Program.groupId,
-                       "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦",
-                       parseMode: ParseMode.Html,
+
+
+              string Path = "早餐商家推荐.gif";
+            var zaocanTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
+
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false,
-                       disableWebPagePreview: true);
+                       protectContent: false);
+
+
+
+            //Program.botClient.SendTextMessageAsync(
+            //           Program.groupId,
+                      
+            //           parseMode: ParseMode.Html,
+            //           replyMarkup: new InlineKeyboardMarkup(results),
+            //           protectContent: false,
+            //           disableWebPagePreview: true);
         }
 
-        public static void wucan()
+
+        public static void z18_wancan()
+        {
+            var s = "晚餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
+            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+
+
+
+
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead("午餐商家推荐.gif"));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！",
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+        }
+            public static void z_wucan()
         {
             var s = "午餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
 
-            Program.botClient.SendTextMessageAsync(
-                       Program.groupId,
-                       "午餐推荐",
-                       parseMode: ParseMode.Html,
+
+
+ 
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead("午餐商家推荐.gif"));
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null,
+                      "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！",
+                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false,
-                       disableWebPagePreview: true);
+                       protectContent: false);
+
+            //Program.botClient.SendTextMessageAsync(
+            //           Program.groupId,
+            //           "午餐推荐",
+            //           parseMode: ParseMode.Html,
+            //           replyMarkup: new InlineKeyboardMarkup(results),
+            //           protectContent: false,
+            //           disableWebPagePreview: true);
         }
 
-        public static void xiawucha()
+        public static void z_xiawucha()
         {
             var s = "下午茶 奶茶 水果茶 水果";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
 
-            Program.botClient.SendTextMessageAsync(
-                       Program.groupId,
-                       "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气",
-                       parseMode: ParseMode.Html,
+            //$bot->sendPhoto($GLOBALS['chat_id'], $cfile, $text, null, null, null, false, "MarkdownV2");
+
+            Stream stream = System.IO.File.OpenRead("下午茶商家推荐.gif");
+            var Photo = InputFile.FromStream(stream);
+            //  Program.botClient.SendPhotoAsync()
+            Program.botClient.SendPhotoAsync(
+                      Program.groupId, Photo, null, 
+                      "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气",
+                        parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false,
-                       disableWebPagePreview: true);
+                       protectContent: false        );
+            //Program.botClient.SendTextMessageAsync(
+            //           Program.groupId,
+            //           "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气",
+            //           parseMode: ParseMode.Html,
+            //           replyMarkup: new InlineKeyboardMarkup(results),
+            //           protectContent: false,
+            //           disableWebPagePreview: true);
         }
 
 
@@ -247,14 +353,14 @@ namespace 缅甸商家
                            from am in ca.Merchant
                            where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
                            orderby am.Views descending
-                           select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+                           select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
                 //count = results.Count;
                 foreach (InlineKeyboardButton[] btn in results)
                 {
 
                 }
 
-                results22 = rdmList(results);
+                results22 = arrCls. rdmList<InlineKeyboardButton[]>(results);
 
                 results22 = results22.Skip(0 * 10).Take(5).ToList();
             }
@@ -262,14 +368,7 @@ namespace 缅甸商家
             return results22;
         }
 
-        private static List<InlineKeyboardButton[]> rdmList(List<InlineKeyboardButton[]> results)
-        {
-            List<InlineKeyboardButton[]> results22;
-            Random rng = new Random();
-
-            results22 = results.OrderBy(x => rng.Next()).ToList();
-            return results22;
-        }
+  
 
         //dep
         public static List<InlineKeyboardButton[]> qryFrmShangjiaOrdbyViewDesc__DEP()

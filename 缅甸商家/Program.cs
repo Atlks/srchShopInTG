@@ -21,7 +21,7 @@ namespace 缅甸商家
 {
     internal class Program
     {
-        public static   TelegramBotClient botClient = new("6632267612:AAFehZabvm7lS7IGRFkmtweBM_AS9uJuBSs");
+        public static   TelegramBotClient botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");
          
         //左道群
         public static   long groupId = -1001613022200; 
@@ -46,6 +46,8 @@ namespace 缅甸商家
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
                        botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0");
+                botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");
+                
                       groupId = -1002040239665; // - 1001613022200;
 
             }
@@ -957,7 +959,7 @@ namespace 缅甸商家
                     break;
             }
 
-            if (string.IsNullOrEmpty(cq.Message?.Text) || contact == null)
+            if (  ( string.IsNullOrEmpty(cq.Message?.Caption)&& string.IsNullOrEmpty(cq.Message?.Text)) || contact == null)
             {
                 Console.WriteLine("查看结果时显示未找到此商家,此处有错误");
                 return;
@@ -1106,6 +1108,7 @@ namespace 缅甸商家
 
             var contactScore = contact.Scores.Count == 0 ? 5 : contact.Scores.Select(u => u.Value).Average();
             //打分
+            #region
             if (contactScore == 5)
             {
                 result += $"\n\n⭐️<b>综合评分</b> <b>{contactScore:F1}</b>❤️❤️❤️❤️❤️ ({contact.Scores.Count})";
@@ -1130,14 +1133,20 @@ namespace 缅甸商家
             {
                 result += $"\n\n⭐️<b>综合评分</b>   <b>{contactScore:F1}</b> 🤍 🤍 🤍 🤍 🤍 ({contact.Scores.Count})";
             }
+            #endregion
 
             //谷歌地图 (如果已经显示了,就不再显示)
+            #region
             if (!string.IsNullOrEmpty(contact.GoogleMapLocator))
                 result += "\n\n📍<b>地理位置</b>   <a href='" + contact.GoogleMapLocator + "'>谷歌地图位置</a>";
 
             var cqText = cq.Message.Text;
 
+            if (cqText == null)
+                cqText = cq.Message.Caption;
+
             isShowMenu = isShowMenu || cqText.Contains("-商家菜单-");
+            #endregion
 
             #region 联系方式
             result += "\n\n<b>-------------联系方式-------------</b>";
@@ -1217,6 +1226,7 @@ namespace 缅甸商家
             //显示评价
             else
             {
+                #region
                 result += "\n\n<b>------------客户点评------------</b>";
                 if (contact.Comments.Count == 0)
                 {
@@ -1256,6 +1266,8 @@ namespace 缅甸商家
                         result += commentStr;
                     }
                 }
+                #endregion
+
             }
 
 
@@ -1265,7 +1277,7 @@ namespace 缅甸商家
             //   ],
             // 发送带有按钮的消息
             List<List<InlineKeyboardButton>> menu = [
-               
+
                  [
                      InlineKeyboardButton.WithCallbackData( "打分",  "null"),
                      InlineKeyboardButton.WithCallbackData( "1",  $"Merchant?id={guid}&score=1"),
@@ -1298,33 +1310,59 @@ namespace 缅甸商家
                     result += $"\n\n⚠️商家有卫生、乱收费问题<a href='https://t.me/{propertyTelegram}'>物业投诉</a>";
             }
 
+
+            //if timer img mode click
+            if(update.CallbackQuery.Data.Contains("timerMsgMode2025"))
+            {
+
+                await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
+
+
+                return;
+
+            }
+
+
+            // ..........send txt 
             try
             {
-                await botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
+                //  botClient.SendTextMessageAsync()
+                //  botClient.EditMessageCaptionAsync
+              //  botClient.EditMessageTextAsync
+                await  botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("current content"))
-                {
-                    try
-                    {
-                        await botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("已经显示了,请勿重复点击时候出错:" + ex.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("编辑联系方式时出错:" + e.Message);
-                }
-            }
+                //try
+                //{
+                //    await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
 
-            await SaveConfig();
+                //}
+                //catch (Exception e)
+                //{
+
+                    if (e.Message.Contains("current content"))
+                    {
+                        try
+                        {
+                            await botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("已经显示了,请勿重复点击时候出错:" + ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("编辑联系方式时出错:" + e.Message);
+                    }
+                    await SaveConfig();
+               // }
+
+
+            }  //end ctch
+
         }
-
-
 
         //获取枚举描述
         public static string GetEnumDescription(Enum value)

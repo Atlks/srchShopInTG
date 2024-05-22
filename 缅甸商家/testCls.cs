@@ -28,14 +28,19 @@ namespace 缅甸商家
           // timerCls.  xiawucha();
           if(System.IO.File.Exists("c:/teststart.txt"))
             {
-                   timerCls.xiawucha();
-              //   timerCls.actSj();
+                timerCls.z_actSj();
+              //  timerCls.renqi();
+             //  timerCls.yule();
+              //  timerCls.zaocan();
+                //  timerCls.wucan();
+                //  timerCls.xiawucha();
+                //   timerCls.actSj();
                 //   addData();
 
-             //   findd();
+                //   findd();
             }
            
-          //  timerCls.renqi();
+          // 
 
         }
 
