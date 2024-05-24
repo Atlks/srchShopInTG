@@ -919,7 +919,22 @@ namespace 缅甸商家
             if (update?.Message?.Chat?.Type == ChatType.Private)
                 keyword = keyword.Trim();
             else  //grp msg
-                keyword = keyword.Substring(19).Trim();
+            {
+                if (keyword.Trim().StartsWith("@LianXin_BianMinBot"))
+                    keyword = keyword.Substring(19).Trim();
+                else
+                    keyword = keyword.Trim();
+            }
+
+            //kwd if ret list btn cmd
+            if(update.Type == UpdateType.CallbackQuery  )
+            {
+                if (keyword.Trim().StartsWith("@LianXin_BianMinBot"))
+                    keyword = keyword.Substring(19).Trim();
+                else
+                    keyword = keyword.Trim();
+            }
+              
 
             Console.WriteLine("  kwd=>"+ keyword);
 
@@ -999,25 +1014,55 @@ namespace 缅甸商家
                 //第一次搜索时返回的列表
                 if (update?.Message != null)
                 {
-                    await botClient.SendTextMessageAsync(
+
+
+                    string Path = "今日促销商家.gif";
+               //     var text = "——————————————";
+                    //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+                    var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+                    await botClient.SendPhotoAsync(
                         update.Message.Chat.Id,
-                        text,
+                        Photo, null, text,
                         parseMode: ParseMode.Html,
                         replyMarkup: new InlineKeyboardMarkup(results),
                         protectContent: false,
-                        disableWebPagePreview: true,
+
                         replyToMessageId: update.Message.MessageId);
+
+
+                    //await botClient.SendTextMessageAsync(
+                    //    update.Message.Chat.Id,
+                    //    text,
+                    //    parseMode: ParseMode.Html,
+                    //    replyMarkup: new InlineKeyboardMarkup(results),
+                    //    protectContent: false,
+                    //    disableWebPagePreview: true,
+                    //    replyToMessageId: update.Message.MessageId);
                 }
                 //点了返回列表按钮时
                 else
                 {
-                    await botClient.EditMessageTextAsync(
-                        chatId: update!.CallbackQuery!.Message!.Chat.Id,
-                        messageId: update.CallbackQuery.Message.MessageId,
-                        text: text,
-                        disableWebPagePreview: true,
-                        parseMode: ParseMode.Html,
-                        replyMarkup: new InlineKeyboardMarkup(results));
+
+                    string Path = "今日促销商家.gif";
+                   
+                    var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+                    //   botClient.edit
+                   
+                       await botClient.EditMessageCaptionAsync(
+                        update.CallbackQuery.Message.Chat.Id,
+                      caption: text,
+                     
+                        replyMarkup: new InlineKeyboardMarkup(results),
+                      messageId: update.CallbackQuery.Message.MessageId,
+                       parseMode: ParseMode.Html
+                       );
+                    //await botClient.EditMessageTextAsync(
+                    //    chatId: update!.CallbackQuery!.Message!.Chat.Id,
+                    //    messageId: update.CallbackQuery.Message.MessageId,
+                    //    text: text,
+                    //    disableWebPagePreview: true,
+                    //    parseMode: ParseMode.Html,
+                    //    replyMarkup: new InlineKeyboardMarkup(results));
                 }
 
                 //每个商家搜索量
@@ -1477,14 +1522,21 @@ namespace 缅甸商家
 
             }
 
+            //detail show
+            if(update.CallbackQuery.Data.StartsWith("Merchant?id="))
+                {
+                await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+
+                return;
+            }
 
             // ..........send txt 
             try
             {
                 //  botClient.SendTextMessageAsync()
                 //  botClient.EditMessageCaptionAsync
-              //  botClient.EditMessageTextAsync
-                await  botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
+                //  botClient.EditMessageTextAsync
+                await botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
             }
             catch (Exception e)
             {
