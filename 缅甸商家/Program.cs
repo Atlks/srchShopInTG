@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -79,6 +80,9 @@ namespace 缅甸商家
 
 
 
+          
+            iniChtStrfile();
+
             testCls.test();
 
             //分类枚举
@@ -92,12 +96,18 @@ namespace 缅甸商家
                     UpdateType.ChatJoinRequest],
                 ThrowPendingUpdates = true,
             });
-
-            timerCls. setTimerTask();
+         //   if (System.IO.File.Exists("c:/tmrclose.txt"))
+               timerCls. setTimerTask();
 
 #warning 循环账号是否过期了
 
             Console.ReadKey();
+        }
+
+        private static void iniChtStrfile()
+        {
+            if (!System.IO.File.Exists(timerCls.chatSessStrfile))
+                System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
         }
 
         //收到消息时执行的方法
@@ -105,6 +115,40 @@ namespace 缅甸商家
         {
             var updateString = JsonConvert.SerializeObject(update);
             Console.WriteLine(updateString);
+
+            //私聊消息  /start开始
+            if(update?.Message?.Text== "/start")
+            {
+                Program.botClient.SendTextMessageAsync(
+                        update.Message.Chat.Id,
+                        "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
+                        parseMode: ParseMode.Html,
+                        //   replyMarkup: new InlineKeyboardMarkup([]),
+                        protectContent: false,
+                        disableWebPagePreview: true);
+
+                saveChtSesion(update.Message.Chat.Id,update.Message.From); return;
+            }
+
+            //add grp msgHDL
+            if (update?.MyChatMember?.NewChatMember!=null)
+            {
+                Program.botClient.SendTextMessageAsync(
+                         update.MyChatMember.Chat.Id,
+                         "我是便民助手,你们要问什么商家,我都知道哦!",
+                         parseMode: ParseMode.Html,
+                      //   replyMarkup: new InlineKeyboardMarkup([]),
+                         protectContent: false,
+                         disableWebPagePreview: true);
+
+                 saveChtSesion(update.MyChatMember.Chat.Id,update.MyChatMember);
+            
+                return;
+            }
+
+        
+
+
             _ = Task.Run(async () =>
             {
                 if (update == null)
@@ -113,12 +157,14 @@ namespace 缅甸商家
                 var isAdminer = update.Message?.From?.Username == "GroupAnonymousBot" || update.CallbackQuery?.From?.Id == 5743211645;
                 var text = update?.Message?.Text;
 
-                #region @回复了商家详情信息
+                #region @回复了商家详情信息  评价商家
                 //@回复了商家详情信息
-                if (!string.IsNullOrEmpty(update?.Message?.Text)
-                && update?.Message?.ReplyToMessage?.From?.Username == "ZuoDao_MianDianShangJiaBot"
-                && update?.Message?.ReplyToMessage?.Text?.Contains("联系方式") == true)
+                if(update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text)) 
+                && update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
+                 && update?.Message?.ReplyToMessage?.Text?.Contains("联系方式") == true
+                ) 
                 {
+                    Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
                     var updateString = JsonConvert.SerializeObject(update);
                     Match match = Regex.Match(updateString, @"(?<=\?id=).*?(?=&)");
                     Merchant? merchant = match.Success ? (from c in _citys
@@ -127,6 +173,7 @@ namespace 缅甸商家
                                                           where am.Guid == match.Value
                                                           select am).FirstOrDefault() : null;
 
+                    
                     if (merchant == null)
                     {
                         Console.WriteLine("未找到目标商家");
@@ -490,6 +537,7 @@ namespace 缅甸商家
                 #endregion
 
 
+                // 评价商家 按钮
                 if (update?.Type is UpdateType.CallbackQuery)
                 {
                     if (update?.CallbackQuery?.Data?.Contains("Comment") == true)
@@ -522,26 +570,63 @@ namespace 缅甸商家
                 }
 
 
-                #region sezrch
-                //search   
-                //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
-                //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
+                //if nmrl msg  n notStartWith   @bot   ingor
+                if (isNnmlMsgInGrp(update))
                 {
+                    return;
+                }
+                #region sezrch
+
+
+                //privt msg serch
+                if (update?.Message?.Chat?.Type== ChatType.Private && update?.Type== UpdateType.Message)
+                {
+
+                    await GetList(botClient, update);
+                    return;
+
+                }
+
+
+                //public search
+                if(update?.Message?.Chat?.Type != ChatType.Private && update?.Type == UpdateType.Message)
+                {
+                    //search   
+                    //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
+                    //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
+
                     //查询或者翻页,或者返回至列表
-                    if (update.Type is UpdateType.Message
-                        || update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page")
-                        || update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
+                    if (update.Type is UpdateType.Message)
+                        //|| update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page")
+                        //|| update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
                     {
                         await GetList(botClient, update);
                         return;
                     }
-                    //查看商家结果
-                    else if (update.Type is UpdateType.CallbackQuery)
-                    {
-                        await View(botClient, update);
-                    }
+                  
+                  
                 }
 
+                //next page evt
+                if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
+                {
+                    await GetList(botClient, update);
+                    return;
+                }
+
+                //return evt
+                if(update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
+                {
+                    await GetList(botClient, update);
+                    return;
+                }
+
+
+                //查看商家结果 defalt is detail view
+                if (update.Type is UpdateType.CallbackQuery)
+                {
+                    await View(botClient, update);
+                }
                 #endregion
 
 
@@ -586,6 +671,56 @@ namespace 缅甸商家
 
                 #endregion
             }, cancellationToken);
+        }
+
+        public static void saveChtSesion(long chtid,object frm)
+        {
+            if (!System.IO.File.Exists(timerCls.chatSessStrfile))
+                System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
+
+
+            Hashtable chtsSesss = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls. chatSessStrfile))!;
+
+            if (chtsSesss.Contains(Convert.ToString(chtid)))
+            {
+                return;
+            }
+            if (!chtsSesss.Contains(Convert.ToString( chtid)))
+            {
+                chtsSesss.Add(chtid, frm);
+
+                System.IO.File.WriteAllText(timerCls.chatSessStrfile, JsonConvert.SerializeObject(chtsSesss, Newtonsoft.Json.Formatting.Indented));
+
+            }
+        }
+
+        private static bool isNnmlMsgInGrp(Update? update)
+        {
+
+            if (update?.Message?.ReplyToMessage != null)
+            {
+                //is nml msg ,not need search kwd  ,,for 评价
+                return true;
+            }
+
+            if (update?.Message?.Chat?.Type != ChatType.Private)// if grp in 
+            {
+
+               
+
+                if (update?.Message == null)
+                    return false;
+                if (update?.Message?.Text == null)
+                    return false;
+
+                if ((bool)update?.Message?.Text.StartsWith("@LianXin_BianMinBot"))
+                    return false;
+
+                Console.WriteLine("nml msg");
+                return true;
+            }else
+                return false;
+               
         }
 
 
@@ -726,6 +861,7 @@ namespace 缅甸商家
         //获取列表,或者是返回至列表
         static async Task GetList(ITelegramBotClient botClient, Update update)
         {
+            Console.WriteLine(" fun  GetList()");
             if (update.Type is UpdateType.Message && string.IsNullOrEmpty(update.Message?.Text)
                 || update.Type is UpdateType.CallbackQuery && string.IsNullOrEmpty(update?.CallbackQuery?.Message?.ReplyToMessage?.Text))
                 return;
@@ -770,10 +906,23 @@ namespace 缅甸商家
                 if (!string.IsNullOrEmpty(pageStr))
                     page = Convert.ToInt32(pageStr);
             }
-
+            const int pagesize = 5;
             List<InlineKeyboardButton[]> results = [];
+
             //搜索关键词  Merchant.json to citys
             string? keyword = update.Type == UpdateType.Message ? update?.Message?.Text : update?.CallbackQuery?.Message?.ReplyToMessage?.Text;
+            keyword = update?.Message?.Text;
+
+            if (update.Type == UpdateType.CallbackQuery)  //for ret to list commd
+                keyword = update?.CallbackQuery?.Message?.ReplyToMessage?.Text;
+
+            if (update?.Message?.Chat?.Type == ChatType.Private)
+                keyword = keyword.Trim();
+            else  //grp msg
+                keyword = keyword.Substring(19).Trim();
+
+            Console.WriteLine("  kwd=>"+ keyword);
+
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = keyword.ToLower().Replace(" ", "").Trim();
@@ -786,12 +935,14 @@ namespace 缅甸商家
                            orderby am.Views descending
                            select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
                 count = results.Count;
-                results = results.Skip(page * 10).Take(10).ToList();
+                results = results.Skip(page * pagesize).Take(pagesize).ToList();
             }
 
-            //发起查询
+            //发起查询  stzrt with @bot
             if (update!.Type is UpdateType.Message)
             {
+               // keyword = update?.Message?.Text;
+             //   keyword = keyword.Substring(19).Trim();
                 if (keyword?.Length is < 2 or > 8)
                 {
                     await DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "请输入2-8个字符的的关键词", 5);
@@ -800,7 +951,7 @@ namespace 缅甸商家
 
                 if (count == 0)
                 {
-                    await DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向左道提交商家联系方式", 5);
+                    await DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                     return;
                 }
                 user.Searchs++;
@@ -829,7 +980,8 @@ namespace 缅甸商家
             if (page > 0)
                 pageBtn.Add(InlineKeyboardButton.WithCallbackData($"◀️ 上一页 ({page})", $"Merchant?page=" + (page - 1)));
 
-            if (count > ((page + 1) * 10))
+          
+            if (count > ((page + 1) * pagesize))
                 pageBtn.Add(InlineKeyboardButton.WithCallbackData($"({page + 2}) 下一页 ▶️", $"Merchant?page=" + (page + 1)));
 
 
@@ -893,6 +1045,9 @@ namespace 缅甸商家
             {
                 Console.WriteLine("返回商家联系方式列表时出错:" + e.Message);
             }
+
+
+            Console.WriteLine(" endfun  GetList()");
 
         }
 
@@ -1167,12 +1322,12 @@ namespace 缅甸商家
             {
                 if (contact.WhatsApp.Count == 1)
                 {
-                    result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={contact.WhatsApp[0]}&text=从左道群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
+                    result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={contact.WhatsApp[0]}&text=从联信群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
                 }
                 else
                 {
                     for (int i = 0; i < contact.WhatsApp.Count; i++)
-                        result += $"\n\nWhatsApp {i + 1}  :  <a href='https://api.whatsapp.com/send/?phone={contact.WhatsApp[0]}&text=从左道群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
+                        result += $"\n\nWhatsApp {i + 1}  :  <a href='https://api.whatsapp.com/send/?phone={contact.WhatsApp[0]}&text=从联信群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
                 }
             }
 
@@ -1180,12 +1335,12 @@ namespace 缅甸商家
             {
                 if (contact.Line.Count == 1)
                 {
-                    result += $"\n\nLine  :  <a href='https://line.me/R/ti/p/~左道提示:切换为电话号码搜{contact.Line[0]}'>点击聊天</a>";
+                    result += $"\n\nLine  :  <a href='https://line.me/R/ti/p/~联信提示:切换为电话号码搜{contact.Line[0]}'>点击聊天</a>";
                 }
                 else
                 {
                     for (int i = 0; i < contact.Line.Count; i++)
-                        result += $"\n\nLine {i + 1}  :  <a href='https://line.me/R/ti/p/~左道提示:切换为电话号码搜{contact.Line[i]}'>点击聊天</a>";
+                        result += $"\n\nLine {i + 1}  :  <a href='https://line.me/R/ti/p/~联信提示:切换为电话号码搜{contact.Line[i]}'>点击聊天</a>";
                 }
             }
 

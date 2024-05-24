@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("缅甸商家")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7029d333adb3c94813bb1792c9e47a123fbb1910")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8aa84a1ccf91118f69e9a09e04d2d4a6322f229c")]
 [assembly: System.Reflection.AssemblyProductAttribute("缅甸商家")]
 [assembly: System.Reflection.AssemblyTitleAttribute("缅甸商家")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

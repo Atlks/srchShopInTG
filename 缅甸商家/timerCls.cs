@@ -1,4 +1,6 @@
 ﻿using Microsoft.VisualBasic;
+using Newtonsoft.Json;
+using System.Collections;
 using System.Timers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -10,7 +12,8 @@ namespace 缅甸商家
 {
     internal class timerCls
     {
-       
+        public const string chatSessStrfile = "chtSess.json";
+
 
         public static void setTimerTask()
         {
@@ -141,7 +144,7 @@ namespace 缅甸商家
             
                        string Path = "今日促销商家.gif";
             var zaocanTxt = "——————————————";
-
+            //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
             //  Program.botClient.SendPhotoAsync()
             Program.botClient.SendPhotoAsync(
@@ -150,6 +153,27 @@ namespace 缅甸商家
                         parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false);
+
+           
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Console.WriteLine(" SendPhotoAsync " + de.Key);
+
+              //  Program.botClient.send
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
+           
 
 
             //Program.botClient.SendTextMessageAsync(
@@ -198,6 +222,21 @@ namespace 缅甸商家
                        protectContent: false);
 
 
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      zaocanTxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
             //Program.botClient.SendTextMessageAsync(
             //           Program.groupId,
             //           "人气榜",
@@ -214,16 +253,33 @@ namespace 缅甸商家
 
 
             string Path = "娱乐消遣.gif";
-            var zaocanTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
+            var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
 
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
             //  Program.botClient.SendPhotoAsync()
             Program.botClient.SendPhotoAsync(
                       Program.groupId, Photo, null,
-                      zaocanTxt,
+                      CaptionTxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false);
+
+
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      CaptionTxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
 
             //Program.botClient.SendTextMessageAsync(
             //           Program.groupId,
@@ -269,35 +325,69 @@ namespace 缅甸商家
         {
             var s = "晚餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
 
 
-
-            var Photo = InputFile.FromStream(System.IO.File.OpenRead("午餐商家推荐.gif"));
+        var Photo = InputFile.FromStream(System.IO.File.OpenRead("午餐商家推荐.gif"));
             //  Program.botClient.SendPhotoAsync()
             Program.botClient.SendPhotoAsync(
                       Program.groupId, Photo, null,
-                      "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！",
+                      CaptionTxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false);
+
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      CaptionTxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
         }
             public static void z_wucan()
         {
             var s = "午餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
 
 
- 
+
             var Photo = InputFile.FromStream(System.IO.File.OpenRead("午餐商家推荐.gif"));
             //  Program.botClient.SendPhotoAsync()
             Program.botClient.SendPhotoAsync(
                       Program.groupId, Photo, null,
-                      "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！",
+                    msgtxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false);
+
+
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      msgtxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
 
             //Program.botClient.SendTextMessageAsync(
             //           Program.groupId,
@@ -311,6 +401,7 @@ namespace 缅甸商家
         public static void z_xiawucha()
         {
             var s = "下午茶 奶茶 水果茶 水果";
+            var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
             List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
 
             //$bot->sendPhoto($GLOBALS['chat_id'], $cfile, $text, null, null, null, false, "MarkdownV2");
@@ -319,11 +410,29 @@ namespace 缅甸商家
             var Photo = InputFile.FromStream(stream);
             //  Program.botClient.SendPhotoAsync()
             Program.botClient.SendPhotoAsync(
-                      Program.groupId, Photo, null, 
-                      "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气",
+                      Program.groupId, Photo, null,
+                msgtxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: new InlineKeyboardMarkup(results),
                        protectContent: false        );
+
+
+
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                if (Convert.ToInt64(de.Key) == Program.groupId)
+                    continue;
+                var key = de.Key;
+                Program.botClient.SendPhotoAsync(
+                    Convert.ToInt64(de.Key)
+                      , Photo, null,
+                      msgtxt,
+                        parseMode: ParseMode.Html,
+                       replyMarkup: new InlineKeyboardMarkup(results),
+                       protectContent: false);
+            }
             //Program.botClient.SendTextMessageAsync(
             //           Program.groupId,
             //           "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气",
