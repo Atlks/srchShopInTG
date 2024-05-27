@@ -15,6 +15,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.ReplyMarkups;
+using 缅甸商家.lib;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
 
@@ -97,7 +98,7 @@ namespace 缅甸商家
                 ThrowPendingUpdates = true,
             });
          //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-               timerCls. setTimerTask();
+             timerCls. setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -116,37 +117,28 @@ namespace 缅甸商家
             var updateString = JsonConvert.SerializeObject(update);
             Console.WriteLine(updateString);
 
-            //私聊消息  /start开始
-            if(update?.Message?.Text== "/start")
-            {
-                Program.botClient.SendTextMessageAsync(
-                        update.Message.Chat.Id,
-                        "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
-                        parseMode: ParseMode.Html,
-                        //   replyMarkup: new InlineKeyboardMarkup([]),
-                        protectContent: false,
-                        disableWebPagePreview: true);
 
-                saveChtSesion(update.Message.Chat.Id,update.Message.From); return;
+            //auto add cht sess
+            if (update?.Message!=null)
+            {
+                saveChtSesion(update.Message.Chat.Id, update.Message.From);
+            }
+
+            //私聊消息  /start开始
+            if (update?.Message?.Text== "/start")
+            {
+                startMsgEvtInPrvtAddBot(update);
+                return;
             }
 
             //add grp msgHDL
             if (update?.MyChatMember?.NewChatMember!=null)
             {
-                Program.botClient.SendTextMessageAsync(
-                         update.MyChatMember.Chat.Id,
-                         "我是便民助手,你们要问什么商家,我都知道哦!",
-                         parseMode: ParseMode.Html,
-                      //   replyMarkup: new InlineKeyboardMarkup([]),
-                         protectContent: false,
-                         disableWebPagePreview: true);
-
-                 saveChtSesion(update.MyChatMember.Chat.Id,update.MyChatMember);
-            
+                botAddtoGrpEvtHdlr(update);
                 return;
             }
 
-        
+
 
 
             _ = Task.Run(async () =>
@@ -161,7 +153,7 @@ namespace 缅甸商家
                 //@回复了商家详情信息
                 if(update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text)) 
                 && update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
-                 && update?.Message?.ReplyToMessage?.Text?.Contains("联系方式") == true
+                 && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
                 ) 
                 {
                     Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
@@ -211,7 +203,14 @@ namespace 缅甸商家
                             return;
                         }
 
-                        merchant.Comments.Add((long)update!.Message.From.Id, text);
+                        try
+                        {
+                            merchant.Comments.Add((long)update!.Message.From.Id, text);
+                        }catch(Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
+                     
 
                         User? user = null;
                         if (_users.ContainsKey((long)update.Message.From.Id))
@@ -673,6 +672,54 @@ namespace 缅甸商家
             }, cancellationToken);
         }
 
+        private static void startMsgEvtInPrvtAddBot(Update update)
+        {
+            Program.botClient.SendTextMessageAsync(
+                    update.Message.Chat.Id,
+                    "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
+                    parseMode: ParseMode.Html,
+                    //   replyMarkup: new InlineKeyboardMarkup([]),
+                    protectContent: false,
+                    disableWebPagePreview: true);
+
+            saveChtSesion(update.Message.Chat.Id, update.Message.From);
+        }
+
+        private static void botAddtoGrpEvtHdlr(Update update)
+        {
+            var Keyboard =
+                new KeyboardButton[][]
+                {
+                            new KeyboardButton[]
+                            {
+                                new KeyboardButton("美食"),
+                                new KeyboardButton("会所")
+                            },
+
+                            new KeyboardButton[]
+                            {
+                                new KeyboardButton("酒吧")
+                            },
+
+                            new KeyboardButton[]
+                            {
+                                new KeyboardButton("咖啡"),
+                                new KeyboardButton("ktv"),
+                                new KeyboardButton("医院")
+                            }
+                };
+            var rkm = new ReplyKeyboardMarkup(Keyboard);
+            Program.botClient.SendTextMessageAsync(
+                     update.MyChatMember.Chat.Id,
+                     "我是便民助手,你们要问什么商家,我都知道哦!",
+                     parseMode: ParseMode.Html,
+                      replyMarkup: rkm,
+                     protectContent: false,
+                     disableWebPagePreview: true);
+
+            saveChtSesion(update.MyChatMember.Chat.Id, update.MyChatMember);
+        }
+
         public static void saveChtSesion(long chtid,object frm)
         {
             if (!System.IO.File.Exists(timerCls.chatSessStrfile))
@@ -694,10 +741,21 @@ namespace 缅甸商家
             }
         }
 
+        //if nml msg ,not search
         private static bool isNnmlMsgInGrp(Update? update)
         {
 
-            if (update?.Message?.ReplyToMessage != null)
+            //if rply n frmuser is bot n textContain(我是便民助手
+            if (update?.Message?.ReplyToMessage != null
+                && update.Message.ReplyToMessage.From.Username == "LianXin_BianMinBot"
+                && strCls. StartsWith(update.Message?.ReplyToMessage?.Text,"我是便民助手")
+                )
+            {
+                return false;  // not nml msg ,start search;
+            }
+
+
+                if (update?.Message?.ReplyToMessage != null)
             {
                 //is nml msg ,not need search kwd  ,,for 评价
                 return true;
@@ -718,7 +776,7 @@ namespace 缅甸商家
 
                 Console.WriteLine("nml msg");
                 return true;
-            }else
+            }else  //prvt mode  ,,,not nml msg
                 return false;
                
         }
@@ -926,7 +984,7 @@ namespace 缅甸商家
                     keyword = keyword.Trim();
             }
 
-            //kwd if ret list btn cmd
+            //kwd if ret list btn cmd cmd
             if(update.Type == UpdateType.CallbackQuery  )
             {
                 if (keyword.Trim().StartsWith("@LianXin_BianMinBot"))
@@ -1010,7 +1068,10 @@ namespace 缅甸商家
 
             try
             {
-                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n" +
+                    $"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
+                    $"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+                text += " \n "+timerCls.plchdTxt;
                 //第一次搜索时返回的列表
                 if (update?.Message != null)
                 {
@@ -1426,11 +1487,12 @@ namespace 缅甸商家
             //显示评价
             else
             {
-                #region
+                #region 显示评价
                 result += "\n\n<b>------------客户点评------------</b>";
                 if (contact.Comments.Count == 0)
                 {
                     result += "\n\n<b>还无人点评,@回复本消息,即可对商家点评!(100字以内)</b>";
+                    result += "\n\n" + timerCls.plchdTxt;
                 }
                 else
                 {
@@ -1511,24 +1573,31 @@ namespace 缅甸商家
             }
 
 
-            //if timer img mode click
-            if(update.CallbackQuery.Data.Contains("timerMsgMode2025"))
-            {
-
-                await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
-
-
-                return;
-
-            }
 
             //detail show
-            if(update.CallbackQuery.Data.StartsWith("Merchant?id="))
+          //  if timer img mode click
+            if (update.CallbackQuery.Data.Contains("timerMsgMode2025"))
+            {
+               // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
+                string imgPath = "今日促销商家.gif";
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                Message message2 = await Program.botClient.SendPhotoAsync(
+              chatId: cq.Message.Chat.Id
+                  , Photo2, null,
+                 caption: result,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: new InlineKeyboardMarkup(menu),
+                   protectContent: false);
+                return;
+            }
+            if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
                 {
                 await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
 
                 return;
             }
+            //end detail
+
 
             // ..........send txt 
             try
