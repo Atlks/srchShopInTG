@@ -9,6 +9,12 @@ using System.Xml.Linq;
 using System.IO;
 using Microsoft.Data.Sqlite;
 using System.Collections;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using SQLitePCL;
+using Newtonsoft.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Reflection;
 
 namespace 缅甸商家.lib
 {
@@ -30,7 +36,7 @@ namespace 缅甸商家.lib
             //     SQLitePCL.raw.SetProvider(new SQLitePCL.ISQLite3Provider());
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             cn.Open();
-          //  cn.Close();
+            //  cn.Close();
 
 
             var sql = $" CREATE TABLE {tabl} ( id text  PRIMARY KEY) ";
@@ -40,7 +46,7 @@ namespace 缅甸商家.lib
             cmd.CommandText = sql;
             //cmd.CommandText = "CREATE TABLE IF NOT EXISTS t1(id varchar(4),score int
             cmd_ExecuteNonQuery(cmd);
-        
+
             //   $typeMapPHP2sqlt = ["integer" => "int", "string" => "text"];
             Hashtable typeMapPHP2sqlt = new Hashtable();
             typeMapPHP2sqlt.Add("integer", "int"); typeMapPHP2sqlt.Add("string", "text");
@@ -53,8 +59,8 @@ namespace 缅甸商家.lib
                 if ((de.Key).ToString().ToLower() == "id")
                     continue;
                 var sqltType = typeMapPHP2sqlt[(de.Key.GetType().Name.ToString().ToLower())];
-                if (sqltType.ToString().ToLower()!= "integer")
-                     sqltType = "text";
+                if (sqltType.ToString().ToLower() != "integer")
+                    sqltType = "text";
                 sql = $"alter table {tabl} add column {de.Key}  {sqltType}";
 
                 cmd = new SqliteCommand();
@@ -84,11 +90,11 @@ namespace 缅甸商家.lib
             {
                 cmd.ExecuteNonQuery(); //cmd.ExecuteNonQuery();cmd.
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
 
             }
-          
+
         }
 
         public static void save(string tblx, Hashtable mapx, string dbFileName)
@@ -100,13 +106,13 @@ namespace 缅甸商家.lib
             crtTable(tblx, mapx, dbFileName);
 
 
-           
-           var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
+
+            var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
 
             Console.WriteLine(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
-           
+
             SqliteCommand cmd = new SqliteCommand();
             cmd.Connection = cn;
             cmd.CommandText = sql;
@@ -119,18 +125,36 @@ namespace 缅甸商家.lib
 
 
 
-    //    public static void delDt(array $array, string $tabl, string $dbFileName)
-    //    {
-    //        setDbgFunEnter(__METHOD__, func_get_args());
+        public static void delByID(string id, string tabl, string dbFileName)
+        {
+            //  setdbgfunenter(__method__, func_get_args());
 
 
-    //$sql = "delete from $tabl where id=". $array['id'];
-    //        setDbgVal(__METHOD__, "sql", $sql);
-    //$db = new SQLite3($dbFileName);
-    //$ret = $db->exec($sql);
-    //        setDbgRtVal(__METHOD__, $ret);
+            var sql = "delete from $tabl where id='" + id + "'";
+            //  setdbgval(__method__, "sql", $sql);
+            SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+            cn.Open();
 
-    //    }
+            SqliteCommand cmd = new SqliteCommand();
+            cmd.Connection = cn;
+            cmd.CommandText = sql;
+            cmd_ExecuteNonQuery(cmd);
+            //   setdbgrtval(__method__, $ret);
+
+        }
+
+        //public static void deldt(array $array, string $tabl, string $dbfilename)
+        //{
+        //    setdbgfunenter(__method__, func_get_args());
+
+
+        //$sql = "delete from $tabl where id=". $array['id'];
+        //    setdbgval(__method__, "sql", $sql);
+        //$db = new sqlite3($dbfilename);
+        //$ret = $db->exec($sql);
+        //    setdbgrtval(__method__, $ret);
+
+        //}
 
 
 
@@ -140,19 +164,80 @@ namespace 缅甸商家.lib
          * @param string $querySql
          * @return array
          */
-//        public static void qry(string $querySql, $dbFileName): array
-//{
-//    setDbgFunEnter(__METHOD__, func_get_args());
-//    $db = new SQLite3($dbFileName);
-//    $SQLite3Result = $db->query($querySql);
-//    $arr_rzt = [];
-//    while ($row = $SQLite3Result->fetchArray(SQLITE3_ASSOC)) {
-//        $arr_rzt[] = ($row);
-//    }
-//    setDbgRtVal(__METHOD__, array_slice($arr_rzt, 0, 3));
-//    return $arr_rzt;
-//}
+        public static object qry(string querySql, string dbFileName)
+        {
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+            cn.Open();
+            //    SqliteCommand cmd = new SqliteCommand();
+            //cmd.Connection = cn;
+            //    cmd.CommandText = sql;
+            //    cmd.ExecuteNonQuery
 
 
+            var results = new List<Dictionary<string, object>>();
+            using (var cmd = new SqliteCommand(querySql, cn))
+            {
+                using (var reader = cmd.ExecuteReader())
+                {
+
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, object>();
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            row[reader.GetName(i)] = reader.GetValue(i);
+                        }
+                        results.Add(row);
+                    }
+
+
+                }
+            }
+
+            // 获取当前方法的信息
+            //MethodBase method = );
+
+            //// 输出当前方法的名称
+            //Console.WriteLine("Current Method Name: " + method.Name);
+            setDbgRtVal(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+
+
+            return results;
+        }
+
+        private static object array_slice(object arr_rzt, int v1, int v2)
+        {
+            return arr_rzt;
+        }
+
+        static int dbgpad = 2;
+
+        private static void setDbgRtVal(object mETHOD__, object results)
+        {
+            //string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
+            //Console.WriteLine(jsonString);
+
+            //    if ($GLOBALS['dbg_show'] == false)
+            //return;
+            // ENDFUN
+            var msglog = str_repeat(" ", dbgpad) + "" + mETHOD__ + ":: ret=>" + json_encode(results);
+            Console.WriteLine(msglog + "\n");
+            //    array_push($GLOBALS['dbg'], $msglog);
+            dbgpad = dbgpad - 4;
+        }
+
+        private static string json_encode(object results)
+        {
+            string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
+            // Console.WriteLine(jsonString);
+            return jsonString;
+        }
+
+        private static string str_repeat(string v, int count)
+        {
+            return new string(' ', count);
+        }
     }
 }

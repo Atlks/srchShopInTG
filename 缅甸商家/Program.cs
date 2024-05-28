@@ -716,8 +716,29 @@ namespace 缅甸商家
                       replyMarkup: rkm,
                      protectContent: false,
                      disableWebPagePreview: true);
-
+            saveGrpInf2db(update.MyChatMember);
             saveChtSesion(update.MyChatMember.Chat.Id, update.MyChatMember);
+        }
+
+        private static void saveGrpInf2db(ChatMemberUpdated myChatMember)
+        {
+            try
+            {
+                if (myChatMember.Chat.Type.ToString().ToLower() == "supergroup")
+                {
+                    Hashtable chtsSesss = new Hashtable();
+                    chtsSesss.Add("id", myChatMember.Chat.Id);
+                    chtsSesss.Add("grp", myChatMember.Chat.Title);
+                    chtsSesss.Add("loc", "Unk");
+                    ormSqlt.save("grpinfo", chtsSesss, "grpinfoDB.db");
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            
+          
         }
 
         public static void saveChtSesion(long chtid,object frm)

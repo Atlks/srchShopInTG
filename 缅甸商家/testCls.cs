@@ -26,28 +26,36 @@ namespace 缅甸商家
 
             //搜索关键词  Merchant.json to citys
 
-           // wucan();
-          // timerCls.  xiawucha();
-          if(System.IO.File.Exists("c:/teststart.txt"))
+            // wucan();
+            // timerCls.  xiawucha();
+            if (System.IO.File.Exists("c:/teststart.txt"))
             {
                 Hashtable chtsSesss = new Hashtable();
-                chtsSesss.Add("id", 1);   chtsSesss.Add("nm", "....");
+                chtsSesss.Add("id", 1); chtsSesss.Add("nm", "....");
                 ormSqlt.save("tb_memb", chtsSesss, "objs.db");
+
+                Hashtable chtsSesss2 = new Hashtable();
+                chtsSesss2.Add("id", 2); chtsSesss2.Add("nm", "nm222");
+                ormSqlt.save("tb_memb", chtsSesss2, "objs.db");
+
+                var rs = ormSqlt.qry("select * from tb_memb", "objs.db");
+
+
 
                 var segmenter = new JiebaSegmenter();
                 segmenter.LoadUserDict("user_dict.txt");
                 segmenter.AddWord("会所"); // 可添加一个新词
 
-              //var segments = segmenter.Cut("我来到北京清华大学", cutAll: true);
-              //Console.WriteLine("【全模式】：{0}", string.Join("/ ", segments));
+                //var segments = segmenter.Cut("我来到北京清华大学", cutAll: true);
+                //Console.WriteLine("【全模式】：{0}", string.Join("/ ", segments));
 
-              //segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式
-              //Console.WriteLine("【精确模式】：{0}", string.Join("/ ", segments));
+                //segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式
+                //Console.WriteLine("【精确模式】：{0}", string.Join("/ ", segments));
 
-              //segments = segmenter.Cut("他来到了网易杭研大厦");  // 默认为精确模式，同时也使用HMM模型
-              //Console.WriteLine("【新词识别】：{0}", string.Join("/ ", segments));
+                //segments = segmenter.Cut("他来到了网易杭研大厦");  // 默认为精确模式，同时也使用HMM模型
+                //Console.WriteLine("【新词识别】：{0}", string.Join("/ ", segments));
 
-              var  segments = segmenter.CutForSearch("谁知道会所联系方式呢"); // 搜索引擎模式
+                var segments = segmenter.CutForSearch("谁知道会所联系方式呢"); // 搜索引擎模式
                 Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
                 // timerCls.z_actSj();
                 //  timerCls.renqi();
@@ -60,8 +68,8 @@ namespace 缅甸商家
 
                 //   findd();
             }
-           
-          // 
+
+            // 
 
         }
 
@@ -77,11 +85,11 @@ namespace 缅甸商家
             settings.DefaultValueHandling = DefaultValueHandling.Ignore;
             JArray rows = JsonConvert.DeserializeObject<JArray>(users_txt, settings);
             showSpanTime(timestamp, "delzobj");
-            var results = (from   jo in rows
+            var results = (from jo in rows
                            where jo.Value<int>("key") == 10
                            select jo).ToList();
 
-           
+
             Console.WriteLine(JsonConvert.SerializeObject(results));
 
 
@@ -100,23 +108,23 @@ namespace 缅甸商家
 
         private static void addData()
         {
- 
+
             long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
 
 
 
             List<object> data = new List<object>();
-            for (int i = 0;i<100*10000;i++)
+            for (int i = 0; i < 100 * 10000; i++)
             {
-                Hashtable ht= new Hashtable();
+                Hashtable ht = new Hashtable();
                 ht.Add("key", i);
-                ht.Add("value"+i, i);
+                ht.Add("value" + i, i);
                 data.Add(ht);
             }
             System.IO.File.WriteAllText("db.json", JsonConvert.SerializeObject(data, Newtonsoft.Json.Formatting.Indented));
 
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long spantime = (   timestamp_end- timestamp);
+            long spantime = (timestamp_end - timestamp);
             Console.WriteLine("spatime(ms):" + spantime);
 
         }
