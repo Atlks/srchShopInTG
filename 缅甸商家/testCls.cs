@@ -1,4 +1,5 @@
 ﻿
+using JiebaNet.Segmenter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
@@ -6,6 +7,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
+using 缅甸商家.lib;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace 缅甸商家
@@ -28,10 +30,29 @@ namespace 缅甸商家
           // timerCls.  xiawucha();
           if(System.IO.File.Exists("c:/teststart.txt"))
             {
-                timerCls.z_actSj();
-              //  timerCls.renqi();
-             //  timerCls.yule();
-              //  timerCls.zaocan();
+                Hashtable chtsSesss = new Hashtable();
+                chtsSesss.Add("id", 1);   chtsSesss.Add("nm", "....");
+                ormSqlt.save("tb_memb", chtsSesss, "objs.db");
+
+                var segmenter = new JiebaSegmenter();
+                segmenter.LoadUserDict("user_dict.txt");
+                segmenter.AddWord("会所"); // 可添加一个新词
+
+              //var segments = segmenter.Cut("我来到北京清华大学", cutAll: true);
+              //Console.WriteLine("【全模式】：{0}", string.Join("/ ", segments));
+
+              //segments = segmenter.Cut("我来到北京清华大学");  // 默认为精确模式
+              //Console.WriteLine("【精确模式】：{0}", string.Join("/ ", segments));
+
+              //segments = segmenter.Cut("他来到了网易杭研大厦");  // 默认为精确模式，同时也使用HMM模型
+              //Console.WriteLine("【新词识别】：{0}", string.Join("/ ", segments));
+
+              var  segments = segmenter.CutForSearch("谁知道会所联系方式呢"); // 搜索引擎模式
+                Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+                // timerCls.z_actSj();
+                //  timerCls.renqi();
+                //     timerCls.z21_yule();
+                //     timerCls.zaocan();
                 //  timerCls.wucan();
                 //  timerCls.xiawucha();
                 //   timerCls.actSj();

@@ -242,7 +242,7 @@ namespace 缅甸商家
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            await sendMsg("娱乐消遣.gif", CaptionTxt+ plchdTxt, results);
+            await sendMsg("娱乐消遣.gif",  plchdTxt, results);
 
         }
 
