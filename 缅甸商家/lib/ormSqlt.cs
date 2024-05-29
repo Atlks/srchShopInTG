@@ -166,7 +166,7 @@ namespace 缅甸商家.lib
          * @param string $querySql
          * @return array
          */
-        public static object qry(string querySql, string dbFileName)
+        public static List<Dictionary<string, object>> qry(string querySql, string dbFileName)
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;

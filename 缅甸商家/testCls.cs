@@ -30,15 +30,34 @@ namespace 缅甸商家
             // timerCls.  xiawucha();
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
+                Merchant? merchant = new Merchant();
+                merchant.Guid = "123456";
+                merchant.Name = "shjjj";
+                var text = "pinlunxxxx";
+              Hashtable pinlunobj = new Hashtable();
+                pinlunobj.Add("id", DateTime.Now.ToString());
+                pinlunobj.Add("商家guid", merchant.Guid);
+                pinlunobj.Add("商家", merchant.Name);
+                pinlunobj.Add("时间", DateTime.Now.ToString());
+                pinlunobj.Add("评论内容", text);
+                ormSqlt.save("商家评论表", pinlunobj, "商家评论表.db");
+                System.IO.Directory.CreateDirectory("pinlunDir");
+                pinlun.savePinlun(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+
+
+
+
+                const string DbFileName = "objs2005.db";
                 Hashtable chtsSesss = new Hashtable();
                 chtsSesss.Add("id", 1); chtsSesss.Add("nm", "....");
-                ormSqlt.save("tb_memb", chtsSesss, "objs.db");
+                ormSqlt.save("tb_memb", chtsSesss, DbFileName);
 
                 Hashtable chtsSesss2 = new Hashtable();
                 chtsSesss2.Add("id", 2); chtsSesss2.Add("nm", "nm222");
-                ormSqlt.save("tb_memb", chtsSesss2, "objs.db");
 
-                var rs = ormSqlt.qry("select * from tb_memb", "objs.db");
+                ormSqlt.save("tb_memb", chtsSesss2, DbFileName);
+
+                var rs = ormSqlt.qry("select * from tb_memb", DbFileName);
 
 
 

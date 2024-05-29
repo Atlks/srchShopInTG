@@ -73,7 +73,7 @@ namespace 缅甸商家
                     _users = JsonConvert.DeserializeObject<Dictionary<long, User>>(users)!;
             }
 
-            var merchants = await System.IO.File.ReadAllTextAsync("Merchant.json");
+            var merchants = await System.IO.File.ReadAllTextAsync(shangjiaFL());
             if (!string.IsNullOrEmpty(merchants))
                 _citys = JsonConvert.DeserializeObject<HashSet<City>>(merchants)!;
             ////ini（）  finish
@@ -154,205 +154,9 @@ namespace 缅甸商家
                 if(update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text)) 
                 && update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
                  && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
-                ) 
+                )
                 {
-                    Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
-                    var updateString = JsonConvert.SerializeObject(update);
-                    Match match = Regex.Match(updateString, @"(?<=\?id=).*?(?=&)");
-                    Merchant? merchant = match.Success ? (from c in _citys
-                                                          from area in c.Address
-                                                          from am in area.Merchant
-                                                          where am.Guid == match.Value
-                                                          select am).FirstOrDefault() : null;
-
-                    
-                    if (merchant == null)
-                    {
-                        Console.WriteLine("未找到目标商家");
-                        return;
-                    }
-
-                    //普通用户评价商家
-                    if (!isAdminer)
-                    {
-                        //如果是评价
-                        if (text.Length > 100)
-                        {
-                            Message? msg = null;
-                            try
-                            {
-                                msg = await botClient.SendTextMessageAsync(chatId: update.Message!.Chat.Id, text: "评价失败,评价文字只能100个字以内!", replyToMessageId: update.Message.MessageId);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("告知评价字数不超过100时出错:" + ex.Message);
-                            }
-
-                            if (msg != null)
-                            {
-                                await Task.Delay(5000);
-                                try
-                                {
-                                    await botClient.DeleteMessageAsync(msg.Chat.Id, msg.MessageId);
-                                }
-                                catch (Exception ex)
-                                {
-                                    Console.WriteLine("删除告知评价字数不可超过100字时出错:" + ex.Message);
-                                }
-                            }
-                            return;
-                        }
-
-                        try
-                        {
-                            merchant.Comments.Add((long)update!.Message.From.Id, text);
-                        }catch(Exception e)
-                        {
-                            Console.WriteLine(e);
-                        }
-                     
-
-                        User? user = null;
-                        if (_users.ContainsKey((long)update.Message.From.Id))
-                        {
-                            user = _users[(long)update.Message.From.Id];
-                        }
-                        else
-                        {
-                            user = new User();
-                            _users.Add((long)update.Message.From.Id, user);
-                        }
-
-                        user.Comments++;
-                        await SaveConfig();
-                        try
-                        {
-                            await DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("告知成功点评了商家时出错:" + ex.Message);
-                        }
-                    }
-                    //管理修改商家信息
-                    else
-                    {
-                        var value = GetText.Getright(text, "=");
-
-                        if (text.Contains("商家菜单=") == false && text.Contains("\n") == true || string.IsNullOrEmpty(value))
-                        {
-                            try
-                            {
-                                await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("告知编辑消息时出错:" + ex.Message);
-                            }
-                            return;
-                        }
-
-                        //如果是修改商家信息
-                        if (text.Contains("商家名称="))
-                        {
-                            merchant.Name = value;
-                        }
-                        else if (text.Contains("商家分类="))
-                        {
-                            try
-                            {
-                                merchant.Category = (Category)Convert.ToInt32(value);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("编辑商家分类时出错:" + ex.Message);
-                                return;
-                            }
-                        }
-                        else if (text.Contains("商家关键词="))
-                        {
-                            merchant.KeywordString = value;
-                        }
-                        else if (text.Contains("开始营业时间="))
-                        {
-                            try
-                            {
-                                merchant.StartTime = TimeSpan.Parse(value);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("编辑商家开始营业时出错:" + ex.Message);
-                                return;
-                            }
-                        }
-                        else if (text.Contains("打烊收摊时间="))
-                        {
-                            try
-                            {
-                                merchant.EndTime = TimeSpan.Parse(value);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("编辑商家截止营业时出错:" + ex.Message);
-                                return;
-                            }
-                        }
-                        else if (text.Contains("Telegram="))
-                        {
-                            merchant.Telegram = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("Telegram群组="))
-                        {
-                            merchant.TelegramGroup = value;
-                        }
-                        else if (text.Contains("Whatsapp="))
-                        {
-                            merchant.WhatsApp = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("Line="))
-                        {
-                            merchant.Line = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("Signal="))
-                        {
-                            merchant.Signal = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("微信="))
-                        {
-                            merchant.WeiXin = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("电话="))
-                        {
-                            merchant.Tel = value.Split(' ').ToList();
-                        }
-                        else if (text.Contains("商家菜单="))
-                        {
-                            merchant.Menu = value;
-                        }
-                        else
-                        {
-                            try
-                            {
-                                await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
-                            }
-                            catch (Exception ex)
-                            {
-                                Console.WriteLine("告知编辑消息时出错:" + ex.Message);
-                            }
-                            return;
-                        }
-
-                        await SaveConfig();
-
-                        try
-                        {
-                            await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("告知编辑成功时出错:" + ex.Message);
-                        }
-                    }
+                    await pinlunShangjia(botClient, update, isAdminer, text);
                     return;
                 }
                 #endregion
@@ -670,6 +474,218 @@ namespace 缅甸商家
 
                 #endregion
             }, cancellationToken);
+        }
+
+        private static async Task pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
+        {
+            Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
+            var updateString = JsonConvert.SerializeObject(update);
+            Match match = Regex.Match(updateString, @"(?<=\?id=).*?(?=&)");
+            Merchant? merchant = match.Success ? (from c in _citys
+                                                  from area in c.Address
+                                                  from am in area.Merchant
+                                                  where am.Guid == match.Value
+                                                  select am).FirstOrDefault() : null;
+
+
+            if (merchant == null)
+            {
+                Console.WriteLine("未找到目标商家");
+                return;
+            }
+
+            //普通用户评价商家
+            if (!isAdminer)
+            {
+                //如果是评价
+                if (text.Length > 100)
+                {
+                    Message? msg = null;
+                    try
+                    {
+                        msg = await botClient.SendTextMessageAsync(chatId: update.Message!.Chat.Id, text: "评价失败,评价文字只能100个字以内!", replyToMessageId: update.Message.MessageId);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("告知评价字数不超过100时出错:" + ex.Message);
+                    }
+
+                    if (msg != null)
+                    {
+                        await Task.Delay(5000);
+                        try
+                        {
+                            await botClient.DeleteMessageAsync(msg.Chat.Id, msg.MessageId);
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine("删除告知评价字数不可超过100字时出错:" + ex.Message);
+                        }
+                    }
+                    return;
+                }
+
+                try
+                {
+                    merchant.Comments.Add((long)update!.Message.From.Id, text);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+
+                User? user = null;
+                if (_users.ContainsKey((long)update.Message.From.Id))
+                {
+                    user = _users[(long)update.Message.From.Id];
+                }
+                else
+                {
+                    user = new User();
+                    _users.Add((long)update.Message.From.Id, user);
+                }
+
+                Hashtable chtsSesss = new Hashtable();
+                chtsSesss.Add("id", DateTime.Now.ToString()); 
+                chtsSesss.Add("商家guid", merchant.Guid);
+                chtsSesss.Add("商家", merchant.Name);
+                chtsSesss.Add("时间", DateTime.Now.ToString());
+                chtsSesss.Add("评论内容", text);
+                ormSqlt.save("商家评论表", chtsSesss, "商家评论表.db");
+                System.IO.Directory.CreateDirectory("pinlunDir");
+                pinlun.savePinlun( chtsSesss, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+
+                user.Comments++;
+                await SaveConfig();
+                try
+                {
+                    await DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("告知成功点评了商家时出错:" + ex.Message);
+                }
+            }
+            //管理修改商家信息
+            else
+            {
+                var value = GetText.Getright(text, "=");
+
+                if (text.Contains("商家菜单=") == false && text.Contains("\n") == true || string.IsNullOrEmpty(value))
+                {
+                    try
+                    {
+                        await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("告知编辑消息时出错:" + ex.Message);
+                    }
+                    return;
+                }
+
+                //如果是修改商家信息
+                if (text.Contains("商家名称="))
+                {
+                    merchant.Name = value;
+                }
+                else if (text.Contains("商家分类="))
+                {
+                    try
+                    {
+                        merchant.Category = (Category)Convert.ToInt32(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("编辑商家分类时出错:" + ex.Message);
+                        return;
+                    }
+                }
+                else if (text.Contains("商家关键词="))
+                {
+                    merchant.KeywordString = value;
+                }
+                else if (text.Contains("开始营业时间="))
+                {
+                    try
+                    {
+                        merchant.StartTime = TimeSpan.Parse(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("编辑商家开始营业时出错:" + ex.Message);
+                        return;
+                    }
+                }
+                else if (text.Contains("打烊收摊时间="))
+                {
+                    try
+                    {
+                        merchant.EndTime = TimeSpan.Parse(value);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("编辑商家截止营业时出错:" + ex.Message);
+                        return;
+                    }
+                }
+                else if (text.Contains("Telegram="))
+                {
+                    merchant.Telegram = value.Split(' ').ToList();
+                }
+                else if (text.Contains("Telegram群组="))
+                {
+                    merchant.TelegramGroup = value;
+                }
+                else if (text.Contains("Whatsapp="))
+                {
+                    merchant.WhatsApp = value.Split(' ').ToList();
+                }
+                else if (text.Contains("Line="))
+                {
+                    merchant.Line = value.Split(' ').ToList();
+                }
+                else if (text.Contains("Signal="))
+                {
+                    merchant.Signal = value.Split(' ').ToList();
+                }
+                else if (text.Contains("微信="))
+                {
+                    merchant.WeiXin = value.Split(' ').ToList();
+                }
+                else if (text.Contains("电话="))
+                {
+                    merchant.Tel = value.Split(' ').ToList();
+                }
+                else if (text.Contains("商家菜单="))
+                {
+                    merchant.Menu = value;
+                }
+                else
+                {
+                    try
+                    {
+                        await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("告知编辑消息时出错:" + ex.Message);
+                    }
+                    return;
+                }
+
+                await SaveConfig();
+
+                try
+                {
+                    await DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("告知编辑成功时出错:" + ex.Message);
+                }
+            }
         }
 
         private static void startMsgEvtInPrvtAddBot(Update update)
@@ -1837,13 +1853,27 @@ namespace 缅甸商家
         writeMerchant:
             try
             {
-                await System.IO.File.WriteAllTextAsync("Merchant.json", JsonConvert.SerializeObject(_citys));
+                await System.IO.File.WriteAllTextAsync(shangjiaFL(), JsonConvert.SerializeObject(_citys));
             }
             catch (Exception e)
             {
                 Console.WriteLine("向本地写入商家时出错：" + e.Message);
                 goto writeMerchant;
             }
+        }
+
+        private static string shangjiaFL()
+        {
+            List<Dictionary<string, object>> lst = (List<Dictionary<string, object>>)ormSqlt.qry($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
+            if (lst.Count > 0)
+            {
+                Dictionary<string, object> d = lst[0];
+                if(d["shangjiaFL"]==null)
+                    return "Merchant.json";
+                return (string)d["shangjiaFL"];
+            }
+             
+            return "Merchant.json";
         }
 
         //转换时间格式
