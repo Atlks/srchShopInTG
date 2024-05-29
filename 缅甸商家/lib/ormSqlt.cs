@@ -84,15 +84,15 @@ namespace 缅甸商家.lib
 
         }
 
-        private static void cmd_ExecuteNonQuery(SqliteCommand cmd)
+        private static object cmd_ExecuteNonQuery(SqliteCommand cmd)
         {
             try
             {
-                cmd.ExecuteNonQuery(); //cmd.ExecuteNonQuery();cmd.
+             return   cmd.ExecuteNonQuery(); //cmd.ExecuteNonQuery();cmd.
             }
             catch (Exception ex)
             {
-
+                return null;
             }
 
         }
@@ -100,6 +100,8 @@ namespace 缅甸商家.lib
         public static void save(string tblx, Hashtable mapx, string dbFileName)
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+           dbgCls. setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls. func_get_args (MethodBase.GetCurrentMethod(),tblx, mapx, dbFileName));
 
             //--------------------- crt table
 
@@ -108,18 +110,18 @@ namespace 缅甸商家.lib
 
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
-
-            Console.WriteLine(sql);
+            dbgCls.setDbgVal(__METHOD__, "sql", sql);
+           // Console.WriteLine(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
 
             SqliteCommand cmd = new SqliteCommand();
             cmd.Connection = cn;
             cmd.CommandText = sql;
-            cmd_ExecuteNonQuery(cmd);
-            //        setDbgVal(__METHOD__, "sql", sql);
-            //ret = $db->exec($sql);
-            //        setDbgRtVal(__METHOD__, $ret);
+            
+         
+            var ret = cmd_ExecuteNonQuery(cmd);
+            dbgCls.setDbgValRtval(__METHOD__, ret);
 
         }
 
@@ -167,6 +169,9 @@ namespace 缅甸商家.lib
         public static object qry(string querySql, string dbFileName)
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
             //    SqliteCommand cmd = new SqliteCommand();
@@ -201,43 +206,40 @@ namespace 缅甸商家.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            setDbgRtVal(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+          dbgCls.  setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls. array_slice(results, 0, 3));
 
 
             return results;
         }
 
-        private static object array_slice(object arr_rzt, int v1, int v2)
-        {
-            return arr_rzt;
-        }
+        
 
-        static int dbgpad = 2;
+ 
 
-        private static void setDbgRtVal(object mETHOD__, object results)
-        {
-            //string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
-            //Console.WriteLine(jsonString);
+        //private static void setDbgRtVal(object mETHOD__, object results)
+        //{
+        //    //string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
+        //    //Console.WriteLine(jsonString);
 
-            //    if ($GLOBALS['dbg_show'] == false)
-            //return;
-            // ENDFUN
-            var msglog = str_repeat(" ", dbgpad) + "" + mETHOD__ + ":: ret=>" + json_encode(results);
-            Console.WriteLine(msglog + "\n");
-            //    array_push($GLOBALS['dbg'], $msglog);
-            dbgpad = dbgpad - 4;
-        }
+        //    //    if ($GLOBALS['dbg_show'] == false)
+        //    //return;
+        //    // ENDFUN
+        //    var msglog = str_repeat(" ", dbgpad) + "" + mETHOD__ + ":: ret=>" + json_encode(results);
+        //    Console.WriteLine(msglog + "\n");
+        //    //    array_push($GLOBALS['dbg'], $msglog);
+        //    dbgpad = dbgpad - 4;
+        //}
 
-        private static string json_encode(object results)
-        {
-            string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
-            // Console.WriteLine(jsonString);
-            return jsonString;
-        }
+        //private static string json_encode(object results)
+        //{
+        //    string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
+        //    // Console.WriteLine(jsonString);
+        //    return jsonString;
+        //}
 
-        private static string str_repeat(string v, int count)
-        {
-            return new string(' ', count);
-        }
+        //private static string str_repeat(string v, int count)
+        //{
+        //    return new string(' ', count);
+        //}
     }
 }
