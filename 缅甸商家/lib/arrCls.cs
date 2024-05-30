@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 
-namespace 缅甸商家.lib
+namespace prj202405.lib
 {
     internal class arrCls
     {

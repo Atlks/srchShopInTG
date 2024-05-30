@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace 缅甸商家.lib
+namespace prj202405.lib
 {
     internal class sqlCls
     {

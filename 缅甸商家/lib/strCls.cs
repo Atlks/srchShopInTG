@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace 缅甸商家.lib
+namespace prj202405.lib
 {
     internal class strCls
     {

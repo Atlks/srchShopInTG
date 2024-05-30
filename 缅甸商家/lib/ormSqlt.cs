@@ -16,7 +16,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection;
 
-namespace 缅甸商家.lib
+namespace prj202405.lib
 {
     internal class ormSqlt
     {
@@ -97,7 +97,7 @@ namespace 缅甸商家.lib
 
         }
 
-        public static void save(string tblx, Hashtable mapx, string dbFileName)
+        public static void _save(string tblx, Hashtable mapx, string dbFileName)
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -158,7 +158,10 @@ namespace 缅甸商家.lib
 
         //}
 
-
+        public static List<Dictionary<string, object>> qry(  string dbFileName)
+        {
+            return _qry("select * from tabx", dbFileName);
+        }
 
 
         /**
@@ -166,7 +169,7 @@ namespace 缅甸商家.lib
          * @param string $querySql
          * @return array
          */
-        public static List<Dictionary<string, object>> qry(string querySql, string dbFileName)
+        public static List<Dictionary<string, object>> _qry(string querySql, string dbFileName)
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -212,9 +215,38 @@ namespace 缅甸商家.lib
             return results;
         }
 
-        
+        internal static void save(Hashtable mapx, string dbFileName)
+        {
+            var tblx = "tabx";
+        //    _save("tabx", chtsSesss, strFL);
 
- 
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+
+            //--------------------- crt table
+
+            crtTable(tblx, mapx, dbFileName);
+
+
+
+            var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
+            dbgCls.setDbgVal(__METHOD__, "sql", sql);
+            // Console.WriteLine(sql);
+            SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+            cn.Open();
+
+            SqliteCommand cmd = new SqliteCommand();
+            cmd.Connection = cn;
+            cmd.CommandText = sql;
+
+
+            var ret = cmd_ExecuteNonQuery(cmd);
+            dbgCls.setDbgValRtval(__METHOD__, ret);
+        }
+
+
+
+
 
         //private static void setDbgRtVal(object mETHOD__, object results)
         //{

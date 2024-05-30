@@ -6,9 +6,9 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using 缅甸商家.lib;
+using prj202405.lib;
 
-namespace 缅甸商家
+namespace prj202405
 {
     internal class timerCls
     {
@@ -17,6 +17,7 @@ namespace 缅甸商家
 
         public static void setTimerTask()
         {
+            return;
             //活动商家(每小时推送)   物业(跟随每个商家推送) 
             //早餐店6点推送   午餐店11点推送推送   下午茶(水果/奶茶)店16点推送   晚餐店18点推送    娱乐消遣/酒店推送21点推送   活动商家(每小时推送)   物业(跟随每个商家推送)    每日人气榜单(每日夜间0:00推送)
             //_ = Task.Run(async () =>
@@ -130,29 +131,29 @@ namespace 缅甸商家
             {
                 System.IO.File.WriteAllText(rqF, "pushlog");
                 // do something
-                var Keyboard =
-                  new KeyboardButton[][]
-                  {
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("美食"),
-                                new KeyboardButton("会所")
-                            },
+                //var Keyboard =
+                //  new KeyboardButton[][]
+                //  {
+                //            new KeyboardButton[]
+                //            {
+                //                new KeyboardButton("美食"),
+                //                new KeyboardButton("会所")
+                //            },
 
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("酒吧")
-                            },
+                //            new KeyboardButton[]
+                //            {
+                //                new KeyboardButton("酒吧")
+                //            },
 
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("咖啡"),
-                                new KeyboardButton("ktv"),
-                                new KeyboardButton("医院")
-                            }
-                  };
-                var rkm = new ReplyKeyboardMarkup(Keyboard);
-                sendMsg4keepmenu("今日促销商家.gif", plchdTxt, rkm);
+                //            new KeyboardButton[]
+                //            {
+                //                new KeyboardButton("咖啡"),
+                //                new KeyboardButton("ktv"),
+                //                new KeyboardButton("医院")
+                //            }
+                //  };
+                //var rkm = new ReplyKeyboardMarkup(Keyboard);
+                sendMsg4keepmenu("今日促销商家.gif", plchdTxt,Program. _btmBtns());
             }
 
 
