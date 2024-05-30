@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace prj202405.lib
 {
-    internal class FLstrCls
+    internal class ormJSonFL
     {
 
         public static List<Dictionary<string, object>> qry(  string dbFileName)

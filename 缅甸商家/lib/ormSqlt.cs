@@ -28,7 +28,7 @@ namespace prj202405.lib
          * @param mapx
          * @return array
          */
-        public static void crtTable(string tabl, Hashtable mapx, string dbFileName)
+        public static void crtTable(string tabl, SortedList mapx, string dbFileName)
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
 
@@ -97,7 +97,7 @@ namespace prj202405.lib
 
         }
 
-        public static void _save(string tblx, Hashtable mapx, string dbFileName)
+        public static void _save(string tblx, SortedList mapx, string dbFileName)
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -215,7 +215,7 @@ namespace prj202405.lib
             return results;
         }
 
-        internal static void save(Hashtable mapx, string dbFileName)
+        internal static void save(SortedList mapx, string dbFileName)
         {
             var tblx = "tabx";
         //    _save("tabx", chtsSesss, strFL);

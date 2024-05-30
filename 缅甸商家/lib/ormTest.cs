@@ -12,11 +12,11 @@ namespace prj202405.lib
         public static void testorm()
         {
             const string DbFileName = "objs2005.db";
-            System.Collections.Hashtable chtsSesss = new System.Collections.Hashtable();
+            System.Collections.SortedList chtsSesss = new System.Collections.SortedList();
             chtsSesss.Add("id", 1); chtsSesss.Add("nm", "....");
             ormSqlt.save(  chtsSesss, DbFileName);
 
-            System.Collections.Hashtable chtsSesss2 = new System.Collections.Hashtable();
+            System.Collections.SortedList chtsSesss2 = new System.Collections.SortedList();
             chtsSesss2.Add("id", 2); chtsSesss2.Add("nm", "nm222");
 
             ormSqlt.save(  chtsSesss2, DbFileName);
