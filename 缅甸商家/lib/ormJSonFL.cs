@@ -1,4 +1,6 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -15,7 +17,7 @@ namespace prj202405.lib
     internal class ormJSonFL
     {
 
-        public static List<Dictionary<string, object>> qry(  string dbFileName)
+        public static ArrayList  qry(  string dbFileName)
         {
 
             //if (!File.Exists(dbFileName))
@@ -28,38 +30,39 @@ namespace prj202405.lib
                 File.WriteAllText(dbFileName, "[]");
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
-            var list = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(File.ReadAllText(dbFileName));
+           var  list = JsonConvert.DeserializeObject<List<SortedList>>(File.ReadAllText(dbFileName));
+            ArrayList list2= new ArrayList(list);
+            //   ArrayList list = (ArrayList)JsonConvert.DeserializeObject(File.ReadAllText(dbFileName));
 
             // 获取当前方法的信息
             //MethodBase method = );
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls.array_slice(list, 0, 3));
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls.array_slice(list2, 0, 3));
 
 
-            return list;
+            // 将List转换为ArrayList
+          //  ArrayList arrayList = new ArrayList(list);
+            return list2;
         }
 
         //replace insert one row
-        public static void save(object frm, string Strfile)
+        public static void save(object objSave, string Strfile)
         {
-           
+
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
-            var list = qry(Strfile);
-           
+            ArrayList list = qry(Strfile);
+            SortedList listIot =db. lst2IOT(list);
 
-            // 将List转换为ArrayList
-            ArrayList arrayList = new ArrayList(list);
-      
-            arrayList.Add(frm);
+            listIot.Add(((SortedList)objSave)["id"], objSave);
 
-            wriToDbf(arrayList, Strfile);
-           
-
-
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            wriToDbf(saveList_hpmod, Strfile);
+        
         }
+
 
         private static void wriToDbf(object lst, string dbfl)
         {

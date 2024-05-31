@@ -94,23 +94,13 @@ namespace prj202405.lib
 
 
                 //-------------------add title
-                var row = 1;
-                int column = 1;
-
-                object? v = List_map[0];
-                SortedList titleMap = (SortedList)v;
-                // 写入哈希表数据到工作表
-                foreach (DictionaryEntry entry in titleMap)
-                {
-                    worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
-                                                                              // worksheet.Cell(row + 1, column).Value = entry.Value.ToString(); // 写入值
-                    column++;
-                }
+                int row;
+                  wrtTitleClms(List_map, worksheet);
 
                 // 定义初始行和列  for datarow
 
-                  row = 2;
-                  column = 1;
+                row = 2;
+                int column = 1;
 
 
                 foreach (SortedList SortedList1 in List_map)
@@ -128,11 +118,32 @@ namespace prj202405.lib
                     }
                     row++;
                 }
-               
+
 
                 // 保存工作簿到文件
                 workbook.SaveAs(dbf);
             }
+        }
+
+        private static void wrtTitleClms(ArrayList List_map, IXLWorksheet worksheet)
+        {
+            var row = 1;
+            int column = 1;
+            //must for ,,beir last obj is more colume,cant show write clm
+            foreach (SortedList SortedList1 in List_map)
+            {
+                column = 1;
+                SortedList titleMap = SortedList1;
+                // 写入哈希表数据到工作表
+                foreach (DictionaryEntry entry in titleMap)
+                {
+                    worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
+                                                                              // worksheet.Cell(row + 1, column).Value = entry.Value.ToString(); // 写入值
+                    column++;
+                }
+            }
+
+            return  ;
         }
 
         private static int getNewRowIdx(IXLWorksheet worksheet)

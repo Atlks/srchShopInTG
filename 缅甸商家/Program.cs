@@ -88,7 +88,7 @@ namespace prj202405
             testCls.test();
 
             //分类枚举
-            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: bot_, receiverOptions: new ReceiverOptions()
+            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: botapi.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
             {
                 AllowedUpdates = [UpdateType.Message,
                     UpdateType.CallbackQuery,
@@ -328,7 +328,7 @@ namespace prj202405
                     await _SaveConfig();
                     try
                     {
-                        await bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
+                        await botapi. bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
                     }
                     catch (Exception ex)
                     {
@@ -403,7 +403,7 @@ namespace prj202405
                 //privt msg serch
                 if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
                 {
-                    string? msgx = bot_getTxtMsg(update);
+                    string? msgx =botapi. bot_getTxtMsg(update);
                     if (msgx != null)
                     {
                         msgx = msgx.Trim();
@@ -422,7 +422,7 @@ namespace prj202405
                     //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
                     //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
 
-                    string? msgx = bot_getTxtMsg(update);
+                    string? msgx = botapi.bot_getTxtMsg(update);
                     if(msgx!=null)
                     {
                         if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
@@ -441,7 +441,7 @@ namespace prj202405
                 //next page evt,,,
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
                 {
-                    string? msgx = bot_getTxtMsg(update);
+                    string? msgx = botapi.bot_getTxtMsg(update);
                     if (msgx != null)
                     {
                         if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
@@ -456,7 +456,7 @@ namespace prj202405
                 //return evt
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
                 {
-                    string? msgx = bot_getTxtMsg(update);
+                    string? msgx = botapi.bot_getTxtMsg(update);
                     if (msgx != null)
                     {
                         if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
@@ -488,7 +488,7 @@ namespace prj202405
                     case UpdateType.EditedMessage:
                         try
                         {
-                            await bot_DeleteMessage(update.EditedMessage!.Chat.Id, update.EditedMessage.MessageId, "不可二次编辑搜索信息,只能重新搜索,现对您编辑的信息进行销毁!", 5);
+                            await botapi.bot_DeleteMessage(update.EditedMessage!.Chat.Id, update.EditedMessage.MessageId, "不可二次编辑搜索信息,只能重新搜索,现对您编辑的信息进行销毁!", 5);
                         }
                         catch (Exception ex)
                         {
@@ -606,7 +606,7 @@ namespace prj202405
                 await _SaveConfig();
                 try
                 {
-                    await bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
+                    await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
                 }
                 catch (Exception ex)
                 {
@@ -622,7 +622,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -712,7 +712,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -725,7 +725,7 @@ namespace prj202405
 
                 try
                 {
-                    await bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
+                    await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
                 }
                 catch (Exception ex)
                 {
@@ -944,8 +944,8 @@ namespace prj202405
                     return false;
                 }
 
-                if(update?.Message?.ReplyToMessage.From.Username == "LianXin_BianMinBot"
-                    && update?.Message?.ReplyToMessage.Caption == "??博彩信誉盘推荐：  世博联盟")
+                if(update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
+                    && update?.Message?.ReplyToMessage?.Caption == "??博彩信誉盘推荐：  世博联盟")
                 {
                     return false;
                 }
@@ -1195,7 +1195,7 @@ namespace prj202405
 
                 if (count == 0)
                 {
-                    await bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                    await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                     return;
                 }
                 user.Searchs++;
@@ -1332,23 +1332,7 @@ namespace prj202405
         }
 
 
-        /**
-         * 
-         * 
-         * 很多时候msg 可能没有text，可能是个evt msg，，enter grp，join grp等
-         */
-        private static string bot_getTxtMsg(Update update)
-        {
-            if (update.Type == UpdateType.Message && update?.Message?.Text != null)
-                return update?.Message?.Text;
-            if (update.Type == UpdateType.Message && update?.Message?.Caption != null)
-                return update?.Message?.Caption;
-            if (update.Type == UpdateType.CallbackQuery)
-                return update?.CallbackQuery?.Message?.ReplyToMessage?.Text;
-
-            return null;
-
-        }
+      
 
         static async Task evt_GetList_qry(ITelegramBotClient botClient, Update update)
         {
@@ -1451,13 +1435,13 @@ namespace prj202405
                 //   keyword = keyword.Substring(19).Trim();
                 if (keyword?.Length is < 2 or > 8)
                 {
-                    await bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "请输入2-8个字符的的关键词", 5);
+                    await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "请输入2-8个字符的的关键词", 5);
                     return;
                 }
 
                 if (count == 0)
                 {
-                    await bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                    await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                     return;
                 }
                 user.Searchs++;
@@ -2055,17 +2039,7 @@ namespace prj202405
             return value.ToString();
         }
 
-        //出错后执行的方法
-        static Task bot_(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
-        {
-            var ErrorMessage = exception switch
-            {
-                ApiRequestException apiRequestException => $"Telegram API 错误:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
-            };
-            Console.WriteLine(ErrorMessage);
-            return Task.CompletedTask;
-        }
+   
 
         //新增加入的聊天Id
         static void bot_AddChatIds(long chatId)
@@ -2087,45 +2061,7 @@ namespace prj202405
         }
 
 
-        //删除别人信息
-        public static async Task bot_DeleteMessage(long chatId, int messageId, string text, int second)
-        {
-            Message? msg = null;
-            try
-            {
-                msg = await botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Html, replyToMessageId: messageId);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("他人发了不合规的商家搜索信息,告知对方时出错:" + e.Message);
-            }
-
-            if (msg == null)
-                return;
-
-            _ = Task.Run(async () =>
-            {
-                await Task.Delay(second * 1000);
-
-                try
-                {
-                    await botClient.DeleteMessageAsync(chatId, messageId);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("删除他人商家搜索信息时出错:" + e.Message);
-                }
-
-                try
-                {
-                    await botClient.DeleteMessageAsync(chatId, msg.MessageId);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("他人发了不合规的商家搜索信息,删除信息时出错:" + e.Message);
-                }
-            });
-        }
+      
 
         //设置用户限制
         public static async Task<Operas> _SetUserOperas(long userId)

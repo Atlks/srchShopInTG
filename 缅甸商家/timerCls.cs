@@ -338,7 +338,7 @@ namespace prj202405
 
         public static async void z_xiawucha()
         {
-            var s = "下午茶 奶茶 水果茶 水果";
+            var s = "奶茶 水果茶 水果";
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
 

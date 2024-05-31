@@ -26,7 +26,7 @@ namespace prj202405
 
             System.IO.Directory.CreateDirectory("pinlunDir");
             //  ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-            List<Dictionary<string, object>> rows = FLstrCls.qry("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
+            List<Dictionary<string, object>> rows = ormJSonFL.qry("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
             for (int i = 0; i < rows.Count; i++)
             {
                 try
