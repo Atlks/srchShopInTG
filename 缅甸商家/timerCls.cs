@@ -7,6 +7,7 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using prj202405.lib;
+using JiebaNet.Segmenter;
 
 namespace prj202405
 {
@@ -17,7 +18,7 @@ namespace prj202405
 
         public static void setTimerTask()
         {
-            return;
+            // return;
             //活动商家(每小时推送)   物业(跟随每个商家推送) 
             //早餐店6点推送   午餐店11点推送推送   下午茶(水果/奶茶)店16点推送   晚餐店18点推送    娱乐消遣/酒店推送21点推送   活动商家(每小时推送)   物业(跟随每个商家推送)    每日人气榜单(每日夜间0:00推送)
             //_ = Task.Run(async () =>
@@ -130,30 +131,8 @@ namespace prj202405
             if ((now.Hour == 10 || now.Hour == 16) && (!System.IO.File.Exists(rqF)))
             {
                 System.IO.File.WriteAllText(rqF, "pushlog");
-                // do something
-                //var Keyboard =
-                //  new KeyboardButton[][]
-                //  {
-                //            new KeyboardButton[]
-                //            {
-                //                new KeyboardButton("美食"),
-                //                new KeyboardButton("会所")
-                //            },
-
-                //            new KeyboardButton[]
-                //            {
-                //                new KeyboardButton("酒吧")
-                //            },
-
-                //            new KeyboardButton[]
-                //            {
-                //                new KeyboardButton("咖啡"),
-                //                new KeyboardButton("ktv"),
-                //                new KeyboardButton("医院")
-                //            }
-                //  };
-                //var rkm = new ReplyKeyboardMarkup(Keyboard);
-                sendMsg4keepmenu("今日促销商家.gif", plchdTxt,Program. _btmBtns());
+                 
+                sendMsg4keepmenu("今日促销商家.gif", plchdTxt, Program._btmBtns());
             }
 
 
@@ -239,24 +218,11 @@ namespace prj202405
         }
 
 
-        private static async Task sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
-        {
-            // var  = plchdTxt;
-            //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
-            var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-            //  Program.botClient.SendPhotoAsync()
-
-            Message message = await Program.botClient.SendPhotoAsync(
-                      Program.groupId, Photo, null,
-                      msgtxt,
-                        parseMode: ParseMode.Html,
-                       replyMarkup: rplyKbdMkp,
-                       protectContent: false);
-
-            Console.WriteLine(JsonConvert.SerializeObject(message));
-
-
+        public static async Task sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
+        {  
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            chtsSess.Add(Program.groupId, "");
+
             //遍历方法三：遍历哈希表中的键值
             foreach (DictionaryEntry de in chtsSess)
             {
@@ -269,14 +235,20 @@ namespace prj202405
                 try
                 {
                     var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                    Message message2 = await Program.botClient.SendPhotoAsync(
-                    Convert.ToInt64(de.Key)
-                      , Photo2, null,
-                      msgtxt,
+                    Message message2 = await Program.botClient.SendTextMessageAsync(
+                    Convert.ToInt64(de.Key)  ,     msgtxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: rplyKbdMkp,
-                       protectContent: false);
+                       protectContent: false, disableWebPagePreview: true);
                     Console.WriteLine(JsonConvert.SerializeObject(message2));
+
+                    //Program.botClient.SendTextMessageAsync(
+                    //         Program.groupId,
+                    //         "活动商家",
+                    //         parseMode: ParseMode.Html,
+                    //         replyMarkup: new InlineKeyboardMarkup(results),
+                    //         protectContent: false,
+                    //         disableWebPagePreview: true);
 
                 }
                 catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -320,7 +292,7 @@ namespace prj202405
         public static async void z21_yule()
         {
             var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧";
-            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
@@ -332,7 +304,7 @@ namespace prj202405
         public static async void zaocan()
         {
             var s = "早餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
 
 
 
@@ -346,7 +318,7 @@ namespace prj202405
         public static async void z18_wancan()
         {
             var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
 
@@ -356,7 +328,7 @@ namespace prj202405
         public static async void z_wucan()
         {
             var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
             await sendMsg("午餐商家推荐.gif", plchdTxt, results);
@@ -368,7 +340,7 @@ namespace prj202405
         {
             var s = "下午茶 奶茶 水果茶 水果";
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
-            List<InlineKeyboardButton[]> results = qryFrmShangjiaByKwds(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
 
 
             await sendMsg("下午茶商家推荐.gif", plchdTxt, results);
@@ -379,40 +351,94 @@ namespace prj202405
         }
 
 
-        public static List<InlineKeyboardButton[]> qryFrmShangjiaByKwds(string s)
+        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(string s)
         {
             var arr = s.Split(" ").ToArray();
-
             var rdm = new Random().Next(1, arr.Length);
-            string? keyword = arr[rdm - 1];
-
-            List<InlineKeyboardButton[]> results = [];
-            List<InlineKeyboardButton[]> results22 = new List<InlineKeyboardButton[]>();
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                keyword = keyword.ToLower().Replace(" ", "").Trim();
-                var searchChars = keyword!.ToCharArray();
-
-                results = (from c in Program._citys
-                           from ca in c.Address
-                           from am in ca.Merchant
-                           where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
-                           orderby am.Views descending
-                           select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
-                //count = results.Count;
-                foreach (InlineKeyboardButton[] btn in results)
-                {
-
-                }
-
-                results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
-
-                results22 = results22.Skip(0 * 10).Take(5).ToList();
-            }
-
+            string? keyword = arr[rdm - 1];          
+            List<InlineKeyboardButton[]> results= qry_ByKwd_TmrMsgmode( keyword);            
+            List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+            results22 = results22.Skip(0 * 10).Take(5).ToList();
             return results22;
         }
 
+        //new msg mode
+        public static List<InlineKeyboardButton[]> qry_ByKwd_TmrMsgmode(string keyword)
+        {
+            List<InlineKeyboardButton[]> results = [];
+
+            if (string.IsNullOrEmpty(keyword))
+                return [];
+
+            keyword = keyword.ToLower().Replace(" ", "").Trim();
+            var searchChars = keyword!.ToCharArray();
+
+            results = (from c in Program._citys
+                       from ca in c.Address
+                       from am in ca.Merchant
+                       where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
+                       orderby am.Views descending
+                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
+            //count = results.Count;
+            foreach (InlineKeyboardButton[] btn in results)
+            {
+
+            }
+            return results;
+        }
+
+
+        public static List<InlineKeyboardButton[]> qryByKwd(string keyword)
+        {
+            List<InlineKeyboardButton[]> results = [];
+
+            if (string.IsNullOrEmpty(keyword))
+                return [];
+
+            keyword = keyword.ToLower().Replace(" ", "").Trim();
+            var searchChars = keyword!.ToCharArray();
+
+            results = (from c in Program._citys
+                       from ca in c.Address
+                       from am in ca.Merchant
+                       where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
+                       orderby am.Views descending
+                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+            //count = results.Count;
+            foreach (InlineKeyboardButton[] btn in results)
+            {
+
+            }
+            return results;
+        }
+
+
+        public static List<InlineKeyboardButton[]> qryByMsgKwds(string msg)
+        {
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            var segments = segmenter.CutForSearch(msg); // 搜索引擎模式
+            Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+
+            
+            List<InlineKeyboardButton[]> rows_rzt = [];
+            foreach (string kwd in segments)
+            {
+                if (kwd.Length < 2)
+                    continue;
+                var rows = qryByKwd(kwd);
+                Console.WriteLine("kwd=>" + kwd);
+                Console.WriteLine("qryByKwd(kwd) cnt=>" + rows.Count);
+                rows_rzt = arrCls.MergeLists(rows_rzt, rows);
+
+            }
+
+            return rows_rzt;
+        //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+
+            //  results22 = results22.Skip(0 * 10).Take(5).ToList();
+        }
 
 
         //dep

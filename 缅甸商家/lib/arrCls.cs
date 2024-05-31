@@ -11,6 +11,30 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+
+        public static List<t> MergeLists<t>(List<t> list1, List<t> list2)
+        {
+            List<t> result = new List<t>();
+
+            // 获取最长列表的长度
+            int maxLength = Math.Max(list1.Count, list2.Count);
+
+            // 遍历并合并列表
+            //for (int i = 0; i < maxLength; i++)
+            //{
+            for (int i = 0; i < list1.Count; i++)
+            {
+                result.Add(list1[i]);
+            }
+
+            for (int i = 0; i < list2.Count; i++)
+            {
+                result.Add(list2[i]);
+            }
+            //}
+
+            return result;
+        }
         public static List<T> rdmList<T>(List<T> results)
         {
             List<T> results22;

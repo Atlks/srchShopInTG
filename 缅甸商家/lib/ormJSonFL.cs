@@ -17,6 +17,9 @@ namespace prj202405.lib
 
         public static List<Dictionary<string, object>> qry(  string dbFileName)
         {
+
+            //if (!File.Exists(dbFileName))
+            //    File.WriteAllText(dbFileName, "[]");
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(),  dbFileName));
@@ -38,29 +41,29 @@ namespace prj202405.lib
             return list;
         }
 
+        //replace insert one row
         public static void save(object frm, string Strfile)
         {
-            if (!File.Exists(Strfile))
-                File.WriteAllText(Strfile, "[]");
+           
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
-            var list = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(File.ReadAllText(Strfile));
+            var list = qry(Strfile);
+           
 
             // 将List转换为ArrayList
             ArrayList arrayList = new ArrayList(list);
-            //    ArrayList chtsSesss =(ArrayList) JsonConvert.DeserializeObject(System.IO.File.ReadAllText(Strfile))!;
-
-            //if (chtsSesss.Contains(Convert.ToString(chtid)))
-            //{
-            //    return;
-            //}
-
-
+      
             arrayList.Add(frm);
 
-            File.WriteAllText(Strfile, JsonConvert.SerializeObject(arrayList, Formatting.Indented));
+            wriToDbf(arrayList, Strfile);
+           
 
 
+        }
+
+        private static void wriToDbf(object lst, string dbfl)
+        {
+            File.WriteAllText(dbfl, JsonConvert.SerializeObject(lst, Formatting.Indented));
         }
     }
 }

@@ -12,12 +12,26 @@ namespace prj202405.lib
 {
     internal class ormExcel
     {
-        internal static void save(SortedList SortedList1, string dbfl)
+        //orm 实际上可以使用 append模式
+        internal static void save(object SortedListx, string dbfl)
+        {
+            SortedList  SortedList1 = (SortedList )SortedListx;
+          
+
+            ArrayList lst=qry(dbfl);
+            lst.Add((SortedList)SortedList1);
+
+            wriToDbf(lst,dbfl);
+
+          
+        }
+
+        internal static void saveAppendMode(SortedList SortedList1, string dbfl)
         {
 
             if (!File.Exists(dbfl))
             {
-              //  File.WriteAllText(dbfl, "[]");
+                //  File.WriteAllText(dbfl, "[]");
                 var workbook = new XLWorkbook();
                 // 添加一个新的工作表
                 var worksheet = workbook.Worksheets.Add("Sheet1");
@@ -30,7 +44,7 @@ namespace prj202405.lib
                 foreach (DictionaryEntry entry in SortedList1)
                 {
                     worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
-                   // worksheet.Cell(row + 1, column).Value = entry.Value.ToString(); // 写入值
+                                                                              // worksheet.Cell(row + 1, column).Value = entry.Value.ToString(); // 写入值
                     column++;
                 }
                 // 保存工作簿到文件
@@ -38,10 +52,11 @@ namespace prj202405.lib
 
             }
 
+            //append
             // 创建一个新的Excel工作簿
             using (var workbook = new XLWorkbook(dbfl))
             {
-               
+
                 // 选择要读取的工作表
                 var worksheet = workbook.Worksheet("Sheet1");
 
@@ -53,13 +68,70 @@ namespace prj202405.lib
                 // 写入哈希表数据到工作表
                 foreach (DictionaryEntry entry in SortedList1)
                 {
-                  //  worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
-                    worksheet.Cell(row, column ).Value = entry.Value.ToString(); // 写入值
+                    //  worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
+                    worksheet.Cell(row, column).Value = entry.Value.ToString(); // 写入值
                     column++;
                 }
 
                 // 保存工作簿到文件
                 workbook.SaveAs(dbfl);
+            }
+        }
+
+
+        private static void wriToDbf(object  List_mapx, string dbf)
+        {
+            Console.WriteLine(" wriToDbf（）：" + dbf);
+            File.Delete(dbf);
+
+            System.Collections. ArrayList List_map = (ArrayList)List_mapx;
+            // 创建一个新的Excel工作簿
+            using (var workbook = new XLWorkbook())
+            {
+
+                // 添加一个新的工作表
+                var worksheet = workbook.Worksheets.Add("Sheet1");
+
+
+                //-------------------add title
+                var row = 1;
+                int column = 1;
+
+                object? v = List_map[0];
+                SortedList titleMap = (SortedList)v;
+                // 写入哈希表数据到工作表
+                foreach (DictionaryEntry entry in titleMap)
+                {
+                    worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
+                                                                              // worksheet.Cell(row + 1, column).Value = entry.Value.ToString(); // 写入值
+                    column++;
+                }
+
+                // 定义初始行和列  for datarow
+
+                  row = 2;
+                  column = 1;
+
+
+                foreach (SortedList SortedList1 in List_map)
+                {
+                    //  worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
+                    //worksheet.Cell(row, column).Value = entry.Value.ToString(); // 写入值
+                    //column++;
+                    column = 1;
+                    // 写入哈希表数据到工作表
+                    foreach (DictionaryEntry entry in SortedList1)
+                    {
+                        //  worksheet.Cell(row, column).Value = entry.Key.ToString(); // 写入键
+                        worksheet.Cell(row, column).Value = entry.Value.ToString(); // 写入值
+                        column++;
+                    }
+                    row++;
+                }
+               
+
+                // 保存工作簿到文件
+                workbook.SaveAs(dbf);
             }
         }
 
@@ -85,8 +157,13 @@ namespace prj202405.lib
             return newRow;
         }
 
-       public static List<Dictionary<string, object>> qry(string dbf)
+       public static ArrayList qry(string dbf)
         {
+            if (!File.Exists(dbf))
+            {
+                return [];
+
+            }
             // 打开一个现有的Excel工作簿
             using (var workbook = new XLWorkbook(dbf))
             {
@@ -94,7 +171,7 @@ namespace prj202405.lib
                 var worksheet = workbook.Worksheet("Sheet1");
 
                 // 创建一个列表来存储读取到的数据
-                var rws = new List<Dictionary<string, object>>();
+                var rws = new ArrayList();
 
                 // 获取工作表的行和列
                 var rows = worksheet.RowsUsed();
@@ -109,7 +186,7 @@ namespace prj202405.lib
                 // 读取每一行数据
                 foreach (var row in rows.Skip(1)) // 跳过标题行
                 {
-                    var rowData = new Dictionary<string, object>();
+                    var rowData = new SortedList();
                     for (int i = 0; i < headers.Count; i++)
                     {
                         rowData[headers[i]] = row.Cell(i + 1).Value.ToString();
