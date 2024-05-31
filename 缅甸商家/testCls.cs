@@ -7,15 +7,20 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using 缅甸商家.lib;
+using prj202405.lib;
 using static System.Net.Mime.MediaTypeNames;
+using prj202405.lib;
+using ClosedXML.Excel;
+using 缅甸商家.lib;
 
-namespace 缅甸商家
+namespace prj202405
 {
     internal class testCls
     {
         internal static void test()
         {
+
+            //export 
             //联系商家城市
             //HashSet<City> _citys = [];
             //var merchants = System.IO.File.ReadAllText("Merchant.json");
@@ -30,36 +35,38 @@ namespace 缅甸商家
             // timerCls.  xiawucha();
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
+
+                //export mercht
+                exptMrcht();
                 Merchant? merchant = new Merchant();
                 merchant.Guid = "123456";
                 merchant.Name = "shjjj";
                 var text = "pinlunxxxx";
-              Hashtable pinlunobj = new Hashtable();
+                SortedList pinlunobj = new SortedList();
                 pinlunobj.Add("id", DateTime.Now.ToString());
                 pinlunobj.Add("商家guid", merchant.Guid);
                 pinlunobj.Add("商家", merchant.Name);
                 pinlunobj.Add("时间", DateTime.Now.ToString());
                 pinlunobj.Add("评论内容", text);
-                ormSqlt.save("商家评论表", pinlunobj, "商家评论表.db");
+
                 System.IO.Directory.CreateDirectory("pinlunDir");
-                pinlun.savePinlun(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+                ormSqlt.save(  pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");             
+                ormJSonFL.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+                ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
+                ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
+                Console.WriteLine("line1633");
+
+                Console.WriteLine(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
 
 
 
-
-                const string DbFileName = "objs2005.db";
-                Hashtable chtsSesss = new Hashtable();
-                chtsSesss.Add("id", 1); chtsSesss.Add("nm", "....");
-                ormSqlt.save("tb_memb", chtsSesss, DbFileName);
-
-                Hashtable chtsSesss2 = new Hashtable();
-                chtsSesss2.Add("id", 2); chtsSesss2.Add("nm", "nm222");
-
-                ormSqlt.save("tb_memb", chtsSesss2, DbFileName);
-
-                var rs = ormSqlt.qry("select * from tb_memb", DbFileName);
+                Console.WriteLine(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
 
 
+                Console.WriteLine(JsonConvert.SerializeObject(ormJSonFL.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
+
+            Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+                //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
                 segmenter.LoadUserDict("user_dict.txt");
@@ -90,6 +97,61 @@ namespace 缅甸商家
 
             // 
 
+        }
+
+        private static void exptMrcht()
+        {
+
+            var citys = (from c in Program._citys select c).ToList();
+
+            foreach (var city in citys)
+            {
+                System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
+                cityMap.Remove("Address");
+                cityMap.Add("cityname", city.Name);
+                Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
+                var addrS = (  from ca in city.Address
+                               select ca
+                         )
+                     .ToList();
+                foreach (var addx in addrS)
+                {
+                    System.Collections.SortedList addMap = corex.ObjectToSortedList(addx);
+                    addMap.Remove("Merchant");
+                    addMap.Add("parkname", addx.Name);
+                    addMap.Add("parkkwd", addx.CityKeywords);
+                    Console.WriteLine(JsonConvert.SerializeObject(addMap, Formatting.Indented));
+                    var rws = (from m in addx.Merchant
+                               select m
+                              )
+                          .ToList();
+                    foreach (var m in rws)
+                    {
+                        System.Collections.SortedList mcht = corex.ObjectToSortedList(m);
+                        mcht.Add("CityKeywords", city.CityKeywords);
+                        mcht.Add("cityname", city.Name);
+                        mcht.Add("parkname", addx.Name);
+                        mcht.Add("parkkwd", addx.CityKeywords);
+                        Console.WriteLine(mcht["Category"]);
+                        //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
+                        mcht.Add("CategoryStrKwds", Program._categoryKeyValue[ (int)m.Category]);
+                        mcht.Add("cateInt", (int)m.Category);
+                        mcht.Add("cateEgls",  m.Category.ToString());
+                        //   mcht
+
+                        Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
+                        Console.WriteLine("..");
+                    }
+
+                }
+            }
+              
+
+           
+                // orderby am.Views descending
+          //  select m,ca
+            //count = results.Count;
+          
         }
 
         private static void findd()
@@ -149,6 +211,7 @@ namespace 缅甸商家
         }
     }
 
+  
 }
 
 

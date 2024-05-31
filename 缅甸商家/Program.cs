@@ -65,6 +65,7 @@ namespace prj202405
 
             }
             ////ini()   
+            var vls = Enum.GetValues(typeof(Category));//  food drink ....
             foreach (var category in Enum.GetValues(typeof(Category)))
             {
                 Category enumValue = (Category)category;
@@ -563,7 +564,7 @@ namespace prj202405
                     _users.Add((long)update.Message.From.Id, user);
                 }
 
-                Hashtable obj1 = new Hashtable();
+                SortedList obj1 = new SortedList();
                 obj1.Add("id", DateTime.Now.ToString());
                 obj1.Add("商家guid", merchant.Guid);
                 obj1.Add("商家", merchant.Name);
@@ -572,7 +573,7 @@ namespace prj202405
 
                 System.IO.Directory.CreateDirectory("pinlunDir");
                 ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-                FLstrCls.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+                ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
                 user.Comments++;
                 await _SaveConfig();
@@ -803,7 +804,7 @@ namespace prj202405
             {
                 if (myChatMember.Chat.Type.ToString().ToLower() == "supergroup")
                 {
-                    Hashtable chtsSesss = new Hashtable();
+                    SortedList chtsSesss = new SortedList();
                     chtsSesss.Add("id", myChatMember.Chat.Id);
                     chtsSesss.Add("grp", myChatMember.Chat.Title);
                     chtsSesss.Add("loc", "Unk");
