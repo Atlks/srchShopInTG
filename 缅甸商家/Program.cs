@@ -22,11 +22,15 @@ using prj202405.lib;
 using prj202405.lib;
 using prj202405.lib;
 using JiebaNet.Segmenter;
+using System.Xml;
+using HtmlAgilityPack;
+using Formatting = Newtonsoft.Json.Formatting;
 
 namespace prj202405
 {
     internal class Program
     {
+        private const string botname = "LianXin_BianMinBot";
         public static TelegramBotClient botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");
 
         //左道群
@@ -99,7 +103,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            timerCls.setTimerTask();
+          //  timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -132,11 +136,32 @@ namespace prj202405
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            
+
             await _readMerInfo();
-            var updateString = JsonConvert.SerializeObject(update);
+            var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
+            Directory.CreateDirectory("msgRcvDir");
             Console.WriteLine(updateString);
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            string fileName = $"msgRcvDir/{timestamp}.txt";
+            Console.WriteLine(fileName);
+            System.IO.File.WriteAllText( ""+fileName, updateString);
 
+            if(update?.Message?.ReplyToMessage?.From?.Username==botname &&
+               strCls.contain( update?.Message?.Text,"世博博彩")
+                )
+            {
+                 evt_shiboBocai(update);
+                return;
+            }
 
+            if (   strCls.contain(update?.Message?.Text, "世博博彩")
+              )
+            {
+                evt_shiboBocai(update);
+                return;
+            }
             //auto add cht sess
             if (update?.Message != null)
             {
@@ -171,7 +196,7 @@ namespace prj202405
                 #region @回复了商家详情信息  评价商家
                 //@回复了商家详情信息
                 if (update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text))
-                && update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
+                && update?.Message?.ReplyToMessage?.From?.Username == botname
                  && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
                 )
                 {
@@ -423,16 +448,17 @@ namespace prj202405
                     //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
 
                     string? msgx = botapi.bot_getTxtMsg(update);
-                    if(msgx!=null)
+                    if(msgx!=null &&   msgx.Length < 19)
                     {
-                        if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
+                        if (msgx.Trim().StartsWith("@"+ botname))
                             msgx = msgx.Substring(19).Trim();
                         msgx = msgx.Trim();
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
                         return;
                     }
-                   
 
+                    else
+                        return;
 
 
                 }
@@ -442,7 +468,8 @@ namespace prj202405
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
                 {
                     string? msgx = botapi.bot_getTxtMsg(update);
-                    if (msgx != null)
+
+                    if (msgx != null )
                     {
                         if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
                             msgx = msgx.Substring(19).Trim();
@@ -450,6 +477,7 @@ namespace prj202405
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
                         return;
                     }
+                   
                       
                 }
 
@@ -519,6 +547,41 @@ namespace prj202405
 
                 #endregion
             }, cancellationToken);
+        }
+
+        private static async void evt_shiboBocai(Update? update)
+        {
+            //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
+          
+              //   custom - emoji - element
+              Message a=await    Program.botClient.SendTextMessageAsync(
+                     update.Message.Chat.Id,
+                   System.IO.File.ReadAllText("shiboTrm.htm"),
+                     parseMode: ParseMode.Html,
+                     //   replyMarkup: new InlineKeyboardMarkup([]),
+                     protectContent: false,
+                     disableWebPagePreview: true);
+            Console.WriteLine(JsonConvert.SerializeObject(a));
+        }
+
+        static void RemoveCustomEmojiRendererElement(string inputFilePath, string outputFilePath)
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(inputFilePath);
+
+            // 在这里添加你的代码来去除 custom-emoji-renderer-element 标签
+            // 这里提供一个示例来移除所有的 custom-emoji-renderer-element 标签
+            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//custom-emoji-renderer-element"))
+            {
+                node.ParentNode.RemoveChild(node);
+            }
+
+            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//custom-emoji-element"))
+            {
+                node.ParentNode.RemoveChild(node);
+            }
+
+            doc.Save(outputFilePath);
         }
 
         private static async Task evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
@@ -891,7 +954,7 @@ namespace prj202405
 
             //if rply n frmuser is bot n textContain(我是便民助手
             if (update?.Message?.ReplyToMessage != null
-                && update.Message.ReplyToMessage.From.Username == "LianXin_BianMinBot"
+                && update.Message.ReplyToMessage.From.Username == botname
                 && strCls.StartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
                 )
             {
@@ -917,8 +980,8 @@ namespace prj202405
            
 
 
-            if (update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
-                && update?.Message?.ReplyToMessage?.Caption == "??博彩信誉盘推荐：  世博联盟")
+            if (update?.Message?.ReplyToMessage?.From?.Username == botname
+                && update?.Message?.ReplyToMessage?.Caption == "??博彩盘推荐：世博联盟")
             {
                 return false;
             }
@@ -934,18 +997,20 @@ namespace prj202405
                 if (update?.Message?.Text == null)
                     return false;
 
-                if ((bool)update?.Message?.Text.StartsWith("@LianXin_BianMinBot"))
+                if ((bool)update?.Message?.Text.StartsWith("@"+ botname))
                     return false;
 
                 // 
-                var trgSearchKwds = "联系方式  纸飞机 line whatsapp telegram tg 飞机号";
-                if( strCls.containKwds(update?.Message?.Text, trgSearchKwds))
+                var trgSearchKwds = "联系方式  纸飞机 line whatsapp telegram tg 飞机号 哪家店 哪里有 哪有卖 手机号";
+                var trgWd = getTrgwdHash("trgWds.txt");
+                trgSearchKwds = trgSearchKwds + trgWd;
+                if ( strCls.containKwds(update?.Message?.Text, trgSearchKwds))
                 {
                     return false;
                 }
 
-                if(update?.Message?.ReplyToMessage?.From?.Username == "LianXin_BianMinBot"
-                    && update?.Message?.ReplyToMessage?.Caption == "??博彩信誉盘推荐：  世博联盟")
+                if(update?.Message?.ReplyToMessage?.From?.Username == botname
+                    && update?.Message?.ReplyToMessage?.Caption == "??博彩盘推荐：世博联盟")
                 {
                     return false;
                 }
@@ -962,6 +1027,38 @@ namespace prj202405
             else  //prvt mode  ,,,not nml msg
                 return false;
 
+        }
+
+        private static string getTrgwdHash(string filePath)
+        {
+            HashSet<string> hs = getTrgwdHashProcessFile(filePath);
+
+            return string.Join(", ", hs);
+        }
+
+        public static HashSet<string> getTrgwdHashProcessFile(string filePath)
+        {
+            // 创建一个 HashSet 来存储处理后的行
+            HashSet<string> processedLines = new HashSet<string>();
+
+            // 读取文件并逐行处理
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // 替换连字符和双引号，并进行 Trim()
+                    line = line.Replace("-", "").Replace("\"", "").Trim();
+
+                    // 将处理后的行添加到 HashSet 中
+                    if (!string.IsNullOrEmpty(line)) // 可选：跳过空行
+                    {
+                        processedLines.Add(line);
+                    }
+                }
+            }
+
+            return processedLines;
         }
 
 
@@ -1173,11 +1270,9 @@ namespace prj202405
 
             if (!string.IsNullOrEmpty(msgx))
             {
-
-
                 //    List<InlineKeyboardButton[]> results = [];
-                results = timerCls.qryByMsgKwds(msgx);
-                results = arrCls.rdmList<InlineKeyboardButton[]>(results);
+                results = timerCls.qryByMsgKwdsV2(msgx);
+                //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
                 results = results.Skip(page * pagesize).Take(pagesize).ToList();
             }
@@ -1236,14 +1331,14 @@ namespace prj202405
             //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
             results.Add([
 
-                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", "https://t.me/share/url?url=https://t.me/ZuoDaoMianDian&text=给大家推荐一个可以搜索商家联系方式的群!")
+                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=给大家推荐一个可以搜索商家联系方式的群!")
                 ]);
 
             try
             {
-                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n" +
-                    $"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
-                    $"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n";// +
+                    //$"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
+                    //$"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
                 text += " \n " + timerCls.plchdTxt;
                 //第一次搜索时返回的列表
                 if (update?.Message != null)
@@ -1333,7 +1428,7 @@ namespace prj202405
 
 
       
-
+        //dep
         static async Task evt_GetList_qry(ITelegramBotClient botClient, Update update)
         {
             Console.WriteLine(" fun  GetList()");
@@ -1487,9 +1582,10 @@ namespace prj202405
 
             try
             {
-                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n" +
-                    $"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
-                    $"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+                var text = $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n";
+                //+
+                //  嫖娼还是谈恋爱、 $"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
+                //    $"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
                 text += " \n " + timerCls.plchdTxt;
                 //第一次搜索时返回的列表
                 if (update?.Message != null)

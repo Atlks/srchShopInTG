@@ -8,6 +8,7 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
 using prj202405.lib;
 using JiebaNet.Segmenter;
+using System.Reflection;
 
 namespace prj202405
 {
@@ -137,7 +138,7 @@ namespace prj202405
 
 
         }
-        public static string plchdTxt = "💁博彩信誉盘推荐：  <a href='https://t.me/shibolianmeng'>世博联盟 </a>";
+        public static string plchdTxt = "💁博彩盘推荐：<a href='https://t.me/shibolianmeng'><b>世博联盟</b></a>";
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {
@@ -303,7 +304,7 @@ namespace prj202405
 
         public static async void zaocan()
         {
-            var s = "早餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉";
+            var s = "早餐 餐饮 早点 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
 
 
@@ -390,6 +391,8 @@ namespace prj202405
 
         public static List<InlineKeyboardButton[]> qryByKwd(string keyword)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
             List<InlineKeyboardButton[]> results = [];
 
             if (string.IsNullOrEmpty(keyword))
@@ -409,9 +412,98 @@ namespace prj202405
             {
 
             }
+
+
+  //          {
+  //              "text": "妙瓦底 ? 东风园区 ? 东方名剪",
+  //  "callback_data": "Merchant?id=dfwlvxcahlzudawgoeqjxafkxv"
+  //}
+            if (results.Count>0)
+                dbgCls.setDbgValRtval(__METHOD__, results[0]);
+
+
+         
             return results;
         }
+        public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg)
+        {
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            var segments = segmenter.CutForSearch(msg); // 搜索引擎模式
+            Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
 
+
+            List<InlineKeyboardButton[]> rows_rzt = [];
+            foreach (string kwd in segments)
+            {
+                if (kwd.Length < 2)
+                    continue;
+                var rows = qryByKwd(kwd);
+                Console.WriteLine("kwd=>" + kwd);
+                Console.WriteLine("qryByKwd(kwd) cnt=>" + rows.Count);
+                rows_rzt = arrCls.MergeLists(rows_rzt, rows);
+
+            }
+
+            SortedList<string, int> ordermap = calcOrderMap(rows_rzt);
+
+            // ArrayList rzt = new ArrayList(rows_rzt);
+            rows_rzt = (List<InlineKeyboardButton[]>)arrCls.dedulip4inlnKbdBtnArr(rows_rzt, "callback_data");
+
+            rows_rzt = ordRztByOrdtbl(rows_rzt, ordermap);
+
+            return rows_rzt;
+            //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+
+            //  results22 = results22.Skip(0 * 10).Take(5).ToList();
+        }
+
+        private static List<InlineKeyboardButton[]> ordRztByOrdtbl(List<InlineKeyboardButton[]> rows_rzt, SortedList<string, int> ordermap)
+        {
+
+            // 对 List<InlineKeyboardButton[]> 进行排序
+            rows_rzt.Sort((a, b) =>
+            {
+                try
+                {
+                    // 获取每个数组的第一个按钮的 Text 属性
+                    InlineKeyboardButton abtn = a[0];
+                    int ord1 = ordermap[abtn.CallbackData];
+
+                    InlineKeyboardButton bbtn = b[0];
+                    int ord2 = ordermap[bbtn.CallbackData];
+
+                    // 按 Text 属性进行排序
+                    return ord2.CompareTo(ord1);
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return 0;
+                }
+                
+            });
+            return rows_rzt;
+        }
+
+        private static SortedList<string, int> calcOrderMap(List<InlineKeyboardButton[]> rows_rzt)
+        {
+            SortedList<string, int> ordMap = new SortedList<string, int>();
+            foreach (InlineKeyboardButton[] row in rows_rzt)
+            {
+                try
+                {
+                    InlineKeyboardButton btn = row[0];
+                    arrCls.saveIncrs(ordMap, btn.CallbackData);
+                }catch(Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                       
+            }
+            return ordMap;
+        }
 
         public static List<InlineKeyboardButton[]> qryByMsgKwds(string msg)
         {
@@ -434,6 +526,8 @@ namespace prj202405
 
             }
 
+            // ArrayList rzt = new ArrayList(rows_rzt);
+            rows_rzt = (List<InlineKeyboardButton[]>)arrCls.dedulip4inlnKbdBtnArr(rows_rzt, "callback_data");
             return rows_rzt;
         //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
 

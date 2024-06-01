@@ -6,11 +6,60 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
+using System.Collections;
 
 namespace prj202405.lib
 {
     internal class arrCls
     {
+        internal static void map_add(SortedList map, string idClmName, object item)
+        {
+
+            //   SortedList itemx = (SortedList)item;
+            try
+            {
+
+                map.Add(idClmName, item);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+
+            }
+        }
+
+
+        internal static ArrayList dedulip(ArrayList List1, string idClmName)
+        {
+            ArrayList list = (ArrayList)List1;
+            SortedList listIot = db.lst2IOT(list, idClmName);
+
+            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            return saveList_hpmod;
+        }
+
+        internal static ArrayList dedulipV2(ArrayList List1, string idClmName)
+        {
+            ArrayList list = (ArrayList)List1;
+            SortedList listIot = db.lst2IOT(list, idClmName);
+
+            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            return saveList_hpmod;
+        }
+        public static ArrayList dedulip(ArrayList List1)
+        {
+            ArrayList list = (ArrayList)List1;
+            SortedList listIot = db.lst2IOT(list);
+
+            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            return saveList_hpmod;
+        }
 
         public static List<t> MergeLists<t>(List<t> list1, List<t> list2)
         {
@@ -43,6 +92,9 @@ namespace prj202405.lib
             results22 = results.OrderBy(x => rng.Next()).ToList();
             return results22;
         }
+
+
+
         private static void findd()
         {
             long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
@@ -74,6 +126,27 @@ namespace prj202405.lib
             long spantime = (timestamp_end - timestamp);
 
             Console.WriteLine(showtitle + spantime);
+        }
+
+        internal static List<InlineKeyboardButton[]> dedulip4inlnKbdBtnArr(List<InlineKeyboardButton[]> List1, string idClmName)
+        {
+            //  ArrayList list = new ArrayList(List1);
+            SortedList listIot = db.lst2IOT4inlKbdBtnArr(List1, idClmName);
+
+            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+            List<InlineKeyboardButton[]> saveList_hpmod = db.lstFrmIot4inlnKbdBtn(listIot);
+            return saveList_hpmod;
+        }
+
+        internal static void saveIncrs(SortedList<string, int> ordMap, string? callbackData)
+        {
+            if (!ordMap.ContainsKey(callbackData))
+                ordMap.Add(callbackData, 1);
+            else
+            {
+                ordMap[callbackData] = ordMap[callbackData] + 1;
+            }
         }
     }
 }

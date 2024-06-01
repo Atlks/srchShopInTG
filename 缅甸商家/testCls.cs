@@ -11,14 +11,43 @@ using prj202405.lib;
 using static System.Net.Mime.MediaTypeNames;
 using prj202405.lib;
 using ClosedXML.Excel;
-using 缅甸商家.lib;
+using prj202405.lib;
+using System.Text.RegularExpressions;
+using prj202504;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace prj202405
 {
     internal class testCls
     {
+
+        public static void ExtractLinks(string inputFilePath, string outputFilePath)
+        {
+            // 读取输入文件内容
+            string htmlContent = System.IO.File.ReadAllText(inputFilePath);
+
+            // 匹配<a>标签中的href属性值和链接文本
+            MatchCollection matches = Regex.Matches(htmlContent, @"<a\s+.*?href\s*=\s*(""(.*?)""|'(.*?)')[^>]*>(.*?)</a>");
+
+            // 输出匹配到的链接和链接文本到输出文件
+            using (StreamWriter writer = new StreamWriter(outputFilePath))
+            {
+                foreach (Match match in matches)
+                {
+                    // 获取 href 属性值和链接文本
+                    string href = match.Groups[2].Success ? match.Groups[2].Value : match.Groups[3].Value;
+                    string linkText = match.Groups[4].Value;
+
+                    // 写入到输出文件
+                    writer.WriteLine($"<a href=\"{href}\">{linkText}</a>");
+                }
+            }
+        }
         internal static void test()
         {
+
+          
+            HashSet<City> dataObjPark= mrcht.qry4byParknameExprs2Dataobj( "city=妙瓦底&park=世纪新城园区", Program._shangjiaFL());
 
             //export 
             //联系商家城市
@@ -31,13 +60,22 @@ namespace prj202405
 
             //搜索关键词  Merchant.json to citys
 
+        //    ExtractLinks("D:\\0prj\\缅甸商家\\缅甸商家\\dbx\\web.htm","shibo.htm");
+        
+
             // wucan();
             // timerCls.  xiawucha();
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
 
+               
+                return;
+
+           //     timerCls. sendMsg4keepmenu("今日促销商家.gif",timerCls. plchdTxt, Program._btmBtns());
+                ArrayList lst = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
+
                 //export mercht
-                exptMrcht();
+                //  exptMrcht();
                 Merchant? merchant = new Merchant();
                 merchant.Guid = "123456";
                 merchant.Name = "shjjj";
@@ -48,10 +86,13 @@ namespace prj202405
                 pinlunobj.Add("商家", merchant.Name);
                 pinlunobj.Add("时间", DateTime.Now.ToString());
                 pinlunobj.Add("评论内容", text);
-
+                pinlunobj.Add("消息", "tttttt111111111111");
                 System.IO.Directory.CreateDirectory("pinlunDir");
-                ormSqlt.save(  pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");             
                 ormJSonFL.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+
+
+                ormSqlt.save(  pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");             
+             
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
                 Console.WriteLine("line1633");
@@ -97,6 +138,30 @@ namespace prj202405
 
             // 
 
+        }
+
+        public static ArrayList kwdSeasrchInGrp(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if(word.Trim().Length>0)
+                       wordList.Add(word);
+                }
+            }
+            return wordList;
         }
 
         private static void exptMrcht()
