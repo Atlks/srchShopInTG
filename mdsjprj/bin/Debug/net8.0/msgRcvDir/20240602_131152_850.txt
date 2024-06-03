@@ -1,0 +1,29 @@
+{
+  "update_id": 839606562,
+  "message": {
+    "message_id": 933,
+    "from": {
+      "id": 6618993733,
+      "is_bot": false,
+      "first_name": "联盛--果冻",
+      "username": "VIPLSPC288",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717308712,
+    "chat": {
+      "id": 6618993733,
+      "type": "private",
+      "username": "VIPLSPC288",
+      "first_name": "联盛--果冻"
+    },
+    "text": "/start",
+    "entities": [
+      {
+        "type": "bot_command",
+        "offset": 0,
+        "length": 6
+      }
+    ]
+  }
+}

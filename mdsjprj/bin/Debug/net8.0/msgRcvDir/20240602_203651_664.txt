@@ -1,0 +1,49 @@
+{
+  "update_id": 839606696,
+  "message": {
+    "message_id": 1347,
+    "from": {
+      "id": 5340172640,
+      "is_bot": false,
+      "first_name": "亚",
+      "username": "Lang922",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335411,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "photo": [
+      {
+        "width": 67,
+        "height": 90,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBUNmXHVzZb70LbxYeh7vtGxuG8ymfQACEr0xGxqa6Vbtqr9E6ftaBQEAAwIAA3MAAzUE",
+        "file_unique_id": "AQADEr0xGxqa6VZ4",
+        "file_size": 1223
+      },
+      {
+        "width": 240,
+        "height": 320,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBUNmXHVzZb70LbxYeh7vtGxuG8ymfQACEr0xGxqa6Vbtqr9E6ftaBQEAAwIAA20AAzUE",
+        "file_unique_id": "AQADEr0xGxqa6VZy",
+        "file_size": 18222
+      },
+      {
+        "width": 600,
+        "height": 800,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBUNmXHVzZb70LbxYeh7vtGxuG8ymfQACEr0xGxqa6Vbtqr9E6ftaBQEAAwIAA3gAAzUE",
+        "file_unique_id": "AQADEr0xGxqa6VZ9",
+        "file_size": 85642
+      },
+      {
+        "width": 960,
+        "height": 1280,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBUNmXHVzZb70LbxYeh7vtGxuG8ymfQACEr0xGxqa6Vbtqr9E6ftaBQEAAwIAA3kAAzUE",
+        "file_unique_id": "AQADEr0xGxqa6VZ-",
+        "file_size": 115035
+      }
+    ]
+  }
+}

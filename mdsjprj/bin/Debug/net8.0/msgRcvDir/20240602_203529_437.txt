@@ -1,0 +1,59 @@
+{
+  "update_id": 839606687,
+  "message": {
+    "message_id": 429817,
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "sender_chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "date": 1717335328,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "author_signature": "韩少",
+    "photo": [
+      {
+        "width": 51,
+        "height": 90,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo75Zlx1IayNM9AoT5DB4L65pAnJ5KkAAs29MRvjReBWbOn1icEAAUVfAQADAgADcwADNQQ",
+        "file_unique_id": "AQADzb0xG-NF4FZ4",
+        "file_size": 1299
+      },
+      {
+        "width": 180,
+        "height": 320,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo75Zlx1IayNM9AoT5DB4L65pAnJ5KkAAs29MRvjReBWbOn1icEAAUVfAQADAgADbQADNQQ",
+        "file_unique_id": "AQADzb0xG-NF4FZy",
+        "file_size": 16053
+      },
+      {
+        "width": 450,
+        "height": 800,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo75Zlx1IayNM9AoT5DB4L65pAnJ5KkAAs29MRvjReBWbOn1icEAAUVfAQADAgADeAADNQQ",
+        "file_unique_id": "AQADzb0xG-NF4FZ9",
+        "file_size": 54916
+      },
+      {
+        "width": 720,
+        "height": 1280,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo75Zlx1IayNM9AoT5DB4L65pAnJ5KkAAs29MRvjReBWbOn1icEAAUVfAQADAgADeQADNQQ",
+        "file_unique_id": "AQADzb0xG-NF4FZ-",
+        "file_size": 93948
+      }
+    ],
+    "caption": "泰国的水，真的不好喝"
+  }
+}

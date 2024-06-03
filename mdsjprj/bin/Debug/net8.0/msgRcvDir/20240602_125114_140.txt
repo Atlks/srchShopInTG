@@ -1,0 +1,67 @@
+{
+  "update_id": 839606547,
+  "message": {
+    "message_id": 429657,
+    "message_thread_id": 429654,
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "sender_chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "date": 1717307473,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429654,
+      "from": {
+        "id": 7119944545,
+        "is_bot": false,
+        "first_name": "联 盛 客 服🌸七 七",
+        "username": "lszqq",
+        "language_code": "zh-hans",
+        "is_premium": true
+      },
+      "date": 1717307207,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "media_group_id": "13738457656629573",
+      "photo": [
+        {
+          "width": 90,
+          "height": 13,
+          "file_id": "AgACAgUAAx0CYCTD-AABBo5WZlwHR7iKHOQqh5toHQ7UmXuc7d8AAuO7MRvjReBWVE8NQYqdPt4BAAMCAANzAAM1BA",
+          "file_unique_id": "AQAD47sxG-NF4FZ4",
+          "file_size": 643
+        },
+        {
+          "width": 244,
+          "height": 36,
+          "file_id": "AgACAgUAAx0CYCTD-AABBo5WZlwHR7iKHOQqh5toHQ7UmXuc7d8AAuO7MRvjReBWVE8NQYqdPt4BAAMCAANtAAM1BA",
+          "file_unique_id": "AQAD47sxG-NF4FZy",
+          "file_size": 2757
+        }
+      ],
+      "caption": "我就不买小单，怎么样嘛"
+    },
+    "author_signature": "韩少",
+    "text": "KKAA?"
+  }
+}

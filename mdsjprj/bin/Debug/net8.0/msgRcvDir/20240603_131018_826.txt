@@ -1,0 +1,37 @@
+{
+  "update_id": 839607075,
+  "chat_member": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 1810482572,
+      "is_bot": false,
+      "first_name": "十二 အသဲကွဲဆရာကြီး",
+      "username": "shier13145"
+    },
+    "date": 1717395018,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 1810482572,
+        "is_bot": false,
+        "first_name": "十二 အသဲကွဲဆရာကြီး",
+        "username": "shier13145"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 1810482572,
+        "is_bot": false,
+        "first_name": "十二 အသဲကွဲဆရာကြီး",
+        "username": "shier13145"
+      }
+    }
+  }
+}

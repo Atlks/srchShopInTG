@@ -1,0 +1,18 @@
+{
+  "update_id": 839606265,
+  "message": {
+    "message_id": 1291,
+    "from": {
+      "id": 6888966948,
+      "is_bot": false,
+      "first_name": "Tank"
+    },
+    "date": 1717242085,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "6/1\nwhatsapp助手， 编写账号管理逻辑"
+  }
+}

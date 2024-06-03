@@ -1,0 +1,43 @@
+{
+  "update_id": 839606816,
+  "message": {
+    "message_id": 429889,
+    "message_thread_id": 429886,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717345498,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429886,
+      "from": {
+        "id": 5281564695,
+        "is_bot": false,
+        "first_name": "👑楊先生",
+        "username": "All1688888",
+        "language_code": "zh-hans"
+      },
+      "date": 1717345362,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "Kfc吧？"
+    },
+    "text": "还什么好吃的？我也饿了"
+  }
+}

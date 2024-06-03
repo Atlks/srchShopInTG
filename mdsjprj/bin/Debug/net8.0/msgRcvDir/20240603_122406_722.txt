@@ -1,0 +1,51 @@
+{
+  "update_id": 839607046,
+  "message": {
+    "message_id": 430203,
+    "from": {
+      "id": 5564438439,
+      "is_bot": false,
+      "first_name": "图",
+      "last_name": "图",
+      "username": "tzc0416"
+    },
+    "date": 1717392246,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "photo": [
+      {
+        "width": 42,
+        "height": 90,
+        "file_id": "AgACAgUAAx0CYCTD-AABBpB7Zl1Td5-ZUp12DI4DmYJlGVHsAw0AAtG-MRt_JulWp_PsS-zy0oIBAAMCAANzAAM1BA",
+        "file_unique_id": "AQAD0b4xG38m6VZ4",
+        "file_size": 1019
+      },
+      {
+        "width": 148,
+        "height": 320,
+        "file_id": "AgACAgUAAx0CYCTD-AABBpB7Zl1Td5-ZUp12DI4DmYJlGVHsAw0AAtG-MRt_JulWp_PsS-zy0oIBAAMCAANtAAM1BA",
+        "file_unique_id": "AQAD0b4xG38m6VZy",
+        "file_size": 14716
+      },
+      {
+        "width": 369,
+        "height": 800,
+        "file_id": "AgACAgUAAx0CYCTD-AABBpB7Zl1Td5-ZUp12DI4DmYJlGVHsAw0AAtG-MRt_JulWp_PsS-zy0oIBAAMCAAN4AAM1BA",
+        "file_unique_id": "AQAD0b4xG38m6VZ9",
+        "file_size": 70958
+      },
+      {
+        "width": 591,
+        "height": 1280,
+        "file_id": "AgACAgUAAx0CYCTD-AABBpB7Zl1Td5-ZUp12DI4DmYJlGVHsAw0AAtG-MRt_JulWp_PsS-zy0oIBAAMCAAN5AAM1BA",
+        "file_unique_id": "AQAD0b4xG38m6VZ-",
+        "file_size": 96153
+      }
+    ]
+  }
+}

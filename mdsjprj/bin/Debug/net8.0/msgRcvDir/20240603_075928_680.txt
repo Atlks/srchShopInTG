@@ -1,0 +1,61 @@
+{
+  "update_id": 839606964,
+  "message": {
+    "message_id": 430114,
+    "message_thread_id": 113642,
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "sender_chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "date": 1717376368,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "is_topic_message": true,
+    "reply_to_message": {
+      "message_id": 113642,
+      "message_thread_id": 113642,
+      "from": {
+        "id": 1087968824,
+        "is_bot": true,
+        "first_name": "Group",
+        "username": "GroupAnonymousBot"
+      },
+      "sender_chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "date": 1697558487,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "is_topic_message": true,
+      "forum_topic_created": {
+        "name": "快递跑腿",
+        "icon_color": 16766590,
+        "icon_custom_emoji_id": "5312322066328853156"
+      }
+    },
+    "forum_topic_closed": {}
+  }
+}

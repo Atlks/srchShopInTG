@@ -1,0 +1,55 @@
+{
+  "update_id": 839606967,
+  "message": {
+    "message_id": 430120,
+    "message_thread_id": 111389,
+    "from": {
+      "id": 1982404639,
+      "is_bot": false,
+      "first_name": "阿风😎（ken）（大额转账电话确认）",
+      "username": "afeng9527",
+      "is_premium": true
+    },
+    "date": 1717379640,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "is_topic_message": true,
+    "reply_to_message": {
+      "message_id": 111389,
+      "message_thread_id": 111389,
+      "from": {
+        "id": 1087968824,
+        "is_bot": true,
+        "first_name": "Group",
+        "username": "GroupAnonymousBot"
+      },
+      "sender_chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "date": 1697428877,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "is_topic_message": true,
+      "forum_topic_created": {
+        "name": "商家联系",
+        "icon_color": 9367192,
+        "icon_custom_emoji_id": "5312486108309757006"
+      }
+    },
+    "text": "金州"
+  }
+}

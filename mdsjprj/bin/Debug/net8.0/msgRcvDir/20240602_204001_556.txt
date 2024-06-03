@@ -1,0 +1,37 @@
+{
+  "update_id": 839606707,
+  "message": {
+    "message_id": 1358,
+    "message_thread_id": 1357,
+    "from": {
+      "id": 5340172640,
+      "is_bot": false,
+      "first_name": "亚",
+      "username": "Lang922",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335601,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1357,
+      "from": {
+        "id": 5743211645,
+        "is_bot": false,
+        "first_name": "MR.HAN",
+        "language_code": "zh-hans"
+      },
+      "date": 1717335592,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "还是和我一起过去"
+    },
+    "text": "你什么时候过去"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "update_id": 839606756,
+  "message": {
+    "message_id": 429851,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717341853,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "animation": {
+      "width": 320,
+      "height": 320,
+      "duration": 2,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjxtmXI6d7FY7h4cujkxUrDI94pKF8AACFgIAAjB1CVUa17giEAM9ZwEAB20AAzUE",
+        "file_unique_id": "AQADFgIAAjB1CVVy",
+        "file_size": 19784
+      },
+      "file_name": "9c1ebe0381685c99a40af92b50aab69c.gif.mp4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo8bZlyOnexWO4eHLo5MVKwyPeKShfAAAhYCAAIwdQlVGte4IhADPWc1BA",
+      "file_unique_id": "AgADFgIAAjB1CVU",
+      "file_size": 60176
+    },
+    "document": {
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjxtmXI6d7FY7h4cujkxUrDI94pKF8AACFgIAAjB1CVUa17giEAM9ZwEAB20AAzUE",
+        "file_unique_id": "AQADFgIAAjB1CVVy",
+        "file_size": 19784
+      },
+      "file_name": "9c1ebe0381685c99a40af92b50aab69c.gif.mp4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo8bZlyOnexWO4eHLo5MVKwyPeKShfAAAhYCAAIwdQlVGte4IhADPWc1BA",
+      "file_unique_id": "AgADFgIAAjB1CVU",
+      "file_size": 60176
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "update_id": 839606332,
+  "chat_member": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 5603475864,
+      "is_bot": false,
+      "first_name": "北海",
+      "username": "hai784878"
+    },
+    "date": 1717259958,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 5603475864,
+        "is_bot": false,
+        "first_name": "北海",
+        "username": "hai784878"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 5603475864,
+        "is_bot": false,
+        "first_name": "北海",
+        "username": "hai784878"
+      }
+    }
+  }
+}

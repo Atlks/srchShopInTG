@@ -1,0 +1,37 @@
+{
+  "update_id": 839606690,
+  "message": {
+    "message_id": 1341,
+    "message_thread_id": 1337,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335359,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1337,
+      "from": {
+        "id": 5340172640,
+        "is_bot": false,
+        "first_name": "亚",
+        "username": "Lang922",
+        "language_code": "zh-hans"
+      },
+      "date": 1717335310,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "这里有好多个兄弟都喜欢这种"
+    },
+    "text": "今晚又组团出去浪了?"
+  }
+}

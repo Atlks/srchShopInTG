@@ -1,0 +1,61 @@
+{
+  "update_id": 839606633,
+  "message": {
+    "message_id": 429747,
+    "message_thread_id": 429743,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717317829,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429743,
+      "from": {
+        "id": 1534615629,
+        "is_bot": false,
+        "first_name": "阿良",
+        "username": "Aliang785",
+        "is_premium": true
+      },
+      "date": 1717317746,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "之前那个天天招人的祭天了吗，现在又换了个"
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": false,
+      "is_video": false,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjrNmXDDFnoKhUlnJFmyXPHVhiqI-8gACaQsAAohZmVRgvvfyfnEFPQEAB20AAzUE",
+        "file_unique_id": "AQADaQsAAohZmVRy",
+        "file_size": 9016
+      },
+      "emoji": "🙂",
+      "set_name": "shayudidi12",
+      "file_id": "CAACAgUAAx0CYCTD-AABBo6zZlwwxZ6CoVJZyRZslzx1YYqiPvIAAmkLAAKIWZlUYL738n5xBT01BA",
+      "file_unique_id": "AgADaQsAAohZmVQ",
+      "file_size": 15836
+    }
+  }
+}

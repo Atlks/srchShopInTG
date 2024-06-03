@@ -1,0 +1,19 @@
+{
+  "update_id": 839607122,
+  "message": {
+    "message_id": 1422,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717400268,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "如果OK就我飞过去订下来了"
+  }
+}

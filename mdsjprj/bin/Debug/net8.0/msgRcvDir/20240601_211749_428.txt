@@ -1,0 +1,42 @@
+{
+  "update_id": 839606295,
+  "message": {
+    "message_id": 429306,
+    "message_thread_id": 429292,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "is_premium": true
+    },
+    "date": 1717251469,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429292,
+      "from": {
+        "id": 5281564695,
+        "is_bot": false,
+        "first_name": "👑楊先生",
+        "username": "All1688888",
+        "language_code": "zh-hans"
+      },
+      "date": 1717248941,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "羡慕还有下班的"
+    },
+    "text": "快过节吧"
+  }
+}

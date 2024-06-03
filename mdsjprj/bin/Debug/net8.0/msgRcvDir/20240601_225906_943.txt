@@ -1,0 +1,42 @@
+{
+  "update_id": 839606319,
+  "message": {
+    "message_id": 429354,
+    "message_thread_id": 429347,
+    "from": {
+      "id": 7162453132,
+      "is_bot": false,
+      "first_name": "艾克斯",
+      "username": "Aix88888Pro",
+      "is_premium": true
+    },
+    "date": 1717257547,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429353,
+      "message_thread_id": 429347,
+      "from": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      },
+      "date": 1717257541,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "未搜索到商家,您可以向我们提交商家联系方式"
+    },
+    "text": "？"
+  }
+}

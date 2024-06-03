@@ -1,0 +1,20 @@
+{
+  "update_id": 839606797,
+  "message": {
+    "message_id": 11466,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717344934,
+    "chat": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
+    "text": "还有WhaleFin 。😂😂也把我账号冻结了幸亏没损失多少"
+  }
+}

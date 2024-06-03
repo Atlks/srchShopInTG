@@ -1,0 +1,39 @@
+{
+  "update_id": 839607074,
+  "message": {
+    "message_id": 430277,
+    "from": {
+      "id": 1631893755,
+      "is_bot": false,
+      "first_name": "小快樂.の",
+      "username": "MK413023"
+    },
+    "date": 1717394914,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": false,
+      "is_video": true,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGkMVmXV3igboEE2jXUUyJkbPt6V3TSwACCwcAAjihgFQ4oOXYXIzQYwEAB20AAzUE",
+        "file_unique_id": "AQADCwcAAjihgFRy",
+        "file_size": 8826
+      },
+      "emoji": "💥",
+      "set_name": "CNM6_by_fStikBot",
+      "file_id": "CAACAgUAAx0CYCTD-AABBpDFZl1d4oG6BBNo11FMiZGz7eld00sAAgsHAAI4oYBUOKDl2FyM0GM1BA",
+      "file_unique_id": "AgADCwcAAjihgFQ",
+      "file_size": 24270
+    }
+  }
+}

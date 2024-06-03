@@ -1,0 +1,73 @@
+{
+  "update_id": 839606513,
+  "message": {
+    "message_id": 429571,
+    "message_thread_id": 429564,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717304468,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429569,
+      "message_thread_id": 429564,
+      "from": {
+        "id": 7039546731,
+        "is_bot": false,
+        "first_name": "财",
+        "username": "pzzzz1704"
+      },
+      "date": 1717304396,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "给我送福利吗"
+    },
+    "animation": {
+      "width": 720,
+      "height": 720,
+      "duration": 4,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjgNmW_yU66Lrtzft6cuwNtolTiHvMgACawwAAhl1yVZUIkDSJGO8JQEAB20AAzUE",
+        "file_unique_id": "AQADawwAAhl1yVZy",
+        "file_size": 16255
+      },
+      "file_name": "IMG_3067.MP4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo4DZlv8lOui67c37enLsDbaJU4h7zIAAmsMAAIZdclWVCJA0iRjvCU1BA",
+      "file_unique_id": "AgADawwAAhl1yVY",
+      "file_size": 435927
+    },
+    "document": {
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjgNmW_yU66Lrtzft6cuwNtolTiHvMgACawwAAhl1yVZUIkDSJGO8JQEAB20AAzUE",
+        "file_unique_id": "AQADawwAAhl1yVZy",
+        "file_size": 16255
+      },
+      "file_name": "IMG_3067.MP4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo4DZlv8lOui67c37enLsDbaJU4h7zIAAmsMAAIZdclWVCJA0iRjvCU1BA",
+      "file_unique_id": "AgADawwAAhl1yVY",
+      "file_size": 435927
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "update_id": 839606533,
+  "message": {
+    "message_id": 429596,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717305682,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "media_group_id": "13738445456865629",
+    "photo": [
+      {
+        "width": 90,
+        "height": 10,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo4cZlwBUmgLVoGiDp_bwJAeNe_p9lYAAtm7MRvjReBWImjT1t5Q4JIBAAMCAANzAAM1BA",
+        "file_unique_id": "AQAD2bsxG-NF4FZ4",
+        "file_size": 619
+      },
+      {
+        "width": 240,
+        "height": 26,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo4cZlwBUmgLVoGiDp_bwJAeNe_p9lYAAtm7MRvjReBWImjT1t5Q4JIBAAMCAANtAAM1BA",
+        "file_unique_id": "AQAD2bsxG-NF4FZy",
+        "file_size": 3476
+      }
+    ],
+    "caption": "就没买小单，你能把我怎么样呀？"
+  }
+}

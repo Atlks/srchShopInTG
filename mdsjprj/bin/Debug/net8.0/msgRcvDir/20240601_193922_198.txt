@@ -1,0 +1,23 @@
+{
+  "update_id": 839606280,
+  "message": {
+    "message_id": 429280,
+    "from": {
+      "id": 7034635484,
+      "is_bot": false,
+      "first_name": "HR请看主页",
+      "last_name": "静心竹叶青",
+      "username": "yangke520520",
+      "language_code": "zh-hans"
+    },
+    "date": 1717245562,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "下班下班"
+  }
+}

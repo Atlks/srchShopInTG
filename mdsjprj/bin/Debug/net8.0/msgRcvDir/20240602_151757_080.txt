@@ -1,0 +1,21 @@
+{
+  "update_id": 839606595,
+  "chat_join_request": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 6941702225,
+      "is_bot": false,
+      "first_name": "Alice🧘🏻‍♀️",
+      "username": "vipp996",
+      "language_code": "zh-hans"
+    },
+    "user_chat_id": 6941702225,
+    "date": 1717316276
+  }
+}

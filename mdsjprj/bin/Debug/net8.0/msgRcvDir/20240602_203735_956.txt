@@ -1,0 +1,38 @@
+{
+  "update_id": 839606702,
+  "message": {
+    "message_id": 1353,
+    "message_thread_id": 1350,
+    "from": {
+      "id": 5340172640,
+      "is_bot": false,
+      "first_name": "亚",
+      "username": "Lang922",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335455,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1350,
+      "from": {
+        "id": 5640108039,
+        "is_bot": false,
+        "first_name": "reed（小明）🇱🇦万象第一深情",
+        "username": "reed779",
+        "language_code": "zh-hans"
+      },
+      "date": 1717335436,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "这个我知道"
+    },
+    "text": "哇，你好厉害啊"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "update_id": 839607010,
+  "message": {
+    "message_id": 430181,
+    "from": {
+      "id": 2130872534,
+      "is_bot": false,
+      "first_name": "那年冬天",
+      "username": "WHlsss"
+    },
+    "date": 1717390053,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "有没有做炒群的盘口啊"
+  }
+}

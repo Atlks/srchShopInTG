@@ -1,0 +1,38 @@
+{
+  "update_id": 839606801,
+  "message": {
+    "message_id": 1380,
+    "message_thread_id": 1379,
+    "from": {
+      "id": 5640108039,
+      "is_bot": false,
+      "first_name": "reed（小明）🇱🇦万象第一深情",
+      "username": "reed779",
+      "language_code": "zh-hans"
+    },
+    "date": 1717345221,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1379,
+      "from": {
+        "id": 879006550,
+        "is_bot": false,
+        "first_name": "十 Adam 大鱼 刘洋 汤姆",
+        "username": "Xxx0079468",
+        "language_code": "en"
+      },
+      "date": 1717345091,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "这几个园区那家汉堡炸鸡好吃的，有没有大兄弟推荐个"
+    },
+    "text": "可以定mei suo"
+  }
+}

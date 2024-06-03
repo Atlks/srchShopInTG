@@ -1,0 +1,39 @@
+{
+  "update_id": 839606422,
+  "chat_member": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717269186,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 1214605019,
+        "is_bot": false,
+        "first_name": "翰崊（综合娱乐城)可玩可代理",
+        "last_name": "支持kpay wave 支付宝 U上下分",
+        "username": "Ironman1888"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 1214605019,
+        "is_bot": false,
+        "first_name": "翰崊（综合娱乐城)可玩可代理",
+        "last_name": "支持kpay wave 支付宝 U上下分",
+        "username": "Ironman1888"
+      }
+    }
+  }
+}

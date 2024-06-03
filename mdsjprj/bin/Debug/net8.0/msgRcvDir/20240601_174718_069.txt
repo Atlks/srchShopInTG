@@ -1,0 +1,59 @@
+{
+  "update_id": 839606227,
+  "message": {
+    "message_id": 429200,
+    "message_thread_id": 429199,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "is_premium": true
+    },
+    "date": 1717238838,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429199,
+      "from": {
+        "id": 7039546731,
+        "is_bot": false,
+        "first_name": "财",
+        "username": "pzzzz1704"
+      },
+      "date": 1717238705,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "sticker": {
+        "type": "regular",
+        "width": 512,
+        "height": 512,
+        "is_animated": false,
+        "is_video": true,
+        "thumbnail": {
+          "width": 320,
+          "height": 320,
+          "file_id": "AAMCBQADHQJgJMP4AAEGjI9mWvuxIrNvYbltajLoPqq32BOCYQAC7AQAAhbDGFV402acXJ0XoQEAB20AAzUE",
+          "file_unique_id": "AQAD7AQAAhbDGFVy",
+          "file_size": 6612
+        },
+        "emoji": "❤",
+        "set_name": "dhdididhjkkw_by_fStikBot",
+        "file_id": "CAACAgUAAx0CYCTD-AABBoyPZlr7sSKzb2G5bWoy6D6qt9gTgmEAAuwEAAIWwxhVeNNmnFydF6E1BA",
+        "file_unique_id": "AgAD7AQAAhbDGFU",
+        "file_size": 53691
+      }
+    },
+    "text": "儿童节快乐，希望你永远心里有爱，眼里有光，做自己的小太阳。"
+  }
+}

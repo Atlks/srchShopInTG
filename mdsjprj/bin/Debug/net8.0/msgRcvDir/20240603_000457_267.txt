@@ -1,0 +1,40 @@
+{
+  "update_id": 839606889,
+  "message": {
+    "message_id": 429933,
+    "message_thread_id": 429926,
+    "from": {
+      "id": 5702575740,
+      "is_bot": false,
+      "first_name": "Deepl"
+    },
+    "date": 1717347897,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429926,
+      "from": {
+        "id": 5099678638,
+        "is_bot": false,
+        "first_name": "木姐小姐姐",
+        "last_name": "菲😊斯",
+        "username": "httpstmeqq123809"
+      },
+      "date": 1717346931,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "球工作"
+    },
+    "text": "来妙瓦底吗？"
+  }
+}

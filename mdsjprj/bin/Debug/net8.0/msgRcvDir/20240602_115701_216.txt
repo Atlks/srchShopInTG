@@ -1,0 +1,42 @@
+{
+  "update_id": 839606505,
+  "message": {
+    "message_id": 429562,
+    "message_thread_id": 429558,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717304220,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429558,
+      "from": {
+        "id": 7039546731,
+        "is_bot": false,
+        "first_name": "财",
+        "username": "pzzzz1704"
+      },
+      "date": 1717304181,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "我从小家里就穷2W是我父母一辈子的积蓄"
+    },
+    "text": "充2000也行"
+  }
+}

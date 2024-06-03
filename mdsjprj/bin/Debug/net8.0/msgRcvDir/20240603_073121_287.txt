@@ -1,0 +1,41 @@
+{
+  "update_id": 839606961,
+  "message": {
+    "message_id": 430111,
+    "message_thread_id": 429918,
+    "from": {
+      "id": 5192581358,
+      "is_bot": false,
+      "first_name": "苹果",
+      "username": "lt004"
+    },
+    "date": 1717374680,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429918,
+      "from": {
+        "id": 5099678638,
+        "is_bot": false,
+        "first_name": "木姐小姐姐",
+        "last_name": "菲😊斯",
+        "username": "httpstmeqq123809"
+      },
+      "date": 1717346731,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "哪里找人做饭的"
+    },
+    "text": "你做饭吗？"
+  }
+}

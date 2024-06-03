@@ -1,0 +1,22 @@
+{
+  "update_id": 839606626,
+  "message": {
+    "message_id": 429741,
+    "from": {
+      "id": 6942038836,
+      "is_bot": false,
+      "first_name": "升",
+      "username": "DS1881880",
+      "language_code": "zh-hans"
+    },
+    "date": 1717317451,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "招人了 招人了  业务员  人事  马来华人翻译  介绍有茶水"
+  }
+}

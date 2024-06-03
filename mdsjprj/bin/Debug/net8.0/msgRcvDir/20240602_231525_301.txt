@@ -1,0 +1,20 @@
+{
+  "update_id": 839606796,
+  "message": {
+    "message_id": 11465,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717344925,
+    "chat": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
+    "text": "我的就好几个交易所把我账号封锁了😓😓coinbase  火币  cropto。com"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "update_id": 839606647,
+  "message": {
+    "message_id": 970,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717326914,
+    "chat": {
+      "id": 879006550,
+      "type": "private",
+      "username": "Xxx0079468",
+      "first_name": "十 Adam 大鱼 刘洋 汤姆"
+    },
+    "text": "💸💸💸 世博博彩 💸💸💸"
+  }
+}

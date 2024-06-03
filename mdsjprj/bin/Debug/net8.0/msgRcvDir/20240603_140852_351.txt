@@ -1,0 +1,22 @@
+{
+  "update_id": 839607096,
+  "message": {
+    "message_id": 430297,
+    "from": {
+      "id": 7175236408,
+      "is_bot": false,
+      "first_name": "人事部飞-飞跃组组员-惜月",
+      "username": "Zyf520520A",
+      "language_code": "zh-hans"
+    },
+    "date": 1717398532,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "有找工作的吗"
+  }
+}

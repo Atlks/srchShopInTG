@@ -1,0 +1,38 @@
+{
+  "update_id": 839606679,
+  "message": {
+    "message_id": 1331,
+    "from": {
+      "id": 5640108039,
+      "is_bot": false,
+      "first_name": "reed（小明）🇱🇦万象第一深情",
+      "username": "reed779",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335244,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 434,
+      "is_animated": false,
+      "is_video": false,
+      "thumbnail": {
+        "width": 320,
+        "height": 271,
+        "file_id": "AAMCBQADHQJ3ca75AAIFM2ZcdMygkl7CKKHNt1uZaOSxv_e_AALvAAP2y4BXiD07HpWQv1YBAAdtAAM1BA",
+        "file_unique_id": "AQAD7wAD9suAV3I",
+        "file_size": 9194
+      },
+      "emoji": "🙈",
+      "set_name": "yxfwest",
+      "file_id": "CAACAgUAAx0Cd3Gu-QACBTNmXHTMoJJewiihzbdbmWjksb_3vwAC7wAD9suAV4g9Ox6VkL9WNQQ",
+      "file_unique_id": "AgAD7wAD9suAVw",
+      "file_size": 14304
+    }
+  }
+}

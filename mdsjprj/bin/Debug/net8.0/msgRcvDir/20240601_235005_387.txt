@@ -1,0 +1,22 @@
+{
+  "update_id": 839606335,
+  "message": {
+    "message_id": 429366,
+    "from": {
+      "id": 7162453132,
+      "is_bot": false,
+      "first_name": "艾克斯",
+      "username": "Aix88888Pro",
+      "is_premium": true
+    },
+    "date": 1717260605,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "我的"
+  }
+}

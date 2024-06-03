@@ -1,0 +1,38 @@
+{
+  "update_id": 839606300,
+  "message": {
+    "message_id": 429311,
+    "from": {
+      "id": 6910594487,
+      "is_bot": false,
+      "first_name": "迷了眼"
+    },
+    "date": 1717251664,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 509,
+      "height": 512,
+      "is_animated": false,
+      "is_video": false,
+      "thumbnail": {
+        "width": 318,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjP9mWy5Q3tNIVlRpoXzR1fmCxA7fVAACRhAAAk8MiVUL8aHPzkcYNAEAB20AAzUE",
+        "file_unique_id": "AQADRhAAAk8MiVVy",
+        "file_size": 5668
+      },
+      "emoji": "👏",
+      "set_name": "RHUBADR_by_fStikBot",
+      "file_id": "CAACAgUAAx0CYCTD-AABBoz_ZlsuUN7TSFZUaaF80dX5gsQO31QAAkYQAAJPDIlVC_Ghz85HGDQ1BA",
+      "file_unique_id": "AgADRhAAAk8MiVU",
+      "file_size": 8576
+    }
+  }
+}

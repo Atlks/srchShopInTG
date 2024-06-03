@@ -1,0 +1,41 @@
+{
+  "update_id": 839607073,
+  "message": {
+    "message_id": 430276,
+    "message_thread_id": 430272,
+    "from": {
+      "id": 1631893755,
+      "is_bot": false,
+      "first_name": "小快樂.の",
+      "username": "MK413023"
+    },
+    "date": 1717394909,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 430273,
+      "message_thread_id": 430272,
+      "from": {
+        "id": 6957363173,
+        "is_bot": false,
+        "first_name": "一条杠",
+        "username": "xyhby22323"
+      },
+      "date": 1717394873,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "阿鲁角是什么"
+    },
+    "text": "啊鲁然后又角"
+  }
+}

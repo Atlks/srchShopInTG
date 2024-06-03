@@ -1,0 +1,20 @@
+{
+  "update_id": 839606162,
+  "message": {
+    "message_id": 2735,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717229492,
+    "chat": {
+      "id": -1002040239665,
+      "type": "supergroup",
+      "title": "grp 资源聚集站"
+    },
+    "text": "💸💸💸 世博博彩 💸💸💸"
+  }
+}

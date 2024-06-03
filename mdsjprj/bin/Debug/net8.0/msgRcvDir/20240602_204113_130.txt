@@ -1,0 +1,19 @@
+{
+  "update_id": 839606716,
+  "message": {
+    "message_id": 1367,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335673,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "恩"
+  }
+}

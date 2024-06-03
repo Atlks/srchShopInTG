@@ -1,0 +1,21 @@
+{
+  "update_id": 839606738,
+  "message": {
+    "message_id": 429837,
+    "from": {
+      "id": 6010830794,
+      "is_bot": false,
+      "first_name": "Pig Man",
+      "username": "evaooooooo"
+    },
+    "date": 1717340193,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "有没有联系方式嘛"
+  }
+}

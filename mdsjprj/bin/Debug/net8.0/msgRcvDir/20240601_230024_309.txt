@@ -1,0 +1,44 @@
+{
+  "update_id": 839606324,
+  "message": {
+    "message_id": 429359,
+    "from": {
+      "id": 7162453132,
+      "is_bot": false,
+      "first_name": "艾克斯",
+      "username": "Aix88888Pro",
+      "is_premium": true
+    },
+    "date": 1717257624,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "photo": [
+      {
+        "width": 90,
+        "height": 54,
+        "file_id": "AgACAgIAAx0CYCTD-AABBo0vZltFmMOd42-kBExTOewllYJqfAcAAjvcMRuxH9lKqqkG6hht7qUBAAMCAANzAAM1BA",
+        "file_unique_id": "AQADO9wxG7Ef2Up4",
+        "file_size": 1133
+      },
+      {
+        "width": 320,
+        "height": 191,
+        "file_id": "AgACAgIAAx0CYCTD-AABBo0vZltFmMOd42-kBExTOewllYJqfAcAAjvcMRuxH9lKqqkG6hht7qUBAAMCAANtAAM1BA",
+        "file_unique_id": "AQADO9wxG7Ef2Upy",
+        "file_size": 21404
+      },
+      {
+        "width": 480,
+        "height": 286,
+        "file_id": "AgACAgIAAx0CYCTD-AABBo0vZltFmMOd42-kBExTOewllYJqfAcAAjvcMRuxH9lKqqkG6hht7qUBAAMCAAN4AAM1BA",
+        "file_unique_id": "AQADO9wxG7Ef2Up9",
+        "file_size": 35788
+      }
+    ]
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "update_id": 839606365,
+  "message": {
+    "message_id": 429395,
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "sender_chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "date": 1717261988,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "author_signature": "韩少",
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": true,
+      "is_video": false,
+      "thumbnail": {
+        "width": 128,
+        "height": 128,
+        "file_id": "AAMCAgADHQJgJMP4AAEGjVNmW1akuIfeCyzFWfSP2tuhhwR3dAACNg8AAh4J8UlSVZzp6JZtewEAB20AAzUE",
+        "file_unique_id": "AQADNg8AAh4J8Uly",
+        "file_size": 5616
+      },
+      "emoji": "👍",
+      "set_name": "TrickyFox",
+      "file_id": "CAACAgIAAx0CYCTD-AABBo1TZltWpLiH3gssxVn0j9rboYcEd3QAAjYPAAIeCfFJUlWc6eiWbXs1BA",
+      "file_unique_id": "AgADNg8AAh4J8Uk",
+      "file_size": 19288
+    }
+  }
+}

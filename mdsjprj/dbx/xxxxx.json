@@ -1,0 +1,27 @@
+{
+    "update_id": 839605667,
+    "message": {
+        "message_id": 798,
+        "from": {
+            "id": 7179646457,
+            "is_bot": false,
+            "first_name": "联信",
+            "username": "LianXinLeader",
+            "language_code": "zh-hans"
+        },
+        "date": 1717128716,
+        "chat": {
+            "id": -4209884020,
+            "type": "group",
+            "title": "联信 - 世纪|KK|金州|东风"
+        },
+        "new_chat_members": [
+            {
+                "id": 6999501721,
+                "is_bot": true,
+                "first_name": "联信便民助手",
+                "username": "LianXin_BianMinBot"
+            }
+        ]
+    }
+}

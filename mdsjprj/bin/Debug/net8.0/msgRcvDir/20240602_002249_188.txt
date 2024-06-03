@@ -1,0 +1,20 @@
+{
+  "update_id": 839606377,
+  "message": {
+    "message_id": 429408,
+    "from": {
+      "id": 6910594487,
+      "is_bot": false,
+      "first_name": "迷了眼"
+    },
+    "date": 1717262569,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "东北菜馆联系方式谁有"
+  }
+}

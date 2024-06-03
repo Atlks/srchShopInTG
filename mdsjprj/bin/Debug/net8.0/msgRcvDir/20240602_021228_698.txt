@@ -1,0 +1,29 @@
+{
+  "update_id": 839606420,
+  "message": {
+    "message_id": 429426,
+    "from": {
+      "id": 6019205909,
+      "is_bot": false,
+      "first_name": "腾龙百家乐 麻将胡 SUT上下分",
+      "username": "DKgrrbsorarx886",
+      "is_premium": true
+    },
+    "date": 1717269148,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "支付宝上分支付宝下分 u上分u下分 @henhaokao88",
+    "entities": [
+      {
+        "type": "mention",
+        "offset": 18,
+        "length": 12
+      }
+    ]
+  }
+}

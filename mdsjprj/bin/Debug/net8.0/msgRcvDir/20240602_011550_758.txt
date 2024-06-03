@@ -1,0 +1,41 @@
+{
+  "update_id": 839606410,
+  "message": {
+    "message_id": 1315,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717265751,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "new_chat_photo": [
+      {
+        "width": 160,
+        "height": 160,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBSNmW2VWdBduVJtY6yCu9D1EPMIksgACLL4xG0CY2FbWm76dUrhwuQEAAwIAA2EAAzUE",
+        "file_unique_id": "AQADLL4xG0CY2FYAAQ",
+        "file_size": 6471
+      },
+      {
+        "width": 320,
+        "height": 320,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBSNmW2VWdBduVJtY6yCu9D1EPMIksgACLL4xG0CY2FbWm76dUrhwuQEAAwIAA2IAAzUE",
+        "file_unique_id": "AQADLL4xG0CY2FZn",
+        "file_size": 12946
+      },
+      {
+        "width": 640,
+        "height": 640,
+        "file_id": "AgACAgUAAx0Cd3Gu-QACBSNmW2VWdBduVJtY6yCu9D1EPMIksgACLL4xG0CY2FbWm76dUrhwuQEAAwIAA2MAAzUE",
+        "file_unique_id": "AQADLL4xG0CY2FYB",
+        "file_size": 29424
+      }
+    ]
+  }
+}

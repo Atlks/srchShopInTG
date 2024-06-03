@@ -1,0 +1,41 @@
+{
+  "update_id": 839606749,
+  "message": {
+    "message_id": 429845,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717340993,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": false,
+      "is_video": false,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjxVmXItBHM7MHXVnexBUdw65ZwQyZgACaQsAAohZmVRgvvfyfnEFPQEAB20AAzUE",
+        "file_unique_id": "AQADaQsAAohZmVRy",
+        "file_size": 9016
+      },
+      "emoji": "🙂",
+      "set_name": "shayudidi12",
+      "file_id": "CAACAgUAAx0CYCTD-AABBo8VZlyLQRzOzB11Z3sQVHcOuWcEMmYAAmkLAAKIWZlUYL738n5xBT01BA",
+      "file_unique_id": "AgADaQsAAohZmVQ",
+      "file_size": 15836
+    }
+  }
+}

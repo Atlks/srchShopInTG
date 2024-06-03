@@ -1,0 +1,95 @@
+{
+  "update_id": 839606535,
+  "callback_query": {
+    "id": "6220162119732887405",
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "message": {
+      "message_id": 887,
+      "from": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      },
+      "date": 1717203605,
+      "chat": {
+        "id": 5743211645,
+        "type": "private",
+        "first_name": "MR.HAN"
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 26,
+          "file_id": "AgACAgUAAxkDAAIDd2ZcAYRPlhOvTBLIsEtyjuBi1Dn9AAKTvTEba5vRVtlq0tRtHzc2AQADAgADcwADNQQ",
+          "file_unique_id": "AQADk70xG2ub0VZ4",
+          "file_size": 719
+        },
+        {
+          "width": 320,
+          "height": 93,
+          "file_id": "AgACAgUAAxkDAAIDd2ZcAYRPlhOvTBLIsEtyjuBi1Dn9AAKTvTEba5vRVtlq0tRtHzc2AQADAgADbQADNQQ",
+          "file_unique_id": "AQADk70xG2ub0VZy",
+          "file_size": 6274
+        },
+        {
+          "width": 800,
+          "height": 233,
+          "file_id": "AgACAgUAAxkDAAIDd2ZcAYRPlhOvTBLIsEtyjuBi1Dn9AAKTvTEba5vRVtlq0tRtHzc2AQADAgADeAADNQQ",
+          "file_unique_id": "AQADk70xG2ub0VZ9",
+          "file_size": 21687
+        }
+      ],
+      "caption": "💁博彩信誉盘推荐：  世博联盟",
+      "caption_entities": [
+        {
+          "type": "text_link",
+          "offset": 12,
+          "length": 4,
+          "url": "https://t.me/shibolianmeng"
+        }
+      ],
+      "reply_markup": {
+        "inline_keyboard": [
+          [
+            {
+              "text": "妙瓦底 • 世纪新城园区 • KTV",
+              "callback_data": "Merchant?id=ewrhmxwwiuruxhysycegrofvft&timerMsgMode2025"
+            }
+          ],
+          [
+            {
+              "text": "妙瓦底 • 御龙湾 • 闪电 快递",
+              "callback_data": "Merchant?id=teltcwswvnfkbmazqwrkdftlbh&timerMsgMode2025"
+            }
+          ],
+          [
+            {
+              "text": "妙瓦底 • KK园区 • 舌尖 速递",
+              "callback_data": "Merchant?id=sqtclwfxadjuflbqibndbgaahg&timerMsgMode2025"
+            }
+          ],
+          [
+            {
+              "text": "妙瓦底 • 御龙湾 • K1 酒店",
+              "callback_data": "Merchant?id=pdfymutuzphufensqdfnaeawff&timerMsgMode2025"
+            }
+          ],
+          [
+            {
+              "text": "妙瓦底 • 妙瓦底市 • 速达快递",
+              "callback_data": "Merchant?id=xqawqvlqixvufmteyfhoyramum&timerMsgMode2025"
+            }
+          ]
+        ]
+      }
+    },
+    "chat_instance": "7146048420965778725",
+    "data": "Merchant?id=teltcwswvnfkbmazqwrkdftlbh&timerMsgMode2025"
+  }
+}

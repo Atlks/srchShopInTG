@@ -1,0 +1,28 @@
+{
+  "update_id": 839606745,
+  "message": {
+    "message_id": 429839,
+    "from": {
+      "id": 5805541716,
+      "is_bot": false,
+      "first_name": "赚它一个亿",
+      "username": "Caixukun199"
+    },
+    "date": 1717340843,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "forward_from": {
+      "id": 5805541716,
+      "is_bot": false,
+      "first_name": "赚它一个亿",
+      "username": "Caixukun199"
+    },
+    "forward_date": 1717141334,
+    "text": "出仿真上码 下载 充值 都可以安排  速度可控制 码子多的老板看过来 另外收cpa 只要直播"
+  }
+}

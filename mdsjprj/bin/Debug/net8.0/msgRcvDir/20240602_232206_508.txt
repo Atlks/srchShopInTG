@@ -1,0 +1,39 @@
+{
+  "update_id": 839606806,
+  "message": {
+    "message_id": 1385,
+    "message_thread_id": 1377,
+    "from": {
+      "id": 939547662,
+      "is_bot": false,
+      "first_name": "寶春",
+      "last_name": "(Hank)",
+      "username": "aflknw",
+      "language_code": "zh-hans"
+    },
+    "date": 1717345326,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1377,
+      "from": {
+        "id": 879006550,
+        "is_bot": false,
+        "first_name": "十 Adam 大鱼 刘洋 汤姆",
+        "username": "Xxx0079468",
+        "language_code": "en"
+      },
+      "date": 1717344357,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "来点好片子老乡，刺激点系列\n\n变性人 人兽 处女 未成年 强奸 童车 人妖 三洞齐开 那种系列\n\n感觉咱们需要搞个色站推广 极品资源收集"
+    },
+    "text": "可以做用戶上傳影片分潤"
+  }
+}

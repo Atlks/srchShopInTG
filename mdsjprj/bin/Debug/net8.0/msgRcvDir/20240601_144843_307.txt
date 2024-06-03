@@ -1,0 +1,75 @@
+{
+  "update_id": 839606103,
+  "message": {
+    "message_id": 2730,
+    "message_thread_id": 2631,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717228123,
+    "chat": {
+      "id": -1002040239665,
+      "type": "supergroup",
+      "title": "grp 资源聚集站"
+    },
+    "reply_to_message": {
+      "message_id": 2631,
+      "from": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      },
+      "date": 1717125792,
+      "chat": {
+        "id": -1002040239665,
+        "type": "supergroup",
+        "title": "grp 资源聚集站"
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 28,
+          "file_id": "AgACAgUAAx0EeZuWMQACCkdmWs7KtUMoAiK0ETLYheTW7ouLUwACPr8xGxj-qFbffWWpdk1yTgEAAwIAA3MAAzUE",
+          "file_unique_id": "AQADPr8xGxj-qFZ4",
+          "file_size": 628
+        },
+        {
+          "width": 320,
+          "height": 99,
+          "file_id": "AgACAgUAAx0EeZuWMQACCkdmWs7KtUMoAiK0ETLYheTW7ouLUwACPr8xGxj-qFbffWWpdk1yTgEAAwIAA20AAzUE",
+          "file_unique_id": "AQADPr8xGxj-qFZy",
+          "file_size": 6534
+        },
+        {
+          "width": 800,
+          "height": 248,
+          "file_id": "AgACAgUAAx0EeZuWMQACCkdmWs7KtUMoAiK0ETLYheTW7ouLUwACPr8xGxj-qFbffWWpdk1yTgEAAwIAA3gAAzUE",
+          "file_unique_id": "AQADPr8xGxj-qFZ9",
+          "file_size": 27652
+        },
+        {
+          "width": 1224,
+          "height": 379,
+          "file_id": "AgACAgUAAx0EeZuWMQACCkdmWs7KtUMoAiK0ETLYheTW7ouLUwACPr8xGxj-qFbffWWpdk1yTgEAAwIAA3kAAzUE",
+          "file_unique_id": "AQADPr8xGxj-qFZ-",
+          "file_size": 53265
+        }
+      ],
+      "caption": "💁博彩信誉盘推荐：  世博联盟",
+      "caption_entities": [
+        {
+          "type": "text_link",
+          "offset": 12,
+          "length": 4,
+          "url": "https://t.me/shibolianmeng"
+        }
+      ]
+    },
+    "text": "💸💸💸 世博博彩 💸💸💸"
+  }
+}

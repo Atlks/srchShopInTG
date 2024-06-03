@@ -1,0 +1,20 @@
+{
+  "update_id": 839606703,
+  "message": {
+    "message_id": 1354,
+    "from": {
+      "id": 5340172640,
+      "is_bot": false,
+      "first_name": "亚",
+      "username": "Lang922",
+      "language_code": "zh-hans"
+    },
+    "date": 1717335459,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "这都知道"
+  }
+}

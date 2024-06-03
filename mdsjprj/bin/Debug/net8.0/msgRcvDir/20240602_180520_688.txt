@@ -1,0 +1,39 @@
+{
+  "update_id": 839606645,
+  "chat_member": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 6330970694,
+      "is_bot": true,
+      "first_name": "🤖左道-群/频道助手",
+      "username": "ZuoDao_ZhuShouBot"
+    },
+    "date": 1717326320,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6472962904,
+        "is_bot": false,
+        "first_name": "抖音群控",
+        "last_name": "私信评论广告软件",
+        "language_code": "en"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6472962904,
+        "is_bot": false,
+        "first_name": "抖音群控",
+        "last_name": "私信评论广告软件",
+        "language_code": "en"
+      }
+    }
+  }
+}

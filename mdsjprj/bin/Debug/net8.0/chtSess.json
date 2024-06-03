@@ -1,0 +1,333 @@
+{
+  "6604503020": {
+    "id": 6604503020,
+    "is_bot": false,
+    "first_name": "阿利",
+    "username": "yy09048888",
+    "language_code": "zh-hans"
+  },
+  "-4252087251": {
+    "chat": {
+      "id": -4252087251,
+      "type": "group",
+      "title": "[联信] - 世纪/KK/金州/东风便民群"
+    },
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717128426,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "879006550": {
+    "id": 879006550,
+    "is_bot": false,
+    "first_name": "十 Adam 大鱼 刘洋 汤姆",
+    "username": "Xxx0079468",
+    "language_code": "en"
+  },
+  "6183495480": {
+    "id": 6183495480,
+    "is_bot": false,
+    "first_name": "95277",
+    "username": "hoshaoge",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "7179646457": {
+    "id": 7179646457,
+    "is_bot": false,
+    "first_name": "联信",
+    "username": "LianXinLeader",
+    "language_code": "zh-hans"
+  },
+  "5743211645": {
+    "id": 5743211645,
+    "is_bot": false,
+    "first_name": "MR.HAN",
+    "language_code": "zh-hans"
+  },
+  "-1001613022200": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "date": 1716584300,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002003939065": {
+    "id": 1087968824,
+    "is_bot": true,
+    "first_name": "Group",
+    "username": "GroupAnonymousBot"
+  },
+  "5640108039": {
+    "id": 5640108039,
+    "is_bot": false,
+    "first_name": "reed（小明）🇱🇦万象第一深情",
+    "username": "reed779",
+    "language_code": "zh-hans"
+  },
+  "2078535546": {
+    "id": 2078535546,
+    "is_bot": false,
+    "first_name": "jark marks",
+    "username": "x0072005",
+    "language_code": "en"
+  },
+  "-1002040239665": {
+    "id": 7088520873,
+    "is_bot": false,
+    "first_name": "tm kmbd",
+    "username": "xxx0072024",
+    "language_code": "en"
+  },
+  "-1002206103554": {
+    "chat": {
+      "id": -1002206103554,
+      "type": "supergroup",
+      "title": "Task grp"
+    },
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1716890111,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6182440202": {
+    "id": 6182440202,
+    "is_bot": false,
+    "first_name": "A8✨星仔（诚招团队）",
+    "username": "A8xzai",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002160746299": {
+    "chat": {
+      "id": -1002160746299,
+      "type": "supergroup",
+      "title": "联信 - 世纪|KK|金州|东风"
+    },
+    "from": {
+      "id": 7179646457,
+      "is_bot": false,
+      "first_name": "联信",
+      "username": "LianXinLeader",
+      "language_code": "zh-hans"
+    },
+    "date": 1717128829,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6409646417": {
+    "id": 6409646417,
+    "is_bot": false,
+    "first_name": "林鹤",
+    "username": "linhe185",
+    "language_code": "zh-hans"
+  },
+  "7088520873": {
+    "chat": {
+      "id": 7088520873,
+      "type": "private",
+      "username": "xxx0072024",
+      "first_name": "tm kmbd"
+    },
+    "from": {
+      "id": 7088520873,
+      "is_bot": false,
+      "first_name": "tm kmbd",
+      "username": "xxx0072024",
+      "language_code": "en"
+    },
+    "date": 1716622635,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6618993733": {
+    "id": 6618993733,
+    "is_bot": false,
+    "first_name": "联盛--果冻",
+    "username": "VIPLSPC288",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "6575920161": {
+    "id": 6575920161,
+    "is_bot": false,
+    "first_name": "百川",
+    "username": "paxl111666",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001479969649": {
+    "chat": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1716544515,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6091395167": {
+    "id": 6091395167,
+    "is_bot": false,
+    "first_name": "此账号已注销",
+    "language_code": "zh-hans"
+  },
+  "-4209884020": {
+    "chat": {
+      "id": -4209884020,
+      "type": "group",
+      "title": "联信 - 世纪|KK|金州|东风"
+    },
+    "from": {
+      "id": 7179646457,
+      "is_bot": false,
+      "first_name": "联信",
+      "username": "LianXinLeader",
+      "language_code": "zh-hans"
+    },
+    "date": 1717128716,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

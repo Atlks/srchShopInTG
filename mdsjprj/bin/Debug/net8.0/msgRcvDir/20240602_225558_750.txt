@@ -1,0 +1,39 @@
+{
+  "update_id": 839606770,
+  "message": {
+    "message_id": 1376,
+    "message_thread_id": 1369,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717343758,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1372,
+      "message_thread_id": 1369,
+      "from": {
+        "id": 5640108039,
+        "is_bot": false,
+        "first_name": "reed（小明）🇱🇦万象第一深情",
+        "username": "reed779",
+        "language_code": "zh-hans"
+      },
+      "date": 1717341823,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "text": "好羡慕你们可以吃水果 不像我只能摸着女孩奶奶睡觉"
+    },
+    "text": "母女花？😁😁"
+  }
+}

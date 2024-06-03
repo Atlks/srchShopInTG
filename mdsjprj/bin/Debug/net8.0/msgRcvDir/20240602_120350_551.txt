@@ -1,0 +1,109 @@
+{
+  "update_id": 839606517,
+  "callback_query": {
+    "id": "763237324149076682",
+    "from": {
+      "id": 6620155981,
+      "is_bot": false,
+      "first_name": "小言-",
+      "language_code": "zh-hans"
+    },
+    "message": {
+      "message_id": 429240,
+      "message_thread_id": 428564,
+      "from": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      },
+      "date": 1717241423,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "reply_to_message": {
+        "message_id": 429239,
+        "message_thread_id": 428564,
+        "from": {
+          "id": 6910594487,
+          "is_bot": false,
+          "first_name": "迷了眼",
+          "language_code": "zh-hans"
+        },
+        "date": 1717241418,
+        "chat": {
+          "id": -1001613022200,
+          "type": "supergroup",
+          "title": "左道-缅甸便民服务站",
+          "username": "ZuoDaoMianDian",
+          "is_forum": true
+        },
+        "text": "有小木屋的联系方式吗"
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 26,
+          "file_id": "AgACAgUAAx0EYCTD-AABBoy4Zlv9NaWz-v22e0oKwQ99yB_9y70AApO9MRtrm9FW2WrS1G0fNzYBAAMCAANzAAM1BA",
+          "file_unique_id": "AQADk70xG2ub0VZ4",
+          "file_size": 719
+        },
+        {
+          "width": 320,
+          "height": 93,
+          "file_id": "AgACAgUAAx0EYCTD-AABBoy4Zlv9NaWz-v22e0oKwQ99yB_9y70AApO9MRtrm9FW2WrS1G0fNzYBAAMCAANtAAM1BA",
+          "file_unique_id": "AQADk70xG2ub0VZy",
+          "file_size": 6274
+        },
+        {
+          "width": 800,
+          "height": 233,
+          "file_id": "AgACAgUAAx0EYCTD-AABBoy4Zlv9NaWz-v22e0oKwQ99yB_9y70AApO9MRtrm9FW2WrS1G0fNzYBAAMCAAN4AAM1BA",
+          "file_unique_id": "AQADk70xG2ub0VZ9",
+          "file_size": 21687
+        }
+      ],
+      "caption": "😙 搜到1个商家,被搜得越多越靠前!\n \n 💁博彩盘推荐：世博联盟",
+      "caption_entities": [
+        {
+          "type": "bold",
+          "offset": 3,
+          "length": 16
+        },
+        {
+          "type": "text_link",
+          "offset": 31,
+          "length": 4,
+          "url": "https://t.me/shibolianmeng"
+        },
+        {
+          "type": "bold",
+          "offset": 31,
+          "length": 4
+        }
+      ],
+      "reply_markup": {
+        "inline_keyboard": [
+          [
+            {
+              "text": "妙瓦底 • 东风园区 • 东方名剪",
+              "callback_data": "Merchant?id=dfwlvxcahlzudawgoeqjxafkxv"
+            }
+          ],
+          [
+            {
+              "text": "↖ 分享机器人",
+              "url": "https://t.me/share/url?url=https://t.me/LianXin_BianMinBot&text=给大家推荐一个可以搜索商家联系方式的群!"
+            }
+          ]
+        ]
+      }
+    },
+    "chat_instance": "5681673489584551706",
+    "data": "Merchant?id=dfwlvxcahlzudawgoeqjxafkxv"
+  }
+}

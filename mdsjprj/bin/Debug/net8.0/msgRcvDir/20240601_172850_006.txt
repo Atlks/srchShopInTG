@@ -1,0 +1,41 @@
+{
+  "update_id": 839606205,
+  "message": {
+    "message_id": 429173,
+    "from": {
+      "id": 5771530415,
+      "is_bot": false,
+      "first_name": "小楠",
+      "username": "Txtc888",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717237730,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": false,
+      "is_video": false,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjHVmWvfizRMYr42V8sRrjIHNP0S_cwAC8woAAidP2VZc_nvOGlf_qAEAB20AAzUE",
+        "file_unique_id": "AQAD8woAAidP2VZy",
+        "file_size": 6186
+      },
+      "emoji": "😒",
+      "set_name": "chosenonekiller",
+      "file_id": "CAACAgUAAx0CYCTD-AABBox1Zlr34s0TGK-NlfLEa4yBzT9Ev3MAAvMKAAInT9lWXP57zhpX_6g1BA",
+      "file_unique_id": "AgAD8woAAidP2VY",
+      "file_size": 12640
+    }
+  }
+}

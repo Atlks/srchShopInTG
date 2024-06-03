@@ -1,0 +1,35 @@
+{
+  "update_id": 839606374,
+  "message": {
+    "message_id": 429405,
+    "from": {
+      "id": 5702575740,
+      "is_bot": false,
+      "first_name": "Deepl"
+    },
+    "date": 1717262234,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "photo": [
+      {
+        "width": 90,
+        "height": 90,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo1dZltXmlUS0YTF1jDc9ZNLdEcIGaoAArq-MRvVpdhW1sZe_0QHMA0BAAMCAANzAAM1BA",
+        "file_unique_id": "AQADur4xG9Wl2FZ4",
+        "file_size": 2068
+      },
+      {
+        "width": 225,
+        "height": 225,
+        "file_id": "AgACAgUAAx0CYCTD-AABBo1dZltXmlUS0YTF1jDc9ZNLdEcIGaoAArq-MRvVpdhW1sZe_0QHMA0BAAMCAANtAAM1BA",
+        "file_unique_id": "AQADur4xG9Wl2FZy",
+        "file_size": 10455
+      }
+    ]
+  }
+}

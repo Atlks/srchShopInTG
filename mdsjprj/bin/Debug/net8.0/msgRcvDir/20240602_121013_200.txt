@@ -1,0 +1,90 @@
+{
+  "update_id": 839606524,
+  "message": {
+    "message_id": 429588,
+    "message_thread_id": 429573,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717305012,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429573,
+      "from": {
+        "id": 7039546731,
+        "is_bot": false,
+        "first_name": "财",
+        "username": "pzzzz1704"
+      },
+      "date": 1717304590,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "sticker": {
+        "type": "regular",
+        "width": 512,
+        "height": 512,
+        "is_animated": false,
+        "is_video": true,
+        "thumbnail": {
+          "width": 320,
+          "height": 320,
+          "file_id": "AAMCBQADHQJgJMP4AAEGjgVmW_0P8zj8EfCNOdPTS3ljfkGsJAACiAQAAjAouVb67LJydhooFwEAB20AAzUE",
+          "file_unique_id": "AQADiAQAAjAouVZy",
+          "file_size": 6586
+        },
+        "emoji": "😘",
+        "set_name": "keaiwan",
+        "file_id": "CAACAgUAAx0CYCTD-AABBo4FZlv9D_M4_BHwjTnT00t5Y35BrCQAAogEAAIwKLlW-uyycnYaKBc1BA",
+        "file_unique_id": "AgADiAQAAjAouVY",
+        "file_size": 91791
+      }
+    },
+    "animation": {
+      "width": 1082,
+      "height": 1442,
+      "duration": 2,
+      "thumbnail": {
+        "width": 240,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjhRmW_60d5ZKTUASjo6rQ9gQ_NGcfAACiQkAAuIpSFRbsxoaSfoAAfQBAAdtAAM1BA",
+        "file_unique_id": "AQADiQkAAuIpSFRy",
+        "file_size": 13945
+      },
+      "file_name": "11111111111111111111111111111111.mp4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo4UZlv-tHeWSk1AEo6Oq0PYEPzRnHwAAokJAALiKUhUW7MaGkn6AAH0NQQ",
+      "file_unique_id": "AgADiQkAAuIpSFQ",
+      "file_size": 3682799
+    },
+    "document": {
+      "thumbnail": {
+        "width": 240,
+        "height": 320,
+        "file_id": "AAMCBQADHQJgJMP4AAEGjhRmW_60d5ZKTUASjo6rQ9gQ_NGcfAACiQkAAuIpSFRbsxoaSfoAAfQBAAdtAAM1BA",
+        "file_unique_id": "AQADiQkAAuIpSFRy",
+        "file_size": 13945
+      },
+      "file_name": "11111111111111111111111111111111.mp4",
+      "mime_type": "video/mp4",
+      "file_id": "CgACAgUAAx0CYCTD-AABBo4UZlv-tHeWSk1AEo6Oq0PYEPzRnHwAAokJAALiKUhUW7MaGkn6AAH0NQQ",
+      "file_unique_id": "AgADiQkAAuIpSFQ",
+      "file_size": 3682799
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "update_id": 839606775,
+  "message": {
+    "message_id": 429867,
+    "message_thread_id": 429866,
+    "from": {
+      "id": 6604503020,
+      "is_bot": false,
+      "first_name": "阿利",
+      "username": "yy09048888",
+      "language_code": "zh-hans"
+    },
+    "date": 1717344031,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429866,
+      "from": {
+        "id": 7481763297,
+        "is_bot": false,
+        "first_name": "岁月流年推广",
+        "username": "suiyueliunian21",
+        "language_code": "zh-hans"
+      },
+      "date": 1717343999,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "谁有KK园区的那些群啊"
+    },
+    "text": "我有"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "update_id": 839606755,
+  "message": {
+    "message_id": 429850,
+    "from": {
+      "id": 5702575740,
+      "is_bot": false,
+      "first_name": "Deepl"
+    },
+    "date": 1717341850,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "没有体罚，没有电棍，也不会有祭天。你放心好了"
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "update_id": 839606491,
+  "message": {
+    "message_id": 925,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717302723,
+    "chat": {
+      "id": 5743211645,
+      "type": "private",
+      "first_name": "MR.HAN"
+    },
+    "text": "搜群"
+  }
+}

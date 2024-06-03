@@ -1,0 +1,52 @@
+{
+  "update_id": 839606767,
+  "message": {
+    "message_id": 429862,
+    "from": {
+      "id": 6472962904,
+      "is_bot": false,
+      "first_name": "腾龙",
+      "last_name": "博源娱乐",
+      "language_code": "en"
+    },
+    "date": 1717343552,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "forward_from_chat": {
+      "id": -1002067222623,
+      "type": "channel",
+      "title": "腾龙博源🔔官方频道",
+      "username": "boy88889999"
+    },
+    "forward_from_message_id": 4,
+    "forward_date": 1713970846,
+    "photo": [
+      {
+        "width": 90,
+        "height": 52,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8mZlyVQOjvDlp0fkDj0nTMgsbGJzoAArqtMRsNBMBGHeLm0sX756wBAAMCAANzAAM1BA",
+        "file_unique_id": "AQADuq0xGw0EwEZ4",
+        "file_size": 1906
+      },
+      {
+        "width": 320,
+        "height": 186,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8mZlyVQOjvDlp0fkDj0nTMgsbGJzoAArqtMRsNBMBGHeLm0sX756wBAAMCAANtAAM1BA",
+        "file_unique_id": "AQADuq0xGw0EwEZy",
+        "file_size": 30823
+      },
+      {
+        "width": 600,
+        "height": 349,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8mZlyVQOjvDlp0fkDj0nTMgsbGJzoAArqtMRsNBMBGHeLm0sX756wBAAMCAAN4AAM1BA",
+        "file_unique_id": "AQADuq0xGw0EwEZ9",
+        "file_size": 72210
+      }
+    ]
+  }
+}

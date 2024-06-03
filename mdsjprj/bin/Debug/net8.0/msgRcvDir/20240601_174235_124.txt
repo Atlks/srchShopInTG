@@ -1,0 +1,22 @@
+{
+  "update_id": 839606224,
+  "message": {
+    "message_id": 429197,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "is_premium": true
+    },
+    "date": 1717238555,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "我一天发好多"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "update_id": 839606927,
+  "message": {
+    "message_id": 430027,
+    "from": {
+      "id": 7194287411,
+      "is_bot": false,
+      "first_name": "k",
+      "username": "skjshs111",
+      "language_code": "zh-hans"
+    },
+    "date": 1717355477,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "果 肉 沙"
+  }
+}

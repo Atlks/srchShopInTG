@@ -1,0 +1,19 @@
+{
+  "update_id": 839606406,
+  "message": {
+    "message_id": 1314,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717264500,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "你那些功能都很简单的.  没必要多排人开发TG工具啊"
+  }
+}

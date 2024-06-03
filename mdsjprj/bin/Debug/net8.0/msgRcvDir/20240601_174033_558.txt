@@ -1,0 +1,43 @@
+{
+  "update_id": 839606214,
+  "message": {
+    "message_id": 429187,
+    "message_thread_id": 429172,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "is_premium": true
+    },
+    "date": 1717238433,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429186,
+      "message_thread_id": 429172,
+      "from": {
+        "id": 6604503020,
+        "is_bot": false,
+        "first_name": "阿利",
+        "username": "yy09048888",
+        "language_code": "zh-hans"
+      },
+      "date": 1717238416,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "你在上班吗"
+    },
+    "text": "在啊"
+  }
+}

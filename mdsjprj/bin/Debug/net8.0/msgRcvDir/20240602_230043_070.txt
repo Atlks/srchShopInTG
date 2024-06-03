@@ -1,0 +1,52 @@
+{
+  "update_id": 839606777,
+  "message": {
+    "message_id": 429869,
+    "from": {
+      "id": 6447002532,
+      "is_bot": false,
+      "first_name": "西湖娱乐城",
+      "last_name": "柬埔寨西港",
+      "language_code": "en"
+    },
+    "date": 1717344042,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "forward_from_chat": {
+      "id": -1002111995392,
+      "type": "channel",
+      "title": "西湖娱乐🔔官方频道 西湖娱乐欢迎您",
+      "username": "xihu888888888"
+    },
+    "forward_from_message_id": 16,
+    "forward_date": 1708255669,
+    "photo": [
+      {
+        "width": 90,
+        "height": 84,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8tZlyXKumLCC-B-5SB4XZ7uUnLHMgAAs6sMRvgCKlEqbr3N9kkumEBAAMCAANzAAM1BA",
+        "file_unique_id": "AQADzqwxG-AIqUR4",
+        "file_size": 2708
+      },
+      {
+        "width": 320,
+        "height": 300,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8tZlyXKumLCC-B-5SB4XZ7uUnLHMgAAs6sMRvgCKlEqbr3N9kkumEBAAMCAANtAAM1BA",
+        "file_unique_id": "AQADzqwxG-AIqURy",
+        "file_size": 50105
+      },
+      {
+        "width": 680,
+        "height": 638,
+        "file_id": "AgACAgEAAx0CYCTD-AABBo8tZlyXKumLCC-B-5SB4XZ7uUnLHMgAAs6sMRvgCKlEqbr3N9kkumEBAAMCAAN4AAM1BA",
+        "file_unique_id": "AQADzqwxG-AIqUR9",
+        "file_size": 153830
+      }
+    ]
+  }
+}

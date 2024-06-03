@@ -1,0 +1,22 @@
+{
+  "update_id": 839606918,
+  "message": {
+    "message_id": 430020,
+    "from": {
+      "id": 6065727974,
+      "is_bot": false,
+      "first_name": "去",
+      "last_name": "过",
+      "username": "jiao21234"
+    },
+    "date": 1717354638,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "家人们在公司的今天听不见什么消息吗？"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "update_id": 839607059,
+  "chat_member": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 1721850327,
+      "is_bot": false,
+      "first_name": "掌柜，卡扎菲",
+      "username": "a948826s"
+    },
+    "date": 1717393401,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 1721850327,
+        "is_bot": false,
+        "first_name": "掌柜，卡扎菲",
+        "username": "a948826s"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 1721850327,
+        "is_bot": false,
+        "first_name": "掌柜，卡扎菲",
+        "username": "a948826s"
+      }
+    }
+  }
+}

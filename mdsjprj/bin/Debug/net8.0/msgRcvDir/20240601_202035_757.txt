@@ -1,0 +1,21 @@
+{
+  "update_id": 839606283,
+  "message": {
+    "message_id": 429290,
+    "from": {
+      "id": 6018901338,
+      "is_bot": false,
+      "first_name": "张百万",
+      "username": "baiwandetaiyang"
+    },
+    "date": 1717248035,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "彩信3块一条，死卡补贴10块一张\n短信1.8一条，死卡补贴10块一张能打短彩信的联系我"
+  }
+}

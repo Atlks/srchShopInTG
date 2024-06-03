@@ -1,0 +1,26 @@
+{
+  "update_id": 839606293,
+  "message": {
+    "message_id": 1295,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717250853,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "text": "@Xxx0079468 如果搜索结果只有一个时，应该直接返回联系方式",
+    "entities": [
+      {
+        "type": "mention",
+        "offset": 0,
+        "length": 11
+      }
+    ]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "update_id": 839606829,
+  "message": {
+    "message_id": 429896,
+    "message_thread_id": 429895,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717345706,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429895,
+      "from": {
+        "id": 5281564695,
+        "is_bot": false,
+        "first_name": "👑楊先生",
+        "username": "All1688888",
+        "language_code": "zh-hans"
+      },
+      "date": 1717345690,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "contact": {
+        "phone_number": "959682692656",
+        "first_name": "真功夫",
+        "user_id": 6262952643,
+        "vcard": "BEGIN:VCARD \nVERSION:3.0 \nPRODID:-//Apple Inc.//iPhone OS 17.3.1//EN \nN:;真功夫;;; \nFN:真功夫 \nTEL;type=CELL;type=VOICE;type=pref:959682692656 \nitem1.URL;type=pref:https://t.me/@id6262952643 \nitem1.X-ABLabel:Telegram \nEND:VCARD \n"
+      }
+    },
+    "text": "点什么呢，我在给你找汉堡"
+  }
+}

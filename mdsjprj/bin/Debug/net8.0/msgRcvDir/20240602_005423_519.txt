@@ -1,0 +1,75 @@
+{
+  "update_id": 839606404,
+  "message": {
+    "message_id": 1312,
+    "message_thread_id": 1311,
+    "from": {
+      "id": 939547662,
+      "is_bot": false,
+      "first_name": "寶春",
+      "last_name": "(Hank)",
+      "username": "aflknw",
+      "language_code": "zh-hans"
+    },
+    "date": 1717264463,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1311,
+      "from": {
+        "id": 5743211645,
+        "is_bot": false,
+        "first_name": "MR.HAN",
+        "language_code": "zh-hans"
+      },
+      "date": 1717264227,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 37,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBR9mW19jZrTYM8mELUJrvrVINmCv2wACo7wxGwd44FaGE-QqemW1oQEAAwIAA3MAAzUE",
+          "file_unique_id": "AQADo7wxGwd44FZ4",
+          "file_size": 923
+        },
+        {
+          "width": 320,
+          "height": 130,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBR9mW19jZrTYM8mELUJrvrVINmCv2wACo7wxGwd44FaGE-QqemW1oQEAAwIAA20AAzUE",
+          "file_unique_id": "AQADo7wxGwd44FZy",
+          "file_size": 10463
+        },
+        {
+          "width": 800,
+          "height": 326,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBR9mW19jZrTYM8mELUJrvrVINmCv2wACo7wxGwd44FaGE-QqemW1oQEAAwIAA3gAAzUE",
+          "file_unique_id": "AQADo7wxGwd44FZ9",
+          "file_size": 42451
+        },
+        {
+          "width": 870,
+          "height": 355,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBR9mW19jZrTYM8mELUJrvrVINmCv2wACo7wxGwd44FaGE-QqemW1oQEAAwIAA3kAAzUE",
+          "file_unique_id": "AQADo7wxGwd44FZ-",
+          "file_size": 44936
+        }
+      ],
+      "caption": "@aflknw 要加把劲啊.老板要快点到处都看到我们的广告",
+      "caption_entities": [
+        {
+          "type": "mention",
+          "offset": 0,
+          "length": 7
+        }
+      ]
+    },
+    "text": "項目不急的人可以一起來搞 先把流量搞起來 😆"
+  }
+}

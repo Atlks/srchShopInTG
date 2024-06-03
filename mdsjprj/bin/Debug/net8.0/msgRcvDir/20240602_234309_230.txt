@@ -1,0 +1,26 @@
+{
+  "update_id": 839606863,
+  "message": {
+    "message_id": 980,
+    "from": {
+      "id": 5743211645,
+      "is_bot": false,
+      "first_name": "MR.HAN",
+      "language_code": "zh-hans"
+    },
+    "date": 1717346589,
+    "chat": {
+      "id": 5743211645,
+      "type": "private",
+      "first_name": "MR.HAN"
+    },
+    "text": "/start",
+    "entities": [
+      {
+        "type": "bot_command",
+        "offset": 0,
+        "length": 6
+      }
+    ]
+  }
+}

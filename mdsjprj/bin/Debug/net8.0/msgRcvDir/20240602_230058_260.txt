@@ -1,0 +1,28 @@
+{
+  "update_id": 839606778,
+  "message": {
+    "message_id": 11463,
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1717344058,
+    "chat": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
+    "forward_from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "forward_date": 1717323773,
+    "text": "不贿赂主管，几乎不可能办成任何事。而且千万不要以为你贿赂了主管，就一定会解决问题，收钱的时候胸脯拍的啪啪响，说全给解决，实际上这件事很可能根本就不在他的职权范围。莫迪的面对这种情况，竟然实施了让全世界瞠目结舌的“废钞令”，紧接着就改革了印度的消费税制度，将税收"
+  }
+}

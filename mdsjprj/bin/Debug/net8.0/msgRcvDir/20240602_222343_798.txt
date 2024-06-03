@@ -1,0 +1,69 @@
+{
+  "update_id": 839606753,
+  "message": {
+    "message_id": 1372,
+    "message_thread_id": 1369,
+    "from": {
+      "id": 5640108039,
+      "is_bot": false,
+      "first_name": "reed（小明）🇱🇦万象第一深情",
+      "username": "reed779",
+      "language_code": "zh-hans"
+    },
+    "date": 1717341823,
+    "chat": {
+      "id": -1002003939065,
+      "type": "supergroup",
+      "title": "金娱科技工作群"
+    },
+    "reply_to_message": {
+      "message_id": 1369,
+      "from": {
+        "id": 939547662,
+        "is_bot": false,
+        "first_name": "寶春",
+        "last_name": "(Hank)",
+        "username": "aflknw",
+        "language_code": "zh-hans"
+      },
+      "date": 1717340567,
+      "chat": {
+        "id": -1002003939065,
+        "type": "supergroup",
+        "title": "金娱科技工作群"
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 67,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBVlmXImWL0kUQmM6Ii0EaCDn3MSLiwACOb0xGxqa6VbbVZglQHi5ZQEAAwIAA3MAAzUE",
+          "file_unique_id": "AQADOb0xGxqa6VZ4",
+          "file_size": 1886
+        },
+        {
+          "width": 320,
+          "height": 240,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBVlmXImWL0kUQmM6Ii0EaCDn3MSLiwACOb0xGxqa6VbbVZglQHi5ZQEAAwIAA20AAzUE",
+          "file_unique_id": "AQADOb0xGxqa6VZy",
+          "file_size": 24995
+        },
+        {
+          "width": 800,
+          "height": 600,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBVlmXImWL0kUQmM6Ii0EaCDn3MSLiwACOb0xGxqa6VbbVZglQHi5ZQEAAwIAA3gAAzUE",
+          "file_unique_id": "AQADOb0xGxqa6VZ9",
+          "file_size": 100051
+        },
+        {
+          "width": 1280,
+          "height": 960,
+          "file_id": "AgACAgUAAx0Cd3Gu-QACBVlmXImWL0kUQmM6Ii0EaCDn3MSLiwACOb0xGxqa6VbbVZglQHi5ZQEAAwIAA3kAAzUE",
+          "file_unique_id": "AQADOb0xGxqa6VZ-",
+          "file_size": 161478
+        }
+      ],
+      "caption": "水果派對"
+    },
+    "text": "好羡慕你们可以吃水果 不像我只能摸着女孩奶奶睡觉"
+  }
+}

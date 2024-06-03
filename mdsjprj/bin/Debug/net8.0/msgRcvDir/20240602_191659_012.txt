@@ -1,0 +1,21 @@
+{
+  "update_id": 839606659,
+  "message": {
+    "message_id": 429787,
+    "from": {
+      "id": 7035078530,
+      "is_bot": false,
+      "first_name": "鳄鱼",
+      "username": "Xl9833"
+    },
+    "date": 1717330618,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "text": "收泰铢"
+  }
+}

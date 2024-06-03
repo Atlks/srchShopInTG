@@ -1,0 +1,39 @@
+{
+  "update_id": 839606262,
+  "message": {
+    "message_id": 429239,
+    "message_thread_id": 428564,
+    "from": {
+      "id": 6910594487,
+      "is_bot": false,
+      "first_name": "迷了眼"
+    },
+    "date": 1717241418,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 428564,
+      "from": {
+        "id": 6723332187,
+        "is_bot": false,
+        "first_name": "陈",
+        "last_name": "陈"
+      },
+      "date": 1717132192,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "你是那个公司"
+    },
+    "text": "有小木屋的联系方式吗"
+  }
+}

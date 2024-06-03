@@ -1,0 +1,42 @@
+{
+  "update_id": 839606754,
+  "message": {
+    "message_id": 429849,
+    "message_thread_id": 429845,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1717341834,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429846,
+      "message_thread_id": 429845,
+      "from": {
+        "id": 5702575740,
+        "is_bot": false,
+        "first_name": "Deepl"
+      },
+      "date": 1717341773,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "刚刚你说你0赔付吗？来我们公司，坐我旁边加人"
+    },
+    "text": "刚刚你说你0赔付吗？来我公司，坐我旁边加人    \n\n 我给你改改啊，是不是多了一个们字"
+  }
+}

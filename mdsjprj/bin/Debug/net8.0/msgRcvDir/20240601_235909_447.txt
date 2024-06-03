@@ -1,0 +1,61 @@
+{
+  "update_id": 839606340,
+  "message": {
+    "message_id": 429370,
+    "message_thread_id": 429292,
+    "from": {
+      "id": 7119944545,
+      "is_bot": false,
+      "first_name": "联 盛 客 服🌸七 七",
+      "username": "lszqq",
+      "is_premium": true
+    },
+    "date": 1717261149,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429369,
+      "message_thread_id": 429292,
+      "from": {
+        "id": 6094929975,
+        "is_bot": false,
+        "first_name": "娜娜炒鸡紧",
+        "username": "Nana5978",
+        "is_premium": true
+      },
+      "date": 1717261137,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": ".."
+    },
+    "sticker": {
+      "type": "regular",
+      "width": 512,
+      "height": 512,
+      "is_animated": false,
+      "is_video": true,
+      "thumbnail": {
+        "width": 320,
+        "height": 320,
+        "file_id": "AAMCBAADHQJgJMP4AAEGjTpmW1NdjaugwCxE_Wfz_cpjbrQbFgACyhgAAl8n4FGqC0ANexVGfAEAB20AAzUE",
+        "file_unique_id": "AQADyhgAAl8n4FFy",
+        "file_size": 17856
+      },
+      "emoji": "🗡",
+      "set_name": "Webp_17Cute",
+      "file_id": "CAACAgQAAx0CYCTD-AABBo06ZltTXY2roMAsRP1n8_3KY260GxYAAsoYAAJfJ-BRqgtADXsVRnw1BA",
+      "file_unique_id": "AgADyhgAAl8n4FE",
+      "file_size": 216398
+    }
+  }
+}

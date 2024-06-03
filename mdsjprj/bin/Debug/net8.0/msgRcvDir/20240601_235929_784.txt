@@ -1,0 +1,69 @@
+{
+  "update_id": 839606341,
+  "message": {
+    "message_id": 429371,
+    "message_thread_id": 429362,
+    "from": {
+      "id": 6094929975,
+      "is_bot": false,
+      "first_name": "娜娜炒鸡紧",
+      "username": "Nana5978",
+      "is_premium": true
+    },
+    "date": 1717261169,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429362,
+      "from": {
+        "id": 5702575740,
+        "is_bot": false,
+        "first_name": "Deepl"
+      },
+      "date": 1717258933,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "photo": [
+        {
+          "width": 90,
+          "height": 66,
+          "file_id": "AgACAgUAAx0CYCTD-AABBo0yZltKtbXarQSGjdSMwr7kjgNrbT4AAqK-MRvVpdhWjOiO92nCyQ8BAAMCAANzAAM1BA",
+          "file_unique_id": "AQADor4xG9Wl2FZ4",
+          "file_size": 925
+        },
+        {
+          "width": 320,
+          "height": 236,
+          "file_id": "AgACAgUAAx0CYCTD-AABBo0yZltKtbXarQSGjdSMwr7kjgNrbT4AAqK-MRvVpdhWjOiO92nCyQ8BAAMCAANtAAM1BA",
+          "file_unique_id": "AQADor4xG9Wl2FZy",
+          "file_size": 9657
+        },
+        {
+          "width": 500,
+          "height": 368,
+          "file_id": "AgACAgUAAx0CYCTD-AABBo0yZltKtbXarQSGjdSMwr7kjgNrbT4AAqK-MRvVpdhWjOiO92nCyQ8BAAMCAAN4AAM1BA",
+          "file_unique_id": "AQADor4xG9Wl2FZ9",
+          "file_size": 13323
+        }
+      ]
+    },
+    "text": "@lszqq",
+    "entities": [
+      {
+        "type": "mention",
+        "offset": 0,
+        "length": 6
+      }
+    ]
+  }
+}

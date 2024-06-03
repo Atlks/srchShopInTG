@@ -1,0 +1,49 @@
+{
+  "update_id": 839606783,
+  "message": {
+    "message_id": 429873,
+    "message_thread_id": 429872,
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "sender_chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "date": 1717344209,
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "reply_to_message": {
+      "message_id": 429872,
+      "from": {
+        "id": 5281564695,
+        "is_bot": false,
+        "first_name": "👑楊先生",
+        "username": "All1688888",
+        "language_code": "zh-hans"
+      },
+      "date": 1717344163,
+      "chat": {
+        "id": -1001613022200,
+        "type": "supergroup",
+        "title": "左道-缅甸便民服务站",
+        "username": "ZuoDaoMianDian",
+        "is_forum": true
+      },
+      "text": "Kk还有啥？冷冷清清的"
+    },
+    "author_signature": "韩少",
+    "text": "难道人少了很多了?"
+  }
+}
