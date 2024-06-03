@@ -65,7 +65,11 @@ namespace prj202405.lib
                 if (kwd2.Length > 0)
                 {
                     if (text.Contains(kwd2))
+                    {
+                        Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
                         return true;
+                    }
+                       
                 }
             }
 
@@ -83,7 +87,11 @@ namespace prj202405.lib
                 if (kwd2.Length > 0)
                 {
                     if (seasrchKw2ds.Contains(kwd2))
+                    {
                         n++;
+                        Console.WriteLine(" contain kwd=>" + kwd2);
+                    }
+                      
                 }
             }
             return n;

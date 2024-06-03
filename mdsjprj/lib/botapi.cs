@@ -33,7 +33,7 @@ namespace prj202405.lib
             if (update.Type == UpdateType.CallbackQuery)
                 return update?.CallbackQuery?.Message?.ReplyToMessage?.Text;
 
-            return null;
+            return "";
 
         }
 

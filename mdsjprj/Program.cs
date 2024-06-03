@@ -27,6 +27,8 @@ using HtmlAgilityPack;
 using Formatting = Newtonsoft.Json.Formatting;
 using DocumentFormat.OpenXml;
 using prj202504;
+using System.Runtime.Intrinsics.Arm;
+using Microsoft.Extensions.Primitives;
 
 namespace prj202405
 {
@@ -150,7 +152,58 @@ namespace prj202405
             Console.WriteLine(fileName);
             System.IO.File.WriteAllText( ""+fileName, updateString);
 
-            if(update?.Message?.ReplyToMessage?.From?.Username==botname &&
+
+
+            //menu proces
+            string msgx2024 = botapi.bot_getTxtMsg(update);
+            if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
+            {
+                InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
+            
+                var rkm = new InlineKeyboardMarkup(Keyboard);
+                timerCls.evt_btm_menuitem_click(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                return;
+            }
+         
+                if (msgx2024 == "返回主菜单")
+            {
+                 timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
+                return;
+            }
+
+            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("cmd="))
+            {
+                //evt_inline_menuitem_click
+                //dataObj
+                Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(update.CallbackQuery!.Data);
+                var msgx = arrCls.TryGetValueDfEmpy(whereExprsObj, "cmd");
+                msgx = msgx.Trim();
+
+
+                if (msgx == "返回商家菜单")
+                {
+                    InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/商家.txt");
+                    var rkm = new InlineKeyboardMarkup(Keyboard);
+                    timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                    return;
+                }
+
+                if (System.IO.File.Exists("menu/" + msgx + ".txt"))
+                {
+                    InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx + ".txt");
+                    var rkm = new InlineKeyboardMarkup(Keyboard);
+                    timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                    return;
+                }
+
+                //if cant find menu,,search
+                await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
+                return;
+               
+            }
+
+
+                if (update?.Message?.ReplyToMessage?.From?.Username==botname &&
                strCls.contain( update?.Message?.Text,"世博博彩")
                 )
             {
@@ -425,6 +478,11 @@ namespace prj202405
                     Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
                     return;
                 }
+
+
+              
+               // if (msgx2024=="商家")
+
                 #region sezrch
 
 
@@ -432,7 +490,7 @@ namespace prj202405
                 if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
                 {
                     string? msgx =botapi. bot_getTxtMsg(update);
-                    if (msgx != null)
+                    if (msgx != null && msgx.Length>0)
                     {
                         msgx = msgx.Trim();
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
@@ -944,7 +1002,7 @@ namespace prj202405
             }
         }
 
-        //if nml msg ,not search
+        //if  is nml msg ,not search
         private static bool bot_isNnmlMsgInGrp(Update? update)
         {
             if(update?.Message==null )  //maybe cmd call
@@ -1020,7 +1078,8 @@ namespace prj202405
                 trgSearchKwds = trgSearchKwds + trgWd;
                 if ( strCls.containKwds(update?.Message?.Text, trgSearchKwds))
                 {
-                    return false;
+                    //if  is nml msg ,not search
+                    return false;   //not nml msg,need search
                 }
 
                 if(update?.Message?.ReplyToMessage?.From?.Username == botname
@@ -1213,6 +1272,8 @@ namespace prj202405
         //获取列表,或者是返回至列表
         static async Task evt_GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         {
+            if (msgx == null || msgx.Length == 0)
+                return;
             Console.WriteLine(" fun  GetList()");
             if (update.Type is UpdateType.Message && string.IsNullOrEmpty(update.Message?.Text)
                 || update.Type is UpdateType.CallbackQuery && string.IsNullOrEmpty(update?.CallbackQuery?.Message?.ReplyToMessage?.Text))

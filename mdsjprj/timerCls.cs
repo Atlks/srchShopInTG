@@ -11,6 +11,7 @@ using JiebaNet.Segmenter;
 using System.Reflection;
 using ChineseCharacterConvert;
 using Convert = System.Convert;
+using System.Runtime.CompilerServices;
 
 namespace prj202405
 {
@@ -218,6 +219,105 @@ namespace prj202405
             //         replyMarkup: new InlineKeyboardMarkup(results),
             //         protectContent: false,
             //         disableWebPagePreview: true);
+        }
+
+        public static async Task evt_inline_menuitem_click_showSubmenu(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
+        {
+            // [CallerMemberName] string methodName = ""
+            //  CallerMemberName 只能获取上一级的调用方法，不能本级别的，只好手工赋值了
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            //  __METHOD__ = methodName;
+            __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+
+
+            //  Program.botClient.send
+            try
+            {
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //   Message message2 =   await Program.botClient.EditMessageReplyMarkupAsync(chat_id,(int)update?.Message?.MessageId, rplyKbdMkp);
+                Message message2 = await Program.botClient.SendTextMessageAsync(
+                chat_id, msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: rplyKbdMkp,
+                   protectContent: false, disableWebPagePreview: true);
+                Console.WriteLine(JsonConvert.SerializeObject(message2));
+
+
+
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.ToString());
+            }
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+
+
+
+        }
+
+        public static async Task evt_btm_menuitem_click(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
+        {
+            // [CallerMemberName] string methodName = ""
+            //  CallerMemberName 只能获取上一级的调用方法，不能本级别的，只好手工赋值了
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            //  __METHOD__ = methodName;
+            __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+
+
+            //  Program.botClient.send
+            try
+            {
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //   Message message2 =   await Program.botClient.EditMessageReplyMarkupAsync(chat_id,(int)update?.Message?.MessageId, rplyKbdMkp);
+                Message message2 = await Program.botClient.SendTextMessageAsync(
+                chat_id, msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: rplyKbdMkp,
+                   protectContent: false, disableWebPagePreview: true);
+                Console.WriteLine(JsonConvert.SerializeObject(message2));
+
+
+
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+
+
+
+        }
+        public static async Task evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(long? chat_id, string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
+        {
+
+
+            //  Program.botClient.send
+            try
+            {
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                Message message2 = await Program.botClient.SendTextMessageAsync(
+               chat_id, msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: rplyKbdMkp,
+                   protectContent: false, disableWebPagePreview: true);
+                Console.WriteLine(JsonConvert.SerializeObject(message2));
+
+                //Program.botClient.SendTextMessageAsync(
+                //         Program.groupId,
+                //         "活动商家",
+                //         parseMode: ParseMode.Html,
+                //         replyMarkup: new InlineKeyboardMarkup(results),
+                //         protectContent: false,
+                //         disableWebPagePreview: true);
+
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+
+
+
+
+
         }
 
 

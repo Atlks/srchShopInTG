@@ -158,6 +158,27 @@ namespace prj202405.lib
             return row[v].ToString();
         }
 
+
+        internal static string TryGetValueDfEmpy(Dictionary<string, StringValues> whereExprsObj, string k)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            try
+            {
+                return whereExprsObj[k];
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
+            //{
+            //    return (string)value;
+            //}
+
+        }
+
         internal static string TryGetValue(Dictionary<string, StringValues> whereExprsObj, string k)
         {
             // 使用 TryGetValue 方法获取值

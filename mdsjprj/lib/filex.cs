@@ -1,13 +1,80 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace prj202405.lib
 {
     internal class filex
     {
+        
+        public static InlineKeyboardButton[][] wdsFromFileRendrToBtnmenu(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            List<InlineKeyboardButton[]> btnTable = [];
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                List<InlineKeyboardButton> lineBtnArr = [];
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if (word.Trim().Length > 0)
+                    {
+                        wordList.Add(word);
+                        // { CallbackData = $"Merchant?id={guid}" }
+                        InlineKeyboardButton btn = new InlineKeyboardButton(word) { CallbackData = $"cmd={word}" };
+                        lineBtnArr.Add(btn);
+                    }
+
+                }
+
+                btnTable.Add(lineBtnArr.ToArray());
+            }
+            return btnTable.ToArray();
+        }
+
+        public static KeyboardButton[][] wdsFromFileRendrToTgBtmBtnmenu(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            List<KeyboardButton[]> btnTable = [];
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                List<KeyboardButton> lineBtnArr = [];
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if (word.Trim().Length > 0)
+                    {
+                        wordList.Add(word);
+                        KeyboardButton btn = new KeyboardButton(word);
+                        lineBtnArr.Add(btn);
+                    }
+                       
+                }
+
+                btnTable.Add(lineBtnArr.ToArray());
+            }
+            return btnTable.ToArray();
+        }
         static string GetParentDirectory(string filePath)
         {
             // 使用Path.GetDirectoryName方法获取文件路径的上一级目录
