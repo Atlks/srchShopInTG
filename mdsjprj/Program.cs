@@ -29,6 +29,7 @@ using DocumentFormat.OpenXml;
 using prj202504;
 using System.Runtime.Intrinsics.Arm;
 using Microsoft.Extensions.Primitives;
+using System.Runtime.CompilerServices;
 
 namespace prj202405
 {
@@ -107,7 +108,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-           timerCls.setTimerTask();
+            timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -140,7 +141,7 @@ namespace prj202405
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            
+
 
             await _readMerInfo();
             var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
@@ -150,68 +151,65 @@ namespace prj202405
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             string fileName = $"msgRcvDir/{timestamp}.txt";
             Console.WriteLine(fileName);
-            System.IO.File.WriteAllText( ""+fileName, updateString);
+            System.IO.File.WriteAllText("" + fileName, updateString);
 
 
 
             //menu proces
+            if (isBtm_btnClink_in_pubGrp(update))
+            {
+                evt_btm_btn_click_inPubgrp(update);
+                return;
+            }
             string msgx2024 = botapi.bot_getTxtMsg(update);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
-                InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
-            
-                var rkm = new InlineKeyboardMarkup(Keyboard);
-                timerCls.evt_btm_menuitem_click(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
+                // var rkm = new InlineKeyboardMarkup(Keyboard);
+                var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
+                var rkm = new ReplyKeyboardMarkup(Keyboard);
+                timerCls.evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+
+                //botClient.SendTextMessageAsync()
+
                 return;
             }
-         
-                if (msgx2024 == "返回主菜单")
+
+            if (msgx2024 == "↩️ 返回主菜单")
             {
-                 timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
+                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
+                return;
+            }
+
+            if (msgx2024 == "↩️ 返回商家菜单")
+            {
+                  evt_retMchrtBtn_click(update);
+           //     await evt_btmBtnclick(botClient, update);
+                return;
+            }
+
+            if (msgx2024 == "↩️ 返回资源菜单")
+            {
+                await evt_btmBtnclick(botClient, update);
                 return;
             }
 
             if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("cmd="))
             {
-                //evt_inline_menuitem_click
-                //dataObj
-                Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(update.CallbackQuery!.Data);
-                var msgx = arrCls.TryGetValueDfEmpy(whereExprsObj, "cmd");
-                msgx = msgx.Trim();
-
-
-                if (msgx == "返回商家菜单")
-                {
-                    InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/商家.txt");
-                    var rkm = new InlineKeyboardMarkup(Keyboard);
-                    timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
-                    return;
-                }
-
-                if (System.IO.File.Exists("menu/" + msgx + ".txt"))
-                {
-                    InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx + ".txt");
-                    var rkm = new InlineKeyboardMarkup(Keyboard);
-                    timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
-                    return;
-                }
-
-                //if cant find menu,,search
-                await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
+                await evt_btnclick(botClient, update);
                 return;
-               
             }
 
 
-                if (update?.Message?.ReplyToMessage?.From?.Username==botname &&
-               strCls.contain( update?.Message?.Text,"世博博彩")
+            if (update?.Message?.ReplyToMessage?.From?.Username == botname &&
+               strCls.contain(update?.Message?.Text, "世博博彩")
                 )
             {
-                 evt_shiboBocai(update);
+                evt_shiboBocai(update);
                 return;
             }
 
-            if (   strCls.contain(update?.Message?.Text, "世博博彩")
+            if (strCls.contain(update?.Message?.Text, "世博博彩")
               )
             {
                 evt_shiboBocai(update);
@@ -408,7 +406,7 @@ namespace prj202405
                     await _SaveConfig();
                     try
                     {
-                        await botapi. bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
+                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
                     }
                     catch (Exception ex)
                     {
@@ -480,8 +478,8 @@ namespace prj202405
                 }
 
 
-              
-               // if (msgx2024=="商家")
+
+                // if (msgx2024=="商家")
 
                 #region sezrch
 
@@ -489,14 +487,14 @@ namespace prj202405
                 //privt msg serch
                 if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
                 {
-                    string? msgx =botapi. bot_getTxtMsg(update);
-                    if (msgx != null && msgx.Length>0)
+                    string? msgx = botapi.bot_getTxtMsg(update);
+                    if (msgx != null && msgx.Length > 0)
                     {
                         msgx = msgx.Trim();
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
                         return;
                     }
-                      
+
 
                 }
 
@@ -509,9 +507,9 @@ namespace prj202405
                     //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
 
                     string? msgx = botapi.bot_getTxtMsg(update);
-                    if(msgx!=null &&   msgx.Length < 25)
+                    if (msgx != null && msgx.Length < 25)
                     {
-                        if (msgx.Trim().StartsWith("@"+ botname))
+                        if (msgx.Trim().StartsWith("@" + botname))
                             msgx = msgx.Substring(19).Trim();
                         msgx = msgx.Trim();
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
@@ -530,7 +528,7 @@ namespace prj202405
                 {
                     string? msgx = botapi.bot_getTxtMsg(update);
 
-                    if (msgx != null )
+                    if (msgx != null)
                     {
                         if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
                             msgx = msgx.Substring(19).Trim();
@@ -538,8 +536,8 @@ namespace prj202405
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
                         return;
                     }
-                   
-                      
+
+
                 }
 
                 //return evt
@@ -554,8 +552,8 @@ namespace prj202405
                         await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
                         return;
                     }
-                  
-                
+
+
                 }
 
 
@@ -610,12 +608,123 @@ namespace prj202405
             }, cancellationToken);
         }
 
+        private static async void evt_btm_btn_click_inPubgrp(Update update)
+        {
+
+            Message a = await Program.botClient.SendTextMessageAsync(
+                      update.Message.Chat.Id,
+                    "要获取二级菜单，请私聊我。。",
+                      parseMode: ParseMode.Html,
+                      //   replyMarkup: new InlineKeyboardMarkup([]),
+                      protectContent: false,
+                      disableWebPagePreview: true
+                      
+                      );
+            //todo reply
+        }
+
+        private static bool isBtm_btnClink_in_pubGrp(Update update)
+        {
+            string msgx2024 = botapi.bot_getTxtMsg(update);
+
+            if (update?.Message?.Chat?.Type != ChatType.Private)
+            {
+                ArrayList a = filex.rdWdsFromFile("menu/底部公共菜单.txt");
+                return a.Contains(msgx2024);
+            }
+            return false;
+
+        }
+        private static async Task evt_btmBtnclick(ITelegramBotClient botClient, Update update)
+        {
+            //evt_inline_menuitem_click
+            //dataObj
+            //Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(update.CallbackQuery!.Data);
+            //var msgx = arrCls.TryGetValueDfEmpy(whereExprsObj, "cmd");
+            string msgx = botapi.bot_getTxtMsg(update);
+            msgx = msgx.Trim();
+            var msgx2024 = msgx;
+
+
+            if (msgx == "返回商家菜单")
+            {
+                evt_retMchrtBtn_click(update);
+            }
+
+
+            if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
+            {
+                // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
+                // var rkm = new InlineKeyboardMarkup(Keyboard);
+                var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenu("menu/" + msgx2024 + ".txt");
+                var rkm = new ReplyKeyboardMarkup(Keyboard);
+                timerCls.evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+
+                //botClient.SendTextMessageAsync()
+
+                return;
+            }
+
+            //if (System.IO.File.Exists("menu/" + msgx + ".txt"))
+            //{
+            //    InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx + ".txt");
+            //    var rkm = new InlineKeyboardMarkup(Keyboard);
+            //    timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+            //    return;
+            //}
+
+            //if cant find menu,,search
+            await evt_btnclick_Pt2_qryByKwd(msgx, 1, 5, botClient, update);
+            return;
+        }
+
+        private static void evt_retMchrtBtn_click(Update update)
+        {
+            var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/商家.txt");
+
+            var rkm = new ReplyKeyboardMarkup(Keyboard);
+            timerCls.evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+
+            //  timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+            return;
+        }
+
+        private static async Task evt_btnclick(ITelegramBotClient botClient, Update update)
+        {
+            //evt_inline_menuitem_click
+            //dataObj
+            Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(update.CallbackQuery!.Data);
+            var msgx = arrCls.TryGetValueDfEmpy(whereExprsObj, "cmd");
+            msgx = msgx.Trim();
+
+
+            if (msgx == "返回商家菜单")
+            {
+                InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/商家.txt");
+                var rkm = new InlineKeyboardMarkup(Keyboard);
+                timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                return;
+            }
+
+            if (System.IO.File.Exists("menu/" + msgx + ".txt"))
+            {
+                InlineKeyboardButton[][] Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx + ".txt");
+                var rkm = new InlineKeyboardMarkup(Keyboard);
+                timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                return;
+            }
+
+            //if cant find menu,,search
+            await evt_btnclick_Pt2_qryByKwd(msgx, 1, 5, botClient, update);
+            return;
+        }
+
         private static async void evt_shiboBocai(Update? update)
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 
-            
-                  string imgPath = "推荐横幅.gif";
+
+            string imgPath = "推荐横幅.gif";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //   custom - emoji - element
             //Message a=await    Program.botClient.SendTextMessageAsync(
@@ -631,7 +740,7 @@ namespace prj202405
                     update.Message.Chat.Id, Photo, null,
                   System.IO.File.ReadAllText("shiboTrm.htm"),
                       parseMode: ParseMode.Html,
-                  //   replyMarkup: new InlineKeyboardMarkup(results),
+                     //   replyMarkup: new InlineKeyboardMarkup(results),
                      protectContent: false);
             Console.WriteLine(JsonConvert.SerializeObject(message));
         }
@@ -908,53 +1017,64 @@ namespace prj202405
                             new KeyboardButton[]
                             {
                                 new KeyboardButton("商家"),
-                                new KeyboardButton("话术") , new KeyboardButton("搜群"),
-                                new KeyboardButton("接码")
+                                       new KeyboardButton("猎艳"),
+                                              new KeyboardButton("猎奇"),
+                                                new KeyboardButton("买号")
+
                             },
 
                             new KeyboardButton[]
                             {
-                                new KeyboardButton("卖号") ,   new KeyboardButton("工作")
-                                ,   new KeyboardButton("代理")
+
+                                 new KeyboardButton("接码")
                                 ,   new KeyboardButton("闲置")
+
+                                 ,   new KeyboardButton("资源"),   new KeyboardButton("招聘")
+
+
+                                // new KeyboardButton("话术") , new KeyboardButton("搜群"),
+
+                                //   new KeyboardButton("卖号") ,   new KeyboardButton("工作")
+                                //,   new KeyboardButton("代理")
+
+                                 
+                                   
                             },
-
-                            new KeyboardButton[]
+                              new KeyboardButton[]
                             {
-                                new KeyboardButton("头条"),
-                                new KeyboardButton("租房"),
-                                new KeyboardButton("文案"),
-                                new KeyboardButton("公告")
-                            }
+                                 new KeyboardButton("跑腿") ,
+                                   new KeyboardButton("代购") ,
+                                    new KeyboardButton("优品") ,
+                                     new KeyboardButton("兑换")
+                            } ,
 
-                            ,
-
-                            new KeyboardButton[]
+                               new KeyboardButton[]
                             {
-                                new KeyboardButton("办证"),
-                                new KeyboardButton("行程"),
-                                new KeyboardButton("卡号"),
-                                new KeyboardButton("代购")
-                            }
-
-                            ,
-
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("兑换"),
+                                //new KeyboardButton("兑换"),
+                                 new KeyboardButton("洗资"),
                                 new KeyboardButton("担保"),
-                                new KeyboardButton("洗资"),
-                                new KeyboardButton("跑腿")
+                                new KeyboardButton("租房"),
+
+                                new KeyboardButton("行程"),
                             }
                             ,
 
                             new KeyboardButton[]
                             {
-                                new KeyboardButton("资源"),
-                                new KeyboardButton("猎艳"),
-                                new KeyboardButton("打车"),
-                                new KeyboardButton("家政")
+
+                                 new KeyboardButton("搜群"),
+
+                                  new KeyboardButton("文案"),
+                                   new KeyboardButton("话术"),
+                                new KeyboardButton("办证")
+
+
                             }
+
+
+
+
+
                 };
             var rkm = new ReplyKeyboardMarkup(Keyboard);
             return rkm;
@@ -1005,23 +1125,23 @@ namespace prj202405
         //if  is nml msg ,not search
         private static bool bot_isNnmlMsgInGrp(Update? update)
         {
-            if(update?.Message==null )  //maybe cmd call
+            if (update?.Message == null)  //maybe cmd call
             {
                 return false;
             }
-          
+
             if (update?.Message?.Chat?.Type == ChatType.Private)
             {
                 return false;
             }
 
-            if (update?.Message?.Text == null || update?.Message?.Text.Trim()=="")
+            if (update?.Message?.Text == null || update?.Message?.Text.Trim() == "")
                 return false;
 
 
             //--------------here myst msg in grp mode 
 
-           
+
 
 
             //if rply n frmuser is bot n textContain(我是便民助手
@@ -1035,7 +1155,7 @@ namespace prj202405
 
             //pingjia 内容，不要进行反馈搜索
             if (update?.Message?.ReplyToMessage != null &&
-                strCls.contain(update?.Message?.ReplyToMessage?.Caption,"---联系方式---"))
+                strCls.contain(update?.Message?.ReplyToMessage?.Caption, "---联系方式---"))
             {
                 //is nml msg ,not need search kwd  ,,for 评价
                 return true;
@@ -1043,13 +1163,13 @@ namespace prj202405
 
 
             //grp spec kwd
-           
+
             ArrayList lst = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
             if (lst.Contains(update?.Message?.Text))
             {
                 return false;
             }
-           
+
 
 
             if (update?.Message?.ReplyToMessage?.From?.Username == botname
@@ -1069,32 +1189,32 @@ namespace prj202405
                 if (update?.Message?.Text == null)
                     return false;
 
-                if ((bool)update?.Message?.Text.StartsWith("@"+ botname))
+                if ((bool)update?.Message?.Text.StartsWith("@" + botname))
                     return false;
 
                 // 
                 var trgSearchKwds = "联系方式  纸飞机 line whatsapp telegram tg 有没有 飞机号 哪家店 哪里有 哪有卖 手机号 哪家 ";
                 var trgWd = getTrgwdHash("trgWds.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
-                if ( strCls.containKwds(update?.Message?.Text, trgSearchKwds))
+                if (strCls.containKwds(update?.Message?.Text, trgSearchKwds))
                 {
                     //if  is nml msg ,not search
                     return false;   //not nml msg,need search
                 }
 
-                if(update?.Message?.ReplyToMessage?.From?.Username == botname
+                if (update?.Message?.ReplyToMessage?.From?.Username == botname
                     && update?.Message?.ReplyToMessage?.Caption == "??博彩盘推荐：世博联盟")
                 {
                     return false;
                 }
 
-                ArrayList lst2 =testCls. kwdSeasrchInGrp("kwdSearchINGrp.txt");
+                ArrayList lst2 = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
                 if (lst2.Contains(update?.Message?.Text))
                 {
                     return false;
                 }
 
-                    Console.WriteLine("nml msg");
+                Console.WriteLine("nml msg");
                 return true;
             }
             else  //prvt mode  ,,,not nml msg
@@ -1272,6 +1392,9 @@ namespace prj202405
         //获取列表,或者是返回至列表
         static async Task evt_GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         {
+            var __METHOD__ = "evt_GetList_qryV2";  //bcs in task so cant get currentmethod
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
+
             if (msgx == null || msgx.Length == 0)
                 return;
             Console.WriteLine(" fun  GetList()");
@@ -1346,7 +1469,7 @@ namespace prj202405
             if (!string.IsNullOrEmpty(msgx))
             {
                 //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
-                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底",_shangjiaFL());
+                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底", _shangjiaFL());
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
                 results = results.Skip(page * pagesize).Take(pagesize).ToList();
@@ -1392,7 +1515,7 @@ namespace prj202405
             }
 
 
- 
+
             // pagebtns
             evt_search_btns(page, count, pagesize, results);
 
@@ -1486,6 +1609,227 @@ namespace prj202405
 
             Console.WriteLine(" endfun  GetList()");
 
+        }
+
+        static async Task evt_btnclick_Pt2_qryByKwd(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
+        {
+            var __METHOD__ = "evt_GetList_qryV2";  //bcs in task so cant get currentmethod
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
+
+            if (msgx == null || msgx.Length == 0)
+                return;
+            Console.WriteLine(" fun  GetList()");
+
+
+            //页码
+            int page = 0;
+            //搜索结果数
+            int count = 0;
+            //获取操作用户
+            User? user;
+            if (update.Type is UpdateType.Message)
+            {
+                if (_users.ContainsKey((long)update.Message.From.Id))
+                {
+                    user = _users[(long)update?.Message?.From.Id];
+                }
+                else
+                {
+                    user = new User();
+                    _users.Add((long)update?.Message?.From.Id, user);
+                }
+            }
+            else
+            {
+                if (_users.ContainsKey((long)update?.CallbackQuery?.From?.Id))
+                {
+                    user = _users[(long)update?.CallbackQuery?.From?.Id];
+                }
+                else
+                {
+                    user = new User();
+                    _users.Add((long)update?.CallbackQuery?.From?.Id, user);
+                }
+            }
+
+
+            if (update.Type is UpdateType.CallbackQuery)
+            {
+                var uri = new Uri("https://t.me/" + update.CallbackQuery?.Data);
+                var parameters = QueryHelpers.ParseQuery(uri.Query);
+                parameters.TryGetValue("page", out var pageStr);
+                if (!string.IsNullOrEmpty(pageStr))
+                    page = Convert.ToInt32(pageStr);
+            }
+            const int pagesize = 5;
+            List<InlineKeyboardButton[]> results = [];
+
+            //搜索关键词  Merchant.json to citys
+
+
+
+
+
+            //kwd if ret list btn cmd cmd
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
+                    msgx = msgx.Substring(19).Trim();
+                else
+                    msgx = msgx.Trim();
+            }
+
+
+            Console.WriteLine("  msg=>" + msgx);
+
+            if (!string.IsNullOrEmpty(msgx))
+            {
+                //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
+                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底", _shangjiaFL());
+                //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
+                count = results.Count;
+                results = results.Skip(page * pagesize).Take(pagesize).ToList();
+            }
+
+            //发起查询  stzrt with @bot
+            if (update!.Type is UpdateType.Message)
+            {
+                // keyword = update?.Message?.Text;
+                //   keyword = keyword.Substring(19).Trim();
+                //if (msgx?.Length is < 2 or > 8)
+                //{
+                //    await bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "请输入2-8个字符的的关键词", 5);
+                //    return;
+                //}
+
+                if (count == 0)
+                {
+
+                    //await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                    return;
+                }
+                user.Searchs++;
+            }
+            ////返回列表
+            //else
+            //{
+            //    var cq = update!.CallbackQuery!;
+            //    if (string.IsNullOrEmpty(msgx))
+            //    {
+            //        try
+            //        {
+            //            await botClient.AnswerCallbackQueryAsync(cq.Id, "搜索关键词已经删除,需重新搜索!", true);
+            //            await botClient.DeleteMessageAsync(cq.Message!.Chat.Id, cq.Message.MessageId);
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            Console.WriteLine("告知搜索关键词已经删除时出错:" + e.Message);
+            //        }
+            //        return;
+            //    }
+            //    user.Returns++;
+            //}
+
+
+
+            // pagebtns
+            evt_search_btns(page, count, pagesize, results);
+
+            try
+            {
+                var text = "";// $"😙 <b>搜到{count}个商家,被搜得越多越靠前!</b>\n";// +
+                              //$"<blockquote>您的统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}" +
+                              //$"  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+                text += " \n " + timerCls.plchdTxt;
+                //第一次搜索时返回的列表
+
+
+
+                string Path = "搜索横幅.gif";
+                //     var text = "——————————————";
+                //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+                var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+                await botClient.SendPhotoAsync(
+                   bot_getChatid(update),
+                    Photo, null, text,
+                    parseMode: ParseMode.Html,
+                    replyMarkup: new InlineKeyboardMarkup(results),
+                    protectContent: false);
+
+
+                //await botClient.SendTextMessageAsync(
+                //    update.Message.Chat.Id,
+                //    text,
+                //    parseMode: ParseMode.Html,
+                //    replyMarkup: new InlineKeyboardMarkup(results),
+                //    protectContent: false,
+                //    disableWebPagePreview: true,
+                //    replyToMessageId: update.Message.MessageId);
+                //}
+                ////点了返回列表按钮时
+                //else
+                //{
+
+                //    string Path = "搜索横幅.gif";
+
+                //    var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
+                //    //   botClient.edit
+
+                //    await botClient.EditMessageCaptionAsync(
+                //     update.CallbackQuery.Message.Chat.Id,
+                //   caption: text,
+
+                //     replyMarkup: new InlineKeyboardMarkup(results),
+                //   messageId: update.CallbackQuery.Message.MessageId,
+                //    parseMode: ParseMode.Html
+                //    );
+                //    //await botClient.EditMessageTextAsync(
+                //    //    chatId: update!.CallbackQuery!.Message!.Chat.Id,
+                //    //    messageId: update.CallbackQuery.Message.MessageId,
+                //    //    text: text,
+                //    //    disableWebPagePreview: true,
+                //    //    parseMode: ParseMode.Html,
+                //    //    replyMarkup: new InlineKeyboardMarkup(results));
+                //}
+
+                //每个商家搜索量
+                //foreach (var item in results)
+                //{
+                //    foreach (var it in item)
+                //    {
+                //        string cd = it.CallbackData!;
+                //        if (cd?.Contains("Merchant?id=") == true)
+                //        {
+                //            var mid = cd.Replace("Merchant?id=", "");
+                //            var merchant = (from c in _citys
+                //                            from a in c.Address
+                //                            from am in a.Merchant
+                //                            where am.Guid == mid
+                //                            select am).FirstOrDefault();
+                //            if (merchant != null)
+                //                merchant.Searchs++;
+                //        }
+                //    }
+                //}
+
+                //await _SaveConfig();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("返回商家联系方式列表时出错:" + e.Message);
+            }
+
+
+            Console.WriteLine(" endfun  GetList()");
+
+        }
+
+        private static ChatId bot_getChatid(Update update)
+        {
+            if (update?.Message?.Chat?.Id != null)
+                return update?.Message?.Chat?.Id;
+            //  if (update?.CallbackQuery?.Message?.Chat?.Id != null)
+            return update?.CallbackQuery?.Message?.Chat?.Id;
         }
 
         private static void evt_search_btns(int page, int count, int pagesize, List<InlineKeyboardButton[]> results)
@@ -2217,7 +2561,7 @@ namespace prj202405
             return value.ToString();
         }
 
-   
+
 
         //新增加入的聊天Id
         static void bot_AddChatIds(long chatId)
@@ -2239,7 +2583,7 @@ namespace prj202405
         }
 
 
-      
+
 
         //设置用户限制
         public static async Task<Operas> _SetUserOperas(long userId)

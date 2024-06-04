@@ -10,7 +10,73 @@ namespace prj202405.lib
 {
     internal class filex
     {
-        
+
+
+
+        public static ArrayList rdWdsFromFileSplitComma(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if (word.Trim().Length > 0)
+                    {
+                        wordList.Add(word);
+                        // { CallbackData = $"Merchant?id={guid}" }
+
+                    }
+
+                }
+
+
+            }
+            return wordList;
+        }
+
+        public static ArrayList rdWdsFromFile(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if (word.Trim().Length > 0)
+                    {
+                        wordList.Add(word);
+                        // { CallbackData = $"Merchant?id={guid}" }
+                      
+                    }
+
+                }
+
+                
+            }
+            return wordList;
+        }
+
         public static InlineKeyboardButton[][] wdsFromFileRendrToBtnmenu(string filePath)
         {
             // 创建一个 ArrayList 来存储所有的单词
@@ -34,6 +100,38 @@ namespace prj202405.lib
                         wordList.Add(word);
                         // { CallbackData = $"Merchant?id={guid}" }
                         InlineKeyboardButton btn = new InlineKeyboardButton(word) { CallbackData = $"cmd={word}" };
+                        lineBtnArr.Add(btn);
+                    }
+
+                }
+
+                btnTable.Add(lineBtnArr.ToArray());
+            }
+            return btnTable.ToArray();
+        }
+
+        public static KeyboardButton[][] wdsFromFileRendrToTgBtmBtnmenuBycomma(string filePath)
+        {
+            // 创建一个 ArrayList 来存储所有的单词
+            ArrayList wordList = new ArrayList();
+
+            // 读取文件中的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            List<KeyboardButton[]> btnTable = [];
+            // 遍历每一行
+            foreach (string line in lines)
+            {
+                // 按空格分割行，得到单词数组
+                string[] words = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                List<KeyboardButton> lineBtnArr = [];
+                // 将单词添加到 ArrayList 中
+                foreach (string word in words)
+                {
+                    if (word.Trim().Length > 0)
+                    {
+                        wordList.Add(word);
+                        KeyboardButton btn = new KeyboardButton(word);
                         lineBtnArr.Add(btn);
                     }
 
