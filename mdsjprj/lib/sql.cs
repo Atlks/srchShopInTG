@@ -11,6 +11,9 @@ namespace prj202405.lib
 {
     internal class sqlCls
     {
+
+
+
         public static string arr_toSqlPrms4insert(SortedList arr)
         {
  

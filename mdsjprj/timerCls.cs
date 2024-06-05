@@ -12,6 +12,8 @@ using System.Reflection;
 using ChineseCharacterConvert;
 using Convert = System.Convert;
 using System.Runtime.CompilerServices;
+using mdsj.libBiz;
+using static mdsj.other;
 
 namespace prj202405
 {
@@ -136,7 +138,7 @@ namespace prj202405
             {
                 System.IO.File.WriteAllText(rqF, "pushlog");
 
-                tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt, Program._btmBtns());
+                tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt, tgBiz.tg_btmBtns());
             }
 
 
@@ -145,8 +147,9 @@ namespace prj202405
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {
+            HashSet<prj202405.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
-            results = (from c in Program._citys
+            results = (from c in _citys
                        from ca in c.Address
                        from am in ca.Merchant
                        orderby am.Views descending
@@ -374,12 +377,13 @@ namespace prj202405
                 try
                 {
                     var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                    Message message2 = await Program.botClient.SendTextMessageAsync(
+                  //  Message message2dbg = await 
+                        Program.botClient.SendTextMessageAsync(
                     Convert.ToInt64(de.Key), msgtxt,
                         parseMode: ParseMode.Html,
                        replyMarkup: rplyKbdMkp,
                        protectContent: false, disableWebPagePreview: true);
-                    Console.WriteLine(JsonConvert.SerializeObject(message2));
+                 //   Console.WriteLine(JsonConvert.SerializeObject(message2));
 
                     //Program.botClient.SendTextMessageAsync(
                     //         Program.groupId,
@@ -415,8 +419,8 @@ namespace prj202405
 
             var s = "";
             List<InlineKeyboardButton[]> results = [];
-
-            results = (from c in Program._citys
+            HashSet<prj202405.City> _citys = getCitysObj();
+            results = (from c in _citys
                        from ca in c.Address
                        from am in ca.Merchant
                            //   where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
@@ -511,8 +515,8 @@ namespace prj202405
 
             keyword = keyword.ToLower().Replace(" ", "").Trim();
             var searchChars = keyword!.ToCharArray();
-
-            results = (from c in Program._citys
+            HashSet<prj202405.City> _citys = getCitysObj();
+            results = (from c in _citys
                        from ca in c.Address
                        from am in ca.Merchant
                        where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
@@ -559,9 +563,9 @@ namespace prj202405
         //dep
         public static List<InlineKeyboardButton[]> qryFrmShangjiaOrdbyViewDesc__DEP()
         {
-
+            HashSet<prj202405.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
-            results = (from c in Program._citys
+            results = (from c in _citys
                        from ca in c.Address
                        from am in ca.Merchant
                            //   where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))

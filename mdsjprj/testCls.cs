@@ -15,7 +15,10 @@ using prj202405.lib;
 using System.Text.RegularExpressions;
 using prj202504;
 using DocumentFormat.OpenXml.Bibliography;
-
+using SqlParser;
+using SqlParser.Ast;
+using mdsj.lib;
+using static mdsj.other;
 namespace prj202405
 {
     internal class testCls
@@ -47,7 +50,7 @@ namespace prj202405
         {
 
           
-            HashSet<City> dataObjPark= mrcht.qry4byParknameExprs2Dataobj( "city=妙瓦底&park=世纪新城园区", Program._shangjiaFL());
+       //     HashSet<City> dataObjPark= mrcht.qry4byParknameExprs2Dataobj( "city=妙瓦底&park=世纪新城园区", Program._shangjiaFL());
 
             //export 
             //联系商家城市
@@ -68,7 +71,19 @@ namespace prj202405
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
 
-               
+                sqlParser.MainTEst();
+
+                    return;
+
+                 var sql = "select * from my_table where 列名1 > 99 and col2<98 ";
+
+                Sequence<Statement> ast = new Parser().ParseSql(sql);
+                var updateString = JsonConvert.SerializeObject(ast, Formatting.Indented);
+
+                Console.WriteLine(updateString);
+                //   ast.
+                //    ArrayList a = filex.rdWdsFromFile("底部公共菜单.txt");
+                //   timerCls.tmrEvt_sendMsg4keepmenu("今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
                 return;
 
            //     timerCls. sendMsg4keepmenu("今日促销商家.gif",timerCls. plchdTxt, Program._btmBtns());
@@ -166,8 +181,8 @@ namespace prj202405
 
         private static void exptMrcht()
         {
-
-            var citys = (from c in Program._citys select c).ToList();
+            HashSet<prj202405.City> _citys = getCitysObj();
+            var citys = (from c in _citys select c).ToList();
 
             foreach (var city in citys)
             {

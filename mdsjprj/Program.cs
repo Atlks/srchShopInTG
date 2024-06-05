@@ -30,12 +30,16 @@ using prj202504;
 using System.Runtime.Intrinsics.Arm;
 using Microsoft.Extensions.Primitives;
 using System.Runtime.CompilerServices;
+using mdsj;
+using mdsj.libBiz;
+using static mdsj.other;
+using DocumentFormat.OpenXml.Bibliography;
 
 namespace prj202405
 {
     internal class Program
     {
-        private const string botname = "LianXin_BianMinBot";
+        public const string botname = "LianXin_BianMinBot";
         public static TelegramBotClient botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");
 
         //左道群
@@ -43,9 +47,9 @@ namespace prj202405
         //机器人创建者Id
         static readonly long botCreatorId = 6091395167;
         //加入的聊天Ids
-        static HashSet<string> chatIds = [];
+        public static HashSet<string> chatIds = [];
         //联系商家城市
-        public static HashSet<City> _citys = [];
+        //public static HashSet<City> _citys = [];
         //联系方式(这个的作用是检测别人在聊天信息中出现这个时就让别人可以搜索)
         public static HashSet<string> _contactType = ["商家联系方式", "商家飞机"];
         //分类键值对
@@ -79,25 +83,25 @@ namespace prj202405
             foreach (var category in Enum.GetValues(typeof(Category)))
             {
                 Category enumValue = (Category)category;
-                string description = _GetEnumDescription(enumValue);
+                string description =other. _GetEnumDescription(enumValue);
                 _categoryKeyValue.Add((int)enumValue, description);
             }
 
 
             #region 读取商家信息
             //  读取加入的群Ids           
-            await _readMerInfo();
+            await other._readMerInfo();
             #endregion
             #endregion
 
 
 
-            bot_iniChtStrfile();
+            tglib.bot_iniChtStrfile();
 
             testCls.test();
 
             //分类枚举
-            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: botapi.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
+            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: tglib.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
             {
                 AllowedUpdates = [UpdateType.Message,
                     UpdateType.CallbackQuery,
@@ -115,35 +119,14 @@ namespace prj202405
             Console.ReadKey();
         }
 
-        private static async Task _readMerInfo()
-        {
-            chatIds = [.. System.IO.File.ReadAllLines("chatIds.txt")];
-
-            if (System.IO.File.Exists("Users.json"))
-            {
-                var users = await System.IO.File.ReadAllTextAsync("Users.json");
-                if (!string.IsNullOrEmpty(users))
-                    _users = JsonConvert.DeserializeObject<Dictionary<long, User>>(users)!;
-            }
-
-            var merchants = await System.IO.File.ReadAllTextAsync(_shangjiaFL());
-            if (!string.IsNullOrEmpty(merchants))
-                _citys = JsonConvert.DeserializeObject<HashSet<City>>(merchants)!;
-            ////ini（）  finish
-        }
-
-        private static void bot_iniChtStrfile()
-        {
-            if (!System.IO.File.Exists(timerCls.chatSessStrfile))
-                System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
-        }
+     
 
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
 
-            await _readMerInfo();
+            await other._readMerInfo();
             var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
             Directory.CreateDirectory("msgRcvDir");
             Console.WriteLine(updateString);
@@ -152,16 +135,20 @@ namespace prj202405
             string fileName = $"msgRcvDir/{timestamp}.txt";
             Console.WriteLine(fileName);
             System.IO.File.WriteAllText("" + fileName, updateString);
-
+            //auto add cht sess
+            if (update?.Message != null)
+            {
+                tglib.bot_saveChtSesion(update?.Message?.Chat?.Id, update?.Message?.From);
+            }
 
 
             //menu proces
-            if (isBtm_btnClink_in_pubGrp(update))
+            if (tgBiz. tg_isBtm_btnClink_in_pubGrp(update))
             {
                 evt_btm_btn_click_inPubgrp(update);
                 return;
             }
-            string msgx2024 = botapi.bot_getTxtMsg(update);
+            string msgx2024 = tglib.bot_getTxtMsg(update);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
                 // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
@@ -177,14 +164,14 @@ namespace prj202405
 
             if (msgx2024 == "↩️ 返回主菜单")
             {
-                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
+                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, tgBiz.tg_btmBtns());
                 return;
             }
 
             if (msgx2024 == "↩️ 返回商家菜单")
             {
-                  evt_retMchrtBtn_click(update);
-           //     await evt_btmBtnclick(botClient, update);
+                evt_retMchrtBtn_click(update);
+                //     await evt_btmBtnclick(botClient, update);
                 return;
             }
 
@@ -205,21 +192,17 @@ namespace prj202405
                strCls.contain(update?.Message?.Text, "世博博彩")
                 )
             {
-                evt_shiboBocai(update);
+                evt_shiboBocai_click(update);
                 return;
             }
 
             if (strCls.contain(update?.Message?.Text, "世博博彩")
               )
             {
-                evt_shiboBocai(update);
+                evt_shiboBocai_click(update);
                 return;
             }
-            //auto add cht sess
-            if (update?.Message != null)
-            {
-                bot_saveChtSesion(update.Message.Chat.Id, update.Message.From);
-            }
+           
 
             //私聊消息  /start开始
             if (update?.Message?.Text == "/start")
@@ -266,152 +249,7 @@ namespace prj202405
                 && string.IsNullOrEmpty(update.Message.ReplyToMessage?.Text)
                 && update.Message.MessageThreadId == 111389)
                 {
-                    var callError = async (string text) =>
-                    {
-                        try
-                        {
-                            await botClient.SendTextMessageAsync(chatId: update.Message.Chat.Id, text: text, messageThreadId: update.Message.MessageThreadId, replyToMessageId: update.Message.MessageId);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("告知新增联系方式时获取到时出错:" + ex.Message);
-                        }
-                    };
-                    var merchant = new Merchant();
-                    merchant.Guid = Guid.NewGuid().ToString();
-
-                    var chengshiandyuanqu = GetText.GetBetween(text, "城市园区名字:", "\n");
-                    if (string.IsNullOrEmpty(chengshiandyuanqu))
-                    {
-                        await callError("在添加商家联系方式时,城市/园区名字未获取到");
-                        return;
-                    }
-
-                    //园区城市
-                    Address? address = null;
-                    foreach (var c in _citys)
-                    {
-                        foreach (var a in c.Address)
-                        {
-                            if (a.Name == chengshiandyuanqu)
-                            {
-                                address = a;
-                                break;
-                            }
-                        }
-                    }
-                    if (address == null)
-                    {
-                        await callError("城市园区不存在");
-                        return;
-                    }
-
-                    merchant.Name = GetText.GetBetween(text, "商家名称:", "\n");
-                    if (string.IsNullOrEmpty(merchant.Name))
-                    {
-                        await callError("商家名称未获取到");
-                        return;
-                    }
-
-                    var category = GetText.GetBetween(text, "商家分类:", "\n");
-                    try
-                    {
-                        merchant.Category = (Category)Convert.ToInt32(category);
-                    }
-                    catch (Exception)
-                    {
-                        await callError("商家分类未获取到");
-                        return;
-                    }
-
-                    merchant.KeywordString = GetText.GetBetween(text, "商家关键词:", "\n");
-                    if (string.IsNullOrEmpty(merchant.KeywordString))
-                    {
-                        await callError("商家关键词未获取到");
-                        return;
-                    }
-
-                    var start = GetText.GetBetween(text, "开始营业时间:", "\n");
-                    try
-                    {
-                        merchant.StartTime = TimeSpan.Parse(start);
-                    }
-                    catch (Exception)
-                    {
-                        await callError("商家开始营业时间未获取到");
-                        return;
-                    }
-
-                    var end = GetText.GetBetween(text, "打烊收摊时间:", "\n");
-                    try
-                    {
-                        merchant.StartTime = TimeSpan.Parse(end);
-                    }
-                    catch (Exception)
-                    {
-                        await callError("商家打烊时间未获取到");
-                        return;
-                    }
-
-                    var telegram = GetText.GetBetween(text, "Telegram:", "\n");
-                    if (!string.IsNullOrEmpty(telegram))
-                    {
-                        merchant.Telegram = telegram.Split(' ').ToList();
-                    }
-
-                    var telegramGroup = GetText.GetBetween(text, "Telegram群组:", "\n");
-                    if (!string.IsNullOrEmpty(telegramGroup))
-                    {
-                        merchant.TelegramGroup = telegramGroup;
-                    }
-
-                    var whatsapp = GetText.GetBetween(text, "Whatsapp:", "\n");
-                    if (!string.IsNullOrEmpty(whatsapp))
-                    {
-                        merchant.WhatsApp = whatsapp.Split(' ').ToList();
-                    }
-
-                    var lines = GetText.GetBetween(text, "Line:", "\n");
-                    if (!string.IsNullOrEmpty(lines))
-                    {
-                        merchant.Line = lines.Split(' ').ToList();
-                    }
-
-                    var signals = GetText.GetBetween(text, "Signal:", "\n");
-                    if (!string.IsNullOrEmpty(signals))
-                    {
-                        merchant.Signal = signals.Split(' ').ToList();
-                    }
-
-                    var weixins = GetText.GetBetween(text, "微信:", "\n");
-                    if (!string.IsNullOrEmpty(weixins))
-                    {
-                        merchant.WeiXin = weixins.Split(' ').ToList();
-                    }
-
-                    var tels = GetText.GetBetween(text, "电话:", "\n");
-                    if (!string.IsNullOrEmpty(tels))
-                    {
-                        merchant.Tel = tels.Split(' ').ToList();
-                    }
-
-                    if (merchant.Telegram.Count == 0 && merchant.WhatsApp.Count == 0 && merchant.Line.Count == 0 && merchant.Signal.Count == 0 && merchant.WeiXin.Count == 0)
-                    {
-                        await callError("未获取到任何一个联系方式");
-                        return;
-                    }
-
-                    merchant.Menu = GetText.GetBetween(text, "商家菜单:", "\n");
-                    address.Merchant.Add(merchant);
-                    await _SaveConfig();
-                    try
-                    {
-                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("告知商家添加成功时出错:" + ex.Message);
-                    }
+                    await 添加商家信息(botClient, update, text);
 
                     return;
 
@@ -471,7 +309,7 @@ namespace prj202405
 
 
                 //if nmrl msg  n notStartWith   @bot   ingor
-                if (bot_isNnmlMsgInGrp(update))
+                if (tgBiz. bot_isNnmlMsgInGrp(update))
                 {
                     Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
                     return;
@@ -487,73 +325,31 @@ namespace prj202405
                 //privt msg serch
                 if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
                 {
-                    string? msgx = botapi.bot_getTxtMsg(update);
-                    if (msgx != null && msgx.Length > 0)
-                    {
-                        msgx = msgx.Trim();
-                        await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
-                        return;
-                    }
-
-
+                    await evt_msgTrgSrch(botClient, update);
+                    return;
                 }
 
 
                 //public search
                 if (update?.Message?.Chat?.Type != ChatType.Private && update?.Type == UpdateType.Message)
-                {
-                    //search   
-                    //   if (update?.Message?.Chat?.Type == ChatType.Supergroup && update.Message.Chat.Id == groupId && update.Message.MessageThreadId == 111389 ||
-                    //       update?.CallbackQuery?.Message?.Chat?.Type == ChatType.Supergroup && update.CallbackQuery?.Message?.Chat.Id == groupId && update.CallbackQuery.Message.MessageThreadId == 111389)
-
-                    string? msgx = botapi.bot_getTxtMsg(update);
-                    if (msgx != null && msgx.Length < 25)
-                    {
-                        if (msgx.Trim().StartsWith("@" + botname))
-                            msgx = msgx.Substring(19).Trim();
-                        msgx = msgx.Trim();
-                        await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
-                        return;
-                    }
-
-                    else
-                        return;
-
-
+                {                      
+                        await evt_msgTrgSrch(botClient, update);
+                       return;
                 }
 
                 //pre page evt???  todo
                 //next page evt,,,
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
                 {
-                    string? msgx = botapi.bot_getTxtMsg(update);
-
-                    if (msgx != null)
-                    {
-                        if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
-                            msgx = msgx.Substring(19).Trim();
-                        msgx = msgx.Trim();
-                        await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
-                        return;
-                    }
-
-
+                    await evt_nextPrePage(botClient, update);
+                    return;
                 }
 
                 //return evt
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
                 {
-                    string? msgx = botapi.bot_getTxtMsg(update);
-                    if (msgx != null)
-                    {
-                        if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
-                            msgx = msgx.Substring(19).Trim();
-                        msgx = msgx.Trim();
-                        await evt_GetList_qryV2(msgx, 1, 5, botClient, update);
-                        return;
-                    }
-
-
+                    await evt_ret_mchrt_list(botClient, update);
+                    return;
                 }
 
 
@@ -566,82 +362,236 @@ namespace prj202405
 
 
                 #region add chatids
-                long chatId = -1;
-                switch (update!.Type)
-                {
-                    case UpdateType.Message:
-                        chatId = update.Message!.Chat.Id;
-                        break;
-                    case UpdateType.EditedMessage:
-                        try
-                        {
-                            await botapi.bot_DeleteMessage(update.EditedMessage!.Chat.Id, update.EditedMessage.MessageId, "不可二次编辑搜索信息,只能重新搜索,现对您编辑的信息进行销毁!", 5);
-                        }
-                        catch (Exception ex)
-                        {
-                            Console.WriteLine("告知不可二次编辑时出错:" + ex.Message);
-                        }
-                        break;
-                    case UpdateType.CallbackQuery:
-                        chatId = update.CallbackQuery!.From.Id;
-                        break;
-                    case UpdateType.ChannelPost:
-                        chatId = update.ChannelPost!.Chat.Id;
-                        break;
-                    case UpdateType.MyChatMember:
-                        chatId = update.MyChatMember!.Chat.Id;
-                        break;
-                    case UpdateType.ChatMember:
-                        chatId = update.ChatMember!.Chat.Id;
-                        break;
-                    case UpdateType.ChatJoinRequest:
-                        chatId = update.ChatJoinRequest!.Chat.Id;
-                        break;
-                    default:
-                        break;
-                }
-
-                if (chatId != -1)
-                    bot_AddChatIds(chatId);
+                await tglib.tg_addChtid(update);
 
                 #endregion
             }, cancellationToken);
         }
 
+        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update )
+        {
+            string? msgx = tglib.bot_getTxtMsg(update);
+            if (msgx.Trim().StartsWith("@" + botname))
+                msgx = msgx.Substring(botname.Length+1).Trim();
+            msgx = msgx.Trim();
+
+
+           
+            if (msgx != null && msgx.Length < 25)
+            {
+                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                return;
+            }
+            else
+                return;
+
+        }
+
+        private static async Task 添加商家信息(ITelegramBotClient botClient, Update update, string? text)
+        {
+            var callError = async (string text) =>
+            {
+                try
+                {
+                    await botClient.SendTextMessageAsync(chatId: update.Message.Chat.Id, text: text, messageThreadId: update.Message.MessageThreadId, replyToMessageId: update.Message.MessageId);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("告知新增联系方式时获取到时出错:" + ex.Message);
+                }
+            };
+            var merchant = new Merchant();
+            merchant.Guid = Guid.NewGuid().ToString();
+
+            var chengshiandyuanqu = GetText.GetBetween(text, "城市园区名字:", "\n");
+            if (string.IsNullOrEmpty(chengshiandyuanqu))
+            {
+                await callError("在添加商家联系方式时,城市/园区名字未获取到");
+                return;
+            }
+
+           
+            var _citys = getCitysObj();
+            //园区城市
+            Address? address = null;
+            foreach (var c in _citys)
+            {
+                foreach (var a in c.Address)
+                {
+                    if (a.Name == chengshiandyuanqu)
+                    {
+                        address = a;
+                        break;
+                    }
+                }
+            }
+            if (address == null)
+            {
+                await callError("城市园区不存在");
+                return;
+            }
+
+            merchant.Name = GetText.GetBetween(text, "商家名称:", "\n");
+            if (string.IsNullOrEmpty(merchant.Name))
+            {
+                await callError("商家名称未获取到");
+                return;
+            }
+
+            var category = GetText.GetBetween(text, "商家分类:", "\n");
+            try
+            {
+                merchant.Category = (Category)Convert.ToInt32(category);
+            }
+            catch (Exception)
+            {
+                await callError("商家分类未获取到");
+                return;
+            }
+
+            merchant.KeywordString = GetText.GetBetween(text, "商家关键词:", "\n");
+            if (string.IsNullOrEmpty(merchant.KeywordString))
+            {
+                await callError("商家关键词未获取到");
+                return;
+            }
+
+            var start = GetText.GetBetween(text, "开始营业时间:", "\n");
+            try
+            {
+                merchant.StartTime = TimeSpan.Parse(start);
+            }
+            catch (Exception)
+            {
+                await callError("商家开始营业时间未获取到");
+                return;
+            }
+
+            var end = GetText.GetBetween(text, "打烊收摊时间:", "\n");
+            try
+            {
+                merchant.StartTime = TimeSpan.Parse(end);
+            }
+            catch (Exception)
+            {
+                await callError("商家打烊时间未获取到");
+                return;
+            }
+
+            var telegram = GetText.GetBetween(text, "Telegram:", "\n");
+            if (!string.IsNullOrEmpty(telegram))
+            {
+                merchant.Telegram = telegram.Split(' ').ToList();
+            }
+
+            var telegramGroup = GetText.GetBetween(text, "Telegram群组:", "\n");
+            if (!string.IsNullOrEmpty(telegramGroup))
+            {
+                merchant.TelegramGroup = telegramGroup;
+            }
+
+            var whatsapp = GetText.GetBetween(text, "Whatsapp:", "\n");
+            if (!string.IsNullOrEmpty(whatsapp))
+            {
+                merchant.WhatsApp = whatsapp.Split(' ').ToList();
+            }
+
+            var lines = GetText.GetBetween(text, "Line:", "\n");
+            if (!string.IsNullOrEmpty(lines))
+            {
+                merchant.Line = lines.Split(' ').ToList();
+            }
+
+            var signals = GetText.GetBetween(text, "Signal:", "\n");
+            if (!string.IsNullOrEmpty(signals))
+            {
+                merchant.Signal = signals.Split(' ').ToList();
+            }
+
+            var weixins = GetText.GetBetween(text, "微信:", "\n");
+            if (!string.IsNullOrEmpty(weixins))
+            {
+                merchant.WeiXin = weixins.Split(' ').ToList();
+            }
+
+            var tels = GetText.GetBetween(text, "电话:", "\n");
+            if (!string.IsNullOrEmpty(tels))
+            {
+                merchant.Tel = tels.Split(' ').ToList();
+            }
+
+            if (merchant.Telegram.Count == 0 && merchant.WhatsApp.Count == 0 && merchant.Line.Count == 0 && merchant.Signal.Count == 0 && merchant.WeiXin.Count == 0)
+            {
+                await callError("未获取到任何一个联系方式");
+                return;
+            }
+
+            merchant.Menu = GetText.GetBetween(text, "商家菜单:", "\n");
+            address.Merchant.Add(merchant);
+            await other._SaveConfig();
+            try
+            {
+                await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("告知商家添加成功时出错:" + ex.Message);
+            }
+        }
+
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update)
+        {
+            string? msgx = tglib.bot_getTxtMsg(update);
+
+            if (msgx != null)
+            {
+                if (msgx.Trim().StartsWith("@" + Program.botname))
+                    msgx = msgx.Substring(19).Trim();
+                msgx = msgx.Trim();
+                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                return;
+            }
+        }
+
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update)
+        {
+            string? msgx = tglib.bot_getTxtMsg(update);
+            if (msgx != null)
+            {
+                if (msgx.Trim().StartsWith("@"+Program.botname))
+                    msgx = msgx.Substring(19).Trim();
+                msgx = msgx.Trim();
+                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                return;
+            }
+        }
+
+        
         private static async void evt_btm_btn_click_inPubgrp(Update update)
         {
 
             Message a = await Program.botClient.SendTextMessageAsync(
                       update.Message.Chat.Id,
-                    "要获取二级菜单，请私聊我。。",
+                    "要获取多级菜单，请私聊我",
                       parseMode: ParseMode.Html,
                       //   replyMarkup: new InlineKeyboardMarkup([]),
                       protectContent: false,
+                      replyToMessageId: update.Message.MessageId,
                       disableWebPagePreview: true
-                      
+
                       );
+            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
+            tglib.   bot_DeleteMessageV2(update.Message.Chat.Id,a.MessageId,10);
             //todo reply
         }
 
-        private static bool isBtm_btnClink_in_pubGrp(Update update)
-        {
-            string msgx2024 = botapi.bot_getTxtMsg(update);
-
-            if (update?.Message?.Chat?.Type != ChatType.Private)
-            {
-                ArrayList a = filex.rdWdsFromFile("menu/底部公共菜单.txt");
-                return a.Contains(msgx2024);
-            }
-            return false;
-
-        }
         private static async Task evt_btmBtnclick(ITelegramBotClient botClient, Update update)
         {
             //evt_inline_menuitem_click
             //dataObj
             //Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(update.CallbackQuery!.Data);
             //var msgx = arrCls.TryGetValueDfEmpy(whereExprsObj, "cmd");
-            string msgx = botapi.bot_getTxtMsg(update);
+            string msgx = tglib.bot_getTxtMsg(update);
             msgx = msgx.Trim();
             var msgx2024 = msgx;
 
@@ -719,54 +669,37 @@ namespace prj202405
             return;
         }
 
-        private static async void evt_shiboBocai(Update? update)
+        private static async void evt_shiboBocai_click(Update? update)
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 
 
             string imgPath = "推荐横幅.gif";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-            //   custom - emoji - element
-            //Message a=await    Program.botClient.SendTextMessageAsync(
-            //         update.Message.Chat.Id,
-            //       System.IO.File.ReadAllText("shiboTrm.htm"),
-            //         parseMode: ParseMode.Html,
-            //         //   replyMarkup: new InlineKeyboardMarkup([]),
-            //         protectContent: false,
-            //         disableWebPagePreview: true);
 
 
+            InlineKeyboardButton[][] btns = tglib.ConvertHtmlLinksToTelegramButtons("shiboTrm.htm");
             Message message = await Program.botClient.SendPhotoAsync(
-                    update.Message.Chat.Id, Photo, null,
-                  System.IO.File.ReadAllText("shiboTrm.htm"),
-                      parseMode: ParseMode.Html,
-                     //   replyMarkup: new InlineKeyboardMarkup(results),
-                     protectContent: false);
+                  update.Message.Chat.Id, Photo, null,
+              timerCls.plchdTxt,
+                    parseMode: ParseMode.Html,
+                     replyMarkup: new InlineKeyboardMarkup(btns),
+                   protectContent: false);
+
+            //ori 64
+            //Message message = await Program.botClient.SendPhotoAsync(
+            //        update.Message.Chat.Id, Photo, null,
+            //      System.IO.File.ReadAllText("shiboTrm.htm"),
+            //          parseMode: ParseMode.Html,
+            //         //   replyMarkup: new InlineKeyboardMarkup(results),
+            //         protectContent: false);
             Console.WriteLine(JsonConvert.SerializeObject(message));
         }
 
-        static void RemoveCustomEmojiRendererElement(string inputFilePath, string outputFilePath)
-        {
-            HtmlDocument doc = new HtmlDocument();
-            doc.Load(inputFilePath);
-
-            // 在这里添加你的代码来去除 custom-emoji-renderer-element 标签
-            // 这里提供一个示例来移除所有的 custom-emoji-renderer-element 标签
-            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//custom-emoji-renderer-element"))
-            {
-                node.ParentNode.RemoveChild(node);
-            }
-
-            foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//custom-emoji-element"))
-            {
-                node.ParentNode.RemoveChild(node);
-            }
-
-            doc.Save(outputFilePath);
-        }
 
         private static async Task evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
         {
+            HashSet<prj202405.City> _citys = getCitysObj();
             Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
             var updateString = JsonConvert.SerializeObject(update);
             Match match = Regex.Match(updateString, @"(?<=\?id=).*?(?=&)");
@@ -847,10 +780,10 @@ namespace prj202405
                 ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
                 user.Comments++;
-                await _SaveConfig();
+                await other._SaveConfig();
                 try
                 {
-                    await botapi.bot_DeleteMessage(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
+                    await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
                 }
                 catch (Exception ex)
                 {
@@ -866,7 +799,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -956,7 +889,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -965,11 +898,11 @@ namespace prj202405
                     return;
                 }
 
-                await _SaveConfig();
+                await other._SaveConfig();
 
                 try
                 {
-                    await botapi.bot_DeleteMessage(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
+                    await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
                 }
                 catch (Exception ex)
                 {
@@ -988,12 +921,12 @@ namespace prj202405
                     protectContent: false,
                     disableWebPagePreview: true);
 
-            bot_saveChtSesion(update.Message.Chat.Id, update.Message.From);
+            tglib.bot_saveChtSesion(update.Message.Chat.Id, update.Message.From);
         }
 
         private static void evt_botAddtoGrpEvtHdlr(Update update)
         {
-            ReplyKeyboardMarkup rkm = _btmBtns();
+            ReplyKeyboardMarkup rkm =tgBiz. tg_btmBtns();
             Program.botClient.SendTextMessageAsync(
                      update.MyChatMember.Chat.Id,
                      "我是便民助手,你们要问什么商家,我都知道哦!",
@@ -1001,260 +934,13 @@ namespace prj202405
                       replyMarkup: rkm,
                      protectContent: false,
                      disableWebPagePreview: true);
-            bot_saveGrpInf2db(update.MyChatMember);
-            bot_saveChtSesion(update.MyChatMember.Chat.Id, update.MyChatMember);
+            tglib.bot_saveGrpInf2db(update.MyChatMember);
+            tglib.bot_saveChtSesion(update.MyChatMember.Chat.Id, update.MyChatMember);
         }
 
-        public static ReplyKeyboardMarkup _btmBtns()
-        {
-            var Keyboard =
-                new KeyboardButton[][]
-                {
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("💸💸💸 世博博彩 💸💸💸")
-                            },
-                            new KeyboardButton[]
-                            {
-                                new KeyboardButton("商家"),
-                                       new KeyboardButton("猎艳"),
-                                              new KeyboardButton("猎奇"),
-                                                new KeyboardButton("买号")
-
-                            },
-
-                            new KeyboardButton[]
-                            {
-
-                                 new KeyboardButton("接码")
-                                ,   new KeyboardButton("闲置")
-
-                                 ,   new KeyboardButton("资源"),   new KeyboardButton("招聘")
-
-
-                                // new KeyboardButton("话术") , new KeyboardButton("搜群"),
-
-                                //   new KeyboardButton("卖号") ,   new KeyboardButton("工作")
-                                //,   new KeyboardButton("代理")
-
-                                 
-                                   
-                            },
-                              new KeyboardButton[]
-                            {
-                                 new KeyboardButton("跑腿") ,
-                                   new KeyboardButton("代购") ,
-                                    new KeyboardButton("优品") ,
-                                     new KeyboardButton("兑换")
-                            } ,
-
-                               new KeyboardButton[]
-                            {
-                                //new KeyboardButton("兑换"),
-                                 new KeyboardButton("洗资"),
-                                new KeyboardButton("担保"),
-                                new KeyboardButton("租房"),
-
-                                new KeyboardButton("行程"),
-                            }
-                            ,
-
-                            new KeyboardButton[]
-                            {
-
-                                 new KeyboardButton("搜群"),
-
-                                  new KeyboardButton("文案"),
-                                   new KeyboardButton("话术"),
-                                new KeyboardButton("办证")
-
-
-                            }
-
-
-
-
-
-                };
-            var rkm = new ReplyKeyboardMarkup(Keyboard);
-            return rkm;
-        }
-
-        private static void bot_saveGrpInf2db(ChatMemberUpdated myChatMember)
-        {
-            try
-            {
-                if (myChatMember.Chat.Type.ToString().ToLower() == "supergroup")
-                {
-                    SortedList chtsSesss = new SortedList();
-                    chtsSesss.Add("id", myChatMember.Chat.Id);
-                    chtsSesss.Add("grp", myChatMember.Chat.Title);
-                    chtsSesss.Add("loc", "Unk");
-                    ormSqlt._save("grpinfo", chtsSesss, "grpinfoDB.db");
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-
-
-        }
-
-        public static void bot_saveChtSesion(long chtid, object frm)
-        {
-            if (!System.IO.File.Exists(timerCls.chatSessStrfile))
-                System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
-
-
-            Hashtable chtsSesss = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-
-            if (chtsSesss.Contains(Convert.ToString(chtid)))
-            {
-                return;
-            }
-            if (!chtsSesss.Contains(Convert.ToString(chtid)))
-            {
-                chtsSesss.Add(chtid, frm);
-
-                System.IO.File.WriteAllText(timerCls.chatSessStrfile, JsonConvert.SerializeObject(chtsSesss, Newtonsoft.Json.Formatting.Indented));
-
-            }
-        }
-
-        //if  is nml msg ,not search
-        private static bool bot_isNnmlMsgInGrp(Update? update)
-        {
-            if (update?.Message == null)  //maybe cmd call
-            {
-                return false;
-            }
-
-            if (update?.Message?.Chat?.Type == ChatType.Private)
-            {
-                return false;
-            }
-
-            if (update?.Message?.Text == null || update?.Message?.Text.Trim() == "")
-                return false;
-
-
-            //--------------here myst msg in grp mode 
-
-
-
-
-            //if rply n frmuser is bot n textContain(我是便民助手
-            if (update?.Message?.ReplyToMessage != null
-                && update.Message.ReplyToMessage.From.Username == botname
-                && strCls.StartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
-                )
-            {
-                return false;  // not nml msg ,start search;
-            }
-
-            //pingjia 内容，不要进行反馈搜索
-            if (update?.Message?.ReplyToMessage != null &&
-                strCls.contain(update?.Message?.ReplyToMessage?.Caption, "---联系方式---"))
-            {
-                //is nml msg ,not need search kwd  ,,for 评价
-                return true;
-            }
-
-
-            //grp spec kwd
-
-            ArrayList lst = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
-            if (lst.Contains(update?.Message?.Text))
-            {
-                return false;
-            }
-
-
-
-            if (update?.Message?.ReplyToMessage?.From?.Username == botname
-                && update?.Message?.ReplyToMessage?.Caption == "??博彩盘推荐：世博联盟")
-            {
-                return false;
-            }
-
-
-            if (update?.Message?.Chat?.Type != ChatType.Private)// if grp in 
-            {
-
-
-
-                if (update?.Message == null)
-                    return false;
-                if (update?.Message?.Text == null)
-                    return false;
-
-                if ((bool)update?.Message?.Text.StartsWith("@" + botname))
-                    return false;
-
-                // 
-                var trgSearchKwds = "联系方式  纸飞机 line whatsapp telegram tg 有没有 飞机号 哪家店 哪里有 哪有卖 手机号 哪家 ";
-                var trgWd = getTrgwdHash("trgWds.txt");
-                trgSearchKwds = trgSearchKwds + trgWd;
-                if (strCls.containKwds(update?.Message?.Text, trgSearchKwds))
-                {
-                    //if  is nml msg ,not search
-                    return false;   //not nml msg,need search
-                }
-
-                if (update?.Message?.ReplyToMessage?.From?.Username == botname
-                    && update?.Message?.ReplyToMessage?.Caption == "??博彩盘推荐：世博联盟")
-                {
-                    return false;
-                }
-
-                ArrayList lst2 = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
-                if (lst2.Contains(update?.Message?.Text))
-                {
-                    return false;
-                }
-
-                Console.WriteLine("nml msg");
-                return true;
-            }
-            else  //prvt mode  ,,,not nml msg
-                return false;
-
-        }
-
-        private static string getTrgwdHash(string filePath)
-        {
-            HashSet<string> hs = getTrgwdHashProcessFile(filePath);
-
-            return string.Join(" ", hs);
-        }
-
-        public static HashSet<string> getTrgwdHashProcessFile(string filePath)
-        {
-            // 创建一个 HashSet 来存储处理后的行
-            HashSet<string> processedLines = new HashSet<string>();
-
-            // 读取文件并逐行处理
-            using (StreamReader reader = new StreamReader(filePath))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    // 替换连字符和双引号，并进行 Trim()
-                    line = line.Replace("-", "").Replace("\"", "").Trim();
-
-                    // 将处理后的行添加到 HashSet 中
-                    if (!string.IsNullOrEmpty(line)) // 可选：跳过空行
-                    {
-                        processedLines.Add(line);
-                    }
-                }
-            }
-
-            return processedLines;
-        }
-
-
+       
+      
+   
         //回调告知怎么添加和修改商家信息
         //                    if (update.CallbackQuery!.Data?.Contains("AddMerchant")==true || update.CallbackQuery!.Data?.Contains("Update")==true)
         //                    {
@@ -1390,7 +1076,7 @@ namespace prj202405
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task evt_GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
+        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         {
             var __METHOD__ = "evt_GetList_qryV2";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
@@ -1457,7 +1143,7 @@ namespace prj202405
             //kwd if ret list btn cmd cmd
             if (update.Type == UpdateType.CallbackQuery)
             {
-                if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
+                if (msgx.Trim().StartsWith("@"+Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 else
                     msgx = msgx.Trim();
@@ -1469,9 +1155,33 @@ namespace prj202405
             if (!string.IsNullOrEmpty(msgx))
             {
                 //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
-                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底", _shangjiaFL());
+
+                // update.Message.Chat.Id;
+                string groupId = tglib.bot_getChatid(update).ToString();
+                   
+                List<Dictionary<string, object>> lst = (List<Dictionary<string, object>>)ormSqlt._qry($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
+
+              
+                string whereExprs = (string)getRowVal(lst, "whereExprs","");
+            //    city = 妙瓦底"
+                results = mrcht.qryByMsgKwdsV2(msgx, whereExprs, other._shangjiaFL(groupId));
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
+
+
+                if (count == 0 &&  (update?.Message?.Chat?.Type == ChatType.Private))
+                {
+
+                    await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                    return;
+                }
+
+                if (count == 0)   //in pubgrp
+                {
+                    Console.WriteLine(" evt serch.  in public grp. srch rzt cnt =0,so ret");
+                    return;
+                }
+                    
                 results = results.Skip(page * pagesize).Take(pagesize).ToList();
             }
 
@@ -1517,7 +1227,7 @@ namespace prj202405
 
 
             // pagebtns
-            evt_search_btns(page, count, pagesize, results);
+            evt_search_pt3_btns翻页(page, count, pagesize, results);
 
             try
             {
@@ -1579,6 +1289,7 @@ namespace prj202405
                     //    replyMarkup: new InlineKeyboardMarkup(results));
                 }
 
+                  HashSet<prj202405.City> _citys = getCitysObj();
                 //每个商家搜索量
                 foreach (var item in results)
                 {
@@ -1599,7 +1310,7 @@ namespace prj202405
                     }
                 }
 
-                await _SaveConfig();
+                await other._SaveConfig();
             }
             catch (Exception e)
             {
@@ -1609,6 +1320,25 @@ namespace prj202405
 
             Console.WriteLine(" endfun  GetList()");
 
+        }
+
+        public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, object> d = lst[0];
+                try
+                {
+                    return d[fld];
+
+                }
+                catch(Exception e)
+                {
+                    return v2;
+                }
+                
+            }
+            return v2;
         }
 
         static async Task evt_btnclick_Pt2_qryByKwd(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
@@ -1673,7 +1403,7 @@ namespace prj202405
             //kwd if ret list btn cmd cmd
             if (update.Type == UpdateType.CallbackQuery)
             {
-                if (msgx.Trim().StartsWith("@LianXin_BianMinBot"))
+                if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 else
                     msgx = msgx.Trim();
@@ -1685,7 +1415,7 @@ namespace prj202405
             if (!string.IsNullOrEmpty(msgx))
             {
                 //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
-                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底", _shangjiaFL());
+                results = mrcht.qryByMsgKwdsV2(msgx, "city=妙瓦底", other._shangjiaFL(Program.groupId.ToString()));
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
                 results = results.Skip(page * pagesize).Take(pagesize).ToList();
@@ -1733,7 +1463,7 @@ namespace prj202405
 
 
             // pagebtns
-            evt_search_btns(page, count, pagesize, results);
+            evt_search_pt3_btns翻页(page, count, pagesize, results);
 
             try
             {
@@ -1750,7 +1480,7 @@ namespace prj202405
                 //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
                 var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
                 await botClient.SendPhotoAsync(
-                   bot_getChatid(update),
+                   tglib.bot_getChatid(update),
                     Photo, null, text,
                     parseMode: ParseMode.Html,
                     replyMarkup: new InlineKeyboardMarkup(results),
@@ -1824,15 +1554,8 @@ namespace prj202405
 
         }
 
-        private static ChatId bot_getChatid(Update update)
-        {
-            if (update?.Message?.Chat?.Id != null)
-                return update?.Message?.Chat?.Id;
-            //  if (update?.CallbackQuery?.Message?.Chat?.Id != null)
-            return update?.CallbackQuery?.Message?.Chat?.Id;
-        }
 
-        private static void evt_search_btns(int page, int count, int pagesize, List<InlineKeyboardButton[]> results)
+        private static void evt_search_pt3_btns翻页(int page, int count, int pagesize, List<InlineKeyboardButton[]> results)
         {
             var pageBtn = new List<InlineKeyboardButton>();
             if (page > 0)
@@ -2131,7 +1854,7 @@ namespace prj202405
             var parameters = QueryHelpers.ParseQuery(uri.Query);
 
             parameters.TryGetValue("id", out var id);
-            string guid = id.ToString();
+            string guid = id.ToString(); var _citys = getCitysObj();
             foreach (var city in _citys)
             {
                 foreach (var area in city.Address)
@@ -2176,7 +1899,7 @@ namespace prj202405
                 score = Convert.ToInt32(sc);
             }
             #region 受限了
-            var operaCount = await _SetUserOperas(cq.From.Id);
+            var operaCount = await other._SetUserOperas(cq.From.Id);
             var answer = string.Empty;
             //24小时10个   一周30个    一个月50个   一年150个  
             if (operaCount.Years > 150)
@@ -2306,7 +2029,7 @@ namespace prj202405
             };
 
             //营业时间
-            result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(contact_Merchant.StartTime) + "-" + timeCls.FormatTimeSpan(contact_Merchant.EndTime) + " " + _IsBusinessHours(contact_Merchant.StartTime, contact_Merchant.EndTime);
+            result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(contact_Merchant.StartTime) + "-" + timeCls.FormatTimeSpan(contact_Merchant.EndTime) + " " +other. _IsBusinessHours(contact_Merchant.StartTime, contact_Merchant.EndTime);
 
             var contactScore = contact_Merchant.Scores.Count == 0 ? 5 : contact_Merchant.Scores.Select(u => u.Value).Average();
             //打分
@@ -2534,7 +2257,7 @@ namespace prj202405
                 {
                     Console.WriteLine("编辑联系方式时出错:" + e.Message);
                 }
-                await _SaveConfig();
+                await other._SaveConfig();
                 // }
 
 
@@ -2543,147 +2266,16 @@ namespace prj202405
         }
 
 
-        //获取枚举描述
-        public static string _GetEnumDescription(Enum value)
-        {
-            FieldInfo field = value.GetType().GetField(value.ToString());
-
-            if (field != null)
-            {
-                DescriptionAttribute attribute = (DescriptionAttribute)Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute));
-
-                if (attribute != null)
-                {
-                    return attribute.Description;
-                }
-            }
-
-            return value.ToString();
-        }
+       
 
 
 
-        //新增加入的聊天Id
-        static void bot_AddChatIds(long chatId)
-        {
-            var id = chatId.ToString();
-            if (chatIds.Contains(chatId.ToString()) == false)
-            {
-                chatIds.Add(id);
-            AddChatIds:
-                try
-                {
-                    System.IO.File.AppendAllLines("chatIds.txt", [id]);
-                }
-                catch
-                {
-                    goto AddChatIds;
-                }
-            }
-        }
+      
 
 
 
-
-        //设置用户限制
-        public static async Task<Operas> _SetUserOperas(long userId)
-        {
-            //操作计数
-            var operas = new Operas();
-
-            var member = _users[userId];
-            //有此用户
-            if (member == null)
-            {
-                _users.Add(userId, new User { ViewTimes = [DateTime.Now] });
-            }
-            //无此用户
-            else
-            {
-                member.ViewTimes.Add(DateTime.Now);
-                operas.Todays = member.ViewTimes.Count(time => (DateTime.Now - time).TotalHours <= 24);
-                operas.Weeks = member.ViewTimes.Count(time => (DateTime.Now - time).TotalDays <= 7);
-                operas.Months = member.ViewTimes.Count(time => (DateTime.Now - time).TotalDays <= 30);
-                operas.Totals = member.ViewTimes.Count;
-            }
-
-            await _SaveConfig();
-            return operas;
-        }
-
-        public static async Task _SaveConfig()
-        {
-        writeUser:
-            try
-            {
-                await System.IO.File.WriteAllTextAsync("Users.json", JsonConvert.SerializeObject(_users));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("向本地写入限制用户时出错：" + e.Message);
-                goto writeUser;
-            }
-
-        writeMerchant:
-            try
-            {
-                await System.IO.File.WriteAllTextAsync(_shangjiaFL(), JsonConvert.SerializeObject(_citys));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("向本地写入商家时出错：" + e.Message);
-                goto writeMerchant;
-            }
-        }
-
-        public static string _shangjiaFL()
-        {
-            List<Dictionary<string, object>> lst = (List<Dictionary<string, object>>)ormSqlt._qry($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
-            if (lst.Count > 0)
-            {
-                Dictionary<string, object> d = lst[0];
-                if (d["shangjiaFL"] == null)
-                    return "Merchant.json";
-                return (string)d["shangjiaFL"];
-            }
-
-            return "Merchant.json";
-        }
-
-
-
-        //是否在营业时间内
-        static string _IsBusinessHours(TimeSpan startTime, TimeSpan endTime)
-        {
-            var currentDayTime = DateTime.Now.TimeOfDay;
-
-            // 如果结束时间小于开始时间，说明跨越了午夜
-            if (endTime < startTime)
-            {
-                if (currentDayTime >= startTime || currentDayTime <= endTime)
-                {
-                    return "(营业中)";
-                }
-                else
-                {
-                    return "(已打烊)";
-                }
-            }
-            else
-            {
-                // 正常情况下比较开始时间和结束时间
-                if (currentDayTime >= startTime && currentDayTime <= endTime)
-                {
-                    return "(营业中)";
-                }
-                else
-                {
-                    return "(已打烊)";
-                }
-            }
-
-        }
-
+    
+     
         //获取上级目录名称 dep
 
     }

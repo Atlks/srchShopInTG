@@ -46,43 +46,43 @@ namespace prj202504
 
 
 
-        public static List<InlineKeyboardButton[]> qryByKwd(string keyword)
-        {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
-            List<InlineKeyboardButton[]> results = [];
+        //public static List<InlineKeyboardButton[]> qryByKwd(string keyword)
+        //{
+        //    var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+        //    dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
+        //    List<InlineKeyboardButton[]> results = [];
 
-            if (string.IsNullOrEmpty(keyword))
-                return [];
+        //    if (string.IsNullOrEmpty(keyword))
+        //        return [];
 
-            keyword = keyword.ToLower().Replace(" ", "").Trim();
-            var searchChars = keyword!.ToCharArray();
+        //    keyword = keyword.ToLower().Replace(" ", "").Trim();
+        //    var searchChars = keyword!.ToCharArray();
 
-            results = (from c in Program._citys
-                       from ca in c.Address
-                       from am in ca.Merchant
-                       where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
-                       orderby am.Views descending
-                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
-            //count = results.Count;
-            foreach (InlineKeyboardButton[] btn in results)
-            {
+        //    results = (from c in Program._citys
+        //               from ca in c.Address
+        //               from am in ca.Merchant
+        //               where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
+        //               orderby am.Views descending
+        //               select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}" } }).ToList();
+        //    //count = results.Count;
+        //    foreach (InlineKeyboardButton[] btn in results)
+        //    {
 
-            }
-
-
-            //          {
-            //              "text": "妙瓦底 ? 东风园区 ? 东方名剪",
-            //  "callback_data": "Merchant?id=dfwlvxcahlzudawgoeqjxafkxv"
-            //}
-            if (results.Count > 0)
-                dbgCls.setDbgValRtval(__METHOD__, results[0]);
+        //    }
 
 
+        //    //          {
+        //    //              "text": "妙瓦底 ? 东风园区 ? 东方名剪",
+        //    //  "callback_data": "Merchant?id=dfwlvxcahlzudawgoeqjxafkxv"
+        //    //}
+        //    if (results.Count > 0)
+        //        dbgCls.setDbgValRtval(__METHOD__, results[0]);
 
-            return results;
-        }
-        public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg, string whereExprs, string dbf)
+
+
+        //    return results;
+        //}
+       public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg, string whereExprs, string dbf)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbf));
