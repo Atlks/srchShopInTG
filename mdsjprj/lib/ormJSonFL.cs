@@ -12,12 +12,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
 namespace prj202405.lib
 {
     internal class ormJSonFL
     {
-
+        //qry just use path as qry dsl  ,,
         public static ArrayList  qry(  string dbFileName)
         {
 
@@ -51,6 +52,40 @@ namespace prj202405.lib
             return list2;
         }
 
+
+        public static List<SortedList> qryV2(string dbFileName)
+        {
+
+            //if (!File.Exists(dbFileName))
+            //    File.WriteAllText(dbFileName, "[]");
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+
+            if (!File.Exists(dbFileName))
+                File.WriteAllText(dbFileName, "[]");
+
+            // 将JSON字符串转换为List<Dictionary<string, object>>
+            string txt = File.ReadAllText(dbFileName);
+            if (txt.Trim().Length == 0)
+                txt = "[]";
+            var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
+             
+            //   ArrayList list = (ArrayList)JsonConvert.DeserializeObject(File.ReadAllText(dbFileName));
+
+            // 获取当前方法的信息
+            //MethodBase method = );
+
+            //// 输出当前方法的名称
+            //Console.WriteLine("Current Method Name: " + method.Name);
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 3));
+
+
+            // 将List转换为ArrayList
+            //  ArrayList arrayList = new ArrayList(list);
+            return list;
+        }
+
         //replace insert one row
         public static void save(object objSave, string Strfile)
         {
@@ -67,21 +102,37 @@ namespace prj202405.lib
         
         }
 
-        internal static void saveMlt(ArrayList rows, string Strfile)
+        internal static void saveAll(List<SortedList> rows, string Strfile)
+        {
+            ArrayList list = qry(Strfile);
+            SortedList listIot = db.lst2IOT(list);
+
+            foreach (SortedList objSave in rows)
+            {
+               
+                arrCls.replaceKeyV(listIot, TryGetValueAsStrDefNull(objSave, "id"), objSave);
+              
+            }
+
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            wriToDbf(saveList_hpmod, Strfile);
+        }
+        internal static void saveMlt(List<SortedList> rows, string Strfile)
         {
             // 将JSON字符串转换为List<Dictionary<string, object>>
             ArrayList list = qry(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
-            foreach(var objSave in rows )
+            foreach(SortedList objSave in rows )
             {
                 try
                 {
-                    listIot.Add(((SortedList)objSave)["id"], objSave);
+                    listIot.Add(objSave["id"], objSave);
                 }catch(Exception ex) {
                     Console.WriteLine(ex.Message);
                 }
-               
+                listIot[ objSave["id"]]= objSave;
             }
           
 

@@ -17,6 +17,8 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using City = prj202405.City;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
 
 namespace prj202504
 {
@@ -82,7 +84,102 @@ namespace prj202504
 
         //    return results;
         //}
-       public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg, string whereExprs, string dbf)
+
+
+        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3(string msg, string whereExprs, string dbf)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbf));
+
+            //   where searchChars.All(s => (
+            //   c.CityKeywords + add.CityKeywords +
+            //   am.KeywordString + am.KeywordString +
+            //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
+
+           
+
+            //----------kwds splt
+            msg = ChineseCharacterConvert.Convert.ToSimple(msg);
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            var segments = segmenter.CutForSearch(msg); // 搜索引擎模式
+            Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+
+
+            ArrayList rows_rzt4srch = [];
+            List<SortedList> rows = ormJSonFL.qryV2("mrcht.json");
+
+            //SetIdProperties(rows);
+            //ormJSonFL.saveMlt(rows,"mrcht.json");
+            //dataObj
+            Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+
+            //------------------------------- from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
+            foreach (SortedList row in rows)
+            {
+
+                //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+                if (hasCondt(whereExprsObj, "city"))
+                    if (!strCls.eq(row["cityname"], arrCls.TryGetValue(whereExprsObj, "city")))   //  cityname not in (citysss) 
+                        continue;  //skip
+                if (hasCondt(whereExprsObj, "park"))
+                    if (!strCls.eq(row["parkname"], arrCls.TryGetValue(whereExprsObj, "park")))   //  cityname not in (citysss) 
+                        continue;  //skip
+                if (hasCondt(whereExprsObj, "ctry"))
+                    if (!strCls.eq(row["ctry"], arrCls.TryGetValue(whereExprsObj, "ctry")))   //  cityname not in (citysss) 
+                        continue;  //skip
+                if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
+                    continue;   //skip
+
+
+                //if condt  containxx(row,msgSpltKwArr)>0
+                var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "CityKeywords") +
+                  "__pkkwds=> " + arrCls.rowValDefEmpty(row, "parkkwd") +
+                   "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "KeywordString") +
+                   "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "CategoryStrKwds");
+                row["_seasrchKw2ds"] = seasrchKwds;
+
+                int containScore = strCls.containCalcCntScore(seasrchKwds, segments);
+                row["_containCntScore"] = containScore;
+                if (containScore > 0)
+                    rows_rzt4srch.Add(row);
+            }
+            const string dbgFl = "rows_rzt4srchDirdbg";
+            dbgooutput(rows_rzt4srch, dbgFl);
+
+
+            //--------------------order prcs
+            // 使用 LINQ 对 ArrayList 进行排序
+            List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
+                                      .OrderByDescending(sl => (int)sl["_containCntScore"])
+                                      .ToList();
+
+
+            //-------------------------map select prcs
+            List<InlineKeyboardButton[]> rsRztInlnKbdBtn = [];
+            for (int i = 0; i < rows_rzt4srch.Count; i++)
+            {
+                SortedList row = list[i];
+                string text = arrCls.rowValDefEmpty(row, "cityname") + " • " + arrCls.rowValDefEmpty(row, "parkname") + " • " + arrCls.rowValDefEmpty(row, "Name");
+                string guid = arrCls.rowValDefEmpty(row, "Guid");
+                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
+                rsRztInlnKbdBtn.Add(btnsInLine);
+            }
+            //count = re
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+
+
+
+            return rsRztInlnKbdBtn;
+            //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+
+            //  results22 = results22.Skip(0 * 10).Take(5).ToList();
+        }
+
+
+        public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg, string whereExprs, string dbf)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbf));
@@ -117,7 +214,7 @@ namespace prj202504
             //dataObj
             Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
 
-            // from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
+            //------------------------------- from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
             foreach (SortedList row in rows)
             {
 
@@ -148,14 +245,14 @@ namespace prj202504
             dbgooutput(rows_rzt4srch, dbgFl);
 
 
-            //order prcs
+            //--------------------order prcs
             // 使用 LINQ 对 ArrayList 进行排序
             List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
                                       .OrderByDescending(sl => (int)sl["_containCntScore"])
                                       .ToList();
 
 
-            //map select prcs
+            //-------------------------map select prcs
             List<InlineKeyboardButton[]> rsRztInlnKbdBtn = [];
             for (int i = 0; i < rows_rzt4srch.Count; i++)
             {
@@ -166,31 +263,9 @@ namespace prj202504
                 rsRztInlnKbdBtn.Add(btnsInLine);
             }
             //count = re
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
 
 
-
-
-
-
-
-            //List<InlineKeyboardButton[]> rows_rzt = [];
-            //foreach (string kwd in segments)
-            //{
-            //    if (kwd.Length < 2)
-            //        continue;
-            //    var rows = qryByKwd(kwd);
-            //    Console.WriteLine("kwd=>" + kwd);
-            //    Console.WriteLine("qryByKwd(kwd) cnt=>" + rows.Count);
-            //    rows_rzt = arrCls.MergeLists(rows_rzt, rows);
-
-            //}
-
-            //SortedList<string, int> ordermap = calcOrderMap(rows_rzt);
-
-            //// ArrayList rzt = new ArrayList(rows_rzt);
-            //rows_rzt = (List<InlineKeyboardButton[]>)arrCls.dedulip4inlnKbdBtnArr(rows_rzt, "callback_data");
-
-            //rows_rzt = ordRztByOrdtbl(rows_rzt, ordermap);
 
             return rsRztInlnKbdBtn;
             //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);

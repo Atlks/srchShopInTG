@@ -197,6 +197,26 @@ namespace prj202405.lib
 
         }
 
+        internal static string TryGetValueAsStrDefNull(SortedList whereExprsObj, string k)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            try
+            {
+                return whereExprsObj[k].ToString();
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
+            //{
+            //    return (string)value;
+            //}
+
+        }
+
         internal static string TryGetValue(Dictionary<string, StringValues> whereExprsObj, string k)
         {
             // 使用 TryGetValue 方法获取值
@@ -214,6 +234,16 @@ namespace prj202405.lib
             //    return (string)value;
             //}
            
+        }
+
+        internal static void replaceKeyV(SortedList obj, string k, object v)
+        {
+            if (k == null)
+                return;
+            if (obj.ContainsKey(k))
+                obj[k] = v;
+            else
+                obj.Add(k, v);
         }
     }
 }

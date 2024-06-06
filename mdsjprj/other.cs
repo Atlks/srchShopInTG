@@ -11,6 +11,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
+using static SqlParser.Ast.CharacterLength;
 
 namespace mdsj
 {
@@ -46,6 +47,9 @@ namespace mdsj
 
         public static async Task _SaveConfig()
         {
+            var __METHOD__ = "_SaveConfig";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+
         writeUser:
             try
             {
@@ -67,15 +71,20 @@ namespace mdsj
                 Console.WriteLine("向本地写入商家时出错：" + e.Message);
                 goto writeMerchant;
             }
+            dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
         public static HashSet<prj202405.City>   getCitysObj()
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+
             //联系商家城市
             HashSet<prj202405.City> _citys = [];
             var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
           //  if (!string.IsNullOrEmpty(merchants))
                 _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
+            dbgCls.setDbgValRtval(__METHOD__," citys[]...");
             return _citys;
         }
 

@@ -112,7 +112,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            timerCls.setTimerTask();
+          //  timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -125,6 +125,8 @@ namespace prj202405
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
+            var __METHOD__ = "evt_aHandleUpdateAsync";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             await other._readMerInfo();
             var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
@@ -334,7 +336,9 @@ namespace prj202405
                 if (update?.Message?.Chat?.Type != ChatType.Private && update?.Type == UpdateType.Message)
                 {                      
                         await evt_msgTrgSrch(botClient, update);
-                       return;
+                    dbgCls.setDbgValRtval(__METHOD__, 0);
+
+                    return;
                 }
 
                 //pre page evt???  todo
@@ -370,6 +374,9 @@ namespace prj202405
 
         private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update )
         {
+            var __METHOD__ = "evt_msgTrgSrch";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+
             string? msgx = tglib.bot_getTxtMsg(update);
             if (msgx.Trim().StartsWith("@" + botname))
                 msgx = msgx.Substring(botname.Length+1).Trim();
@@ -380,10 +387,17 @@ namespace prj202405
             if (msgx != null && msgx.Length < 25)
             {
                 await GetList_qryV2(msgx, 1, 5, botClient, update);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+
                 return;
             }
             else
+            {
+                Console.WriteLine(" msg is null or leng>25");
+                dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
+            }
+               
 
         }
 
@@ -1078,12 +1092,12 @@ namespace prj202405
         //获取列表,或者是返回至列表
         static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         {
-            var __METHOD__ = "evt_GetList_qryV2";  //bcs in task so cant get currentmethod
+            var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
 
             if (msgx == null || msgx.Length == 0)
                 return;
-            Console.WriteLine(" fun  GetList()");
+          //  Console.WriteLine(" fun  GetList()");
             if (update.Type is UpdateType.Message && string.IsNullOrEmpty(update.Message?.Text)
                 || update.Type is UpdateType.CallbackQuery && string.IsNullOrEmpty(update?.CallbackQuery?.Message?.ReplyToMessage?.Text))
                 return;
@@ -1153,6 +1167,7 @@ namespace prj202405
             Console.WriteLine("  msg=>" + msgx);
 
             if (!string.IsNullOrEmpty(msgx))
+
             {
                 //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
 
@@ -1164,7 +1179,7 @@ namespace prj202405
               
                 string whereExprs = (string)getRowVal(lst, "whereExprs","");
             //    city = 妙瓦底"
-                results = mrcht.qryByMsgKwdsV2(msgx, whereExprs, other._shangjiaFL(groupId));
+                results = mrcht.qryByMsgKwdsV3(msgx, whereExprs, other._shangjiaFL(groupId));
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
 
@@ -1318,7 +1333,8 @@ namespace prj202405
             }
 
 
-            Console.WriteLine(" endfun  GetList()");
+         //   Console.WriteLine(" endfun  GetList()");
+            dbgCls.setDbgValRtval(__METHOD__, "");
 
         }
 
@@ -1343,7 +1359,7 @@ namespace prj202405
 
         static async Task evt_btnclick_Pt2_qryByKwd(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         {
-            var __METHOD__ = "evt_GetList_qryV2";  //bcs in task so cant get currentmethod
+            var __METHOD__ = "evt_btnclick_Pt2_qryByKwd";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
 
             if (msgx == null || msgx.Length == 0)
@@ -1550,8 +1566,8 @@ namespace prj202405
             }
 
 
-            Console.WriteLine(" endfun  GetList()");
-
+          //  Console.WriteLine(" endfun  GetList()");
+            dbgCls.setDbgValRtval(__METHOD__, "");
         }
 
 

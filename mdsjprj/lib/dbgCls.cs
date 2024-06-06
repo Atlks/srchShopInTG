@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,10 +14,59 @@ namespace prj202405.lib
 {
     internal class dbgCls
     {
-
-        public static object array_slice(object arr_rzt, int v1, int v2)
+        public static object array_slice<t>(List<t> inputList, int startIdx, int length)
         {
-            return arr_rzt;
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            var rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+
+        public static object array_slice(List<Dictionary<string, object>> inputList, int startIdx, int length)
+        {
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            var rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+        public static object array_slice(ArrayList inputList, int startIdx, int length)
+        {
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            ArrayList rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+
+        public static List<SortedList> array_slice(List<SortedList> inputList, int startIdx, int length)
+        {
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            List<SortedList> rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+            //  return arr_rzt;
         }
 
         public static int dbgpad = 0;
@@ -41,7 +91,7 @@ namespace prj202405.lib
         {
             //if($GLOBALS['dbg_show']==false)
             //    return;
-            var msglog = str_repeat(" ", dbgpad+3) + "" + METHOD__ + $"():: {vname}=>{val}";
+            var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{val}";
             // array_push($GLOBALS['dbg'],        $msg);
             Console.WriteLine(msglog + "");
 
@@ -70,7 +120,7 @@ namespace prj202405.lib
         public static object func_get_args(MethodBase method, params object[] paramValues)
         {
             // 获取当前方法
-           // MethodBase method = new StackFrame(1).GetMethod();
+            // MethodBase method = new StackFrame(1).GetMethod();
 
             // 获取当前方法的参数
             ParameterInfo[] parameters = method.GetParameters();
