@@ -52,16 +52,16 @@ namespace prj202405.lib
 
         public static SortedList lst2IOT(ArrayList arrayList)
         {
-            SortedList obj = new SortedList();
+            SortedList hash = new SortedList();
 
 
             foreach (var item in arrayList)
             {
                 SortedList itemx = (SortedList)item;
-                obj.Add(itemx["id"], item);
+                hash.Add(itemx["id"], item);
             }
 
-            return obj;
+            return hash;
         }
         public static SortedList lst2IOT4inlKbdBtnArr(List<InlineKeyboardButton[]> arrayList, string idColmName)
         {

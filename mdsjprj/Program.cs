@@ -1571,7 +1571,7 @@ namespace prj202405
             //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
             results.Add([
 
-                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=给大家推荐一个可以搜索商家联系方式的群!")
+                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=给大家推荐一个什么信息资源都有的机器人!")
                 ]);
         }
 

@@ -111,6 +111,9 @@ namespace prj202504
 
             ArrayList rows_rzt4srch = [];
             ArrayList rows = cvt2IniRowMode(_citys);
+
+            //SetIdProperties(rows);
+            //ormJSonFL.saveMlt(rows,"mrcht.json");
             //dataObj
             Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
 
@@ -195,7 +198,18 @@ namespace prj202504
             //  results22 = results22.Skip(0 * 10).Take(5).ToList();
         }
 
-        private static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
+
+        static void SetIdProperties(ArrayList arrayList)
+        {
+            foreach (var item in arrayList)
+            {
+                SortedList sortedList1 = (SortedList)item;
+                sortedList1.Add("id", sortedList1["Guid"]);
+                 
+            }
+        }
+
+            private static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
         {
             string park4srch = arrCls.TryGetValue(whereExprsObj, v); ;
 

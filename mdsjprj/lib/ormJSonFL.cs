@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
@@ -30,7 +31,10 @@ namespace prj202405.lib
                 File.WriteAllText(dbFileName, "[]");
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
-           var  list = JsonConvert.DeserializeObject<List<SortedList>>(File.ReadAllText(dbFileName));
+            string txt = File.ReadAllText(dbFileName);
+            if (txt.Trim().Length == 0)
+                txt = "[]";
+            var  list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
             ArrayList list2= new ArrayList(list);
             //   ArrayList list = (ArrayList)JsonConvert.DeserializeObject(File.ReadAllText(dbFileName));
 
@@ -63,6 +67,27 @@ namespace prj202405.lib
         
         }
 
+        internal static void saveMlt(ArrayList rows, string Strfile)
+        {
+            // 将JSON字符串转换为List<Dictionary<string, object>>
+            ArrayList list = qry(Strfile);
+            SortedList listIot = db.lst2IOT(list);
+
+            foreach(var objSave in rows )
+            {
+                try
+                {
+                    listIot.Add(((SortedList)objSave)["id"], objSave);
+                }catch(Exception ex) {
+                    Console.WriteLine(ex.Message);
+                }
+               
+            }
+          
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            wriToDbf(saveList_hpmod, Strfile);
+        }
 
         private static void wriToDbf(object lst, string dbfl)
         {

@@ -14,6 +14,24 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+        public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, object> d = lst[0];
+                try
+                {
+                    return d[fld];
+
+                }
+                catch (Exception e)
+                {
+                    return v2;
+                }
+
+            }
+            return v2;
+        }
         internal static void map_add(SortedList map, string idClmName, object item)
         {
 
