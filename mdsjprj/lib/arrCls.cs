@@ -14,20 +14,33 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+
+        public static object getHashtableKv(SortedList hashobj, string fld, object v2)
+        {
+            try
+            {
+                if (hashobj.ContainsKey(fld))
+                    return hashobj[fld];
+                return v2;
+            }catch(Exception e)
+            {
+                return v2;
+            }
+                
+           
+        }
+
         public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
         {
             if (lst.Count > 0)
             {
                 Dictionary<string, object> d = lst[0];
-                try
-                {
+                if (d.ContainsKey(fld))
                     return d[fld];
 
-                }
-                catch (Exception e)
-                {
+                else
                     return v2;
-                }
+               
 
             }
             return v2;
@@ -267,5 +280,13 @@ namespace prj202405.lib
             else
                 obj.Add(k, v);
         }
+
+        //internal static int getRowVal(object s1, string v1, int v2)
+        //{
+        //    throw new NotImplementedException();
+        //}        //internal static int getRowVal(object s1, string v1, int v2)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

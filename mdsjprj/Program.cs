@@ -1211,7 +1211,9 @@ namespace prj202405
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));         
                 whereExprsObj.Add("msgCtain", msgx);
 
-                results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
+               // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
+                results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj);
+                
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
 

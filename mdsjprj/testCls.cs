@@ -52,8 +52,8 @@ namespace prj202405
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
 
-                var sql_dbf = "mrcht.json";
-                List<SortedList> lst_hash = ormJSonFL.qryV2(sql_dbf);
+                //var sql_dbf = "mrcht.json";
+                //List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
 
               //  ormIni.saveRplsMlt(lst_hash,"mrcht.ini");
              
@@ -167,7 +167,7 @@ namespace prj202405
         private static string setCtry()
         {
             var sql_dbf = "mrcht.json";
-            List<SortedList> lst_hash = ormJSonFL.qryV2(sql_dbf);
+            List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
             foreach (SortedList obj in lst_hash)
             {
                 arrCls.replaceKeyV(obj, "ctry", "缅甸");
@@ -177,7 +177,7 @@ namespace prj202405
                 //sortedList.Add(1, obj);
                 //sortedLists.Add(sortedList);
             }
-            ormJSonFL.saveAll(lst_hash, sql_dbf);
+            ormJSonFL.saveMltV2(lst_hash, sql_dbf);
             return sql_dbf;
         }
 

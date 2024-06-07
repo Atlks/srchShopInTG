@@ -25,26 +25,26 @@ namespace prj202504
     internal class mrcht
     {
         //city=妙瓦底&park=世纪新城园区
-        public static HashSet<City> qry4byParknameExprs2Dataobj(string uri_Query, string dbf)
-        {
-            HashSet<City> rowss = new HashSet<City>();
-            var merchantsStr = System.IO.File.ReadAllText(dbf);
-            if (!string.IsNullOrEmpty(merchantsStr))
-                rowss = JsonConvert.DeserializeObject<HashSet<City>>(merchantsStr)!;
-            //dataObj
-            Dictionary<string, StringValues> parameters = QueryHelpers.ParseQuery(uri_Query);
-            string cityName = parameters["city"]; string park = parameters["park"];
-            //  Program._citys = 
-            //trimOtherCity(Program._citys, city);
+        //public static HashSet<City> qry4byParknameExprs2Dataobj(string uri_Query, string dbf)
+        //{
+        //    HashSet<City> rowss = new HashSet<City>();
+        //    var merchantsStr = System.IO.File.ReadAllText(dbf);
+        //    if (!string.IsNullOrEmpty(merchantsStr))
+        //        rowss = JsonConvert.DeserializeObject<HashSet<City>>(merchantsStr)!;
+        //    //dataObj
+        //    Dictionary<string, StringValues> parameters = QueryHelpers.ParseQuery(uri_Query);
+        //    string cityName = parameters["city"]; string park = parameters["park"];
+        //    //  Program._citys = 
+        //    //trimOtherCity(Program._citys, city);
 
-            // 使用LINQ查询来查找指定名称的城市
-            City city1 = rowss.FirstOrDefault(c => c.Name == cityName);
+        //    // 使用LINQ查询来查找指定名称的城市
+        //    City city1 = rowss.FirstOrDefault(c => c.Name == cityName);
 
-            Address park1 = city1.Address.FirstOrDefault(a => a.Name == park);
-            city1.Address.Clear();
-            city1.Address.Add(park1);
-            return rowss;
-        }
+        //    Address park1 = city1.Address.FirstOrDefault(a => a.Name == park);
+        //    city1.Address.Clear();
+        //    city1.Address.Add(park1);
+        //    return rowss;
+        //}
 
 
 
@@ -90,10 +90,64 @@ namespace prj202504
         //   c.CityKeywords + add.CityKeywords +
         //   am.KeywordString + am.KeywordString +
         //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
+        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));
 
+            string msgx = whereExprsObj["msgCtain"];
+            if (string.IsNullOrEmpty(msgx)) { return []; }
+            string[] kwds = strCls.calcKwdsAsArr(ref msgx);
+            //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
+            var rsRztInlnKbdBtn = db.qryV6(dbfFrom, (SortedList row) =>
+                 {
+                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+                     if (hasCondt(whereExprsObj, "city"))
+                         if (!strCls.eq(row["cityname"], arrCls.TryGetValue(whereExprsObj, "city")))   //  cityname not in (citysss) 
+                             return false;
+                     if (hasCondt(whereExprsObj, "park"))
+                         if (!strCls.eq(row["parkname"], arrCls.TryGetValue(whereExprsObj, "park")))   //  cityname not in (citysss) 
+                             return false;
+                     if (hasCondt(whereExprsObj, "ctry"))
+                         if (!strCls.eq(row["ctry"], arrCls.TryGetValue(whereExprsObj, "ctry")))   //  cityname not in (citysss) 
+                             return false;
+                     if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
+                         return false;
 
+                     //if condt  containxx(row,msgSpltKwArr)>0
+                     var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "CityKeywords") +
+                       "__pkkwds=> " + arrCls.rowValDefEmpty(row, "parkkwd") +
+                        "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "KeywordString") +
+                        "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "CategoryStrKwds");
+                     row["_seasrchKw2ds"] = seasrchKwds;
 
+                     int containScore = strCls.containCalcCntScore(seasrchKwds, kwds);
+                     if (containScore > 0)
+                     {
+                         row["_containCntScore"] = containScore;
+                         return true;
+                     }
+                     return false;
+                 },
+                 (SortedList sl) =>
+                 {
+                  //   (List<SortedList<string, object>>)
+                     return 0 - (int)getHashtableKv( sl, "_containCntScore", 0);                    
+                 },
+                     (SortedList row) =>
+                     {
+                         string text = arrCls.rowValDefEmpty(row, "cityname") + " • " + arrCls.rowValDefEmpty(row, "parkname") + " • " + arrCls.rowValDefEmpty(row, "Name");
+                         string guid = arrCls.rowValDefEmpty(row, "Guid");
+                         InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
+                         return btnsInLine;
+                     }
+                );
+            //end fun
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+            return rsRztInlnKbdBtn;
+        }
 
+        // seelct from dbfform patn(111) wehre xxxx   sekect  List<InlineKeyboardButton[
         public static List<InlineKeyboardButton[]> qryByMsgKwdsV3(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -101,8 +155,8 @@ namespace prj202504
 
             //----------kwds splt
             string msgx = whereExprsObj["msgCtain"];
-            string[] kwds = strCls.calcKwdsAsArr(ref msgx);            
-           
+            string[] kwds = strCls.calcKwdsAsArr(ref msgx);
+
             ArrayList rows_rzt4srch = [];
             List<SortedList> rows = ormJSonFL.qry(dbfFrom);
 
@@ -146,8 +200,9 @@ namespace prj202504
 
             //--------------------order prcs
             // 使用 LINQ 对 ArrayList 进行排序
+            Func<SortedList, int> keySelector = sl => (int)sl["_containCntScore"];
             List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
-                                      .OrderByDescending(sl => (int)sl["_containCntScore"])
+                                      .OrderBy(keySelector)
                                       .ToList();
 
 
@@ -301,111 +356,111 @@ namespace prj202504
             System.IO.File.WriteAllText("" + fileName, updateString);
         }
 
-        private static ArrayList cvt2IniRowMode(HashSet<City> citysobj)
-        {
-            ArrayList a = new System.Collections.ArrayList();
-            var citys = (from c in citysobj select c).ToList();
+        //private static ArrayList cvt2IniRowMode(HashSet<City> citysobj)
+        //{
+        //    ArrayList a = new System.Collections.ArrayList();
+        //    var citys = (from c in citysobj select c).ToList();
 
-            foreach (var city in citys)
-            {
-                System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
-                cityMap.Remove("Address");
-                cityMap.Add("cityname", city.Name);
-                //    Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
-                var addrS = (from ca in city.Address
-                             select ca
-                         )
-                     .ToList();
-                foreach (var addx_park in addrS)
-                {
-                    System.Collections.SortedList addMap = corex.ObjectToSortedList(addx_park);
-                    addMap.Remove("Merchant");
-                    addMap.Add("parkname", addx_park.Name);
-                    addMap.Add("parkkwd", addx_park.CityKeywords);
-                    //     Console.WriteLine(JsonConvert.SerializeObject(addMap, Formatting.Indented));
-                    var rws = (from m in addx_park.Merchant
-                               select m
-                              )
-                          .ToList();
-                    foreach (var m in rws)
-                    {
-                        System.Collections.SortedList mcht = corex.ObjectToSortedList(m);
-                        mcht.Add("CityKeywords", city.CityKeywords);
-                        mcht.Add("cityname", city.Name);
-                        mcht.Add("parkname", addx_park.Name);
-                        mcht.Add("parkkwd", addx_park.CityKeywords);
-                        //   Console.WriteLine(mcht["Category"]);
-                        //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
-                        mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
-                        mcht.Add("cateInt", (int)m.Category);
-                        mcht.Add("cateEgls", m.Category.ToString());
-                        //   mcht
+        //    foreach (var city in citys)
+        //    {
+        //        System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
+        //        cityMap.Remove("Address");
+        //        cityMap.Add("cityname", city.Name);
+        //        //    Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
+        //        var addrS = (from ca in city.Address
+        //                     select ca
+        //                 )
+        //             .ToList();
+        //        foreach (var addx_park in addrS)
+        //        {
+        //            System.Collections.SortedList addMap = corex.ObjectToSortedList(addx_park);
+        //            addMap.Remove("Merchant");
+        //            addMap.Add("parkname", addx_park.Name);
+        //            addMap.Add("parkkwd", addx_park.CityKeywords);
+        //            //     Console.WriteLine(JsonConvert.SerializeObject(addMap, Formatting.Indented));
+        //            var rws = (from m in addx_park.Merchant
+        //                       select m
+        //                      )
+        //                  .ToList();
+        //            foreach (var m in rws)
+        //            {
+        //                System.Collections.SortedList mcht = corex.ObjectToSortedList(m);
+        //                mcht.Add("CityKeywords", city.CityKeywords);
+        //                mcht.Add("cityname", city.Name);
+        //                mcht.Add("parkname", addx_park.Name);
+        //                mcht.Add("parkkwd", addx_park.CityKeywords);
+        //                //   Console.WriteLine(mcht["Category"]);
+        //                //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
+        //                mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
+        //                mcht.Add("cateInt", (int)m.Category);
+        //                mcht.Add("cateEgls", m.Category.ToString());
+        //                //   mcht
 
-                        mcht.Add("_parent", city.Name + "_" + addx_park.Name);
-                        a.Add(mcht);
-                        //   Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
-                        //  Console.WriteLine("..");
-                    }
+        //                mcht.Add("_parent", city.Name + "_" + addx_park.Name);
+        //                a.Add(mcht);
+        //                //   Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
+        //                //  Console.WriteLine("..");
+        //            }
 
-                }
-            }
-
-
-            return a;
-            // orderby am.Views descending
-            //  select m,ca
-            //count = results.Count;
-
-        }
+        //        }
+        //    }
 
 
-        public static List<InlineKeyboardButton[]> ordRztByOrdtbl(List<InlineKeyboardButton[]> rows_rzt, SortedList<string, int> ordermap)
-        {
+        //    return a;
+        //    // orderby am.Views descending
+        //    //  select m,ca
+        //    //count = results.Count;
 
-            // 对 List<InlineKeyboardButton[]> 进行排序
-            rows_rzt.Sort((a, b) =>
-            {
-                try
-                {
-                    // 获取每个数组的第一个按钮的 Text 属性
-                    InlineKeyboardButton abtn = a[0];
-                    int ord1 = ordermap[abtn.CallbackData];
-
-                    InlineKeyboardButton bbtn = b[0];
-                    int ord2 = ordermap[bbtn.CallbackData];
-
-                    // 按 Text 属性进行排序
-                    return ord2.CompareTo(ord1);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                    return 0;
-                }
-
-            });
-            return rows_rzt;
-        }
+        //}
 
 
-        public static SortedList<string, int> calcOrderMap(List<InlineKeyboardButton[]> rows_rzt)
-        {
-            SortedList<string, int> ordMap = new SortedList<string, int>();
-            foreach (InlineKeyboardButton[] row in rows_rzt)
-            {
-                try
-                {
-                    InlineKeyboardButton btn = row[0];
-                    arrCls.saveIncrs(ordMap, btn.CallbackData);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
+        //public static List<InlineKeyboardButton[]> ordRztByOrdtbl(List<InlineKeyboardButton[]> rows_rzt, SortedList<string, int> ordermap)
+        //{
 
-            }
-            return ordMap;
-        }
+        //    // 对 List<InlineKeyboardButton[]> 进行排序
+        //    rows_rzt.Sort((a, b) =>
+        //    {
+        //        try
+        //        {
+        //            // 获取每个数组的第一个按钮的 Text 属性
+        //            InlineKeyboardButton abtn = a[0];
+        //            int ord1 = ordermap[abtn.CallbackData];
+
+        //            InlineKeyboardButton bbtn = b[0];
+        //            int ord2 = ordermap[bbtn.CallbackData];
+
+        //            // 按 Text 属性进行排序
+        //            return ord2.CompareTo(ord1);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //            return 0;
+        //        }
+
+        //    });
+        //    return rows_rzt;
+        //}
+
+
+        //public static SortedList<string, int> calcOrderMap(List<InlineKeyboardButton[]> rows_rzt)
+        //{
+        //    SortedList<string, int> ordMap = new SortedList<string, int>();
+        //    foreach (InlineKeyboardButton[] row in rows_rzt)
+        //    {
+        //        try
+        //        {
+        //            InlineKeyboardButton btn = row[0];
+        //            arrCls.saveIncrs(ordMap, btn.CallbackData);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine(e.Message);
+        //        }
+
+        //    }
+        //    return ordMap;
+        //}
         //private static HashSet<City> qryByPknm(HashSet<City> citys, string? city, string? park)
         //{
         //    City city1 = FindCityByName(citys, city);
