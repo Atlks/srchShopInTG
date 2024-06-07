@@ -1,7 +1,9 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Office2019.Excel.RichData2;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -63,6 +65,21 @@ namespace prj202405.lib
 
             return hash;
         }
+
+
+        public static SortedList lst2IOT(List<SortedList> arrayList)
+        {
+            SortedList hash = new SortedList();
+
+
+            foreach (SortedList item in arrayList)
+            {
+                
+                hash.Add(item["id"], item);
+            }
+
+            return hash;
+        }
         public static SortedList lst2IOT4inlKbdBtnArr(List<InlineKeyboardButton[]> arrayList, string idColmName)
         {
             SortedList obj = new SortedList();
@@ -109,6 +126,50 @@ namespace prj202405.lib
             }
 
             return obj;
+        }
+
+        internal static string calcPatns(string dir, string partfile区块文件)
+        {  
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+
+            if (string.IsNullOrEmpty(   partfile区块文件))
+            {
+                return GetFilePathsCommaSeparated(dir);
+            }
+             ArrayList arrayList = new ArrayList();
+            string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach(var dbf in dbArr)
+            {
+                string path = dir + "/" + dbf+".json";
+                if (!File.Exists(path))
+                {
+                    Console.WriteLine("not exist file dbf=>" + path);
+                    continue;
+                }
+                arrayList.Add(path);
+            }
+
+            // 使用 ArrayList 的 ToArray 方法将其转换为对象数组
+            object[] objectArray = arrayList.ToArray();
+
+            // 使用 String.Join 方法将数组转换为逗号分割的字符串
+            string result = string.Join(",", objectArray);
+
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, result);
+            
+            return result;
+        }
+
+        static string GetFilePathsCommaSeparated(string directoryPath)
+        {
+            // 获取目录下的所有文件路径
+            string[] filePaths = Directory.GetFiles(directoryPath);
+
+            // 将文件路径数组转换为逗号分割的字符串
+            string result = string.Join(",", filePaths);
+
+            return result;
         }
     }
 }

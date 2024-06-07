@@ -215,6 +215,56 @@ namespace prj202405.lib
             return results;
         }
 
+        public static List<Dictionary<string, string>> _qryV2(string querySql, string dbFileName)
+        {
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+
+            SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+            cn.Open();
+            //    SqliteCommand cmd = new SqliteCommand();
+            //cmd.Connection = cn;
+            //    cmd.CommandText = sql;
+            //    cmd.ExecuteNonQuery
+
+
+            var results = new List<Dictionary<string, string>>();
+            using (var cmd = new SqliteCommand(querySql, cn))
+            {
+                using (var reader = cmd.ExecuteReader())
+                {
+
+
+                    while (reader.Read())
+                    {
+                        var row = new Dictionary<string, string>();
+                        for (int i = 0; i < reader.FieldCount; i++)
+                        {
+                            object v = reader.GetValue(i);
+                            if (v == null)
+                                row[reader.GetName(i)] = null;
+                            else
+                               row[reader.GetName(i)] = v.ToString();
+                        }
+                        results.Add(row);
+                    }
+
+
+                }
+            }
+
+            // 获取当前方法的信息
+            //MethodBase method = );
+
+            //// 输出当前方法的名称
+            //Console.WriteLine("Current Method Name: " + method.Name);
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls.array_slice(results, 0, 3));
+
+
+            return results;
+        }
+
         internal static void save(SortedList mapx, string dbFileName)
         {
             var tblx = "tabx";

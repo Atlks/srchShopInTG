@@ -1174,7 +1174,7 @@ namespace prj202405
                 // update.Message.Chat.Id;
                 string groupId = tglib.bot_getChatid(update).ToString();
                    
-                List<Dictionary<string, object>> lst = (List<Dictionary<string, object>>)ormSqlt._qry($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
+                List<Dictionary<string, string>> lst = (List<Dictionary<string, string>>)ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
 
               
                 string whereExprs = (string)getRowVal(lst, "whereExprs","");
@@ -1338,20 +1338,38 @@ namespace prj202405
 
         }
 
+
+        public static object getRowVal(List<Dictionary<string, string>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, string> d = lst[0];
+                if (d.ContainsKey(fld))
+                {
+                    object v = d[fld];
+                    return v;
+                }
+                else
+                    return v2;
+
+
+            }
+            return v2;
+        }
+
         public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
         {
             if (lst.Count > 0)
             {
                 Dictionary<string, object> d = lst[0];
-                try
+                if(d.ContainsKey(fld))
                 {
-                    return d[fld];
-
+                    object v = d[fld];
+                    return v;
                 }
-                catch(Exception e)
-                {
+                else
                     return v2;
-                }
+               
                 
             }
             return v2;
@@ -1840,6 +1858,9 @@ namespace prj202405
         //获取商家结果
         static async Task evt_View(ITelegramBotClient botClient, Update update)
         {
+            var __METHOD__ = "evt_View listitem_click()";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
+
             var cq = update.CallbackQuery!;
 
             //联系商家
@@ -2028,9 +2049,9 @@ namespace prj202405
             }
 
             var result = string.Empty;
-            result += $"<blockquote>您搜索统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
+           // result += $"<blockquote>您搜索统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
             //展现量 浏览量 评论数
-            result += $"\n🔎{contact_Merchant.Searchs}    👁{contact_Merchant.Views}    💬{contact_Merchant.Comments.Count()}";
+           // result += $"\n🔎{contact_Merchant.Searchs}    👁{contact_Merchant.Views}    💬{contact_Merchant.Comments.Count()}";
             //名称路径
             result += "\n\n🏠<b>" + path + "</b>";
 
@@ -2229,17 +2250,21 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(menu),
                    protectContent: false);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
             }
             if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
             {
                 await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
 
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+
                 return;
             }
             //end detail
 
 
+            //---------fowlow maybe dep...
             // ..........send txt 
             try
             {

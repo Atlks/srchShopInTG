@@ -86,17 +86,18 @@ namespace prj202504
         //}
 
 
-        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3(string msg, string whereExprs, string dbf)
+        //   where searchChars.All(s => (
+        //   c.CityKeywords + add.CityKeywords +
+        //   am.KeywordString + am.KeywordString +
+        //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
+
+
+
+
+        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3(string msg, string whereExprs, string dbfDep)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbf));
-
-            //   where searchChars.All(s => (
-            //   c.CityKeywords + add.CityKeywords +
-            //   am.KeywordString + am.KeywordString +
-            //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
-
-           
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbfDep));
 
             //----------kwds splt
             msg = ChineseCharacterConvert.Convert.ToSimple(msg);
@@ -109,12 +110,14 @@ namespace prj202504
 
 
             ArrayList rows_rzt4srch = [];
-            List<SortedList> rows = ormJSonFL.qryV2("mrcht.json");
+          
 
             //SetIdProperties(rows);
             //ormJSonFL.saveMlt(rows,"mrcht.json");
             //dataObj
             Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+            var patns = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
+             List < SortedList > rows = ormJSonFL.qry(patns);
 
             //------------------------------- from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
             foreach (SortedList row in rows)
@@ -142,9 +145,13 @@ namespace prj202504
                 row["_seasrchKw2ds"] = seasrchKwds;
 
                 int containScore = strCls.containCalcCntScore(seasrchKwds, segments);
-                row["_containCntScore"] = containScore;
                 if (containScore > 0)
+                {
+                    row["_containCntScore"] = containScore;
                     rows_rzt4srch.Add(row);
+                }
+              //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
+               // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
             }
             const string dbgFl = "rows_rzt4srchDirdbg";
             dbgooutput(rows_rzt4srch, dbgFl);

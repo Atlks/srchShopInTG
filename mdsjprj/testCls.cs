@@ -19,6 +19,7 @@ using SqlParser;
 using SqlParser.Ast;
 using mdsj.lib;
 using static mdsj.other;
+using System.Collections.Generic;
 namespace prj202405
 {
     internal class testCls
@@ -47,46 +48,54 @@ namespace prj202405
             }
         }
         internal static void test()
-        {
-
-          
-       //     HashSet<City> dataObjPark= mrcht.qry4byParknameExprs2Dataobj( "city=妙瓦底&park=世纪新城园区", Program._shangjiaFL());
-
-            //export 
-            //联系商家城市
-            //HashSet<City> _citys = [];
-            //var merchants = System.IO.File.ReadAllText("Merchant.json");
-            //if (!string.IsNullOrEmpty(merchants))
-            //    _citys = JsonConvert.DeserializeObject<HashSet<City>>(merchants)!;
-
-            //   午餐餐饮关键词 午餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉
-
-            //搜索关键词  Merchant.json to citys
-
-        //    ExtractLinks("D:\\0prj\\缅甸商家\\缅甸商家\\dbx\\web.htm","shibo.htm");
-        
-
-            // wucan();
-            // timerCls.  xiawucha();
+        {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
 
+                var sql_dbf = "mrcht.json";
+                List<SortedList> lst_hash = ormJSonFL.qryV2(sql_dbf);
+
+              //  ormIni.saveRplsMlt(lst_hash,"mrcht.ini");
+             
+                //   string sql_dbf = setCtry();
+
+                return;
+
+
+                //     HashSet<City> dataObjPark= mrcht.qry4byParknameExprs2Dataobj( "city=妙瓦底&park=世纪新城园区", Program._shangjiaFL());
+
+                //export 
+                //联系商家城市
+                //HashSet<City> _citys = [];
+                //var merchants = System.IO.File.ReadAllText("Merchant.json");
+                //if (!string.IsNullOrEmpty(merchants))
+                //    _citys = JsonConvert.DeserializeObject<HashSet<City>>(merchants)!;
+
+                //   午餐餐饮关键词 午餐 餐饮 鱼肉 牛肉 火锅 炒饭 炒粉
+
+                //搜索关键词  Merchant.json to citys
+
+                //    ExtractLinks("D:\\0prj\\缅甸商家\\缅甸商家\\dbx\\web.htm","shibo.htm");
+
+
+                // wucan();
+                // timerCls.  xiawucha();
                 sqlParser.MainTEst();
 
-                    return;
+                return;
 
-                 var sql = "select * from my_table where 列名1 > 99 and col2<98 ";
+                var sql = "select * from my_table where 列名1 > 99 and col2<98 ";
 
-                Sequence<Statement> ast = new Parser().ParseSql(sql);
-                var updateString = JsonConvert.SerializeObject(ast, Formatting.Indented);
+                //Sequence<Statement> ast = new Parser().ParseSql(sql_dbf);
+                //var updateString = JsonConvert.SerializeObject(ast, Formatting.Indented);
 
-                Console.WriteLine(updateString);
+           //     Console.WriteLine(updateString);
                 //   ast.
                 //    ArrayList a = filex.rdWdsFromFile("底部公共菜单.txt");
                 //   timerCls.tmrEvt_sendMsg4keepmenu("今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
                 return;
 
-           //     timerCls. sendMsg4keepmenu("今日促销商家.gif",timerCls. plchdTxt, Program._btmBtns());
+                //     timerCls. sendMsg4keepmenu("今日促销商家.gif",timerCls. plchdTxt, Program._btmBtns());
                 ArrayList lst = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
 
                 //export mercht
@@ -106,8 +115,8 @@ namespace prj202405
                 ormJSonFL.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
 
-                ormSqlt.save(  pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");             
-             
+                ormSqlt.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
+
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
                 Console.WriteLine("line1633");
@@ -119,9 +128,9 @@ namespace prj202405
                 Console.WriteLine(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
 
 
-                Console.WriteLine(JsonConvert.SerializeObject(ormJSonFL.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
+                Console.WriteLine(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
 
-            Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+                Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
@@ -153,6 +162,23 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static string setCtry()
+        {
+            var sql_dbf = "mrcht.json";
+            List<SortedList> lst_hash = ormJSonFL.qryV2(sql_dbf);
+            foreach (SortedList obj in lst_hash)
+            {
+                arrCls.replaceKeyV(obj, "ctry", "缅甸");
+
+                //obj[""ctry = ; // 设置 ctry 属性
+                //SortedList sortedList = new SortedList();
+                //sortedList.Add(1, obj);
+                //sortedLists.Add(sortedList);
+            }
+            ormJSonFL.saveAll(lst_hash, sql_dbf);
+            return sql_dbf;
         }
 
         public static ArrayList kwdSeasrchInGrp(string filePath)

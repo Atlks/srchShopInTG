@@ -19,6 +19,7 @@
           "MiniGuid": "1.1.2",
           "RG3.PF.PinYinScriptEngineCliWrap": "7.2.10",
           "SQLite": "3.13.0",
+          "SqlParserCS": "0.3.1",
           "Telegram.Bot": "20.0.0-alpha.1",
           "jieba.NET": "0.42.2"
         },
@@ -403,6 +404,14 @@
           "Microsoft.Extensions.Logging.Configuration": "3.1.32"
         }
       },
+      "Microsoft.Extensions.ObjectPool/8.0.1": {
+        "runtime": {
+          "lib/net8.0/Microsoft.Extensions.ObjectPool.dll": {
+            "assemblyVersion": "8.0.0.0",
+            "fileVersion": "8.0.123.58008"
+          }
+        }
+      },
       "Microsoft.Extensions.Options/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
@@ -767,6 +776,17 @@
           "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll": {
             "assemblyVersion": "2.1.6.2060",
             "fileVersion": "2.1.6.2060"
+          }
+        }
+      },
+      "SqlParserCS/0.3.1": {
+        "dependencies": {
+          "Microsoft.Extensions.ObjectPool": "8.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/SqlParser.dll": {
+            "assemblyVersion": "0.3.1.0",
+            "fileVersion": "0.3.1.0"
           }
         }
       },
@@ -1856,6 +1876,13 @@
       "path": "microsoft.extensions.logging.console/3.1.32",
       "hashPath": "microsoft.extensions.logging.console.3.1.32.nupkg.sha512"
     },
+    "Microsoft.Extensions.ObjectPool/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-X21b8D6z58EG34OMLH955750mFaEaGs5xLGe9Vyi3059Cgb3sk+p2k/JlQXaieEBRrk+SVlFzDei3Q6PdVzJOA==",
+      "path": "microsoft.extensions.objectpool/8.0.1",
+      "hashPath": "microsoft.extensions.objectpool.8.0.1.nupkg.sha512"
+    },
     "Microsoft.Extensions.Options/8.0.0": {
       "type": "package",
       "serviceable": true,
@@ -2107,6 +2134,13 @@
       "sha512": "sha512-PQ2Oq3yepLY4P7ll145P3xtx2bX8xF4PzaKPRpw9jZlKvfe4LE/saAV82inND9usn1XRpmxXk7Lal3MTI+6CNg==",
       "path": "sqlitepclraw.provider.e_sqlite3/2.1.6",
       "hashPath": "sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512"
+    },
+    "SqlParserCS/0.3.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-SjaNi+Lr/zZUrs97gZCLzyWbGJXpcC7rbjBjw7IOHAGkyTBfkQ3MnF3VQXus2lWW4CWqJw1YTT5AVHZEIyVrIg==",
+      "path": "sqlparsercs/0.3.1",
+      "hashPath": "sqlparsercs.0.3.1.nupkg.sha512"
     },
     "System.AppContext/4.3.0": {
       "type": "package",

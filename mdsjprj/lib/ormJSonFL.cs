@@ -1,5 +1,6 @@
 ﻿using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
@@ -19,7 +20,7 @@ namespace prj202405.lib
     internal class ormJSonFL
     {
         //qry just use path as qry dsl  ,,
-        public static ArrayList  qry(  string dbFileName)
+        public static ArrayList  qryDep(  string dbFileName)
         {
 
             //if (!File.Exists(dbFileName))
@@ -52,8 +53,31 @@ namespace prj202405.lib
             return list2;
         }
 
+        public static List<SortedList> qry(string dbfS)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfS));
+            string[] dbArr = dbfS.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-        public static List<SortedList> qryV2(string dbFileName)
+            List < SortedList > arr=new List<SortedList >();
+            foreach (string dbf in dbArr)
+            {
+                if(!File.Exists(dbf))
+                {
+                    Console.WriteLine("not exist file dbf=>" + dbf);
+                    continue;
+                }
+                List<SortedList> sortedLists= qrySglFL(dbf);
+                arr= array_merge(arr, sortedLists);
+            }
+            
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 3));
+
+ 
+            return arr;
+        }
+
+        public static List<SortedList> qrySglFL(string dbFileName)
         {
 
             //if (!File.Exists(dbFileName))
@@ -78,7 +102,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 3));
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
 
 
             // 将List转换为ArrayList
@@ -92,7 +116,7 @@ namespace prj202405.lib
 
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
-            ArrayList list = qry(Strfile);
+            ArrayList list = qryDep(Strfile);
             SortedList listIot =db. lst2IOT(list);
 
             listIot.Add(((SortedList)objSave)["id"], objSave);
@@ -104,7 +128,7 @@ namespace prj202405.lib
 
         internal static void saveAll(List<SortedList> rows, string Strfile)
         {
-            ArrayList list = qry(Strfile);
+            ArrayList list = qryDep(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
             foreach (SortedList objSave in rows)
@@ -121,7 +145,7 @@ namespace prj202405.lib
         internal static void saveMlt(List<SortedList> rows, string Strfile)
         {
             // 将JSON字符串转换为List<Dictionary<string, object>>
-            ArrayList list = qry(Strfile);
+            ArrayList list = qryDep(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
             foreach(SortedList objSave in rows )
