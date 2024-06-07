@@ -105,7 +105,7 @@ namespace prj202405.lib
             //    if ($GLOBALS['dbg_show'] == false)
             //return;
             // ENDFUN
-            var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode(results);
+            var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
             Console.WriteLine(msglog + "");
             //    array_push($GLOBALS['dbg'], $msglog);
             dbgpad = dbgpad - 4;
@@ -166,6 +166,21 @@ namespace prj202405.lib
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
+            };
+            //  string json = JsonConvert.SerializeObject(obj, settings);
+            string jsonString = JsonConvert.SerializeObject(results, settings);
+            // Console.WriteLine(jsonString);
+            return jsonString;
+        }
+
+        public static string json_encode_noFmt(object results)
+        {
+            //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+              //  Formatting = Formatting.Indented
             };
             //  string json = JsonConvert.SerializeObject(obj, settings);
             string jsonString = JsonConvert.SerializeObject(results, settings);

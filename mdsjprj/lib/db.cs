@@ -128,6 +128,44 @@ namespace prj202405.lib
             return obj;
         }
 
+
+        public static object getRowVal(List<Dictionary<string, string>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, string> d = lst[0];
+                if (d.ContainsKey(fld))
+                {
+                    object v = d[fld];
+                    return v;
+                }
+                else
+                    return v2;
+
+
+            }
+            return v2;
+        }
+
+        public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, object> d = lst[0];
+                if (d.ContainsKey(fld))
+                {
+                    object v = d[fld];
+                    return v;
+                }
+                else
+                    return v2;
+
+
+            }
+            return v2;
+        }
+
+
         internal static string calcPatns(string dir, string partfile区块文件)
         {  
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -135,7 +173,10 @@ namespace prj202405.lib
 
             if (string.IsNullOrEmpty(   partfile区块文件))
             {
-                return GetFilePathsCommaSeparated(dir);
+              
+                string rzt = GetFilePathsCommaSeparated(dir);
+                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                return rzt;
             }
              ArrayList arrayList = new ArrayList();
             string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -156,7 +197,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, result);
+            dbgCls.setDbgValRtval(__METHOD__, result);
             
             return result;
         }

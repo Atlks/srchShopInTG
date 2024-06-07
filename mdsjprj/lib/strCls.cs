@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿using JiebaNet.Segmenter;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,6 +11,34 @@ namespace prj202405.lib
 {
     internal class strCls
     {
+
+        public static string[] calcKwdsAsArr(ref string msgx)
+        {
+            msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
+            // 使用 LINQ 的 ToArray 方法进行转换
+            string[] kwds = enumerable.ToArray();
+          //  string[] kwds = enumerable; // 搜索引擎模式
+            string kdwsJoin = string.Join("/", kwds);
+            Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+            return kwds;
+        }
+        public static string calcKwds(ref string msgx)
+        {
+            msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            var kwds = segmenter.CutForSearch(msgx); // 搜索引擎模式
+            string kdwsJoin = string.Join("/", kwds);
+            Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+            return kdwsJoin;
+        }
 
         /// <summary> 
         /// 繁体转换为简体

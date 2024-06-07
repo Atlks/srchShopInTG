@@ -142,26 +142,21 @@ namespace prj202405.lib
         {
             List<SortedList> list = qryV2(Strfile);
             SortedList listIot = db.lst2IOT(list);
-
             foreach (SortedList objSave in lst_hash)
             {
-
                 arrCls.replaceKeyV(listIot, TryGetValueAsStrDefNull(objSave, "id"), objSave);
-
             }
-
-
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
         }
 
         private static void wriToDbf(ArrayList saveList_hpmod, string strfile)
         {
-            const string logdir = "errDir";
+            const string logdir = "errlogDir";
             var __METHOD__ = MethodBase.GetCurrentMethod().Name+ $"({strfile})";
          //   dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msg, whereExprs, dbf));
 
-            Directory.CreateDirectory("errDir");
+            Directory.CreateDirectory(logdir);
             File.Delete(strfile);
             // 使用StreamWriter追加写入文件
             using (StreamWriter writer = new StreamWriter(strfile, true, Encoding.UTF8))

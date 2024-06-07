@@ -71,7 +71,7 @@ namespace prj202405.lib
                 arr= array_merge(arr, sortedLists);
             }
             
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 3));
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
 
  
             return arr;
@@ -114,7 +114,8 @@ namespace prj202405.lib
         public static void save(object objSave, string Strfile)
         {
 
-
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
             // 将JSON字符串转换为List<Dictionary<string, object>>
             ArrayList list = qryDep(Strfile);
             SortedList listIot =db. lst2IOT(list);
@@ -123,11 +124,14 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
-        
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
+
         }
 
-        internal static void saveAll(List<SortedList> rows, string Strfile)
+        internal static void saveMltV2(List<SortedList> rows, string Strfile)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
             ArrayList list = qryDep(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
@@ -141,6 +145,7 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
         }
         internal static void saveMlt(List<SortedList> rows, string Strfile)
         {

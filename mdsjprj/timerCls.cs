@@ -435,7 +435,7 @@ namespace prj202405
         public static async void z21_yule()
         {
             var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
@@ -447,7 +447,7 @@ namespace prj202405
         public static async void zaocan()
         {
             var s = "早餐 餐饮 早点 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
 
@@ -461,7 +461,7 @@ namespace prj202405
         public static async void z18_wancan()
         {
             var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
 
@@ -471,7 +471,7 @@ namespace prj202405
         public static async void z_wucan()
         {
             var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
             await sendMsg("午餐商家推荐.gif", plchdTxt, results);
@@ -483,7 +483,7 @@ namespace prj202405
         {
             var s = "奶茶 水果茶 水果";
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(s);
+            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             await sendMsg("下午茶商家推荐.gif", plchdTxt, results);
@@ -494,7 +494,7 @@ namespace prj202405
         }
 
 
-        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Tmrmode_lmt5(string s)
+        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Timermode_lmt5(string s)
         {
             var arr = s.Split(" ").ToArray();
             var rdm = new Random().Next(1, arr.Length);
