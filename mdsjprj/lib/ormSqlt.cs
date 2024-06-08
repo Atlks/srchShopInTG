@@ -15,7 +15,17 @@ using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection;
-
+using static mdsj.other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
 namespace prj202405.lib
 {
     internal class ormSqlt
@@ -209,7 +219,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-          dbgCls.  setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls. array_slice(results, 0, 3));
+          dbgCls.  setDbgValRtval(MethodBase.GetCurrentMethod().Name,  array_slice(results, 0, 3));
 
 
             return results;
@@ -259,7 +269,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, dbgCls.array_slice(results, 0, 3));
+            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
 
 
             return results;

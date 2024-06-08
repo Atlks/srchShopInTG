@@ -20,43 +20,38 @@ using SqlParser.Ast;
 using mdsj.lib;
 using static mdsj.other;
 using System.Collections.Generic;
+
+using static mdsj.other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+
+
 namespace prj202405
 {
     internal class testCls
     {
 
-        public static void ExtractLinks(string inputFilePath, string outputFilePath)
-        {
-            // 读取输入文件内容
-            string htmlContent = System.IO.File.ReadAllText(inputFilePath);
+  
 
-            // 匹配<a>标签中的href属性值和链接文本
-            MatchCollection matches = Regex.Matches(htmlContent, @"<a\s+.*?href\s*=\s*(""(.*?)""|'(.*?)')[^>]*>(.*?)</a>");
-
-            // 输出匹配到的链接和链接文本到输出文件
-            using (StreamWriter writer = new StreamWriter(outputFilePath))
-            {
-                foreach (Match match in matches)
-                {
-                    // 获取 href 属性值和链接文本
-                    string href = match.Groups[2].Success ? match.Groups[2].Value : match.Groups[3].Value;
-                    string linkText = match.Groups[4].Value;
-
-                    // 写入到输出文件
-                    writer.WriteLine($"<a href=\"{href}\">{linkText}</a>");
-                }
-            }
-        }
         internal static void test()
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
-
+               // exportCftFrmDb();
                 //var sql_dbf = "mrcht.json";
                 //List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
 
-              //  ormIni.saveRplsMlt(lst_hash,"mrcht.ini");
-             
+                //  ormIni.saveRplsMlt(lst_hash,"mrcht.ini");
+
                 //   string sql_dbf = setCtry();
 
                 return;
@@ -89,7 +84,7 @@ namespace prj202405
                 //Sequence<Statement> ast = new Parser().ParseSql(sql_dbf);
                 //var updateString = JsonConvert.SerializeObject(ast, Formatting.Indented);
 
-           //     Console.WriteLine(updateString);
+                //     Console.WriteLine(updateString);
                 //   ast.
                 //    ArrayList a = filex.rdWdsFromFile("底部公共菜单.txt");
                 //   timerCls.tmrEvt_sendMsg4keepmenu("今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
@@ -162,6 +157,21 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static void exportCftFrmDb()
+        {
+            List<Dictionary<string, string>> li = ormSqlt._qryV2($"select * from grp_loc_tb ", "grp_loc.db");
+            foreach (Dictionary<string, string> dic in li)
+            {
+
+                //       List<SortedList> lst = ormJSonFL.qry("grpCfgDir/grpcfg{groupId}.json");
+                string groupId = dic["grpid"];
+
+                SortedList hash = DictionaryToSortedList(dic);
+                hash["id"] = groupId;
+                ormJSonFL.save(hash, $"grpCfgDir/grpcfg{groupId}.json");
+            }
         }
 
         private static string setCtry()

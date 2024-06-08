@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
-
+//  prj202405.lib.db
 namespace prj202405.lib
 {
     internal class db
@@ -60,7 +60,6 @@ namespace prj202405.lib
             }
             return arrayList;
         }
-
         public static ArrayList lstFrmIot(SortedList listIot)
         {
             // 创建一个 ArrayList 来存储 SortedList 中的值
@@ -70,6 +69,24 @@ namespace prj202405.lib
             foreach (var value in listIot.Values)
             {
                 arrayList.Add(value);
+            }
+            return arrayList;
+        }
+        /// <summary>
+        /// Converts a SortedList to a List of SortedLists.
+        /// </summary>
+        /// <param name="listIot">The SortedList to be converted.</param>
+        /// <returns>A List of SortedLists containing the values from the input SortedList.</returns>
+
+        public static List<SortedList> iot2list(SortedList listIot)
+        {
+            // 创建一个 ArrayList 来存储 SortedList 中的值
+            List<SortedList> arrayList = new List<SortedList>();
+
+            // 遍历 SortedList 的值并添加到 ArrayList 中
+            foreach (var value in listIot.Values)
+            {
+                arrayList.Add((SortedList)value);
             }
             return arrayList;
         }
@@ -163,7 +180,23 @@ namespace prj202405.lib
 
             return obj;
         }
+        public static object getRowVal(List<SortedList > lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                SortedList d = lst[0];
+                if (d.ContainsKey(fld))
+                {
+                    object v = d[fld];
+                    return v;
+                }
+                else
+                    return v2;
 
+
+            }
+            return v2;
+        }
 
         public static object getRowVal(List<Dictionary<string, string>> lst, string fld, string v2)
         {

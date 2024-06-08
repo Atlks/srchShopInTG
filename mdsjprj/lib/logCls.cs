@@ -11,17 +11,19 @@ namespace mdsj.lib
     {
 
 
-        public static void logErr2025(Exception e, string funName, string logdir)
+        public static void logErr2025(object e, string funName, string logdir)
         {
-            // 创建目录
-            Directory.CreateDirectory(logdir);
+
+            try
+            {
+                // 创建目录
+                Directory.CreateDirectory(logdir);
             // 获取当前时间并格式化为文件名
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             string fileName = $"{logdir}/{timestamp}.txt";
             File.WriteAllText(fileName, funName+"()\n"+ e.ToString());
 
-            try
-            {
+            
                 File.AppendAllText(JsonConvert.SerializeObject(e, Formatting.Indented),fileName);
             }catch (Exception ex)
             {

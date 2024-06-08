@@ -6,9 +6,17 @@ using System.Threading.Tasks;
 
 namespace mdsj.lib
 {
-    internal class exCls
+    public class exCls
     {
 
+
+        public static void set_error_handler()
+        {
+            AppDomain.CurrentDomain.UnhandledException += exCls.CurrentDomain_UnhandledException;
+            TaskScheduler.UnobservedTaskException += exCls.TaskScheduler_UnobservedTaskException;
+        }
+
+        // set_error_handler
         public static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
             Console.WriteLine("捕获未处理的同步异常：");

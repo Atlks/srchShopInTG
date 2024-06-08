@@ -4,14 +4,109 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Telegram.Bot.Types.ReplyMarkups;
 
+// prj202405.lib.filex
 namespace prj202405.lib
 {
     internal class filex
     {
+        //我们首先使用 System.IO.Path.GetInvalidFileNameChars 方法获取操作系统支持的非法文件名字符数组
+        /*
+         
+         我们遍历输入的文本，并检查每个字符是否是非法字符。如果字符是非法字符，则使用 HttpUtility.UrlEncode 方法对字符进行 URL 编码，然后将编码后的结果添加到结果字符串中。最后，返回处理后的结果字符串。
+         
+         */
+        public static string ConvertToValidFileName(string input)
+        {
+            // URL 编码非法字符
+            string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars());
+            StringBuilder encodedBuilder = new StringBuilder();
+            foreach (char c in input)
+            {
+                if (invalidChars.Contains(c))
+                {
+                    // 如果字符为非法字符，则使用 URL 编码替换
+                    string encoded = HttpUtility.UrlEncode(c.ToString());
+                    encodedBuilder.Append(encoded);
+                }
+                else
+                {
+                    // 如果字符为合法字符，则直接添加到结果中
+                    encodedBuilder.Append(c);
+                }
+            }
+            return encodedBuilder.ToString();
+        }
 
+        /// <summary>
+        /// 创建一个新的目录，如果目录已存在，则不执行任何操作。
+        /// </summary>
+        /// <param name="directoryPath">要创建的目录的路径</param>
+        public static void mkdir(string directoryPath)
+        {
+            try
+            {
+                // 使用 Directory.CreateDirectory 创建目录
+                Directory.CreateDirectory(directoryPath);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
 
+        /// <summary>
+        /// 读取指定文件的内容，并返回字符串形式的内容。
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <returns>文件内容的字符串</returns>
+        public static string file_get_contents(string filePath)
+        {
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    return File.ReadAllText(filePath);
+                }
+                else
+                {
+                    throw new FileNotFoundException("The specified file does not exist.", filePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return string.Empty;
+            }
+        }
+
+        /// <summary>
+        /// 将指定内容写入到文件中，如果文件不存在则创建文件。
+        /// </summary>
+        /// <param name="filePath">文件路径</param>
+        /// <param name="content">要写入的内容</param>
+        /// <param name="append">是否追加内容到文件末尾，默认为 false</param>
+        public static void file_put_contents(string filePath, string content, bool append = false)
+        {
+            try
+            {
+                // 根据 append 参数确定写入模式
+                FileMode mode = append ? FileMode.Append : FileMode.Create;
+
+                // 使用 FileStream 写入内容到文件
+                using (FileStream fs = new FileStream(filePath, mode, FileAccess.Write))
+                using (StreamWriter writer = new StreamWriter(fs))
+                {
+                    writer.Write(content);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
 
         public static ArrayList rdWdsFromFileSplitComma(string filePath)
         {

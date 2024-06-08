@@ -32,9 +32,23 @@ using Microsoft.Extensions.Primitives;
 using System.Runtime.CompilerServices;
 using mdsj;
 using mdsj.libBiz;
-using static mdsj.other;
+
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
+
+using static mdsj.other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+
 
 namespace prj202405
 {
@@ -58,18 +72,33 @@ namespace prj202405
 
         //搜索用户
         public static Dictionary<long, User> _users = [];
+
+
+        static void PrintPythonLogo()
+        {
+            Console.WriteLine(@"
+        ,--./,-.
+       / #      \
+      |          |
+       \        /    
+        `._,._,'
+           ]
+        ,--'
+        |
+        `.___.
+        ");
+        }
+
         static async Task Main(string[] args)
         {
+            PrintPythonLogo();
 
             //            C# 中捕获全局异常和全局异步异常，可以通过以下方式实现：
 
             //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
             //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
             // 设置全局异常处理
-            AppDomain.CurrentDomain.UnhandledException += exCls.CurrentDomain_UnhandledException;
-            TaskScheduler.UnobservedTaskException += exCls.TaskScheduler_UnobservedTaskException;
-
-
+            mdsj.lib.exCls.set_error_handler();
 
             System.IO.Directory.CreateDirectory("pinlunDir");
             #region 构造函数
@@ -141,14 +170,7 @@ namespace prj202405
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             await other._readMerInfo();
-            var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
-            Directory.CreateDirectory("msgRcvDir");
-            Console.WriteLine(updateString);
-            // 获取当前时间并格式化为文件名
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            string fileName = $"msgRcvDir/{timestamp}.txt";
-            Console.WriteLine(fileName);
-            System.IO.File.WriteAllText("" + fileName, updateString);
+            _logMsg(update);
             //auto add cht sess
             if (update?.Message != null)
             {
@@ -393,6 +415,26 @@ namespace prj202405
             //    logCls.logErr2025(e, "evt_msg_rcv", "errlog");
             //}
 
+
+        }
+
+        private static void _logMsg(Update update)
+        {
+            try
+            {
+                var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
+                Directory.CreateDirectory("msgRcvDir");
+                Console.WriteLine(updateString);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                string fileName = $"msgRcvDir/{timestamp}.txt";
+                Console.WriteLine(fileName);
+                System.IO.File.WriteAllText("" + fileName, updateString);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
 
         }
 
@@ -1202,18 +1244,20 @@ namespace prj202405
                 // update.Message.Chat.Id;
                 string groupId = tglib.bot_getChatid(update).ToString();
 
-                List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
+                //  List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
 
-
+                List<SortedList> lst = ormJSonFL.qry($"grpCfgDir/grpcfg{groupId}.json");
                 string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
                 //    city = "
-                Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));         
-                whereExprsObj.Add("msgCtain", msgx);
 
-               // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
-                results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj);
+                //qry from mrcht by  where exprs  strFmt
+                Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+                var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
                 
+
+                // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
+                results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
+
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
 

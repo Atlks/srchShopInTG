@@ -15,6 +15,85 @@ namespace prj202405.lib
     internal class arrCls
     {
 
+
+        public static object array_slice<t>(List<t> inputList, int startIdx, int length)
+        {
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            var rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+
+        public static object array_slice(List<Dictionary<string, object>> inputList, int startIdx, int length)
+        {
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            var rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+        public static object array_slice(ArrayList inputList, int startIdx, int length)
+        {
+            //  List<Dictionary
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            ArrayList rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+        }
+
+        public static List<SortedList> array_slice(List<SortedList> inputList, int startIdx, int length)
+        {
+            // 确保 length 不超过列表的长度
+            if (length > inputList.Count)
+            {
+                length = inputList.Count;
+            }
+
+            // 使用 GetRange 方法来截取列表的前 length 个元素
+            List<SortedList> rtz = inputList.GetRange(startIdx, length);
+            return rtz;
+            //  return arr_rzt;
+        }
+
+        /**
+         * // 使用 Filter 函数筛选出 age 大于 23 的元素
+        var filteredList = Filter(list, sl => (int)sl["age"] > 23).ToList();
+         * 
+         */
+        public static IEnumerable<SortedList> arrar_filter(IEnumerable<SortedList> source, Func<SortedList, bool> predicate)
+        {
+            // 使用 LINQ 的 Where 方法筛选元素
+            return source.Where(predicate);
+        }
+
+        static List<SortedList> sort(List<SortedList> list, string key)
+        {
+            // 使用 List 的 Sort 方法进行排序
+            list.Sort((x, y) => Comparer.Default.Compare(x[key], y[key]));
+            return list;
+        }
+
+        static IEnumerable<SortedList> array_map(IEnumerable<SortedList> source, Func<SortedList, SortedList> mapFunction)
+        {
+            // 使用 LINQ 的 Select 方法对每个元素应用 mapFunction
+            return source.Select(mapFunction);
+        }
         public static object getHashtableKv(SortedList hashobj, string fld, object v2)
         {
             try
@@ -279,6 +358,14 @@ namespace prj202405.lib
                 obj[k] = v;
             else
                 obj.Add(k, v);
+        }
+
+        internal static void addRplsKeyV(SortedList listIot, string? key, SortedList objSave)
+        {
+            if (listIot.ContainsKey(key))
+                listIot[key] = objSave;
+            else
+                listIot.Add(key, objSave);
         }
 
         //internal static int getRowVal(object s1, string v1, int v2)

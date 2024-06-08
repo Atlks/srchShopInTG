@@ -6,11 +6,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+//   prj202405.lib.strCls
 namespace prj202405.lib
 {
     internal class strCls
     {
+
+        /// <summary>
+        ///  // 示例用法
+      //  string result = sprintf("Hello, {0}! You have {1} new messages.", "John", 5);
+
+        /// 类似于 PHP 中的 sprintf 函数，使用格式字符串和参数数组构建格式化字符串。
+        /// </summary>
+        /// <param name="format">格式字符串</param>
+        /// <param name="args">参数数组</param>
+        /// <returns>格式化后的字符串</returns>
+        public static string sprintf(string format, params object[] args)
+        {
+            return string.Format(format, args);
+        }
 
         public static string[] calcKwdsAsArr(ref string msgx)
         {

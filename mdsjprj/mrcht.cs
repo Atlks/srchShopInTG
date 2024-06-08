@@ -90,14 +90,14 @@ namespace prj202504
         //   c.CityKeywords + add.CityKeywords +
         //   am.KeywordString + am.KeywordString +
         //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
-        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
+        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbfFrom, Dictionary<string, StringValues> whereExprsObj, string msgCtain)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));
 
-            string msgx = whereExprsObj["msgCtain"];
-            if (string.IsNullOrEmpty(msgx)) { return []; }
-            string[] kwds = strCls.calcKwdsAsArr(ref msgx);
+          //  string msgx = whereExprsObj["msgCtain"];
+            if (string.IsNullOrEmpty(msgCtain)) { return []; }
+            string[] kwds = strCls.calcKwdsAsArr(ref msgCtain);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
             var rsRztInlnKbdBtn = db.qryV6(dbfFrom, (SortedList row) =>
                  {

@@ -11,6 +11,29 @@ namespace prj202405.lib
     /// </summary>
     public static class TextHelper
     {
+
+        public static void ExtractLinks(string inputFilePath, string outputFilePath)
+        {
+            // 读取输入文件内容
+            string htmlContent = System.IO.File.ReadAllText(inputFilePath);
+
+            // 匹配<a>标签中的href属性值和链接文本
+            MatchCollection matches = Regex.Matches(htmlContent, @"<a\s+.*?href\s*=\s*(""(.*?)""|'(.*?)')[^>]*>(.*?)</a>");
+
+            // 输出匹配到的链接和链接文本到输出文件
+            using (StreamWriter writer = new StreamWriter(outputFilePath))
+            {
+                foreach (Match match in matches)
+                {
+                    // 获取 href 属性值和链接文本
+                    string href = match.Groups[2].Success ? match.Groups[2].Value : match.Groups[3].Value;
+                    string linkText = match.Groups[4].Value;
+
+                    // 写入到输出文件
+                    writer.WriteLine($"<a href=\"{href}\">{linkText}</a>");
+                }
+            }
+        }
         /// <summary>
         /// 分割字符串
         /// </summary>
