@@ -20,7 +20,7 @@ using City = prj202405.City;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
 
-namespace prj202504
+namespace mdsj
 {
     internal class mrcht
     {
@@ -93,7 +93,7 @@ namespace prj202504
         public static List<InlineKeyboardButton[]> qryFromMrcht(string dbfFrom, Dictionary<string, StringValues> whereExprsObj, string msgCtain)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj, msgCtain));
 
           //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }

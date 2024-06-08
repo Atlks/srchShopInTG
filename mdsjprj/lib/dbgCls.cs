@@ -200,33 +200,40 @@ namespace prj202405.lib
         /// <param name="indentLevel">缩进级别，用于递归调用时控制缩进</param>
         public static void print_r(object obj, int indentLevel = 0)
         {
-            string indent = new string(' ', indentLevel * 4);
+            try
+            {
+                string indent = new string(' ', indentLevel * 4);
 
-            if (obj == null)
-            {
-                Console.WriteLine($"{indent}null");
-            }
-            else if (obj is IDictionary dictionary)
-            {
-                Console.WriteLine($"{indent}Dictionary:");
-                foreach (DictionaryEntry entry in dictionary)
+                if (obj == null)
                 {
-                    Console.Write($"{indent}  [{entry.Key}] => ");
-                    print_r(entry.Value, indentLevel + 1);
+                    Console.WriteLine($"{indent}null");
                 }
-            }
-            else if (obj is IEnumerable enumerable && !(obj is string))
-            {
-                Console.WriteLine($"{indent}List:");
-                foreach (var item in enumerable)
+                else if (obj is IDictionary dictionary)
                 {
-                    print_r(item, indentLevel + 1);
+                    Console.WriteLine($"{indent}Dictionary:");
+                    foreach (DictionaryEntry entry in dictionary)
+                    {
+                        Console.Write($"{indent}  [{entry.Key}] => ");
+                        print_r(entry.Value, indentLevel + 1);
+                    }
                 }
-            }
-            else
+                else if (obj is IEnumerable enumerable && !(obj is string))
+                {
+                    Console.WriteLine($"{indent}List:");
+                    foreach (var item in enumerable)
+                    {
+                        print_r(item, indentLevel + 1);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{indent}{obj}");
+                }
+            }catch(Exception e)
             {
-                Console.WriteLine($"{indent}{obj}");
+                Console.WriteLine(e);
             }
+           
         }
 
         /**
@@ -359,8 +366,11 @@ namespace prj202405.lib
                         };
                     }catch(Exception e)
                     {
-                        var o = (ex: e, method_Name: method.Name,prm: paramValues);
-                        logErr2025(o, "func_get_args", "errlogDir");
+                        Hashtable hash = new Hashtable();
+                        hash.Add("func_get_args.p1.method_Name", method.Name);
+                        hash.Add("func_get_args.p2.prm", paramValues);
+                         
+                        logErr2024(e, "func_get_args", "errlogDir2024",hash);
                         print_r(e);
                         return new
                         {

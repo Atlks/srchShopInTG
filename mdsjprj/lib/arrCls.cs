@@ -360,6 +360,41 @@ namespace prj202405.lib
                 obj.Add(k, v);
         }
 
+        public static int count(object collection)
+        {
+            return 计算长度(collection)；
+        }
+
+        /// <summary>
+        /// 计算集合的长度。
+        /// </summary>
+        /// <param name="collection">集合对象。</param>
+        /// <returns>集合的长度。</returns>
+        public static int 计算长度(object collection)
+        {
+            if (collection == null)
+            {
+                throw new ArgumentNullException(nameof(collection), "Collection cannot be null");
+            }
+
+            if (collection is ICollection col)
+            {
+                return col.Count;
+            }
+
+            if (collection is IEnumerable enumerable)
+            {
+                int count = 0;
+                foreach (var item in enumerable)
+                {
+                    count++;
+                }
+                return count;
+            }
+
+            throw new ArgumentException("Unsupported collection type", nameof(collection));
+        }
+
         internal static void addRplsKeyV(SortedList listIot, string? key, SortedList objSave)
         {
             if (listIot.ContainsKey(key))

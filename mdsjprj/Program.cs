@@ -26,7 +26,7 @@ using System.Xml;
 using HtmlAgilityPack;
 using Formatting = Newtonsoft.Json.Formatting;
 using DocumentFormat.OpenXml;
-using prj202504;
+using mdsj;
 using System.Runtime.Intrinsics.Arm;
 using Microsoft.Extensions.Primitives;
 using System.Runtime.CompilerServices;
@@ -153,7 +153,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            //  timerCls.setTimerTask();
+               timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 

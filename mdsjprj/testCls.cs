@@ -13,7 +13,7 @@ using prj202405.lib;
 using ClosedXML.Excel;
 using prj202405.lib;
 using System.Text.RegularExpressions;
-using prj202504;
+using mdsj;
 using DocumentFormat.OpenXml.Bibliography;
 using SqlParser;
 using SqlParser.Ast;
@@ -46,6 +46,9 @@ namespace prj202405
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
+                var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
+                logErr2025(o, "func_get_args", "errlogDir2024");
+                
                // exportCftFrmDb();
                 //var sql_dbf = "mrcht.json";
                 //List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);

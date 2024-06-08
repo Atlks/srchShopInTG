@@ -9,6 +9,35 @@ namespace mdsj.lib
     public class exCls
     {
 
+        /// <summary>
+        /// 设置全局异常处理程序。
+        /// </summary>
+        /// <param name="handler">异常处理程序。</param>
+        public static void set_exception_handler(Action<Exception> handler)
+        {
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                handler(e.ExceptionObject as Exception);
+            };
+
+            TaskScheduler.UnobservedTaskException += (sender, e) =>
+            {
+                handler(e.Exception);
+                e.SetObserved();
+            };
+        }
+
+        /// <summary>
+        /// 异常处理程序。
+        /// </summary>
+        /// <param name="ex">捕获的异常。</param>
+        public static void HandleException(Exception ex)
+        {
+            // 在这里处理异常，例如记录日志或显示错误信息
+            Console.WriteLine("捕获到未处理的异常:");
+            Console.WriteLine($"消息: {ex.Message}");
+            Console.WriteLine($"堆栈跟踪: {ex.StackTrace}");
+        }
 
         public static void set_error_handler()
         {
