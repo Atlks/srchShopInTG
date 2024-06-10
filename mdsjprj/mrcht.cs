@@ -99,26 +99,26 @@ namespace mdsj
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
             string[] kwds = strCls.calcKwdsAsArr(ref msgCtain);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
-            var rsRztInlnKbdBtn = db.qryV6(dbfFrom, (SortedList row) =>
+            var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFrom, (SortedList row) =>
                  {
                      //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                     if (hasCondt(whereExprsObj, "city"))
-                         if (!strCls.eq(row["cityname"], arrCls.TryGetValue(whereExprsObj, "city")))   //  cityname not in (citysss) 
+                     if (hasCondt(whereExprsObj, "城市"))
+                         if (!strCls.eq(row["城市"], arrCls.TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
                              return false;
-                     if (hasCondt(whereExprsObj, "park"))
-                         if (!strCls.eq(row["parkname"], arrCls.TryGetValue(whereExprsObj, "park")))   //  cityname not in (citysss) 
+                     if (hasCondt(whereExprsObj, "园区"))
+                         if (!strCls.eq(row["园区"], arrCls.TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
                              return false;
-                     if (hasCondt(whereExprsObj, "ctry"))
-                         if (!strCls.eq(row["ctry"], arrCls.TryGetValue(whereExprsObj, "ctry")))   //  cityname not in (citysss) 
+                     if (hasCondt(whereExprsObj, "国家"))
+                         if (!strCls.eq(row["国家"], arrCls.TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                              return false;
                      if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
                          return false;
 
                      //if condt  containxx(row,msgSpltKwArr)>0
-                     var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "CityKeywords") +
-                       "__pkkwds=> " + arrCls.rowValDefEmpty(row, "parkkwd") +
-                        "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "KeywordString") +
-                        "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "CategoryStrKwds");
+                     var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "城市关键词") +
+                       "__pkkwds=> " + arrCls.rowValDefEmpty(row, "园区关键词") +
+                        "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "关键词") +
+                        "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "分类关键词");
                      row["_seasrchKw2ds"] = seasrchKwds;
 
                      int containScore = strCls.containCalcCntScore(seasrchKwds, kwds);
@@ -136,8 +136,8 @@ namespace mdsj
                  },
                      (SortedList row) =>
                      {
-                         string text = arrCls.rowValDefEmpty(row, "cityname") + " • " + arrCls.rowValDefEmpty(row, "parkname") + " • " + arrCls.rowValDefEmpty(row, "Name");
-                         string guid = arrCls.rowValDefEmpty(row, "Guid");
+                         string text = arrCls.rowValDefEmpty(row, "城市") + " • " + arrCls.rowValDefEmpty(row, "园区") + " • " + arrCls.rowValDefEmpty(row, "商家");
+                         string guid = arrCls.rowValDefEmpty(row, "Guid编号");
                          InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
                          return btnsInLine;
                      }
@@ -148,7 +148,7 @@ namespace mdsj
         }
 
         // seelct from dbfform patn(111) wehre xxxx   sekect  List<InlineKeyboardButton[
-        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
+        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3dep(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));

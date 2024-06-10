@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace prj202405
 {
@@ -16,22 +17,29 @@ namespace prj202405
     {
         public static string pinlun_getpinlun(Merchant? contact_Merchant, string result)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
+
             result += "\n\n<b>------------客户点评------------</b>";
-            if (contact_Merchant.Comments.Count == 0)
+            //  ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+            List<SortedList> rowsx = ormJSonFL.qry("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
+            if (rowsx.Count == 0)
             {
-                result += "\n\n<b>还无人点评,@回复本消息,即可对商家点评!(100字以内)</b>";
+                result += "\n\n<b>还无人点评 \n\n@回复本消息,即可对商家点评!(100字以内)</b>";
                 result += "\n\n" + timerCls.plchdTxt;
                 return result;
             }
 
             System.IO.Directory.CreateDirectory("pinlunDir");
             //  ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-            ArrayList rows = ormJSonFL.qryDep("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
+            List<SortedList> rows = ormJSonFL.qry("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
             for (int i = 0; i < rows.Count; i++)
             {
+                SortedList rw = rows[i];
                 try
                 {
-                    var uid = contact_Merchant.Comments.ElementAt(i).Key;
+                    var uid =(long) rw["评论人id"];
+                        //contact_Merchant.Comments.ElementAt(i).Key;
                     #region start 
                     var star = "★ ★ ★ ★ ★ \n\n🥰";
                     if (contact_Merchant.Scores.ContainsKey(uid))
@@ -69,7 +77,7 @@ namespace prj202405
             }
 
 
-
+            dbgCls.setDbgValRtval( __METHOD__, result);
             return result;
         }
 

@@ -48,7 +48,7 @@ using static prj202405.lib.filex;
 using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
-
+using static mdsj.lib.net_http;
 
 namespace prj202405
 {
@@ -76,6 +76,7 @@ namespace prj202405
 
         static void PrintPythonLogo()
         {
+
             Console.WriteLine(@"
         ,--./,-.
        / #      \
@@ -87,6 +88,7 @@ namespace prj202405
         |
         `.___.
         ");
+            Console.WriteLine(System.IO.File.ReadAllText("logo.txt"));
         }
 
         static async Task Main(string[] args)
@@ -153,7 +155,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-               timerCls.setTimerTask();
+            timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -184,7 +186,7 @@ namespace prj202405
                 evt_btm_btn_click_inPubgrp(update);
                 return;
             }
-            string msgx2024 = tglib.bot_getTxtMsg(update);
+            string msgx2024 = tglib.bot_getTxtMsgDep(update);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
                 // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
@@ -272,7 +274,9 @@ namespace prj202405
                 //@回复了商家详情信息
                 if (update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text))
                 && update?.Message?.ReplyToMessage?.From?.Username == botname
-                 && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
+                 && update?.Message?.ReplyToMessage?.Caption?.Contains("--联系方式--") == true
+                  && update?.Message?.ReplyToMessage?.Caption?.Contains("--客户点评--") == true
+                //    && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
                 )
                 {
                     await evt_pinlunShangjia(botClient, update, isAdminer, text);
@@ -443,7 +447,7 @@ namespace prj202405
             var __METHOD__ = "evt_msgTrgSrch";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
-            string? msgx = tglib.bot_getTxtMsg(update);
+            string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx.Trim().StartsWith("@" + botname))
                 msgx = msgx.Substring(botname.Length + 1).Trim();
             msgx = msgx.Trim();
@@ -621,7 +625,7 @@ namespace prj202405
 
         private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update)
         {
-            string? msgx = tglib.bot_getTxtMsg(update);
+            string? msgx = tglib.bot_getTxtMsgDep(update);
 
             if (msgx != null)
             {
@@ -635,7 +639,7 @@ namespace prj202405
 
         private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update)
         {
-            string? msgx = tglib.bot_getTxtMsg(update);
+            string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx != null)
             {
                 if (msgx.Trim().StartsWith("@" + Program.botname))
@@ -649,19 +653,26 @@ namespace prj202405
 
         private static async void evt_btm_btn_click_inPubgrp(Update update)
         {
+            try
+            {
+                Message a = await Program.botClient.SendTextMessageAsync(
+                 update.Message.Chat.Id,
+               "要获取多级菜单，请私聊我",
+                 parseMode: ParseMode.Html,
+                 //   replyMarkup: new InlineKeyboardMarkup([]),
+                 protectContent: false,
+                 replyToMessageId: update.Message.MessageId,
+                 disableWebPagePreview: true
 
-            Message a = await Program.botClient.SendTextMessageAsync(
-                      update.Message.Chat.Id,
-                    "要获取多级菜单，请私聊我",
-                      parseMode: ParseMode.Html,
-                      //   replyMarkup: new InlineKeyboardMarkup([]),
-                      protectContent: false,
-                      replyToMessageId: update.Message.MessageId,
-                      disableWebPagePreview: true
-
-                      );
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
+                 );
+                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
+                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+       
             //todo reply
         }
 
@@ -783,6 +794,11 @@ namespace prj202405
 
         private static async Task evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
         {
+            if (text.StartsWith("@xxx007"))
+                return;
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
+
             HashSet<prj202405.City> _citys = getCitysObj();
             Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
             var updateString = JsonConvert.SerializeObject(update);
@@ -858,7 +874,8 @@ namespace prj202405
                 obj1.Add("商家", merchant.Name);
                 obj1.Add("时间", DateTime.Now.ToString());
                 obj1.Add("评论内容", text);
-
+                obj1.Add("评论人", update.Message.From.Username);
+                obj1.Add("评论人id", update.Message.From.Id);
                 System.IO.Directory.CreateDirectory("pinlunDir");
                 ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
                 ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
@@ -993,6 +1010,9 @@ namespace prj202405
                     Console.WriteLine("告知编辑成功时出错:" + ex.Message);
                 }
             }
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+
         }
 
         private static void evt_startMsgEvtInPrvtAddBot(Update update)
@@ -1253,7 +1273,7 @@ namespace prj202405
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
-                
+
 
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
@@ -2113,7 +2133,7 @@ namespace prj202405
 
             var contactScore = contact_Merchant.Scores.Count == 0 ? 5 : contact_Merchant.Scores.Select(u => u.Value).Average();
             //打分
-            #region
+            #region  打分
             if (contactScore == 5)
             {
                 result += $"\n\n⭐️<b>综合评分</b> <b>{contactScore:F1}</b>❤️❤️❤️❤️❤️ ({contact_Merchant.Scores.Count})";
@@ -2231,12 +2251,12 @@ namespace prj202405
             //显示评价
             else
             {
-                #region 显示评价
-                result = pinlun.pinlun_getpinlun(contact_Merchant, result);
-                #endregion
+
 
             }
-
+            #region 显示评价
+            result = pinlun.pinlun_getpinlun(contact_Merchant, result);
+            #endregion
 
             //[
             //   InlineKeyboardButton.WithCallbackData("➕ 添加商家", "AddMerchant"),

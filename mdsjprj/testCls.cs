@@ -35,6 +35,21 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 
 
+using static mdsj.other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+
+
 namespace prj202405
 {
     internal class testCls
@@ -46,6 +61,10 @@ namespace prj202405
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
+                http_GetHttpResponseAsync("https://t.me/aflknw202563");
+
+            //    json2dbMrcht();
+
                 var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
                 logErr2025(o, "func_get_args", "errlogDir2024");
                 
@@ -128,7 +147,7 @@ namespace prj202405
 
                 Console.WriteLine(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
 
-                Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qry("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+                Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
@@ -160,6 +179,13 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static void json2dbMrcht()
+        {
+            string f = "mercht商家数据/缅甸.json";
+            List<SortedList> li= ormJSonFL.qry(f);
+            ormSqlt.saveMltHiPfm(li, "mercht商家数据/缅甸.db");
         }
 
         private static void exportCftFrmDb()
