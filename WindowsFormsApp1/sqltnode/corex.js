@@ -8,6 +8,17 @@ function urldecode(encodedString) {
         return null;
     }
 }
+
+const fs = require('fs');
+global['file_get_contents']=file_get_contents
+function file_get_contents(filePath) {
+    try {
+        return fs.readFileSync(filePath, 'utf8');
+    } catch (error) {
+        console.error('Error reading file:', error);
+        return null;
+    }
+}
 global['json_decode']=json_decode
 function json_decode(jsonString) {
     try {

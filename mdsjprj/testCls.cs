@@ -74,7 +74,17 @@ namespace prj202405
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
-             //   getProdSvrWdlib();
+
+                List<SortedList> rws = ormIni.qryV2("cateECns.ini");
+
+                SortedList map = rws[0];
+                //  foreach (SortedList item in map)
+                foreach(var value in map.Values)
+                {
+                    String s = $" <option value=\"{value}\">";
+                    Console.WriteLine(s);
+                }
+                //   getProdSvrWdlib();
 
                 //    增加分类addcate();
 

@@ -1318,7 +1318,7 @@ namespace prj202405
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
 
-
+                //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
 

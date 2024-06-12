@@ -61,6 +61,16 @@ namespace prj202405.lib
             }
         }
 
+        public static string GetAbsolutePath(string relativePath)
+        {
+            // 获取当前工作目录
+            string currentDirectory = Environment.CurrentDirectory;
+
+            // 将相对路径转换为绝对路径
+            string absolutePath = Path.GetFullPath(Path.Combine(currentDirectory, relativePath));
+
+            return absolutePath;
+        }
         /// <summary>
         /// 读取指定文件的内容，并返回字符串形式的内容。
         /// </summary>

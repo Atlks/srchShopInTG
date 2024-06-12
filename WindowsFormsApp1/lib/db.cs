@@ -13,6 +13,48 @@ namespace prj202405.lib
 {
     internal class db
     {
+
+
+        public static List<SortedList> qryV7(List<SortedList> rows,
+  Func<SortedList, bool> whereFun,
+  Func<SortedList, int> ordFun,
+  Func<SortedList, SortedList> selktFun)
+        {
+            List<SortedList> rows_rzt4srch =new List<SortedList>();
+            foreach (SortedList row in rows)
+            {
+                if (whereFun(row))
+                {
+                    rows_rzt4srch.Add(row);
+                }
+              
+            }
+
+            List<SortedList> list_ordered = rows_rzt4srch;
+            if (ordFun!=null)
+            {
+                list_ordered = rows_rzt4srch.Cast<SortedList>()
+                                .OrderBy(ordFun)
+                                .ToList();
+            }
+          
+
+
+            List<SortedList> list_Seleced = new List<SortedList>();
+            for (int i = 0; i < list_ordered.Count; i++)
+            {
+                SortedList row = list_ordered[i];
+                if(selktFun!=null)
+                    list_Seleced.Add(selktFun(row));
+                else
+                    list_Seleced.Add(row);
+            }
+
+            return list_Seleced;
+
+        }
+
+
         public static List<t> qryFrmSqlt<t>(string dbfFrom,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,
@@ -267,8 +309,45 @@ namespace prj202405.lib
             }
             return v2;
         }
+        internal static string calcPatnsV2(string dir, string partfile区块文件,string Extname="txt")
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
+            if (string.IsNullOrEmpty(Extname))
+                Extname = "txt";
+            if (string.IsNullOrEmpty(partfile区块文件))
+            {
 
+                string rzt = GetFilePathsCommaSeparated(dir);
+                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                return rzt;
+            }
+            ArrayList arrayList = new ArrayList();
+            string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var dbf in dbArr)
+            {
+                string path = dir + "/" + dbf + "."+ Extname;
+                if (!File.Exists(path))
+                {
+                    Console.WriteLine("not exist file dbf=>" + path);
+                    continue;
+                }
+                arrayList.Add(path);
+            }
+
+            // 使用 ArrayList 的 ToArray 方法将其转换为对象数组
+            object[] objectArray = arrayList.ToArray();
+
+            // 使用 String.Join 方法将数组转换为逗号分割的字符串
+            string result = string.Join(",", objectArray);
+
+            dbgCls.setDbgValRtval(__METHOD__, result);
+
+            return result;
+        }
+
+        //only for db sdqlt
         internal static string calcPatns(string dir, string partfile区块文件)
         {  
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;

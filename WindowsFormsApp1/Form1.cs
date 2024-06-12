@@ -29,7 +29,9 @@ namespace WindowsFormsApp1
             
             new ScriptManager(this).list();
 
-            string filePath = @"D:\0prj\mdsj\WindowsFormsApp1\idx.htm";
+
+            string filePath = @"../../idx.htm";
+            filePath = filex.GetAbsolutePath(filePath);
             //  filePath = @"idx.htm";
             Console.WriteLine(filePath);
             File.AppendAllText("log2024.log", filePath);

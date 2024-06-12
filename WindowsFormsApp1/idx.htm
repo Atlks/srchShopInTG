@@ -8,7 +8,31 @@
 
         function m1() {
             // window.external.m1();
-            alert(window.external.list());
+          //  alert(window.external.list());
+
+            var list = window.external.list($("#merchantName").val());
+            list = JSON.parse(list);
+            list = list.slice(0, 100);
+            //  alert(list);
+            var tableBody = $('#merchantTable tbody');
+            tableBody.empty(); // 清空表格现有内容
+            $.each(list, function (index, merchant) {
+                //   alert(merchant);
+                var row = $('<tr></tr>');
+                row.append($('<td></td>').html('<a href="save.htm?id=' + merchant.id+'&'+Math.random()+'">'+merchant.商家+'</a>' ));
+                row.append($('<td></td>').text(merchant.分类));
+                row.append($('<td></td>').text(merchant.关键词));
+                row.append($('<td></td>').text(merchant.开始时间));
+                row.append($('<td></td>').text(merchant.结束时间));
+                row.append($('<td></td>').text(merchant.园区));
+                row.append($('<td></td>').text(merchant.城市));
+                row.append($('<td></td>').text(merchant.国家));
+                row.append($('<td></td>').text(merchant.Telegram));
+                row.append($('<td></td>').text(merchant.line));
+                row.append($('<td></td>').text(merchant.微信));
+                row.append($('<td></td>').text(merchant.WhatsApp));
+                tableBody.append(row);
+            });
         }
 
 
@@ -51,29 +75,10 @@
 
     <script>
         $(document).ready(function () {
-            var list = window.external.list();
-            list = JSON.parse(list);
-            list = list.slice(0, 100);
-            //  alert(list);
-            var tableBody = $('#merchantTable tbody');
-            tableBody.empty(); // 清空表格现有内容
-            $.each(list, function (index, merchant) {
-                //   alert(merchant);
-                var row = $('<tr></tr>');
-                row.append($('<td></td>').text(merchant.商家));
-                row.append($('<td></td>').text(merchant.分类));
-                row.append($('<td></td>').text(merchant.关键词));
-                row.append($('<td></td>').text(merchant.开始时间));
-                row.append($('<td></td>').text(merchant.结束时间));
-                row.append($('<td></td>').text(merchant.园区));
-                row.append($('<td></td>').text(merchant.城市));
-                row.append($('<td></td>').text(merchant.国家));
-                row.append($('<td></td>').text(merchant.Telegram));
-                row.append($('<td></td>').text(merchant.line));
-                row.append($('<td></td>').text(merchant.微信));
-                row.append($('<td></td>').text(merchant.WhatsApp));
-                tableBody.append(row);
-            });
+
+
+            m1();
+            
             //end jq each
 
         });

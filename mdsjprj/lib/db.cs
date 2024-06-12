@@ -12,10 +12,49 @@ namespace prj202405.lib
 {
     internal class db
     {
-        public static List<t> qryFrmSqlt<t>(string dbfFrom,
+
+
+        public static List<t> qryFrmSqlt2<t>(string dbfFrom,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,
   Func<SortedList, t> selktFun)
+        {
+            ArrayList rows_rzt4srch = [];
+            List<SortedList> rows = ormSqlt.qryV2(dbfFrom);
+            foreach (SortedList row in rows)
+            {
+                if (whereFun(row))
+                {
+                    rows_rzt4srch.Add(row);
+                }
+                //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
+                // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+            }
+
+
+            List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
+                                  .OrderBy(ordFun)
+                                  .ToList();
+
+
+            List<t> rsRztInlnKbdBtn = [];
+            for (int i = 0; i < rows_rzt4srch.Count; i++)
+            {
+                SortedList row = list[i];
+                rsRztInlnKbdBtn.Add(selktFun(row));
+            }
+
+            return rsRztInlnKbdBtn;
+
+        }
+
+
+        public static List<t> qryFrmSqlt<t>(string dbfFrom,
+  Func<SortedList, bool> whereFun,
+  Func<SortedList, int> ordFun,
+  Func<SortedList, t> selktFun
+            
+            )
         {
             ArrayList rows_rzt4srch = [];
             List<SortedList> rows = ormSqlt.qryV2(dbfFrom);

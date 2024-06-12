@@ -2,14 +2,15 @@ const sqlite3 = require('sqlite3').verbose();
 const { open } = require('sqlite');
 const path = require('path');
 
-require("corex");
+require("./corex");
 var obj={"name":11,"age":222};
 //save(obj,"db2404.db");
 // 获取控制台输入的参数
 const args = process.argv.slice(2); // 去掉前两个参数
 var dbF=urldecode( args[0]);
-var sdaveObjstr=args[1];
-save( json_decode(urldecode(sdaveObjstr)) ,"db2404.db");
+var sdaveObjstr=file_get_contents(dbF);
+prmobj=json_decode(sdaveObjstr);
+save( prmobj['saveobj'] ,prmobj['dbf']);
 
 // 创建表格的函数
 // 创建表格的函数
@@ -34,12 +35,18 @@ async function crtTable(tabl, mapx, dbFileName) {
 
     // 遍历 mapx 对象并添加列
     for (const [key, value] of Object.entries(mapx)) {
-        if (key.toLowerCase() === 'id') continue;
-        let varType=gettype (value);
-        let sqltType = typeMapPHP2sqlt[varType];
-        if (sqltType.toLowerCase() !== 'int') sqltType = 'TEXT';
-        sql = `ALTER TABLE ${tabl} ADD COLUMN ${key} ${sqltType}`;
-        await db.run(sql);
+        try{
+            if (key.toLowerCase() === 'id') continue;
+            let varType=gettype (value);
+            let sqltType = typeMapPHP2sqlt[varType];
+            if (sqltType.toLowerCase() !== 'int') sqltType = 'TEXT';
+            sql = `ALTER TABLE ${tabl} ADD COLUMN ${key} ${sqltType}`;
+            await db.run(sql);
+        }catch (e)
+        {
+
+        }
+
     }
 
     // 关闭数据库连接
@@ -95,7 +102,7 @@ async function save(mapx, dbFileName) {
     // 创建表格
      await crtTable(tblx, mapx, dbFileName);
 
-
+    //if(mapx["id"]!=null)
      // { columns, placeholders, values };
     // 构建SQL插入语句
     const { columns, placeholders, values } = arr_toSqlPrms4insert(mapx);
@@ -110,6 +117,8 @@ async function save(mapx, dbFileName) {
 
     const ret = await cmd_ExecuteNonQuery(db, sql, values);
     console.log("Return value:", ret);
+      marker = "----------marker----------";
 
+    console.log(marker); console.log(ret);
     await db.close();
 }

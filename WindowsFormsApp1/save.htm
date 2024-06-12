@@ -2,9 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>����������̼�����</title>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <script type="text/javascript">
 
@@ -12,78 +14,114 @@
 
         function btn() {
             // window.external.m1();
-          
-             (window.external.save($("form").serialize()));
+
+            (window.external.save($("form").serialize()));
         }
 
 
     </script>
-    
+
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+            crossorigin="anonymous"></script>
+
 </head>
 
 
-<body>
+<body style="padding:10px">
+    <a href="idx.htm">返回查询页</a>
     <h2>商家信息</h2>
     <form id="merchantForm">
+
+        <div class="row justify-content-start ">
+            <label class="col-1 col-form-label" for="merchantName">id：</label>
+            <input class="col-5" type="text" id="id" name="id" required>
+        </div>
         <!-- 商家名称 -->
-        <div>
-            <label for="merchantName">商家：</label>
-            <input type="text" id="merchantName" name="merchantName" required>
+        <div class="row justify-content-start ">
+            <label class="col-1 col-form-label" for="merchantName">商家：</label>
+            <input class="col-5" type="text" id="商家" name="商家" required>
         </div>
         <!-- 分类 -->
         <div>
-            <label for="category">分类：</label>
-            <input type="text" id="category" name="category" required>
+            <label class="col-1 col-form-label" for="category">分类：</label>
+            <input type="text" list="browsers" id="分类" name="分类">
+
+            <datalist id="browsers">
+                <option value="车辆服务">
+                <option value="服饰">
+                <option value="娱乐">
+                <option value="化妆品">
+                <option value="饮料">
+                <option value="电子产品">
+                <option value="兑换">
+                <option value="快递">
+                <option value="餐饮">
+                <option value="水果店">
+                <option value="医院">
+                <option value="酒店">
+                <option value="珠宝">
+                <option value="宠物店">
+                <option value="物业">
+                <option value="商店">
+            </datalist>
         </div>
         <!-- 关键词 -->
         <div>
-            <label for="keywords">关键词：</label>
-            <input type="text" id="keywords" name="keywords" required>
+            <label class="col-1 col-form-label" for="keywords">关键词：</label>
+            <input type="text" id="关键词" name="关键词">
         </div>
         <!-- 营业开始时间 -->
         <div>
-            <label for="openingTime">营业开始时间：</label>
-            <input type="text" id="openingTime" name="openingTime" required>
+            <label class="col-1 col-form-label" for="openingTime">营业开始时间：</label>
+            <input type="text" id="营业开始时间" name="营业开始时间">
         </div>
         <!-- 营业结束时间 -->
         <div>
-            <label for="closingTime">营业结束时间：</label>
-            <input type="text" id="closingTime" name="closingTime" required>
+            <label class="col-1 col-form-label" for="closingTime">营业结束时间：</label>
+            <input type="text" id="营业开始时间" name="营业结束时间">
         </div>
         <!-- 其他字段 -->
         <!-- 园区 -->
         <div>
-            <label for="park">园区：</label>
-            <input type="text" id="park" name="park" required>
+            <label class="col-1 col-form-label" for="park">园区：</label>
+            <input type="text" id="park" name="园区">
         </div>
         <!-- 城市 -->
         <div>
-            <label for="city">城市：</label>
-            <input type="text" id="city" name="city" required>
+            <label class="col-1 col-form-label" for="city">城市：</label>
+            <input type="text" id="city" name="城市">
         </div>
         <!-- 国家 -->
         <div>
-            <label for="country">国家：</label>
-            <input type="text" id="country" name="country" required>
+            <label class="col-1 col-form-label" for="country">国家：</label>
+            <input type="text" list="browsers2" id="country" name="国家" value="缅甸">
+
+            <datalist id="browsers2">
+                <option value="缅甸">
+                <option value="老挝">
+                <option value="泰国">
+
+            </datalist>
         </div>
         <!-- Telegram -->
         <div>
-            <label for="telegram">Telegram：</label>
+            <label class="col-1 col-form-label" for="telegram">Telegram：</label>
             <input type="text" id="telegram" name="telegram">
         </div>
         <!-- Line -->
         <div>
-            <label for="line">Line：</label>
+            <label class="col-1 col-form-label" for="line">Line：</label>
             <input type="text" id="line" name="line">
         </div>
         <!-- 微信 -->
         <div>
-            <label for="wechat">微信：</label>
-            <input type="text" id="wechat" name="wechat">
+            <label class="col-1 col-form-label" for="wechat">微信：</label>
+            <input type="text" id="wechat" name="微信">
         </div>
         <!-- WhatsApp -->
         <div>
-            <label for="whatsapp">WhatsApp：</label>
+            <label class="col-1 col-form-label" for="whatsapp">WhatsApp：</label>
             <input type="text" id="whatsapp" name="whatsapp">
         </div>
         <!-- 提交按钮 -->
@@ -91,6 +129,8 @@
             <button type="submit" onclick="btn()">提交</button>
         </div>
     </form>
+
+    <script src="save.js"></script>
 </body>
 
 

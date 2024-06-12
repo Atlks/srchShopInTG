@@ -200,6 +200,11 @@ namespace mdsj.lib
         {
             return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
         }
+
+        public static t json_decode<t>(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<t>(jsonString);
+        }
         public static string json_encode(object results)
         {
             //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
