@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-
+using static mdsj.libBiz.tgBiz;
 namespace mdsj.libBiz
 {
     internal class tgBiz
@@ -18,7 +18,11 @@ namespace mdsj.libBiz
 
         public static bool tg_isBtm_btnClink_in_pubGrp(Update update)
         {
-            string msgx2024 = tglib.bot_getTxtMsg(update);
+            if(  update.Type != UpdateType.Message)
+            {
+                return false;
+            }
+            string msgx2024 = tglib.bot_getTxt(update);
 
             if (update?.Message?.Chat?.Type != ChatType.Private)
             {
@@ -68,7 +72,7 @@ namespace mdsj.libBiz
             }
 
 
-            //grp spec kwd
+            //grp spec kwd... btm btn seqrch wds
 
             ArrayList lst = testCls.kwdSeasrchInGrp("kwdSearchINGrp.txt");
             if (lst.Contains(update?.Message?.Text))
@@ -85,10 +89,8 @@ namespace mdsj.libBiz
             }
 
 
-            if (update?.Message?.Chat?.Type != ChatType.Private)// if grp in 
-            {
-
-
+            if ( isGrpChat (update?.Message?.Chat?.Type) )// if grp in 
+            {  
 
                 if (update?.Message == null)
                     return false;
@@ -99,8 +101,8 @@ namespace mdsj.libBiz
                     return false;
 
                 // 
-                var trgSearchKwds = "联系方式  纸飞机 line whatsapp telegram tg 有没有 飞机号 哪家店 哪里有 哪有卖 手机号 哪家 ";
-                var trgWd = other.getTrgwdHash("trgWds.txt");
+                var trgSearchKwds = " ";
+                var trgWd = biz_other.getTrgwdHash("搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
                 if (strCls.containKwds(update?.Message?.Text, trgSearchKwds))
                 {
@@ -127,6 +129,16 @@ namespace mdsj.libBiz
                 return false;
 
         }
+
+        public static bool isGrpChat(ChatType? type)
+        {
+            if (type == ChatType.Private)
+                return false;
+            if (type == ChatType.Group || type == ChatType.Supergroup || type == ChatType.Channel)
+                return true;
+            return false;
+        }
+
         public const string botname =Program.botname;
 
         public static ReplyKeyboardMarkup tg_btmBtns()

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>����������̼�����</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script type="text/javascript">
+
+
+
+        function btn() {
+            // window.external.m1();
+          
+             (window.external.save($("form").serialize()));
+        }
+
+
+    </script>
+    
+</head>
+
+
+<body>
+    <h2>商家信息</h2>
+    <form id="merchantForm">
+        <!-- 商家名称 -->
+        <div>
+            <label for="merchantName">商家：</label>
+            <input type="text" id="merchantName" name="merchantName" required>
+        </div>
+        <!-- 分类 -->
+        <div>
+            <label for="category">分类：</label>
+            <input type="text" id="category" name="category" required>
+        </div>
+        <!-- 关键词 -->
+        <div>
+            <label for="keywords">关键词：</label>
+            <input type="text" id="keywords" name="keywords" required>
+        </div>
+        <!-- 营业开始时间 -->
+        <div>
+            <label for="openingTime">营业开始时间：</label>
+            <input type="text" id="openingTime" name="openingTime" required>
+        </div>
+        <!-- 营业结束时间 -->
+        <div>
+            <label for="closingTime">营业结束时间：</label>
+            <input type="text" id="closingTime" name="closingTime" required>
+        </div>
+        <!-- 其他字段 -->
+        <!-- 园区 -->
+        <div>
+            <label for="park">园区：</label>
+            <input type="text" id="park" name="park" required>
+        </div>
+        <!-- 城市 -->
+        <div>
+            <label for="city">城市：</label>
+            <input type="text" id="city" name="city" required>
+        </div>
+        <!-- 国家 -->
+        <div>
+            <label for="country">国家：</label>
+            <input type="text" id="country" name="country" required>
+        </div>
+        <!-- Telegram -->
+        <div>
+            <label for="telegram">Telegram：</label>
+            <input type="text" id="telegram" name="telegram">
+        </div>
+        <!-- Line -->
+        <div>
+            <label for="line">Line：</label>
+            <input type="text" id="line" name="line">
+        </div>
+        <!-- 微信 -->
+        <div>
+            <label for="wechat">微信：</label>
+            <input type="text" id="wechat" name="wechat">
+        </div>
+        <!-- WhatsApp -->
+        <div>
+            <label for="whatsapp">WhatsApp：</label>
+            <input type="text" id="whatsapp" name="whatsapp">
+        </div>
+        <!-- 提交按钮 -->
+        <div>
+            <button type="submit" onclick="btn()">提交</button>
+        </div>
+    </form>
+</body>
+
+
+</html>

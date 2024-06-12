@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prj202405.lib;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -22,7 +23,11 @@ namespace WindowsFormsApp1
         }
         public Form1()
         {
+        corex.    SetFeatures(55000);
             InitializeComponent();
+            //webBrowser1.Document.InvokeScript("MyCLickFunction");
+            
+            new ScriptManager(this).list();
 
             string filePath = @"D:\0prj\mdsj\WindowsFormsApp1\idx.htm";
             //  filePath = @"idx.htm";
@@ -33,6 +38,8 @@ namespace WindowsFormsApp1
             // Enable JavaScript in the WebBrowser control
             webBrowser1.ObjectForScripting = new ScriptManager(this);
             this.webBrowser1.Navigate(new Uri(filePath));
+
+          
         }
 
         //dep

@@ -1,6 +1,7 @@
 ﻿using Mono.Web;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -79,7 +80,7 @@ namespace mdsj.lib
 
         private static string delEmpltyLines(string result)
         {
-            string[] lines = result.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = result.Split('\n'); //var//Install-Package SQLitePCLRaw.core
             lines = delEmptyLines(lines);
             //for (int i = 0; i < lines.Length; i++)
             //{
@@ -195,9 +196,9 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="jsonString">要解析的 JSON 字符串</param>
         /// <returns>解析后的动态对象</returns>
-        public static dynamic json_decode(string jsonString)
+        public static List<SortedList> json_decode(string jsonString)
         {
-            return JsonConvert.DeserializeObject(jsonString );
+            return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
         }
         public static string json_encode(object results)
         {

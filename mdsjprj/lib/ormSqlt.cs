@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Reflection;
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib

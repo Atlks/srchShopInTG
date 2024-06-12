@@ -13,6 +13,28 @@ namespace prj202405.lib
     internal class strCls
     {
 
+        public static string ExtractTextAfterMarker(string input, string marker)
+        {
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(marker))
+            {
+                throw new ArgumentException("Input and marker cannot be null or empty.");
+            }
+
+            int markerIndex = input.IndexOf(marker);
+            if (markerIndex == -1)
+            {
+                return string.Empty; // Marker not found, return empty string
+            }
+
+            int startIndex = markerIndex + marker.Length;
+            if (startIndex >= input.Length)
+            {
+                return string.Empty; // No text after marker
+            }
+
+            return input.Substring(startIndex);
+        }
+
         /// <summary>
         ///  // 示例用法
       //  string result = sprintf("Hello, {0}! You have {1} new messages.", "John", 5);
@@ -162,21 +184,21 @@ namespace prj202405.lib
         }
 
 
-        internal static bool eqV2(object rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
-        {
+        //internal static bool eqV2(object rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
+        //{
 
-            string cityName4srch = arrCls.TryGetValue(whereExprsObj, cityName4srchxx); ;
-            if (cityName4srch == null)  //if not have this clm in where exprs
-                return false;
-            else if (cityName4srch != null)
-            {
-                if (rowVal == null)
-                    return false;
-                return rowVal.Equals(cityName4srch);
-            }
-            return false;
+        //    string cityName4srch = arrCls.TryGetValue(whereExprsObj, cityName4srchxx); ;
+        //    if (cityName4srch == null)  //if not have this clm in where exprs
+        //        return false;
+        //    else if (cityName4srch != null)
+        //    {
+        //        if (rowVal == null)
+        //            return false;
+        //        return rowVal.Equals(cityName4srch);
+        //    }
+        //    return false;
 
-        }
+        //}
 
         internal static string JoinHashtbKV(string v, ICollection keys)
         {

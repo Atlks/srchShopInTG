@@ -15,17 +15,19 @@ namespace prj202405
 {
     internal class pinlun
     {
-        public static string pinlun_getpinlun(Merchant? contact_Merchant, string result)
+        public static string pinlun_getpinlun(Merchant? contact_Merchant)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
 
-            result += "\n\n<b>------------客户点评------------</b>";
+            string result = "";
             //  ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
             List<SortedList> rowsx = ormJSonFL.qry("pinlunDir/" + contact_Merchant.Guid + contact_Merchant.Name + ".json");
             if (rowsx.Count == 0)
             {
-                result += "\n\n<b>还无人点评 \n\n@回复本消息,即可对商家点评!(100字以内)</b>";
+              //  result += "\n\n<b>------------客户点评------------</b>";
+                // result += "\n\n<b>还无人点评 " ；
+                result += "\n\n@回复本消息,即可对商家点评!(100字以内)";
                 result += "\n\n" + timerCls.plchdTxt;
                 return result;
             }

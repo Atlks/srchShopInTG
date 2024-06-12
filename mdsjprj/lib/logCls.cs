@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
@@ -118,6 +118,26 @@ namespace mdsj.lib
             }
 
 
+        }
+
+        internal static void log(object m, string logdir)
+        {
+            try
+            {
+                Directory.CreateDirectory(logdir);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                string fileName = $"{logdir}/{timestamp}.txt";
+                if(IsString(m))
+                {
+                    System.IO.File.WriteAllText((m.ToString()), fileName);
+                }else
+                System.IO.File.WriteAllText(json_encode(m), fileName);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
         }
     }
 }

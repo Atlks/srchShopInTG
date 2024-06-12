@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 //   prj202405.lib.strCls
 namespace prj202405.lib
@@ -101,6 +102,8 @@ namespace prj202405.lib
 
         internal static bool containKwds(string? text, string trgSearchKwds)
         {
+            if (text == null)
+                return false;
             string[] kwds = trgSearchKwds.Split(" ");
             foreach (string kwd in kwds)
             {
@@ -119,6 +122,27 @@ namespace prj202405.lib
 
 
             return false;
+        }
+
+        public static string RemoveWords(string inputText, HashSet<string> wordsToRemove)
+        {
+            // 使用正则表达式拆分文本为单词
+            string[] words = Regex.Split(inputText, @"\W+");
+
+            // 使用 StringBuilder 构建最终的字符串
+            StringBuilder result = new StringBuilder();
+
+            foreach (string word in words)
+            {
+                // 如果当前单词不在要去除的单词集合中，则将其添加到结果中
+                if (!wordsToRemove.Contains(word))
+                {
+                    result.Append(word).Append(" ");
+                }
+            }
+
+            // 返回结果并去除末尾多余的空格
+            return result.ToString().Trim();
         }
 
         //pai除 城市词

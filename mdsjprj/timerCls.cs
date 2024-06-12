@@ -13,7 +13,7 @@ using ChineseCharacterConvert;
 using Convert = System.Convert;
 using System.Runtime.CompilerServices;
 using mdsj.libBiz;
-using static mdsj.other;
+using static mdsj.biz_other;
 
 namespace prj202405
 {

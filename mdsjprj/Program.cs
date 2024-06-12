@@ -36,7 +36,7 @@ using mdsj.libBiz;
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
 
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
@@ -49,6 +49,8 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
+
+using static mdsj.libBiz.tgBiz;
 
 namespace prj202405
 {
@@ -126,14 +128,14 @@ namespace prj202405
             foreach (var category in Enum.GetValues(typeof(Category)))
             {
                 Category enumValue = (Category)category;
-                string description = other._GetEnumDescription(enumValue);
+                string description = biz_other._GetEnumDescription(enumValue);
                 _categoryKeyValue.Add((int)enumValue, description);
             }
 
 
             #region 读取商家信息
             //  读取加入的群Ids           
-            await other._readMerInfo();
+            await biz_other._readMerInfo();
             #endregion
             #endregion
 
@@ -155,7 +157,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            timerCls.setTimerTask();
+            //   timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -167,11 +169,11 @@ namespace prj202405
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-
+            Console.WriteLine(0);
             var __METHOD__ = "evt_aHandleUpdateAsync";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
-            await other._readMerInfo();
+            await biz_other._readMerInfo();
             _logMsg(update);
             //auto add cht sess
             if (update?.Message != null)
@@ -275,7 +277,8 @@ namespace prj202405
                 if (update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text))
                 && update?.Message?.ReplyToMessage?.From?.Username == botname
                  && update?.Message?.ReplyToMessage?.Caption?.Contains("--联系方式--") == true
-                  && update?.Message?.ReplyToMessage?.Caption?.Contains("--客户点评--") == true
+                  && update?.Message?.ReplyToMessage?.Caption?.Contains("商家排名") == true
+                     && update?.Message?.ReplyToMessage?.Caption?.Contains("营业时间") == true
                 //    && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
                 )
                 {
@@ -373,12 +376,44 @@ namespace prj202405
                 }
 
 
-                //public search
-                if (update?.Message?.Chat?.Type != ChatType.Private && update?.Type == UpdateType.Message)
+                //public search jude
+                if (isGrpChat(update?.Message?.Chat?.Type) && update?.Type == UpdateType.Message)
                 {
+                    string? msgx = tglib.bot_getTxt(update);
+                    if (msgx == null || msgx.Length > 25)
+                    {
+                        Console.WriteLine(" msgx == null || msgx.Length > 25 ");
+                        return;
+                    }
+                    msgx = msgx.Trim();
+                    if (msgx.Trim().StartsWith("@" + botname)) //goto seasrch
+                        msgx = msgx.Substring(botname.Length + 1).Trim();
+                    msgx = msgx.Trim();
+
+                    HashSet<string> trgWdSt = ReadWordsFromFile("搜索触发词.txt");
+                    var trgWd = string.Join(" ", trgWdSt);
+                    if (!strCls.containKwds(update?.Message?.Text, trgWd))
+                    {
+                        Console.WriteLine(" 不包含触发词，ret");
+                        return;
+                    }
+
+                    //bao含触发词，进一步判断
+
+                    //去除搜索触发词，比如哪里有
+                    msgx = msgx.Replace("联系方式", " ");
+                    HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
+                    msgx = RemoveWords(msgx, hs);
+
+                    //是否包含搜索词 商品或服务关键词
+                    HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                    if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
+                    {
+                        Console.WriteLine(" 不包含商品服务词，ret"); return;
+                    }
+
                     await evt_msgTrgSrch(botClient, update);
                     dbgCls.setDbgValRtval(__METHOD__, 0);
-
                     return;
                 }
 
@@ -399,6 +434,7 @@ namespace prj202405
 
 
                 //查看商家结果 defalt is detail view
+                //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
                 if (update.Type is UpdateType.CallbackQuery)
                 {
                     await evt_View(botClient, update);
@@ -451,6 +487,14 @@ namespace prj202405
             if (msgx.Trim().StartsWith("@" + botname))
                 msgx = msgx.Substring(botname.Length + 1).Trim();
             msgx = msgx.Trim();
+
+            msgx = msgx.Replace("联系方式", " ");
+            //去除搜索触发词，比如哪里有
+            HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
+            msgx = RemoveWords(msgx, hs);
+            // 搜索触发词
+
+
 
 
 
@@ -612,7 +656,7 @@ namespace prj202405
 
             merchant.Menu = GetText.GetBetween(text, "商家菜单:", "\n");
             address.Merchant.Add(merchant);
-            await other._SaveConfig();
+            await biz_other._SaveConfig();
             try
             {
                 await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
@@ -668,11 +712,11 @@ namespace prj202405
                 tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
                 tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-       
+
             //todo reply
         }
 
@@ -881,7 +925,7 @@ namespace prj202405
                 ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
                 user.Comments++;
-                await other._SaveConfig();
+                await biz_other._SaveConfig();
                 try
                 {
                     await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
@@ -999,7 +1043,7 @@ namespace prj202405
                     return;
                 }
 
-                await other._SaveConfig();
+                await biz_other._SaveConfig();
 
                 try
                 {
@@ -1423,7 +1467,7 @@ namespace prj202405
                     }
                 }
 
-                await other._SaveConfig();
+                await biz_other._SaveConfig();
             }
             catch (Exception e)
             {
@@ -1999,7 +2043,7 @@ namespace prj202405
                 score = Convert.ToInt32(sc);
             }
             #region 受限了
-            var operaCount = await other._SetUserOperas(cq.From.Id);
+            var operaCount = await biz_other._SetUserOperas(cq.From.Id);
             var answer = string.Empty;
             //24小时10个   一周30个    一个月50个   一年150个  
             if (operaCount.Years > 150)
@@ -2129,7 +2173,7 @@ namespace prj202405
             };
 
             //营业时间
-            result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(contact_Merchant.StartTime) + "-" + timeCls.FormatTimeSpan(contact_Merchant.EndTime) + " " + other._IsBusinessHours(contact_Merchant.StartTime, contact_Merchant.EndTime);
+            result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(contact_Merchant.StartTime) + "-" + timeCls.FormatTimeSpan(contact_Merchant.EndTime) + " " + biz_other._IsBusinessHours(contact_Merchant.StartTime, contact_Merchant.EndTime);
 
             var contactScore = contact_Merchant.Scores.Count == 0 ? 5 : contact_Merchant.Scores.Select(u => u.Value).Average();
             //打分
@@ -2255,7 +2299,8 @@ namespace prj202405
 
             }
             #region 显示评价
-            result = pinlun.pinlun_getpinlun(contact_Merchant, result);
+            string pinlunRzt = pinlun.pinlun_getpinlun(contact_Merchant);
+            result = result + pinlunRzt;
             #endregion
 
             //[
@@ -2318,8 +2363,19 @@ namespace prj202405
             }
             if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
             {
-                await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
-
+                try
+                {
+                    logCls.log(result, "detailClickLogDir");
+                    //  result = "ttt";
+                    Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+                  
+                    logCls.log(m, "detailClickLogDir");
+                }catch(Exception e)
+                {
+                    logCls.logErr2025(e, "detal click()", "errlog");
+                }
+                 
+             
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
                 return;
@@ -2361,7 +2417,7 @@ namespace prj202405
                 {
                     Console.WriteLine("编辑联系方式时出错:" + e.Message);
                 }
-                await other._SaveConfig();
+                await biz_other._SaveConfig();
                 // }
 
 

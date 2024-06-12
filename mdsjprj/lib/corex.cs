@@ -11,7 +11,10 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
-
+        public static bool IsString(object input)
+        {
+            return input is string;
+        }
 
 
 

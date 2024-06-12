@@ -18,10 +18,10 @@ using DocumentFormat.OpenXml.Bibliography;
 using SqlParser;
 using SqlParser.Ast;
 using mdsj.lib;
-using static mdsj.other;
+using static mdsj.biz_other;
 using System.Collections.Generic;
 
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
@@ -35,7 +35,7 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 
 
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
@@ -55,20 +55,38 @@ namespace prj202405
     internal class testCls
     {
 
-  
+        public static HashSet<string> MergeArrayWithHashSet(string s, HashSet<string> set)
+        {
+            string[] array = s.Split(" ");
+            // 创建一个新的 HashSet<string>，包含 HashSet<string> 的所有元素
+            HashSet<string> resultSet = new HashSet<string>(set);
+
+            // 将字符串数组中的所有元素添加到新的 HashSet<string> 中
+            foreach (string item in array)
+            {
+                resultSet.Add(item);
+            }
+
+            return resultSet;
+        }
 
         internal static void test()
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
-                http_GetHttpResponseAsync("https://t.me/aflknw202563");
+             //   getProdSvrWdlib();
 
-            //    json2dbMrcht();
+                //    增加分类addcate();
+
+
+                //    http_GetHttpResponseAsync("https://t.me/aflknw202563");
+
+                //    json2dbMrcht();
 
                 var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
                 logErr2025(o, "func_get_args", "errlogDir2024");
-                
-               // exportCftFrmDb();
+
+                // exportCftFrmDb();
                 //var sql_dbf = "mrcht.json";
                 //List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
 
@@ -179,6 +197,42 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static void getProdSvrWdlib()
+        {
+            var words = new HashSet<string>();
+            //建立商品与服务词库
+            List<SortedList> li = ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
+            foreach (SortedList rw in li)
+            {
+                string wds = rw["商家"].ToString();
+                words = MergeArrayWithHashSet(wds, words);
+                words = MergeArrayWithHashSet(rw["关键词"].ToString(), words);
+                words = MergeArrayWithHashSet(rw["分类关键词"].ToString(), words);
+
+            }
+
+            var txt = string.Join("\r\n", words);
+            System.IO.File.WriteAllText("商品词.txt", txt);
+        }
+
+        private static void 增加分类addcate()
+        {
+            List<SortedList> rws = ormIni.qryV2("cateECns.ini");
+
+            SortedList map = rws[0];
+
+
+            List<SortedList> li = ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
+            foreach (SortedList rw in li)
+            {
+                object? cateE = rw["cateEgls"];
+                arrCls.addRplsKeyV(rw, "分类", map[cateE.ToString()]);
+            }
+
+
+            ormSqlt.saveMltHiPfm(li, "mercht商家数据/缅甸.db");
         }
 
         private static void json2dbMrcht()

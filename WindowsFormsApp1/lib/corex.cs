@@ -1,18 +1,91 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using static prj202405.lib.corex;
 namespace prj202405.lib
 {
     //prj202405.lib.corex
     internal class corex
     {
+        /*
+         * 
+         * 
+         *  传入 11000 是 IE11, 9000 是 IE9, 只不过当试着传入 6000 时, 理应是 IE6, 
+         *  可实际却是 Edge, 这时进一步测试, 当传入除 IE 现有版本以外的一些数值时 WebBrowser 都使用 Edge 内核
+         *  */
+        /// <summary>
+        /// 修改注册表信息使WebBrowser使用指定版本IE内核
+        /// </summary>
+        public static void SetFeatures(UInt32 ieMode)
+        {
+            if (LicenseManager.UsageMode != LicenseUsageMode.Runtime)
+            {
+                throw new ApplicationException();
+            }
+            //获取程序及名称
+            string appName = System.IO.Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+            string featureControlRegKey = "HKEY_CURRENT_USER\\Software\\Microsoft\\Internet Explorer\\Main\\FeatureControl\\";
+            //设置浏览器对应用程序(appName)以什么模式(ieMode)运行
+            Registry.SetValue(featureControlRegKey + "FEATURE_BROWSER_EMULATION", appName, ieMode, RegistryValueKind.DWord);
+            //不晓得设置有什么用
+          //  Registry.SetValue(featureControlRegKey + "FEATURE_ENABLE_CLIPCHILDREN_OPTIMIZATION", appName, 1, RegistryValueKind.DWord);
+        }
 
+        //D:\0prj\mdsj\WindowsFormsApp1\sqltnode\qry.js
+        public  static string ExecuteNodeScript(string scriptPath, string arguments)
+        {
+            // Create a new process to run the Node.js script
+            Process process = new Process();
+            process.StartInfo.FileName = "node";
+            process.StartInfo.Arguments = $"{scriptPath} {arguments}";
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.StandardOutputEncoding = Encoding.UTF8; // 设置标准输出编码
 
+            process.StartInfo.StandardErrorEncoding = Encoding.UTF8;  // 设置标准错误输出编码
+            // Capture the output from the process
+            string output;
+            string errorOutput="";
+
+            try
+            {
+                process.Start();
+
+                // Read the standard output and error output streams
+                using (StreamReader outputReader = process.StandardOutput)
+                {
+                    output = outputReader.ReadToEnd();
+                }
+                using (StreamReader errorReader = process.StandardError)
+                {
+                    errorOutput = errorReader.ReadToEnd();
+                }
+
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                output = $"An error occurred while executing the Node.js script: {ex.Message}";
+            }
+
+            // If there is any error output, append it to the main output
+            if (!string.IsNullOrEmpty(errorOutput))
+            {
+                output += Environment.NewLine + "Error output: " + errorOutput;
+            }
+
+            return output;
+        }
 
 
         public static SortedList DictionaryToSortedList<TKey, TValue>(Dictionary<TKey, TValue> dictionary)

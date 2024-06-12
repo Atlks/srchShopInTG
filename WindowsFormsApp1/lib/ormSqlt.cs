@@ -41,8 +41,8 @@ namespace prj202405.lib
             // setDbgFunEnter(__METHOD__, func_get_args());
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
-            //     SQLitePCL.raw.SetProvider(new SQLitePCL.ISQLite3Provider());
-            SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+             //   SQLitePCL.raw.SetProvider(new SQLitePCL.ISQLite3Provider());
+
             cn.Open();
             //  cn.Close();
 
@@ -75,18 +75,7 @@ namespace prj202405.lib
                 cmd.Connection = cn;
                 cmd.CommandText = sql;
                 cmd_ExecuteNonQuery(cmd);
-                // setDbgVal(__METHOD__, "", $crtColm);
-
-                //   setDbgVal(__METHOD__, "sql_ret", $db->exec($crtColm));
-
-
-                //$idxname =$k."Idx2024";
-                //$sql_idx = "  CREATE INDEX $idxname ON  $tabl (  $k ); ";
-                //        setDbgVal(__METHOD__, "", $sql_idx);
-
-                //        setDbgVal(__METHOD__, "sql_ret", $db->exec($sql_idx));
-                //    }
-                //    setDbgRtVal(__METHOD__, "");
+                 
             }
 
 
@@ -172,6 +161,8 @@ namespace prj202405.lib
         }
         public static List<SortedList> qryV2(string dbFileName)
         {
+            // 初始化SQLitePCL
+            Batteries_V2.Init();
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -181,7 +172,7 @@ namespace prj202405.lib
             cn.Open();
             //    SqliteCommand cmd = new SqliteCommand();
             //cmd.Connection = cn;
-            //    cmd.CommandText = sql;
+            //    cmd.CommandText = sql;  Install-Package Microsoft.Data.Sqlite
             //    cmd.ExecuteNonQuery
 
 

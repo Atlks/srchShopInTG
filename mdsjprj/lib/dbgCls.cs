@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using static mdsj.other;
+using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib

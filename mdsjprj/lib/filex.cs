@@ -133,6 +133,34 @@ namespace prj202405.lib
             }
         }
 
+        public static HashSet<string> ReadWordsFromFile(string filePath)
+        {
+            var words = new HashSet<string>();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        // 拆分行中的单词，按空格和回车拆分
+                        var splitWords = line.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var word in splitWords)
+                        {
+                          var  word1= word.Trim();
+                            words.Add(word1);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading file: " + ex.Message);
+            }
+
+            return words;
+        }
         public static ArrayList rdWdsFromFileSplitComma(string filePath)
         {
             // 创建一个 ArrayList 来存储所有的单词
