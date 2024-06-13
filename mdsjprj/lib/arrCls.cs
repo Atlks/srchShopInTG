@@ -101,12 +101,13 @@ namespace prj202405.lib
                 if (hashobj.ContainsKey(fld))
                     return hashobj[fld];
                 return v2;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return v2;
             }
-                
-           
+
+
         }
 
         public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
@@ -119,7 +120,7 @@ namespace prj202405.lib
 
                 else
                     return v2;
-               
+
 
             }
             return v2;
@@ -172,9 +173,9 @@ namespace prj202405.lib
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             return saveList_hpmod;
         }
-        
 
-                 public static List<t> array_merge<t>(List<t> list1, List<t> list2)
+
+        public static List<t> array_merge<t>(List<t> list1, List<t> list2)
         {
             List<t> result = new List<t>();
 
@@ -318,15 +319,12 @@ namespace prj202405.lib
         {
             // 使用 TryGetValue 方法获取值
             object value;
-            try
-            {
-                return whereExprsObj[k].ToString();
+            if (whereExprsObj.ContainsKey(k))
 
-            }
-            catch (Exception ex)
-            {
+                return whereExprsObj[k].ToString();
+            else
                 return null;
-            }
+
             //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
             //{
             //    return (string)value;
@@ -409,6 +407,16 @@ namespace prj202405.lib
                 listIot[key] = objSave;
             else
                 listIot.Add(key, objSave);
+        }
+
+        internal static HashSet<string> addSetNStr(HashSet<string> set, string v)
+        {
+            string[] a = v.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            foreach (string wd in a)
+            {
+                set.Add(wd);
+            }
+            return set;
         }
 
         //internal static int getRowVal(object s1, string v1, int v2)

@@ -26,7 +26,10 @@ function getQueryParam(param) {
 
 $(document).ready(function () {
 
-   // alert(getQueryParam("id"))
+    // alert(getQueryParam("id"))
+    var id = getQueryParam("id");
+    if (!id)
+        return;
     $("#id").val(getQueryParam("id"))
     //window.id.value = getQueryParam("id");
 

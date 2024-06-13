@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
+using Mono.Web;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -15,6 +17,33 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
+
+        public static SortedList urlqry2hashtb(string urlqryStr)
+        {
+
+            // 解析查询字符串为字典
+            NameValueCollection queryString = HttpUtility.ParseQueryString(urlqryStr);
+            var QueryHashtb = new System.Collections.Generic.Dictionary<string, string>();
+
+            // 将解析结果存入字典
+            foreach (string key in queryString.AllKeys)
+            {
+                QueryHashtb.Add(key, queryString[key]);
+            }
+
+
+
+            // 创建一个 SortedList 并初始化大小
+            SortedList sortedList = new SortedList(QueryHashtb.Count);
+
+            // 将 Dictionary 中的项添加到 SortedList 中
+            foreach (var pair in QueryHashtb)
+            {
+                sortedList.Add(pair.Key, pair.Value.ToString());
+            }
+
+            return sortedList;
+        }
         /*
          * 
          * 

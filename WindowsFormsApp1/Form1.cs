@@ -27,7 +27,7 @@ namespace WindowsFormsApp1
             InitializeComponent();
             //webBrowser1.Document.InvokeScript("MyCLickFunction");
             
-            new ScriptManager(this).list();
+           // new ScriptManager(this).list_click();
 
 
             string filePath = @"../../idx.htm";

@@ -8,6 +8,18 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static prj202405.lib.corex;
 //  prj202405.lib.db
 namespace prj202405.lib
 {
@@ -308,6 +320,126 @@ namespace prj202405.lib
 
             }
             return v2;
+        }
+
+
+        //parti spt
+        public static List<SortedList> qry888(string dataDir, string partnsExprs,
+            Func<SortedList, bool> whereFun, Func<SortedList, int> ordFun = null,
+                Func<SortedList, SortedList> selktFun = null, string prtnFileExt = "ini")
+        {
+            List<SortedList> rztLi = new List<SortedList>();
+            var patns_dbfs = db.calcPatnsV2(dataDir, partnsExprs, prtnFileExt);
+            string[] arr = patns_dbfs.Split(',');
+            foreach (string dbf in arr)
+            {
+                List<SortedList> li = _qryBySnglePart(dbf, whereFun);
+                rztLi = arrCls.array_merge(rztLi, li);
+            }
+
+            return rztLi;
+        }
+
+        //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
+        public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun)
+        {
+            List<SortedList> li = rdFrmStoreEngr(dbf);
+
+            li = db.qryV7(li, whereFun, null, null);
+            return li;
+        }
+
+        public static string find(string id ,string dataDir,string partns = "")
+        {
+
+            string soluDir = @"../../../";
+            soluDir = filex.GetAbsolutePath(soluDir);
+          //  var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
+                if (string.IsNullOrEmpty(id))
+                    return false;
+                if (row["id"].ToString().ToLower().Contains(id.ToLower()))
+                    return true;
+                return false;
+            };
+
+            //from xxx partion(aa,bb) where xxx
+            List<SortedList> rztLi = qry888(dataDir, partns, whereFun,null,null);
+
+            // return rztLi[0];
+            //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
+            return json_encode(rztLi[0]);
+        }
+
+
+        public static string save(SortedList sortedListNew, Func<SortedList, string> setStrEngrFun, string dataDir, string prtnFileExt, SortedList dbg)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                SortedList old = json_decode<SortedList>(find(sortedListNew["id"].ToString(),dataDir, partns:""));
+                mereed = CopyToOldSortedList(sortedListNew, old);
+            }
+            else
+            {
+                mereed = sortedListNew;
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                sortedListNew.Add("id", timestamp);
+            }
+
+            // string str = save2storeFLByNodejs( mereed, dbg);
+            string str = setStrEngrFun(mereed);
+            return str;
+        }
+
+        public static string save2storeFLByNodejs(SortedList mereed, string saveDataDir, string prtnKey, string prtnFileExt, SortedList dbg)
+        {
+            SortedList prm = new SortedList();
+            prm.Add("dbg", dbg);
+            prm.Add("saveobj", mereed);
+
+
+          
+            prm.Add("dbf", ($"{saveDataDir}\\{mereed[prtnKey]}."+ prtnFileExt));
+
+            string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            Directory.CreateDirectory("prmDir");
+            File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
+            string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
+
+            string prjDir = @"../../";
+            string str = ExecuteNodeScript($"{prjDir}\\sqltnode\\save.js", prm_fileAbs);
+
+            string marker = "----------marker----------";
+            str = ExtractTextAfterMarker(str, marker);
+            str = str.Trim();
+            return str;
+        }
+
+
+        private static List<SortedList> rdFrmStoreEngr(string dbf)
+        {
+            SortedList prm = new SortedList();
+
+            //   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
+            prm.Add("dbf", ($"{dbf}"));
+
+            string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            Directory.CreateDirectory("prmDir");
+            File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
+
+            string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
+
+            string prjDir = @"../../";
+            string str = ExecuteNodeScript($"{prjDir}\\sqltnode\\qry.js", prm_fileAbs);
+            string marker = "----------qryrzt----------";
+            str = ExtractTextAfterMarker(str, marker);
+            str = str.Trim();
+            string txt = File.ReadAllText($"{prjDir}\\sqltnode\\tmp\\" + str);
+            List<SortedList> li = json_decode(txt);
+            return li;
         }
         internal static string calcPatnsV2(string dir, string partfile区块文件,string Extname="txt")
         {

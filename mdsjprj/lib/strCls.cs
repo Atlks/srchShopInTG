@@ -34,6 +34,8 @@ namespace prj202405.lib
             segmenter.LoadUserDict("user_dict.txt");
             segmenter.AddWord("会所"); // 可添加一个新词
             segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            segmenter.AddWord("御龙湾"); // 可添加一个新词
+            
             IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();
@@ -147,26 +149,26 @@ namespace prj202405.lib
 
         //pai除 城市词
         //触发词  城市词  商品词
-        internal static int containCalcCntScore(string seasrchKw2ds, IEnumerable<string> segments)
-        {
-            int n = 0;
-            foreach (string kwd in segments)
-            {
-                var kwd2 = kwd.Trim();
-                if (kwd2.Length > 0)
-                {
-                    if (strBiz_isPostnWord(kwd2))
-                        continue;
-                    if (seasrchKw2ds.Contains(kwd2))
-                    {
-                        n++;
-                        Console.WriteLine(" contain kwd=>" + kwd2);
-                    }
+        //internal static int containCalcCntScore(string seasrchKw2ds, IEnumerable<string> segments)
+        //{
+        //    int n = 0;
+        //    foreach (string kwd in segments)
+        //    {
+        //        var kwd2 = kwd.Trim();
+        //        if (kwd2.Length > 0)
+        //        {
+        //            if (strBiz_isPostnWord(kwd2))
+        //                continue;
+        //            if (seasrchKw2ds.Contains(kwd2))
+        //            {
+        //                n++;
+        //                Console.WriteLine(" contain kwd=>" + kwd2);
+        //            }
                       
-                }
-            }
-            return n;
-        }
+        //        }
+        //    }
+        //    return n;
+        //}
 
         private static bool strBiz_isPostnWord(string kwd2)
         {
@@ -251,6 +253,41 @@ namespace prj202405.lib
                 return true;
             }
             return false;
+        }
+
+        internal static int containCalcCntScoreSetfmt(HashSet<string> set, string[] segments)
+        {
+          //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
+         //   Console.WriteLine();
+            set.Remove("店");
+            set.Remove("飞机号");
+
+            HashSet<string> blackListWd=new HashSet<string>();
+
+            blackListWd.Add("店");
+            blackListWd.Add("飞机号");
+
+
+            int n = 0;
+            foreach (string kwd in segments)
+            {
+                var kwd2 = kwd.Trim();
+                
+                if (kwd2.Length > 0)
+                {
+                    if (blackListWd.Contains(kwd2))
+                        continue;
+                    if (strBiz_isPostnWord(kwd2))
+                        continue;
+                    if (set.Contains(kwd2))
+                    {
+                        n++;
+                        Console.WriteLine(" contain. kwd=>" + kwd2);
+                    }
+
+                }
+            }
+            return n;
         }
     }
 }

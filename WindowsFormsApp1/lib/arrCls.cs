@@ -384,7 +384,20 @@ namespace prj202405.lib
 
             throw new ArgumentException("Unsupported collection type", nameof(collection));
         }
+        public static SortedList CopyToOldSortedList(SortedList newList, SortedList oldList)
+        {
+            // 创建一个新的 SortedList
+            // SortedList newList = new SortedList();
 
+            // 遍历旧的 SortedList 并将每个键值对复制到新的 SortedList
+            foreach (DictionaryEntry entry in newList)
+            {
+                arrCls.addRplsKeyV(oldList, entry.Key.ToString(), entry.Value);
+                //   newList.Add(entry.Key, entry.Value);
+            }
+
+            return newList;
+        }
         internal static void addRplsKeyV(SortedList listIot, string key, SortedList objSave)
         {
             if (listIot.ContainsKey(key))

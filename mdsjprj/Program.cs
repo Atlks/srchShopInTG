@@ -157,7 +157,7 @@ namespace prj202405
                 ThrowPendingUpdates = true,
             });
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            //   timerCls.setTimerTask();
+            timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
@@ -367,11 +367,23 @@ namespace prj202405
 
                 #region sezrch
 
+                HashSet<string> 商品与服务词库2 = ReadWordsFromFile("商品与服务词库.txt");
+                string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
+                SortedList whereMap2 = new SortedList();
+                whereMap2.Add("fuwuci", fuwuci);
 
                 //privt msg serch
                 if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
                 {
-                    await evt_msgTrgSrch(botClient, update);
+                    HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                    if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
+                    {
+                        Console.WriteLine(" 不包含商品服务词，ret");
+
+                        return;
+                    }
+                    string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
+                    await evt_msgTrgSrch(botClient, update, fuwuWd);
                     return;
                 }
 
@@ -392,6 +404,7 @@ namespace prj202405
 
                     HashSet<string> trgWdSt = ReadWordsFromFile("搜索触发词.txt");
                     var trgWd = string.Join(" ", trgWdSt);
+                    Console.WriteLine(" 触发词 chk");
                     if (!strCls.containKwds(update?.Message?.Text, trgWd))
                     {
                         Console.WriteLine(" 不包含触发词，ret");
@@ -406,13 +419,24 @@ namespace prj202405
                     msgx = RemoveWords(msgx, hs);
 
                     //是否包含搜索词 商品或服务关键词
+                    Console.WriteLine(" 商品或服务关键词 srch");
                     HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
                     if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                     {
-                        Console.WriteLine(" 不包含商品服务词，ret"); return;
+                        Console.WriteLine(" 不包含商品服务词，ret"); 
+
+                        return;
+                    }
+                    string fuwuWd=getFuwuci(update?.Message?.Text, 商品与服务词库);
+                    if (getFuwuci == null)
+                    {
+                        Console.WriteLine(" 不包含商品服务词，ret");
+                        return;
                     }
 
-                    await evt_msgTrgSrch(botClient, update);
+                   
+
+                    await evt_msgTrgSrch(botClient, update, fuwuWd);
                     dbgCls.setDbgValRtval(__METHOD__, 0);
                     return;
                 }
@@ -421,14 +445,14 @@ namespace prj202405
                 //next page evt,,,
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
                 {
-                    await evt_nextPrePage(botClient, update);
+                    await evt_nextPrePage(botClient, update, whereMap2);
                     return;
                 }
 
                 //return evt
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
                 {
-                    await evt_ret_mchrt_list(botClient, update);
+                    await evt_ret_mchrt_list(botClient, update, whereMap2);
                     return;
                 }
 
@@ -458,6 +482,19 @@ namespace prj202405
 
         }
 
+        private static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
+        {
+            if (text == null)
+                return null;
+            string[] spltWds = calcKwdsAsArr(ref text);
+            foreach(string wd in spltWds)
+            {
+                if (商品与服务词库.Contains(wd))
+                    return wd;
+            }
+            return null;
+        }
+
         private static void _logMsg(Update update)
         {
             try
@@ -478,8 +515,10 @@ namespace prj202405
 
         }
 
-        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update)
+        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd)
         {
+            SortedList whereMap = new SortedList();
+            whereMap.Add("fuwuci", fuwuWd);
             var __METHOD__ = "evt_msgTrgSrch";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
@@ -500,7 +539,7 @@ namespace prj202405
 
             if (msgx != null && msgx.Length < 25)
             {
-                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap);
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
                 return;
@@ -667,7 +706,7 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update)
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update,SortedList whereMap2)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -676,12 +715,12 @@ namespace prj202405
                 if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap2);
                 return;
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update)
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update , SortedList fuwuci)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx != null)
@@ -689,7 +728,7 @@ namespace prj202405
                 if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update);
+                await GetList_qryV2(msgx, 1, 5, botClient, update,fuwuci);
                 return;
             }
         }
@@ -1224,7 +1263,7 @@ namespace prj202405
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
+        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMap)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
@@ -1317,7 +1356,7 @@ namespace prj202405
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
-
+                whereExprsObj.Add("fuwuci", TryGetValueAsStrDefNull( whereMap,"fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
@@ -2368,14 +2407,15 @@ namespace prj202405
                     logCls.log(result, "detailClickLogDir");
                     //  result = "ttt";
                     Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
-                  
+
                     logCls.log(m, "detailClickLogDir");
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     logCls.logErr2025(e, "detal click()", "errlog");
                 }
-                 
-             
+
+
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
                 return;

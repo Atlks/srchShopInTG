@@ -20,6 +20,8 @@ using City = prj202405.City;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
 
+using static prj202405.lib.strCls;
+
 namespace mdsj
 {
     internal class mrcht
@@ -98,6 +100,9 @@ namespace mdsj
           //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
             string[] kwds = strCls.calcKwdsAsArr(ref msgCtain);
+
+            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
+            string weizhici = getWeizhici(postnKywd位置词set, kwds);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
             var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFroms, (SortedList row) =>
                  {
@@ -115,19 +120,48 @@ namespace mdsj
                          return false;
 
                      //if condt  containxx(row,msgSpltKwArr)>0
+
                      var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "城市关键词") +
                        "__pkkwds=> " + arrCls.rowValDefEmpty(row, "园区关键词") +
                         "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "关键词") +
                         "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "分类关键词");
                      row["_seasrchKw2ds"] = seasrchKwds;
+                     HashSet<string> curRowKywdSset = new HashSet<string>();
 
-                     int containScore = strCls.containCalcCntScore(seasrchKwds, kwds);
-                     if (containScore > 0)
+                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "关键词"));
+                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "分类关键词"));
+                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "城市关键词"));
+                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "园区关键词"));
+
+                     string fuwuci = whereExprsObj["fuwuci"];
+                     if (!curRowKywdSset.Contains(fuwuci))
+                         return false;
+                     int containScore = 0;
+                 
+                     if(weizhici==null)
                      {
-                         row["_containCntScore"] = containScore;
-                         return true;
+                           containScore = strCls.containCalcCntScoreSetfmt(curRowKywdSset, kwds);
+                         if (containScore > 0)
+                         {
+                             row["_containCntScore"] = containScore;
+                             return true;
+                         }
+                         return false;
                      }
-                     return false;
+                     else
+                     {
+                         HashSet<string> curRw_posnSet = new HashSet<string>();
+                         curRw_posnSet.Add(row["国家"].ToString());
+                         curRw_posnSet.Add(row["城市"].ToString());
+                         curRw_posnSet.Add(row["园区"].ToString());
+                         Console.WriteLine(curRw_posnSet.Join(" "));
+                         if (curRw_posnSet.Contains(weizhici))
+                             return true;
+                         else
+                             return false;
+                     }
+                  
+                 
                  },
                  (SortedList sl) =>
                  {
@@ -147,84 +181,97 @@ namespace mdsj
             return rsRztInlnKbdBtn;
         }
 
-        // seelct from dbfform patn(111) wehre xxxx   sekect  List<InlineKeyboardButton[
-        public static List<InlineKeyboardButton[]> qryByMsgKwdsV3dep(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
+        private static string getWeizhici(HashSet<string> postnKywd位置词set, string[] kwds)
         {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));
-
-            //----------kwds splt
-            string msgx = whereExprsObj["msgCtain"];
-            string[] kwds = strCls.calcKwdsAsArr(ref msgx);
-
-            ArrayList rows_rzt4srch = [];
-            List<SortedList> rows = ormJSonFL.qry(dbfFrom);
-
-            //------------------------------- from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
-            foreach (SortedList row in rows)
+            //if (text == null)
+            //    return null;
+            string[] spltWds = kwds;
+            foreach (string wd in spltWds)
             {
-
-                //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                if (hasCondt(whereExprsObj, "city"))
-                    if (!strCls.eq(row["cityname"], arrCls.TryGetValue(whereExprsObj, "city")))   //  cityname not in (citysss) 
-                        continue;  //skip
-                if (hasCondt(whereExprsObj, "park"))
-                    if (!strCls.eq(row["parkname"], arrCls.TryGetValue(whereExprsObj, "park")))   //  cityname not in (citysss) 
-                        continue;  //skip
-                if (hasCondt(whereExprsObj, "ctry"))
-                    if (!strCls.eq(row["ctry"], arrCls.TryGetValue(whereExprsObj, "ctry")))   //  cityname not in (citysss) 
-                        continue;  //skip
-                if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
-                    continue;   //skip
-
-
-                //if condt  containxx(row,msgSpltKwArr)>0
-                var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "CityKeywords") +
-                  "__pkkwds=> " + arrCls.rowValDefEmpty(row, "parkkwd") +
-                   "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "KeywordString") +
-                   "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "CategoryStrKwds");
-                row["_seasrchKw2ds"] = seasrchKwds;
-
-                int containScore = strCls.containCalcCntScore(seasrchKwds, kwds);
-                if (containScore > 0)
-                {
-                    row["_containCntScore"] = containScore;
-                    rows_rzt4srch.Add(row);
-                }
-                //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
-                // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+                if (postnKywd位置词set.Contains(wd))
+                    return wd;
             }
-            const string dbgFlDir = "rows_rzt4srchDirdbg";
-            dbgooutput(rows_rzt4srch, dbgFlDir);
-
-
-            //--------------------order prcs
-            // 使用 LINQ 对 ArrayList 进行排序
-            Func<SortedList, int> keySelector = sl => (int)sl["_containCntScore"];
-            List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
-                                      .OrderBy(keySelector)
-                                      .ToList();
-
-
-            //-------------------------map select prcs
-            List<InlineKeyboardButton[]> rsRztInlnKbdBtn = [];
-            for (int i = 0; i < rows_rzt4srch.Count; i++)
-            {
-                SortedList row = list[i];
-                string text = arrCls.rowValDefEmpty(row, "cityname") + " • " + arrCls.rowValDefEmpty(row, "parkname") + " • " + arrCls.rowValDefEmpty(row, "Name");
-                string guid = arrCls.rowValDefEmpty(row, "Guid");
-                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
-                rsRztInlnKbdBtn.Add(btnsInLine);
-            }
-            //count = re
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
-
-
-
-            return rsRztInlnKbdBtn;
-            //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
-            //  results22 = results22.Skip(0 * 10).Take(5).ToList();
+            return null;
         }
+
+        // seelct from dbfform patn(111) wehre xxxx   sekect  List<InlineKeyboardButton[
+        //public static List<InlineKeyboardButton[]> qryByMsgKwdsV3dep(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
+        //{
+        //    var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+        //    dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFrom, whereExprsObj));
+
+        //    //----------kwds splt
+        //    string msgx = whereExprsObj["msgCtain"];
+        //    string[] kwds = strCls.calcKwdsAsArr(ref msgx);
+
+        //    ArrayList rows_rzt4srch = [];
+        //    List<SortedList> rows = ormJSonFL.qry(dbfFrom);
+
+        //    //------------------------------- from xx where city=xx and park=xx and  containxx(row,msgSpltKwArr)>0
+        //    foreach (SortedList row in rows)
+        //    {
+
+        //        //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+        //        if (hasCondt(whereExprsObj, "city"))
+        //            if (!strCls.eq(row["cityname"], arrCls.TryGetValue(whereExprsObj, "city")))   //  cityname not in (citysss) 
+        //                continue;  //skip
+        //        if (hasCondt(whereExprsObj, "park"))
+        //            if (!strCls.eq(row["parkname"], arrCls.TryGetValue(whereExprsObj, "park")))   //  cityname not in (citysss) 
+        //                continue;  //skip
+        //        if (hasCondt(whereExprsObj, "ctry"))
+        //            if (!strCls.eq(row["ctry"], arrCls.TryGetValue(whereExprsObj, "ctry")))   //  cityname not in (citysss) 
+        //                continue;  //skip
+        //        if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
+        //            continue;   //skip
+
+
+        //        //if condt  containxx(row,msgSpltKwArr)>0
+        //        var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "CityKeywords") +
+        //          "__pkkwds=> " + arrCls.rowValDefEmpty(row, "parkkwd") +
+        //           "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "KeywordString") +
+        //           "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "CategoryStrKwds");
+        //        row["_seasrchKw2ds"] = seasrchKwds;
+
+        //        int containScore = strCls.containCalcCntScore(seasrchKwds, kwds);
+        //        if (containScore > 0)
+        //        {
+        //            row["_containCntScore"] = containScore;
+        //            rows_rzt4srch.Add(row);
+        //        }
+        //        //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
+        //        // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+        //    }
+        //    const string dbgFlDir = "rows_rzt4srchDirdbg";
+        //    dbgooutput(rows_rzt4srch, dbgFlDir);
+
+
+        //    //--------------------order prcs
+        //    // 使用 LINQ 对 ArrayList 进行排序
+        //    Func<SortedList, int> keySelector = sl => (int)sl["_containCntScore"];
+        //    List<SortedList> list = rows_rzt4srch.Cast<SortedList>()
+        //                              .OrderBy(keySelector)
+        //                              .ToList();
+
+
+        //    //-------------------------map select prcs
+        //    List<InlineKeyboardButton[]> rsRztInlnKbdBtn = [];
+        //    for (int i = 0; i < rows_rzt4srch.Count; i++)
+        //    {
+        //        SortedList row = list[i];
+        //        string text = arrCls.rowValDefEmpty(row, "cityname") + " • " + arrCls.rowValDefEmpty(row, "parkname") + " • " + arrCls.rowValDefEmpty(row, "Name");
+        //        string guid = arrCls.rowValDefEmpty(row, "Guid");
+        //        InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
+        //        rsRztInlnKbdBtn.Add(btnsInLine);
+        //    }
+        //    //count = re
+        //    dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+
+
+
+        //    return rsRztInlnKbdBtn;
+        //    //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+        //    //  results22 = results22.Skip(0 * 10).Take(5).ToList();
+        //}
 
 
         //public static List<InlineKeyboardButton[]> qryByMsgKwdsV2(string msg, string whereExprs, string dbf)

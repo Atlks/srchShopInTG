@@ -101,6 +101,7 @@ namespace mdsj.libBiz
                     return false;
 
                 // 
+                Console.WriteLine("搜索触发词 in isNumlMsgInGrp()");
                 var trgSearchKwds = " ";
                 var trgWd = biz_other.getTrgwdHash("搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
