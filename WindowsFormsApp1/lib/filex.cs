@@ -15,7 +15,18 @@ namespace prj202405.lib
 {
     internal class filex
     {
-      //  WriteAllText
+
+        public static string GetFilePathsCommaSeparated(string directoryPath)
+        {
+            // 获取目录下的所有文件路径
+            string[] filePaths = Directory.GetFiles(directoryPath);
+
+            // 将文件路径数组转换为逗号分割的字符串
+            string result = string.Join(",", filePaths);
+
+            return result;
+        }
+        //  WriteAllText
         //我们首先使用 System.IO.Path.GetInvalidFileNameChars 方法获取操作系统支持的非法文件名字符数组
         /*
          

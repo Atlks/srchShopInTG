@@ -20,6 +20,8 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
+
+using static libx.qryParser;
 //  prj202405.lib.db
 namespace prj202405.lib
 {
@@ -347,116 +349,13 @@ namespace prj202405.lib
             return rztLi;
         }
 
-        //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
-        public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> cfgStrEngr)
-        {
-            List<SortedList> li = cfgStrEngr(dbf);
-
-            li = db.qryV7(li, whereFun);
-            return li;
-        }
 
 
 
 
       
 
-        public static SortedList find(string id, string dataDir, string partns=null, Func<string, List<SortedList>> cfgStrEngrx = null )
-        {
-           
-            Func<SortedList, bool> whereFun = (SortedList row) =>
-            {
-                if (string.IsNullOrEmpty(id))
-                    return false;
-                if (row["id"].ToString().ToLower().Contains(id.ToLower()))
-                    return true;
-                return false;
-            };
-
-            //from xxx partion(aa,bb) where xxx
-            List<SortedList> rztLi = qry888(dataDir, partns, whereFun, cfgStrEngr: cfgStrEngrx);
-
-            // return rztLi[0];
-            //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
-            SortedList results = rztLi[0];
-            return results;
-        }
-
-        public static int save(SortedList sortedListNew, string dataDir, Func<SortedList, int> setStrEngrFun,  SortedList dbg=null)
-        {
-            SortedList mereed = new SortedList();
-            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
-            {
-                SortedList old =(find(sortedListNew["id"].ToString(), dataDir));
-                mereed = CopyToOldSortedList(sortedListNew, old);
-            }
-            else
-            {//new
-                mereed = sortedListNew;
-                // 获取当前时间并格式化为文件名
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                sortedListNew["id"]= timestamp;
-            }
-
-            // string str = save2storeFLByNodejs( mereed, dbg);
-            int str = setStrEngrFun(mereed);
-            return str;
-        }
-
-        public static int save2storeFLByNodejs(SortedList mereed, string saveDataDir, string prtnKey,  SortedList dbg)
-        {
-            SortedList prm = new SortedList();
-            prm.Add("dbg", dbg);
-            prm.Add("saveobj", mereed);
-
-
-
-            prm.Add("dbf", ($"{saveDataDir}\\{mereed[prtnKey]}.db" ));
-
-            string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            Directory.CreateDirectory("prmDir");
-            File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
-            string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
-
-            string prjDir = @"../../";
-            string str = ExecuteNodeScript($"{prjDir}\\sqltnode\\save.js", prm_fileAbs);
-
-            string marker = "----------marker----------";
-            str = ExtractTextAfterMarker(str, marker);
-            str = str.Trim();
-            return int.Parse(str);
-        }
-
-
-        public static List<SortedList> rdFrmStoreEngrFrmNodejsRdSqlt(string dbf)
-        {
-            if(!dbf.EndsWith(".db"))
-            {
-                string ext = ".db";
-                dbf = dbf + ext;
-            }
-           
-            SortedList prm = new SortedList();
-
-            //   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
-            prm.Add("dbf", ($"{dbf}"));
-
-            string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            Directory.CreateDirectory("prmDir");
-            File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
-
-            string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
-
-            string prjDir = @"../../";
-            string str = ExecuteNodeScript($"{prjDir}\\sqltnode\\qry.js", prm_fileAbs);
-            string marker = "----------qryrzt----------";
-            str = ExtractTextAfterMarker(str, marker);
-            str = str.Trim();
-            string txt = File.ReadAllText($"{prjDir}\\sqltnode\\tmp\\" + str);
-            List<SortedList> li = json_decode(txt);
-            return li;
-        }
-
+     
         internal static string calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -570,15 +469,6 @@ namespace prj202405.lib
             return result;
         }
 
-        static string GetFilePathsCommaSeparated(string directoryPath)
-        {
-            // 获取目录下的所有文件路径
-            string[] filePaths = Directory.GetFiles(directoryPath);
-
-            // 将文件路径数组转换为逗号分割的字符串
-            string result = string.Join(",", filePaths);
-
-            return result;
-        }
+      
     }
 }

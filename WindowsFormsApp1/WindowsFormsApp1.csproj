@@ -150,6 +150,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="lib\funCls.cs" />
+    <Compile Include="lib\qryParser.cs" />
+    <Compile Include="lib\storeEngr.cs" />
     <Compile Include="ScriptManager.cs" />
     <Compile Include="lib\arrCls.cs" />
     <Compile Include="lib\core.cs" />

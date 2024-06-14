@@ -22,11 +22,14 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
+using static libx.qryParser;
+using static libx.storeEngr;
 using System.IO;
 using Microsoft.Extensions.Primitives;
 using Mono.Web;
 using System.Collections.Specialized;
 using System.Security.Policy;
+using libx;
 namespace WindowsFormsApp1
 {
     [ComVisible(true)]
@@ -53,7 +56,7 @@ namespace WindowsFormsApp1
                     return true;
                 return false;
             };
-            string prtnFileExt = "db";
+           
             //from xxx partion(aa,bb) where xxx
 
 
@@ -61,7 +64,7 @@ namespace WindowsFormsApp1
             {
                 return   rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);               
             };
-            List<SortedList> rztLi = qry888(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
+            List<SortedList> rztLi = qryParser.qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
@@ -78,7 +81,7 @@ namespace WindowsFormsApp1
             {
                 return rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);
             };
-            SortedList results =db. find(id, dataDir ,null, cfgStrEngr);
+            SortedList results = find24614(id, dataDir ,null, cfgStrEngr);
 
 
 
@@ -100,13 +103,15 @@ namespace WindowsFormsApp1
            
             Func<SortedList, int> setStrEngr = (SortedList row) =>
             {
-              
-                const string prtnKey = "国家";
-           
-                int strx = save2storeFLByNodejs(row, mrchtDir, prtnKey, dbg);
+                Dictionary<string,string> prtnCfg = new Dictionary<string,string>();
+                prtnCfg.Add("prtnKey", "国家");
+                prtnCfg.Add("filetype", "db");  //sqlt
+                //const string prtnKey = "国家";
+
+                int strx = save2storeFLByNodejs(row, mrchtDir, prtnCfg, dbg);
                 return strx;
             };
-            int str = db.save(sortedListNew,  mrchtDir, setStrEngr, dbg);
+            int str = save24614(sortedListNew,  mrchtDir, setStrEngr, dbg);
             MessageBox.Show("添加成功!");
             return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
