@@ -14,7 +14,7 @@ using Convert = System.Convert;
 using System.Runtime.CompilerServices;
 using mdsj.libBiz;
 using static mdsj.biz_other;
-
+using static prj202405.timerCls;
 namespace prj202405
 {
     internal class timerCls

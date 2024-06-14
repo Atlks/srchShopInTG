@@ -128,11 +128,13 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{logdir}/{timestamp}.txt";
-                if(IsString(m))
+                Console.WriteLine(" logdir=>"+logdir);
+                Console.WriteLine(" fileName=>" + fileName);
+                if (IsString(m))
                 {
-                    System.IO.File.WriteAllText((m.ToString()), fileName);
+                    System.IO.File.WriteAllText(  fileName, m.ToString());
                 }else
-                System.IO.File.WriteAllText(json_encode(m), fileName);
+                System.IO.File.WriteAllText( fileName, json_encode(m));
             }
             catch (Exception ex)
             {

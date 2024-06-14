@@ -37,6 +37,9 @@ using static mdsj.lib.encdCls;
 
 using static mdsj.biz_other;
 using static mdsj.clrCls;
+using static prj202405.timerCls;
+
+
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;

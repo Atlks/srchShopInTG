@@ -19,7 +19,18 @@ using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 using City = prj202405.City;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
-
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static mdsj.libBiz.strBiz;
+using static mdsj.libBiz.tgBiz;
 using static prj202405.lib.strCls;
 
 namespace mdsj
@@ -100,9 +111,19 @@ namespace mdsj
           //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
             string[] kwds = strCls.calcKwdsAsArr(ref msgCtain);
+            //todo 去除触发词，，只保留 服务次和位置词
+            //园区
+            kwds=removeStopWd4biz(kwds);
+
+
+            //c----calc fuwuci 
+            HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");            
+            string fuwuci = getFuwuci(msgCtain, 商品与服务词库);
+
 
             HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
             string weizhici = getWeizhici(postnKywd位置词set, kwds);
+            weizhici=guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
             var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFroms, (SortedList row) =>
                  {
@@ -133,11 +154,12 @@ namespace mdsj
                      arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "城市关键词"));
                      arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "园区关键词"));
 
-                     string fuwuci = whereExprsObj["fuwuci"];
+                     //去除触发词，，只保留 服务次和位置词                   
                      if (!curRowKywdSset.Contains(fuwuci))
                          return false;
                      int containScore = 0;
                  
+                     //-------------weizhi condt
                      if(weizhici==null)
                      {
                            containScore = strCls.containCalcCntScoreSetfmt(curRowKywdSset, kwds);
@@ -148,13 +170,15 @@ namespace mdsj
                          }
                          return false;
                      }
-                     else
+                     else   //if has weizhici 
                      {
                          HashSet<string> curRw_posnSet = new HashSet<string>();
                          curRw_posnSet.Add(row["国家"].ToString());
                          curRw_posnSet.Add(row["城市"].ToString());
                          curRw_posnSet.Add(row["园区"].ToString());
-                         Console.WriteLine(curRw_posnSet.Join(" "));
+                         curRw_posnSet.Add(row["园区"].ToString().ToLower());
+                         Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRw_posnSet));
+                         Console.WriteLine(" weizhici=>" + weizhici);
                          if (curRw_posnSet.Contains(weizhici))
                              return true;
                          else
@@ -179,6 +203,43 @@ namespace mdsj
             //end fun
             dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
+        }
+
+        private static string guiyihuaWeizhici(string weizhici)
+        {
+             SortedList<string,string> sortedList = new SortedList<string, string>();
+            sortedList.Add("kk", "kk园区"); try
+            {
+                return sortedList[weizhici].Trim().ToLower();
+            }catch(Exception e)
+            {
+                return weizhici;
+            }
+          
+        }
+
+        //、、o 去除触发词，，只保留 服务次和位置词
+        private static string[] removeStopWd4biz(string[] kwds)
+        {
+            //todo 去除触发词，，只保留 服务次和位置词
+            HashSet<string> 搜索触发词 = ReadWordsFromFile("搜索触发词.txt");
+
+            HashSet<string> stopWdSet = new HashSet<string>();      
+           
+            //园区
+            stopWdSet.Add("店"); stopWdSet.Add("的"); stopWdSet.Add("号");
+            stopWdSet.Add("飞机号"); stopWdSet.Add("飞机");
+            stopWdSet.Add("园区");
+
+
+            // 使用HashSet的构造函数将字符串数组转换为HashSet
+            HashSet<string> kwdSt = new HashSet<string>(kwds);
+            // 移除set2中的元素
+            kwdSt.ExceptWith(搜索触发词);
+            kwdSt.ExceptWith(stopWdSet);
+
+            return kwdSt.ToArray();
+
         }
 
         private static string getWeizhici(HashSet<string> postnKywd位置词set, string[] kwds)

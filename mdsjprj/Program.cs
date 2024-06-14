@@ -1749,9 +1749,11 @@ namespace prj202405
             if (pageBtn.Count != 0)
                 results.Add([.. pageBtn]);
             //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
+            string txt = "这个机器人简直是神了，啥都有 !";
+            //给大家推荐一个什么信息资源都有的机器人!
             results.Add([
 
-                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=给大家推荐一个什么信息资源都有的机器人!")
+                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text={txt}")
                 ]);
         }
 
@@ -2273,14 +2275,15 @@ namespace prj202405
 
             if (contact_Merchant.WhatsApp.Any())
             {
+                string tmpleTxt = $"你好，从telegrame 的 https://t.me/{botname} 联信便民助手找到你的。麻烦发下菜单，谢谢";
                 if (contact_Merchant.WhatsApp.Count == 1)
                 {
-                    result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={contact_Merchant.WhatsApp[0]}&text=从联信群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
+                    result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={contact_Merchant.WhatsApp[0]}&text={tmpleTxt}'>点击聊天</a>";
                 }
                 else
                 {
                     for (int i = 0; i < contact_Merchant.WhatsApp.Count; i++)
-                        result += $"\n\nWhatsApp {i + 1}  :  <a href='https://api.whatsapp.com/send/?phone={contact_Merchant.WhatsApp[0]}&text=从联信群https://t.me/ZuoDaoMianDian找到你的。麻烦发下菜单'>点击聊天</a>";
+                        result += $"\n\nWhatsApp {i + 1}  :  <a href='https://api.whatsapp.com/send/?phone={contact_Merchant.WhatsApp[0]}&text={tmpleTxt}'>点击聊天</a>";
                 }
             }
 
@@ -2357,7 +2360,7 @@ namespace prj202405
                      InlineKeyboardButton.WithCallbackData( "4",  $"Merchant?id={guid}&score=4"),
                      InlineKeyboardButton.WithCallbackData( "5",  $"Merchant?id={guid}&score=5"),
                  ],
-                 [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", "https://t.me/share/url?url=https://t.me/ZuoDaoMianDian&text=这个群可以搜索全缅甸的商家联系方式!") ],
+                 [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
                  [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
             ];
 

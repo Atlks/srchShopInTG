@@ -27,6 +27,8 @@ namespace prj202405.lib
             return string.Format(format, args);
         }
 
+
+
         public static string[] calcKwdsAsArr(ref string msgx)
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
@@ -35,7 +37,20 @@ namespace prj202405.lib
             segmenter.AddWord("会所"); // 可添加一个新词
             segmenter.AddWord("妙瓦底"); // 可添加一个新词
             segmenter.AddWord("御龙湾"); // 可添加一个新词
-            
+            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            foreach (string line in user_dict)
+            {
+                segmenter.AddWord(line);
+            }
+            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
+            foreach(string line in postnKywd位置词set)
+            {
+                segmenter.AddWord(line);
+            }
+
+
+
+
             IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();

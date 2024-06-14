@@ -320,8 +320,10 @@ namespace prj202405.lib
             // 使用 TryGetValue 方法获取值
             object value;
             if (whereExprsObj.ContainsKey(k))
-
-                return whereExprsObj[k].ToString();
+                if (whereExprsObj[k] == null)
+                    return null;
+                else
+                    return whereExprsObj[k].ToString();
             else
                 return null;
 
