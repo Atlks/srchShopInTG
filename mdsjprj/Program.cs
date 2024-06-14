@@ -1750,7 +1750,7 @@ namespace prj202405
                 results.Add([.. pageBtn]);
             //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
             string txt = "这个机器人简直是神了，啥都有 !";
-            //给大家推荐一个什么信息资源都有的机器人!
+            //给大家推荐一个什么信息资源都有的机器人!    detail click 里面also shar bot one need chg sync
             results.Add([
 
                 InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text={txt}")

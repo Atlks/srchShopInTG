@@ -100,7 +100,8 @@ namespace prj202405.lib
             {
                 if (hashobj.ContainsKey(fld))
                     return hashobj[fld];
-                return v2;
+                else
+                    return v2;
             }
             catch (Exception e)
             {

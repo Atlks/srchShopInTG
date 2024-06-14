@@ -125,68 +125,85 @@ namespace mdsj
             string weizhici = getWeizhici(postnKywd位置词set, kwds);
             weizhici=guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
-            var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFroms, (SortedList row) =>
-                 {
-                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                     if (hasCondt(whereExprsObj, "城市"))
-                         if (!strCls.eq(row["城市"], arrCls.TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
-                             return false;
-                     if (hasCondt(whereExprsObj, "园区"))
-                         if (!strCls.eq(row["园区"], arrCls.TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
-                             return false;
-                     if (hasCondt(whereExprsObj, "国家"))
-                         if (!strCls.eq(row["国家"], arrCls.TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
-                             return false;
-                     if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
-                         return false;
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
 
-                     //if condt  containxx(row,msgSpltKwArr)>0
+                try
+                {
+                    //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+                    if (hasCondt(whereExprsObj, "城市"))
+                        if (!strCls.eq(row["城市"], arrCls.TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                            return false;
+                    if (hasCondt(whereExprsObj, "园区"))
+                        if (!strCls.eq(row["园区"], arrCls.TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                            return false;
+                    if (hasCondt(whereExprsObj, "国家"))
+                        if (!strCls.eq(row["国家"], arrCls.TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                            return false;
+                    if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
+                        return false;
 
-                     var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "城市关键词") +
-                       "__pkkwds=> " + arrCls.rowValDefEmpty(row, "园区关键词") +
-                        "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "关键词") +
-                        "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "分类关键词");
-                     row["_seasrchKw2ds"] = seasrchKwds;
-                     HashSet<string> curRowKywdSset = new HashSet<string>();
+                    //if condt  containxx(row,msgSpltKwArr)>0
 
-                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "关键词"));
-                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "分类关键词"));
-                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "城市关键词"));
-                     arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "园区关键词"));
+                    var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "城市关键词") +
+                      "__pkkwds=> " + arrCls.rowValDefEmpty(row, "园区关键词") +
+                       "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "关键词") +
+                       "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "分类关键词");
+                    row["_seasrchKw2ds"] = seasrchKwds;
+                    HashSet<string> curRowKywdSset = new HashSet<string>();
 
-                     //去除触发词，，只保留 服务次和位置词                   
-                     if (!curRowKywdSset.Contains(fuwuci))
-                         return false;
-                     int containScore = 0;
-                 
-                     //-------------weizhi condt
-                     if(weizhici==null)
-                     {
-                           containScore = strCls.containCalcCntScoreSetfmt(curRowKywdSset, kwds);
-                         if (containScore > 0)
-                         {
-                             row["_containCntScore"] = containScore;
-                             return true;
-                         }
-                         return false;
-                     }
-                     else   //if has weizhici 
-                     {
-                         HashSet<string> curRw_posnSet = new HashSet<string>();
-                         curRw_posnSet.Add(row["国家"].ToString());
-                         curRw_posnSet.Add(row["城市"].ToString());
-                         curRw_posnSet.Add(row["园区"].ToString());
-                         curRw_posnSet.Add(row["园区"].ToString().ToLower());
-                         Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRw_posnSet));
-                         Console.WriteLine(" weizhici=>" + weizhici);
-                         if (curRw_posnSet.Contains(weizhici))
-                             return true;
-                         else
-                             return false;
-                     }
-                  
-                 
-                 },
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "分类关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "城市关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "园区关键词"));
+
+                    //去除触发词，，只保留 服务次和位置词
+                    // if no fuwuci flt
+                    ////if ctin fuwuci &&  no weizhi  
+                    ///   if  cton fuwuci && hasWeizhi 
+                    if (!curRowKywdSset.Contains(fuwuci))
+                        return false;
+                    int containScore = 0;
+
+                    //-------------weizhi condt
+                    if (weizhici == null)
+                    {
+                        containScore = strCls.containCalcCntScoreSetfmt(curRowKywdSset, kwds);
+                        if (containScore > 0)
+                        {
+                            row["_containCntScore"] = containScore;
+                            return true;
+                        }
+                        return false;
+                    }
+                    else   //if has weizhici 
+                    {
+                        HashSet<string> curRw_posnSet = new HashSet<string>();
+                        curRw_posnSet.Add(row["国家"].ToString());
+                        curRw_posnSet.Add(row["城市"].ToString());
+                        curRw_posnSet.Add(row["园区"].ToString());
+                        curRw_posnSet.Add(row["园区"].ToString().ToLower());
+                        Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRw_posnSet));
+                        Console.WriteLine(" weizhici=>" + weizhici);
+                        if (curRw_posnSet.Contains(weizhici))
+                            return true;
+                        else
+                            return false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    logErr2024(e, "whereFun", "errlog", null);
+                    return false;
+                }
+
+
+
+            };
+
+
+
+            var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFroms, whereFun: whereFun,
                  (SortedList sl) =>
                  {
                   //   (List<SortedList<string, object>>)

@@ -30,7 +30,7 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{logdir}/{timestamp}.txt";
-                File.AppendAllText(fileName, funName + "()\n e=>" + e.ToString());
+                File.AppendAllText(fileName, funName + "()\n eStr=>" + e.ToString());
 
                 File.AppendAllText(fileName,"\n inf=》" + JsonConvert.SerializeObject(othInf, Formatting.Indented));
                 File.AppendAllText(fileName,"\n eFmt=》" + JsonConvert.SerializeObject(e, Formatting.Indented));

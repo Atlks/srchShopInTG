@@ -44,7 +44,7 @@ namespace WindowsFormsApp1
 
             string soluDir = @"../../../";
             soluDir = filex.GetAbsolutePath(soluDir);
-            var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+            var fromDdataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (string.IsNullOrEmpty(mrchName))
@@ -55,15 +55,38 @@ namespace WindowsFormsApp1
             };
             string prtnFileExt = "db";
             //from xxx partion(aa,bb) where xxx
-            List<SortedList> rztLi = qry888(dataDir, partns, whereFun, null,null,prtnFileExt);
+
+
+            Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
+            {
+                return   rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);               
+            };
+            List<SortedList> rztLi = qry888(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
             return json_encode(rztLi);
         }
 
+        public string find(string id)
+        {
 
-        public string save_click(string urlqryStr)
+            string soluDir = @"../../../";
+            soluDir = filex.GetAbsolutePath(soluDir);
+             var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+            Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
+            {
+                return rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);
+            };
+            SortedList results =db. find(id, dataDir ,null, cfgStrEngr);
+
+
+
+            return json_encode(results);
+        }
+
+
+            public string save_click(string urlqryStr)
         {
             SortedList sortedListNew = urlqry2hashtb(urlqryStr);
 
@@ -74,18 +97,18 @@ namespace WindowsFormsApp1
             string soluDir = @"../../../";
             soluDir = filex.GetAbsolutePath(soluDir);
             var mrchtDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
-            string prtnFileExt = "db";
-            Func<SortedList, string> setStrEngr = (SortedList row) =>
+           
+            Func<SortedList, int> setStrEngr = (SortedList row) =>
             {
               
                 const string prtnKey = "国家";
            
-                string strx = save2storeFLByNodejs(row, mrchtDir, prtnKey, prtnFileExt, dbg);
+                int strx = save2storeFLByNodejs(row, mrchtDir, prtnKey, dbg);
                 return strx;
             };
-            string str = db.save(sortedListNew, setStrEngr, mrchtDir, prtnFileExt,dbg);
+            int str = db.save(sortedListNew,  mrchtDir, setStrEngr, dbg);
             MessageBox.Show("添加成功!");
-            return str;
+            return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             //ormSqlt.save(sortedList, "D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
 

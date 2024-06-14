@@ -390,9 +390,10 @@ namespace prj202405.lib
             // SortedList newList = new SortedList();
 
             // 遍历旧的 SortedList 并将每个键值对复制到新的 SortedList
-            foreach (DictionaryEntry entry in newList)
+            foreach (DictionaryEntry newx in newList)
             {
-                arrCls.addRplsKeyV(oldList, entry.Key.ToString(), entry.Value);
+                if(newx.Key!=null)
+                   arrCls.addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
                 //   newList.Add(entry.Key, entry.Value);
             }
 
