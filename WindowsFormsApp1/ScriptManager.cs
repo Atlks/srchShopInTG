@@ -1,4 +1,5 @@
-﻿using prj202405.lib;
+﻿using libx;
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -7,29 +8,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using static libx.qryEngrParser;
+using static libx.storeEngr;
+using static mdsj.lib.encdCls;
 //using static mdsj.other;
 //using static mdsj.clrCls;
-using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
-using static mdsj.lib.logCls;
 using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
-using static mdsj.lib.encdCls;
-using static mdsj.lib.net_http;
-using static prj202405.lib.corex;
-using static libx.qryParser;
-using static libx.storeEngr;
-using System.IO;
-using Microsoft.Extensions.Primitives;
-using Mono.Web;
-using System.Collections.Specialized;
-using System.Security.Policy;
-using libx;
 namespace WindowsFormsApp1
 {
     [ComVisible(true)]
@@ -62,9 +46,9 @@ namespace WindowsFormsApp1
 
             Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
             {
-                return   rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);               
+                return   rd(prtnDbfNoExt);               
             };
-            List<SortedList> rztLi = qryParser.qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
+            List<SortedList> rztLi = qryEngrParser.qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
@@ -79,7 +63,7 @@ namespace WindowsFormsApp1
              var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
             Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
             {
-                return rdFrmStoreEngrFrmNodejsRdSqlt(prtnDbfNoExt);
+                return rd(prtnDbfNoExt);
             };
             SortedList results = find24614(id, dataDir ,null, cfgStrEngr);
 
@@ -99,19 +83,21 @@ namespace WindowsFormsApp1
 
             string soluDir = @"../../../";
             soluDir = filex.GetAbsolutePath(soluDir);
-            var mrchtDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
-           
-            Func<SortedList, int> setStrEngr = (SortedList row) =>
-            {
-                Dictionary<string,string> prtnCfg = new Dictionary<string,string>();
-                prtnCfg.Add("prtnKey", "国家");
-                prtnCfg.Add("filetype", "db");  //sqlt
-                //const string prtnKey = "国家";
+            var saveDataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
 
-                int strx = save2storeFLByNodejs(row, mrchtDir, prtnCfg, dbg);
+
+            Dictionary<string, string> prtnCfg = new Dictionary<string, string>();
+            prtnCfg.Add("prtnKey", "国家");
+            prtnCfg.Add("filetype", "db");  //sqlt
+            Func<SortedList, int> callFun_ivkStrEngr = (SortedList row) =>
+            {                
+                string prtnKey = "国家";
+                string wrtFile = $"{saveDataDir}\\{row[prtnKey]}.db";
+                int strx =storeEngr. write(row, wrtFile, dbg);
                 return strx;
             };
-            int str = save24614(sortedListNew,  mrchtDir, setStrEngr, dbg);
+            //prtn cfg also trans into  save24614
+            int str = qryEngrParser. save24614(sortedListNew,  saveDataDir, callFun_ivkStrEngr, dbg);
             MessageBox.Show("添加成功!");
             return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 //   prj202405.lib.strCls
 namespace prj202405.lib
@@ -98,7 +99,9 @@ namespace prj202405.lib
 
         internal static bool containKwds(string text, string trgSearchKwds)
         {
-            string[] kwds = trgSearchKwds.Split(' ');
+            if (text == null)
+                return false;
+            string[] kwds = trgSearchKwds.Split(new char[] { ' ' });
             foreach (string kwd in kwds)
             {
                 var kwd2 = kwd.Trim();

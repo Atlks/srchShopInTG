@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections;
 using Microsoft.Extensions.Primitives;
-using Telegram.Bot.Types;
+
+
 
 namespace prj202405.lib
 {
@@ -395,13 +396,27 @@ namespace prj202405.lib
 
             throw new ArgumentException("Unsupported collection type", nameof(collection));
         }
-
-        internal static void addRplsKeyV(SortedList listIot, string? key, SortedList objSave)
+        public static SortedList CopyToOldSortedList(SortedList newList, SortedList oldList)
         {
-            if (listIot.ContainsKey(key))
-                listIot[key] = objSave;
+            // 创建一个新的 SortedList
+            // SortedList newList = new SortedList();
+
+            // 遍历旧的 SortedList 并将每个键值对复制到新的 SortedList
+            foreach (DictionaryEntry newx in newList)
+            {
+                if(newx.Key!=null)
+                   arrCls.addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
+                //   newList.Add(entry.Key, entry.Value);
+            }
+
+            return newList;
+        }
+        internal static void addRplsKeyV(SortedList SortedList1_iot, string? key, SortedList objSave)
+        {
+            if (SortedList1_iot.ContainsKey(key))
+                SortedList1_iot[key] = objSave;
             else
-                listIot.Add(key, objSave);
+                SortedList1_iot.Add(key, objSave);
         }
 
         internal static void addRplsKeyV(SortedList listIot, string? key, object objSave)

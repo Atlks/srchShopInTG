@@ -203,7 +203,7 @@ namespace mdsj
 
 
 
-            var rsRztInlnKbdBtn = db.qryFrmSqlt(dbfFroms, whereFun: whereFun,
+            var rsRztInlnKbdBtn = db.qryFrmSqlt_dep(dbfFroms, whereFun: whereFun,
                  (SortedList sl) =>
                  {
                   //   (List<SortedList<string, object>>)

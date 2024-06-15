@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Options;
+﻿ 
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+ 
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
@@ -272,15 +272,15 @@ namespace prj202405.lib
         public static int dbgpad = 0;
 
 
-        /*
+        /* //if($GLOBALS['dbg_show']==false)
+            //    return;
+            //  $GLOBALS['dbgpad']=$GLOBALS['dbgpad']+4;
          * @param string $METHOD__
          * @return void
          */
         public static void setDbgFunEnter(string METHOD__, object func_get_args)
         {
-            //if($GLOBALS['dbg_show']==false)
-            //    return;
-            //  $GLOBALS['dbgpad']=$GLOBALS['dbgpad']+4;
+           
             dbgpad = dbgpad + 4;
             var msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + JsonConvert.SerializeObject(func_get_args) + "))";
             // array_push($GLOBALS['dbg'],$logmsg   );
@@ -299,12 +299,7 @@ namespace prj202405.lib
 
         public static void setDbgValRtval(object mETHOD__, object results)
         {
-            //string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
-            //Console.WriteLine(jsonString);
-
-            //    if ($GLOBALS['dbg_show'] == false)
-            //return;
-            // ENDFUN
+             
             var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
             Console.WriteLine(msglog + "");
             //    array_push($GLOBALS['dbg'], $msglog);

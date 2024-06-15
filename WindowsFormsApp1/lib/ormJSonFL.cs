@@ -1,9 +1,9 @@
-﻿ 
- 
- 
+﻿
+
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
- 
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -19,6 +19,21 @@ namespace prj202405.lib
 {
     internal class ormJSonFL
     {
+
+        public static void WriteFileIfNotExist(string filePath, string txt)
+        {
+            // 获取文件目录
+            string dir = Path.GetDirectoryName(filePath);
+
+            // 检查目录是否存在，如果不存在，则创建目录
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            File.WriteAllText(filePath, txt);
+
+
+        }
         //qry just use path as qry dsl  ,,
         public static ArrayList qryDep(string dbFileName)
         {
@@ -155,7 +170,7 @@ namespace prj202405.lib
         {
 
         }
-            public static void save(SortedList objSave, string Strfile)
+        public static void save(SortedList objSave, string Strfile)
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -165,9 +180,9 @@ namespace prj202405.lib
             SortedList listIot = db.lst2IOT(list);
 
             string key = objSave["id"].ToString();
-            arrCls.addRplsKeyV(listIot,key, objSave);
-           
-            
+            arrCls.addRplsKeyV(listIot, key, objSave);
+
+
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);

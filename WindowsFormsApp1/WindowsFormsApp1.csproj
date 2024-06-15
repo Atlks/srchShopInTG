@@ -151,7 +151,7 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="lib\funCls.cs" />
-    <Compile Include="lib\qryParser.cs" />
+    <Compile Include="lib\qryEngrParser.cs" />
     <Compile Include="lib\storeEngr.cs" />
     <Compile Include="ScriptManager.cs" />
     <Compile Include="lib\arrCls.cs" />

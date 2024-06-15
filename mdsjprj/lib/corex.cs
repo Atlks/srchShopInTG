@@ -1,21 +1,101 @@
-﻿using System;
+﻿using Microsoft.Win32;
+//using Mono.Web;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Web;
+using static prj202405.lib.corex;
 namespace prj202405.lib
 {
     //prj202405.lib.corex
     internal class corex
     {
+ public static SortedList urlqry2hashtb(string urlqryStr)
+        {
+
+            // 解析查询字符串为字典
+            NameValueCollection queryString = HttpUtility.ParseQueryString(urlqryStr);
+            var QueryHashtb = new System.Collections.Generic.Dictionary<string, string>();
+
+            // 将解析结果存入字典
+            foreach (string key in queryString.AllKeys)
+            {
+                QueryHashtb.Add(key, queryString[key]);
+            }
+
+
+
+            // 创建一个 SortedList 并初始化大小
+            SortedList sortedList = new SortedList(QueryHashtb.Count);
+
+            // 将 Dictionary 中的项添加到 SortedList 中
+            foreach (var pair in QueryHashtb)
+            {
+                sortedList.Add(pair.Key, pair.Value.ToString());
+            }
+
+            return sortedList;
+        }
         public static bool IsString(object input)
         {
             return input is string;
         }
 
+        //D:\0prj\mdsj\WindowsFormsApp1\sqltnode\qry.js
+        public  static string ExecuteNodeScript(string scriptPath, string arguments)
+        {
+            // Create a new process to run the Node.js script
+            Process process = new Process();
+            process.StartInfo.FileName = "node";
+            process.StartInfo.Arguments = $"{scriptPath} {arguments}";
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = true;
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.StandardOutputEncoding = Encoding.UTF8; // 设置标准输出编码
+
+            process.StartInfo.StandardErrorEncoding = Encoding.UTF8;  // 设置标准错误输出编码
+            // Capture the output from the process
+            string output;
+            string errorOutput="";
+
+            try
+            {
+                process.Start();
+
+                // Read the standard output and error output streams
+                using (StreamReader outputReader = process.StandardOutput)
+                {
+                    output = outputReader.ReadToEnd();
+                }
+                using (StreamReader errorReader = process.StandardError)
+                {
+                    errorOutput = errorReader.ReadToEnd();
+                }
+
+                process.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                output = $"An error occurred while executing the Node.js script: {ex.Message}";
+            }
+
+            // If there is any error output, append it to the main output
+            if (!string.IsNullOrEmpty(errorOutput))
+            {
+                output += Environment.NewLine + "Error output: " + errorOutput;
+            }
+
+            return output;
+        }
 
 
         public static SortedList DictionaryToSortedList<TKey, TValue>(Dictionary<TKey, TValue> dictionary)

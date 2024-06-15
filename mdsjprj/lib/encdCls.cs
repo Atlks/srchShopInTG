@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
@@ -194,12 +195,14 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="jsonString">要解析的 JSON 字符串</param>
         /// <returns>解析后的动态对象</returns>
-        public static dynamic json_decode(string jsonString)
+        public static List<SortedList> json_decode(string jsonString)
         {
-            return System.Text.Json.JsonSerializer.Deserialize<dynamic>(jsonString, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
+        }
+
+        public static t json_decode<t>(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<t>(jsonString);
         }
         public static string json_encode(object results)
         {

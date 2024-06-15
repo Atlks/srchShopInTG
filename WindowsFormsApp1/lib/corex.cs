@@ -44,6 +44,12 @@ namespace prj202405.lib
 
             return sortedList;
         }
+		
+		
+		    public static bool IsString(object input)
+        {
+            return input is string;
+        }
         /*
          * 
          * 

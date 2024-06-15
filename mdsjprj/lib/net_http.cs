@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2010.ExcelAc;
+﻿
 using prj202405.lib;
 using System;
 using System.Collections.Generic;
@@ -7,8 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-using static mdsj.biz_other;
-using static mdsj.clrCls;
+
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;

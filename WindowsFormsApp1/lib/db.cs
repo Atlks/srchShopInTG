@@ -21,7 +21,7 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
 
-using static libx.qryParser;
+using static libx.qryEngrParser;
 //  prj202405.lib.db
 namespace prj202405.lib
 {
@@ -469,6 +469,15 @@ namespace prj202405.lib
             return result;
         }
 
-      
+        static string GetFilePathsCommaSeparated(string directoryPath)
+        {
+            // 获取目录下的所有文件路径
+            string[] filePaths = Directory.GetFiles(directoryPath);
+
+            // 将文件路径数组转换为逗号分割的字符串
+            string result = string.Join(",", filePaths);
+
+            return result;
+        }
     }
 }

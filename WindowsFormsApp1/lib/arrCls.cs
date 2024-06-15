@@ -308,15 +308,14 @@ namespace prj202405.lib
         {
             // 使用 TryGetValue 方法获取值
             object value;
-            try
-            {
-                return whereExprsObj[k].ToString();
-
-            }
-            catch (Exception ex)
-            {
+            if (whereExprsObj.ContainsKey(k))
+                if (whereExprsObj[k] == null)
+                    return null;
+                else
+                    return whereExprsObj[k].ToString();
+            else
                 return null;
-            }
+
             //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
             //{
             //    return (string)value;
@@ -413,6 +412,17 @@ namespace prj202405.lib
                 listIot[key] = objSave;
             else
                 listIot.Add(key, objSave);
+        }
+		
+		    internal static HashSet<string> addSetNStr(HashSet<string> set, string v)
+        {
+           
+            string[] a = v.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string wd in a)
+            {
+                set.Add(wd);
+            }
+            return set;
         }
 
         //internal static int getRowVal(object s1, string v1, int v2)

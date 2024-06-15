@@ -40,6 +40,11 @@ namespace prj202405
                 SortedList rw = rows[i];
                 try
                 {
+                    if (arrCls.TryGetValueAsStrDefNull(rw, "评论人id") == null)
+                    {
+                        continue;
+                    }
+                    
                     var uid =(long) rw["评论人id"];
                         //contact_Merchant.Comments.ElementAt(i).Key;
                     #region start 

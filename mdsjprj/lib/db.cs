@@ -1,12 +1,27 @@
-﻿using DocumentFormat.OpenXml.Office2019.Excel.RichData2;
+﻿ 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static prj202405.lib.corex;
+
+using static libx.qryEngrParser;
 //  prj202405.lib.db
 namespace prj202405.lib
 {
@@ -14,12 +29,50 @@ namespace prj202405.lib
     {
 
 
-        public static List<t> qryFrmSqlt2<t>(string dbfFrom,
+      public static List<SortedList> qryV7(List<SortedList> rows,
+  Func<SortedList, bool> whereFun,
+  Func<SortedList, int> ordFun = null,
+  Func<SortedList, SortedList> selktFun = null)
+        {
+            List<SortedList> rows_rzt4srch = new List<SortedList>();
+            foreach (SortedList row in rows)
+            {
+                if (whereFun(row))
+                {
+                    rows_rzt4srch.Add(row);
+                }
+
+            }
+
+            List<SortedList> list_ordered = rows_rzt4srch;
+            if (ordFun != null)
+            {
+                list_ordered = rows_rzt4srch.Cast<SortedList>()
+                                .OrderBy(ordFun)
+                                .ToList();
+            }
+
+
+
+            List<SortedList> list_Seleced = new List<SortedList>();
+            for (int i = 0; i < list_ordered.Count; i++)
+            {
+                SortedList row = list_ordered[i];
+                if (selktFun != null)
+                    list_Seleced.Add(selktFun(row));
+                else
+                    list_Seleced.Add(row);
+            }
+
+            return list_Seleced;
+
+        }
+        public static List<t> qryFrmSqlt2dep<t>(string dbfFrom,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,
   Func<SortedList, t> selktFun)
         {
-            ArrayList rows_rzt4srch = [];
+            ArrayList rows_rzt4srch = new ArrayList();
             List<SortedList> rows = ormSqlt.qryV2(dbfFrom);
             foreach (SortedList row in rows)
             {
@@ -37,7 +90,7 @@ namespace prj202405.lib
                                   .ToList();
 
 
-            List<t> rsRztInlnKbdBtn = [];
+            List<t> rsRztInlnKbdBtn = new List<t>();
             for (int i = 0; i < rows_rzt4srch.Count; i++)
             {
                 SortedList row = list[i];
@@ -49,7 +102,7 @@ namespace prj202405.lib
         }
 
 
-        public static List<t> qryFrmSqlt<t>(string dbfFrom,
+        public static List<t> qryFrmSqlt_dep<t>(string dbfFrom,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,
   Func<SortedList, t> selktFun
@@ -86,12 +139,12 @@ namespace prj202405.lib
         }
 
 
-        public static List<t> qryV6<t>(string dbfFrom,
+        public static List<t> qryV6dep<t>(string dbfFrom,
        Func<SortedList, bool> whereFun,
        Func<SortedList, int> ordFun,
        Func<SortedList, t> selktFun)
         {
-            ArrayList rows_rzt4srch = [];
+            ArrayList rows_rzt4srch = new ArrayList();
             List<SortedList> rows = ormJSonFL.qry(dbfFrom);
             foreach (SortedList row in rows)
             {
@@ -109,7 +162,7 @@ namespace prj202405.lib
                                   .ToList();
 
 
-            List<t> rsRztInlnKbdBtn = [];
+            List<t> rsRztInlnKbdBtn = new List<t>();
             for (int i = 0; i < rows_rzt4srch.Count; i++)
             {
                 SortedList row = list[i];
@@ -167,7 +220,7 @@ namespace prj202405.lib
         public static List<InlineKeyboardButton[]> lstFrmIot4inlnKbdBtn(SortedList listIot)
         {
             // 创建一个 ArrayList 来存储 SortedList 中的值
-            List<InlineKeyboardButton[]>  arrayList = [];
+            List<InlineKeyboardButton[]> arrayList = new List<InlineKeyboardButton[]>();
 
             // 遍历 SortedList 的值并添加到 ArrayList 中
             foreach (var value in listIot.Values)
@@ -307,6 +360,64 @@ namespace prj202405.lib
         }
 
 
+        //parti spt
+        public static List<SortedList> qry888(string dataDir, string partnsExprs,
+            Func<SortedList, bool> whereFun, Func<SortedList, int> ordFun = null,
+                Func<SortedList, SortedList> selktFun = null, Func<string, List<SortedList>> cfgStrEngr=null)
+        {
+            if (cfgStrEngr is null)
+            {
+                throw new ArgumentNullException(nameof(cfgStrEngr));
+            }
+
+            List<SortedList> rztLi = new List<SortedList>();
+            var patns_dbfs = db.calcPatnsV3(dataDir, partnsExprs);
+            string[] arr = patns_dbfs.Split(',');
+            foreach (string dbf in arr)
+            {
+                List<SortedList> li = _qryBySnglePart(dbf, whereFun, cfgStrEngr);
+                rztLi = arrCls.array_merge(rztLi, li);
+            }
+
+            return rztLi;
+        }
+        internal static string calcPatnsV3(string dir, string partfile区块文件)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+
+            //if (string.IsNullOrEmpty(Extname))
+            //    Extname = "txt";
+            if (string.IsNullOrEmpty(partfile区块文件))
+            {
+
+                string rzt = GetFilePathsCommaSeparated(dir);
+                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                return rzt;
+            }
+            ArrayList arrayList = new ArrayList();
+            string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var dbf in dbArr)
+            {
+                string path = dir + "/" + dbf + "";
+                //if (!File.Exists(path))
+                //{
+                //    Console.WriteLine("not exist file dbf=>" + path);
+                //    continue;
+                //}
+                arrayList.Add(path);
+            }
+
+            // 使用 ArrayList 的 ToArray 方法将其转换为对象数组
+            object[] objectArray = arrayList.ToArray();
+
+            // 使用 String.Join 方法将数组转换为逗号分割的字符串
+            string result = string.Join(",", objectArray);
+
+            dbgCls.setDbgValRtval(__METHOD__, result);
+
+            return result;
+        }
         internal static string calcPatns(string dir, string partfile区块文件)
         {  
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;

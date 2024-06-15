@@ -3,6 +3,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -12,6 +13,28 @@ namespace prj202405.lib
 {
     internal class strCls
     {
+
+        public static string ExtractTextAfterMarker(string input, string marker)
+        {
+            if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(marker))
+            {
+                throw new ArgumentException("Input and marker cannot be null or empty.");
+            }
+
+            int markerIndex = input.IndexOf(marker);
+            if (markerIndex == -1)
+            {
+                return string.Empty; // Marker not found, return empty string
+            }
+
+            int startIndex = markerIndex + marker.Length;
+            if (startIndex >= input.Length)
+            {
+                return string.Empty; // No text after marker
+            }
+
+            return input.Substring(startIndex);
+        }
 
         /// <summary>
         ///  // 示例用法
