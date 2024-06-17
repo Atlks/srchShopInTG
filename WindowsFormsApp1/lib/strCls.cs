@@ -97,6 +97,39 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
+     public   static string trim_RemoveUnnecessaryCharacters(string input)
+        {
+            // Define the characters to be removed
+            char[] charsToRemove = new char[] { '\"', '[', ']' };
+
+            // Create a new array to hold the filtered characters
+            char[] result = new char[input.Length];
+            int resultIndex = 0;
+
+            // Iterate over the input string and copy only the characters that are not in charsToRemove
+            foreach (char c in input)
+            {
+                bool shouldRemove = false;
+                foreach (char remove in charsToRemove)
+                {
+                    if (c == remove)
+                    {
+                        shouldRemove = true;
+                        break;
+                    }
+                }
+
+                if (!shouldRemove)
+                {
+                    result[resultIndex++] = c;
+                }
+            }
+
+            // Return the new string without the unnecessary characters
+            string v = new string(result, 0, resultIndex);
+            return v.Trim();
+        }
+
         internal static bool containKwds(string text, string trgSearchKwds)
         {
             if (text == null)

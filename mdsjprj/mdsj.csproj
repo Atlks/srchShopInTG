@@ -15,6 +15,7 @@
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="jieba.NET" Version="0.42.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.10.0" />
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
     <PackageReference Include="MiniGuid" Version="1.1.2" />

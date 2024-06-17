@@ -284,7 +284,7 @@ namespace prj202405.lib
         }
 
 
-        internal static string TryGetValueDfEmpy(Dictionary<string, object> whereExprsObj, string k)
+        public static string TryGetValueDfEmpy(Dictionary<string, object> whereExprsObj, string k)
         {
             // 使用 TryGetValue 方法获取值
             object value;
@@ -304,7 +304,20 @@ namespace prj202405.lib
 
         }
 
-        internal static string TryGetValueAsStrDefNull(SortedList whereExprsObj, string k)
+        public static string TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string k)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            if (whereExprsObj.ContainsKey(k))
+                if (whereExprsObj[k] == null)
+                    return "";
+                else
+                    return whereExprsObj[k].ToString();
+            else
+                return "";
+        }
+
+            internal static string TryGetValueAsStrDefNull(SortedList whereExprsObj, string k)
         {
             // 使用 TryGetValue 方法获取值
             object value;

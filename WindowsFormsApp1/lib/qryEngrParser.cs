@@ -22,7 +22,40 @@ namespace libx
 {
     internal class qryEngrParser
     {
-        public static List<SortedList> qry(string fromDdataDir, string partnsExprs, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> cfgStrEngr)
+
+        public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> strE4rd, Func<(SortedList, string), int> callFunStrEngr)
+        {
+
+            var patns_dbfs = _calcPatnsV3(fromDdataDir, "");
+            string[] arr = patns_dbfs.Split(',');
+
+            int n = 0;
+            foreach (string dbf in arr)
+            {
+                Func<SortedList, bool> whereFun = (SortedList row) =>
+                {
+                    if (string.IsNullOrEmpty(id))
+                        return false;
+                    if (row["id"].ToString().ToLower() == (id.ToLower()))
+                        return true;
+                    return false;
+                };
+
+                //= _qryBySnglePart(dbf, whereFun, cfgStrEngr);
+                //rztLi = arrCls.array_merge(rztLi, li);
+                List<SortedList> delneedRowSX = _qryBySnglePart(dbf, whereFun, strE4rd);
+                //   var tuple = (id: id, dbf: dbf);
+                //   var tuple = (id: id, dbf: dbf);
+                foreach (SortedList delneedRow in delneedRowSX)
+                {
+                    n = n + callFunStrEngr((rw: delneedRow, dbf: dbf));
+                }
+
+            }
+
+            return n;
+        }
+        public static List<SortedList> Qe_qry(string fromDdataDir, string partnsExprs, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> cfgStrEngr)
         {
             if (cfgStrEngr is null)
             {
@@ -41,12 +74,12 @@ namespace libx
             return rztLi;
         }
 
-        public static int save24614(SortedList sortedListNew, string dataDir, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
+        public static int Qe_save(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> cfgStrEngr4rd, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
         {
             SortedList mereed = new SortedList();
             if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
             {
-                SortedList old = (find24614(sortedListNew["id"].ToString(), dataDir));
+                SortedList old = (Qe_find(sortedListNew["id"].ToString(), dataDir, null, cfgStrEngr4rd));
                 mereed = CopyToOldSortedList(sortedListNew, old);
             }
             else
@@ -62,20 +95,21 @@ namespace libx
             return str;
         }
 
-        public static SortedList find24614(string id, string dataDir, string partns = null, Func<string, List<SortedList>> cfgStrEngrx = null)
+        // str eng is find_current_row
+        public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> cfgStrEngrx)
         {
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (string.IsNullOrEmpty(id))
                     return false;
-                if (row["id"].ToString().ToLower().Contains(id.ToLower()))
+                if (row["id"].ToString().ToLower() == (id.ToLower()))
                     return true;
                 return false;
             };
 
             //from xxx partion(aa,bb) where xxx
-            List<SortedList> rztLi = qry888(dataDir, partns, whereFun, cfgStrEngr: cfgStrEngrx);
+            List<SortedList> rztLi = Qe_qry(dataDir, partns, whereFun, cfgStrEngr: cfgStrEngrx);
 
 
             SortedList results = rztLi[0];

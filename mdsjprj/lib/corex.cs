@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
+using Microsoft.Win32;
 //using Mono.Web;
 using System;
 using System.Collections;
@@ -18,7 +20,32 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
- public static SortedList urlqry2hashtb(string urlqryStr)
+
+        public static object 运行(string 代码)
+        {
+            try
+            {
+                var 结果 = CSharpScript.EvaluateAsync(代码, ScriptOptions.Default).Result;
+                return 结果;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        public static object Eval(string code)
+        {
+            try
+            {
+                var result = CSharpScript.EvaluateAsync(code, ScriptOptions.Default).Result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
+        public static SortedList parse_str_qrystr(string urlqryStr)
         {
 
             // 解析查询字符串为字典

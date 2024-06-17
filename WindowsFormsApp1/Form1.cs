@@ -24,6 +24,7 @@ namespace WindowsFormsApp1
         }
         public Form1()
         {
+            testCls.test();
         corex.    SetFeatures(55000);
             InitializeComponent();
             //webBrowser1.Document.InvokeScript("MyCLickFunction");

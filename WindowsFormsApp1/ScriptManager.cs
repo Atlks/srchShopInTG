@@ -14,6 +14,8 @@ using static mdsj.lib.encdCls;
 //using static mdsj.other;
 //using static mdsj.clrCls;
 using static prj202405.lib.corex;
+using static prj202405.lib.strCls;
+using static prj202405.lib.arrCls;
 namespace WindowsFormsApp1
 {
     [ComVisible(true)]
@@ -40,19 +42,29 @@ namespace WindowsFormsApp1
                     return true;
                 return false;
             };
-           
+
             //from xxx partion(aa,bb) where xxx
 
 
-            Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
-            {
-                return   rd(prtnDbfNoExt);               
-            };
-            List<SortedList> rztLi = qryEngrParser.qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
+            Func<string, List<SortedList>> cfgStrEngr = getRdStrEngr();
+            //return (string prtnDbfNoExt) =>
+            //{
+            //    return rnd_next(prtnDbfNoExt);
+            //};
+
+            List<SortedList> rztLi = qryEngrParser.Qe_qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
             return json_encode(rztLi);
+        }
+
+        private Func<string, List<SortedList>> getRdStrEngr()
+        {
+            return (string prtnDbfNoExt) =>
+            {
+                return rnd_next(prtnDbfNoExt);
+            };
         }
 
         public string find(string id)
@@ -63,17 +75,43 @@ namespace WindowsFormsApp1
              var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
             Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
             {
-                return rd(prtnDbfNoExt);
+                return rnd_next(prtnDbfNoExt);
             };
-            SortedList results = find24614(id, dataDir ,null, cfgStrEngr);
-
+            SortedList results = Qe_find(id, dataDir ,null, cfgStrEngr);
+            results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty( results,"Telegram"));
+                 results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
 
 
             return json_encode(results);
         }
 
+        public string del_clck(string id)
+        {
 
-            public string save_click(string urlqryStr)
+            string soluDir = @"../../../";
+            soluDir = filex.GetAbsolutePath(soluDir);
+            var saveDataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+         
+
+            Func<string, List<SortedList>> cfgStrEngr4rd = (string prtnDbfNoExt) =>
+            {
+                return rnd_next(prtnDbfNoExt);
+            };
+
+
+            Func<(SortedList, string), int> callFun_ivkStrEngr = ((SortedList, string) row) =>
+            {
+                Console.WriteLine(row);
+                int strx = storeEngr.delete_row(row.Item1,row.Item2);
+                return strx;
+            };
+            //prtn cfg also trans into  save24614
+            int str = qryEngrParser.Qe_del(id, saveDataDir, cfgStrEngr4rd, callFun_ivkStrEngr);
+            return str.ToString();
+
+        }
+
+        public string save_click(string urlqryStr)
         {
             SortedList sortedListNew = urlqry2hashtb(urlqryStr);
 
@@ -93,11 +131,16 @@ namespace WindowsFormsApp1
             {                
                 string prtnKey = "国家";
                 string wrtFile = $"{saveDataDir}\\{row[prtnKey]}.db";
-                int strx =storeEngr. write(row, wrtFile, dbg);
+                int strx =storeEngr. write_row(row, wrtFile, dbg);
                 return strx;
             };
+
+            Func<string, List<SortedList>> cfgStrEngr4rd = (string prtnDbfNoExt) =>
+            {
+                return rnd_next(prtnDbfNoExt);
+            };
             //prtn cfg also trans into  save24614
-            int str = qryEngrParser. save24614(sortedListNew,  saveDataDir, callFun_ivkStrEngr, dbg);
+            int str = qryEngrParser. Qe_save(sortedListNew,  saveDataDir, cfgStrEngr4rd, callFun_ivkStrEngr, dbg);
             MessageBox.Show("添加成功!");
             return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());

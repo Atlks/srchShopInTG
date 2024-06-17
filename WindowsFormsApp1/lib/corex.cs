@@ -75,7 +75,7 @@ namespace prj202405.lib
         }
 
         //D:\0prj\mdsj\WindowsFormsApp1\sqltnode\qry.js
-        public  static string ExecuteNodeScript(string scriptPath, string arguments)
+        public  static string callNodePstr(string scriptPath, string arguments)
         {
             // Create a new process to run the Node.js script
             Process process = new Process();

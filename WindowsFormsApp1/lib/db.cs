@@ -328,7 +328,7 @@ namespace prj202405.lib
 
 
         //parti spt
-        public static List<SortedList> qry888(string dataDir, string partnsExprs,
+        public static List<SortedList> qe_qry(string dataDir, string partnsExprs,
             Func<SortedList, bool> whereFun, Func<SortedList, int> ordFun = null,
                 Func<SortedList, SortedList> selktFun = null, Func<string, List<SortedList>> cfgStrEngr=null)
         {
