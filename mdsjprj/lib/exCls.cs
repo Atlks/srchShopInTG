@@ -1,4 +1,5 @@
-﻿using System;
+﻿using prj202405;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -50,14 +51,26 @@ namespace mdsj.lib
         {
             try
             {
+                Console.WriteLine("FUN CurrentDomain_UnhandledException()");
                 Console.WriteLine("捕获未处理的同步异常：");
                 Console.WriteLine(((Exception)e.ExceptionObject).Message);
                 // 这里可以记录日志或执行其他处理
                 logCls.logErr2025((Exception)e.ExceptionObject, "CurrentDomain_UnhandledException", "errlog");
+                Console.WriteLine("END FUN CurrentDomain_UnhandledException()");
+
+                // 延迟启动一个新的线程
+                new System.Threading.Thread(() =>
+                {
+                    // 恢复应用程序逻辑
+                    // Console.WriteLine("Application is recovering...");
+                    Program.Main(null);
+                    // Restart or recover logic here
+                }).Start();
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("END FUN CurrentDomain_UnhandledException()");
             }
 
         }
@@ -66,18 +79,20 @@ namespace mdsj.lib
         {
             try
             {
+                Console.WriteLine("FUN TaskScheduler_UnobservedTaskException()");
                 Console.WriteLine("捕获未处理的异步异常：");
                 Console.WriteLine(e.Exception.Message);
                 // 这里可以记录日志或执行其他处理
-                e.SetObserved(); // 标记异常已观察到，防止程序崩溃
+                e.SetObserved(); // 标记异常已观察到，防止程序崩溃   // 阻止异常传播
 
                 logCls.logErr2025((Exception)e.Exception, "TaskScheduler_UnobservedTaskException", "errlog");
-
+                Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
 
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
+                Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
             }
         }
     }

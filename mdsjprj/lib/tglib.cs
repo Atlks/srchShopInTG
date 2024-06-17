@@ -16,11 +16,102 @@ using Telegram.Bot.Types.ReplyMarkups;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
 using System.Collections;
+using static mdsj.biz_other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
 
+using static mdsj.libBiz.tgBiz;
+using static prj202405.lib.tglib;
 namespace prj202405.lib
 {
     internal class tglib
     {
+        /*
+         * 
+         * 401错误检测，可能token错误，检测token是ok的。
+         https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
+         
+         */
+        // sendmsg4timrtask
+        public static async Task bot_sendMsg(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
+        {
+
+            var __METHOD__ = "sendMsg";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
+
+            try
+            {
+                // var  = plchdTxt;
+                //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+                var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //  Program.botClient.SendPhotoAsync()
+
+                Message message = await Program.botClient.SendPhotoAsync(
+                          Program.groupId, Photo, null,
+                          msgtxt,
+                            parseMode: ParseMode.Html,
+                           replyMarkup: new InlineKeyboardMarkup(results),
+                           protectContent: false);
+
+                Console.WriteLine(JsonConvert.SerializeObject(message));
+
+
+                var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+                //遍历方法三：遍历哈希表中的键值
+                foreach (DictionaryEntry de in chtsSess)
+                {
+                    if (Convert.ToInt64(de.Key) == Program.groupId)
+                        continue;
+                    var key = de.Key;
+                    Console.WriteLine(" SendPhotoAsync " + de.Key);
+
+                    //  Program.botClient.send
+                    try
+                    {
+                        var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                        Message message2 = await Program.botClient.SendPhotoAsync(
+                        Convert.ToInt64(de.Key)
+                          , Photo2, null,
+                          msgtxt,
+                            parseMode: ParseMode.Html,
+                           replyMarkup: new InlineKeyboardMarkup(results),
+                           protectContent: false);
+                        Console.WriteLine(JsonConvert.SerializeObject(message2));
+
+                    }
+                    catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, results)));
+
+            }
+
+
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+            //Program.botClient.SendTextMessageAsync(
+            //         Program.groupId,
+            //         "活动商家",
+            //         parseMode: ParseMode.Html,
+            //         replyMarkup: new InlineKeyboardMarkup(results),
+            //         protectContent: false,
+            //         disableWebPagePreview: true);
+        }
+
         public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtons(string filePath)
         {
             // 读取HTML文件内容
@@ -124,12 +215,21 @@ namespace prj202405.lib
         //出错后执行的方法
         public static Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            var ErrorMessage = exception switch
+            try
             {
-                ApiRequestException apiRequestException => $"Telegram API 错误:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
-                _ => exception.ToString()
-            };
-            Console.WriteLine(ErrorMessage);
+                logErr2024(exception, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
+                var ErrorMessage = exception switch
+                {
+                    ApiRequestException apiRequestException => $"Telegram API 错误:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
+                    _ => exception.ToString()
+                };
+                Console.WriteLine(ErrorMessage);
+               
+            }catch(Exception e)
+            {
+                logErr2024(e, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
+
+            }
             return Task.CompletedTask;
         }
         //删除别人信息

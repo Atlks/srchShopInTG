@@ -99,10 +99,11 @@ namespace WindowsFormsApp1
             };
 
 
-            Func<(SortedList, string), int> callFun_ivkStrEngr = ((SortedList, string) row) =>
+            Func<(SortedList, string), int> callFun_ivkStrEngr = ((SortedList, string) tpl) =>
             {
-                Console.WriteLine(row);
-                int strx = storeEngr.delete_row(row.Item1,row.Item2);
+                Console.WriteLine(tpl);
+                //del row dbf retVal
+                int strx = storeEngr.delete_row(tpl.Item1,tpl.Item2);
                 return strx;
             };
             //prtn cfg also trans into  save24614

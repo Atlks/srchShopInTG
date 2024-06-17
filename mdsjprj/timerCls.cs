@@ -15,6 +15,24 @@ using System.Runtime.CompilerServices;
 using mdsj.libBiz;
 using static mdsj.biz_other;
 using static prj202405.timerCls;
+using System.Collections.Generic;
+using DocumentFormat.OpenXml;
+using static mdsj.biz_other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+
+using static mdsj.libBiz.tgBiz;
+using static prj202405.lib.tglib;
 namespace prj202405
 {
     internal class timerCls
@@ -39,7 +57,8 @@ namespace prj202405
 
 
             //设置定时间隔(毫秒为单位)
-            int interval = 5000;
+            int interval = 15*1000;  //15s 一次，一共四次机会每小时。。
+            //因为设施了每小时 01分才触发
             System.Timers.Timer timer = new System.Timers.Timer(interval);
             //设置执行一次（false）还是一直执行(true)
             timer.AutoReset = true;
@@ -58,95 +77,126 @@ namespace prj202405
 
             DateTime now = DateTime.Now;
 
-            // //早餐
-            var zaocanLgF = $"tmrlg/brkfstPushLog{Convert.ToString(now.Month) + now.Day}.json";
-            if (now.Hour == 6 && (!System.IO.File.Exists(zaocanLgF)))
+            早餐(now);
+
+            launch午餐(now);
+
+            aftnTea(now);
+
+            wecan(now);
+            yule(now);
+
+            renciNshangj(now);
+            cuxiao(now);
+
+            static void 早餐(DateTime now)
             {
-                // do something
-                System.IO.File.WriteAllText(zaocanLgF, "pushlog");
-                // Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "早餐时间到了");
-                zaocan();
+                // //早餐
+                string zaocanLgF = $"tmrlg/brkfstPushLog{Convert.ToString(now.Month) + now.Day}.json";
+
+                if (now.Hour == 6 && now.Minute == 1 && (!System.IO.File.Exists(zaocanLgF)))
+                {
+                    // do something
+                    System.IO.File.WriteAllText(zaocanLgF, "pushlog");
+                    // Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "早餐时间到了");
+                    zaocan();
+                }
             }
 
-
-            //午餐
-            if (now.Hour == 11 && (!System.IO.File.Exists($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json")))
-
+            static void launch午餐(DateTime now)
             {
-                Console.WriteLine("push luch time。");
-                System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
-                //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
-                z_wucan();
+                //午餐
+                string lauch = $"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json";
+                if (now.Hour == 11 && now.Minute == 1 && (!System.IO.File.Exists(lauch)))
 
+                {
+                    Console.WriteLine("push luch time。");
+                    System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
+                    //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
+                    z_wucan();
+
+                }
             }
 
-
-            //下午差
-            var xwcF = $"tmrlg/xiawuchaPushLog{Convert.ToString(now.Month) + now.Day}.json";
-            if (now.Hour == 16 && (!System.IO.File.Exists(xwcF)))
+            static void aftnTea(DateTime now)
             {
-                System.IO.File.WriteAllText(xwcF, "pushlog");
-                // do something
-                z_xiawucha();
+                //下午差
+                var xwcF = $"tmrlg/xiawuchaPushLog{Convert.ToString(now.Month) + now.Day}.json";
+                if (now.Hour == 16 && now.Minute == 1 && (!System.IO.File.Exists(xwcF)))
+                {
+                    System.IO.File.WriteAllText(xwcF, "pushlog");
+                    // do something
+                    z_xiawucha();
+                }
             }
 
-
-            //下午差
-            //18,wecan,wancan()
-            xwcF = $"tmrlg/wecanPushLog{Convert.ToString(now.Month) + now.Day}.json";
-            if (now.Hour == 18 && (!System.IO.File.Exists(xwcF)))
+            static void wecan(DateTime now)
             {
-                System.IO.File.WriteAllText(xwcF, "pushlog");
-                // do something
-                z18_wancan();
+                //晚餐
+                //18,wecan,wancan()
+                var vecan = $"tmrlg/wecanPushLog{Convert.ToString(now.Month) + now.Day}.json";
+                if (now.Hour == 18 && now.Minute == 1 && (!System.IO.File.Exists(vecan)))
+                {
+                    System.IO.File.WriteAllText(vecan, "pushlog");
+                    // do something
+                    z18_wancan();
+                }
             }
 
+            static void renciNshangj(DateTime now)
+            {
 
+                //人气榜
+                var rqF = $"tmrlg/renqiPushLog{Convert.ToString(now.Month) + now.Day}.json";
+                if (now.Hour == 0 && now.Minute == 1 && (!System.IO.File.Exists(rqF)))
+                {
+                    System.IO.File.WriteAllText(rqF, "pushlog");
+                    // do something
+                    z_renqi();
+                }
+
+                //#huodong 商家
+                var hour = "8";
+                var huodonMrcht = $"tmrlg/actShjPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
+                if (now.Hour == 8 && now.Minute == 1 && (!System.IO.File.Exists(huodonMrcht)))
+                {
+                    System.IO.File.WriteAllText(huodonMrcht, "pushlog");
+                    // do something
+                    //    z_actSj();
+                }
+            }
+
+            static void cuxiao(DateTime now)
+            {
+                var tsoxiaoShjk = $"tmrlg/actMenuPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
+                if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
+                {
+                    System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
+
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt, tgBiz.tg_btmBtns());
+                }
+            }
+        }
+
+        private static void yule(DateTime now)
+        {
             //娱乐
             var ylF = $"tmrlg/yulePushLog{Convert.ToString(now.Month) + now.Day}.json";
-            if (now.Hour == 21 && (!System.IO.File.Exists(xwcF)))
+            if (now.Hour == 21 && now.Minute == 1 && (!System.IO.File.Exists(ylF)))
             {
                 System.IO.File.WriteAllText(ylF, "pushlog");
                 // do something
                 z21_yule();
             }
-
-
-
-            //人气榜
-            var rqF = $"tmrlg/renqiPushLog{Convert.ToString(now.Month) + now.Day}.json";
-            if (now.Hour == 0 && (!System.IO.File.Exists(rqF)))
-            {
-                System.IO.File.WriteAllText(rqF, "pushlog");
-                // do something
-                z_renqi();
-            }
-
-            //#huodong 商家
-            var hour = "8";
-            rqF = $"tmrlg/actShjPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
-            if (now.Hour == 8 && (!System.IO.File.Exists(rqF)))
-            {
-                System.IO.File.WriteAllText(rqF, "pushlog");
-                // do something
-                z_actSj();
-            }
-
-
-            rqF = $"tmrlg/actMenuPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
-            if ((now.Hour == 10 || now.Hour == 16) && (!System.IO.File.Exists(rqF)))
-            {
-                System.IO.File.WriteAllText(rqF, "pushlog");
-
-                tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt, tgBiz.tg_btmBtns());
-            }
-
-
         }
+
         public static string plchdTxt = "💁博彩盘推荐：<a href='https://t.me/shibolianmeng'><b>世博联盟</b></a>";
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {
+            var __METHOD__ = "z_actSj";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+
             HashSet<prj202405.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
             results = (from c in _citys
@@ -164,66 +214,12 @@ namespace prj202405
 
 
             string Path = "今日促销商家.gif";
-            await sendMsg(Path, plchdTxt, results);
+            await bot_sendMsg(Path, plchdTxt, results);
+            dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
 
-        // sendmsg4timrtask
-        private static async Task sendMsg(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
-        {
-            // var  = plchdTxt;
-            //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
-            var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-            //  Program.botClient.SendPhotoAsync()
-
-            Message message = await Program.botClient.SendPhotoAsync(
-                      Program.groupId, Photo, null,
-                      msgtxt,
-                        parseMode: ParseMode.Html,
-                       replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false);
-
-            Console.WriteLine(JsonConvert.SerializeObject(message));
-
-
-            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-            //遍历方法三：遍历哈希表中的键值
-            foreach (DictionaryEntry de in chtsSess)
-            {
-                if (Convert.ToInt64(de.Key) == Program.groupId)
-                    continue;
-                var key = de.Key;
-                Console.WriteLine(" SendPhotoAsync " + de.Key);
-
-                //  Program.botClient.send
-                try
-                {
-                    var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                    Message message2 = await Program.botClient.SendPhotoAsync(
-                    Convert.ToInt64(de.Key)
-                      , Photo2, null,
-                      msgtxt,
-                        parseMode: ParseMode.Html,
-                       replyMarkup: new InlineKeyboardMarkup(results),
-                       protectContent: false);
-                    Console.WriteLine(JsonConvert.SerializeObject(message2));
-
-                }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
-
-            }
-
-
-
-            //Program.botClient.SendTextMessageAsync(
-            //         Program.groupId,
-            //         "活动商家",
-            //         parseMode: ParseMode.Html,
-            //         replyMarkup: new InlineKeyboardMarkup(results),
-            //         protectContent: false,
-            //         disableWebPagePreview: true);
-        }
-
+     
         public static async Task evt_inline_menuitem_click_showSubmenu(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
         {
             // [CallerMemberName] string methodName = ""
@@ -429,18 +425,20 @@ namespace prj202405
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
 
-            await sendMsg("今日商家人气榜.gif", plchdTxt, results);
+            await bot_sendMsg("今日商家人气榜.gif", plchdTxt, results);
         }
 
+        //todo 娱乐kwd 有空白
         public static async void z21_yule()
         {
-            var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧";
+            //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧
+            var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 ";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            await sendMsg("娱乐消遣.gif", plchdTxt, results);
+            await bot_sendMsg("娱乐消遣.gif", plchdTxt, results);
 
         }
 
@@ -454,7 +452,7 @@ namespace prj202405
             string Path = "早餐商家推荐.gif";
             var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
-            await sendMsg("早餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsg("早餐商家推荐.gif", plchdTxt, results);
         }
 
 
@@ -465,7 +463,7 @@ namespace prj202405
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
 
-            await sendMsg("晚餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsg("晚餐商家推荐.gif", plchdTxt, results);
 
         }
         public static async void z_wucan()
@@ -474,7 +472,7 @@ namespace prj202405
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
-            await sendMsg("午餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsg("午餐商家推荐.gif", plchdTxt, results);
 
 
         }
@@ -486,7 +484,7 @@ namespace prj202405
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
-            await sendMsg("下午茶商家推荐.gif", plchdTxt, results);
+            await bot_sendMsg("下午茶商家推荐.gif", plchdTxt, results);
 
 
 

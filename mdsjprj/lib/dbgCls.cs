@@ -326,6 +326,18 @@ namespace prj202405.lib
             //}
             return args;
         }
+
+        public static object func_get_args4async( params object[] paramValues)
+        {
+            // 获取当前方法
+            // MethodBase method = new StackFrame(1).GetMethod();
+
+            
+            return paramValues;
+            // 序列化为 JSON 字符串
+            //  return JsonConvert.SerializeObject(parameterValues, Formatting.Indented);
+        }
+
         /**
          * 
          * 在C#中，由于其类型系统的不同，无法直接实现类似于PHP的func_get_args函数，因为C#的方法参数必须在编译时指定类型。

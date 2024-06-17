@@ -56,8 +56,9 @@ namespace prj202405
 {
     internal class Program
     {
+        //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         public const string botname = "LianXin_BianMinBot";
-        public static TelegramBotClient botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");
+        public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
 
         //左道群
         public static long groupId = -1001613022200;
@@ -93,8 +94,22 @@ namespace prj202405
             Console.WriteLine(System.IO.File.ReadAllText("logo.txt"));
         }
 
-        static async Task Main(string[] args)
+      public  static async Task Main(string[] args)
         {
+
+            try
+            {
+                // 获取机器人的信息
+                Telegram.Bot.Types. User me = await botClient.GetMeAsync();
+                Console.WriteLine($"Bot ID: {me.Id}");
+                Console.WriteLine($"Bot Name: {me.FirstName}");
+                Console.WriteLine($"Bot Username: {me.Username}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        //    Console.WriteLine("botClient uname=>"+ botClient.)
             PrintPythonLogo();
 
             //            C# 中捕获全局异常和全局异步异常，可以通过以下方式实现：
@@ -146,7 +161,7 @@ namespace prj202405
             testCls.test();
 
             //分类枚举
-            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: tglib.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
+             botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: tglib.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
             {
                 AllowedUpdates = [UpdateType.Message,
                     UpdateType.CallbackQuery,

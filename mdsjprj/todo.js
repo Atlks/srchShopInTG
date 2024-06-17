@@ -1,0 +1,4 @@
+console.log(33)
+
+
+//todo гщРжkwd гаПеАз
