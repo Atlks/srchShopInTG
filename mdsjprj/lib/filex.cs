@@ -7,7 +7,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Telegram.Bot.Types.ReplyMarkups;
-
+using static mdsj.lib.encdCls;
 // prj202405.lib.filex
 namespace prj202405.lib
 {
@@ -119,13 +119,22 @@ namespace prj202405.lib
                 Directory.CreateDirectory(directoryPath);
             }
         }
+        public static void wrtLgTypeDate(string logdir, object o)
+        {
+            // 创建目录
+            Directory.CreateDirectory(logdir);
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            string fileName = $"{logdir}/{timestamp}.json";
+            file_put_contents(fileName, json_encode(o), false);
 
+        }
         /// <summary>
         /// Removes consecutive extra newline characters from the input string.
         /// </summary>
         /// <param name="input">The input string with potential extra newlines.</param>
         /// <returns>A string with extra newlines removed.</returns>
-   
+
         /// <summary>
         /// 将指定内容写入到文件中，如果文件不存在则创建文件。
         /// </summary>

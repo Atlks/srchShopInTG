@@ -51,6 +51,7 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
+using DocumentFormat.OpenXml.Office2010.Excel;
 
 
 namespace prj202405
@@ -77,7 +78,11 @@ namespace prj202405
         {  
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
-
+                object o = new Hashtable();
+                wrtLgTypeDate("msgrcvDir", o);
+               // timerCls.z_actSj();
+                //   z_actSj();
+              //   callx((id: 11, dbf: "dbf"));
                 List<SortedList> rws = ormIni.qryV2("cateECns.ini");
 
                 SortedList map = rws[0];
@@ -96,8 +101,8 @@ namespace prj202405
 
                 //    json2dbMrcht();
 
-                var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
-                logErr2025(o, "func_get_args", "errlogDir2024");
+              //  var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
+             //   logErr2025(o, "func_get_args", "errlogDir2024");
 
                 // exportCftFrmDb();
                 //var sql_dbf = "mrcht.json";
@@ -210,6 +215,22 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static void wrtLgTypeDate(string logdir, object o)
+        {
+            // 创建目录
+            Directory.CreateDirectory(logdir);
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            string fileName = $"{logdir}/{timestamp}.json";
+            file_put_contents(fileName, json_encode(o), false);
+
+        }
+
+        private static void callx((int id, string dbf) value)
+        {
+           // throw new NotImplementedException();
         }
 
         private static void getProdSvrWdlib()

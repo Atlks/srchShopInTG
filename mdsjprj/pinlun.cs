@@ -28,7 +28,7 @@ namespace prj202405
               //  result += "\n\n<b>------------客户点评------------</b>";
                 // result += "\n\n<b>还无人点评 " ；
                 result += "\n\n@回复本消息,即可对商家点评!(100字以内)";
-                result += "\n\n" + timerCls.plchdTxt;
+             
                 return result;
             }
 

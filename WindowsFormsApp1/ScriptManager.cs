@@ -16,6 +16,9 @@ using static mdsj.lib.encdCls;
 using static prj202405.lib.corex;
 using static prj202405.lib.strCls;
 using static prj202405.lib.arrCls;
+
+using static WindowsFormsApp1.libbiz.queryEngr4nodesqlt;
+using WindowsFormsApp1.libbiz;
 namespace WindowsFormsApp1
 {
     [ComVisible(true)]
@@ -46,44 +49,41 @@ namespace WindowsFormsApp1
             //from xxx partion(aa,bb) where xxx
 
 
-            Func<string, List<SortedList>> cfgStrEngr = getRdStrEngr();
-            //return (string prtnDbfNoExt) =>
-            //{
-            //    return rnd_next(prtnDbfNoExt);
-            //};
 
-            List<SortedList> rztLi = qryEngrParser.Qe_qry(fromDdataDir, partns, whereFun, cfgStrEngr: cfgStrEngr);
+
+            List<SortedList> rztLi = Qe_qry4NodeSqltMode(fromDdataDir, partns, whereFun);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
             return json_encode(rztLi);
         }
 
-        private Func<string, List<SortedList>> getRdStrEngr()
-        {
-            return (string prtnDbfNoExt) =>
-            {
-                return rnd_next(prtnDbfNoExt);
-            };
-        }
+     
+
+        //private Func<string, List<SortedList>> getRdStrEngr()
+        //{
+        //    return (string prtnDbfNoExt) =>
+        //    {
+        //        return rnd_next(prtnDbfNoExt);
+        //    };
+        //}
 
         public string find(string id)
         {
 
             string soluDir = @"../../../";
             soluDir = filex.GetAbsolutePath(soluDir);
-             var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
-            Func<string, List<SortedList>> cfgStrEngr = (string prtnDbfNoExt) =>
-            {
-                return rnd_next(prtnDbfNoExt);
-            };
-            SortedList results = Qe_find(id, dataDir ,null, cfgStrEngr);
-            results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty( results,"Telegram"));
-                 results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
+            var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+           
+            SortedList results = Qe_find4nodesqlt(id, dataDir);
+            results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty(results, "Telegram"));
+            results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
 
 
             return json_encode(results);
         }
+
+       
 
         public string del_clck(string id)
         {
@@ -91,23 +91,13 @@ namespace WindowsFormsApp1
             string soluDir = @"../../../";
             soluDir = filex.GetAbsolutePath(soluDir);
             var saveDataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
-         
-
-            Func<string, List<SortedList>> cfgStrEngr4rd = (string prtnDbfNoExt) =>
-            {
-                return rnd_next(prtnDbfNoExt);
-            };
 
 
-            Func<(SortedList, string), int> callFun_ivkStrEngr = ((SortedList, string) tpl) =>
-            {
-                Console.WriteLine(tpl);
-                //del row dbf retVal
-                int strx = storeEngr.delete_row(tpl.Item1,tpl.Item2);
-                return strx;
-            };
+            
+
+            
             //prtn cfg also trans into  save24614
-            int str = qryEngrParser.Qe_del(id, saveDataDir, cfgStrEngr4rd, callFun_ivkStrEngr);
+            int str = queryEngr4nodesqlt.Qe_del4nodeSqlt(id, saveDataDir);
             return str.ToString();
 
         }
@@ -125,23 +115,10 @@ namespace WindowsFormsApp1
             var saveDataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
 
 
-            Dictionary<string, string> prtnCfg = new Dictionary<string, string>();
-            prtnCfg.Add("prtnKey", "国家");
-            prtnCfg.Add("filetype", "db");  //sqlt
-            Func<SortedList, int> callFun_ivkStrEngr = (SortedList row) =>
-            {                
-                string prtnKey = "国家";
-                string wrtFile = $"{saveDataDir}\\{row[prtnKey]}.db";
-                int strx =storeEngr. write_row(row, wrtFile, dbg);
-                return strx;
-            };
-
-            Func<string, List<SortedList>> cfgStrEngr4rd = (string prtnDbfNoExt) =>
-            {
-                return rnd_next(prtnDbfNoExt);
-            };
+         
+           
             //prtn cfg also trans into  save24614
-            int str = qryEngrParser. Qe_save(sortedListNew,  saveDataDir, cfgStrEngr4rd, callFun_ivkStrEngr, dbg);
+            int str =queryEngr4nodesqlt. Qe_save4nodeSqlt(sortedListNew, saveDataDir);
             MessageBox.Show("添加成功!");
             return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());

@@ -79,19 +79,66 @@ namespace libx
             SortedList mereed = new SortedList();
             if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
             {
-                SortedList old = (Qe_find(sortedListNew["id"].ToString(), dataDir, null, cfgStrEngr4rd));
-                mereed = CopyToOldSortedList(sortedListNew, old);
+                return qe_merge(sortedListNew, dataDir, cfgStrEngr4rd, callFunStrEngr);
             }
             else
             {//new
-                mereed = sortedListNew;
-                // 获取当前时间并格式化为文件名
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                sortedListNew["id"] = timestamp;
-            }
+                return qe_add(sortedListNew, dataDir, callFunStrEngr);
 
-            // string str = save2storeFLByNodejs( mereed, dbg);
+            }
+        }
+
+        public static int Qe_saveOrUpdtMerge(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> cfgStrEngr4rd, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                return qe_merge(sortedListNew, dataDir, cfgStrEngr4rd, callFunStrEngr);
+            }
+            else
+            {//new
+                return qe_add(sortedListNew, dataDir, callFunStrEngr);
+
+            }
+        }
+
+        public static int Qe_saveOrUpdtReplace(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> cfgStrEngr4rd, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                return qe_replace(sortedListNew, dataDir,  callFunStrEngr);
+            }
+            else
+            {//new
+                return qe_add(sortedListNew, dataDir, callFunStrEngr);
+
+            }
+        }
+
+        private static int qe_replace(SortedList sortedListNew, string dataDir, Func<SortedList, int> callFunStrEngr)
+        {   
+           
+            int str = callFunStrEngr(sortedListNew);
+            return str;
+        }
+
+        private static int qe_merge(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> cfgStrEngr4rd, Func<SortedList, int> callFunStrEngr)
+        {
+
+            SortedList old = (Qe_find(sortedListNew["id"].ToString(), dataDir, null, cfgStrEngr4rd));
+            SortedList mereed = CopyToOldSortedList(sortedListNew, old);
             int str = callFunStrEngr(mereed);
+            return str;
+        }
+
+        private static int qe_add(SortedList sortedListNew, string dataDir, Func<SortedList, int> callFunStrEngr)
+        {
+            //  mereed = sortedListNew;
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            sortedListNew["id"] = timestamp;
+            int str = callFunStrEngr(sortedListNew);
             return str;
         }
 

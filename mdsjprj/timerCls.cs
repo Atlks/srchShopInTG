@@ -79,12 +79,12 @@ namespace prj202405
 
             早餐(now);
 
-            launch午餐(now);
+            Chk_launch午餐(now);
 
-            aftnTea(now);
+            Chk_aftnTea(now);
 
-            wecan(now);
-            yule(now);
+            Chktrg_wecan(now);
+            chktrg_yule(now);
 
             renciNshangj(now);
             cuxiao(now);
@@ -103,7 +103,7 @@ namespace prj202405
                 }
             }
 
-            static void launch午餐(DateTime now)
+            static void Chk_launch午餐(DateTime now)
             {
                 //午餐
                 string lauch = $"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json";
@@ -118,7 +118,7 @@ namespace prj202405
                 }
             }
 
-            static void aftnTea(DateTime now)
+            static void Chk_aftnTea(DateTime now)
             {
                 //下午差
                 var xwcF = $"tmrlg/xiawuchaPushLog{Convert.ToString(now.Month) + now.Day}.json";
@@ -130,7 +130,7 @@ namespace prj202405
                 }
             }
 
-            static void wecan(DateTime now)
+            static void Chktrg_wecan(DateTime now)
             {
                 //晚餐
                 //18,wecan,wancan()
@@ -139,7 +139,7 @@ namespace prj202405
                 {
                     System.IO.File.WriteAllText(vecan, "pushlog");
                     // do something
-                    z18_wancan();
+                    tmEvt_z18_wancan();
                 }
             }
 
@@ -178,13 +178,13 @@ namespace prj202405
             }
         }
 
-        private static void yule(DateTime now)
+        private static void chktrg_yule(DateTime now)
         {
             //娱乐
             var ylF = $"tmrlg/yulePushLog{Convert.ToString(now.Month) + now.Day}.json";
             if (now.Hour == 21 && now.Minute == 1 && (!System.IO.File.Exists(ylF)))
             {
-                System.IO.File.WriteAllText(ylF, "pushlog");
+                System.IO.File.WriteAllText(ylF, "pushlog"); //if wrt lg err.not next send
                 // do something
                 z21_yule();
             }
@@ -214,7 +214,7 @@ namespace prj202405
 
 
             string Path = "今日促销商家.gif";
-            await bot_sendMsg(Path, plchdTxt, results);
+            await bot_sendMsgToMlt(Path, plchdTxt, results);
             dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
@@ -425,20 +425,20 @@ namespace prj202405
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
 
-            await bot_sendMsg("今日商家人气榜.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("今日商家人气榜.gif", plchdTxt, results);
         }
 
         //todo 娱乐kwd 有空白
         public static async void z21_yule()
         {
-            //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧
-            var s = "娱乐 ktv 水疗 会所 嫖娼 酒吧 足疗 spa 马杀鸡 按摩 ";
+            //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧 马杀鸡
+            var s = "ktv 水疗 会所 嫖娼 酒吧 足疗 spa  按摩 ";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            await bot_sendMsg("娱乐消遣.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("娱乐消遣.gif", CaptionTxt+ plchdTxt, results);
 
         }
 
@@ -452,18 +452,18 @@ namespace prj202405
             string Path = "早餐商家推荐.gif";
             var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
-            await bot_sendMsg("早餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("早餐商家推荐.gif", plchdTxt, results);
         }
 
 
-        public static async void z18_wancan()
+        public static async void tmEvt_z18_wancan()
         {
             var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
 
-            await bot_sendMsg("晚餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("晚餐商家推荐.gif", plchdTxt, results);
 
         }
         public static async void z_wucan()
@@ -472,7 +472,7 @@ namespace prj202405
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
-            await bot_sendMsg("午餐商家推荐.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("午餐商家推荐.gif", msgtxt+plchdTxt, results);
 
 
         }
@@ -484,7 +484,7 @@ namespace prj202405
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
-            await bot_sendMsg("下午茶商家推荐.gif", plchdTxt, results);
+            await bot_sendMsgToMlt("下午茶商家推荐.gif", plchdTxt, results);
 
 
 

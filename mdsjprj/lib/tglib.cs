@@ -43,7 +43,7 @@ namespace prj202405.lib
          
          */
         // sendmsg4timrtask
-        public static async Task bot_sendMsg(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
+        public static async Task bot_sendMsgToMlt(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
         {
 
             var __METHOD__ = "sendMsg";
@@ -55,15 +55,10 @@ namespace prj202405.lib
                 //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
                 var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //  Program.botClient.SendPhotoAsync()
+                sendFoto(imgPath, msgtxt, results, Program.groupId);
+               
 
-                Message message = await Program.botClient.SendPhotoAsync(
-                          Program.groupId, Photo, null,
-                          msgtxt,
-                            parseMode: ParseMode.Html,
-                           replyMarkup: new InlineKeyboardMarkup(results),
-                           protectContent: false);
-
-                Console.WriteLine(JsonConvert.SerializeObject(message));
+            //    Console.WriteLine(JsonConvert.SerializeObject(message));
 
 
                 var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
@@ -72,24 +67,10 @@ namespace prj202405.lib
                 {
                     if (Convert.ToInt64(de.Key) == Program.groupId)
                         continue;
-                    var key = de.Key;
-                    Console.WriteLine(" SendPhotoAsync " + de.Key);
+                    var chatid = Convert.ToInt64(de.Key);
+                    Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
+                      sendFoto(imgPath, msgtxt, results, chatid);
 
-                    //  Program.botClient.send
-                    try
-                    {
-                        var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                        Message message2 = await Program.botClient.SendPhotoAsync(
-                        Convert.ToInt64(de.Key)
-                          , Photo2, null,
-                          msgtxt,
-                            parseMode: ParseMode.Html,
-                           replyMarkup: new InlineKeyboardMarkup(results),
-                           protectContent: false);
-                        Console.WriteLine(JsonConvert.SerializeObject(message2));
-
-                    }
-                    catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
                 }
             }
@@ -110,6 +91,23 @@ namespace prj202405.lib
             //         replyMarkup: new InlineKeyboardMarkup(results),
             //         protectContent: false,
             //         disableWebPagePreview: true);
+        }
+
+        private static async Task sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
+        {
+            try
+            {
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                Message message2 = await Program.botClient.SendPhotoAsync(
+               chatid
+                  , Photo2, null,
+                  msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: new InlineKeyboardMarkup(results),
+                   protectContent: false);
+                Console.WriteLine(JsonConvert.SerializeObject(message2));
+            }
+            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
         }
 
         public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtons(string filePath)
@@ -207,7 +205,7 @@ namespace prj202405.lib
                 return update?.Message?.Text;
             if (update.Type == UpdateType.Message && update?.Message?.Caption != null)
                 return update?.Message?.Caption;
-      
+
 
             return "";
 
@@ -215,6 +213,7 @@ namespace prj202405.lib
         //出错后执行的方法
         public static Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
+            Console.WriteLine("FUN bot_pollingErrorHandler()");
             try
             {
                 logErr2024(exception, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
@@ -224,12 +223,14 @@ namespace prj202405.lib
                     _ => exception.ToString()
                 };
                 Console.WriteLine(ErrorMessage);
-               
-            }catch(Exception e)
+
+            }
+            catch (Exception e)
             {
                 logErr2024(e, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
 
             }
+            Console.WriteLine("END FUN bot_pollingErrorHandler()");
             return Task.CompletedTask;
         }
         //删除别人信息
@@ -280,12 +281,12 @@ namespace prj202405.lib
 
         }
         //新增加入的聊天Id
-       public static void bot_AddChatIds(long chatId)
+        public static void bot_AddChatIds(long chatId)
         {
             var id = chatId.ToString();
             if (Program.chatIds.Contains(chatId.ToString()) == false)
             {
-                Program. chatIds.Add(id);
+                Program.chatIds.Add(id);
             AddChatIds:
                 try
                 {

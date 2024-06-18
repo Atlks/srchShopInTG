@@ -60,8 +60,8 @@ namespace prj202405
         public const string botname = "LianXin_BianMinBot";
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
 
-        //左道群
-        public static long groupId = -1001613022200;
+        // task grp
+        public static long groupId = -1002206103554;
         //机器人创建者Id
         static readonly long botCreatorId = 6091395167;
         //加入的聊天Ids
@@ -94,22 +94,10 @@ namespace prj202405
             Console.WriteLine(System.IO.File.ReadAllText("logo.txt"));
         }
 
-      public  static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
-
-            try
-            {
-                // 获取机器人的信息
-                Telegram.Bot.Types. User me = await botClient.GetMeAsync();
-                Console.WriteLine($"Bot ID: {me.Id}");
-                Console.WriteLine($"Bot Name: {me.FirstName}");
-                Console.WriteLine($"Bot Username: {me.Username}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        //    Console.WriteLine("botClient uname=>"+ botClient.)
+            获取机器人的信息();
+            //    Console.WriteLine("botClient uname=>"+ botClient.)
             PrintPythonLogo();
 
             //            C# 中捕获全局异常和全局异步异常，可以通过以下方式实现：
@@ -122,6 +110,8 @@ namespace prj202405
             System.IO.Directory.CreateDirectory("pinlunDir");
             #region 构造函数
 
+
+            // set test grp bot
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
                 //                mg MR.HAN, [20 / 5 / 2024 下午 1:25]
@@ -133,9 +123,9 @@ namespace prj202405
                 //mg MR.HAN, [20 / 5 / 2024 下午 1:25]
                 //@LianXin_BianMinBot
                 // botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0"); ///lianxin_2025bot.
-                botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");   //@LianXin_BianMinBot
+                //  botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");   //@LianXin_BianMinBot
 
-                groupId = -1002040239665; // - 1001613022200;
+                groupId = -1002206103554; //taskgrp
 
             }
             ////ini()   
@@ -160,23 +150,47 @@ namespace prj202405
 
             testCls.test();
 
+
+            //botClient.OnMessage += Bot_OnMessage;
+          //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
             //分类枚举
-             botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync, pollingErrorHandler: tglib.bot_pollingErrorHandler, receiverOptions: new ReceiverOptions()
-            {
-                AllowedUpdates = [UpdateType.Message,
-                    UpdateType.CallbackQuery,
-                    UpdateType.ChannelPost,
-                    UpdateType.MyChatMember,
-                    UpdateType.ChatMember,
-                    UpdateType.ChatJoinRequest],
-                ThrowPendingUpdates = true,
-            });
+            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync,
+                pollingErrorHandler: tglib.bot_pollingErrorHandler,
+                receiverOptions: new ReceiverOptions()
+                {
+                    AllowedUpdates = Array.Empty<UpdateType>(),
+                    // 接收所有类型的更新
+                    //AllowedUpdates = [UpdateType.Message,
+                    //    UpdateType.CallbackQuery,
+                    //    UpdateType.ChannelPost,
+                    //    UpdateType.MyChatMember,
+                    //    UpdateType.ChatMember,
+                    //    UpdateType.ChatJoinRequest],
+                    ThrowPendingUpdates = true,
+                });
+            //在 Telegram.Bot 库中，ThrowPendingUpdates 是一个参数，用于指定在机器人启动时是否丢弃所有挂起的更新。换句话说，如果在启动机器人之前已经有一些未处理的更新（消息、命令等），设置 ThrowPendingUpdates 可以决定是否忽略这些未处理的更新。
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
             timerCls.setTimerTask();
 
 #warning 循环账号是否过期了
 
             Console.ReadKey();
+        }
+
+        private static async Task 获取机器人的信息()
+        {
+            try
+            {
+                // 获取机器人的信息
+                Telegram.Bot.Types.User me = await botClient.GetMeAsync();
+                Console.WriteLine($"Bot ID: {me.Id}");
+                Console.WriteLine($"Bot Name: {me.FirstName}");
+                Console.WriteLine($"Bot Username: {me.Username}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
         }
 
 
@@ -394,8 +408,9 @@ namespace prj202405
                     if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                     {
                         Console.WriteLine(" 不包含商品服务词，ret");
-
+                        await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                         return;
+                        //  return;
                     }
                     string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
                     await evt_msgTrgSrch(botClient, update, fuwuWd);
@@ -438,18 +453,18 @@ namespace prj202405
                     HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
                     if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                     {
-                        Console.WriteLine(" 不包含商品服务词，ret"); 
+                        Console.WriteLine(" 不包含商品服务词，ret");
 
                         return;
                     }
-                    string fuwuWd=getFuwuci(update?.Message?.Text, 商品与服务词库);
+                    string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
                     if (getFuwuci == null)
                     {
                         Console.WriteLine(" 不包含商品服务词，ret");
                         return;
                     }
 
-                   
+
 
                     await evt_msgTrgSrch(botClient, update, fuwuWd);
                     dbgCls.setDbgValRtval(__METHOD__, 0);
@@ -502,7 +517,7 @@ namespace prj202405
             if (text == null)
                 return null;
             string[] spltWds = calcKwdsAsArr(ref text);
-            foreach(string wd in spltWds)
+            foreach (string wd in spltWds)
             {
                 if (商品与服务词库.Contains(wd))
                     return wd;
@@ -519,7 +534,7 @@ namespace prj202405
                 Console.WriteLine(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string fileName = $"msgRcvDir/{timestamp}.txt";
+                string fileName = $"msgRcvDir/{timestamp}.json";
                 Console.WriteLine(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
@@ -721,7 +736,7 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update,SortedList whereMap2)
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -735,7 +750,7 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update , SortedList fuwuci)
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx != null)
@@ -743,7 +758,7 @@ namespace prj202405
                 if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update,fuwuci);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci);
                 return;
             }
         }
@@ -1371,7 +1386,7 @@ namespace prj202405
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
-                whereExprsObj.Add("fuwuci", TryGetValueAsStrDefNull( whereMap,"fuwuci"));
+                whereExprsObj.Add("fuwuci", TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
@@ -2024,6 +2039,16 @@ namespace prj202405
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
 
+            if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+            {
+                Console.WriteLine("not same user...ret");
+                await botClient.AnswerCallbackQueryAsync(
+                          callbackQueryId: update.CallbackQuery.Id,
+                          text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                          showAlert: true); // 这是显示对话框的关键);
+                return;
+
+            }
             var cq = update.CallbackQuery!;
 
             //联系商家
@@ -2212,6 +2237,7 @@ namespace prj202405
             }
 
             var result = string.Empty;
+            result += "\n\n" + timerCls.plchdTxt;
             // result += $"<blockquote>您搜索统计:搜索{user.Searchs}  返列表{user.Returns}  查看数{user.Views}  看菜单{user.ViewMenus}  打分{user.Scores}  评价{user.Comments}</blockquote>";
             //展现量 浏览量 评论数
             // result += $"\n🔎{contact_Merchant.Searchs}    👁{contact_Merchant.Views}    💬{contact_Merchant.Comments.Count()}";
@@ -2481,6 +2507,13 @@ namespace prj202405
 
             }  //end ctch
 
+        }
+
+        private static bool str_eq(string? username1, string? username2)
+        {
+            if (username1 == null || username2 == null)
+                return false;
+            return username1.Equals(username2);
         }
 
 
