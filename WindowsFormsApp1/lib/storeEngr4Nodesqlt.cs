@@ -17,15 +17,15 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
-using static libx.storeEngr;
+using static libx.storeEngr4Nodesqlt;
 using static libx.funCls;
-using static libx.storeEngr;
+using static libx.storeEngr4Nodesqlt;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using prj202405.lib;
 namespace libx
 {
-    internal class storeEngr
+    internal class storeEngr4Nodesqlt
     {
 
         //cmd 模式可能遇到cache size ouput oversize prblm,can use async mode solu
@@ -158,7 +158,7 @@ namespace libx
             return 0;
         }
         
-        public static int write_row(SortedList row, string wrtFile, SortedList dbg)
+        public static int write_row4nodeSqlt(SortedList row, string wrtFile, SortedList dbg)
         {
             SortedList prm = new SortedList();
 
@@ -176,13 +176,14 @@ namespace libx
             prm.Add("dbg", dbg);
 
             string scriptPath = $"{prjDir}\\sqltnode\\write_row.js";
-            string str = funCls.callNode(scriptPath, prm);
+          
+            string str = funCls.call_exe_retStr(execpath, scriptPath, prm);
             return int.Parse(str);
         }
 
       
         //rd 
-        public static List<SortedList> rnd_next(string dbf)
+        public static List<SortedList> rnd_next4nodeSqlt(string dbf)
         {
             if (!dbf.EndsWith(".db"))
             {
@@ -199,14 +200,15 @@ namespace libx
 
             string prjDir = @"../../";
             string scriptPath = $"{prjDir}\\sqltnode\\rnd.js";
-            string txt = callRetList(scriptPath,prm);
+            string outputDir = $"{prjDir}\\sqltnode\\tmp";
+            string txt = callRetList(execpath,scriptPath, prm, outputDir);
             List<SortedList> li = json_decode(txt);
             return li;
         }
 
         //  buf参数包含要删除行的内容。对于大多数存储引擎，该参数可被忽略，
         //  但事务性存储引擎可能需要保存删除的数据，以供回滚操作使用。
-        internal static int delete_row(SortedList buf_row, string dbf)
+        internal static int delete_row4nodeSqlt(SortedList buf_row, string dbf)
         {
 
             SortedList prm = new SortedList();
@@ -225,7 +227,7 @@ namespace libx
          //   prm.Add("dbg", dbg);
 
             string scriptPath = $"{prjDir}\\sqltnode\\delete_row.js";
-            string str = callNode(scriptPath, prm);
+            string str = call_exe_retStr(execpath, scriptPath, prm);
             return int.Parse(str);
         }
     }

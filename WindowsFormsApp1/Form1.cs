@@ -24,6 +24,11 @@ namespace WindowsFormsApp1
         }
         public Form1()
         {
+            string soluDir = @"../../../";
+
+            soluDir = filex.GetAbsolutePath(soluDir);
+          corex.  soluPath = soluDir;
+            corex.execpath = corex.soluPath + "/node-v22.2.0-win-x64/node.exe";
             testCls.test();
         corex.    SetFeatures(55000);
             InitializeComponent();

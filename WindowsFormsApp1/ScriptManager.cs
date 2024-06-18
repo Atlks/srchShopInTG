@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static libx.qryEngrParser;
-using static libx.storeEngr;
+using static libx.storeEngr4Nodesqlt;
 using static mdsj.lib.encdCls;
 //using static mdsj.other;
 //using static mdsj.clrCls;
@@ -17,7 +17,7 @@ using static prj202405.lib.corex;
 using static prj202405.lib.strCls;
 using static prj202405.lib.arrCls;
 
-using static WindowsFormsApp1.libbiz.queryEngr4nodesqlt;
+using static WindowsFormsApp1.libbiz.strengFunRefCls;
 using WindowsFormsApp1.libbiz;
 namespace WindowsFormsApp1
 {
@@ -51,7 +51,8 @@ namespace WindowsFormsApp1
 
 
 
-            List<SortedList> rztLi = Qe_qry4NodeSqltMode(fromDdataDir, partns, whereFun);
+            List<SortedList> rztLi =   Qe_qry(fromDdataDir, partns, whereFun, rndFun: rnd4nodeSqltRef());
+          //  Qe_qry4NodeSqltMode(fromDdataDir, partns, whereFun);
 
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
@@ -59,15 +60,7 @@ namespace WindowsFormsApp1
         }
 
      
-
-        //private Func<string, List<SortedList>> getRdStrEngr()
-        //{
-        //    return (string prtnDbfNoExt) =>
-        //    {
-        //        return rnd_next(prtnDbfNoExt);
-        //    };
-        //}
-
+ 
         public string find(string id)
         {
 
@@ -75,7 +68,8 @@ namespace WindowsFormsApp1
             soluDir = filex.GetAbsolutePath(soluDir);
             var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
            
-            SortedList results = Qe_find4nodesqlt(id, dataDir);
+            SortedList results = Qe_find(id, dataDir, null, rnd4nodeSqltRef());// Qe_find4nodesqlt(id, dataDir);
+          
             results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty(results, "Telegram"));
             results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
 
@@ -97,11 +91,11 @@ namespace WindowsFormsApp1
 
             
             //prtn cfg also trans into  save24614
-            int str = queryEngr4nodesqlt.Qe_del4nodeSqlt(id, saveDataDir);
+            int str =    Qe_del(id, saveDataDir, rnd4nodeSqltRef(), del_row4nodeSqltRef());
             return str.ToString();
 
         }
-
+      
         public string save_click(string urlqryStr)
         {
             SortedList sortedListNew = urlqry2hashtb(urlqryStr);
@@ -111,14 +105,17 @@ namespace WindowsFormsApp1
 
 
             string soluDir = @"../../../";
+           
             soluDir = filex.GetAbsolutePath(soluDir);
+            soluPath = soluDir;
             var saveDataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
 
 
          
            
             //prtn cfg also trans into  save24614
-            int str =queryEngr4nodesqlt. Qe_save4nodeSqlt(sortedListNew, saveDataDir);
+            int str =Qe_saveOrUpdtMerge(sortedListNew, saveDataDir, rnd4nodeSqltRef(), wrt_row4nodeSqltRef( saveDataDir));
+            //Qe_saveOrUpdtMrgr4nodeSqlt(sortedListNew, saveDataDir);
             MessageBox.Show("添加成功!");
             return str.ToString();
             //  SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());

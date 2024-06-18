@@ -73,14 +73,19 @@ namespace prj202405.lib
             //不晓得设置有什么用
           //  Registry.SetValue(featureControlRegKey + "FEATURE_ENABLE_CLIPCHILDREN_OPTIMIZATION", appName, 1, RegistryValueKind.DWord);
         }
+        public static string soluPath = "";
+        public static string execpath="";
 
         //D:\0prj\mdsj\WindowsFormsApp1\sqltnode\qry.js
-        public  static string callNodePstr(string scriptPath, string arguments)
+        public  static string call_exe_Pstr(String exec,string scriptPath, string arguments)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
+
             // Create a new process to run the Node.js script
             Process process = new Process();
-            process.StartInfo.FileName = "node";
-            process.StartInfo.Arguments = $"{scriptPath} {arguments}";
+            process.StartInfo.FileName = exec;
+            process.StartInfo.Arguments = $"\"{scriptPath}\" \"{arguments}\"";
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;
@@ -118,7 +123,7 @@ namespace prj202405.lib
             {
                 output += Environment.NewLine + "Error output: " + errorOutput;
             }
-
+            dbgCls.setDbgValRtval(__METHOD__, output);
             return output;
         }
 

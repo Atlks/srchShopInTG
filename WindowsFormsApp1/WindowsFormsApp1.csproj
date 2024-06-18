@@ -150,10 +150,10 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="libbiz\queryEngr4nodesqlt.cs" />
+    <Compile Include="libbiz\strengFunRefCls.cs" />
     <Compile Include="lib\funCls.cs" />
     <Compile Include="lib\qryEngrParser.cs" />
-    <Compile Include="lib\storeEngr.cs" />
+    <Compile Include="lib\storeEngr4Nodesqlt.cs" />
     <Compile Include="ScriptManager.cs" />
     <Compile Include="lib\arrCls.cs" />
     <Compile Include="lib\core.cs" />

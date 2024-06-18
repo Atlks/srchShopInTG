@@ -2041,12 +2041,16 @@ namespace prj202405
 
             if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
             {
-                Console.WriteLine("not same user...ret");
-                await botClient.AnswerCallbackQueryAsync(
-                          callbackQueryId: update.CallbackQuery.Id,
-                          text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
-                          showAlert: true); // 这是显示对话框的关键);
-                return;
+                if (!update.CallbackQuery.Data.Contains("timerMsgMode2025"))
+                {
+                    Console.WriteLine("not same user...ret");
+                    await botClient.AnswerCallbackQueryAsync(
+                              callbackQueryId: update.CallbackQuery.Id,
+                              text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                              showAlert: true); // 这是显示对话框的关键);
+                    return;
+                }
+                  
 
             }
             var cq = update.CallbackQuery!;

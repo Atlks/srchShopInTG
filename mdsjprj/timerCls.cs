@@ -190,7 +190,10 @@ namespace prj202405
             }
         }
 
-        public static string plchdTxt = "💁博彩盘推荐：<a href='https://t.me/shibolianmeng'><b>世博联盟</b></a>";
+       /// <summary>
+       /// /、、https://t.me/shibolianmeng
+       /// </summary>
+        public static string plchdTxt = "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {

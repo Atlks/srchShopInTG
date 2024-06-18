@@ -300,43 +300,51 @@ namespace prj202405.lib
         }
         public static async Task tg_addChtid(Update update)
         {
-            long chatId = -1;
-            switch (update!.Type)
+            try
             {
-                case UpdateType.Message:
-                    chatId = update.Message!.Chat.Id;
-                    break;
-                case UpdateType.EditedMessage:
-                    try
-                    {
-                        await tglib.bot_dltMsgThenSendmsg(update.EditedMessage!.Chat.Id, update.EditedMessage.MessageId, "不可二次编辑搜索信息,只能重新搜索,现对您编辑的信息进行销毁!", 5);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("告知不可二次编辑时出错:" + ex.Message);
-                    }
-                    break;
-                case UpdateType.CallbackQuery:
-                    chatId = update.CallbackQuery!.From.Id;
-                    break;
-                case UpdateType.ChannelPost:
-                    chatId = update.ChannelPost!.Chat.Id;
-                    break;
-                case UpdateType.MyChatMember:
-                    chatId = update.MyChatMember!.Chat.Id;
-                    break;
-                case UpdateType.ChatMember:
-                    chatId = update.ChatMember!.Chat.Id;
-                    break;
-                case UpdateType.ChatJoinRequest:
-                    chatId = update.ChatJoinRequest!.Chat.Id;
-                    break;
-                default:
-                    break;
-            }
+                long chatId = -1;
+                switch (update!.Type)
+                {
+                    case UpdateType.Message:
+                        chatId = update.Message!.Chat.Id;
+                        break;
+                    case UpdateType.EditedMessage:
+                        //try
+                        //{
+                        //    await tglib.bot_dltMsgThenSendmsg(update.EditedMessage!.Chat.Id, update.EditedMessage.MessageId, "不可二次编辑搜索信息,只能重新搜索,现对您编辑的信息进行销毁!", 5);
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    Console.WriteLine("告知不可二次编辑时出错:" + ex.Message);
+                        //}
+                        break;
+                    case UpdateType.CallbackQuery:
+                        chatId = update.CallbackQuery!.From.Id;
+                        break;
+                    case UpdateType.ChannelPost:
+                        chatId = update.ChannelPost!.Chat.Id;
+                        break;
+                    case UpdateType.MyChatMember:
+                        chatId = update.MyChatMember!.Chat.Id;
+                        break;
+                    case UpdateType.ChatMember:
+                        chatId = update.ChatMember!.Chat.Id;
+                        break;
+                    case UpdateType.ChatJoinRequest:
+                        chatId = update.ChatJoinRequest!.Chat.Id;
+                        break;
+                    default:
+                        break;
+                }
 
-            if (chatId != -1)
-                tglib.bot_AddChatIds(chatId);
+                if (chatId != -1)
+                    tglib.bot_AddChatIds(chatId);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+           
         }
 
 

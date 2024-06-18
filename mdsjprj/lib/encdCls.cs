@@ -15,6 +15,19 @@ namespace mdsj.lib
 {
     internal class encdCls
     {
+
+        static string escapeshellarg(string arg)
+        {
+            // Check if the argument contains spaces or quotes
+            if (arg.Contains(" ") || arg.Contains("\"") || arg.Contains("\'"))
+            {
+                // Escape quotes by doubling them
+                arg = arg.Replace("\"", "\\\"").Replace("'", "\\'");
+                // Enclose the argument in double quotes
+                arg = "\"" + arg + "\"";
+            }
+            return arg;
+        }
         /// <summary> 们可以编写类似于 PHP 中的 unserialize 和 serialize 函数。
         /// 这两个函数通常用于将对象序列化为字符串（serialize）和将字符串反序列化为对象（unserialize）。
         /// 在 C# 中，可以使用 JSON 序列化和反序列化来实现类似的功能。下面是示例代码
