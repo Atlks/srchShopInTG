@@ -14,7 +14,7 @@ namespace prj202405.lib
     internal class strCls
     {
 
-        public static string ExtractTextAfterMarker(string input, string marker)
+        public static string substr_AfterMarker(string input, string marker)
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(marker))
             {
@@ -52,7 +52,7 @@ namespace prj202405.lib
 
 
 
-        public static string[] calcKwdsAsArr(ref string msgx)
+        public static string[] splt_by_fenci(ref string msgx)
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
             var segmenter = new JiebaSegmenter();
@@ -82,18 +82,18 @@ namespace prj202405.lib
             Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
-        public static string calcKwds(ref string msgx)
-        {
-            msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
-            var segmenter = new JiebaSegmenter();
-            segmenter.LoadUserDict("user_dict.txt");
-            segmenter.AddWord("会所"); // 可添加一个新词
-            segmenter.AddWord("妙瓦底"); // 可添加一个新词
-            var kwds = segmenter.CutForSearch(msgx); // 搜索引擎模式
-            string kdwsJoin = string.Join("/", kwds);
-            Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
-            return kdwsJoin;
-        }
+        //public static string calcKwds(ref string msgx)
+        //{
+        //    msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
+        //    var segmenter = new JiebaSegmenter();
+        //    segmenter.LoadUserDict("user_dict.txt");
+        //    segmenter.AddWord("会所"); // 可添加一个新词
+        //    segmenter.AddWord("妙瓦底"); // 可添加一个新词
+        //    var kwds = segmenter.CutForSearch(msgx); // 搜索引擎模式
+        //    string kdwsJoin = string.Join("/", kwds);
+        //    Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+        //    return kdwsJoin;
+        //}
 
         /// <summary> 
         /// 繁体转换为简体
@@ -140,6 +140,38 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
+    public   static string trim_RemoveUnnecessaryCharacters(string input)
+        {
+            // Define the characters to be removed
+            char[] charsToRemove = new char[] { '\"', '[', ']' };
+
+            // Create a new array to hold the filtered characters
+            char[] result = new char[input.Length];
+            int resultIndex = 0;
+
+            // Iterate over the input string and copy only the characters that are not in charsToRemove
+            foreach (char c in input)
+            {
+                bool shouldRemove = false;
+                foreach (char remove in charsToRemove)
+                {
+                    if (c == remove)
+                    {
+                        shouldRemove = true;
+                        break;
+                    }
+                }
+
+                if (!shouldRemove)
+                {
+                    result[resultIndex++] = c;
+                }
+            }
+
+            // Return the new string without the unnecessary characters
+            string v = new string(result, 0, resultIndex);
+            return v.Trim();
+        }
         internal static bool containKwds(string? text, string trgSearchKwds)
         {
             if (text == null)
@@ -164,7 +196,29 @@ namespace prj202405.lib
             return false;
         }
 
-        public static string RemoveWords(string inputText, HashSet<string> wordsToRemove)
+ //pai除 城市词
+        //触发词  城市词  商品词
+        //internal static int containCalcCntScore(string seasrchKw2ds, IEnumerable<string> segments)
+        //{
+        //    int n = 0;
+        //    foreach (string kwd in segments)
+        //    {
+        //        var kwd2 = kwd.Trim();
+        //        if (kwd2.Length > 0)
+        //        {
+        //            if (strBiz_isPostnWord(kwd2))
+        //                continue;
+        //            if (seasrchKw2ds.Contains(kwd2))
+        //            {
+        //                n++;
+        //                Console.WriteLine(" contain kwd=>" + kwd2);
+        //            }
+                      
+        //        }
+        //    }
+        //    return n;
+        //}
+        public static string replace_RemoveWords(string inputText, HashSet<string> wordsToRemove)
         {
             // 使用正则表达式拆分文本为单词
             string[] words = Regex.Split(inputText, @"\W+");
@@ -208,11 +262,7 @@ namespace prj202405.lib
         //    return n;
         //}
 
-        private static bool strBiz_isPostnWord(string kwd2)
-        {
-            HashSet<string> citys = ReadLinesToHashSet("位置词.txt");
-            return citys.Contains(kwd2);
-        }
+     
 
 
         /// <summary>
@@ -267,7 +317,7 @@ namespace prj202405.lib
 
         }
 
-        internal static string JoinHashtbKV(string v, ICollection keys)
+        internal static string join2024(string v, ICollection keys)
         {
             // 获取Hashtable的所有键
             //     ICollection keys = hashtable.Keys;
@@ -282,7 +332,7 @@ namespace prj202405.lib
         }
 
         // ToLower
-        internal static bool StartsWith(string? text, string v)
+        internal static bool isStartsWith(string? text, string v)
         {
             if (text == null) return false;
 
@@ -293,39 +343,5 @@ namespace prj202405.lib
             return false;
         }
 
-        internal static int containCalcCntScoreSetfmt(HashSet<string> set, string[] segments)
-        {
-          //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
-         //   Console.WriteLine();
-            set.Remove("店");
-            set.Remove("飞机号");
-
-            HashSet<string> blackListWd=new HashSet<string>();
-
-            blackListWd.Add("店");
-            blackListWd.Add("飞机号");
-
-
-            int n = 0;
-            foreach (string kwd in segments)
-            {
-                var kwd2 = kwd.Trim();
-                
-                if (kwd2.Length > 0)
-                {
-                    if (blackListWd.Contains(kwd2))
-                        continue;
-                    if (strBiz_isPostnWord(kwd2))
-                        continue;
-                    if (set.Contains(kwd2))
-                    {
-                        n++;
-                        Console.WriteLine(" contain. kwd=>" + kwd2);
-                    }
-
-                }
-            }
-            return n;
-        }
     }
 }

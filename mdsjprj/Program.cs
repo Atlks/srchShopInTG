@@ -446,7 +446,7 @@ namespace prj202405
                     //去除搜索触发词，比如哪里有
                     msgx = msgx.Replace("联系方式", " ");
                     HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
-                    msgx = RemoveWords(msgx, hs);
+                    msgx = replace_RemoveWords(msgx, hs);
 
                     //是否包含搜索词 商品或服务关键词
                     Console.WriteLine(" 商品或服务关键词 srch");
@@ -516,7 +516,7 @@ namespace prj202405
         {
             if (text == null)
                 return null;
-            string[] spltWds = calcKwdsAsArr(ref text);
+            string[] spltWds = splt_by_fenci(ref text);
             foreach (string wd in spltWds)
             {
                 if (商品与服务词库.Contains(wd))
@@ -560,7 +560,7 @@ namespace prj202405
             msgx = msgx.Replace("联系方式", " ");
             //去除搜索触发词，比如哪里有
             HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
-            msgx = RemoveWords(msgx, hs);
+            msgx = replace_RemoveWords(msgx, hs);
             // 搜索触发词
 
 

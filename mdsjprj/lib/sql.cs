@@ -21,7 +21,7 @@ namespace prj202405.lib
 
             //var columns = implode(", ", arr.Keys);
 
-            var columns = strCls.JoinHashtbKV(",", SortedList1.Keys);          
+            var columns = strCls.join2024(",", SortedList1.Keys);          
 
             string values2024 = valueSqlFmt(SortedList1);
             return "(" + columns + ")values(" + values2024 + ")";

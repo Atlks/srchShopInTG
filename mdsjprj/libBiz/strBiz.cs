@@ -11,7 +11,47 @@ namespace mdsj.libBiz
 {
     internal class strBiz
     {
-        public static string[] calcKwdsAsArr(ref string msgx)
+        public static int containCalcCntScoreSetfmt(HashSet<string> set, string[] segments)
+        {
+            //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
+            //   Console.WriteLine();
+            set.Remove("店");
+            set.Remove("飞机号");
+
+            HashSet<string> blackListWd = new HashSet<string>();
+
+            blackListWd.Add("店");
+            blackListWd.Add("飞机号");
+
+
+            int n = 0;
+            foreach (string kwd in segments)
+            {
+                var kwd2 = kwd.Trim();
+
+                if (kwd2.Length > 0)
+                {
+                    if (blackListWd.Contains(kwd2))
+                        continue;
+                    if (strBiz_isPostnWord(kwd2))
+                        continue;
+                    if (set.Contains(kwd2))
+                    {
+                        n++;
+                        Console.WriteLine(" contain. kwd=>" + kwd2);
+                    }
+
+                }
+            }
+            return n;
+        }
+
+        public static bool strBiz_isPostnWord(string kwd2)
+        {
+            HashSet<string> citys = ReadLinesToHashSet("位置词.txt");
+            return citys.Contains(kwd2);
+        }
+        public static string[] splt_by_fenci458prj(ref string msgx)
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
             var segmenter = new JiebaSegmenter();
@@ -41,11 +81,11 @@ namespace mdsj.libBiz
             Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
-        public static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
+        public static string substr_getFuwuci(string? text, HashSet<string> 商品与服务词库)
         {
             if (text == null)
                 return null;
-            string[] spltWds = calcKwdsAsArr(ref text);
+            string[] spltWds = splt_by_fenci458prj(ref text);
             foreach (string wd in spltWds)
             {
                 if (商品与服务词库.Contains(wd))

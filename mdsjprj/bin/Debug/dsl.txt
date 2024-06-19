@@ -1,0 +1,29 @@
+let a 111
+let b bbb
+echo a  %b%
+
+
+
+
+
+if gretthan a 111  
+
+    
+    echo ifthencase...
+else
+
+   
+     echo  elseCase....
+
+endif
+
+
+
+fun xxx
+
+echo 222
+
+endfun
+
+
+call xxx 111

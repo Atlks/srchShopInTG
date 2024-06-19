@@ -48,7 +48,7 @@ namespace libx
         }
 
 
-        public static string callRetList(string execpath,string scriptPath, SortedList prm,string outputDir)
+        public static string call_exec_RetList(string execpath,string scriptPath, SortedList prm,string outputDir)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));

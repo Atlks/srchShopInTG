@@ -21,6 +21,21 @@ namespace prj202405.lib
 {
     internal class ormJSonFL
     {
+
+        public static void WriteFileIfNotExist(string filePath, string txt)
+        {
+            // 获取文件目录
+            string dir = System.IO.Path.GetDirectoryName(filePath);
+
+            // 检查目录是否存在，如果不存在，则创建目录
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            File.WriteAllText(filePath, txt);
+
+
+        }
         //qry just use path as qry dsl  ,,
         public static ArrayList qryDep(string dbFileName)
         {

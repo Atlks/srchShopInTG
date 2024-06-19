@@ -289,11 +289,11 @@ namespace prj202405.lib
             }
         }
 
-        internal static string rowValDefEmpty(SortedList row, string v)
+        internal static string ldFldDefEmpty(SortedList row, string fld)
         {
-            if (row[v] == null)
+            if (row[fld] == null)
                 return "";
-            return row[v].ToString();
+            return row[fld].ToString();
         }
 
 
@@ -315,6 +315,19 @@ namespace prj202405.lib
             //    return (string)value;
             //}
 
+        }
+		
+		       public static string TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string k)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            if (whereExprsObj.ContainsKey(k))
+                if (whereExprsObj[k] == null)
+                    return "";
+                else
+                    return whereExprsObj[k].ToString();
+            else
+                return "";
         }
 
         internal static string TryGetValueAsStrDefNull(SortedList whereExprsObj, string k)

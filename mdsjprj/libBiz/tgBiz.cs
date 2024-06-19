@@ -57,7 +57,7 @@ namespace mdsj.libBiz
             //if rply n frmuser is bot n textContain(我是便民助手
             if (update?.Message?.ReplyToMessage != null
                 && update.Message.ReplyToMessage.From.Username ==Program. botname
-                && strCls.StartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
+                && strCls.isStartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
                 )
             {
                 return false;  // not nml msg ,start search;

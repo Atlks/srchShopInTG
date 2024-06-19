@@ -23,6 +23,7 @@ using static libx.storeEngr4Nodesqlt;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using prj202405.lib;
+ 
 namespace libx
 {
     internal class storeEngr4Nodesqlt
@@ -177,7 +178,7 @@ namespace libx
 
             string scriptPath = $"{prjDir}\\sqltnode\\write_row.js";
           
-            string str = funCls.call_exe_retStr(execpath, scriptPath, prm);
+            string str = call_exe_retStr(execpath, scriptPath, prm);
             return int.Parse(str);
         }
 

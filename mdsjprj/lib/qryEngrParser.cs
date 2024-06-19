@@ -17,34 +17,49 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
 using static libx.qryEngrParser;
-using static libx.storeEngr;
+using static libx.storeEngr4Nodesqlt;
 namespace libx
 {
     internal class qryEngrParser
     {
 
-
-        public static int Qe_save(SortedList sortedListNew, string dataDir, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
+        public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> rndFun, Func<(SortedList, string), int> del_row_Fun)
         {
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            SortedList mereed = new SortedList();
-            if (!sortedListNew.ContainsKey("id"))
-                sortedListNew.Add("id", timestamp);
-            if (sortedListNew["id"].ToString().Trim() == "")
-                sortedListNew["id"] = timestamp;
 
+            var patns_dbfs = _calcPatnsV3(fromDdataDir, "");
+            string[] arr = patns_dbfs.Split(',');
 
-
-            // string str = save2storeFLByNodejs( mereed, dbg);
-            int str = callFunStrEngr(mereed);
-            return str;
-        }
-
-        public static List<SortedList> Qe_qry(string fromDdataDir, string partnsExprs, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> cfgStrEngr)
-        {
-            if (cfgStrEngr is null)
+            int n = 0;
+            foreach (string dbf in arr)
             {
-                throw new ArgumentNullException(nameof(cfgStrEngr));
+                Func<SortedList, bool> whereFun = (SortedList row) =>
+                {
+                    if (string.IsNullOrEmpty(id))
+                        return false;
+                    if (row["id"].ToString().ToLower() == (id.ToLower()))
+                        return true;
+                    return false;
+                };
+
+                //= _qryBySnglePart(dbf, whereFun, cfgStrEngr);
+                //rztLi = arrCls.array_merge(rztLi, li);
+                List<SortedList> delneedRowSX = _qryBySnglePart(dbf, whereFun, rndFun);
+                //   var tuple = (id: id, dbf: dbf);
+                //   var tuple = (id: id, dbf: dbf);
+                foreach (SortedList delneedRow in delneedRowSX)
+                {
+                    n = n + del_row_Fun((rw: delneedRow, dbf: dbf));
+                }
+
+            }
+
+            return n;
+        }
+        public static List<SortedList> Qe_qry(string fromDdataDir, string partnsExprs, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
+        {
+            if (rndFun is null)
+            {
+                throw new ArgumentNullException(nameof(rndFun));
             }
 
             List<SortedList> rztLi = new List<SortedList>();
@@ -52,67 +67,116 @@ namespace libx
             string[] arr = patns_dbfs.Split(',');
             foreach (string dbf in arr)
             {
-                List<SortedList> li = _qryBySnglePart(dbf, whereFun, cfgStrEngr);
+                List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
                 rztLi = arrCls.array_merge(rztLi, li);
             }
 
             return rztLi;
         }
 
-        public static SortedList find24614(string id, string dataDir, string partns = null, Func<string, List<SortedList>> cfgStrEngrx = null)
+        public static int Qe_save(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> rndFun, Func<SortedList, int> wrt_rowFun, SortedList dbg = null)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                return qe_merge(sortedListNew, dataDir, rndFun, wrt_rowFun);
+            }
+            else
+            {//new
+                return qe_add(sortedListNew, dataDir, wrt_rowFun);
+
+            }
+        }
+
+        public static int Qe_saveOrUpdtMerge(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> rndFun, Func<SortedList, int> wrt_row_fun, SortedList dbg = null)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                return qe_merge(sortedListNew, dataDir, rndFun, wrt_row_fun);
+            }
+            else
+            {//new
+                return qe_add(sortedListNew, dataDir, wrt_row_fun);
+
+            }
+        }
+
+        public static int Qe_saveOrUpdtReplace(SortedList sortedListNew, string dataDir,  Func<SortedList, int> wrt_rowFun, SortedList dbg = null)
+        {
+            SortedList mereed = new SortedList();
+            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
+            {
+                return qe_replace(sortedListNew, dataDir,  wrt_rowFun);
+            }
+            else
+            {//new
+                return qe_add(sortedListNew, dataDir, wrt_rowFun);
+
+            }
+        }
+
+        private static int qe_replace(SortedList sortedListNew, string dataDir, Func<SortedList, int> wrt_rowFun)
+        {   
+           
+            int str = wrt_rowFun(sortedListNew);
+            return str;
+        }
+
+        private static int qe_merge(SortedList sortedListNew, string dataDir, Func<string, List<SortedList>> rndFun, Func<SortedList, int> wrt_rowFun)
+        {
+
+            SortedList old = (Qe_find(sortedListNew["id"].ToString(), dataDir, null, rndFun));
+            SortedList mereed = CopyToOldSortedList(sortedListNew, old);
+            int str = wrt_rowFun(mereed);
+            return str;
+        }
+
+        private static int qe_add(SortedList sortedListNew, string dataDir, Func<SortedList, int> wrt_rowFun)
+        {
+            //  mereed = sortedListNew;
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            sortedListNew["id"] = timestamp;
+            int str = wrt_rowFun(sortedListNew);
+            return str;
+        }
+
+        // str eng is find_current_row
+        public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (string.IsNullOrEmpty(id))
                     return false;
-                if (row["id"].ToString().ToLower().Contains(id.ToLower()))
+                if (row["id"].ToString().ToLower() == (id.ToLower()))
                     return true;
                 return false;
             };
 
             //from xxx partion(aa,bb) where xxx
-            List<SortedList> rztLi = qry888(dataDir, partns, whereFun, cfgStrEngr: cfgStrEngrx);
+            List<SortedList> rztLi = Qe_qry(dataDir, partns, whereFun, rndFun: rndFun);
 
 
             SortedList results = rztLi[0];
             return results;
         }
 
-        public static int saveOrUpdt(SortedList sortedListNew, string dataDir, Func<SortedList, int> callFunStrEngr, SortedList dbg = null)
-        {
-            SortedList mereed = new SortedList();
-            if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
-            {
-                SortedList old = (find24614(sortedListNew["id"].ToString(), dataDir));
-                mereed = CopyToOldSortedList(sortedListNew, old);
-            }
-            else
-            {//new
-                mereed = sortedListNew;
-                // 获取当前时间并格式化为文件名
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                sortedListNew["id"] = timestamp;
-            }
-
-            // string str = save2storeFLByNodejs( mereed, dbg);
-            int str = callFunStrEngr(mereed);
-            return str;
-        }
-
-
 
 
         internal static string _calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            setDbgFunEnter(__METHOD__, func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
- 
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+
+            //if (string.IsNullOrEmpty(Extname))
+            //    Extname = "txt";
             if (string.IsNullOrEmpty(partfile区块文件))
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                setDbgValRtval(__METHOD__, rzt);
+                dbgCls.setDbgValRtval(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -134,16 +198,16 @@ namespace libx
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            setDbgValRtval(__METHOD__, result);
+            dbgCls.setDbgValRtval(__METHOD__, result);
 
             return result;
         }
 
 
         //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
-        public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> cfgStrEngr)
+        public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
-            List<SortedList> li = cfgStrEngr(dbf);
+            List<SortedList> li = rndFun(dbf);
 
             li = db.qryV7(li, whereFun);
             return li;

@@ -110,7 +110,7 @@ namespace mdsj
 
           //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
-            string[] kwds = strCls.calcKwdsAsArr(ref msgCtain);
+            string[] kwds = strCls.splt_by_fenci(ref msgCtain);
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
             kwds=removeStopWd4biz(kwds);
@@ -118,7 +118,7 @@ namespace mdsj
 
             //c----calc fuwuci 
             HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");            
-            string fuwuci = getFuwuci(msgCtain, 商品与服务词库);
+            string fuwuci = substr_getFuwuci(msgCtain, 商品与服务词库);
 
 
             HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
@@ -140,22 +140,22 @@ namespace mdsj
                     if (hasCondt(whereExprsObj, "国家"))
                         if (!strCls.eq(row["国家"], arrCls.TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                             return false;
-                    if (arrCls.rowValDefEmpty(row, "cateEgls") == "Property")
+                    if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                         return false;
 
                     //if condt  containxx(row,msgSpltKwArr)>0
 
-                    var seasrchKwds = "__citykwds=> " + arrCls.rowValDefEmpty(row, "城市关键词") +
-                      "__pkkwds=> " + arrCls.rowValDefEmpty(row, "园区关键词") +
-                       "__mrcht_kwds=> " + arrCls.rowValDefEmpty(row, "关键词") +
-                       "__mrcht_CategoryStrKwds=> " + arrCls.rowValDefEmpty(row, "分类关键词");
+                    var seasrchKwds = "__citykwds=> " + arrCls.ldFldDefEmpty(row, "城市关键词") +
+                      "__pkkwds=> " + arrCls.ldFldDefEmpty(row, "园区关键词") +
+                       "__mrcht_kwds=> " + arrCls.ldFldDefEmpty(row, "关键词") +
+                       "__mrcht_CategoryStrKwds=> " + arrCls.ldFldDefEmpty(row, "分类关键词");
                     row["_seasrchKw2ds"] = seasrchKwds;
                     HashSet<string> curRowKywdSset = new HashSet<string>();
 
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "分类关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "城市关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.rowValDefEmpty(row, "园区关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
+                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
 
                     //去除触发词，，只保留 服务次和位置词
                     // if no fuwuci flt
@@ -168,7 +168,7 @@ namespace mdsj
                     //-------------weizhi condt
                     if (weizhici == null)
                     {
-                        containScore = strCls.containCalcCntScoreSetfmt(curRowKywdSset, kwds);
+                        containScore = containCalcCntScoreSetfmt(curRowKywdSset, kwds);
                         if (containScore > 0)
                         {
                             row["_containCntScore"] = containScore;
@@ -211,8 +211,8 @@ namespace mdsj
                  },
                      (SortedList row) =>
                      {
-                         string text = arrCls.rowValDefEmpty(row, "城市") + " • " + arrCls.rowValDefEmpty(row, "园区") + " • " + arrCls.rowValDefEmpty(row, "商家");
-                         string guid = arrCls.rowValDefEmpty(row, "Guid编号");
+                         string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
+                         string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
                          InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
                          return btnsInLine;
                      }
