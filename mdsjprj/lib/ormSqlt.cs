@@ -185,7 +185,7 @@ namespace prj202405.lib
                         var row = new SortedList();
                         for (int i = 0; i < reader.FieldCount; i++)
                         {
-                            arrCls.addRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
+                            arrCls.stfld_addRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
                             //  row[reader.GetName(i)] = reader.GetValue(i);
                         }
                         results.Add(row);

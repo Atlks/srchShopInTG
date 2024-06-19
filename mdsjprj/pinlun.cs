@@ -40,7 +40,7 @@ namespace prj202405
                 SortedList rw = rows[i];
                 try
                 {
-                    if (arrCls.TryGetValueAsStrDefNull(rw, "评论人id") == null)
+                    if (arrCls.ldfld_TryGetValueAsStrDefNull(rw, "评论人id") == null)
                     {
                         continue;
                     }

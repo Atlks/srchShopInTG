@@ -85,6 +85,15 @@ namespace mdsj.lib
                 // 这里可以记录日志或执行其他处理
                 e.SetObserved(); // 标记异常已观察到，防止程序崩溃   // 阻止异常传播
 
+
+                //// 延迟启动一个新的线程
+                //new System.Threading.Thread(() =>
+                //{
+                //    // 恢复应用程序逻辑
+                //    // Console.WriteLine("Application is recovering...");
+                //    Program.Main(null);
+                //    // Restart or recover logic here
+                //}).Start();
                 logCls.logErr2025((Exception)e.Exception, "TaskScheduler_UnobservedTaskException", "errlog");
                 Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
 

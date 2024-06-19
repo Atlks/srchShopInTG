@@ -30,9 +30,10 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-
+using static mdsj.lib.web3;
 using static mdsj.libBiz.tgBiz;
 using static prj202405.lib.tglib;
+using static prj202405.timerCls;
 namespace prj202405
 {
     internal class timerCls
@@ -67,6 +68,30 @@ namespace prj202405
             //绑定Elapsed事件
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerEvt);
             timer.Start();
+        }
+
+
+        public static void setTimerTask4prs()
+        {
+             
+
+
+            //设置定时间隔(毫秒为单位)
+            int interval = 2*60 * 1000;  //15s 一次，一共四次机会每小时。。
+            //因为设施了每小时 01分才触发
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            //设置执行一次（false）还是一直执行(true)
+            timer.AutoReset = true;
+            //设置是否执行System.Timers.Timer.Elapsed事件
+            timer.Enabled = true;
+            //绑定Elapsed事件
+            timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerEvt4prs);
+            timer.Start();
+        }
+
+        private static void TimerEvt4prs(object? sender, ElapsedEventArgs e)
+        {
+            rdCnPrs();
         }
 
         internal static void TimerEvt(object? sender, ElapsedEventArgs e)

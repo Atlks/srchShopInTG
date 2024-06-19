@@ -4,11 +4,18 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static mdsj.lib.dtime;
 namespace mdsj.lib
 {
     internal class dtime
     {
+        public static void showSpanTime(long timestamp, string showtitle)
+        {
+            long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+            long spantime = (timestamp_end - timestamp);
+
+            Console.WriteLine(showtitle + spantime);
+        }
 
         /// <summary>
         /// 将日期字符串解析为 Unix 时间戳。

@@ -144,7 +144,7 @@ namespace prj202405.lib
             SortedList listIot = db.lst2IOT(list);
             foreach (SortedList objSave in lst_hash)
             {
-                arrCls.replaceKeyV(listIot, TryGetValueAsStrDefNull(objSave, "id"), objSave);
+                arrCls.stfld_replaceKeyV(listIot, ldfld_TryGetValueAsStrDefNull(objSave, "id"), objSave);
             }
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);

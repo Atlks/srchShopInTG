@@ -17,7 +17,7 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
-
+        //dep name
         public static SortedList urlqry2hashtb(string urlqryStr)
         {
 

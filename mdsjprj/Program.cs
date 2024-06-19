@@ -35,7 +35,7 @@ using mdsj.libBiz;
 
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
-
+using static prj202405.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
@@ -51,6 +51,7 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 
 using static mdsj.libBiz.tgBiz;
+using RG3.PF.Abstractions.Entity;
 
 namespace prj202405
 {
@@ -154,7 +155,7 @@ namespace prj202405
             //botClient.OnMessage += Bot_OnMessage;
           //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
             //分类枚举
-            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsync,
+            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsyncSafe,
                 pollingErrorHandler: tglib.bot_pollingErrorHandler,
                 receiverOptions: new ReceiverOptions()
                 {
@@ -171,7 +172,7 @@ namespace prj202405
             //在 Telegram.Bot 库中，ThrowPendingUpdates 是一个参数，用于指定在机器人启动时是否丢弃所有挂起的更新。换句话说，如果在启动机器人之前已经有一些未处理的更新（消息、命令等），设置 ThrowPendingUpdates 可以决定是否忽略这些未处理的更新。
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
             timerCls.setTimerTask();
-
+            setTimerTask4prs();
 #warning 循环账号是否过期了
 
             Console.ReadKey();
@@ -193,14 +194,32 @@ namespace prj202405
             }
         }
 
-
+        static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        {
+            // 获取主线程 ID
+            int reqThreadId = Thread.CurrentThread.ManagedThreadId;
+            //  throw new Exception("myex");
+            try
+            {
+          //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
+                 evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
+            }
+            catch(Exception e)
+            {
+                logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
+            }
+           
+        }
 
         //收到消息时执行的方法
-        static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, int reqThreadId)
         {
+          //  throw new Exception("myex");
             Console.WriteLine(0);
             var __METHOD__ = "evt_aHandleUpdateAsync";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            logCls.log("fun "+__METHOD__, func_get_args(),null,"logDir", reqThreadId);
+         
 
             await biz_other._readMerInfo();
             _logMsg(update);
@@ -220,6 +239,7 @@ namespace prj202405
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
+                logCls.log(__METHOD__, func_get_args(), "Exists "+ "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
                 // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
                 // var rkm = new InlineKeyboardMarkup(Keyboard);
                 var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
@@ -291,10 +311,10 @@ namespace prj202405
             }
 
 
-
+            //   logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
             #region taskregn
-            _ = Task.Run(async () =>
-            {
+            //_ = Task.Run(async (reqThreadId) =>
+            //{
                 if (update == null)
                     return;
 
@@ -413,7 +433,8 @@ namespace prj202405
                         //  return;
                     }
                     string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
-                    await evt_msgTrgSrch(botClient, update, fuwuWd);
+                // logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
+                evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
                     return;
                 }
 
@@ -466,7 +487,7 @@ namespace prj202405
 
 
 
-                    await evt_msgTrgSrch(botClient, update, fuwuWd);
+                      evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
                     dbgCls.setDbgValRtval(__METHOD__, 0);
                     return;
                 }
@@ -475,14 +496,14 @@ namespace prj202405
                 //next page evt,,,
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
                 {
-                    await evt_nextPrePage(botClient, update, whereMap2);
+                    await evt_nextPrePage(botClient, update, whereMap2, reqThreadId);
                     return;
                 }
 
                 //return evt
                 if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
                 {
-                    await evt_ret_mchrt_list(botClient, update, whereMap2);
+                    await evt_ret_mchrt_list(botClient, update, whereMap2,reqThreadId);
                     return;
                 }
 
@@ -491,7 +512,8 @@ namespace prj202405
                 //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
                 if (update.Type is UpdateType.CallbackQuery)
                 {
-                    await evt_View(botClient, update);
+                // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
+                evt_View(botClient, update, reqThreadId);
                 }
                 #endregion
 
@@ -500,7 +522,7 @@ namespace prj202405
                 await tglib.tg_addChtid(update);
 
                 #endregion
-            }, cancellationToken);
+            //}, cancellationToken);
             #endregion
 
             //}
@@ -545,8 +567,9 @@ namespace prj202405
 
         }
 
-        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd)
+        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd, int reqThreadId)
         {
+            logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
             SortedList whereMap = new SortedList();
             whereMap.Add("fuwuci", fuwuWd);
             var __METHOD__ = "evt_msgTrgSrch";
@@ -569,7 +592,7 @@ namespace prj202405
 
             if (msgx != null && msgx.Length < 25)
             {
-                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap,reqThreadId);
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
                 return;
@@ -736,7 +759,7 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2)
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2, int reqThreadId)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -745,20 +768,21 @@ namespace prj202405
                 if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap2);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap2, reqThreadId);
                 return;
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci)
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, int reqThreadId)
         {
+            logCls.log("fun evt_ret_mchrt_list" , func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx != null)
             {
                 if (msgx.Trim().StartsWith("@" + Program.botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci, reqThreadId);
                 return;
             }
         }
@@ -1293,11 +1317,11 @@ namespace prj202405
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMap)
+        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, int reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
-
+            logCls.log("fun GetList_qryV2", func_get_args(msgx,pagex,pagesizex, whereMapDep), "", "logDir", reqThreadId);
             if (msgx == null || msgx.Length == 0)
                 return;
             //  Console.WriteLine(" fun  GetList()");
@@ -1385,8 +1409,8 @@ namespace prj202405
 
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.TryGetValue(whereExprsObj, "@file"));
-                whereExprsObj.Add("fuwuci", TryGetValueAsStrDefNull(whereMap, "fuwuci"));
+                var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
+               // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
@@ -2034,11 +2058,11 @@ namespace prj202405
         //}
 
         //获取商家结果
-        static async Task evt_View(ITelegramBotClient botClient, Update update)
+        static async Task evt_View(ITelegramBotClient botClient, Update update, int reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
-
+            logCls.log("FUN "+ __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
             if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
             {
                 if (!update.CallbackQuery.Data.Contains("timerMsgMode2025"))

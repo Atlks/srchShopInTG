@@ -10,8 +10,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Binance.Net" Version="9.10.0" />
+    <PackageReference Include="BinanceAPI.NET" Version="35.1.11" />
     <PackageReference Include="ChineseCharacterConvert" Version="1.0.2" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
+    <PackageReference Include="CryptoExchange.Net" Version="7.6.0" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
     <PackageReference Include="jieba.NET" Version="0.42.2" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.0" />
@@ -19,6 +22,17 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
     <PackageReference Include="MiniGuid" Version="1.1.2" />
+    <PackageReference Include="Nethereum.ABI" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Accounts" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Contracts" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Hex" Version="4.21.0" />
+    <PackageReference Include="Nethereum.JsonRpc.RpcClient" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Model" Version="4.21.0" />
+    <PackageReference Include="Nethereum.RLP" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Signer" Version="4.21.0" />
+    <PackageReference Include="Nethereum.StandardTokenEIP20" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Util" Version="4.21.0" />
+    <PackageReference Include="Nethereum.Web3" Version="4.21.0" />
     <PackageReference Include="RG3.PF.PinYinScriptEngineCliWrap" Version="7.2.10" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />

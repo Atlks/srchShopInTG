@@ -162,7 +162,7 @@ namespace prj202405.lib
             SortedList listIot = db.lst2IOT(list);
 
             string key = SortedList1["id"].ToString();
-            arrCls.addRplsKeyV(listIot,key, SortedList1);          
+            arrCls.stfld_addRplsKeyV(listIot,key, SortedList1);          
             
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
@@ -200,7 +200,7 @@ namespace prj202405.lib
             foreach (SortedList objSave in rows)
             {
 
-                arrCls.replaceKeyV(listIot, TryGetValueAsStrDefNull(objSave, "id"), objSave);
+                arrCls.stfld_replaceKeyV(listIot, ldfld_TryGetValueAsStrDefNull(objSave, "id"), objSave);
 
             }
 

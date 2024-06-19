@@ -16,6 +16,7 @@ using static prj202405.lib.filex;
 using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
+using RG3.PF.Abstractions.Entity;
 namespace mdsj.lib
 {
     internal class logCls
@@ -140,6 +141,40 @@ namespace mdsj.lib
             {
                 Console.WriteLine(ex.ToString());
             }
+        }
+
+        internal static void log(string mETHOD__, object prm, object val, string logdir, int reqThreadId)
+        {
+            try
+            {
+                string timestampPx = DateTime.Now.ToString("dd_HHmmss");
+                Directory.CreateDirectory(logdir);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
+                string fileName = $"{logdir}/{timestamp}.{reqThreadId}.txt";
+                Console.WriteLine(" logdir=>" + logdir);
+                Console.WriteLine(" fileName=>" + fileName);
+                string msg = $"{timestampPx} {mETHOD__}({json_encode_noFmt(prm)})::{json_encode_noFmt(val)} \n"; 
+                if (IsString(msg))
+                {
+                    // 将字符串追加到文件
+                    File.AppendAllText(fileName, ToString(msg));
+                }
+                else
+                    System.IO.File.AppendAllText(fileName, json_encode(msg));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+            }
+            
+        }
+
+        private static string? ToString(object val)
+        {
+            if (val == null)
+                return "";
+            return val.ToString();
         }
     }
 }

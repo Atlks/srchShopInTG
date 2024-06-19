@@ -52,7 +52,12 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using DocumentFormat.OpenXml.Office2010.Excel;
-
+using RG3.PF.Abstractions.Entity;
+using System.Security.Cryptography;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
+using static mdsj.lib.dsl;
+using System.Reflection;
+using System.Threading;
 
 namespace prj202405
 {
@@ -75,7 +80,13 @@ namespace prj202405
         }
 
         internal static void test()
-        {  
+        {
+
+            logErr2024(111, "test", "errlog", null);
+
+            //rdCnPrs();
+            //  parse_str_dsl();
+
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
                 object o = new Hashtable();
@@ -217,6 +228,33 @@ namespace prj202405
 
         }
 
+     
+
+   public static string GetHtmlContent(string url)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {       // 设置用户代理
+                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
+
+                    HttpResponseMessage response = client.GetAsync(url).Result;
+                    response.EnsureSuccessStatusCode();
+                    string htmlContent = response.Content.ReadAsStringAsync().Result;
+                    dbgCls.setDbgValRtval(__METHOD__, htmlContent.Substring(0,300));
+                    return htmlContent;
+                }
+                catch (HttpRequestException e)
+                {
+                    Console.WriteLine($"Request error: {e.Message}");
+                    dbgCls.setDbgValRtval(__METHOD__, 0);
+                    return null;
+                }
+            }
+        }
         private static void wrtLgTypeDate(string logdir, object o)
         {
             // 创建目录
@@ -262,7 +300,7 @@ namespace prj202405
             foreach (SortedList rw in li)
             {
                 object? cateE = rw["cateEgls"];
-                arrCls.addRplsKeyV(rw, "分类", map[cateE.ToString()]);
+                arrCls.stfld_addRplsKeyV(rw, "分类", map[cateE.ToString()]);
             }
 
 
@@ -297,7 +335,7 @@ namespace prj202405
             List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
             foreach (SortedList obj in lst_hash)
             {
-                arrCls.replaceKeyV(obj, "ctry", "缅甸");
+                arrCls.stfld_replaceKeyV(obj, "ctry", "缅甸");
 
                 //obj[""ctry = ; // 设置 ctry 属性
                 //SortedList sortedList = new SortedList();

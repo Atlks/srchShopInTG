@@ -132,13 +132,13 @@ namespace mdsj
                 {
                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                     if (hasCondt(whereExprsObj, "城市"))
-                        if (!strCls.eq(row["城市"], arrCls.TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                        if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "园区"))
-                        if (!strCls.eq(row["园区"], arrCls.TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                        if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "国家"))
-                        if (!strCls.eq(row["国家"], arrCls.TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                        if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                             return false;
                     if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                         return false;
@@ -152,10 +152,10 @@ namespace mdsj
                     row["_seasrchKw2ds"] = seasrchKwds;
                     HashSet<string> curRowKywdSset = new HashSet<string>();
 
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
-                    arrCls.addSetNStr(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
+                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
+                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
+                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
+                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
 
                     //去除触发词，，只保留 服务次和位置词
                     // if no fuwuci flt
@@ -207,7 +207,7 @@ namespace mdsj
                  (SortedList sl) =>
                  {
                   //   (List<SortedList<string, object>>)
-                     return 0 - (int)getHashtableKv( sl, "_containCntScore", 0);                    
+                     return 0 - (int)ldfld( sl, "_containCntScore", 0);                    
                  },
                      (SortedList row) =>
                      {
@@ -459,7 +459,7 @@ namespace mdsj
 
         private static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
         {
-            string park4srch = arrCls.TryGetValue(whereExprsObj, v); ;
+            string park4srch = arrCls.ldfld_TryGetValue(whereExprsObj, v); ;
 
             if (park4srch == null)
             {

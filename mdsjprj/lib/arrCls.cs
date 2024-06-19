@@ -95,24 +95,24 @@ namespace prj202405.lib
             // 使用 LINQ 的 Select 方法对每个元素应用 mapFunction
             return source.Select(mapFunction);
         }
-        public static object getHashtableKv(SortedList hashobj, string fld, object v2)
+        public static object ldfld(SortedList hashobj, string fld, object dfval)
         {
             try
             {
                 if (hashobj.ContainsKey(fld))
                     return hashobj[fld];
                 else
-                    return v2;
+                    return dfval;
             }
             catch (Exception e)
             {
-                return v2;
+                return dfval;
             }
 
 
         }
 
-        public static object getRowVal(List<Dictionary<string, object>> lst, string fld, string v2)
+        public static object ldfld(List<Dictionary<string, object>> lst, string fld, string v2)
         {
             if (lst.Count > 0)
             {
@@ -144,37 +144,58 @@ namespace prj202405.lib
         }
 
 
-        internal static ArrayList dedulip(ArrayList List1, string idClmName)
-        {
-            ArrayList list = (ArrayList)List1;
-            SortedList listIot = db.lst2IOT(list, idClmName);
+        //internal static ArrayList dedulip(ArrayList List1, string idClmName)
+        //{
+        //    ArrayList list = (ArrayList)List1;
+        //    SortedList listIot = db.lst2IOT(list, idClmName);
 
-            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
 
-            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
-            return saveList_hpmod;
-        }
+        //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+        //    return saveList_hpmod;
+        //}
 
-        internal static ArrayList dedulipV2(ArrayList List1, string idClmName)
-        {
-            ArrayList list = (ArrayList)List1;
-            SortedList listIot = db.lst2IOT(list, idClmName);
+        //internal static ArrayList dedulipV2(ArrayList List1, string idClmName)
+        //{
+        //    ArrayList list = (ArrayList)List1;
+        //    SortedList listIot = db.lst2IOT(list, idClmName);
 
-            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
 
-            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
-            return saveList_hpmod;
-        }
-        public static ArrayList dedulip(ArrayList List1)
-        {
-            ArrayList list = (ArrayList)List1;
-            SortedList listIot = db.lst2IOT(list);
+        //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+        //    return saveList_hpmod;
+        //}
+        //internal static ArrayList dedulip(ArrayList List1, string idClmName)
+        //{
+        //    ArrayList list = (ArrayList)List1;
+        //    SortedList listIot = db.lst2IOT(list, idClmName);
 
-            //  listIot.Add(((SortedList)objSave)["id"], objSave);
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
 
-            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
-            return saveList_hpmod;
-        }
+        //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+        //    return saveList_hpmod;
+        //}
+
+        //internal static ArrayList dedulipV2(ArrayList List1, string idClmName)
+        //{
+        //    ArrayList list = (ArrayList)List1;
+        //    SortedList listIot = db.lst2IOT(list, idClmName);
+
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+        //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+        //    return saveList_hpmod;
+        //}
+        //public static ArrayList dedulip(ArrayList List1)
+        //{
+        //    ArrayList list = (ArrayList)List1;
+        //    SortedList listIot = db.lst2IOT(list);
+
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+        //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+        //    return saveList_hpmod;
+        //}
 
 
         public static List<t> array_merge<t>(List<t> list1, List<t> list2)
@@ -201,29 +222,29 @@ namespace prj202405.lib
             return result;
         }
 
-        public static List<t> MergeLists<t>(List<t> list1, List<t> list2)
-        {
-            List<t> result = new List<t>();
+        //public static List<t> MergeLists<t>(List<t> list1, List<t> list2)
+        //{
+        //    List<t> result = new List<t>();
 
-            // 获取最长列表的长度
-            int maxLength = Math.Max(list1.Count, list2.Count);
+        //    // 获取最长列表的长度
+        //    int maxLength = Math.Max(list1.Count, list2.Count);
 
-            // 遍历并合并列表
-            //for (int i = 0; i < maxLength; i++)
-            //{
-            for (int i = 0; i < list1.Count; i++)
-            {
-                result.Add(list1[i]);
-            }
+        //    // 遍历并合并列表
+        //    //for (int i = 0; i < maxLength; i++)
+        //    //{
+        //    for (int i = 0; i < list1.Count; i++)
+        //    {
+        //        result.Add(list1[i]);
+        //    }
 
-            for (int i = 0; i < list2.Count; i++)
-            {
-                result.Add(list2[i]);
-            }
-            //}
+        //    for (int i = 0; i < list2.Count; i++)
+        //    {
+        //        result.Add(list2[i]);
+        //    }
+        //    //}
 
-            return result;
-        }
+        //    return result;
+        //}
         public static List<T> rdmList<T>(List<T> results)
         {
             List<T> results22;
@@ -235,57 +256,51 @@ namespace prj202405.lib
 
 
 
-        private static void findd()
+        //private static void findd()
+        //{
+        //    long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
+
+        //    var users_txt = System.IO.File.ReadAllText("db.json");
+
+        //    showSpanTime(timestamp, "readFile");
+
+        //    ////JsonSerializerSettings settings = new JsonSerializerSettings();
+        //    ////settings.DefaultValueHandling = DefaultValueHandling.Ignore;
+        //    JArray rows = JsonConvert.DeserializeObject<JArray>(users_txt);
+        //    showSpanTime(timestamp, "delzobj");
+        //    var results = (from jo in rows
+        //                   where jo.Value<int>("key") == 10
+        //                   select jo).ToList();
+
+
+        //    Console.WriteLine(JsonConvert.SerializeObject(results));
+
+
+        //    string showtitle = "spatime(ms):";
+        //    showSpanTime(timestamp, showtitle);
+
+        //}
+
+    
+
+        //internal static List<InlineKeyboardButton[]> dedulip4inlnKbdBtnArr(List<InlineKeyboardButton[]> List1, string idClmName)
+        //{
+        //    //  ArrayList list = new ArrayList(List1);
+        //    SortedList listIot = db.lst2IOT4inlKbdBtnArr(List1, idClmName);
+
+        //    //  listIot.Add(((SortedList)objSave)["id"], objSave);
+
+        //    List<InlineKeyboardButton[]> saveList_hpmod = db.lstFrmIot4inlnKbdBtn(listIot);
+        //    return saveList_hpmod;
+        //}
+
+        internal static void Increment(SortedList<string, int> ordMap, string? fld)
         {
-            long timestamp = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-
-            var users_txt = System.IO.File.ReadAllText("db.json");
-
-            showSpanTime(timestamp, "readFile");
-
-            ////JsonSerializerSettings settings = new JsonSerializerSettings();
-            ////settings.DefaultValueHandling = DefaultValueHandling.Ignore;
-            JArray rows = JsonConvert.DeserializeObject<JArray>(users_txt);
-            showSpanTime(timestamp, "delzobj");
-            var results = (from jo in rows
-                           where jo.Value<int>("key") == 10
-                           select jo).ToList();
-
-
-            Console.WriteLine(JsonConvert.SerializeObject(results));
-
-
-            string showtitle = "spatime(ms):";
-            showSpanTime(timestamp, showtitle);
-
-        }
-
-        private static void showSpanTime(long timestamp, string showtitle)
-        {
-            long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-            long spantime = (timestamp_end - timestamp);
-
-            Console.WriteLine(showtitle + spantime);
-        }
-
-        internal static List<InlineKeyboardButton[]> dedulip4inlnKbdBtnArr(List<InlineKeyboardButton[]> List1, string idClmName)
-        {
-            //  ArrayList list = new ArrayList(List1);
-            SortedList listIot = db.lst2IOT4inlKbdBtnArr(List1, idClmName);
-
-            //  listIot.Add(((SortedList)objSave)["id"], objSave);
-
-            List<InlineKeyboardButton[]> saveList_hpmod = db.lstFrmIot4inlnKbdBtn(listIot);
-            return saveList_hpmod;
-        }
-
-        internal static void saveIncrs(SortedList<string, int> ordMap, string? callbackData)
-        {
-            if (!ordMap.ContainsKey(callbackData))
-                ordMap.Add(callbackData, 1);
+            if (!ordMap.ContainsKey(fld))
+                ordMap.Add(fld, 1);
             else
             {
-                ordMap[callbackData] = ordMap[callbackData] + 1;
+                ordMap[fld] = ordMap[fld] + 1;
             }
         }
 
@@ -297,7 +312,7 @@ namespace prj202405.lib
         }
 
 
-        internal static string TryGetValueDfEmpy(Dictionary<string, StringValues> whereExprsObj, string k)
+        internal static string ldfld_TryGetValueDfEmpy(Dictionary<string, StringValues> whereExprsObj, string k)
         {
             // 使用 TryGetValue 方法获取值
             object value;
@@ -317,28 +332,28 @@ namespace prj202405.lib
 
         }
 		
-		       public static string TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string k)
+		       public static string ldfld_TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
-            if (whereExprsObj.ContainsKey(k))
-                if (whereExprsObj[k] == null)
+            if (whereExprsObj.ContainsKey(fld))
+                if (whereExprsObj[fld] == null)
                     return "";
                 else
-                    return whereExprsObj[k].ToString();
+                    return whereExprsObj[fld].ToString();
             else
                 return "";
         }
 
-        internal static string TryGetValueAsStrDefNull(SortedList whereExprsObj, string k)
+        internal static string ldfld_TryGetValueAsStrDefNull(SortedList whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
-            if (whereExprsObj.ContainsKey(k))
-                if (whereExprsObj[k] == null)
+            if (whereExprsObj.ContainsKey(fld))
+                if (whereExprsObj[fld] == null)
                     return null;
                 else
-                    return whereExprsObj[k].ToString();
+                    return whereExprsObj[fld].ToString();
             else
                 return null;
 
@@ -349,12 +364,12 @@ namespace prj202405.lib
 
         }
 
-        internal static string TryGetValue(Dictionary<string, StringValues> whereExprsObj, string k)
+        internal static string ldfld_TryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
-            if (whereExprsObj.ContainsKey(k))
-                return whereExprsObj[k];
+            if (whereExprsObj.ContainsKey(fld))
+                return whereExprsObj[fld];
             else
                 return null;
 
@@ -365,14 +380,14 @@ namespace prj202405.lib
 
         }
 
-        internal static void replaceKeyV(SortedList obj, string k, object v)
+        internal static void stfld_replaceKeyV(SortedList obj, string fld, object v)
         {
-            if (k == null)
+            if (fld == null)
                 return;
-            if (obj.ContainsKey(k))
-                obj[k] = v;
+            if (obj.ContainsKey(fld))
+                obj[fld] = v;
             else
-                obj.Add(k, v);
+                obj.Add(fld, v);
         }
 
         public static int count(object collection)
@@ -418,13 +433,13 @@ namespace prj202405.lib
             foreach (DictionaryEntry newx in newList)
             {
                 if(newx.Key!=null)
-                   arrCls.addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
+                   arrCls.stfld_addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
                 //   newList.Add(entry.Key, entry.Value);
             }
 
             return newList;
         }
-        internal static void addRplsKeyV(SortedList SortedList1_iot, string? key, SortedList objSave)
+        internal static void stfld_addRplsKeyV(SortedList SortedList1_iot, string? key, SortedList objSave)
         {
             if (SortedList1_iot.ContainsKey(key))
                 SortedList1_iot[key] = objSave;
@@ -432,7 +447,7 @@ namespace prj202405.lib
                 SortedList1_iot.Add(key, objSave);
         }
 
-        internal static void addRplsKeyV(SortedList listIot, string? key, object objSave)
+        internal static void stfld_addRplsKeyV(SortedList listIot, string? key, object objSave)
         {
             if (listIot.ContainsKey(key))
                 listIot[key] = objSave;
@@ -440,9 +455,9 @@ namespace prj202405.lib
                 listIot.Add(key, objSave);
         }
 
-        internal static HashSet<string> addSetNStr(HashSet<string> set, string v)
+        internal static HashSet<string> add_elmt2hsst(HashSet<string> set, string txt)
         {
-            string[] a = v.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            string[] a = txt.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             foreach (string wd in a)
             {
                 set.Add(wd);

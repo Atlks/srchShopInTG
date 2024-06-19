@@ -304,7 +304,7 @@ namespace prj202405.lib
         internal static bool eqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
         {
 
-            string cityName4srch = arrCls.TryGetValue(whereExprsObj, cityName4srchxx); ;
+            string cityName4srch = arrCls.ldfld_TryGetValue(whereExprsObj, cityName4srchxx); ;
             if (cityName4srch == null)  //if not have this clm in where exprs
                 return false;
             else if (cityName4srch != null)
