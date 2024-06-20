@@ -58,6 +58,7 @@ using DocumentFormat.OpenXml.Drawing.Diagrams;
 using static mdsj.lib.dsl;
 using System.Reflection;
 using System.Threading;
+using static mdsj.lib.util;
 
 namespace prj202405
 {
@@ -81,7 +82,9 @@ namespace prj202405
 
         internal static void test()
         {
+            string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
+         //   playMp3(mp3FilePath);
             logErr2024(111, "test", "errlog", null);
 
             //rdCnPrs();

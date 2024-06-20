@@ -1,6 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+
+  <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
+  <EnableComHosting>true</EnableComHosting>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -22,6 +25,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
     <PackageReference Include="MiniGuid" Version="1.1.2" />
+    <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Nethereum.ABI" Version="4.21.0" />
     <PackageReference Include="Nethereum.Accounts" Version="4.21.0" />
     <PackageReference Include="Nethereum.Contracts" Version="4.21.0" />

@@ -34,6 +34,8 @@ using static mdsj.lib.web3;
 using static mdsj.libBiz.tgBiz;
 using static prj202405.lib.tglib;
 using static prj202405.timerCls;
+using static mdsj.lib.util;
+using NAudio.Wave;
 namespace prj202405
 {
     internal class timerCls
@@ -88,6 +90,33 @@ namespace prj202405
             timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerEvt4prs);
             timer.Start();
         }
+
+        public static void setTimerTask4tmr()
+        {
+
+
+
+            //设置定时间隔(毫秒为单位)
+            int interval = 15*60*1000;
+                //2 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
+            //因为设施了每小时 01分才触发
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            //设置执行一次（false）还是一直执行(true)
+            timer.AutoReset = true;
+            //设置是否执行System.Timers.Timer.Elapsed事件
+            timer.Enabled = true;
+            //绑定Elapsed事件
+            timer.Elapsed += new System.Timers.ElapsedEventHandler((object? sender, ElapsedEventArgs e) =>
+            {
+              //  string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
+
+                playMp3(mp3FilePath_slowSkedu);
+
+            });
+            timer.Start();
+        }
+
+       
 
         private static void TimerEvt4prs(object? sender, ElapsedEventArgs e)
         {
@@ -219,6 +248,7 @@ namespace prj202405
        /// /、、https://t.me/shibolianmeng
        /// </summary>
         public static string plchdTxt = "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
+      
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {

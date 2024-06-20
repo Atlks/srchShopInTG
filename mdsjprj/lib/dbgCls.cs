@@ -26,6 +26,19 @@ namespace prj202405.lib
     internal class dbgCls
     {
 
+        public static string geneReqid()
+        {
+            // 获取主线程 ID
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("dd_HH");
+            return timestamp+ (Thread.CurrentThread.ManagedThreadId);
+        }
+
+        public static string ToString(object managedThreadId)
+        {
+            return managedThreadId.ToString();
+        }
+
         /// <summary>
         /// 打印对象的类型和值，类似于 PHP 的 var_dump 函数。
         /// </summary>

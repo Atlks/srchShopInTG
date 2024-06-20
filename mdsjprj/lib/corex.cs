@@ -1,6 +1,8 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Win32;
+using NAudio.Wave;
+
 //using Mono.Web;
 using System;
 using System.Collections;
@@ -17,9 +19,14 @@ using System.Web;
 using static prj202405.lib.corex;
 namespace prj202405.lib
 {
+
     //prj202405.lib.corex
     internal class corex
     {
+        public static void ExecuteAfterDelay(int millisecondsDelay, Action action)
+        {
+            Task.Delay(millisecondsDelay).ContinueWith(_ => action());
+        }
 
         public static object 运行(string 代码)
         {

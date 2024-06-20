@@ -143,7 +143,7 @@ namespace mdsj.lib
             }
         }
 
-        internal static void log(string mETHOD__, object prm, object val, string logdir, int reqThreadId)
+        internal static void log(string mETHOD__, object prm, object val, string logdir, string reqThreadId)
         {
             try
             {

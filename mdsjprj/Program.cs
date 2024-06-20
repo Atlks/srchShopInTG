@@ -49,7 +49,7 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-
+using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using RG3.PF.Abstractions.Entity;
 
@@ -153,7 +153,7 @@ namespace prj202405
 
 
             //botClient.OnMessage += Bot_OnMessage;
-          //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
+            //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
             //分类枚举
             botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsyncSafe,
                 pollingErrorHandler: tglib.bot_pollingErrorHandler,
@@ -173,6 +173,7 @@ namespace prj202405
             //   if (System.IO.File.Exists("c:/tmrclose.txt"))
             timerCls.setTimerTask();
             setTimerTask4prs();
+            setTimerTask4tmr();
 #warning 循环账号是否过期了
 
             Console.ReadKey();
@@ -196,30 +197,31 @@ namespace prj202405
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            // 获取主线程 ID
-            int reqThreadId = Thread.CurrentThread.ManagedThreadId;
+            string reqThreadId = geneReqid();
             //  throw new Exception("myex");
             try
             {
-          //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
-                 evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
+                //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
+                evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
             }
-           
+
         }
 
+
+
         //收到消息时执行的方法
-        static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, int reqThreadId)
+        static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
         {
-          //  throw new Exception("myex");
+            //  throw new Exception("myex");
             Console.WriteLine(0);
             var __METHOD__ = "evt_aHandleUpdateAsync";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            logCls.log("fun "+__METHOD__, func_get_args(),null,"logDir", reqThreadId);
-         
+            logCls.log("fun " + __METHOD__, func_get_args(), null, "logDir", reqThreadId);
+
 
             await biz_other._readMerInfo();
             _logMsg(update);
@@ -237,9 +239,11 @@ namespace prj202405
                 return;
             }
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
+            if(msgx2024.Trim().ToString().Contains("xxx007") || msgx2024.Trim().ToString().Contains("大鱼"))
+                playMp3(mp3FilePathEmgcy);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
-                logCls.log(__METHOD__, func_get_args(), "Exists "+ "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
+                logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
                 // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
                 // var rkm = new InlineKeyboardMarkup(Keyboard);
                 var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
@@ -315,213 +319,213 @@ namespace prj202405
             #region taskregn
             //_ = Task.Run(async (reqThreadId) =>
             //{
-                if (update == null)
-                    return;
+            if (update == null)
+                return;
 
-                var isAdminer = update.Message?.From?.Username == "GroupAnonymousBot" || update.CallbackQuery?.From?.Id == 5743211645;
-                var text = update?.Message?.Text;
+            var isAdminer = update.Message?.From?.Username == "GroupAnonymousBot" || update.CallbackQuery?.From?.Id == 5743211645;
+            var text = update?.Message?.Text;
 
-                #region @回复了商家详情信息  评价商家
-                //@回复了商家详情信息
-                if (update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text))
-                && update?.Message?.ReplyToMessage?.From?.Username == botname
-                 && update?.Message?.ReplyToMessage?.Caption?.Contains("--联系方式--") == true
-                  && update?.Message?.ReplyToMessage?.Caption?.Contains("商家排名") == true
-                     && update?.Message?.ReplyToMessage?.Caption?.Contains("营业时间") == true
-                //    && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
-                )
+            #region @回复了商家详情信息  评价商家
+            //@回复了商家详情信息
+            if (update?.Message?.ReplyToMessage != null && (!string.IsNullOrEmpty(update?.Message?.Text))
+            && update?.Message?.ReplyToMessage?.From?.Username == botname
+             && update?.Message?.ReplyToMessage?.Caption?.Contains("--联系方式--") == true
+              && update?.Message?.ReplyToMessage?.Caption?.Contains("商家排名") == true
+                 && update?.Message?.ReplyToMessage?.Caption?.Contains("营业时间") == true
+            //    && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
+            )
+            {
+                await evt_pinlunShangjia(botClient, update, isAdminer, text);
+                return;
+            }
+            #endregion
+
+            //添加商家信息
+            #region 添加商家信息
+            if (isAdminer
+            && update?.Message != null
+            && update?.Message?.Text?.Contains("打烊收摊时间") == true
+            && string.IsNullOrEmpty(update.Message.ReplyToMessage?.Text)
+            && update.Message.MessageThreadId == 111389)
+            {
+                await 添加商家信息(botClient, update, text);
+
+                return;
+
+            }
+            #endregion
+
+
+            #region 提示他人可搜索联系方式
+            //提示他人可搜索联系方式
+            ///    _contactType = ["商家联系方式", "商家飞机"];
+
+            if (update?.Message != null && !string.IsNullOrEmpty(text) && _contactType.Any(u => text.Contains(u)))
+            {
+                try
                 {
-                    await evt_pinlunShangjia(botClient, update, isAdminer, text);
-                    return;
+                    await botClient.SendTextMessageAsync(update.Message.Chat.Id, "@回复本信息,搜商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
                 }
-                #endregion
-
-                //添加商家信息
-                #region 添加商家信息
-                if (isAdminer
-                && update?.Message != null
-                && update?.Message?.Text?.Contains("打烊收摊时间") == true
-                && string.IsNullOrEmpty(update.Message.ReplyToMessage?.Text)
-                && update.Message.MessageThreadId == 111389)
+                catch (Exception e)
                 {
-                    await 添加商家信息(botClient, update, text);
-
-                    return;
-
+                    Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
                 }
-                #endregion
+            }
+            #endregion
 
 
-                #region 提示他人可搜索联系方式
-                //提示他人可搜索联系方式
-                ///    _contactType = ["商家联系方式", "商家飞机"];
-
-                if (update?.Message != null && !string.IsNullOrEmpty(text) && _contactType.Any(u => text.Contains(u)))
+            // 评价商家 按钮
+            if (update?.Type is UpdateType.CallbackQuery)
+            {
+                if (update?.CallbackQuery?.Data?.Contains("Comment") == true)
                 {
                     try
                     {
-                        await botClient.SendTextMessageAsync(update.Message.Chat.Id, "@回复本信息,搜商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
+                        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价", true);
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+                        Console.WriteLine("告诉别人怎么评价时出错:" + e.Message);
                     }
-                }
-                #endregion
-
-
-                // 评价商家 按钮
-                if (update?.Type is UpdateType.CallbackQuery)
-                {
-                    if (update?.CallbackQuery?.Data?.Contains("Comment") == true)
-                    {
-                        try
-                        {
-                            await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价", true);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine("告诉别人怎么评价时出错:" + e.Message);
-                        }
-                        return;
-                    }
-
-
-
-                    //if (update?.CallbackQuery.Message?.ReplyToMessage?.From?.Id != update?.CallbackQuery.From.Id)
-                    //{
-                    //    try
-                    //    {
-                    //        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "您无权点击别人的搜索结果!", true);
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        Console.WriteLine("告诉对方您无权点击时出错:" + e.Message);
-                    //    }
-                    //    return;
-                    //}
-                }
-
-
-                //if nmrl msg  n notStartWith   @bot   ingor
-                if (tgBiz.bot_isNnmlMsgInGrp(update))
-                {
-                    Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
                     return;
                 }
 
 
 
-                // if (msgx2024=="商家")
+                //if (update?.CallbackQuery.Message?.ReplyToMessage?.From?.Id != update?.CallbackQuery.From.Id)
+                //{
+                //    try
+                //    {
+                //        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "您无权点击别人的搜索结果!", true);
+                //    }
+                //    catch (Exception e)
+                //    {
+                //        Console.WriteLine("告诉对方您无权点击时出错:" + e.Message);
+                //    }
+                //    return;
+                //}
+            }
 
-                #region sezrch
 
-                HashSet<string> 商品与服务词库2 = ReadWordsFromFile("商品与服务词库.txt");
-                string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
-                SortedList whereMap2 = new SortedList();
-                whereMap2.Add("fuwuci", fuwuci);
+            //if nmrl msg  n notStartWith   @bot   ingor
+            if (tgBiz.bot_isNnmlMsgInGrp(update))
+            {
+                Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
+                return;
+            }
 
-                //privt msg serch
-                if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
+
+
+            // if (msgx2024=="商家")
+
+            #region sezrch
+
+            HashSet<string> 商品与服务词库2 = ReadWordsFromFile("商品与服务词库.txt");
+            string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
+            SortedList whereMap2 = new SortedList();
+            whereMap2.Add("fuwuci", fuwuci);
+
+            //privt msg serch
+            if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
+            {
+                HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
-                    HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
-                    if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
-                    {
-                        Console.WriteLine(" 不包含商品服务词，ret");
-                        await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
-                        return;
-                        //  return;
-                    }
-                    string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
+                    Console.WriteLine(" 不包含商品服务词，ret");
+                    await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                    return;
+                    //  return;
+                }
+                string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
                 // logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
                 evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
+                return;
+            }
+
+
+            //public search jude
+            if (isGrpChat(update?.Message?.Chat?.Type) && update?.Type == UpdateType.Message)
+            {
+                string? msgx = tglib.bot_getTxt(update);
+                if (msgx == null || msgx.Length > 25)
+                {
+                    Console.WriteLine(" msgx == null || msgx.Length > 25 ");
+                    return;
+                }
+                msgx = msgx.Trim();
+                if (msgx.Trim().StartsWith("@" + botname)) //goto seasrch
+                    msgx = msgx.Substring(botname.Length + 1).Trim();
+                msgx = msgx.Trim();
+
+                HashSet<string> trgWdSt = ReadWordsFromFile("搜索触发词.txt");
+                var trgWd = string.Join(" ", trgWdSt);
+                Console.WriteLine(" 触发词 chk");
+                if (!strCls.containKwds(update?.Message?.Text, trgWd))
+                {
+                    Console.WriteLine(" 不包含触发词，ret");
+                    return;
+                }
+
+                //bao含触发词，进一步判断
+
+                //去除搜索触发词，比如哪里有
+                msgx = msgx.Replace("联系方式", " ");
+                HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
+                msgx = replace_RemoveWords(msgx, hs);
+
+                //是否包含搜索词 商品或服务关键词
+                Console.WriteLine(" 商品或服务关键词 srch");
+                HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
+                {
+                    Console.WriteLine(" 不包含商品服务词，ret");
+
+                    return;
+                }
+                string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
+                if (getFuwuci == null)
+                {
+                    Console.WriteLine(" 不包含商品服务词，ret");
                     return;
                 }
 
 
-                //public search jude
-                if (isGrpChat(update?.Message?.Chat?.Type) && update?.Type == UpdateType.Message)
-                {
-                    string? msgx = tglib.bot_getTxt(update);
-                    if (msgx == null || msgx.Length > 25)
-                    {
-                        Console.WriteLine(" msgx == null || msgx.Length > 25 ");
-                        return;
-                    }
-                    msgx = msgx.Trim();
-                    if (msgx.Trim().StartsWith("@" + botname)) //goto seasrch
-                        msgx = msgx.Substring(botname.Length + 1).Trim();
-                    msgx = msgx.Trim();
 
-                    HashSet<string> trgWdSt = ReadWordsFromFile("搜索触发词.txt");
-                    var trgWd = string.Join(" ", trgWdSt);
-                    Console.WriteLine(" 触发词 chk");
-                    if (!strCls.containKwds(update?.Message?.Text, trgWd))
-                    {
-                        Console.WriteLine(" 不包含触发词，ret");
-                        return;
-                    }
+                evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
 
-                    //bao含触发词，进一步判断
+            //pre page evt???  todo
+            //next page evt,,,
+            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
+            {
+                await evt_nextPrePage(botClient, update, whereMap2, reqThreadId);
+                return;
+            }
 
-                    //去除搜索触发词，比如哪里有
-                    msgx = msgx.Replace("联系方式", " ");
-                    HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
-                    msgx = replace_RemoveWords(msgx, hs);
-
-                    //是否包含搜索词 商品或服务关键词
-                    Console.WriteLine(" 商品或服务关键词 srch");
-                    HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
-                    if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
-                    {
-                        Console.WriteLine(" 不包含商品服务词，ret");
-
-                        return;
-                    }
-                    string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
-                    if (getFuwuci == null)
-                    {
-                        Console.WriteLine(" 不包含商品服务词，ret");
-                        return;
-                    }
+            //return evt
+            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
+            {
+                await evt_ret_mchrt_list(botClient, update, whereMap2, reqThreadId);
+                return;
+            }
 
 
-
-                      evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
-                    dbgCls.setDbgValRtval(__METHOD__, 0);
-                    return;
-                }
-
-                //pre page evt???  todo
-                //next page evt,,,
-                if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
-                {
-                    await evt_nextPrePage(botClient, update, whereMap2, reqThreadId);
-                    return;
-                }
-
-                //return evt
-                if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
-                {
-                    await evt_ret_mchrt_list(botClient, update, whereMap2,reqThreadId);
-                    return;
-                }
-
-
-                //查看商家结果 defalt is detail view
-                //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
-                if (update.Type is UpdateType.CallbackQuery)
-                {
+            //查看商家结果 defalt is detail view
+            //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
+            if (update.Type is UpdateType.CallbackQuery)
+            {
                 // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
                 evt_View(botClient, update, reqThreadId);
-                }
-                #endregion
+            }
+            #endregion
 
 
-                #region add chatids
-                await tglib.tg_addChtid(update);
+            #region add chatids
+            await tglib.tg_addChtid(update);
 
-                #endregion
+            #endregion
             //}, cancellationToken);
             #endregion
 
@@ -567,7 +571,7 @@ namespace prj202405
 
         }
 
-        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd, int reqThreadId)
+        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd, string reqThreadId)
         {
             logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
             SortedList whereMap = new SortedList();
@@ -592,7 +596,7 @@ namespace prj202405
 
             if (msgx != null && msgx.Length < 25)
             {
-                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap,reqThreadId);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap, reqThreadId);
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
                 return;
@@ -759,7 +763,7 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2, int reqThreadId)
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2, string reqThreadId)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -773,9 +777,9 @@ namespace prj202405
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, int reqThreadId)
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
         {
-            logCls.log("fun evt_ret_mchrt_list" , func_get_args(fuwuci), "", "logDir", reqThreadId);
+            logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx != null)
             {
@@ -1317,11 +1321,11 @@ namespace prj202405
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, int reqThreadId)
+        static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
-            logCls.log("fun GetList_qryV2", func_get_args(msgx,pagex,pagesizex, whereMapDep), "", "logDir", reqThreadId);
+            logCls.log("fun GetList_qryV2", func_get_args(msgx, pagex, pagesizex, whereMapDep), "", "logDir", reqThreadId);
             if (msgx == null || msgx.Length == 0)
                 return;
             //  Console.WriteLine(" fun  GetList()");
@@ -1410,7 +1414,7 @@ namespace prj202405
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                 var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
-               // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
+                // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
                 results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
@@ -2058,11 +2062,11 @@ namespace prj202405
         //}
 
         //获取商家结果
-        static async Task evt_View(ITelegramBotClient botClient, Update update, int reqThreadId)
+        static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
-            logCls.log("FUN "+ __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
+            logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
             if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
             {
                 if (!update.CallbackQuery.Data.Contains("timerMsgMode2025"))
@@ -2074,7 +2078,7 @@ namespace prj202405
                               showAlert: true); // 这是显示对话框的关键);
                     return;
                 }
-                  
+
 
             }
             var cq = update.CallbackQuery!;
