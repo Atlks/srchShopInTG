@@ -30,7 +30,7 @@ namespace prj202405.lib
          我们遍历输入的文本，并检查每个字符是否是非法字符。如果字符是非法字符，则使用 HttpUtility.UrlEncode 方法对字符进行 URL 编码，然后将编码后的结果添加到结果字符串中。最后，返回处理后的结果字符串。
          
          */
-        public static string ConvertToValidFileName(string input)
+        public static string ConvertToValidFileName2024(string input)
         {
             // URL 编码非法字符
             string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars());

@@ -12,6 +12,15 @@ namespace mdsj.lib
 {
     internal class util
     {
+
+        void loopForever()
+        {
+            while(true)
+            {
+                Console.WriteLine(DateTime.Now);
+                Thread.Sleep(5000);
+            }
+        }
         public static string mp3FilePath_slowSkedu = "C:\\Users\\Administrator\\OneDrive\\mklv song lst\\Nana - Lonely HQ.mp3";
 
         public static string mp3FilePathEmgcy = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径

@@ -52,6 +52,9 @@ using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using RG3.PF.Abstractions.Entity;
+using System.Security.Cryptography;
+using static SqlParser.Ast.DataType;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace prj202405
 {
@@ -97,6 +100,7 @@ namespace prj202405
 
         public static async Task Main(string[] args)
         {
+            tgBiz.botClient = botClient;
             获取机器人的信息();
             //    Console.WriteLine("botClient uname=>"+ botClient.)
             PrintPythonLogo();
@@ -130,8 +134,8 @@ namespace prj202405
 
             }
             ////ini()   
-            var vls = Enum.GetValues(typeof(Category));//  food drink ....
-            foreach (var category in Enum.GetValues(typeof(Category)))
+            var vls = System.Enum.GetValues(typeof(Category));//  food drink ....
+            foreach (var category in System.Enum.GetValues(typeof(Category)))
             {
                 Category enumValue = (Category)category;
                 string description = biz_other._GetEnumDescription(enumValue);
@@ -151,7 +155,7 @@ namespace prj202405
 
             testCls.test();
 
-
+            //   botClient.OnApiResponseReceived
             //botClient.OnMessage += Bot_OnMessage;
             //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
             //分类枚举
@@ -159,7 +163,7 @@ namespace prj202405
                 pollingErrorHandler: tglib.bot_pollingErrorHandler,
                 receiverOptions: new ReceiverOptions()
                 {
-                    AllowedUpdates = Array.Empty<UpdateType>(),
+                    AllowedUpdates = System.Array.Empty<UpdateType>(),
                     // 接收所有类型的更新
                     //AllowedUpdates = [UpdateType.Message,
                     //    UpdateType.CallbackQuery,
@@ -211,19 +215,56 @@ namespace prj202405
 
         }
 
+        private static async void Bot_OnUpdate(object sender, UpdateEventArgs e)
+        {
+            var __METHOD__ = "Bot_OnUpdate";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
+
+            if (e.Update.Type == UpdateType.ChatMember && e.Update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
+            {
+                var chatId = e.Update.ChatMember.Chat.Id;
+                var userId = e.Update.ChatMember.NewChatMember.User.Id;
+
+                await evt_newUserjoinSngle(chatId, userId, e.Update.ChatMember.NewChatMember.User);
+            }
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+        }
 
 
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
         {
             //  throw new Exception("myex");
-            Console.WriteLine(0);
+
             var __METHOD__ = "evt_aHandleUpdateAsync";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            logCls.log("fun " + __METHOD__, func_get_args(), null, "logDir", reqThreadId);
+            logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
+            Console.WriteLine(update?.Message?.Text);
+            Console.WriteLine(json_encode(update));
+
+            //----------if new user join
+            if (update?.Message?.NewChatMembers != null)
+                evt_newUserJoin2024(update.Message.Chat.Id, update?.Message?.NewChatMembers);
+
+            if (update.Type == UpdateType.ChatMember)
+            {
+                UpdateEventArgs uea = new UpdateEventArgs();
+                uea.Update = update;
+                Bot_OnUpdate(null, uea);
+            }
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if (ldfld2str(parse_str1, "btn") == "解除禁言")
+                    canSendBtn_click(update);
+
+            }
+
 
 
             await biz_other._readMerInfo();
+            adChkSave(update);
             _logMsg(update);
             //auto add cht sess
             if (update?.Message != null)
@@ -239,7 +280,8 @@ namespace prj202405
                 return;
             }
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
-            if(msgx2024.Trim().ToString().Contains("xxx007") || msgx2024.Trim().ToString().Contains("大鱼"))
+            string msg2056 = str_trim_tolower(msgx2024);
+            if (msg2056.Contains("xxx007") || msg2056.Contains("大鱼") || msg2056.Contains("鱼总"))
                 playMp3(mp3FilePathEmgcy);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
@@ -538,6 +580,129 @@ namespace prj202405
 
         }
 
+        private static string ldfld(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
+
+        public static string ldfld2str(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
+
+        public static void canSendBtn_click(Update e)
+        {
+            Dictionary<string, string> parse_str1 = parse_str(e.CallbackQuery.Data);
+            string uid = ldfld2str(parse_str1, "uid");
+            if (uid != e.CallbackQuery.From.Id.ToString())
+            {
+                botClient.AnswerCallbackQueryAsync(
+                          callbackQueryId: e.CallbackQuery.Id,
+                          text: "只能本人解除",
+                          showAlert: true); // 这是显示对话框的关键);
+                return;
+            }
+
+
+            botClient.RestrictChatMemberAsync(e.CallbackQuery.Message.Chat.Id, e.CallbackQuery.From.Id, permissions: new Telegram.Bot.Types.ChatPermissions
+            {
+                CanSendMessages = true,
+                // CanSendMediaMessages = true,
+                CanSendOtherMessages = true,
+                CanAddWebPagePreviews = true,
+                CanSendDocuments = true,
+                CanSendPhotos = false,
+                CanSendPolls = true,
+                CanSendVideoNotes = true,
+                CanSendVideos = true,
+                CanSendVoiceNotes = true,
+                CanSendAudios = true
+               
+            });
+
+            botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "已解除禁言！");
+
+        }
+
+        private static void evt_newUserJoin2024(long chatId, Telegram.Bot.Types.User[]? newChatMembers)
+        {
+            foreach (Telegram.Bot.Types.User u in newChatMembers)
+            {
+                evt_newUserjoinSngle(chatId, u.Id, u);
+            }
+        }
+
+        private static void adChkSave(Update update)
+        {
+            try
+            {
+                if (update?.Type is UpdateType.Message)
+                {
+                    if (update.Message.Text.Length < 10)
+                        return;
+                    string timestamp = DateTime.Now.ToString("MM");
+                    //  string timecode=
+                    string fnameFrmTxt = ConvertToValidFileName(update.Message.Text);
+                    string uid = update.Message.From.Id.ToString();
+                    string fname = $"adchkDir/uid{uid}_Dt{timestamp}_" + fnameFrmTxt.Substring(0, 50) + ".txt";
+                    if (System.IO.File.Exists(fname))
+                    {
+                        Console.WriteLine("是广告告可能" + fname);
+                        file_put_contents(fname, update.Message.Text, true);
+
+                        SortedList obj = new SortedList();
+                        obj.Add("id", uid);
+                        obj.Add("user", update.Message.From);
+                        ormJSonFL.save(obj, "aduser.json");
+
+                        tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为广告,本消息10秒后删除!", 10);
+
+                    }
+                    else
+                        file_put_contents(fname, update.Message.Text, true);
+
+                    //机器人检测
+                    if (update.Message.From.IsBot)
+                    {
+                        SortedList obj = new SortedList();
+                        obj.Add("id", uid);
+                        obj.Add("user", update.Message.From);
+                        ormJSonFL.save(obj, "aduser.json");
+                    }
+
+                    //广告号检测
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+
+        }
+
+        private static string str_trim_tolower(string msgx2024)
+        {
+            try
+            {
+                return msgx2024.Trim().ToString().ToLower();
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+
+
+        }
+
         private static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
         {
             if (text == null)
@@ -779,8 +944,12 @@ namespace prj202405
 
         private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
+
             logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
+            // if msg==null ..just from timer send msg..ret no op
             if (msgx != null)
             {
                 if (msgx.Trim().StartsWith("@" + Program.botname))
@@ -789,6 +958,8 @@ namespace prj202405
                 await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci, reqThreadId);
                 return;
             }
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
 
@@ -2561,5 +2732,10 @@ namespace prj202405
 
         //获取上级目录名称 dep
 
+    }
+
+    internal class UpdateEventArgs
+    {
+        public Update Update { get; internal set; }
     }
 }

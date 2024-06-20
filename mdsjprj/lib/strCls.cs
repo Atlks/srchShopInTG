@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 //   prj202405.lib.strCls
 namespace prj202405.lib
 {
@@ -331,6 +332,43 @@ namespace prj202405.lib
             return allKeys;
         }
 
+
+        public static Dictionary<string, string> parse_str(string queryString)
+        {
+            var queryDictionary = new Dictionary<string, string>();
+
+            if (string.IsNullOrEmpty(queryString))
+            {
+                return queryDictionary;
+            }
+
+            // Split the query string by '&'
+            var pairs = queryString.Split('&');
+
+            foreach (var pair in pairs)
+            {
+                // Split each pair by '='
+                var keyValue = pair.Split(new[] { '=' }, 2);
+
+                if (keyValue.Length == 2)
+                {
+                    var key = HttpUtility.UrlDecode(keyValue[0]);
+                    var value = HttpUtility.UrlDecode(keyValue[1]);
+
+                    // Add the key-value pair to the dictionary
+                    queryDictionary[key] = value;
+                }
+                else if (keyValue.Length == 1)
+                {
+                    var key = HttpUtility.UrlDecode(keyValue[0]);
+                    queryDictionary[key] = string.Empty;
+                }
+            }
+
+            return queryDictionary;
+        }
+
+        //   parse_url 函数会返回一个数组，其中包含以下键（如果存在）：scheme、host、port、user、pass、path、query 和 fragment。
         // ToLower
         internal static bool isStartsWith(string? text, string v)
         {

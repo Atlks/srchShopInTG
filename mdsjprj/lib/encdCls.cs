@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization.Json;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -15,7 +16,27 @@ namespace mdsj.lib
 {
     internal class encdCls
     {
+        static string ComputeMd5Hash(string input)
+        {
+            // 使用 MD5 类来计算哈希值
+            using (MD5 md5 = MD5.Create())
+            {
+                // 将输入字符串转换为字节数组
+                byte[] inputBytes = Encoding.UTF8.GetBytes(input);
 
+                // 计算输入字节数组的哈希值
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                // 将字节数组转换为十六进制字符串
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    sb.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return sb.ToString();
+            }
+        }
         static string escapeshellarg(string arg)
         {
             // Check if the argument contains spaces or quotes

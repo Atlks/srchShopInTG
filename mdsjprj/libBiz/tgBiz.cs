@@ -10,11 +10,50 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using static mdsj.libBiz.tgBiz;
+using Telegram.Bot;
 namespace mdsj.libBiz
 {
     internal class tgBiz
     {
+        public static TelegramBotClient botClient;
 
+        public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
+        {
+            try
+            {
+                // 禁言用户
+                await Program. botClient.RestrictChatMemberAsync(chatId, userId, permissions: new Telegram.Bot.Types.ChatPermissions
+                {
+                    CanSendDocuments = false,
+                    CanSendPhotos = false,
+                    CanSendPolls = false,
+                    CanSendVideoNotes = false,
+                    CanSendVideos = false,
+                    CanSendVoiceNotes = false,
+                    CanSendAudios = false,
+                    CanSendMessages = false,
+                    //    CanSendMediaMessages = false,
+                    CanSendOtherMessages = false,
+                    CanAddWebPagePreviews = false
+                });
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+
+            // 发送欢迎消息和按钮
+            var inlineKeyboard = new InlineKeyboardMarkup(new[]
+            {
+                new[]
+                {
+                    InlineKeyboardButton.WithCallbackData("解除禁言", $"btn=解除禁言&uid={userId}")
+                }
+                 });
+
+            await Program. botClient.SendTextMessageAsync(chatId, $"@{user.Username} 欢迎来到群组，请点击按钮解除禁言状态。", replyMarkup: inlineKeyboard);
+        }
 
         public static bool tg_isBtm_btnClink_in_pubGrp(Update update)
         {

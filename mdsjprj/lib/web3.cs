@@ -24,7 +24,22 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using static mdsj.lib.web3;
-
+using static prj202405.timerCls;
+using static mdsj.biz_other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static mdsj.lib.util;
+using static mdsj.libBiz.tgBiz;
 namespace mdsj.lib
 {
 
@@ -76,8 +91,8 @@ namespace mdsj.lib
 
         //    Console.WriteLine("Swap successful, transaction hash: " + receipt.TransactionHash);
         //}
-       
-        
+
+
         //public async Task ApproveUniswapV2Async(decimal amountInUSDT)
         //{
         //    string url = $"https://mainnet.infura.io/v3/{InfuraProjectId}"; // Mainnet URL
@@ -157,54 +172,117 @@ namespace mdsj.lib
             //file_put_contents("cn2004.htm", htm);
             Console.WriteLine("GetEthPrice()");
             decimal prs = GetEthPrice();
-            if (prs < 3480 || prs>3600 )
+            if (prs < 3480 || prs > 3700)
             {
-                try
-                {
-                    Program.botClient.SendTextMessageAsync(879006550, "快来回复本信息,快来回复本信息快来回复本信息", parseMode: ParseMode.Html);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
-                }
+                sendNotyfy2me();
 
-                try
-                {
-                    Program.botClient.SendTextMessageAsync(2078535546, "快来回复本信息,快来回复本信息快来回复本信息", parseMode: ParseMode.Html);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
-                }
-                
             }
+
+            prs = GetBitcoinPrice();
+            if (prs > 67000)
+            {
+                sendNotyfy2me();
+
+            }
+
+
+            //if (prs < 3480 || prs > 3650)
+            //{
+            //    sendNotyfy2me();
+
+            //}
             Console.WriteLine(prs);
             dbgCls.setDbgValRtval(__METHOD__, prs);
         }
 
+        private static void sendNotyfy2me()
+        {
+            try
+            {
+                Program.botClient.SendTextMessageAsync(879006550, "prs快来回复本信息,快来回复本信息快来回复本信息prs", parseMode: ParseMode.Html);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+            }
 
+            try
+            {
+                Program.botClient.SendTextMessageAsync(2078535546, "prs快来回复本信息,快来回复本信息快来回复本信息", parseMode: ParseMode.Html);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+            }
+        }
+
+        static decimal GetBitcoinPrice()
+        {
+            try
+            {
+                Console.WriteLine("FUN GetBitcoinPrice()");
+                using (HttpClient client = new HttpClient())
+                {
+                    // 请求CoinGecko API获取比特币当前价格
+                    HttpResponseMessage response = client.GetAsync("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd").Result;
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        throw new Exception("Failed to fetch Bitcoin price.");
+                    }
+
+                    string jsonResponse = response.Content.ReadAsStringAsync().Result;
+                    JObject json = JObject.Parse(jsonResponse);
+                    decimal price = json["bitcoin"]["usd"].Value<decimal>();
+                    Console.WriteLine(json_encode(json));
+                    Console.WriteLine("end FUN GetBitcoinPrice");
+                    return price;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}"); return 0;
+            }
+
+        }
+        //        {
+        //  "ethereum": {
+        //    "usd": 3604.69
+        //  }
+        //}
         public static decimal GetEthPrice()
         {
-            string url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd";
-
-            using (HttpClient client = new HttpClient())
+            try
             {
-                try
-                {
-                    HttpResponseMessage response = client.GetAsync(url).Result;
-                    response.EnsureSuccessStatusCode();
-                    string responseBody = response.Content.ReadAsStringAsync().Result;
+                Console.WriteLine("FUN GetEthPrice()");
+                string url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd";
 
-                    JObject json = JObject.Parse(responseBody);
-                    decimal ethPrice = json["ethereum"]["usd"].Value<decimal>();
-
-                    return ethPrice;
-                }
-                catch (HttpRequestException e)
+                using (HttpClient client = new HttpClient())
                 {
-                    Console.WriteLine($"Request error: {e.Message}");
-                    return 0;
+                    try
+                    {
+                        HttpResponseMessage response = client.GetAsync(url).Result;
+                        response.EnsureSuccessStatusCode();
+                        string responseBody = response.Content.ReadAsStringAsync().Result;
+
+                        JObject json = JObject.Parse(responseBody);
+                        file_put_contents("cns.json", json_encode(json));
+                        decimal ethPrice = json["ethereum"]["usd"].Value<decimal>();
+                        Console.WriteLine(json_encode(json));
+                        Console.WriteLine("end FUN GetEthPric");
+                        return ethPrice;
+                    }
+                    catch (HttpRequestException e)
+                    {
+                        Console.WriteLine($"Request error: {e.Message}");
+                        return 0;
+                    }
                 }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error: {e.Message}"); return 0;
             }
         }
 

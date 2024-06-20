@@ -49,6 +49,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Binance.Net": {
+              "target": "Package",
+              "version": "[9.10.0, )"
+            },
+            "BinanceAPI.NET": {
+              "target": "Package",
+              "version": "[35.1.11, )"
+            },
             "ChineseCharacterConvert": {
               "target": "Package",
               "version": "[1.0.2, )"
@@ -57,6 +65,10 @@
               "target": "Package",
               "version": "[0.102.2, )"
             },
+            "CryptoExchange.Net": {
+              "target": "Package",
+              "version": "[7.6.0, )"
+            },
             "HtmlAgilityPack": {
               "target": "Package",
               "version": "[1.11.61, )"
@@ -64,6 +76,10 @@
             "Microsoft.AspNetCore.WebUtilities": {
               "target": "Package",
               "version": "[8.0.0, )"
+            },
+            "Microsoft.CodeAnalysis.CSharp.Scripting": {
+              "target": "Package",
+              "version": "[4.10.0, )"
             },
             "Microsoft.Data.Sqlite.Core": {
               "target": "Package",
@@ -88,6 +104,54 @@
             "MiniGuid": {
               "target": "Package",
               "version": "[1.1.2, )"
+            },
+            "NAudio": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "Nethereum.ABI": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Accounts": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Contracts": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Hex": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.JsonRpc.RpcClient": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Model": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.RLP": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Signer": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.StandardTokenEIP20": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Util": {
+              "target": "Package",
+              "version": "[4.21.0, )"
+            },
+            "Nethereum.Web3": {
+              "target": "Package",
+              "version": "[4.21.0, )"
             },
             "RG3.PF.PinYinScriptEngineCliWrap": {
               "target": "Package",
