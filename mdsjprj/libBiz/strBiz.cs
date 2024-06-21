@@ -11,6 +11,41 @@ namespace mdsj.libBiz
 {
     internal class strBiz
     {
+
+        public static int containCalcCntScoreSetfmt(string segments, HashSet<string> set)
+        {
+            //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
+            //   Console.WriteLine();
+            set.Remove("店");
+            set.Remove("飞机号");
+
+            HashSet<string> blackListWd = new HashSet<string>();
+
+            blackListWd.Add("店");
+            blackListWd.Add("飞机号");
+
+
+            int n = 0;
+            foreach (string kwd in set)
+            {
+                var kwd2 = kwd.Trim();
+
+                if (kwd2.Length == 0)
+                    continue;
+
+
+
+                if (segments.Contains(kwd2))
+                {
+                    n++;
+                    Console.WriteLine(" containChk2024. kwd=>" + kwd2);
+                }
+
+
+            }
+            return n;
+        }
+
         public static int containCalcCntScoreSetfmt(HashSet<string> set, string[] segments)
         {
             //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));

@@ -10,19 +10,303 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using static mdsj.libBiz.tgBiz;
+using static prj202405.timerCls;
+using static mdsj.biz_other;
+using static mdsj.clrCls;
+using static mdsj.lib.exCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static mdsj.lib.util;
+using static mdsj.libBiz.tgBiz;
 using Telegram.Bot;
+using System.Reflection;
+using Newtonsoft.Json;
+using static mdsj.libBiz.strBiz;
+using City = prj202405.City;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+using static mdsj.libBiz.strBiz;
+using static mdsj.libBiz.tgBiz;
+using static prj202405.lib.strCls;
+using static mdsj.lib.adChkr;
 namespace mdsj.libBiz
 {
     internal class tgBiz
-    {
+    {  public static void bot_adChk(Update update)
+        {
+            try
+            {
+                if (update?.Type is UpdateType.Message)
+                {
+                   
+
+                    if (update.Message.Text.Length < 10)
+                        return;
+
+                    //  string timecode=
+                    string text = update.Message.Text;
+
+                    string uid = update.Message.From.Id.ToString();
+                    var grpid = update.Message.Chat.Id;
+
+                    Action act = () =>
+                    {
+
+                        SortedList obj = new SortedList();
+                        obj.Add("id", uid);
+                        obj.Add("user", update.Message.From);
+                        ormJSonFL.save(obj, "aduser.json");
+                        Console.WriteLine("可能广告");
+                      //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
+
+                    };
+                    lgc_chkad(text, uid, grpid, act);
+
+                    //机器人检测
+                    if (update.Message.From.IsBot)
+                    {
+                        SortedList obj = new SortedList();
+                        obj.Add("id", uid);
+                        obj.Add("user", update.Message.From);
+                        ormJSonFL.save(obj, "aduser.json");
+                    }
+
+                    //广告号检测
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+
+        }
+
+        public static async Task 添加商家信息(ITelegramBotClient botClient, Update update, string? text)
+        {
+            var callError = async (string text) =>
+            {
+                try
+                {
+                    await botClient.SendTextMessageAsync(chatId: update.Message.Chat.Id, text: text, messageThreadId: update.Message.MessageThreadId, replyToMessageId: update.Message.MessageId);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("告知新增联系方式时获取到时出错:" + ex.Message);
+                }
+            };
+            var merchant = new Merchant();
+            merchant.Guid = Guid.NewGuid().ToString();
+
+            var chengshiandyuanqu = GetText.GetBetween(text, "城市园区名字:", "\n");
+            if (string.IsNullOrEmpty(chengshiandyuanqu))
+            {
+                await callError("在添加商家联系方式时,城市/园区名字未获取到");
+                return;
+            }
+
+
+            var _citys = getCitysObj();
+            //园区城市
+            Address? address = null;
+            foreach (var c in _citys)
+            {
+                foreach (var a in c.Address)
+                {
+                    if (a.Name == chengshiandyuanqu)
+                    {
+                        address = a;
+                        break;
+                    }
+                }
+            }
+            if (address == null)
+            {
+                await callError("城市园区不存在");
+                return;
+            }
+
+            merchant.Name = GetText.GetBetween(text, "商家名称:", "\n");
+            if (string.IsNullOrEmpty(merchant.Name))
+            {
+                await callError("商家名称未获取到");
+                return;
+            }
+
+            var category = GetText.GetBetween(text, "商家分类:", "\n");
+            try
+            {
+                merchant.Category = (Category)Convert.ToInt32(category);
+            }
+            catch (Exception)
+            {
+                await callError("商家分类未获取到");
+                return;
+            }
+
+            merchant.KeywordString = GetText.GetBetween(text, "商家关键词:", "\n");
+            if (string.IsNullOrEmpty(merchant.KeywordString))
+            {
+                await callError("商家关键词未获取到");
+                return;
+            }
+
+            var start = GetText.GetBetween(text, "开始营业时间:", "\n");
+            try
+            {
+                merchant.StartTime = TimeSpan.Parse(start);
+            }
+            catch (Exception)
+            {
+                await callError("商家开始营业时间未获取到");
+                return;
+            }
+
+            var end = GetText.GetBetween(text, "打烊收摊时间:", "\n");
+            try
+            {
+                merchant.StartTime = TimeSpan.Parse(end);
+            }
+            catch (Exception)
+            {
+                await callError("商家打烊时间未获取到");
+                return;
+            }
+
+            var telegram = GetText.GetBetween(text, "Telegram:", "\n");
+            if (!string.IsNullOrEmpty(telegram))
+            {
+                merchant.Telegram = telegram.Split(' ').ToList();
+            }
+
+            var telegramGroup = GetText.GetBetween(text, "Telegram群组:", "\n");
+            if (!string.IsNullOrEmpty(telegramGroup))
+            {
+                merchant.TelegramGroup = telegramGroup;
+            }
+
+            var whatsapp = GetText.GetBetween(text, "Whatsapp:", "\n");
+            if (!string.IsNullOrEmpty(whatsapp))
+            {
+                merchant.WhatsApp = whatsapp.Split(' ').ToList();
+            }
+
+            var lines = GetText.GetBetween(text, "Line:", "\n");
+            if (!string.IsNullOrEmpty(lines))
+            {
+                merchant.Line = lines.Split(' ').ToList();
+            }
+
+            var signals = GetText.GetBetween(text, "Signal:", "\n");
+            if (!string.IsNullOrEmpty(signals))
+            {
+                merchant.Signal = signals.Split(' ').ToList();
+            }
+
+            var weixins = GetText.GetBetween(text, "微信:", "\n");
+            if (!string.IsNullOrEmpty(weixins))
+            {
+                merchant.WeiXin = weixins.Split(' ').ToList();
+            }
+
+            var tels = GetText.GetBetween(text, "电话:", "\n");
+            if (!string.IsNullOrEmpty(tels))
+            {
+                merchant.Tel = tels.Split(' ').ToList();
+            }
+
+            if (merchant.Telegram.Count == 0 && merchant.WhatsApp.Count == 0 && merchant.Line.Count == 0 && merchant.Signal.Count == 0 && merchant.WeiXin.Count == 0)
+            {
+                await callError("未获取到任何一个联系方式");
+                return;
+            }
+
+            merchant.Menu = GetText.GetBetween(text, "商家菜单:", "\n");
+            address.Merchant.Add(merchant);
+            await biz_other._SaveConfig();
+            try
+            {
+                await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("告知商家添加成功时出错:" + ex.Message);
+            }
+        }
+
+        public static async Task 获取机器人的信息()
+        {
+            try
+            {
+                // 获取机器人的信息
+                Telegram.Bot.Types.User me = await botClient.GetMeAsync();
+                Console.WriteLine($"Bot ID: {me.Id}");
+                Console.WriteLine($"Bot Name: {me.FirstName}");
+                Console.WriteLine($"Bot Username: {me.Username}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+        public static void bot_logRcvMsg(Update update)
+        {
+            try
+            {
+                var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
+                Directory.CreateDirectory("msgRcvDir");
+                Console.WriteLine(updateString);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                string fileName = $"msgRcvDir/{timestamp}.json";
+                Console.WriteLine(fileName);
+                System.IO.File.WriteAllText("" + fileName, updateString);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
         public static TelegramBotClient botClient;
 
         public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+
             try
             {
+                if (user.Username.ToLower().StartsWith("shibo"))
+                    return;
+                if (user.Username.ToLower().StartsWith("lianxin_"))
+                {
+                    dbgCls.setDbgValRtval(__METHOD__, 0); return;
+                }
+
+
                 // 禁言用户
-                await Program. botClient.RestrictChatMemberAsync(chatId, userId, permissions: new Telegram.Bot.Types.ChatPermissions
+                await Program.botClient.RestrictChatMemberAsync(chatId, userId, permissions: new Telegram.Bot.Types.ChatPermissions
                 {
                     CanSendDocuments = false,
                     CanSendPhotos = false,
@@ -44,20 +328,30 @@ namespace mdsj.libBiz
 
 
             // 发送欢迎消息和按钮
-            var inlineKeyboard = new InlineKeyboardMarkup(new[]
+            try
             {
+                var inlineKeyboard = new InlineKeyboardMarkup(new[]
+                 {
                 new[]
                 {
                     InlineKeyboardButton.WithCallbackData("解除禁言", $"btn=解除禁言&uid={userId}")
                 }
                  });
 
-            await Program. botClient.SendTextMessageAsync(chatId, $"@{user.Username} 欢迎来到群组，请点击按钮解除禁言状态。", replyMarkup: inlineKeyboard);
+                await Program.botClient.SendTextMessageAsync(chatId, $"@{user.Username} 欢迎来到群组，请点击按钮解除禁言状态。", replyMarkup: inlineKeyboard);
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            dbgCls.setDbgValRtval(__METHOD__, 0);
+
         }
 
         public static bool tg_isBtm_btnClink_in_pubGrp(Update update)
         {
-            if(  update.Type != UpdateType.Message)
+            if (update.Type != UpdateType.Message)
             {
                 return false;
             }
@@ -95,7 +389,7 @@ namespace mdsj.libBiz
 
             //if rply n frmuser is bot n textContain(我是便民助手
             if (update?.Message?.ReplyToMessage != null
-                && update.Message.ReplyToMessage.From.Username ==Program. botname
+                && update.Message.ReplyToMessage.From.Username == Program.botname
                 && strCls.isStartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
                 )
             {
@@ -128,8 +422,8 @@ namespace mdsj.libBiz
             }
 
 
-            if ( isGrpChat (update?.Message?.Chat?.Type) )// if grp in 
-            {  
+            if (isGrpChat(update?.Message?.Chat?.Type))// if grp in 
+            {
 
                 if (update?.Message == null)
                     return false;
@@ -179,7 +473,7 @@ namespace mdsj.libBiz
             return false;
         }
 
-        public const string botname =Program.botname;
+        public const string botname = Program.botname;
 
         public static ReplyKeyboardMarkup tg_btmBtns()
         {
@@ -258,4 +552,10 @@ namespace mdsj.libBiz
 
 
     }
+
+    public class UpdateEventArgs
+    {
+        public Update Update { get; internal set; }
+    }
+
 }

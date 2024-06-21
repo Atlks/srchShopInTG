@@ -32,7 +32,7 @@ using Microsoft.Extensions.Primitives;
 using System.Runtime.CompilerServices;
 using mdsj;
 using mdsj.libBiz;
-
+using static mdsj.lib.afrmwk;
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
 using static prj202405.timerCls;
@@ -51,6 +51,7 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
+using static mdsj.lib.afrmwk;
 using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
 using static SqlParser.Ast.DataType;
@@ -65,9 +66,9 @@ namespace prj202405
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
 
         // task grp
-        public static long groupId = -1002206103554;
+        //  public static long groupId = -1002206103554;
         //机器人创建者Id
-        static readonly long botCreatorId = 6091395167;
+        //     static readonly long botCreatorId = 6091395167;
         //加入的聊天Ids
         public static HashSet<string> chatIds = [];
         //联系商家城市
@@ -81,36 +82,35 @@ namespace prj202405
         public static Dictionary<long, User> _users = [];
 
 
-        static void PrintPythonLogo()
-        {
-
-            Console.WriteLine(@"
-        ,--./,-.
-       / #      \
-      |          |
-       \        /    
-        `._,._,'
-           ]
-        ,--'
-        |
-        `.___.
-        ");
-            Console.WriteLine(System.IO.File.ReadAllText("logo.txt"));
-        }
 
         public static async Task Main(string[] args)
         {
-            tgBiz.botClient = botClient;
-            获取机器人的信息();
+
+
+
+
+
+            evt_boot(() =>
+            {
+                tgBiz.botClient = botClient;
+                获取机器人的信息();
+            });
+
+            //aop_lgtry(() =>
+            //{
+            //    tgBiz.botClient = botClient;
+            //    获取机器人的信息();
+            //});
+
+            // throw new Exception("000");
+            //boot evt
+
             //    Console.WriteLine("botClient uname=>"+ botClient.)
-            PrintPythonLogo();
+
 
             //            C# 中捕获全局异常和全局异步异常，可以通过以下方式实现：
 
-            //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
-            //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
-            // 设置全局异常处理
-            mdsj.lib.exCls.set_error_handler();
+
 
             System.IO.Directory.CreateDirectory("pinlunDir");
             #region 构造函数
@@ -130,7 +130,7 @@ namespace prj202405
                 // botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0"); ///lianxin_2025bot.
                 //  botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");   //@LianXin_BianMinBot
 
-                groupId = -1002206103554; //taskgrp
+                //groupId = -1002206103554; //taskgrp
 
             }
             ////ini()   
@@ -183,21 +183,7 @@ namespace prj202405
             Console.ReadKey();
         }
 
-        private static async Task 获取机器人的信息()
-        {
-            try
-            {
-                // 获取机器人的信息
-                Telegram.Bot.Types.User me = await botClient.GetMeAsync();
-                Console.WriteLine($"Bot ID: {me.Id}");
-                Console.WriteLine($"Bot Name: {me.FirstName}");
-                Console.WriteLine($"Bot Username: {me.Username}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
+
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
@@ -264,8 +250,13 @@ namespace prj202405
 
 
             await biz_other._readMerInfo();
-            adChkSave(update);
-            _logMsg(update);
+
+            // if (update.Message != null)
+            if (update?.Type is UpdateType.Message)
+            {
+                bot_adChk(update);
+            }
+            bot_logRcvMsg(update);
             //auto add cht sess
             if (update?.Message != null)
             {
@@ -580,21 +571,7 @@ namespace prj202405
 
         }
 
-        private static string ldfld(Dictionary<string, string> parse_str1, string fld)
-        {
-            if (parse_str1.ContainsKey(fld))
-                return parse_str1[fld];
-            else
-                return "";
-        }
 
-        public static string ldfld2str(Dictionary<string, string> parse_str1, string fld)
-        {
-            if (parse_str1.ContainsKey(fld))
-                return parse_str1[fld];
-            else
-                return "";
-        }
 
         public static void canSendBtn_click(Update e)
         {
@@ -623,7 +600,7 @@ namespace prj202405
                 CanSendVideos = true,
                 CanSendVoiceNotes = true,
                 CanSendAudios = true
-               
+
             });
 
             botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "已解除禁言！");
@@ -638,70 +615,7 @@ namespace prj202405
             }
         }
 
-        private static void adChkSave(Update update)
-        {
-            try
-            {
-                if (update?.Type is UpdateType.Message)
-                {
-                    if (update.Message.Text.Length < 10)
-                        return;
-                    string timestamp = DateTime.Now.ToString("MM");
-                    //  string timecode=
-                    string fnameFrmTxt = ConvertToValidFileName(update.Message.Text);
-                    string uid = update.Message.From.Id.ToString();
-                    string fname = $"adchkDir/uid{uid}_Dt{timestamp}_" + fnameFrmTxt.Substring(0, 50) + ".txt";
-                    if (System.IO.File.Exists(fname))
-                    {
-                        Console.WriteLine("是广告告可能" + fname);
-                        file_put_contents(fname, update.Message.Text, true);
 
-                        SortedList obj = new SortedList();
-                        obj.Add("id", uid);
-                        obj.Add("user", update.Message.From);
-                        ormJSonFL.save(obj, "aduser.json");
-
-                        tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为广告,本消息10秒后删除!", 10);
-
-                    }
-                    else
-                        file_put_contents(fname, update.Message.Text, true);
-
-                    //机器人检测
-                    if (update.Message.From.IsBot)
-                    {
-                        SortedList obj = new SortedList();
-                        obj.Add("id", uid);
-                        obj.Add("user", update.Message.From);
-                        ormJSonFL.save(obj, "aduser.json");
-                    }
-
-                    //广告号检测
-
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
-
-        }
-
-        private static string str_trim_tolower(string msgx2024)
-        {
-            try
-            {
-                return msgx2024.Trim().ToString().ToLower();
-            }
-            catch (Exception ex)
-            {
-                return "";
-            }
-
-
-        }
 
         private static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
         {
@@ -716,25 +630,7 @@ namespace prj202405
             return null;
         }
 
-        private static void _logMsg(Update update)
-        {
-            try
-            {
-                var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
-                Directory.CreateDirectory("msgRcvDir");
-                Console.WriteLine(updateString);
-                // 获取当前时间并格式化为文件名
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string fileName = $"msgRcvDir/{timestamp}.json";
-                Console.WriteLine(fileName);
-                System.IO.File.WriteAllText("" + fileName, updateString);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
 
-        }
 
         private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string fuwuWd, string reqThreadId)
         {
@@ -776,157 +672,6 @@ namespace prj202405
 
         }
 
-        private static async Task 添加商家信息(ITelegramBotClient botClient, Update update, string? text)
-        {
-            var callError = async (string text) =>
-            {
-                try
-                {
-                    await botClient.SendTextMessageAsync(chatId: update.Message.Chat.Id, text: text, messageThreadId: update.Message.MessageThreadId, replyToMessageId: update.Message.MessageId);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("告知新增联系方式时获取到时出错:" + ex.Message);
-                }
-            };
-            var merchant = new Merchant();
-            merchant.Guid = Guid.NewGuid().ToString();
-
-            var chengshiandyuanqu = GetText.GetBetween(text, "城市园区名字:", "\n");
-            if (string.IsNullOrEmpty(chengshiandyuanqu))
-            {
-                await callError("在添加商家联系方式时,城市/园区名字未获取到");
-                return;
-            }
-
-
-            var _citys = getCitysObj();
-            //园区城市
-            Address? address = null;
-            foreach (var c in _citys)
-            {
-                foreach (var a in c.Address)
-                {
-                    if (a.Name == chengshiandyuanqu)
-                    {
-                        address = a;
-                        break;
-                    }
-                }
-            }
-            if (address == null)
-            {
-                await callError("城市园区不存在");
-                return;
-            }
-
-            merchant.Name = GetText.GetBetween(text, "商家名称:", "\n");
-            if (string.IsNullOrEmpty(merchant.Name))
-            {
-                await callError("商家名称未获取到");
-                return;
-            }
-
-            var category = GetText.GetBetween(text, "商家分类:", "\n");
-            try
-            {
-                merchant.Category = (Category)Convert.ToInt32(category);
-            }
-            catch (Exception)
-            {
-                await callError("商家分类未获取到");
-                return;
-            }
-
-            merchant.KeywordString = GetText.GetBetween(text, "商家关键词:", "\n");
-            if (string.IsNullOrEmpty(merchant.KeywordString))
-            {
-                await callError("商家关键词未获取到");
-                return;
-            }
-
-            var start = GetText.GetBetween(text, "开始营业时间:", "\n");
-            try
-            {
-                merchant.StartTime = TimeSpan.Parse(start);
-            }
-            catch (Exception)
-            {
-                await callError("商家开始营业时间未获取到");
-                return;
-            }
-
-            var end = GetText.GetBetween(text, "打烊收摊时间:", "\n");
-            try
-            {
-                merchant.StartTime = TimeSpan.Parse(end);
-            }
-            catch (Exception)
-            {
-                await callError("商家打烊时间未获取到");
-                return;
-            }
-
-            var telegram = GetText.GetBetween(text, "Telegram:", "\n");
-            if (!string.IsNullOrEmpty(telegram))
-            {
-                merchant.Telegram = telegram.Split(' ').ToList();
-            }
-
-            var telegramGroup = GetText.GetBetween(text, "Telegram群组:", "\n");
-            if (!string.IsNullOrEmpty(telegramGroup))
-            {
-                merchant.TelegramGroup = telegramGroup;
-            }
-
-            var whatsapp = GetText.GetBetween(text, "Whatsapp:", "\n");
-            if (!string.IsNullOrEmpty(whatsapp))
-            {
-                merchant.WhatsApp = whatsapp.Split(' ').ToList();
-            }
-
-            var lines = GetText.GetBetween(text, "Line:", "\n");
-            if (!string.IsNullOrEmpty(lines))
-            {
-                merchant.Line = lines.Split(' ').ToList();
-            }
-
-            var signals = GetText.GetBetween(text, "Signal:", "\n");
-            if (!string.IsNullOrEmpty(signals))
-            {
-                merchant.Signal = signals.Split(' ').ToList();
-            }
-
-            var weixins = GetText.GetBetween(text, "微信:", "\n");
-            if (!string.IsNullOrEmpty(weixins))
-            {
-                merchant.WeiXin = weixins.Split(' ').ToList();
-            }
-
-            var tels = GetText.GetBetween(text, "电话:", "\n");
-            if (!string.IsNullOrEmpty(tels))
-            {
-                merchant.Tel = tels.Split(' ').ToList();
-            }
-
-            if (merchant.Telegram.Count == 0 && merchant.WhatsApp.Count == 0 && merchant.Line.Count == 0 && merchant.Signal.Count == 0 && merchant.WeiXin.Count == 0)
-            {
-                await callError("未获取到任何一个联系方式");
-                return;
-            }
-
-            merchant.Menu = GetText.GetBetween(text, "商家菜单:", "\n");
-            address.Merchant.Add(merchant);
-            await biz_other._SaveConfig();
-            try
-            {
-                await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("告知商家添加成功时出错:" + ex.Message);
-            }
-        }
 
         private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2, string reqThreadId)
         {
@@ -2712,12 +2457,6 @@ namespace prj202405
 
         }
 
-        private static bool str_eq(string? username1, string? username2)
-        {
-            if (username1 == null || username2 == null)
-                return false;
-            return username1.Equals(username2);
-        }
 
 
 
@@ -2734,8 +2473,5 @@ namespace prj202405
 
     }
 
-    internal class UpdateEventArgs
-    {
-        public Update Update { get; internal set; }
-    }
+
 }

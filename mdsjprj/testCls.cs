@@ -65,27 +65,17 @@ namespace prj202405
     internal class testCls
     {
 
-        public static HashSet<string> MergeArrayWithHashSet(string s, HashSet<string> set)
-        {
-            string[] array = s.Split(" ");
-            // 创建一个新的 HashSet<string>，包含 HashSet<string> 的所有元素
-            HashSet<string> resultSet = new HashSet<string>(set);
-
-            // 将字符串数组中的所有元素添加到新的 HashSet<string> 中
-            foreach (string item in array)
-            {
-                resultSet.Add(item);
-            }
-
-            return resultSet;
-        }
+   
 
         internal static void test()
         {
+            int n = 3513;
+            double pre = n * 0.85;
+            double next = n * 1.015;
             string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
          //   playMp3(mp3FilePath);
-            logErr2024(111, "test", "errlog", null);
+        //    logErr2024(111, "test", "errlog", null);
 
             //rdCnPrs();
             //  parse_str_dsl();

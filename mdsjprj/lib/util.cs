@@ -25,6 +25,43 @@ namespace mdsj.lib
 
         public static string mp3FilePathEmgcy = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
+
+        public static async Task playMp3(string mp3FilePath,int sec)
+        {
+            try
+            {
+                var __METHOD__ = "playMp3";
+                dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
+
+                using (var audioFile = new AudioFileReader(mp3FilePath))
+                using (var outputDevice = new WaveOutEvent())
+                {
+                    outputDevice.Init(audioFile);
+                    outputDevice.Play();
+
+                    Console.WriteLine("Playing... Press any key to stop.");
+                    // Console.ReadKey(); // 按任意键停止播放
+                    // 使当前线程休眠5秒钟
+                    Thread.Sleep(sec*1000);
+                    //async maosi nt wk ..only slp wk...maybe same thrd..
+                    //yaos ma slp mthis thrd just finish fast..
+                    ExecuteAfterDelay(sec * 1000, () =>
+                    {
+                        outputDevice.Stop();
+                    });
+
+                }
+
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+
+        }
         /*
          open com ..beri show tips com disable
          <Project Sdk="Microsoft.NET.Sdk">
@@ -34,7 +71,7 @@ namespace mdsj.lib
   <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   <EnableComHosting>true</EnableComHosting>
          */
-        public static void playMp3(string mp3FilePath)
+        public static async Task playMp3(string mp3FilePath)
         {
             try
             {

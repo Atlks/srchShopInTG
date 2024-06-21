@@ -15,8 +15,35 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+        public static HashSet<string> MergeArrayWithHashSet(string s, HashSet<string> set)
+        {
+            string[] array = s.Split(" ");
+            // 创建一个新的 HashSet<string>，包含 HashSet<string> 的所有元素
+            HashSet<string> resultSet = new HashSet<string>(set);
 
+            // 将字符串数组中的所有元素添加到新的 HashSet<string> 中
+            foreach (string item in array)
+            {
+                resultSet.Add(item);
+            }
 
+            return resultSet;
+        }
+        private static string ldfld(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
+
+        public static string ldfld2str(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
         public static object array_slice<t>(List<t> inputList, int startIdx, int length)
         {
             //  List<Dictionary

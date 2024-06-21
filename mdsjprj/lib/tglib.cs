@@ -55,7 +55,7 @@ namespace prj202405.lib
                 //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
                 var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //  Program.botClient.SendPhotoAsync()
-                sendFoto(imgPath, msgtxt, results, Program.groupId);
+             //   sendFoto(imgPath, msgtxt, results, Program.groupId);
                
 
             //    Console.WriteLine(JsonConvert.SerializeObject(message));
@@ -65,8 +65,8 @@ namespace prj202405.lib
                 //遍历方法三：遍历哈希表中的键值
                 foreach (DictionaryEntry de in chtsSess)
                 {
-                    if (Convert.ToInt64(de.Key) == Program.groupId)
-                        continue;
+                    //if (Convert.ToInt64(de.Key) == Program.groupId)
+                    //    continue;
                     var chatid = Convert.ToInt64(de.Key);
                     Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
                       sendFoto(imgPath, msgtxt, results, chatid);

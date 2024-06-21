@@ -40,6 +40,7 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
+using System.Collections;
 namespace mdsj.lib
 {
 
@@ -171,18 +172,28 @@ namespace mdsj.lib
             //string htm = GetHtmlContent(url);
             //file_put_contents("cn2004.htm", htm);
             Console.WriteLine("GetEthPrice()");
-            decimal prs = GetEthPrice();
-            if (prs < 3480 || prs > 3700)
+            double prs = (double)GetEthPrice();
+            double bijiaoPrc = 3490;
+            double pre = bijiaoPrc * 0.85;
+            double next = bijiaoPrc * 1.015;
+            Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
+            if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
+                playMp3(mp3FilePathEmgcy);
 
             }
 
-            prs = GetBitcoinPrice();
-            if (prs > 67000)
+            prs = (double)GetBitcoinPrice();
+            bijiaoPrc = 63800;
+            pre = bijiaoPrc * 0.85;
+            next = bijiaoPrc * 1.015;
+            Console.WriteLine("GetBitcoinPrice()");
+            Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
+            if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
-
+                playMp3(mp3FilePathEmgcy);
             }
 
 

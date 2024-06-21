@@ -58,31 +58,33 @@ namespace mdsj
 
         public static async Task _SaveConfig()
         {
+          
             var __METHOD__ = "_SaveConfig";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-
-        writeUser:
-            try
-            {
-                await System.IO.File.WriteAllTextAsync("Users.json", JsonConvert.SerializeObject(Program._users));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("向本地写入限制用户时出错：" + e.Message);
-                goto writeUser;
-            }
-
-        writeMerchant:
-            try
-            {
-                await System.IO.File.WriteAllTextAsync(_shangjiaFL(Program.groupId.ToString() ), JsonConvert.SerializeObject(getCitysObj()));
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine("向本地写入商家时出错：" + e.Message);
-                goto writeMerchant;
-            }
             dbgCls.setDbgValRtval(__METHOD__, 0);
+            return;
+        //writeUser:
+        //    try
+        //    {
+        //        await System.IO.File.WriteAllTextAsync("Users.json", JsonConvert.SerializeObject(Program._users));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("向本地写入限制用户时出错：" + e.Message);
+        //        goto writeUser;
+        //    }
+
+        //writeMerchant:
+        //    try
+        //    {
+        //        await System.IO.File.WriteAllTextAsync(_shangjiaFL(Program.groupId.ToString() ), JsonConvert.SerializeObject(getCitysObj()));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Console.WriteLine("向本地写入商家时出错：" + e.Message);
+        //        goto writeMerchant;
+        //    }
+        //    dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
         public static HashSet<prj202405.City>   getCitysObj()
@@ -92,9 +94,9 @@ namespace mdsj
 
             //联系商家城市
             HashSet<prj202405.City> _citys = [];
-            var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
+         //   var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
           //  if (!string.IsNullOrEmpty(merchants))
-                _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
+          //      _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
             dbgCls.setDbgValRtval(__METHOD__," citys[]...");
             return _citys;
         }
@@ -159,7 +161,7 @@ namespace mdsj
                     Program._users = JsonConvert.DeserializeObject<Dictionary<long, prj202405.User>>(users)!;
             }
 
-            var merchants = await System.IO.File.ReadAllTextAsync(_shangjiaFL((string)Program.groupId.ToString()));
+        //    var merchants = await System.IO.File.ReadAllTextAsync(_shangjiaFL((string)Program.groupId.ToString()));
             //if (!string.IsNullOrEmpty(merchants))
             //    Program._citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
             ////ini（）  finish

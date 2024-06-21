@@ -14,6 +14,37 @@ namespace prj202405.lib
 {
     internal class strCls
     {
+        public static HashSet<string> splitFileByChrs(string filePath, string spltChrs)
+        {
+            char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };
+
+            HashSet<string> words = new HashSet<string>();
+
+            try
+            {
+                // 读取文件内容
+                string content = System.IO.File.ReadAllText(filePath);
+
+                // 根据空格、回车符和逗号拆分单词
+
+                string[] wordArray = content.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+                // 将单词添加到HashSet中
+                foreach (string word in wordArray)
+                {
+                    string word1 = word.Trim();
+                    if (word1.Length > 0)
+                        words.Add(word1);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
+            }
+
+            return words;
+        }
+
 
         public static string substr_AfterMarker(string input, string marker)
         {
@@ -330,6 +361,27 @@ namespace prj202405.lib
             // 将字符串数组中的所有键连接成一个单一的字符串
             string allKeys = string.Join(", ", keyArray);
             return allKeys;
+        }
+
+
+        public static string str_trim_tolower(string msgx2024)
+        {
+            try
+            {
+                return msgx2024.Trim().ToString().ToLower();
+            }
+            catch (Exception ex)
+            {
+                return "";
+            }
+
+
+        }
+        public static bool str_eq(string? username1, string? username2)
+        {
+            if (username1 == null || username2 == null)
+                return false;
+            return username1.Equals(username2);
         }
 
 

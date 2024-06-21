@@ -60,7 +60,7 @@ namespace prj202405
 
 
             //设置定时间隔(毫秒为单位)
-            int interval = 15*1000;  //15s 一次，一共四次机会每小时。。
+            int interval = 15 * 1000;  //15s 一次，一共四次机会每小时。。
             //因为设施了每小时 01分才触发
             System.Timers.Timer timer = new System.Timers.Timer(interval);
             //设置执行一次（false）还是一直执行(true)
@@ -75,30 +75,11 @@ namespace prj202405
 
         public static void setTimerTask4prs()
         {
-             
-
-
-            //设置定时间隔(毫秒为单位)
-            int interval = 2*60 * 1000;  //15s 一次，一共四次机会每小时。。
-            //因为设施了每小时 01分才触发
-            System.Timers.Timer timer = new System.Timers.Timer(interval);
-            //设置执行一次（false）还是一直执行(true)
-            timer.AutoReset = true;
-            //设置是否执行System.Timers.Timer.Elapsed事件
-            timer.Enabled = true;
-            //绑定Elapsed事件
-            timer.Elapsed += new System.Timers.ElapsedEventHandler(timerCls.TimerEvt4prs);
-            timer.Start();
-        }
-
-        public static void setTimerTask4tmr()
-        {
 
 
 
             //设置定时间隔(毫秒为单位)
-            int interval = 15*60*1000;
-                //2 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
+            int interval = 2 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
             //因为设施了每小时 01分才触发
             System.Timers.Timer timer = new System.Timers.Timer(interval);
             //设置执行一次（false）还是一直执行(true)
@@ -108,7 +89,30 @@ namespace prj202405
             //绑定Elapsed事件
             timer.Elapsed += new System.Timers.ElapsedEventHandler((object? sender, ElapsedEventArgs e) =>
             {
-              //  string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
+                rdCnPrs();
+            });
+            timer.Start();
+        }
+
+        public static void setTimerTask4tmr()
+        {
+            DateTime now = DateTime.Now;
+            if (now.Hour >= 18 || now.Hour < 9)
+                return;
+
+            //设置定时间隔(毫秒为单位)
+            int interval = 15 * 60 * 1000;
+            //2 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
+            //因为设施了每小时 01分才触发
+            System.Timers.Timer timer = new System.Timers.Timer(interval);
+            //设置执行一次（false）还是一直执行(true)
+            timer.AutoReset = true;
+            //设置是否执行System.Timers.Timer.Elapsed事件
+            timer.Enabled = true;
+            //绑定Elapsed事件
+            timer.Elapsed += new System.Timers.ElapsedEventHandler((object? sender, ElapsedEventArgs e) =>
+            {
+                //  string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
                 playMp3(mp3FilePath_slowSkedu);
 
@@ -116,12 +120,9 @@ namespace prj202405
             timer.Start();
         }
 
-       
 
-        private static void TimerEvt4prs(object? sender, ElapsedEventArgs e)
-        {
-            rdCnPrs();
-        }
+
+
 
         internal static void TimerEvt(object? sender, ElapsedEventArgs e)
         {
@@ -141,7 +142,7 @@ namespace prj202405
             chktrg_yule(now);
 
             renciNshangj(now);
-            cuxiao(now);
+            keepBtnMenu(now);
 
             static void 早餐(DateTime now)
             {
@@ -220,14 +221,14 @@ namespace prj202405
                 }
             }
 
-            static void cuxiao(DateTime now)
+            static void keepBtnMenu(DateTime now)
             {
                 var tsoxiaoShjk = $"tmrlg/actMenuPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
                 if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
-
-                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt, tgBiz.tg_btmBtns());
+                    var txt = "美好的一天从早上开始，当然美丽的心情从现在开始\n";
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txt+plchdTxt, tgBiz.tg_btmBtns());
                 }
             }
         }
@@ -244,11 +245,11 @@ namespace prj202405
             }
         }
 
-       /// <summary>
-       /// /、、https://t.me/shibolianmeng
-       /// </summary>
+        /// <summary>
+        /// /、、https://t.me/shibolianmeng
+        /// </summary>
         public static string plchdTxt = "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
-      
+
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
         {
@@ -277,7 +278,7 @@ namespace prj202405
         }
 
 
-     
+
         public static async Task evt_inline_menuitem_click_showSubmenu(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
         {
             // [CallerMemberName] string methodName = ""
@@ -303,7 +304,8 @@ namespace prj202405
 
 
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Console.WriteLine(ex.ToString());
             }
 
@@ -333,9 +335,9 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true
-                   ,replyToMessageId: update.Message.MessageId
+                   , replyToMessageId: update.Message.MessageId
                    );
-              //  Program.botClient.SendTextMessageAsync()
+                //  Program.botClient.SendTextMessageAsync()
                 Console.WriteLine(JsonConvert.SerializeObject(message2));
 
 
@@ -417,13 +419,13 @@ namespace prj202405
         public static async Task tmrEvt_sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
         {
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-            chtsSess.Add(Program.groupId, "");
+        //    chtsSess.Add(Program.groupId, "");
 
             //遍历方法三：遍历哈希表中的键值
             foreach (DictionaryEntry de in chtsSess)
             {
-                if (Convert.ToInt64(de.Key) == Program.groupId)
-                    continue;
+                //if (Convert.ToInt64(de.Key) == Program.groupId)
+                //    continue;
                 var key = de.Key;
                 Console.WriteLine(" SendPhotoAsync " + de.Key);
 
@@ -431,13 +433,13 @@ namespace prj202405
                 try
                 {
                     var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                  //  Message message2dbg = await 
-                        Program.botClient.SendTextMessageAsync(
-                    Convert.ToInt64(de.Key), msgtxt,
-                        parseMode: ParseMode.Html,
-                       replyMarkup: rplyKbdMkp,
-                       protectContent: false, disableWebPagePreview: true);
-                 //   Console.WriteLine(JsonConvert.SerializeObject(message2));
+                    //  Message message2dbg = await 
+                    Program.botClient.SendTextMessageAsync(
+                Convert.ToInt64(de.Key), msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: rplyKbdMkp,
+                   protectContent: false, disableWebPagePreview: true);
+                    //   Console.WriteLine(JsonConvert.SerializeObject(message2));
 
                     //Program.botClient.SendTextMessageAsync(
                     //         Program.groupId,
@@ -496,13 +498,13 @@ namespace prj202405
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            await bot_sendMsgToMlt("娱乐消遣.gif", CaptionTxt+ plchdTxt, results);
+            await bot_sendMsgToMlt("娱乐消遣.gif", plchdTxt, results);
 
         }
 
         public static async void zaocan()
         {
-            var s = "早餐 餐饮 早点 牛肉 火锅 炒饭 炒粉";
+            var s = "早餐 餐饮 早点 牛肉 火锅  炒粉";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
@@ -516,7 +518,7 @@ namespace prj202405
 
         public static async void tmEvt_z18_wancan()
         {
-            var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
+            var s = "餐饮 牛肉 火锅 炒粉";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
@@ -526,11 +528,11 @@ namespace prj202405
         }
         public static async void z_wucan()
         {
-            var s = "餐饮 米饭 牛肉 火锅 炒饭 炒粉";
+            var s = "餐饮  牛肉 火锅  炒粉";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
 
-            await bot_sendMsgToMlt("午餐商家推荐.gif", msgtxt+plchdTxt, results);
+            await bot_sendMsgToMlt("午餐商家推荐.gif", plchdTxt, results);
 
 
         }
