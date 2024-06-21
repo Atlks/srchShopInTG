@@ -157,6 +157,19 @@ namespace prj202405.lib
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfile));
+
+            // 创建目录
+            // 使用 Path.GetDirectoryName 方法获取目录路径
+            string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
+
+            // 检查目录是否存在
+            if (!Directory.Exists(directoryPath))
+            {
+                // 创建目录及所有上级目录
+                Directory.CreateDirectory(directoryPath);
+                Console.WriteLine($"Created directory: {directoryPath}");
+            }
+          //  Directory.CreateDirectory(logdir);
             // 将JSON字符串转换为List<Dictionary<string, object>>
             ArrayList list = qryDep(dbfile);
             SortedList listIot = db.lst2IOT(list);

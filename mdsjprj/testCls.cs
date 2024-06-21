@@ -59,23 +59,132 @@ using static mdsj.lib.dsl;
 using System.Reflection;
 using System.Threading;
 using static mdsj.lib.util;
+using System.Text.Json;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Lucene.Net.Analysis.Standard;
+using Lucene.Net.Store;
+using Lucene.Net.Index;
 
 namespace prj202405
 {
     internal class testCls
     {
 
-   
+        public static void ReadAndPrintJsonMessages(string directoryPath)
+        {
+            try
+            {
+                // 获取目录中所有的 JSON 文件
+                string[] jsonFiles = System.IO.Directory.GetFiles(directoryPath, "*.json");
+
+                foreach (string jsonFile in jsonFiles)
+                {
+                    // 读取 JSON 文件内容
+                    string jsonContent = System.IO.File.ReadAllText(jsonFile);
+
+                    // 解析 JSON 内容
+                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
+                    {
+                        // 检查是否包含 "message" 属性
+                        if (doc.RootElement.TryGetProperty("message", out JsonElement messageElement))
+                        {
+                            // 检查 "message" 属性是否为对象
+                            if (messageElement.ValueKind == JsonValueKind.Object)
+                            {
+                                // 获取 message 对象中的 text 属性
+                                if (messageElement.TryGetProperty("text", out JsonElement textElement))
+                                {
+                                    // 输出 text 属性的值
+                                    Console.WriteLine(textElement.GetString());
+                                    CreateIndex(textElement.GetString());
+                                }
+
+                            }
+                            else
+                            {
+                                Console.WriteLine($"The 'message' property in the file {jsonFile} is not an object.");
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        private static void CreateIndex(string? msgxv1)
+        {
+            var msgx = ChineseCharacterConvert.Convert.ToSimple(msgxv1);
+            var segmenter = new JiebaSegmenter();
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            segmenter.AddWord("御龙湾"); // 可添加一个新词
+            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            foreach (string line in user_dict)
+            {
+                segmenter.AddWord(line);
+            }
+            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
+            foreach (string line in postnKywd位置词set)
+            {
+                segmenter.AddWord(line);
+            }
+
+
+
+
+            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
+            // 使用 LINQ 的 ToArray 方法进行转换
+            string[] kwds = enumerable.ToArray();
+
+            foreach (string wd in kwds)
+            {
+                SortedList doc = new SortedList();
+
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                doc.Add("id", timestamp);
+
+                doc.Add("kwd", wd); doc.Add("txt", msgxv1);
+                ormJSonFL.save(doc, $"fullTxtSrchIdxdataDir/{wd}.json");
+
+            }
+        }
+
+        //private static void CreateIndex(string texts)
+        //{
+        //    var analyzer = new StandardAnalyzer(LuceneVersion.LUCENE_48);
+        //    var indexDir = FSDirectory.Open(new DirectoryInfo(IndexPath));
+        //    var indexConfig = new IndexWriterConfig(LuceneVersion.LUCENE_48, analyzer);
+        //    using var writer = new IndexWriter(indexDir, indexConfig);
+
+        //    foreach (var text in texts)
+        //    {
+        //        var doc = new Document
+        //    {
+        //        new TextField("content", text, Field.Store.YES)
+        //    };
+        //        writer.AddDocument(doc);
+        //    }
+
+        //    writer.Flush(triggerMerge: false, applyAllDeletes: false);
+        //}
+
 
         internal static void test()
         {
+
+            ReadAndPrintJsonMessages("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
             double pre = n * 0.85;
             double next = n * 1.015;
             string mp3FilePath = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
-         //   playMp3(mp3FilePath);
-        //    logErr2024(111, "test", "errlog", null);
+            //   playMp3(mp3FilePath);
+            //    logErr2024(111, "test", "errlog", null);
 
             //rdCnPrs();
             //  parse_str_dsl();
@@ -84,14 +193,14 @@ namespace prj202405
             {
                 object o = new Hashtable();
                 wrtLgTypeDate("msgrcvDir", o);
-               // timerCls.z_actSj();
+                // timerCls.z_actSj();
                 //   z_actSj();
-              //   callx((id: 11, dbf: "dbf"));
+                //   callx((id: 11, dbf: "dbf"));
                 List<SortedList> rws = ormIni.qryV2("cateECns.ini");
 
                 SortedList map = rws[0];
                 //  foreach (SortedList item in map)
-                foreach(var value in map.Values)
+                foreach (var value in map.Values)
                 {
                     String s = $" <option value=\"{value}\">";
                     Console.WriteLine(s);
@@ -105,8 +214,8 @@ namespace prj202405
 
                 //    json2dbMrcht();
 
-              //  var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
-             //   logErr2025(o, "func_get_args", "errlogDir2024");
+                //  var o = (ex: 111, method_Name: "mthnamxxx", prm: "paramValues");
+                //   logErr2025(o, "func_get_args", "errlogDir2024");
 
                 // exportCftFrmDb();
                 //var sql_dbf = "mrcht.json";
@@ -221,9 +330,9 @@ namespace prj202405
 
         }
 
-     
 
-   public static string GetHtmlContent(string url)
+
+        public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
@@ -237,7 +346,7 @@ namespace prj202405
                     HttpResponseMessage response = client.GetAsync(url).Result;
                     response.EnsureSuccessStatusCode();
                     string htmlContent = response.Content.ReadAsStringAsync().Result;
-                    dbgCls.setDbgValRtval(__METHOD__, htmlContent.Substring(0,300));
+                    dbgCls.setDbgValRtval(__METHOD__, htmlContent.Substring(0, 300));
                     return htmlContent;
                 }
                 catch (HttpRequestException e)
@@ -251,7 +360,7 @@ namespace prj202405
         private static void wrtLgTypeDate(string logdir, object o)
         {
             // 创建目录
-            Directory.CreateDirectory(logdir);
+            System.IO.Directory.CreateDirectory(logdir);
             // 获取当前时间并格式化为文件名
             string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             string fileName = $"{logdir}/{timestamp}.json";
@@ -261,7 +370,7 @@ namespace prj202405
 
         private static void callx((int id, string dbf) value)
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
         private static void getProdSvrWdlib()
@@ -303,7 +412,7 @@ namespace prj202405
         private static void json2dbMrcht()
         {
             string f = "mercht商家数据/缅甸.json";
-            List<SortedList> li= ormJSonFL.qry(f);
+            List<SortedList> li = ormJSonFL.qry(f);
             ormSqlt.saveMltHiPfm(li, "mercht商家数据/缅甸.db");
         }
 
@@ -356,8 +465,8 @@ namespace prj202405
                 // 将单词添加到 ArrayList 中
                 foreach (string word in words)
                 {
-                    if(word.Trim().Length>0)
-                       wordList.Add(word);
+                    if (word.Trim().Length > 0)
+                        wordList.Add(word);
                 }
             }
             return wordList;
@@ -374,8 +483,8 @@ namespace prj202405
                 cityMap.Remove("Address");
                 cityMap.Add("cityname", city.Name);
                 Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
-                var addrS = (  from ca in city.Address
-                               select ca
+                var addrS = (from ca in city.Address
+                             select ca
                          )
                      .ToList();
                 foreach (var addx in addrS)
@@ -398,9 +507,9 @@ namespace prj202405
                         mcht.Add("parkkwd", addx.CityKeywords);
                         Console.WriteLine(mcht["Category"]);
                         //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
-                        mcht.Add("CategoryStrKwds", Program._categoryKeyValue[ (int)m.Category]);
+                        mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
                         mcht.Add("cateInt", (int)m.Category);
-                        mcht.Add("cateEgls",  m.Category.ToString());
+                        mcht.Add("cateEgls", m.Category.ToString());
                         //   mcht
 
                         Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
@@ -409,13 +518,13 @@ namespace prj202405
 
                 }
             }
-              
 
-           
-                // orderby am.Views descending
-          //  select m,ca
+
+
+            // orderby am.Views descending
+            //  select m,ca
             //count = results.Count;
-          
+
         }
 
         private static void findd()
@@ -475,7 +584,7 @@ namespace prj202405
         }
     }
 
-  
+
 }
 
 
