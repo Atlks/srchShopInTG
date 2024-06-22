@@ -181,8 +181,23 @@ namespace libx
             string str = call_exe_retStr(execpath, scriptPath, prm);
             return int.Parse(str);
         }
+        public static List<SortedList> rnd_next4Sqlt(string dbf)
+        {
+            if (!dbf.EndsWith(".db"))
+            {
+                string ext = ".db";
+                dbf = dbf + ext;
+            }
 
-      
+            SortedList prm = new SortedList();
+
+            //   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
+
+
+            prm.Add("dbf", ($"{dbf}"));
+            return ormSqlt.qryV2(dbf);
+        }
+
         //rd 
         public static List<SortedList> rnd_next4nodeSqlt(string dbf)
         {

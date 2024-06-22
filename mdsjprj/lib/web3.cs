@@ -173,7 +173,7 @@ namespace mdsj.lib
             //file_put_contents("cn2004.htm", htm);
             Console.WriteLine("GetEthPrice()");
             double prs = (double)GetEthPrice();
-            double bijiaoPrc = 3490;
+            double bijiaoPrc = 3500;
             double pre = bijiaoPrc * 0.85;
             double next = bijiaoPrc * 1.015;
             Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
@@ -185,7 +185,7 @@ namespace mdsj.lib
             }
 
             prs = (double)GetBitcoinPrice();
-            bijiaoPrc = 63800;
+            bijiaoPrc = 64255;
             pre = bijiaoPrc * 0.85;
             next = bijiaoPrc * 1.015;
             Console.WriteLine("GetBitcoinPrice()");

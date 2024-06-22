@@ -9,6 +9,20 @@ namespace mdsj.lib
 {
     internal class dtime
     {
+
+        public static string ConvertUnixTimeStampToDateTime(long unixTimeStamp)
+        {
+            // 创建 DateTimeOffset 对象，表示 UTC 时间
+            DateTimeOffset dateTimeOffset = DateTimeOffset.FromUnixTimeSeconds(unixTimeStamp);
+
+            // 将 UTC 时间转换为本地时间
+            DateTime dateTime = dateTimeOffset.LocalDateTime;
+
+            // 格式化日期时间字符串
+            string formattedDate = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+
+            return formattedDate;
+        }
         public static void showSpanTime(long timestamp, string showtitle)
         {
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;

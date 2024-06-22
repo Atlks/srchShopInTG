@@ -1,4 +1,6 @@
 ﻿using JiebaNet.Segmenter;
+using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Extensions.Primitives;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
@@ -14,6 +16,18 @@ namespace prj202405.lib
 {
     internal class strCls
     {
+        public static Dictionary<string, StringValues> ParseQuery2024(string qerystr)
+        {
+            if(!qerystr.StartsWith("http"))
+            {
+                var uri = new Uri("https://t.me/" + qerystr);
+                var parameters = QueryHelpers.ParseQuery(uri.Query);
+                return parameters;
+            }
+           return QueryHelpers.ParseQuery(qerystr); ;
+        }
+
+
         public static HashSet<string> splitFileByChrs(string filePath, string spltChrs)
         {
             char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };

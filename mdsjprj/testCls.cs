@@ -51,108 +51,30 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
+using static mdsj.lib.dsl;
+using static mdsj.lib.util;
 using DocumentFormat.OpenXml.Office2010.Excel;
 using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
-using static mdsj.lib.dsl;
+
 using System.Reflection;
 using System.Threading;
-using static mdsj.lib.util;
+
 using System.Text.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Store;
 using Lucene.Net.Index;
-
+using DocumentFormat.OpenXml.Wordprocessing;
+using static mdsj.lib.dtime;
+using static mdsj.lib.fulltxtSrch;
 namespace prj202405
 {
     internal class testCls
     {
-
-        public static void ReadAndPrintJsonMessages(string directoryPath)
-        {
-            try
-            {
-                // 获取目录中所有的 JSON 文件
-                string[] jsonFiles = System.IO.Directory.GetFiles(directoryPath, "*.json");
-
-                foreach (string jsonFile in jsonFiles)
-                {
-                    // 读取 JSON 文件内容
-                    string jsonContent = System.IO.File.ReadAllText(jsonFile);
-
-                    // 解析 JSON 内容
-                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
-                    {
-                        // 检查是否包含 "message" 属性
-                        if (doc.RootElement.TryGetProperty("message", out JsonElement messageElement))
-                        {
-                            // 检查 "message" 属性是否为对象
-                            if (messageElement.ValueKind == JsonValueKind.Object)
-                            {
-                                // 获取 message 对象中的 text 属性
-                                if (messageElement.TryGetProperty("text", out JsonElement textElement))
-                                {
-                                    // 输出 text 属性的值
-                                    Console.WriteLine(textElement.GetString());
-                                    CreateIndex(textElement.GetString());
-                                }
-
-                            }
-                            else
-                            {
-                                Console.WriteLine($"The 'message' property in the file {jsonFile} is not an object.");
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-            }
-        }
-
-        private static void CreateIndex(string? msgxv1)
-        {
-            var msgx = ChineseCharacterConvert.Convert.ToSimple(msgxv1);
-            var segmenter = new JiebaSegmenter();
-            segmenter.LoadUserDict("user_dict.txt");
-            segmenter.AddWord("会所"); // 可添加一个新词
-            segmenter.AddWord("妙瓦底"); // 可添加一个新词
-            segmenter.AddWord("御龙湾"); // 可添加一个新词
-            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
-            foreach (string line in user_dict)
-            {
-                segmenter.AddWord(line);
-            }
-            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
-            foreach (string line in postnKywd位置词set)
-            {
-                segmenter.AddWord(line);
-            }
-
-
-
-
-            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
-            // 使用 LINQ 的 ToArray 方法进行转换
-            string[] kwds = enumerable.ToArray();
-
-            foreach (string wd in kwds)
-            {
-                SortedList doc = new SortedList();
-
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                doc.Add("id", timestamp);
-
-                doc.Add("kwd", wd); doc.Add("txt", msgxv1);
-                ormJSonFL.save(doc, $"fullTxtSrchIdxdataDir/{wd}.json");
-
-            }
-        }
+      
+  
 
         //private static void CreateIndex(string texts)
         //{
@@ -176,8 +98,8 @@ namespace prj202405
 
         internal static void test()
         {
-
-            ReadAndPrintJsonMessages("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
+         //   z_wucan();
+          //  ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
             double pre = n * 0.85;
             double next = n * 1.015;

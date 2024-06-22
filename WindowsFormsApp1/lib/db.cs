@@ -20,15 +20,30 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
-
+using static prj202405.lib.db;
 using static libx.qryEngrParser;
+ 
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static prj202405.lib.arrCls;//  prj202405.lib
+using static prj202405.lib.dbgCls;
+using static mdsj.lib.logCls;
+using static prj202405.lib.corex;
+using static prj202405.lib.db;
+using static prj202405.lib.filex;
+using static prj202405.lib.ormJSonFL;
+using static prj202405.lib.strCls;
+using static mdsj.lib.encdCls;
+using static mdsj.lib.net_http;
+ 
+using static prj202405.lib.strCls;
+using Microsoft.Extensions.Primitives;
 //  prj202405.lib.db
 namespace prj202405.lib
 {
     internal class db
-    {
-
-
+    { 
+      
         public static List<SortedList> qryV7(List<SortedList> rows,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun = null,

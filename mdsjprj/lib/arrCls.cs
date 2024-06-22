@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections;
 using Microsoft.Extensions.Primitives;
+using System.Reflection;
 
 
 
@@ -391,7 +392,28 @@ namespace prj202405.lib
 
         }
 
-        internal static string ldfld_TryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
+        public static void copyPropSortedListToMerchant(SortedList sortedList, Merchant merchant)
+        {
+            Type merchantType = typeof(Merchant);
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                string key = entry.Key.ToString();
+                PropertyInfo property = merchantType.GetProperty(key);
+                if (property != null && property.CanWrite)
+                {
+                    try
+                    {
+                        property.SetValue(merchant, Convert.ChangeType(entry.Value, property.PropertyType));
+                    }catch(Exception e)
+                    {
+                        Console.WriteLine(e);
+                    }
+               
+                }
+            }
+        }
+
+        public static string ldfld_TryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;

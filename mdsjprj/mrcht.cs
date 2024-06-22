@@ -457,7 +457,7 @@ namespace mdsj
             }
         }
 
-        private static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
+        public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
         {
             string park4srch = arrCls.ldfld_TryGetValue(whereExprsObj, v); ;
 

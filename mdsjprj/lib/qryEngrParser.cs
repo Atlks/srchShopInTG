@@ -18,11 +18,22 @@ using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
 using static libx.qryEngrParser;
 using static libx.storeEngr4Nodesqlt;
+using Microsoft.Extensions.Primitives;
+using prj202405;
 namespace libx
 {
     internal class qryEngrParser
     {
+        public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
+        {
+            string park4srch = ldfld_TryGetValue(whereExprsObj, v); ;
 
+            if (park4srch == null)
+            {
+                return false;
+            }
+            return true;
+        }
         public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> rndFun, Func<(SortedList, string), int> del_row_Fun)
         {
 
@@ -55,6 +66,42 @@ namespace libx
 
             return n;
         }
+
+        public static List<t> Qe_qryV2<t>(string fromDdataDir, string partnsExprs,
+                    Func<SortedList, bool> whereFun,
+                    Func<SortedList, int> ordFun,
+                    Func<SortedList, t> selktFun,
+                    Func<string, List<SortedList>> rndFun)
+        {
+            if (rndFun is null)
+            {
+                throw new ArgumentNullException(nameof(rndFun));
+            }
+
+            List<SortedList> rztLi = new List<SortedList>();
+            var patns_dbfs = _calcPatnsV3(fromDdataDir, partnsExprs);
+            string[] arr = patns_dbfs.Split(',');
+            foreach (string dbf in arr)
+            {
+                List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
+                rztLi = array_merge(rztLi, li);
+            }
+
+            List<SortedList> list = rztLi.Cast<SortedList>()
+                                .OrderBy(ordFun)
+                                .ToList();
+
+
+            List<t> rsRztInlnKbdBtn = new List<t>();
+            for (int i = 0; i < rztLi.Count; i++)
+            {
+                SortedList row = list[i];
+                rsRztInlnKbdBtn.Add(selktFun(row));
+            }
+
+            return rsRztInlnKbdBtn;
+        }
+
         public static List<SortedList> Qe_qry(string fromDdataDir, string partnsExprs, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             if (rndFun is null)
@@ -102,12 +149,12 @@ namespace libx
             }
         }
 
-        public static int Qe_saveOrUpdtReplace(SortedList sortedListNew, string dataDir,  Func<SortedList, int> wrt_rowFun, SortedList dbg = null)
+        public static int Qe_saveOrUpdtReplace(SortedList sortedListNew, string dataDir, Func<SortedList, int> wrt_rowFun, SortedList dbg = null)
         {
             SortedList mereed = new SortedList();
             if (sortedListNew.ContainsKey("id") && sortedListNew["id"].ToString().Trim().Length > 0)//updt mode
             {
-                return qe_replace(sortedListNew, dataDir,  wrt_rowFun);
+                return qe_replace(sortedListNew, dataDir, wrt_rowFun);
             }
             else
             {//new
@@ -117,8 +164,8 @@ namespace libx
         }
 
         private static int qe_replace(SortedList sortedListNew, string dataDir, Func<SortedList, int> wrt_rowFun)
-        {   
-           
+        {
+
             int str = wrt_rowFun(sortedListNew);
             return str;
         }

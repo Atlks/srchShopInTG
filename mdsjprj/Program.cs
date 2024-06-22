@@ -35,9 +35,11 @@ using mdsj.libBiz;
 using static mdsj.lib.afrmwk;
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
+using static libx.storeEngr4Nodesqlt;
 using static prj202405.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
+using static libx.qryEngrParser;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
@@ -56,6 +58,7 @@ using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
 using static SqlParser.Ast.DataType;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Drawing;
 
 namespace prj202405
 {
@@ -1999,10 +2002,18 @@ namespace prj202405
             }
             var cq = update.CallbackQuery!;
 
+
+            Dictionary<string, StringValues> whereExprsObj = ParseQuery2024( update.CallbackQuery.Data);
+            SortedList Merchant1 = Qe_find(whereExprsObj["id"], "mercht商家数据",null,(dbf) =>
+            {
+                return rnd_next4Sqlt(dbf);
+            });
+
             //联系商家
-            Merchant? contact_Merchant = null;
+            Merchant? contact_Merchant = new Merchant();
             //商家路径
-            string path = string.Empty;
+            string mrchtpath = string.Empty;
+            mrchtpath = Merchant1["城市"] + "•" + Merchant1["园区"] + "•" + Merchant1["商家"];
             //商家所属园区物业联系(纸飞机号)
             string propertyTelegram = string.Empty;
             //是否显示商家菜单
@@ -2024,6 +2035,7 @@ namespace prj202405
                 _users.Add((long)cq.From?.Id, user);
             }
             var uri = new Uri("https://t.me/" + cq.Data);
+          
             var parameters = QueryHelpers.ParseQuery(uri.Query);
 
             parameters.TryGetValue("id", out var id);
@@ -2038,7 +2050,7 @@ namespace prj202405
                         if (merchant.Guid.Contains(guid) && contact_Merchant == null)
                         {
                             contact_Merchant = merchant;
-                            path = city.Name + "•" + area.Name + "•" + merchant.Name;
+                            mrchtpath = city.Name + "•" + area.Name + "•" + merchant.Name;
                             merchants = area.Merchant;
                             goto getProperty;
                         }
@@ -2057,11 +2069,11 @@ namespace prj202405
                     break;
             }
 
-            if ((string.IsNullOrEmpty(cq.Message?.Caption) && string.IsNullOrEmpty(cq.Message?.Text)) || contact_Merchant == null)
-            {
-                Console.WriteLine("查看结果时显示未找到此商家,此处有错误");
-                return;
-            }
+            //if ((string.IsNullOrEmpty(cq.Message?.Caption) && string.IsNullOrEmpty(cq.Message?.Text)) || contact_Merchant == null)
+            //{
+            //    Console.WriteLine("查看结果时显示未找到此商家,此处有错误");
+            //    return;
+            //}
 
             //是否需要显示查看菜单
             isShowMenu = parameters.ContainsKey("showMenu");
@@ -2190,7 +2202,7 @@ namespace prj202405
             //展现量 浏览量 评论数
             // result += $"\n🔎{contact_Merchant.Searchs}    👁{contact_Merchant.Views}    💬{contact_Merchant.Comments.Count()}";
             //名称路径
-            result += "\n\n🏠<b>" + path + "</b>";
+            result += "\n\n🏠<b>" + mrchtpath + "</b>";
 
             //人气排名   
             int rank = merchants.OrderByDescending(e => e.Views).ToList().FindIndex(e => e.Guid == guid) + 1;
@@ -2202,8 +2214,19 @@ namespace prj202405
                 _ => $"\n\n🏆<b>商家排名</b> 第<b> {rank} </b>名 (受欢迎程度)",
             };
 
+            copyPropSortedListToMerchant(Merchant1, contact_Merchant);
             //营业时间
-            result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(contact_Merchant.StartTime) + "-" + timeCls.FormatTimeSpan(contact_Merchant.EndTime) + " " + biz_other._IsBusinessHours(contact_Merchant.StartTime, contact_Merchant.EndTime);
+            try
+            {
+                TimeSpan StartTime = TimeSpan.Parse(Merchant1["开始时间"].ToString());
+                TimeSpan EndTime = TimeSpan.Parse(Merchant1["结束时间"].ToString());
+                result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(TimeSpan.Parse(Merchant1["开始时间"].ToString())) + "-" + timeCls.FormatTimeSpan(TimeSpan.Parse(Merchant1["结束时间"].ToString())) + " " + biz_other._IsBusinessHours(StartTime, EndTime);
+
+            }catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+            
 
             var contactScore = contact_Merchant.Scores.Count == 0 ? 5 : contact_Merchant.Scores.Select(u => u.Value).Average();
             //打分
@@ -2353,6 +2376,7 @@ namespace prj202405
                  [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
             ];
 
+            contact_Merchant.Name = Merchant1["商家"].ToString();
             //如果不是物业
             if (!contact_Merchant.Name.Contains("物业"))
             {

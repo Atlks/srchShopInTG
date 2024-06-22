@@ -79,7 +79,7 @@ namespace prj202405
 
 
             //设置定时间隔(毫秒为单位)
-            int interval = 2 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
+            int interval = 5 * 60 * 1000;  //15s 一次，一共四次机会每小时。。
             //因为设施了每小时 01分才触发
             System.Timers.Timer timer = new System.Timers.Timer(interval);
             //设置执行一次（false）还是一直执行(true)
@@ -267,13 +267,14 @@ namespace prj202405
 
 
             results = arrCls.rdmList<InlineKeyboardButton[]>(results);
-
-            results = results.Skip(0 * 10).Take(5).ToList();
+          
+                results = results.Skip(0 * 10).Take(5).ToList();
 
 
 
             string Path = "今日促销商家.gif";
-            await bot_sendMsgToMlt(Path, plchdTxt, results);
+            if (results.Count > 0)
+                await bot_sendMsgToMlt(Path, plchdTxt, results);
             dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
@@ -484,8 +485,8 @@ namespace prj202405
                        select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
-
-            await bot_sendMsgToMlt("今日商家人气榜.gif", plchdTxt, results);
+            if (results.Count > 0)
+                await bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
         }
 
         //todo 娱乐kwd 有空白
@@ -498,7 +499,8 @@ namespace prj202405
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            await bot_sendMsgToMlt("娱乐消遣.gif", plchdTxt, results);
+            if (results.Count > 0)
+                await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
         }
 
@@ -512,7 +514,8 @@ namespace prj202405
             string Path = "早餐商家推荐.gif";
             var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
-            await bot_sendMsgToMlt("早餐商家推荐.gif", plchdTxt, results);
+            if(results.Count>0)
+            await bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
         }
 
 
@@ -522,17 +525,18 @@ namespace prj202405
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
-
-            await bot_sendMsgToMlt("晚餐商家推荐.gif", plchdTxt, results);
+            if (results.Count > 0)
+                await bot_sendMsgToMlt("晚餐商家推荐.gif", plchdTxt, results);
 
         }
         public static async void z_wucan()
         {
-            var s = "餐饮  牛肉 火锅  炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            var wdss = "餐饮 牛肉 火锅 炒粉";
+           
+         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
-
-            await bot_sendMsgToMlt("午餐商家推荐.gif", plchdTxt, results);
+           // if (results.Count > 0)
+                await bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt,  wdss);
 
 
         }
@@ -543,8 +547,8 @@ namespace prj202405
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
             List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
-
-            await bot_sendMsgToMlt("下午茶商家推荐.gif", plchdTxt, results);
+            if (results.Count > 0)
+                await bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
 
 
 
@@ -552,11 +556,16 @@ namespace prj202405
         }
 
 
-        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Timermode_lmt5(string s)
+        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Timermode_lmt5(string wdss)
         {
-            var arr = s.Split(" ").ToArray();
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), wdss));
+
+            var arr = wdss.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
             var rdm = new Random().Next(1, arr.Length);
+           
             string? keyword = arr[rdm - 1];
+            dbgCls.setDbgVal(__METHOD__, "kwd", keyword);
             List<InlineKeyboardButton[]> results = qry_ByKwd_TmrMsgmode(keyword);
             List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
             results22 = results22.Skip(0 * 10).Take(5).ToList();
@@ -566,6 +575,9 @@ namespace prj202405
         //new msg mode
         public static List<InlineKeyboardButton[]> qry_ByKwd_TmrMsgmode(string keyword)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
+
             List<InlineKeyboardButton[]> results = [];
 
             if (string.IsNullOrEmpty(keyword))
@@ -585,6 +597,9 @@ namespace prj202405
             {
 
             }
+
+
+
             return results;
         }
 

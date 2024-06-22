@@ -166,43 +166,39 @@ namespace prj202405.lib
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
-
-            SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
-            cn.Open();
-
-
-
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             var results = new List<SortedList>();
-            using (var cmd = new SqliteCommand(querySql, cn))
+            try
             {
-                using (var reader = cmd.ExecuteReader())
+                SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+                cn.Open();             
+                using (var cmd = new SqliteCommand(querySql, cn))
                 {
-
-
-                    while (reader.Read())
+                    using (var reader = cmd.ExecuteReader())
                     {
-                        var row = new SortedList();
-                        for (int i = 0; i < reader.FieldCount; i++)
+
+
+                        while (reader.Read())
                         {
-                            arrCls.stfld_addRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
-                            //  row[reader.GetName(i)] = reader.GetValue(i);
+                            var row = new SortedList();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                arrCls.stfld_addRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
+                                //  row[reader.GetName(i)] = reader.GetValue(i);
+                            }
+                            results.Add(row);
                         }
-                        results.Add(row);
+
+
                     }
-
-
                 }
+
+                
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
-
-            // 获取当前方法的信息
-            //MethodBase method = );
-
-            //// 输出当前方法的名称
-            //Console.WriteLine("Current Method Name: " + method.Name);
             dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
-
-
             return results;
         }
 

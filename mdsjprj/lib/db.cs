@@ -32,7 +32,9 @@ namespace prj202405.lib
       public static List<SortedList> qryV7(List<SortedList> rows,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun = null,
-  Func<SortedList, SortedList> selktFun = null)
+  Func<SortedList, SortedList> selktFun = null
+          
+          )
         {
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
@@ -418,6 +420,8 @@ namespace prj202405.lib
 
             return result;
         }
+
+        //if patn file not exist ,,flt..
         internal static string calcPatns(string dir, string partfile区块文件)
         {  
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
