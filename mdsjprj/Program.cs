@@ -59,6 +59,7 @@ using System.Security.Cryptography;
 using static SqlParser.Ast.DataType;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Drawing;
+using Lucene.Net.Index;
 
 namespace prj202405
 {
@@ -2393,7 +2394,7 @@ namespace prj202405
             contact_Merchant.WhatsApp = cvt2list(Merchant1, "WhatsApp");
             contact_Merchant.WeiXin = cvt2list(Merchant1, "微信");
             contact_Merchant.Tel = cvt2list(Merchant1, "电话");
-            result = rendLianxiFosh(contact_Merchant, result);
+            result = evt_detail_rendLianxiFosh(contact_Merchant, result);
             //查看菜单 (如果已经显示了,就不再显示)
             if (isShowMenu)
             {
@@ -2561,7 +2562,7 @@ namespace prj202405
             return li;
         }
 
-        private static string rendLianxiFosh(Merchant? contact_Merchant, string result)
+        private static string evt_detail_rendLianxiFosh(Merchant? contact_Merchant, string result)
         {
 
             #region 联系方式
@@ -2571,7 +2572,9 @@ namespace prj202405
             {
                 if (contact_Merchant.Telegram.Count == 1)
                 {
-                    result += $"\n\nTelegram  :  <a href='https://t.me/{contact_Merchant.Telegram[0]}'>点击聊天</a>";
+                    string tlgrm = contact_Merchant.Telegram[0];
+                    if(tlgrm.Trim().Length>3)
+                    result += $"\n\nTelegram  :  <a href='https://t.me/{tlgrm}'>点击聊天</a>";
                 }
                 else
                 {
@@ -2585,7 +2588,9 @@ namespace prj202405
                 string tmpleTxt = $"你好，从telegrame 的 https://t.me/{botname} 联信便民助手找到你的。麻烦发下菜单，谢谢";
                 if (contact_Merchant.WhatsApp.Count == 1)
                 {
-                    result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={contact_Merchant.WhatsApp[0]}&text={tmpleTxt}'>点击聊天</a>";
+                    string wtap = contact_Merchant.WhatsApp[0];
+                    if (wtap.Trim().Length > 3)
+                        result += $"\n\nWhatsApp  :  <a href='https://api.whatsapp.com/send/?phone={wtap}&text={tmpleTxt}'>点击聊天</a>";
                 }
                 else
                 {
@@ -2598,7 +2603,9 @@ namespace prj202405
             {
                 if (contact_Merchant.Line.Count == 1)
                 {
-                    result += $"\n\nLine  :  <a href='https://line.me/R/ti/p/~联信提示:切换为电话号码搜{contact_Merchant.Line[0]}'>点击聊天</a>";
+                    string ctct = contact_Merchant.Line[0];
+                    if (ctct.Trim().Length > 3)
+                        result += $"\n\nLine  :  <a href='https://line.me/R/ti/p/~联信提示:切换为电话号码搜{ctct}'>点击聊天</a>";
                 }
                 else
                 {
@@ -2611,7 +2618,9 @@ namespace prj202405
             {
                 if (contact_Merchant.WeiXin.Count == 1)
                 {
-                    result += $"\n\n微信  :  " + contact_Merchant.WeiXin[0];
+                    string ctct = contact_Merchant.WeiXin[0];
+                    if (ctct.Trim().Length > 3)
+                        result += $"\n\n微信  :  " + contact_Merchant.WeiXin[0];
                 }
                 else
                 {
@@ -2624,7 +2633,10 @@ namespace prj202405
             {
                 if (contact_Merchant.Tel.Count == 1)
                 {
-                    result += $"\n\n电话  :  " + contact_Merchant.Tel[0];
+
+                    string ctct = contact_Merchant.Tel[0];
+                    if (ctct.Trim().Length > 3)
+                        result += $"\n\n电话  :  " + contact_Merchant.Tel[0];
                 }
                 else
                 {

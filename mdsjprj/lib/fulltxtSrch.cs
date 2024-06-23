@@ -28,13 +28,100 @@ using static mdsj.lib.util;
 using JiebaNet.Segmenter;
 using prj202405.lib;
 using System.Reflection;
+using Newtonsoft.Json.Linq;
 namespace mdsj.lib
 {
     internal class fulltxtSrch
     {
 
+        public static List<Dictionary<string, object>> SearchMatch(string dataDir, string matchKwds)
+        {
+            // Split the matchKwds string into individual keywords
+            string[] splitStr = matchKwds.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-      
+            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+            bool needini = true;
+
+            // Iterate through each keyword
+            foreach (var value in splitStr)
+            {
+                string trimmedValue = value.Trim();
+                if (trimmedValue.Length > 0)
+                {
+                    string fpath = Path.Combine(dataDir, $"{trimmedValue}.json");
+                    List<Dictionary<string, object>> maparr = ReadJSONFileToMapArray(fpath);
+
+                    if (needini)
+                    {
+                        result = maparr;
+                        needini = false;
+                    }
+                    else
+                    {
+                        result = IntersectArrays(result, maparr);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        // Function to read JSON file and return List of Dictionary<string, object>
+        public static List<Dictionary<string, object>> ReadJSONFileToMapArray(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return new List<Dictionary<string, object>>(); // Return empty list if file doesn't exist
+            }
+
+            string jsonContent = File.ReadAllText(filePath);
+            JArray jsonArray = JArray.Parse(jsonContent);
+
+            List<Dictionary<string, object>> mapArray = new List<Dictionary<string, object>>();
+
+            foreach (JObject obj in jsonArray)
+            {
+                Dictionary<string, object> dict = obj.ToObject<Dictionary<string, object>>();
+                mapArray.Add(dict);
+            }
+
+            return mapArray;
+        }
+
+        // Function to compute intersection of two List of Dictionary<string, object>
+        public static List<Dictionary<string, object>> IntersectArrays(List<Dictionary<string, object>> arr1, List<Dictionary<string, object>> arr2)
+        {
+            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+
+            // Create a dictionary for arr1 elements with id as key
+            Dictionary<string, Dictionary<string, object>> map1 = new Dictionary<string, Dictionary<string, object>>();
+            foreach (var m in arr1)
+            {
+                string id = m["id"].ToString();
+                map1[id] = m;
+            }
+
+            // Iterate through arr2 and add to result if exists in map1
+            foreach (var m in arr2)
+            {
+                string id = m["id"].ToString();
+                if (map1.ContainsKey(id) && DeepCompare(map1[id], m))
+                {
+                    result.Add(m);
+                }
+            }
+
+            return result;
+        }
+
+        // Deep comparison function for dictionaries
+        public static bool DeepCompare(Dictionary<string, object> dict1, Dictionary<string, object> dict2)
+        {
+            // Implement your own deep comparison logic here
+            // Example uses reference equality for simplicity
+            return object.ReferenceEquals(dict1, dict2);
+        }
+
         //遍历输入字符串中的每个字符，检查它是否在标点符号集合中。
         public static bool IsAllPunctuation(string input)
         {
