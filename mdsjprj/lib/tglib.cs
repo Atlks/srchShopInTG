@@ -99,7 +99,7 @@ namespace prj202405.lib
                     var chatid = Convert.ToInt64(de.Key);
                     try
                     {
-                      //  if(chatid== -1002206103554)
+                       //  if(chatid== -1002206103554)
                         srchNsendFotoToGrp(imgPath, msgtxt,wdss, chatid);
                     }
                     catch (Exception e)
@@ -161,7 +161,7 @@ namespace prj202405.lib
             {
                 string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
                 string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
-                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}&timerMsgMode2025" } };
+                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&sdr=tmr&btn=dtl&ckuid=n" } };
                 return btnsInLine;
             };
 
@@ -174,7 +174,8 @@ namespace prj202405.lib
 
             var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
             Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
-            sendFoto(imgPath, msgtxt, results3, chatid);
+            if (results3.Count > 0)
+                sendFoto(imgPath, msgtxt, results3, chatid);
         }
 
         private static string getRdmKwd(string wdss)

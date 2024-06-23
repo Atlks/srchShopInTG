@@ -309,7 +309,7 @@ namespace prj202405.lib
 
         //}
 
-    
+
 
         //internal static List<InlineKeyboardButton[]> dedulip4inlnKbdBtnArr(List<InlineKeyboardButton[]> List1, string idClmName)
         //{
@@ -359,8 +359,8 @@ namespace prj202405.lib
             //}
 
         }
-		
-		       public static string ldfld_TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string fld)
+
+        public static string ldfld_TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
@@ -397,18 +397,28 @@ namespace prj202405.lib
             Type merchantType = typeof(Merchant);
             foreach (DictionaryEntry entry in sortedList)
             {
-                string key = entry.Key.ToString();
-                PropertyInfo property = merchantType.GetProperty(key);
-                if (property != null && property.CanWrite)
+                try
                 {
-                    try
+
+
+                    string key = entry.Key.ToString();
+                    PropertyInfo property = merchantType.GetProperty(key);
+                    if (property != null && property.CanWrite)
                     {
-                        property.SetValue(merchant, Convert.ChangeType(entry.Value, property.PropertyType));
-                    }catch(Exception e)
-                    {
-                        Console.WriteLine(e);
+                        try
+                        {
+                            property.SetValue(merchant, Convert.ChangeType(entry.Value, property.PropertyType));
+                        }
+                        catch (Exception e)
+                        {
+                           Console.WriteLine(e);
+                        }
+
                     }
-               
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
                 }
             }
         }
@@ -481,8 +491,8 @@ namespace prj202405.lib
             // 遍历旧的 SortedList 并将每个键值对复制到新的 SortedList
             foreach (DictionaryEntry newx in newList)
             {
-                if(newx.Key!=null)
-                   arrCls.stfld_addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
+                if (newx.Key != null)
+                    arrCls.stfld_addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
                 //   newList.Add(entry.Key, entry.Value);
             }
 

@@ -175,6 +175,97 @@ namespace prj202405.lib
         {
             callback.DynamicInvoke(args);
         }
+
+        public static void call_user_func(string className, string methodName, object[] parameters)
+        {
+            try
+            {
+                // 获取当前程序集中所有的类型
+                var type = Assembly.GetExecutingAssembly().GetType(className);
+                if (type == null)
+                {
+                    Console.WriteLine($"找不到类 '{className}'。");
+                    return;
+                }
+
+                // 获取参数类型数组
+                Type[] paramTypes = parameters != null ? Array.ConvertAll(parameters, p => p.GetType()) : Type.EmptyTypes;
+
+                // 获取方法信息，尝试先找静态方法
+                var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, paramTypes, null);
+
+                // 如果没有找到静态方法，再尝试找实例方法
+                if (method == null)
+                {
+                    method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, paramTypes, null);
+                }
+
+                if (method == null)
+                {
+                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
+                    return;
+                }
+
+                // 如果是静态方法，直接调用
+                if (method.IsStatic)
+                {
+                    method.Invoke(null, parameters);
+                }
+                else
+                {
+                    // 如果是实例方法，需要先创建实例
+                    var instance = Activator.CreateInstance(type);
+                    method.Invoke(instance, parameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
+            }
+        }
+
+        public static void call_user_func_array(string classAndMethod, object[] parameters)
+        {
+            // 分割类名和方法名
+            var parts = classAndMethod.Split('.');
+            if (parts.Length != 2)
+            {
+                Console.WriteLine("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
+                return;
+            }
+
+            string className = parts[0];
+            string methodName = parts[1];
+
+            try
+            {
+                // 获取当前程序集中所有的类型
+                var type = Assembly.GetExecutingAssembly().GetType(className);
+                if (type == null)
+                {
+                    Console.WriteLine($"找不到类 '{className}'。");
+                    return;
+                }
+
+                // 获取参数类型数组
+                Type[] paramTypes = parameters != null ? Array.ConvertAll(parameters, p => p.GetType()) : Type.EmptyTypes;
+
+                // 获取静态方法信息
+                var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public, null, paramTypes, null);
+                if (method == null)
+                {
+                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
+                    return;
+                }
+
+                // 调用静态方法
+                method.Invoke(null, parameters);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
+            }
+        }
         /// <summary>
         /// 检查某个类中是否存在指定名称的方法。
         /// </summary>

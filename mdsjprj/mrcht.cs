@@ -32,7 +32,8 @@ using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
 using static mdsj.libBiz.tgBiz;
 using static prj202405.lib.strCls;
-
+using static libx.qryEngrParser;
+using static libx.storeEngr4Nodesqlt;
 namespace mdsj
 {
     internal class mrcht
@@ -108,22 +109,22 @@ namespace mdsj
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfFroms, whereExprsObj, msgCtain));
 
-          //  string msgx = whereExprsObj["msgCtain"];
+            //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
             string[] kwds = strCls.splt_by_fenci(ref msgCtain);
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
-            kwds=removeStopWd4biz(kwds);
+            kwds = removeStopWd4biz(kwds);
 
 
             //c----calc fuwuci 
-            HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");            
+            HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
             string fuwuci = substr_getFuwuci(msgCtain, 商品与服务词库);
 
 
             HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
             string weizhici = getWeizhici(postnKywd位置词set, kwds);
-            weizhici=guiyihuaWeizhici(weizhici);
+            weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -157,11 +158,18 @@ namespace mdsj
                     arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
                     arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
 
+                    HashSet<string> fuwuWds = new HashSet<string>();
+                    arrCls.add_elmt2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "商家"));
+                    arrCls.add_elmt2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "关键词"));
+                    arrCls.add_elmt2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "分类关键词"));
                     //去除触发词，，只保留 服务次和位置词
                     // if no fuwuci flt
                     ////if ctin fuwuci &&  no weizhi  
                     ///   if  cton fuwuci && hasWeizhi 
-                    if (!curRowKywdSset.Contains(fuwuci))
+                    //if (!curRowKywdSset.Contains(fuwuci))
+                    //    return false;
+
+                    if (!strCls.containKwds(msgCtain, fuwuWds))
                         return false;
                     int containScore = 0;
 
@@ -203,20 +211,28 @@ namespace mdsj
 
 
 
-            var rsRztInlnKbdBtn = db.qryFrmSqlt_dep(dbfFroms, whereFun: whereFun,
-                 (SortedList sl) =>
-                 {
-                  //   (List<SortedList<string, object>>)
-                     return 0 - (int)ldfld( sl, "_containCntScore", 0);                    
-                 },
-                     (SortedList row) =>
-                     {
-                         string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
-                         string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
-                         InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"Merchant?id={guid}" } };
-                         return btnsInLine;
-                     }
-                );
+            //db.qryFrmSqlt_dep(dbfFroms, whereFun: whereFun,
+            //    ,
+
+
+            //    );
+
+            var rsRztInlnKbdBtn = Qe_qryV2<InlineKeyboardButton[]>(
+                "mercht商家数据", "",
+                whereFun, (SortedList sl) =>
+                {
+                    //   (List<SortedList<string, object>>)
+                    return 0 - (int)ldfld(sl, "_containCntScore", 0);
+                }, (SortedList row) =>
+                {
+                    string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
+                    string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
+                    InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
+                    return btnsInLine;
+                }, (dbf) =>
+            {
+                return rnd_next4Sqlt(dbf);
+            });
             //end fun
             dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
@@ -224,15 +240,16 @@ namespace mdsj
 
         private static string guiyihuaWeizhici(string weizhici)
         {
-             SortedList<string,string> sortedList = new SortedList<string, string>();
+            SortedList<string, string> sortedList = new SortedList<string, string>();
             sortedList.Add("kk", "kk园区"); try
             {
                 return sortedList[weizhici].Trim().ToLower();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return weizhici;
             }
-          
+
         }
 
         //、、o 去除触发词，，只保留 服务次和位置词
@@ -241,8 +258,8 @@ namespace mdsj
             //todo 去除触发词，，只保留 服务次和位置词
             HashSet<string> 搜索触发词 = ReadWordsFromFile("搜索触发词.txt");
 
-            HashSet<string> stopWdSet = new HashSet<string>();      
-           
+            HashSet<string> stopWdSet = new HashSet<string>();
+
             //园区
             stopWdSet.Add("店"); stopWdSet.Add("的"); stopWdSet.Add("号");
             stopWdSet.Add("飞机号"); stopWdSet.Add("飞机");

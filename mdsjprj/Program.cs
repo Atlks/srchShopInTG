@@ -233,13 +233,47 @@ namespace prj202405
 
             //----------if new user join
             if (update?.Message?.NewChatMembers != null)
+            {
+
                 evt_newUserJoin2024(update.Message.Chat.Id, update?.Message?.NewChatMembers);
 
+                return;
+            }
+              
             if (update.Type == UpdateType.ChatMember)
             {
                 UpdateEventArgs uea = new UpdateEventArgs();
                 uea.Update = update;
                 Bot_OnUpdate(null, uea);
+            }
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                //callback evt
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if (ldfld2str(parse_str1, "ckuid") == "y") //def is not
+                {
+                    if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                    {
+                        await botClient.AnswerCallbackQueryAsync(
+                           callbackQueryId: update.CallbackQuery.Id,
+                           text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                           showAlert: true); // 这是显示对话框的关键);
+                        return;
+                    }
+                }
+
+                if (ldfld2str(parse_str1, "btn") == "lkmenu") //def is not
+                {
+                    evt_lookmenu(update.CallbackQuery);
+                    return;
+                }
+                     
+
+                    
+
+
+
             }
 
             if (update.Type == UpdateType.CallbackQuery)
@@ -250,6 +284,27 @@ namespace prj202405
 
             }
 
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if (ldfld2str(parse_str1, "btn") == "dafenTips")
+                    return;
+
+            }
+
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                string btnname = ldfld2str(parse_str1, "btn");
+                if (btnname.StartsWith("df") && btnname != "dafenTips")
+                {
+                    await evtDafen(botClient, update, parse_str1);
+                    return;
+                }
+
+
+            }
 
 
             await biz_other._readMerInfo();
@@ -275,8 +330,7 @@ namespace prj202405
             }
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
-            if (msg2056.Contains("xxx007") || msg2056.Contains("大鱼") || msg2056.Contains("鱼总"))
-                playMp3(mp3FilePathEmgcy);
+            tipDayu(msg2056);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
                 logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
@@ -468,7 +522,10 @@ namespace prj202405
                 if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
                     Console.WriteLine(" 不包含商品服务词，ret");
-                    await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+
+                    Program.botClient.SendTextMessageAsync(update.Message!.Chat.Id, "未搜索到商家,您可以向我们提交商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
+
+                    //tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                     return;
                     //  return;
                 }
@@ -552,8 +609,13 @@ namespace prj202405
             //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
             if (update.Type is UpdateType.CallbackQuery)
             {
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if(ldfld2str(parse_str1, "btn")=="dtl")
+                {
+                    evt_View(botClient, update, reqThreadId);
+                }
                 // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
-                evt_View(botClient, update, reqThreadId);
+               
             }
             #endregion
 
@@ -574,7 +636,45 @@ namespace prj202405
 
         }
 
+        private static void evt_lookmenu(CallbackQuery? callbackQuery)
+        {
+            //如果展开菜单
+           // if ( string.IsNullOrEmpty(contact_Merchant.Menu))
+            {
+                try
+                {
+                      botClient.AnswerCallbackQueryAsync(callbackQuery.Id, "该商家暂未提供菜单", true);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("点击查看菜单,告知未提供菜单时时出错:" + e.Message);
+                }
+                return;
+            }
+        }
 
+        private static async Task evtDafen(ITelegramBotClient botClient, Update update, Dictionary<string, string> parse_str1)
+        {
+            //evet dafen 
+            if (ldfld2str(parse_str1, "ckuid") == "y")
+            {
+                if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                {
+                    await botClient.AnswerCallbackQueryAsync(
+                  callbackQueryId: update.CallbackQuery.Id,
+                  text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                  showAlert: true); // 这是显示对话框的关键);
+                    return;
+                }
+
+            }
+            //not need chk uid
+            botClient.AnswerCallbackQueryAsync(
+            callbackQueryId: update.CallbackQuery.Id,
+            text: "打分成功",
+            showAlert: true); // 这是显示对话框的关键);
+            return;
+        }
 
         public static void canSendBtn_click(Update e)
         {
@@ -1341,7 +1441,7 @@ namespace prj202405
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
 
-
+                //GetList_qryV2 
                 if (count == 0 && (update?.Message?.Chat?.Type == ChatType.Private))
                 {
 
@@ -1980,31 +2080,59 @@ namespace prj202405
 
         //}
 
-        //获取商家结果
+        //获取商家结果 detail click
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
-            if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+
+            Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+            if (ldfld2str(parse_str1, "btn") == "dtl") //def is not  
+                if (ldfld2str(parse_str1, "ckuid") == "y")
+                    if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                    {
+
+
+                        Console.WriteLine("not same user...ret");
+                        await botClient.AnswerCallbackQueryAsync(
+                                  callbackQueryId: update.CallbackQuery.Id,
+                                  text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                                  showAlert: true); // 这是显示对话框的关键);
+                        return;
+
+                    }
+
+
+
+
+            ////if dafen lookmenu ing{
+            //Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+            //if (ldfld2str(parse_str1, "score") != "") //def is not                        
+            //{
+
+            //}
+            //else if (ldfld2str(parse_str1, "showMenu") != "") //def is not                        
+            //{
+
+            //}
+            //else
+            //{
+            //    if (ldfld2str(parse_str1, "chkUidEq") == "y")
+
+
+            Dictionary<string, string> parse_str2 = parse_str(update.CallbackQuery.Data);
+            if (ldfld2str(parse_str2, "btn") == "detail") //def is not   
             {
-                if (!update.CallbackQuery.Data.Contains("timerMsgMode2025"))
-                {
-                    Console.WriteLine("not same user...ret");
-                    await botClient.AnswerCallbackQueryAsync(
-                              callbackQueryId: update.CallbackQuery.Id,
-                              text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
-                              showAlert: true); // 这是显示对话框的关键);
-                    return;
-                }
-
-
+                //need chk
             }
+
+
             var cq = update.CallbackQuery!;
 
 
-            Dictionary<string, StringValues> whereExprsObj = ParseQuery2024( update.CallbackQuery.Data);
-            SortedList Merchant1 = Qe_find(whereExprsObj["id"], "mercht商家数据",null,(dbf) =>
+            Dictionary<string, StringValues> whereExprsObj = ParseQuery2024(update.CallbackQuery.Data);
+            SortedList Merchant1 = Qe_find(whereExprsObj["id"], "mercht商家数据", null, (dbf) =>
             {
                 return rnd_next4Sqlt(dbf);
             });
@@ -2035,7 +2163,7 @@ namespace prj202405
                 _users.Add((long)cq.From?.Id, user);
             }
             var uri = new Uri("https://t.me/" + cq.Data);
-          
+
             var parameters = QueryHelpers.ParseQuery(uri.Query);
 
             parameters.TryGetValue("id", out var id);
@@ -2113,19 +2241,7 @@ namespace prj202405
             //}
             #endregion
 
-            //如果展开菜单
-            if (isShowMenu && string.IsNullOrEmpty(contact_Merchant.Menu))
-            {
-                try
-                {
-                    await botClient.AnswerCallbackQueryAsync(cq.Id, "该商家暂未提供菜单", true);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("点击查看菜单,告知未提供菜单时时出错:" + e.Message);
-                }
-                return;
-            }
+           
 
             //如果是评分
             if (score != null)
@@ -2204,6 +2320,7 @@ namespace prj202405
             //名称路径
             result += "\n\n🏠<b>" + mrchtpath + "</b>";
 
+            Console.WriteLine(result);
             //人气排名   
             int rank = merchants.OrderByDescending(e => e.Views).ToList().FindIndex(e => e.Guid == guid) + 1;
             result += rank switch
@@ -2222,15 +2339,17 @@ namespace prj202405
                 TimeSpan EndTime = TimeSpan.Parse(Merchant1["结束时间"].ToString());
                 result += "\n\n⏱<b>营业时间</b> " + timeCls.FormatTimeSpan(TimeSpan.Parse(Merchant1["开始时间"].ToString())) + "-" + timeCls.FormatTimeSpan(TimeSpan.Parse(Merchant1["结束时间"].ToString())) + " " + biz_other._IsBusinessHours(StartTime, EndTime);
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-            
+
 
             var contactScore = contact_Merchant.Scores.Count == 0 ? 5 : contact_Merchant.Scores.Select(u => u.Value).Average();
             //打分
-            #region  打分
+            #region  
+
             if (contactScore == 5)
             {
                 result += $"\n\n⭐️<b>综合评分</b> <b>{contactScore:F1}</b>❤️❤️❤️❤️❤️ ({contact_Merchant.Scores.Count})";
@@ -2270,8 +2389,184 @@ namespace prj202405
             isShowMenu = isShowMenu || cqText.Contains("-商家菜单-");
             #endregion
 
+            contact_Merchant.Telegram = cvt2list(Merchant1,"Telegram");
+            contact_Merchant.WhatsApp = cvt2list(Merchant1, "WhatsApp");
+            contact_Merchant.WeiXin = cvt2list(Merchant1, "微信");
+            contact_Merchant.Tel = cvt2list(Merchant1, "电话");
+            result = rendLianxiFosh(contact_Merchant, result);
+            //查看菜单 (如果已经显示了,就不再显示)
+            if (isShowMenu)
+            {
+                result += "\n\n<b>------------商家菜单------------</b>";
+                result += "\n\n" + contact_Merchant.Menu;
+                user.ViewMenus++;
+            }
+            //显示评价
+            else
+            {
+
+
+            }
+            #region 显示评价
+            string pinlunRzt = pinlun.pinlun_getpinlun(contact_Merchant);
+            result = result + pinlunRzt;
+            Console.WriteLine(result);
+            #endregion
+
+            //[
+            //   InlineKeyboardButton.WithCallbackData("➕ 添加商家", "AddMerchant"),
+            //   InlineKeyboardButton.WithCallbackData("⚙ 修改信息", "Update"),
+            //   ],
+            var chkUidEq = "y";
+            //if (update.CallbackQuery.Data.Contains("timerMsgMode2025"))
+            chkUidEq = "n";
+            // 发送带有按钮的消息
+            List<List<InlineKeyboardButton>> menu = [
+
+             [
+                     InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
+                     InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
+                     InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
+                     InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
+                     InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
+                     InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
+                 ],
+                 [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
+                 [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
+            ];
+
+            contact_Merchant.Name = Merchant1["商家"].ToString();
+            //如果不是物业
+            if (!contact_Merchant.Name.Contains("物业"))
+            {
+                var firstBtns = new List<InlineKeyboardButton>();
+                if (!isShowMenu)
+                {
+                    firstBtns.Add(InlineKeyboardButton.WithCallbackData("📋 查看菜单", $"id={guid}&btn=lkmenu&ckuid={chkUidEq}"));
+                }
+                else
+                {
+                    firstBtns.Add(InlineKeyboardButton.WithCallbackData("💬 查看评价", $"Merchant?id={guid}&showMenu=false"));
+                }
+
+                firstBtns.Add(InlineKeyboardButton.WithCallbackData("💬 评价商家", $"Merchant?id={guid}&Comment=true"));
+                menu.Insert(0, firstBtns);
+
+                if (!string.IsNullOrEmpty(propertyTelegram))
+                    result += $"\n\n⚠️商家有卫生、乱收费问题<a href='https://t.me/{propertyTelegram}'>物业投诉</a>";
+            }
+
+
+
+            //detail show
+            //  if timer img mode click,,new send msg..def is edit msg
+            parse_str1 = parse_str(update.CallbackQuery.Data);
+            if (ldfld2str(parse_str1, "sdr") == "tmr") //def is not
+
+            {
+                // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
+                string imgPath = "搜索横幅.gif";
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                Message message2 = await Program.botClient.SendPhotoAsync(
+              chatId: cq.Message.Chat.Id
+                  , Photo2, null,
+                 caption: result,
+                    parseMode: ParseMode.Html,
+                   replyMarkup: new InlineKeyboardMarkup(menu),
+                   protectContent: false);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+            else//   (update.CallbackQuery.Data.StartsWith("Merchant?id="))
+            {
+                try
+                {
+                    logCls.log(result, "detailClickLogDir");
+                    //  result = "ttt";
+                    SortedList obj = new SortedList();
+                    obj.Add("txt", result);
+                    obj.Add("menu", menu);
+                    logCls.log(obj, "detailClickDir");
+                    Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+
+                    logCls.log(m, "detailClickLogDir");
+                }
+                catch (Exception e)
+                {
+                    logCls.logErr2025(e, "detal click()", "errlog");
+                }
+
+
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+
+                return;
+            }
+            //end detail
+
+
+            //---------fowlow maybe dep...
+            // ..........send txt 
+            try
+            {
+                //  botClient.SendTextMessageAsync()
+                //  botClient.EditMessageCaptionAsync
+                //  botClient.EditMessageTextAsync
+                await botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+            }
+            catch (Exception e)
+            {
+                //try
+                //{
+                //    await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+
+                //}
+                //catch (Exception e)
+                //{
+
+                if (e.Message.Contains("current content"))
+                {
+                    try
+                    {
+                        await botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine("已经显示了,请勿重复点击时候出错:" + ex.Message);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("编辑联系方式时出错:" + e.Message);
+                }
+                await biz_other._SaveConfig();
+                // }
+
+
+            }  //end ctch
+
+        }
+
+        private static List<string> cvt2list(SortedList merchant1, string v )
+        {
+            List<string> li = new List<string>();
+            try
+            {
+                li.Add(trim_RemoveUnnecessaryCharacters(ldfld(merchant1, v, "").ToString()));
+
+            }catch(Exception e)
+            {
+
+            }
+           
+            return li;
+        }
+
+        private static string rendLianxiFosh(Merchant? contact_Merchant, string result)
+        {
+
             #region 联系方式
             result += "\n\n<b>-------------联系方式-------------</b>";
+            Console.WriteLine(result);
             if (contact_Merchant.Telegram.Any())
             {
                 if (contact_Merchant.Telegram.Count == 1)
@@ -2338,147 +2633,7 @@ namespace prj202405
                 }
             }
             #endregion
-
-            //查看菜单 (如果已经显示了,就不再显示)
-            if (isShowMenu)
-            {
-                result += "\n\n<b>------------商家菜单------------</b>";
-                result += "\n\n" + contact_Merchant.Menu;
-                user.ViewMenus++;
-            }
-            //显示评价
-            else
-            {
-
-
-            }
-            #region 显示评价
-            string pinlunRzt = pinlun.pinlun_getpinlun(contact_Merchant);
-            result = result + pinlunRzt;
-            #endregion
-
-            //[
-            //   InlineKeyboardButton.WithCallbackData("➕ 添加商家", "AddMerchant"),
-            //   InlineKeyboardButton.WithCallbackData("⚙ 修改信息", "Update"),
-            //   ],
-            // 发送带有按钮的消息
-            List<List<InlineKeyboardButton>> menu = [
-
-                 [
-                     InlineKeyboardButton.WithCallbackData( "打分",  "null"),
-                     InlineKeyboardButton.WithCallbackData( "1",  $"Merchant?id={guid}&score=1"),
-                     InlineKeyboardButton.WithCallbackData( "2",  $"Merchant?id={guid}&score=2"),
-                     InlineKeyboardButton.WithCallbackData( "3",  $"Merchant?id={guid}&score=3"),
-                     InlineKeyboardButton.WithCallbackData( "4",  $"Merchant?id={guid}&score=4"),
-                     InlineKeyboardButton.WithCallbackData( "5",  $"Merchant?id={guid}&score=5"),
-                 ],
-                 [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
-                 [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
-            ];
-
-            contact_Merchant.Name = Merchant1["商家"].ToString();
-            //如果不是物业
-            if (!contact_Merchant.Name.Contains("物业"))
-            {
-                var firstBtns = new List<InlineKeyboardButton>();
-                if (!isShowMenu)
-                {
-                    firstBtns.Add(InlineKeyboardButton.WithCallbackData("📋 查看菜单", $"Merchant?id={guid}&showMenu=true"));
-                }
-                else
-                {
-                    firstBtns.Add(InlineKeyboardButton.WithCallbackData("💬 查看评价", $"Merchant?id={guid}&showMenu=false"));
-                }
-
-                firstBtns.Add(InlineKeyboardButton.WithCallbackData("💬 评价商家", $"Merchant?id={guid}&Comment=true"));
-                menu.Insert(0, firstBtns);
-
-                if (!string.IsNullOrEmpty(propertyTelegram))
-                    result += $"\n\n⚠️商家有卫生、乱收费问题<a href='https://t.me/{propertyTelegram}'>物业投诉</a>";
-            }
-
-
-
-            //detail show
-            //  if timer img mode click,,new send msg..def is edit msg
-            if (update.CallbackQuery.Data.Contains("timerMsgMode2025"))
-            {
-                // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
-                string imgPath = "搜索横幅.gif";
-                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                Message message2 = await Program.botClient.SendPhotoAsync(
-              chatId: cq.Message.Chat.Id
-                  , Photo2, null,
-                 caption: result,
-                    parseMode: ParseMode.Html,
-                   replyMarkup: new InlineKeyboardMarkup(menu),
-                   protectContent: false);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-                return;
-            }
-            if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
-            {
-                try
-                {
-                    logCls.log(result, "detailClickLogDir");
-                    //  result = "ttt";
-                    Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
-
-                    logCls.log(m, "detailClickLogDir");
-                }
-                catch (Exception e)
-                {
-                    logCls.logErr2025(e, "detal click()", "errlog");
-                }
-
-
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-
-                return;
-            }
-            //end detail
-
-
-            //---------fowlow maybe dep...
-            // ..........send txt 
-            try
-            {
-                //  botClient.SendTextMessageAsync()
-                //  botClient.EditMessageCaptionAsync
-                //  botClient.EditMessageTextAsync
-                await botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
-            }
-            catch (Exception e)
-            {
-                //try
-                //{
-                //    await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
-
-                //}
-                //catch (Exception e)
-                //{
-
-                if (e.Message.Contains("current content"))
-                {
-                    try
-                    {
-                        await botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine("已经显示了,请勿重复点击时候出错:" + ex.Message);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("编辑联系方式时出错:" + e.Message);
-                }
-                await biz_other._SaveConfig();
-                // }
-
-
-            }  //end ctch
-
+            return result;
         }
 
 

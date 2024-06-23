@@ -25,7 +25,19 @@ namespace mdsj.lib
 
         public static string mp3FilePathEmgcy = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
-
+        public static void tipDayu(string msg2056)
+        {
+            try
+            {
+                if (msg2056.Contains("xxx007") || msg2056.Contains("大鱼") || msg2056.Contains("鱼总"))
+                    playMp3(mp3FilePathEmgcy);
+            }catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                logCls.error_logV2(ex, "err.log");
+            }
+          
+        }
         public static async Task playMp3(string mp3FilePath,int sec)
         {
             try

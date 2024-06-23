@@ -18,13 +18,13 @@ namespace prj202405.lib
     {
         public static Dictionary<string, StringValues> ParseQuery2024(string qerystr)
         {
-            if(!qerystr.StartsWith("http"))
+            if (!qerystr.StartsWith("http"))
             {
-                var uri = new Uri("https://t.me/" + qerystr);
-                var parameters = QueryHelpers.ParseQuery(uri.Query);
+                //    var uri = new Uri("https://t.me/" + qerystr);  uri.Query
+                var parameters = QueryHelpers.ParseQuery(qerystr);
                 return parameters;
             }
-           return QueryHelpers.ParseQuery(qerystr); ;
+            return QueryHelpers.ParseQuery(qerystr); ;
         }
 
 
@@ -112,7 +112,7 @@ namespace prj202405.lib
                 segmenter.AddWord(line);
             }
             HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
-            foreach(string line in postnKywd位置词set)
+            foreach (string line in postnKywd位置词set)
             {
                 segmenter.AddWord(line);
             }
@@ -123,10 +123,23 @@ namespace prj202405.lib
             IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();
-          //  string[] kwds = enumerable; // 搜索引擎模式
+            kwds = CleanStringArray(kwds);
+            //  string[] kwds = enumerable; // 搜索引擎模式
             string kdwsJoin = string.Join("/", kwds);
             Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
+        }
+
+        public static string[] CleanStringArray(string[] input)
+        {
+            if (input == null)
+            {
+                return new string[0];
+            }
+
+            return input
+                .Where(s => !string.IsNullOrWhiteSpace(s))
+                .ToArray();
         }
         //public static string calcKwds(ref string msgx)
         //{
@@ -186,7 +199,7 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
-    public   static string trim_RemoveUnnecessaryCharacters(string input)
+        public static string trim_RemoveUnnecessaryCharacters(string input)
         {
             // Define the characters to be removed
             char[] charsToRemove = new char[] { '\"', '[', ']' };
@@ -218,7 +231,31 @@ namespace prj202405.lib
             string v = new string(result, 0, resultIndex);
             return v.Trim();
         }
-        internal static bool containKwds(string? text, string trgSearchKwds)
+
+        public static bool containKwds(string? text, HashSet<string> trgSearchKwds)
+        {
+            if (text == null)
+                return false;
+            //string[] kwds = trgSearchKwds.Split(" ");
+            foreach (string kwd in trgSearchKwds)
+            {
+                var kwd2 = kwd.Trim();
+                if (kwd2.Length == 0)
+                    continue;
+
+                if (text.Contains(kwd2))
+                {
+                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                    return true;
+                }
+
+            }
+
+
+
+            return false;
+        }
+        public static bool containKwds(string? text, string trgSearchKwds)
         {
             if (text == null)
                 return false;
@@ -233,7 +270,7 @@ namespace prj202405.lib
                         Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
                         return true;
                     }
-                       
+
                 }
             }
 
@@ -242,7 +279,7 @@ namespace prj202405.lib
             return false;
         }
 
- //pai除 城市词
+        //pai除 城市词
         //触发词  城市词  商品词
         //internal static int containCalcCntScore(string seasrchKw2ds, IEnumerable<string> segments)
         //{
@@ -259,7 +296,7 @@ namespace prj202405.lib
         //                n++;
         //                Console.WriteLine(" contain kwd=>" + kwd2);
         //            }
-                      
+
         //        }
         //    }
         //    return n;
@@ -302,13 +339,13 @@ namespace prj202405.lib
         //                n++;
         //                Console.WriteLine(" contain kwd=>" + kwd2);
         //            }
-                      
+
         //        }
         //    }
         //    return n;
         //}
 
-     
+
 
 
         /// <summary>

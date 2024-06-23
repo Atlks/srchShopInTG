@@ -128,7 +128,7 @@ namespace mdsj.lib
                 Directory.CreateDirectory(logdir);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string fileName = $"{logdir}/{timestamp}.txt";
+                string fileName = $"{logdir}/{timestamp}.json";
                 Console.WriteLine(" logdir=>"+logdir);
                 Console.WriteLine(" fileName=>" + fileName);
                 if (IsString(m))

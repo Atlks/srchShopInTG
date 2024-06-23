@@ -34,53 +34,7 @@ namespace mdsj.lib
     {
 
 
-        public static void CreateIndex(string? msgxv1, SortedList o)
-        {
-            var msgx = ChineseCharacterConvert.Convert.ToSimple(msgxv1);
-            var segmenter = new JiebaSegmenter();
-            //------------自定词
-            segmenter.LoadUserDict("user_dict.txt");
-            segmenter.AddWord("会所"); // 可添加一个新词
-            segmenter.AddWord("妙瓦底"); // 可添加一个新词
-            segmenter.AddWord("御龙湾"); // 可添加一个新词
-            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
-            foreach (string line in user_dict)
-            {
-                segmenter.AddWord(line);
-            }
-            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
-            foreach (string line in postnKywd位置词set)
-            {
-                segmenter.AddWord(line);
-            }
-
-
-
-
-            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
-            // 使用 LINQ 的 ToArray 方法进行转换
-            string[] kwds = enumerable.ToArray();
-
-            foreach (string wd in kwds)
-            {
-                //------停顿词过滤  单个字的过滤
-                if(wd.Length<=1) continue;
-                if(IsNumeric(wd)) continue;
-                if(IsAllPunctuation(wd)) continue;
-                //todo 常见没意义词的过滤 虚词过滤
-
-                SortedList doc = new SortedList();
-
-                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                doc.Add("id", timestamp);
-              
-                doc.Add("kwd", wd); doc.Add("txt", msgxv1);
-                doc.Add("grpinfo", o);
-                ormJSonFL.save(doc, $"fullTxtSrchIdxdataDir/{wd}.json");
-
-            }
-        }
-
+      
         //遍历输入字符串中的每个字符，检查它是否在标点符号集合中。
         public static bool IsAllPunctuation(string input)
         {
@@ -166,10 +120,57 @@ namespace mdsj.lib
                 o.Add("timeStamp", stmp);
                 o.Add("time", ConvertUnixTimeStampToDateTime((stmp)));
 
-                CreateIndex(textElement.GetString(), o);
+                CreateIndex_part2(textElement.GetString(), o);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
+        }
+
+        public static void CreateIndex_part2(string? msgxv1, SortedList o)
+        {
+            var msgx = ChineseCharacterConvert.Convert.ToSimple(msgxv1);
+            var segmenter = new JiebaSegmenter();
+            //------------自定词
+            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.AddWord("会所"); // 可添加一个新词
+            segmenter.AddWord("妙瓦底"); // 可添加一个新词
+            segmenter.AddWord("御龙湾"); // 可添加一个新词
+            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            foreach (string line in user_dict)
+            {
+                segmenter.AddWord(line);
+            }
+            HashSet<string> postnKywd位置词set = ReadLinesToHashSet("位置词.txt");
+            foreach (string line in postnKywd位置词set)
+            {
+                segmenter.AddWord(line);
+            }
+
+
+
+
+            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
+            // 使用 LINQ 的 ToArray 方法进行转换
+            string[] kwds = enumerable.ToArray();
+
+            foreach (string wd in kwds)
+            {
+                //------停顿词过滤  单个字的过滤
+                if (wd.Length <= 1) continue;
+                if (IsNumeric(wd)) continue;
+                if (IsAllPunctuation(wd)) continue;
+                //todo 常见没意义词的过滤 虚词过滤
+
+                SortedList doc = new SortedList();
+
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                doc.Add("id", timestamp);
+
+                doc.Add("kwd", wd); doc.Add("txt", msgxv1);
+                doc.Add("grpinfo", o);
+                ormJSonFL.save(doc, $"fullTxtSrchIdxdataDir/{wd}.json");
+
+            }
         }
 
         private static JsonElement setGrpFromTgjson(JsonElement messageElement, SortedList o)

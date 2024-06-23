@@ -192,6 +192,8 @@ namespace libx
         // str eng is find_current_row
         public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -207,6 +209,7 @@ namespace libx
 
 
             SortedList results = rztLi[0];
+            dbgCls.setDbgValRtval(__METHOD__, "results.Count=>"+ results.Count);
             return results;
         }
 

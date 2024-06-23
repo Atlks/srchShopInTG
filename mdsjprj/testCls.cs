@@ -69,6 +69,7 @@ using Lucene.Net.Index;
 using DocumentFormat.OpenXml.Wordprocessing;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
+using Microsoft.EntityFrameworkCore.Metadata;
 namespace prj202405
 {
     internal class testCls
@@ -98,8 +99,9 @@ namespace prj202405
 
         internal static void test()
         {
-         //   z_wucan();
-          //  ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
+            sim2trand("D:\\0prj\\inputmthd\\lib\\常用字3000.txt");
+            //   z_wucan();   tglib    //  if(chatid== -1002206103554)
+            //  ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
             double pre = n * 0.85;
             double next = n * 1.015;
@@ -252,7 +254,28 @@ namespace prj202405
 
         }
 
+        private static void sim2trand(string v)
+        {
+            ArrayList li = new ArrayList();
+            HashSet<string> wds= filex.ReadWordsFromFile(v);
+            int n = 0;
 
+            foreach(string wd in wds)
+            {
+                SortedList o = new SortedList();
+                o.Add(ChineseCharacterConvert.Convert.ToTraditional(wd), wd);
+                //   li.Add(o);
+                string line = ChineseCharacterConvert.Convert.ToTraditional(wd) + "=" + wd;
+                li.Add(line);
+                n++;
+                Console.WriteLine(n);
+                
+            }
+            // file_put_contents("trd2smpLib.json",json_encode(li));
+            file_put_contents("trd2smpLib.ini", string.Join("\r\n", li.ToArray()));
+
+         //   throw new NotImplementedException();
+        }
 
         public static string GetHtmlContent(string url)
         {

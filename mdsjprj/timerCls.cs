@@ -494,12 +494,12 @@ namespace prj202405
         {
             //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧 马杀鸡
             var s = "ktv 水疗 会所 嫖娼 酒吧 足疗 spa  按摩 ";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
             var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-            if (results.Count > 0)
+          //  if (results.Count > 0)
                 await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
         }
@@ -507,26 +507,28 @@ namespace prj202405
         public static async void zaocan()
         {
             var s = "早餐 餐饮 早点 牛肉 火锅  炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+        //    List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
 
             string Path = "早餐商家推荐.gif";
             var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
-            if(results.Count>0)
+         //   if(results.Count>0)
             await bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
         }
 
 
         public static async void tmEvt_z18_wancan()
         {
+            
             var s = "餐饮 牛肉 火锅 炒粉";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            List<InlineKeyboardButton[]> results = new List<InlineKeyboardButton[]>();
+                //qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
-            if (results.Count > 0)
-                await bot_sendMsgToMlt("晚餐商家推荐.gif", plchdTxt, results);
+         //   if (results.Count > 0)
+                await bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
 
         }
         public static async void z_wucan()
@@ -545,9 +547,9 @@ namespace prj202405
         {
             var s = "奶茶 水果茶 水果";
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
-            List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
-            if (results.Count > 0)
+         //   if (results.Count > 0)
                 await bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
 
 
@@ -556,52 +558,52 @@ namespace prj202405
         }
 
 
-        public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Timermode_lmt5(string wdss)
-        {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), wdss));
+        //public static List<InlineKeyboardButton[]> qry_ByKwds_OrderbyRdm_Timermode_lmt5(string wdss)
+        //{
+        //    var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+        //    dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), wdss));
 
-            var arr = wdss.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
-            var rdm = new Random().Next(1, arr.Length);
+        //    var arr = wdss.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
+        //    var rdm = new Random().Next(1, arr.Length);
            
-            string? keyword = arr[rdm - 1];
-            dbgCls.setDbgVal(__METHOD__, "kwd", keyword);
-            List<InlineKeyboardButton[]> results = qry_ByKwd_TmrMsgmode(keyword);
-            List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
-            results22 = results22.Skip(0 * 10).Take(5).ToList();
-            return results22;
-        }
+        //    string? keyword = arr[rdm - 1];
+        //    dbgCls.setDbgVal(__METHOD__, "kwd", keyword);
+        //    List<InlineKeyboardButton[]> results = qry_ByKwd_TmrMsgmode(keyword);
+        //    List<InlineKeyboardButton[]> results22 = arrCls.rdmList<InlineKeyboardButton[]>(results);
+        //    results22 = results22.Skip(0 * 10).Take(5).ToList();
+        //    return results22;
+        //}
 
         //new msg mode
-        public static List<InlineKeyboardButton[]> qry_ByKwd_TmrMsgmode(string keyword)
-        {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
+        //public static List<InlineKeyboardButton[]> qry_ByKwd_TmrMsgmode(string keyword)
+        //{
+        //    var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+        //    dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), keyword));
 
-            List<InlineKeyboardButton[]> results = [];
+        //    List<InlineKeyboardButton[]> results = [];
 
-            if (string.IsNullOrEmpty(keyword))
-                return [];
+        //    if (string.IsNullOrEmpty(keyword))
+        //        return [];
 
-            keyword = keyword.ToLower().Replace(" ", "").Trim();
-            var searchChars = keyword!.ToCharArray();
-            HashSet<prj202405.City> _citys = getCitysObj();
-            results = (from c in _citys
-                       from ca in c.Address
-                       from am in ca.Merchant
-                       where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
-                       orderby am.Views descending
-                       select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
-            //count = results.Count;
-            foreach (InlineKeyboardButton[] btn in results)
-            {
+        //    keyword = keyword.ToLower().Replace(" ", "").Trim();
+        //    var searchChars = keyword!.ToCharArray();
+        //    HashSet<prj202405.City> _citys = getCitysObj();
+        //    results = (from c in _citys
+        //               from ca in c.Address
+        //               from am in ca.Merchant
+        //               where searchChars.All(s => (c.CityKeywords + ca.CityKeywords + am.KeywordString + am.KeywordString + Program._categoryKeyValue[(int)am.Category]).Contains(s))
+        //               orderby am.Views descending
+        //               select new[] { new InlineKeyboardButton(c.Name + " • " + ca.Name + " • " + am.Name) { CallbackData = $"Merchant?id={am.Guid}&timerMsgMode2025" } }).ToList();
+        //    //count = results.Count;
+        //    foreach (InlineKeyboardButton[] btn in results)
+        //    {
 
-            }
+        //    }
 
 
 
-            return results;
-        }
+        //    return results;
+        //}
 
         //public static List<InlineKeyboardButton[]> qryByMsgKwds(string msg)
         //{
