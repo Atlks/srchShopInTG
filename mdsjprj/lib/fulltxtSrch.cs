@@ -33,8 +33,8 @@ namespace mdsj.lib
 {
     internal class fulltxtSrch
     {
-
-        public static List<Dictionary<string, object>> SearchMatch(string dataDir, string matchKwds)
+        //   ContainMatch
+        public static List<Dictionary<string, object>> ContainMatch(string dataDir,string CONTAINS_fld,string matchKwds)
         {
             // Split the matchKwds string into individual keywords
             string[] splitStr = matchKwds.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
@@ -105,7 +105,7 @@ namespace mdsj.lib
             foreach (var m in arr2)
             {
                 string id = m["id"].ToString();
-                if (map1.ContainsKey(id) && DeepCompare(map1[id], m))
+                if (map1.ContainsKey(id))
                 {
                     result.Add(m);
                 }
@@ -176,8 +176,11 @@ namespace mdsj.lib
                                 {
                                     // 输出 text 属性的值
                                     Console.WriteLine(textElement.GetString());
-
-                                    crtIdx(messageElement, textElement);
+                                      string DataDir = "fullTxtSrchIdxdataDir";
+                                    SortedList o= tgMsg2row(messageElement, textElement);
+                                    var msgx = ChineseCharacterConvert.Convert.ToSimple(o["txt"].ToString());
+                                    o["txt"] = msgx;
+                                    wrt_row4tgmsg(o, DataDir);
                                 }
 
                             }
@@ -196,26 +199,22 @@ namespace mdsj.lib
             }
         }
 
-        private static void crtIdx(JsonElement messageElement, JsonElement textElement)
+        private static void wrt_row4tgmsg(SortedList tgmsg, string DataDir)
         {
             try
             {
-                SortedList o = new SortedList();
-                setuNameFrmTgmsgJson(messageElement, o);
-                setGrpFromTgjson(messageElement, o);
-                long stmp = messageElement.GetProperty("date").GetInt64();
-                o.Add("timeStamp", stmp);
-                o.Add("time", ConvertUnixTimeStampToDateTime((stmp)));
-
-                CreateIndex_part2(textElement.GetString(), o);
+               
+                CreateIndex_part2( tgmsg, DataDir);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
         }
 
-        public static void CreateIndex_part2(string? msgxv1, SortedList o)
+    
+
+        public static void CreateIndex_part2(  SortedList o,string dataDir)
         {
-            var msgx = ChineseCharacterConvert.Convert.ToSimple(msgxv1);
+           
             var segmenter = new JiebaSegmenter();
             //------------自定词
             segmenter.LoadUserDict("user_dict.txt");
@@ -236,7 +235,7 @@ namespace mdsj.lib
 
 
 
-            IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
+            IEnumerable<string> enumerable = segmenter.CutForSearch(o["txt"].ToString());
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();
 
@@ -248,24 +247,43 @@ namespace mdsj.lib
                 if (IsAllPunctuation(wd)) continue;
                 //todo 常见没意义词的过滤 虚词过滤
 
-                SortedList doc = new SortedList();
+            //    SortedList doc = new SortedList();
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                doc.Add("id", timestamp);
-
-                doc.Add("kwd", wd); doc.Add("txt", msgxv1);
-                doc.Add("grpinfo", o);
-                ormJSonFL.save(doc, $"fullTxtSrchIdxdataDir/{wd}.json");
+                string msgidx = o["chatid"] + "." + o["timeStamp"] + "." + o["msgid"];
+                o.Add("id", msgidx);
+                o.Add("msgid", msgidx);
+                o.Add("kwd", wd); 
+        //        doc.Add("txt", o["txt"]);
+         //       doc.Add("grpinfo", o);
+         //       o["txt"] = "";
+                ormJSonFL.wrt_row(o, $"{dataDir}/{wd}.json");
 
             }
         }
 
+
+        private static SortedList tgMsg2row(JsonElement messageElement, JsonElement textElement)
+        {
+            SortedList o = new SortedList();
+            setuNameFrmTgmsgJson(messageElement, o);
+            setGrpFromTgjson(messageElement, o);
+            long stmp = messageElement.GetProperty("date").GetInt64();
+            o.Add("timeStamp", stmp);
+            o.Add("time", ConvertUnixTimeStampToDateTime((stmp)));
+            o.Add("msgid", messageElement.GetProperty("message_id").ToString());
+
+            string msgxv1 = textElement.GetString();
+            o.Add("txt", msgxv1);
+            return o;
+        }
         private static JsonElement setGrpFromTgjson(JsonElement messageElement, SortedList o)
         {
-            JsonElement frmObjct = ldfld(messageElement, "chat");
-            JsonElement title = ldfld(frmObjct, "title");
+            JsonElement chatObj = ldfld(messageElement, "chat");
+            JsonElement title = ldfld(chatObj, "title");
             o.Add("grp", title.GetString());
-            return frmObjct;
+            o.Add("chatid", ldfld(chatObj, "id").ToString());
+            return chatObj;
         }
 
         private static void setuNameFrmTgmsgJson(JsonElement messageElement, SortedList o)

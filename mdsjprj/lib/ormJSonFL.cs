@@ -152,22 +152,33 @@ namespace prj202405.lib
         {
 
         }
+
+        public static void wrt_row(SortedList objSave, string Strfile)
+        {
+            save(objSave, Strfile);
+
+        }
             public static void save(SortedList SortedList1, string dbfile)
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfile));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
 
             // 创建目录
             // 使用 Path.GetDirectoryName 方法获取目录路径
             string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
 
             // 检查目录是否存在
+            if(directoryPath.Length>0 ) 
             if (!Directory.Exists(directoryPath))
             {
-                // 创建目录及所有上级目录
-                Directory.CreateDirectory(directoryPath);
-                Console.WriteLine($"Created directory: {directoryPath}");
+                if(directoryPath.Length>5)  //maybe relt path is empty
+                {
+                    // 创建目录及所有上级目录
+                    Directory.CreateDirectory(directoryPath);
+                    Console.WriteLine($"Created directory: {directoryPath}");
+                }
+              
             }
           //  Directory.CreateDirectory(logdir);
             // 将JSON字符串转换为List<Dictionary<string, object>>

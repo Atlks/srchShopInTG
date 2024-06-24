@@ -1,6 +1,7 @@
 {
   "runtimeOptions": {
     "tfm": "net8.0",
+    "rollForward": "LatestMinor",
     "frameworks": [
       {
         "name": "Microsoft.NETCore.App",
@@ -20,7 +21,7 @@
       "System.Reflection.NullabilityInfoContext.IsSupported": true,
       "System.Resources.ResourceManager.AllowCustomResourceTypes": false,
       "System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported": false,
-      "System.Runtime.InteropServices.BuiltInComInterop.IsSupported": false,
+      "System.Runtime.InteropServices.BuiltInComInterop.IsSupported": true,
       "System.Runtime.InteropServices.EnableConsumingManagedCodeFromNativeHosting": false,
       "System.Runtime.InteropServices.EnableCppCLIHostActivation": false,
       "System.Runtime.InteropServices.Marshalling.EnableGeneratedComInterfaceComImportInterop": false,

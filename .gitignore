@@ -58,3 +58,5 @@ fullTxtSrchIdxdataDir
 /mdsjprj/downmp3
 
 /mdsjprj/bin/Debug/net8.0/detailClickLogDir
+/mdsjprj/bin/Debug/net8.0/ffmpeg.exe
+/mdsjprj/bin/Debug/net8.0/ffprobe.exe

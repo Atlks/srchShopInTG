@@ -1,4 +1,3060 @@
 {
+  "6021391744": {
+    "id": 6021391744,
+    "is_bot": false,
+    "first_name": "叁佰万",
+    "username": "fadacaijun",
+    "language_code": "zh-hans"
+  },
+  "6759599834": {
+    "id": 6759599834,
+    "is_bot": false,
+    "first_name": "安旎",
+    "username": "ann0331",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001906359307": {
+    "chat": {
+      "id": -1001906359307,
+      "type": "supergroup",
+      "title": "东北饺子馆"
+    },
+    "from": {
+      "id": 6130568185,
+      "is_bot": false,
+      "first_name": "东北饺子馆（世纪）",
+      "username": "dbjzg888"
+    },
+    "date": 1719208919,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6876310328": {
+    "id": 6876310328,
+    "is_bot": false,
+    "first_name": "爱意随风起",
+    "username": "adao8888888",
+    "language_code": "zh-hans"
+  },
+  "6967103784": {
+    "id": 6967103784,
+    "is_bot": false,
+    "first_name": "2",
+    "username": "buzhiqiu22",
+    "language_code": "zh-hans"
+  },
+  "-1001640687470": {
+    "chat": {
+      "id": -1001640687470,
+      "type": "supergroup",
+      "title": "盱眙小龙虾—东风14号店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027967,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002111158760": {
+    "chat": {
+      "id": -1002111158760,
+      "type": "supergroup",
+      "title": "正新鸡排"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027778,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002046143644": {
+    "chat": {
+      "id": -1002046143644,
+      "type": "supergroup",
+      "title": "🎀A ONE造型🎀"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027024,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6538197406": {
+    "id": 6538197406,
+    "is_bot": false,
+    "first_name": "啊豪",
+    "username": "hdfhwhwh",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-4285625932": {
+    "chat": {
+      "id": -4285625932,
+      "type": "group",
+      "title": "三村快乐八卦吹牛群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027669,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002141755177": {
+    "chat": {
+      "id": -1002141755177,
+      "type": "supergroup",
+      "title": "美食荟&台湾卤肉饭"
+    },
+    "from": {
+      "id": 6778541615,
+      "is_bot": false,
+      "first_name": "台湾卤肉饭",
+      "username": "luroufan168"
+    },
+    "date": 1719206826,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5592123898": {
+    "id": 5592123898,
+    "is_bot": false,
+    "first_name": "十三",
+    "username": "ssan200011",
+    "language_code": "zh-hans"
+  },
+  "-1001758624221": {
+    "chat": {
+      "id": -1001758624221,
+      "type": "supergroup",
+      "title": "H13兑换处～金州兑换处每日汇率更新"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027598,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6404181379": {
+    "id": 6404181379,
+    "is_bot": false,
+    "first_name": "金",
+    "username": "jinsheng5201",
+    "language_code": "zh-hans"
+  },
+  "7172155124": {
+    "id": 7172155124,
+    "is_bot": false,
+    "first_name": "园区小助手 客服",
+    "username": "xxxx12121211",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "6499030388": {
+    "id": 6499030388,
+    "is_bot": false,
+    "first_name": "李宏伟",
+    "username": "hhh_666666",
+    "language_code": "zh-hans"
+  },
+  "-1001980575468": {
+    "chat": {
+      "id": -1001980575468,
+      "type": "supergroup",
+      "title": "囍茶外卖群【24小时营业】"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027105,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6971339877": {
+    "id": 6971339877,
+    "is_bot": false,
+    "first_name": "凡",
+    "username": "kk3366991",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001694511394": {
+    "chat": {
+      "id": -1001694511394,
+      "type": "supergroup",
+      "title": "江湖显饿（24小时营业）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719028028,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001865783817": {
+    "chat": {
+      "id": -1001865783817,
+      "type": "supergroup",
+      "title": "东北铁锅炖世纪店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719030048,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002035531949": {
+    "chat": {
+      "id": -1002035531949,
+      "type": "supergroup",
+      "title": "9号店铺（闽粤楼）24H营业"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027003,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001931624228": {
+    "chat": {
+      "id": -1001931624228,
+      "type": "supergroup",
+      "title": "言夏饮料奶茶店（金州18号店）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719030047,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6618993733": {
+    "id": 6618993733,
+    "is_bot": false,
+    "first_name": "联盛--果冻",
+    "username": "VIPLSPC288",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "7038538901": {
+    "id": 7038538901,
+    "is_bot": false,
+    "first_name": "拓森",
+    "username": "Li0886",
+    "language_code": "zh-hans"
+  },
+  "-1002040239665": {
+    "id": 7088520873,
+    "is_bot": false,
+    "first_name": "tm kmbd",
+    "username": "xxx0072024",
+    "language_code": "en"
+  },
+  "-1001596606959": {
+    "chat": {
+      "id": -1001596606959,
+      "type": "supergroup",
+      "title": "壹品食府接单群（世纪城）☎️"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027975,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001917392855": {
+    "chat": {
+      "id": -1001917392855,
+      "type": "supergroup",
+      "title": "美食荟&超级汉堡工坊"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027068,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6571488427": {
+    "id": 6571488427,
+    "is_bot": false,
+    "first_name": "v",
+    "username": "fm608",
+    "language_code": "zh-hans"
+  },
+  "-1001822486272": {
+    "chat": {
+      "id": -1001822486272,
+      "type": "supergroup",
+      "title": "东风肯德基【24小时营业】"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027443,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001728014216": {
+    "chat": {
+      "id": -1001728014216,
+      "type": "supergroup",
+      "title": "川香阁"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027115,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001479969649": {
+    "chat": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1716544515,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7185877886": {
+    "id": 7185877886,
+    "is_bot": false,
+    "first_name": "A'A可儿",
+    "username": "keklel1",
+    "language_code": "zh-hans"
+  },
+  "-1001620459639": {
+    "chat": {
+      "id": -1001620459639,
+      "type": "supergroup",
+      "title": "白老七兰州牛肉面🎉接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027095,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001750296118": {
+    "chat": {
+      "id": -1001750296118,
+      "type": "supergroup",
+      "title": "金州紫阳海鲜楼（咖啡店）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027845,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001826397539": {
+    "chat": {
+      "id": -1001826397539,
+      "type": "supergroup",
+      "title": "KK桃花岛外卖点单群（四合院旁边）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027492,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001616373735": {
+    "chat": {
+      "id": -1001616373735,
+      "type": "supergroup",
+      "title": "百鲜居 海鲜加工"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027436,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7009075063": {
+    "id": 7009075063,
+    "is_bot": false,
+    "first_name": "任我行",
+    "language_code": "zh-hans"
+  },
+  "-1001897910474": {
+    "chat": {
+      "id": -1001897910474,
+      "type": "supergroup",
+      "title": "泰国快递，代购咨询群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719199933,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6622885073": {
+    "id": 6622885073,
+    "is_bot": false,
+    "first_name": "A😂H 资金请语音电话确定",
+    "username": "cuz268",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002071825100": {
+    "chat": {
+      "id": -1002071825100,
+      "type": "supergroup",
+      "title": "山上现杀猪肉出售群（海鲜调料园区有卖）无法采购"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027304,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6645075586": {
+    "id": 6645075586,
+    "is_bot": false,
+    "first_name": "华强",
+    "last_name": "刘",
+    "username": "niuma516888",
+    "language_code": "zh-hans"
+  },
+  "1941035844": {
+    "id": 1941035844,
+    "is_bot": false,
+    "first_name": "叶知秋",
+    "username": "YZQ8889",
+    "language_code": "zh-hans"
+  },
+  "5018130320": {
+    "id": 5018130320,
+    "is_bot": false,
+    "first_name": "龙",
+    "last_name": "虎豹",
+    "username": "long9988",
+    "language_code": "zh-hans"
+  },
+  "6604503020": {
+    "id": 6604503020,
+    "is_bot": false,
+    "first_name": "阿利",
+    "username": "yy09048888",
+    "language_code": "zh-hans"
+  },
+  "-1001477279692": {
+    "chat": {
+      "id": -1001477279692,
+      "type": "supergroup",
+      "title": "美食荟&港式烧腊工坊"
+    },
+    "from": {
+      "id": 6156947794,
+      "is_bot": false,
+      "first_name": "港式烧腊工坊",
+      "username": "gsslgf168"
+    },
+    "date": 1719209827,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001715496365": {
+    "chat": {
+      "id": -1001715496365,
+      "type": "supergroup",
+      "title": "十st atlks school圣阿迪拉各斯 学校",
+      "username": "statlks"
+    },
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1718961183,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6409646417": {
+    "id": 6409646417,
+    "is_bot": false,
+    "first_name": "林鹤",
+    "username": "linhe185",
+    "language_code": "zh-hans"
+  },
+  "6263907508": {
+    "id": 6263907508,
+    "is_bot": false,
+    "first_name": "O泡🫧",
+    "username": "QQQQQQQ6699",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001898174320": {
+    "chat": {
+      "id": -1001898174320,
+      "type": "supergroup",
+      "title": "🇨🇳kk全球首富聚集地"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719026447,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6535137020": {
+    "id": 6535137020,
+    "is_bot": false,
+    "first_name": "天",
+    "last_name": "子",
+    "username": "tianzi8888888888888",
+    "language_code": "en"
+  },
+  "-1002104629869": {
+    "chat": {
+      "id": -1002104629869,
+      "type": "supergroup",
+      "title": "kk 世纪 金州分享之帝"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719026989,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002075801868": {
+    "chat": {
+      "id": -1002075801868,
+      "type": "supergroup",
+      "title": "24小时营业 印象小厨 点餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027793,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6020731162": {
+    "id": 6020731162,
+    "is_bot": false,
+    "first_name": "安然",
+    "username": "aaa258000",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-4008096419": {
+    "chat": {
+      "id": -4008096419,
+      "type": "group",
+      "title": "东风闽粤楼VIP🆕群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027805,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001855050122": {
+    "chat": {
+      "id": -1001855050122,
+      "type": "supergroup",
+      "title": "东南亚二手交易市场"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027251,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001970717203": {
+    "chat": {
+      "id": -1001970717203,
+      "type": "supergroup",
+      "title": "美食荟&金巴克咖啡工坊"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027767,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6448301705": {
+    "id": 6448301705,
+    "is_bot": false,
+    "first_name": "九海",
+    "username": "HHYYDH",
+    "language_code": "en",
+    "is_premium": true
+  },
+  "6027930954": {
+    "id": 6027930954,
+    "is_bot": false,
+    "first_name": "蓝天",
+    "language_code": "zh-hans"
+  },
+  "-1001613022200": {
+    "chat": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "左道-缅甸便民服务站",
+      "username": "ZuoDaoMianDian",
+      "is_forum": true
+    },
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "date": 1716584300,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6207964676": {
+    "id": 6207964676,
+    "is_bot": false,
+    "first_name": "阿荣",
+    "username": "DBL99",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002086883922": {
+    "chat": {
+      "id": -1002086883922,
+      "type": "supergroup",
+      "title": "L🧋爱乐i love速食24小时"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027266,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6708855968": {
+    "id": 6708855968,
+    "is_bot": false,
+    "first_name": "情",
+    "username": "yun19940212",
+    "language_code": "zh-hans"
+  },
+  "6379941920": {
+    "id": 6379941920,
+    "is_bot": false,
+    "first_name": "Z🤡C",
+    "username": "ZC66810",
+    "language_code": "zh-hans"
+  },
+  "-1001937160781": {
+    "chat": {
+      "id": -1001937160781,
+      "type": "supergroup",
+      "title": "陳記 蘭州牛肉面（金州1號店）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027396,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002017549660": {
+    "chat": {
+      "id": -1002017549660,
+      "type": "supergroup",
+      "title": "御满楼 奢品汇"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027161,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001715729921": {
+    "chat": {
+      "id": -1001715729921,
+      "type": "supergroup",
+      "title": "淄博音乐烤吧"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027329,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002003939065": {
+    "id": 1087968824,
+    "is_bot": true,
+    "first_name": "Group",
+    "username": "GroupAnonymousBot"
+  },
+  "1675769672": {
+    "chat": {
+      "id": 1675769672,
+      "type": "private",
+      "username": "Xfqiang",
+      "first_name": "高启强"
+    },
+    "from": {
+      "id": 1675769672,
+      "is_bot": false,
+      "first_name": "高启强",
+      "username": "Xfqiang",
+      "is_premium": true
+    },
+    "date": 1719140709,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7088891362": {
+    "id": 7088891362,
+    "is_bot": false,
+    "first_name": "中正",
+    "username": "zhongzheng77",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002025780979": {
+    "chat": {
+      "id": -1002025780979,
+      "type": "supergroup",
+      "title": "一品龙茶阁"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027542,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6082146930": {
+    "id": 6082146930,
+    "is_bot": false,
+    "first_name": "林帅",
+    "username": "qqqq126842",
+    "language_code": "zh-hans"
+  },
+  "6218441370": {
+    "id": 6218441370,
+    "is_bot": false,
+    "first_name": "蚂蚁-远",
+    "username": "IDZyuan",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "5702655775": {
+    "id": 5702655775,
+    "is_bot": false,
+    "first_name": "Soder.",
+    "username": "Y_0528",
+    "language_code": "zh-hans"
+  },
+  "-1001854268683": {
+    "chat": {
+      "id": -1001854268683,
+      "type": "supergroup",
+      "title": "kk万福海鲜小酒楼"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027525,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002001725227": {
+    "chat": {
+      "id": -1002001725227,
+      "type": "supergroup",
+      "title": "老地方风味馆•KK店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027127,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5029225306": {
+    "id": 5029225306,
+    "is_bot": false,
+    "first_name": "Nik",
+    "username": "shanshandegou",
+    "language_code": "zh-hans"
+  },
+  "5111567352": {
+    "id": 5111567352,
+    "is_bot": false,
+    "first_name": "Anty",
+    "username": "Anthony28096",
+    "language_code": "zh-hans"
+  },
+  "7178825207": {
+    "id": 7178825207,
+    "is_bot": false,
+    "first_name": "乔",
+    "last_name": "四",
+    "language_code": "zh-hans"
+  },
+  "-4209884020": {
+    "chat": {
+      "id": -4209884020,
+      "type": "group",
+      "title": "联信 - 世纪|KK|金州|东风"
+    },
+    "from": {
+      "id": 7179646457,
+      "is_bot": false,
+      "first_name": "联信",
+      "username": "LianXinLeader",
+      "language_code": "zh-hans"
+    },
+    "date": 1717128716,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001990937989": {
+    "chat": {
+      "id": -1001990937989,
+      "type": "supergroup",
+      "title": "疆来餐饮群（世纪kk金州）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027356,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5850645807": {
+    "id": 5850645807,
+    "is_bot": false,
+    "first_name": "张桃",
+    "last_name": "77助理",
+    "username": "zt9687",
+    "language_code": "zh-hans"
+  },
+  "-1001892779923": {
+    "chat": {
+      "id": -1001892779923,
+      "type": "supergroup",
+      "title": "kk万州烤鱼点餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027865,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6612143605": {
+    "id": 6612143605,
+    "is_bot": false,
+    "first_name": "TT",
+    "language_code": "zh-hans"
+  },
+  "-1001982427250": {
+    "chat": {
+      "id": -1001982427250,
+      "type": "supergroup",
+      "title": "金洲九号饭馆点餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027188,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6091395167": {
+    "id": 6091395167,
+    "is_bot": false,
+    "first_name": "此账号已注销",
+    "language_code": "zh-hans"
+  },
+  "-1001925407066": {
+    "chat": {
+      "id": -1001925407066,
+      "type": "supergroup",
+      "title": "肉丸店接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027200,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5952204068": {
+    "id": 5952204068,
+    "is_bot": false,
+    "first_name": "😃",
+    "username": "LuckyG_9",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "5672156825": {
+    "id": 5672156825,
+    "is_bot": false,
+    "first_name": "味🚬",
+    "last_name": "烟",
+    "username": "yanwei0411",
+    "language_code": "zh-hans"
+  },
+  "1052506611": {
+    "id": 1052506611,
+    "is_bot": false,
+    "first_name": "天幕红尘",
+    "username": "yongyuanjie",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001358920439": {
+    "chat": {
+      "id": -1001358920439,
+      "type": "supergroup",
+      "title": "东北菜馆订餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027873,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7103433875": {
+    "id": 7103433875,
+    "is_bot": false,
+    "first_name": "永恒经典",
+    "username": "zz1188zz",
+    "language_code": "zh-hans"
+  },
+  "-1001866159494": {
+    "chat": {
+      "id": -1001866159494,
+      "type": "supergroup",
+      "title": "同仁堂中医理疗按摩馆"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027829,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001731764282": {
+    "chat": {
+      "id": -1001731764282,
+      "type": "supergroup",
+      "title": "洗衣店+台球🎱接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营"
+    },
+    "date": 1718778301,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6183495480": {
+    "id": 6183495480,
+    "is_bot": false,
+    "first_name": "95277",
+    "username": "hoshaoge",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001852794078": {
+    "chat": {
+      "id": -1001852794078,
+      "type": "supergroup",
+      "title": "金洲 顶头尚丝(2号店铺) 专业美发 按摩养生馆"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027661,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7179646457": {
+    "id": 7179646457,
+    "is_bot": false,
+    "first_name": "联信",
+    "username": "LianXinLeader",
+    "language_code": "zh-hans"
+  },
+  "6483122559": {
+    "chat": {
+      "id": 6483122559,
+      "type": "private",
+      "username": "ds_7987",
+      "first_name": "杰",
+      "last_name": "张"
+    },
+    "from": {
+      "id": 6483122559,
+      "is_bot": false,
+      "first_name": "杰",
+      "last_name": "张",
+      "username": "ds_7987"
+    },
+    "date": 1719142605,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "7232331101": {
+    "id": 7232331101,
+    "is_bot": false,
+    "first_name": "恭喜",
+    "last_name": "恭喜",
+    "username": "chengongxi01",
+    "language_code": "zh-hans"
+  },
+  "6440728101": {
+    "id": 6440728101,
+    "is_bot": false,
+    "first_name": "Y",
+    "username": "zihan112211",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "5891394368": {
+    "chat": {
+      "id": 5891394368,
+      "type": "private",
+      "username": "Ac99999",
+      "first_name": "AC"
+    },
+    "from": {
+      "id": 5891394368,
+      "is_bot": false,
+      "first_name": "AC",
+      "username": "Ac99999"
+    },
+    "date": 1718872790,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6055020216": {
+    "id": 6055020216,
+    "is_bot": false,
+    "first_name": "玲玲",
+    "language_code": "zh-hans"
+  },
+  "-1001938098354": {
+    "chat": {
+      "id": -1001938098354,
+      "type": "supergroup",
+      "title": "巴尖-火锅串串、烧烤"
+    },
+    "from": {
+      "id": 6387650532,
+      "is_bot": false,
+      "first_name": "依💕"
+    },
+    "date": 1719202946,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "restricted",
+      "is_member": true,
+      "can_change_info": false,
+      "can_invite_users": true,
+      "can_pin_messages": true,
+      "can_send_messages": false,
+      "can_send_audios": false,
+      "can_send_documents": false,
+      "can_send_photos": false,
+      "can_send_videos": false,
+      "can_send_video_notes": false,
+      "can_send_voice_notes": false,
+      "can_send_polls": false,
+      "can_send_other_messages": false,
+      "can_add_web_page_previews": false,
+      "can_manage_topics": true,
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002142272536": {
+    "chat": {
+      "id": -1002142272536,
+      "type": "supergroup",
+      "title": "福建特色小吃【周黑鸭，眼肉/西冷/战斧牛排】"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719026996,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "2106929793": {
+    "id": 2106929793,
+    "is_bot": false,
+    "first_name": "山鸡",
+    "username": "siii02888",
+    "language_code": "zh-hans"
+  },
+  "6654188822": {
+    "id": 6654188822,
+    "is_bot": false,
+    "first_name": "橙子🍊",
+    "username": "SHUNCZ",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "6268256943": {
+    "id": 6268256943,
+    "is_bot": false,
+    "first_name": "风云",
+    "username": "taozai44",
+    "language_code": "zh-hans"
+  },
+  "-1001915534182": {
+    "chat": {
+      "id": -1001915534182,
+      "type": "supergroup",
+      "title": "金州KTV中国越南佳丽群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027620,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001866750714": {
+    "chat": {
+      "id": -1001866750714,
+      "type": "supergroup",
+      "title": "乐堡/私房菜点餐群（配送各园区）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027449,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5462102609": {
+    "id": 5462102609,
+    "is_bot": false,
+    "first_name": "阿栋",
+    "username": "Aadong9",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "6554450101": {
+    "id": 6554450101,
+    "is_bot": false,
+    "first_name": "Super chao",
+    "username": "cchhsop",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "7493399656": {
+    "id": 7493399656,
+    "is_bot": false,
+    "first_name": "联信-四大园区运营",
+    "language_code": "zh-hans"
+  },
+  "6953799704": {
+    "id": 6953799704,
+    "is_bot": false,
+    "first_name": "77",
+    "username": "A77liang",
+    "language_code": "zh-hans"
+  },
+  "-1002160746299": {
+    "chat": {
+      "id": -1002160746299,
+      "type": "supergroup",
+      "title": "联信 - 世纪|KK|金州|东风"
+    },
+    "from": {
+      "id": 7179646457,
+      "is_bot": false,
+      "first_name": "联信",
+      "username": "LianXinLeader",
+      "language_code": "zh-hans"
+    },
+    "date": 1717128829,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5743211645": {
+    "id": 5743211645,
+    "is_bot": false,
+    "first_name": "MR.HAN",
+    "language_code": "zh-hans"
+  },
+  "-1001928879265": {
+    "chat": {
+      "id": -1001928879265,
+      "type": "supergroup",
+      "title": "五星（代购，跑腿）🚗"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027607,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "1925858335": {
+    "id": 1925858335,
+    "is_bot": false,
+    "first_name": "佳旺",
+    "username": "JW2023168",
+    "language_code": "zh-hans"
+  },
+  "6542357827": {
+    "id": 6542357827,
+    "is_bot": false,
+    "first_name": "Louis69",
+    "username": "l2lloouis_3",
+    "language_code": "zh-hans"
+  },
+  "-1002009048708": {
+    "chat": {
+      "id": -1002009048708,
+      "type": "supergroup",
+      "title": "金州沙县小吃"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719026484,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6575920161": {
+    "id": 6575920161,
+    "is_bot": false,
+    "first_name": "百川",
+    "username": "paxl111666",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001693688345": {
+    "chat": {
+      "id": -1001693688345,
+      "type": "supergroup",
+      "title": "DF-手机店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027637,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6182440202": {
+    "id": 6182440202,
+    "is_bot": false,
+    "first_name": "A8✨星仔（诚招团队）",
+    "username": "A8xzai",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002082869964": {
+    "chat": {
+      "id": -1002082869964,
+      "type": "supergroup",
+      "title": "老友粉点餐群（DF）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027475,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "2078535546": {
+    "id": 2078535546,
+    "is_bot": false,
+    "first_name": "jark marks",
+    "username": "x0072005",
+    "language_code": "en"
+  },
+  "-1002222685020": {
+    "chat": {
+      "id": -1002222685020,
+      "type": "supergroup",
+      "title": "楼下凉茶东风店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719028002,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "5758897338": {
+    "id": 5758897338,
+    "is_bot": false,
+    "first_name": "多多再跑",
+    "username": "xihuan1112",
+    "language_code": "zh-hans"
+  },
+  "5640108039": {
+    "id": 5640108039,
+    "is_bot": false,
+    "first_name": "reed（小明）🇱🇦万象第一深情",
+    "username": "reed779",
+    "language_code": "zh-hans"
+  },
+  "-1001508783143": {
+    "chat": {
+      "id": -1001508783143,
+      "type": "supergroup",
+      "title": "15号蚝猪手露天烧烤接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719030048,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001533180407": {
+    "chat": {
+      "id": -1001533180407,
+      "type": "supergroup",
+      "title": "13号❤旋转小火锅"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027982,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001796752655": {
+    "chat": {
+      "id": -1001796752655,
+      "type": "supergroup",
+      "title": "🎉乡巴佬16号店点餐群🎉"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027499,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6042896712": {
+    "id": 6042896712,
+    "is_bot": false,
+    "first_name": "旺仔",
+    "username": "ACE1088",
+    "language_code": "zh-hans"
+  },
+  "5836929735": {
+    "id": 5836929735,
+    "is_bot": false,
+    "first_name": "难见旧时月",
+    "username": "Jiangyuerrr",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1002012558629": {
+    "chat": {
+      "id": -1002012558629,
+      "type": "supergroup",
+      "title": "重庆火锅接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027856,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001646732815": {
+    "chat": {
+      "id": -1001646732815,
+      "type": "supergroup",
+      "title": "世纪 喝丢一只鞋点餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719030050,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001758888723": {
+    "chat": {
+      "id": -1001758888723,
+      "type": "supergroup",
+      "title": "DF 🌸 樱花之下-日料店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027316,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001599575365": {
+    "chat": {
+      "id": -1001599575365,
+      "type": "supergroup",
+      "title": "DF KTV选妃群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027915,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002126791806": {
+    "chat": {
+      "id": -1002126791806,
+      "type": "supergroup",
+      "title": "KTV🇨🇳中国🇨🇳 🇻🇳越南美女🇻🇳聊天群，新来的越南妹子，给各位老板带来乐趣，越南妹乖巧，可爱，服务好，"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027336,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6099373600": {
+    "id": 6099373600,
+    "is_bot": false,
+    "first_name": "佳",
+    "last_name": "浩",
+    "username": "Nomore000",
+    "language_code": "zh-hans"
+  },
+  "-1001902125425": {
+    "chat": {
+      "id": -1001902125425,
+      "type": "supergroup",
+      "title": "红运接单群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027959,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001717876981": {
+    "chat": {
+      "id": -1001717876981,
+      "type": "supergroup",
+      "title": "食来运转（点餐群）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027731,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001690979221": {
+    "chat": {
+      "id": -1001690979221,
+      "type": "supergroup",
+      "title": "万州烤鱼（世纪）点餐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027928,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6136953434": {
+    "id": 6136953434,
+    "is_bot": false,
+    "first_name": "点石成金",
+    "username": "kww0626",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "-1001973966712": {
+    "chat": {
+      "id": -1001973966712,
+      "type": "supergroup",
+      "title": "KK吃喝玩乐广场烧烤"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027033,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002111902869": {
+    "chat": {
+      "id": -1002111902869,
+      "type": "supergroup",
+      "title": "吃喝玩乐群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027223,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002121731915": {
+    "chat": {
+      "id": -1002121731915,
+      "type": "supergroup",
+      "title": "佰味小屋"
+    },
+    "from": {
+      "id": 6093778437,
+      "is_bot": false,
+      "first_name": "运财",
+      "last_name": "百味小屋"
+    },
+    "date": 1719207297,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001870450276": {
+    "chat": {
+      "id": -1001870450276,
+      "type": "supergroup",
+      "title": "KTV-世纪 🇻🇳🇨🇳聊天 选妃"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027420,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002064876746": {
+    "chat": {
+      "id": -1002064876746,
+      "type": "supergroup",
+      "title": "老家米粿店"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719028017,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6074159017": {
+    "id": 6074159017,
+    "is_bot": false,
+    "first_name": "欧",
+    "last_name": "阳",
+    "username": "heitu999",
+    "language_code": "zh-hans"
+  },
+  "5466479085": {
+    "id": 5466479085,
+    "is_bot": false,
+    "first_name": "L",
+    "username": "Ly99023",
+    "language_code": "zh-hans"
+  },
+  "-1001608686991": {
+    "chat": {
+      "id": -1001608686991,
+      "type": "supergroup",
+      "title": "我的衣柜东风群"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027742,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "1658848535": {
+    "id": 1658848535,
+    "is_bot": false,
+    "first_name": "Lc",
+    "username": "Lc0097",
+    "language_code": "zh-hans"
+  },
+  "5824066932": {
+    "id": 5824066932,
+    "is_bot": false,
+    "first_name": "流弊",
+    "username": "YLSL779",
+    "language_code": "zh-hans"
+  },
   "-4252087251": {
     "chat": {
       "id": -4252087251,
@@ -31,20 +3087,179 @@
       }
     }
   },
-  "-1002160746299": {
+  "-1002019058448": {
     "chat": {
-      "id": -1002160746299,
+      "id": -1002019058448,
       "type": "supergroup",
-      "title": "联信 - 世纪|KK|金州|东风"
+      "title": "世纪盛兴源 汗蒸搓澡美容馆"
     },
     "from": {
-      "id": 7179646457,
+      "id": 7493399656,
       "is_bot": false,
-      "first_name": "联信",
-      "username": "LianXinLeader",
+      "first_name": "联信-四大园区运营",
       "language_code": "zh-hans"
     },
-    "date": 1717128829,
+    "date": 1719027173,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001924600336": {
+    "chat": {
+      "id": -1001924600336,
+      "type": "supergroup",
+      "title": "世纪串串火锅🍲韩式烤肉（新群）"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027905,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "6853955333": {
+    "id": 6853955333,
+    "is_bot": false,
+    "first_name": "翔",
+    "username": "xixi824824",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "5340172640": {
+    "id": 5340172640,
+    "is_bot": false,
+    "first_name": "亚",
+    "username": "Lang922",
+    "language_code": "zh-hans"
+  },
+  "6557401021": {
+    "id": 6557401021,
+    "is_bot": false,
+    "first_name": "啊酷",
+    "username": "aad1234513",
+    "language_code": "zh-hans",
+    "is_premium": true
+  },
+  "879006550": {
+    "id": 879006550,
+    "is_bot": false,
+    "first_name": "十 Adam 大鱼 刘洋 汤姆",
+    "username": "Xxx0079468",
+    "language_code": "en"
+  },
+  "-1001673107816": {
+    "chat": {
+      "id": -1001673107816,
+      "type": "supergroup",
+      "title": "湘聚湘味（24小时接单群）",
+      "is_forum": true
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027587,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1001813813209": {
+    "chat": {
+      "id": -1001813813209,
+      "type": "supergroup",
+      "title": "虾吃虾涮•重装开业啦"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027150,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  },
+  "-1002206103554": {
+    "chat": {
+      "id": -1002206103554,
+      "type": "supergroup",
+      "title": "Task grp"
+    },
+    "from": {
+      "id": 879006550,
+      "is_bot": false,
+      "first_name": "十 Adam 大鱼 刘洋 汤姆",
+      "username": "Xxx0079468",
+      "language_code": "en"
+    },
+    "date": 1716890111,
     "old_chat_member": {
       "status": "left",
       "user": {
@@ -98,247 +3313,27 @@
       }
     }
   },
-  "6042896712": {
-    "id": 6042896712,
+  "5393947194": {
+    "id": 5393947194,
     "is_bot": false,
-    "first_name": "旺仔",
-    "username": "ACE1088",
-    "language_code": "zh-hans"
-  },
-  "5340172640": {
-    "id": 5340172640,
-    "is_bot": false,
-    "first_name": "亚",
-    "username": "Lang922",
-    "language_code": "zh-hans"
-  },
-  "6182440202": {
-    "id": 6182440202,
-    "is_bot": false,
-    "first_name": "A8✨星仔（诚招团队）",
-    "username": "A8xzai",
+    "first_name": "🐏了个 🌞.",
+    "username": "CTZL7777",
     "language_code": "zh-hans",
     "is_premium": true
   },
-  "1052506611": {
-    "id": 1052506611,
-    "is_bot": false,
-    "first_name": "天幕红尘",
-    "username": "yongyuanjie",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "-1001613022200": {
+  "-1001904513752": {
     "chat": {
-      "id": -1001613022200,
+      "id": -1001904513752,
       "type": "supergroup",
-      "title": "左道-缅甸便民服务站",
-      "username": "ZuoDaoMianDian",
-      "is_forum": true
+      "title": "大城小爱点餐群，金洲20号店"
     },
     "from": {
-      "id": 1087968824,
-      "is_bot": true,
-      "first_name": "Group",
-      "username": "GroupAnonymousBot"
-    },
-    "date": 1716584300,
-    "old_chat_member": {
-      "status": "left",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    },
-    "new_chat_member": {
-      "status": "member",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    }
-  },
-  "-1002003939065": {
-    "id": 1087968824,
-    "is_bot": true,
-    "first_name": "Group",
-    "username": "GroupAnonymousBot"
-  },
-  "-1002206103554": {
-    "chat": {
-      "id": -1002206103554,
-      "type": "supergroup",
-      "title": "Task grp"
-    },
-    "from": {
-      "id": 879006550,
+      "id": 7493399656,
       "is_bot": false,
-      "first_name": "十 Adam 大鱼 刘洋 汤姆",
-      "username": "Xxx0079468",
-      "language_code": "en"
-    },
-    "date": 1716890111,
-    "old_chat_member": {
-      "status": "left",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    },
-    "new_chat_member": {
-      "status": "member",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    }
-  },
-  "6618993733": {
-    "id": 6618993733,
-    "is_bot": false,
-    "first_name": "联盛--果冻",
-    "username": "VIPLSPC288",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "6183495480": {
-    "id": 6183495480,
-    "is_bot": false,
-    "first_name": "95277",
-    "username": "hoshaoge",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "6448301705": {
-    "id": 6448301705,
-    "is_bot": false,
-    "first_name": "九海",
-    "username": "HHYYDH",
-    "language_code": "en",
-    "is_premium": true
-  },
-  "5640108039": {
-    "id": 5640108039,
-    "is_bot": false,
-    "first_name": "reed（小明）🇱🇦万象第一深情",
-    "username": "reed779",
-    "language_code": "zh-hans"
-  },
-  "6759599834": {
-    "id": 6759599834,
-    "is_bot": false,
-    "first_name": "安旎",
-    "username": "ann0331",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "-1001479969649": {
-    "chat": {
-      "id": -1001479969649,
-      "type": "supergroup",
-      "title": "atigrp"
-    },
-    "from": {
-      "id": 879006550,
-      "is_bot": false,
-      "first_name": "十 Adam 大鱼 刘洋 汤姆",
-      "username": "Xxx0079468",
-      "language_code": "en"
-    },
-    "date": 1716544515,
-    "old_chat_member": {
-      "status": "member",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    },
-    "new_chat_member": {
-      "status": "left",
-      "user": {
-        "id": 6999501721,
-        "is_bot": true,
-        "first_name": "联信便民助手",
-        "username": "LianXin_BianMinBot"
-      }
-    }
-  },
-  "879006550": {
-    "id": 879006550,
-    "is_bot": false,
-    "first_name": "十 Adam 大鱼 刘洋 汤姆",
-    "username": "Xxx0079468",
-    "language_code": "en"
-  },
-  "2078535546": {
-    "id": 2078535546,
-    "is_bot": false,
-    "first_name": "jark marks",
-    "username": "x0072005",
-    "language_code": "en"
-  },
-  "6218441370": {
-    "id": 6218441370,
-    "is_bot": false,
-    "first_name": "蚂蚁-远",
-    "username": "IDZyuan",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "6654188822": {
-    "id": 6654188822,
-    "is_bot": false,
-    "first_name": "橙子🍊",
-    "username": "SHUNCZ",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "-1002040239665": {
-    "id": 7088520873,
-    "is_bot": false,
-    "first_name": "tm kmbd",
-    "username": "xxx0072024",
-    "language_code": "en"
-  },
-  "6538197406": {
-    "id": 6538197406,
-    "is_bot": false,
-    "first_name": "啊豪",
-    "username": "hdfhwhwh",
-    "language_code": "zh-hans",
-    "is_premium": true
-  },
-  "6604503020": {
-    "id": 6604503020,
-    "is_bot": false,
-    "first_name": "阿利",
-    "username": "yy09048888",
-    "language_code": "zh-hans"
-  },
-  "-4209884020": {
-    "chat": {
-      "id": -4209884020,
-      "type": "group",
-      "title": "联信 - 世纪|KK|金州|东风"
-    },
-    "from": {
-      "id": 7179646457,
-      "is_bot": false,
-      "first_name": "联信",
-      "username": "LianXinLeader",
+      "first_name": "联信-四大园区运营",
       "language_code": "zh-hans"
     },
-    "date": 1717128716,
+    "date": 1719027786,
     "old_chat_member": {
       "status": "left",
       "user": {
@@ -358,44 +3353,118 @@
       }
     }
   },
-  "6409646417": {
-    "id": 6409646417,
+  "-1001857223861": {
+    "id": 7493399656,
     "is_bot": false,
-    "first_name": "林鹤",
-    "username": "linhe185",
+    "first_name": "联信-四大园区运营",
     "language_code": "zh-hans"
   },
-  "6091395167": {
-    "id": 6091395167,
-    "is_bot": false,
-    "first_name": "此账号已注销",
-    "language_code": "zh-hans"
+  "-1002077429619": {
+    "chat": {
+      "id": -1002077429619,
+      "type": "supergroup",
+      "title": "KK男爵服装"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027677,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
   },
-  "5743211645": {
-    "id": 5743211645,
-    "is_bot": false,
-    "first_name": "MR.HAN",
-    "language_code": "zh-hans"
+  "-1001845467982": {
+    "chat": {
+      "id": -1001845467982,
+      "type": "supergroup",
+      "title": "艾颜养生馆 我的衣柜(金州六号店)禁广告"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营"
+    },
+    "date": 1718778375,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
   },
-  "7009075063": {
-    "id": 7009075063,
-    "is_bot": false,
-    "first_name": "任我行",
-    "language_code": "zh-hans"
+  "-1001720685899": {
+    "chat": {
+      "id": -1001720685899,
+      "type": "supergroup",
+      "title": "饭冰冰长樂冰饭17号店欢迎你"
+    },
+    "from": {
+      "id": 7493399656,
+      "is_bot": false,
+      "first_name": "联信-四大园区运营",
+      "language_code": "zh-hans"
+    },
+    "date": 1719027751,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
   },
-  "7179646457": {
-    "id": 7179646457,
+  "5451853724": {
+    "id": 5451853724,
     "is_bot": false,
-    "first_name": "联信",
-    "username": "LianXinLeader",
-    "language_code": "zh-hans"
-  },
-  "6575920161": {
-    "id": 6575920161,
-    "is_bot": false,
-    "first_name": "百川",
-    "username": "paxl111666",
+    "first_name": "AiL",
     "language_code": "zh-hans",
     "is_premium": true
+  },
+  "6216306585": {
+    "id": 6216306585,
+    "is_bot": false,
+    "first_name": "五月",
+    "language_code": "zh-hans"
   }
 }

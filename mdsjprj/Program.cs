@@ -73,6 +73,7 @@ namespace prj202405
     {
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         public const string botname = "LianXin_BianMinBot";
+        private const string serchTipsWd = "嗨小爱童鞋";
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
 
         // task grp
@@ -664,7 +665,7 @@ namespace prj202405
 
         private static void OnMsg(Update update, string reqThreadId)
         {
-            if (update.Message.Text.Trim().StartsWith("嗨小爱童鞋"))
+            if (update.Message.Text.Trim().StartsWith(serchTipsWd))
             {
                 evt_嗨小爱同学Async(update, reqThreadId);
                 return;
@@ -676,14 +677,15 @@ namespace prj202405
         {
             var __METHOD__ = "evt_嗨小爱同学Async";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
-
-            if (update.Message.Text.Trim() == "嗨小爱童鞋")
+            string prjdir = @"../../../";
+            if (update.Message.Text.Trim() == serchTipsWd)
             {
-                string prjdir = @"../../../";
+             
                 prjdir = filex.GetAbsolutePath(prjdir);
 
                 string path = $"{prjdir}/cfg/所有命令.txt";
                 string text = System.IO.File.ReadAllText(path);
+                text=text.Replace("%前导提示词%", serchTipsWd);
                 botClient.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
                 dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
@@ -692,20 +694,21 @@ namespace prj202405
             var cmd = a[1].Trim().ToUpper();
             if (cmd .Equals( "所有命令"))
             {
-                string prjdir = @"../../";
-                prjdir = filex.GetAbsolutePath(prjdir);
-
-                botClient.SendTextMessageAsync(update.Message.Chat.Id, System.IO.File.ReadAllText($"{prjdir}/lib/所有命令.txt"), replyToMessageId: update.Message.MessageId);
+              
+                prjdir = filex.GetAbsolutePath(prjdir); string path = $"{prjdir}/cfg/所有命令.txt";
+                string text = System.IO.File.ReadAllText(path);
+                text = text.Replace("%前导提示词%", serchTipsWd);
+                botClient.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
                 dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
-            if (cmd.Equals( "搜索音乐"))
+            if (cmd.Equals( "搜索音乐")|| cmd.Equals("搜索歌曲"))
             {
-                string prjdir = @"../../../";
+                
                 prjdir = filex.GetAbsolutePath(prjdir);
                 var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
-                botClient.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName, replyToMessageId: update.Message.MessageId);
+                botClient.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName+"因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
                 string downdir = prjdir + "/downmp3";
                 string mp3path = $"{downdir}/{songName}.mp3";
                 Console.WriteLine(mp3path);
@@ -716,6 +719,23 @@ namespace prj202405
                 dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
             }
+
+            if (cmd.Equals("搜索聊天记录"))
+            {
+               
+                prjdir = filex.GetAbsolutePath(prjdir);
+                var kwds = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
+
+                List<Dictionary<string, object>> li = ContainMatch("fullTxtSrchIdxdataDir","txt",kwds);
+                // 使用 LINQ 查询语法提取 txt 属性值
+                var txtValues = li.Select(dict => dict.TryGetValue("txt", out object txt) ? txt.ToString() : null)
+                                        .Where(txt => txt != null)
+                                        .ToArray();
+                botClient.SendTextMessageAsync(update.Message.Chat.Id,json_encode(txtValues), replyToMessageId: update.Message.MessageId);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+            
         }
 
         private static void evt_lookmenu(CallbackQuery? callbackQuery)

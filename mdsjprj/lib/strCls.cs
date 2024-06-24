@@ -199,6 +199,26 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
+      public  static string str_sub(string input, int startIndex, int length)
+        {
+            // 如果起始位置小于字符串长度，则截取指定长度
+            if (startIndex < input.Length)
+            {
+                // 如果起始位置 + 长度 大于字符串长度，则截取剩余的部分
+                if (startIndex + length > input.Length)
+                {
+                    return input.Substring(startIndex);
+                }
+                else
+                {
+                    return input.Substring(startIndex, length);
+                }
+            }
+            else
+            {
+                return string.Empty; // 或者可以抛出异常或者返回 null，视情况而定
+            }
+        }
         public static string substr_GetTextAfterKeyword(string text, string keyword)
         {
             int index = text.IndexOf(keyword);

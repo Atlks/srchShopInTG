@@ -58,7 +58,7 @@ namespace mdsj.lib
                 string timestampMM = DateTime.Now.ToString("MM");
                 string fnameFrmTxt = ConvertToValidFileName(text);
                 Console.WriteLine("fnameFrmTxt=>" + fnameFrmTxt);
-                string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + fnameFrmTxt.Substring(0, 50) + ".txt";
+                string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + str_sub (fnameFrmTxt,0, 50) + ".txt";
                 if (System.IO.File.Exists(fname))
                 {
                     Console.WriteLine("是重复消息了" + fname);

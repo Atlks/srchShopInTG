@@ -107,6 +107,14 @@ namespace prj202405
             // 设置 FFmpeg 路径
             await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
 
+
+            string apiKey = "sk-proj-N2Fq9Z6KNZ7xx98ssXshT3BlbkFJ2HyoaRNCbxEkQtYcGOu6";
+            string question = "世界一共多少个城市";
+
+       //     string answer = await Program2024.srchByChtgpt(apiKey, question);
+       //     Console.WriteLine(answer);
+
+
             // 指定加密货币符号，例如 "bitcoin,ethereum,ripple"
             string cryptoSymbols = "bitcoin,ethereum,optimism,arbitrum,chainlink,dogecoin,binancecoin,solana,shiba-inu,ripple";
             //  
@@ -126,7 +134,7 @@ namespace prj202405
          //   SendMp3ToGroupAsync("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\Sweet Like Cola.mp3", -1002206103554);
             //  sim2trand("D:\\0prj\\inputmthd\\lib\\常用字3000.txt");
             //   z_wucan();   tglib    //  if(chatid== -1002206103554)
-            //  ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
+          //     ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
             double pre = n * 0.85;
             double next = n * 1.015;

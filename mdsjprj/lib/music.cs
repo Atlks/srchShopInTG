@@ -50,9 +50,9 @@ namespace mdsj.lib
                 Directory.CreateDirectory(dir);
                 // 下载音频流
                 var tempFile = Path.GetTempFileName();
-                string filePathTmp = dir + "/" + tempFile;
-                Console.WriteLine($"down tmpfile=>{filePathTmp}");
-                await youtube.Videos.Streams.DownloadAsync(streamInfo, filePathTmp);
+              // string filePathTmp = dir + "/" + tempFile;
+                Console.WriteLine($"down tmpfile=>{tempFile}");
+                await youtube.Videos.Streams.DownloadAsync(streamInfo, tempFile);
 
                 // 转换为 MP3
                 // 转换为 MP3

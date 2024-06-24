@@ -69,9 +69,37 @@
               "target": "Package",
               "version": "[7.6.0, )"
             },
+            "FFMpegCore": {
+              "target": "Package",
+              "version": "[5.1.0, )"
+            },
+            "FFmpeg.AutoGen": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
+            "FFmpeg.Nightly": {
+              "target": "Package",
+              "version": "[20200831.1.0, )"
+            },
             "HtmlAgilityPack": {
               "target": "Package",
               "version": "[1.11.61, )"
+            },
+            "Kayisoft.Abp.XabeFFmpeg": {
+              "target": "Package",
+              "version": "[3.5.5, )"
+            },
+            "Lucene.Net": {
+              "target": "Package",
+              "version": "[3.0.3, )"
+            },
+            "Lucene.Net.Analysis.Cn": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
+            "Lucene.Net.Analysis.PanGu": {
+              "target": "Package",
+              "version": "[2.4.1, )"
             },
             "Microsoft.AspNetCore.WebUtilities": {
               "target": "Package",
@@ -108,6 +136,18 @@
             "NAudio": {
               "target": "Package",
               "version": "[2.2.1, )"
+            },
+            "NReco": {
+              "target": "Package",
+              "version": "[2.0.3, )"
+            },
+            "NReco.ImageGenerator.LT": {
+              "target": "Package",
+              "version": "[1.1.3, )"
+            },
+            "NReco.VideoConverter": {
+              "target": "Package",
+              "version": "[1.2.1, )"
             },
             "Nethereum.ABI": {
               "target": "Package",
@@ -176,6 +216,26 @@
             "Telegram.Bot": {
               "target": "Package",
               "version": "[20.0.0-alpha.1, )"
+            },
+            "Xabe.FFmpeg": {
+              "target": "Package",
+              "version": "[5.2.6, )"
+            },
+            "Xabe.FFmpeg.Downloader": {
+              "target": "Package",
+              "version": "[5.2.6, )"
+            },
+            "Xabe.FileLock": {
+              "target": "Package",
+              "version": "[2.0.0, )"
+            },
+            "YoutubeExplode": {
+              "target": "Package",
+              "version": "[6.3.16, )"
+            },
+            "YoutubeExplode.Converter": {
+              "target": "Package",
+              "version": "[6.3.16, )"
             },
             "jieba.NET": {
               "target": "Package",
