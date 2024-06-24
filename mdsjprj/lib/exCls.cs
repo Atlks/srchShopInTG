@@ -1,5 +1,6 @@
 ﻿using prj202405;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -81,11 +82,27 @@ namespace mdsj.lib
             {
                 Console.WriteLine("FUN TaskScheduler_UnobservedTaskException()");
                 Console.WriteLine("捕获未处理的异步异常：");
-                Console.WriteLine(e.Exception.Message);
+                Console.WriteLine("sender=》 "+sender );
+                Console.WriteLine("emsg=>"+e.Exception.Message);
+
+                // 解析堆栈跟踪，获取出错的异步函数名称
+                if(e.Exception.StackTrace!=null)
+                foreach (var stackFrame in e.Exception.StackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
+                {
+                    Console.WriteLine(stackFrame);
+                    if (stackFrame.Contains("ThrowExceptionAsync"))
+                    {
+                        Console.WriteLine($"出错的异步函数: {stackFrame.Trim()}");
+                        break;
+                    }
+                }
                 // 这里可以记录日志或执行其他处理
                 e.SetObserved(); // 标记异常已观察到，防止程序崩溃   // 阻止异常传播
 
-
+                Hashtable hashtable = new Hashtable();
+                hashtable.Add("sender", sender);
+                hashtable.Add("UnobservedTaskExceptionEventArgs", e);
+                logCls.logErr2025(hashtable, "TaskScheduler_UnobservedTaskException", "errAsyncDir");
                 //// 延迟启动一个新的线程
                 //new System.Threading.Thread(() =>
                 //{

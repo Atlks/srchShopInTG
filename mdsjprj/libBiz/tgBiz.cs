@@ -78,7 +78,7 @@ namespace mdsj.libBiz
                       //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
 
                     };
-                    lgc_chkad(text, uid, grpid, act);
+                    logic_chkad(text, uid, grpid, act);
 
                     //机器人检测
                     if (update.Message.From.IsBot)

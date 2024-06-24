@@ -21,6 +21,7 @@ using static prj202405.lib.filex;
 using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
+using DocumentFormat.OpenXml.Drawing;
 namespace prj202405.lib
 {
     internal class dbgCls
@@ -332,11 +333,12 @@ namespace prj202405.lib
         public static object func_get_args(params object[] args)
         {
             // 输出每个参数的值
-            Console.WriteLine("Arguments:");
+           // Console.WriteLine("Arguments:");
             //foreach (object arg in args)
             //{
             //    Console.WriteLine(arg);
             //}
+          //  return paramValues;
             return args;
         }
 
@@ -431,6 +433,8 @@ namespace prj202405.lib
 
         public static string str_repeat(string v, int count)
         {
+            if (count < 0)
+                count = 0;
             return new string(' ', count);
         }
     }

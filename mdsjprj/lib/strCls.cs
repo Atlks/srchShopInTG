@@ -199,6 +199,16 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
+        public static string substr_GetTextAfterKeyword(string text, string keyword)
+        {
+            int index = text.IndexOf(keyword);
+            if (index != -1)
+            {
+                // 提取关键字后面的文本
+                return text.Substring(index + keyword.Length).Trim();
+            }
+            return null;
+        }
         public static string trim_RemoveUnnecessaryCharacters(string input)
         {
             // Define the characters to be removed

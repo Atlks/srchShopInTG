@@ -156,7 +156,27 @@ namespace prj202405.lib
         //    setdbgrtval(__method__, $ret);
 
         //}
+        internal static int delete_row4nodeSqlt(SortedList buf_row, string dbf)
+        {
+            return 0;
+        }
+        public static int update_row(SortedList old_data, SortedList new_data, string wrtFile, SortedList dbg)
+        {
+            return 0;
+        }
 
+        public static void wrt_row()
+        {
+
+        }
+        public static void rnd(string dbFileName)
+        {
+
+        }
+        public static void rnd_next()
+        {
+
+        }
         public static List<Dictionary<string, object>> qryDep(string dbFileName)
         {
             return _qry("select * from 表格1", dbFileName);
@@ -171,7 +191,7 @@ namespace prj202405.lib
             try
             {
                 SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
-                cn.Open();             
+                cn.Open();
                 using (var cmd = new SqliteCommand(querySql, cn))
                 {
                     using (var reader = cmd.ExecuteReader())
@@ -193,8 +213,9 @@ namespace prj202405.lib
                     }
                 }
 
-                
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }

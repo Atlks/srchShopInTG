@@ -60,6 +60,12 @@ using static SqlParser.Ast.DataType;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Drawing;
 using Lucene.Net.Index;
+using System.Security.Policy;
+using static SqlParser.Ast.CharacterLength;
+using static mdsj.lib.music;
+using static mdsj.lib.dtime;
+using static mdsj.lib.fulltxtSrch;
+using static prj202405.lib.tglib;
 
 namespace prj202405
 {
@@ -157,7 +163,7 @@ namespace prj202405
 
             tglib.bot_iniChtStrfile();
 
-            testCls.test();
+            testCls.testAsync();
 
             //   botClient.OnApiResponseReceived
             //botClient.OnMessage += Bot_OnMessage;
@@ -184,7 +190,11 @@ namespace prj202405
             setTimerTask4tmr();
 #warning 循环账号是否过期了
 
-            Console.ReadKey();
+            //  Console.ReadKey();
+            while (true)
+            {
+                Thread.Sleep(100);
+            }
         }
 
 
@@ -240,7 +250,17 @@ namespace prj202405
 
                 return;
             }
-              
+
+            if (update.Type == UpdateType.Message)
+            {
+                OnMsg(update, reqThreadId);
+            }
+
+            if (update.Type == UpdateType.CallbackQuery)
+            {
+                OnCallbk(update, reqThreadId);
+            }
+
             if (update.Type == UpdateType.ChatMember)
             {
                 UpdateEventArgs uea = new UpdateEventArgs();
@@ -269,9 +289,9 @@ namespace prj202405
                     evt_lookmenu(update.CallbackQuery);
                     return;
                 }
-                     
 
-                    
+
+
 
 
 
@@ -472,7 +492,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价", true);
+                        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价 !(100字以内)", true);
                     }
                     catch (Exception e)
                     {
@@ -611,12 +631,12 @@ namespace prj202405
             if (update.Type is UpdateType.CallbackQuery)
             {
                 Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
-                if(ldfld2str(parse_str1, "btn")=="dtl")
+                if (ldfld2str(parse_str1, "btn") == "dtl")
                 {
                     evt_View(botClient, update, reqThreadId);
                 }
                 // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
-               
+
             }
             #endregion
 
@@ -637,14 +657,75 @@ namespace prj202405
 
         }
 
+        private static void OnCallbk(Update update, string reqThreadId)
+        {
+            // throw new NotImplementedException();
+        }
+
+        private static void OnMsg(Update update, string reqThreadId)
+        {
+            if (update.Message.Text.Trim().StartsWith("嗨小爱童鞋"))
+            {
+                evt_嗨小爱同学Async(update, reqThreadId);
+                return;
+            }
+
+        }
+
+        private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "evt_嗨小爱同学Async";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
+
+            if (update.Message.Text.Trim() == "嗨小爱童鞋")
+            {
+                string prjdir = @"../../../";
+                prjdir = filex.GetAbsolutePath(prjdir);
+
+                string path = $"{prjdir}/cfg/所有命令.txt";
+                string text = System.IO.File.ReadAllText(path);
+                botClient.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var cmd = a[1].Trim().ToUpper();
+            if (cmd .Equals( "所有命令"))
+            {
+                string prjdir = @"../../";
+                prjdir = filex.GetAbsolutePath(prjdir);
+
+                botClient.SendTextMessageAsync(update.Message.Chat.Id, System.IO.File.ReadAllText($"{prjdir}/lib/所有命令.txt"), replyToMessageId: update.Message.MessageId);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+
+            if (cmd.Equals( "搜索音乐"))
+            {
+                string prjdir = @"../../../";
+                prjdir = filex.GetAbsolutePath(prjdir);
+                var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
+                botClient.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName, replyToMessageId: update.Message.MessageId);
+                string downdir = prjdir + "/downmp3";
+                string mp3path = $"{downdir}/{songName}.mp3";
+                Console.WriteLine(mp3path);
+                if (!System.IO.File.Exists(mp3path))
+                    await DownloadSongAsMp3(songName, downdir);
+                SendMp3ToGroupAsync(mp3path, update.Message.Chat.Id, update.Message.MessageId);
+                dbgpad = 0;
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+        }
+
         private static void evt_lookmenu(CallbackQuery? callbackQuery)
         {
             //如果展开菜单
-           // if ( string.IsNullOrEmpty(contact_Merchant.Menu))
+            // if ( string.IsNullOrEmpty(contact_Merchant.Menu))
             {
                 try
                 {
-                      botClient.AnswerCallbackQueryAsync(callbackQuery.Id, "该商家暂未提供菜单", true);
+                    botClient.AnswerCallbackQueryAsync(callbackQuery.Id, "该商家暂未提供菜单", true);
                 }
                 catch (Exception e)
                 {
@@ -1540,6 +1621,7 @@ namespace prj202405
                 //点了返回列表按钮时
                 else
                 {
+                    //  botClient.send
 
                     string Path = "搜索横幅.gif";
 
@@ -1829,10 +1911,10 @@ namespace prj202405
             //  InlineKeyboardButton.WithCallbackData( "➕ 添加商家",  "AddMerchant") ,
             string txt = "这个机器人简直是神了，啥都有 !";
             //给大家推荐一个什么信息资源都有的机器人!    detail click 里面also shar bot one need chg sync
-            results.Add([
+            //results.Add([
 
-                InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text={txt}")
-                ]);
+            //    InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text={txt}")
+            //    ]);
         }
 
 
@@ -2242,7 +2324,7 @@ namespace prj202405
             //}
             #endregion
 
-           
+
 
             //如果是评分
             if (score != null)
@@ -2323,14 +2405,14 @@ namespace prj202405
 
             Console.WriteLine(result);
             //人气排名   
-            int rank = merchants.OrderByDescending(e => e.Views).ToList().FindIndex(e => e.Guid == guid) + 1;
-            result += rank switch
-            {
-                1 => $"\n\n🏆<b>商家排名</b> 第<b>🥇</b>名 (受欢迎程度)",
-                2 => $"\n\n🏆<b>商家排名</b> 第<b>🥈</b>名 (受欢迎程度)",
-                3 => $"\n\n🏆<b>商家排名</b> 第<b>🥉</b>名 (受欢迎程度)",
-                _ => $"\n\n🏆<b>商家排名</b> 第<b> {rank} </b>名 (受欢迎程度)",
-            };
+            //int rank = merchants.OrderByDescending(e => e.Views).ToList().FindIndex(e => e.Guid == guid) + 1;
+            //result += rank switch
+            //{
+            //    1 => $"\n\n🏆<b>商家排名</b> 第<b>🥇</b>名 (受欢迎程度)",
+            //    2 => $"\n\n🏆<b>商家排名</b> 第<b>🥈</b>名 (受欢迎程度)",
+            //    3 => $"\n\n🏆<b>商家排名</b> 第<b>🥉</b>名 (受欢迎程度)",
+            //    _ => $"\n\n🏆<b>商家排名</b> 第<b> {rank} </b>名 (受欢迎程度)",
+            //};
 
             copyPropSortedListToMerchant(Merchant1, contact_Merchant);
             //营业时间
@@ -2390,7 +2472,7 @@ namespace prj202405
             isShowMenu = isShowMenu || cqText.Contains("-商家菜单-");
             #endregion
 
-            contact_Merchant.Telegram = cvt2list(Merchant1,"Telegram");
+            contact_Merchant.Telegram = cvt2list(Merchant1, "Telegram");
             contact_Merchant.WhatsApp = cvt2list(Merchant1, "WhatsApp");
             contact_Merchant.WeiXin = cvt2list(Merchant1, "微信");
             contact_Merchant.Tel = cvt2list(Merchant1, "电话");
@@ -2422,19 +2504,10 @@ namespace prj202405
             //if (update.CallbackQuery.Data.Contains("timerMsgMode2025"))
             chkUidEq = "n";
             // 发送带有按钮的消息
-            List<List<InlineKeyboardButton>> menu = [
 
-             [
-                     InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
-                     InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
-                     InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
-                     InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
-                     InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
-                     InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
-                 ],
-                 [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
-                 [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
-            ];
+            parse_str1 = parse_str(update.CallbackQuery.Data);
+            //  if (ldfld2str(parse_str1, "sdr") == "tmr") //def is not
+            List<List<InlineKeyboardButton>> menu = GetMenuDafen(guid, chkUidEq, ldfld2str(parse_str1, "sdr"));
 
             contact_Merchant.Name = Merchant1["商家"].ToString();
             //如果不是物业
@@ -2545,20 +2618,52 @@ namespace prj202405
 
             }  //end ctch
 
+            static List<List<InlineKeyboardButton>> GetMenuDafen(string guid, string chkUidEq, string sndr)
+            {
+                if (sndr == "tmr")
+                    return [
+
+                            [
+                     InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
+                     InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
+                     InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
+                     InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
+                     InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
+                     InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
+                 ],
+               //  [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
+             //    [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
+                           ];
+                else
+                    return [
+
+                                 [
+                     InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
+                     InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
+                     InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
+                     InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
+                     InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
+                     InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
+                 ],
+               //  [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
+                 [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
+                                ];
+            }
         }
 
-        private static List<string> cvt2list(SortedList merchant1, string v )
+        private static List<string> cvt2list(SortedList merchant1, string v)
         {
             List<string> li = new List<string>();
             try
             {
                 li.Add(trim_RemoveUnnecessaryCharacters(ldfld(merchant1, v, "").ToString()));
 
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
 
             }
-           
+
             return li;
         }
 
@@ -2573,8 +2678,8 @@ namespace prj202405
                 if (contact_Merchant.Telegram.Count == 1)
                 {
                     string tlgrm = contact_Merchant.Telegram[0];
-                    if(tlgrm.Trim().Length>3)
-                    result += $"\n\nTelegram  :  <a href='https://t.me/{tlgrm}'>点击聊天</a>";
+                    if (tlgrm.Trim().Length > 3)
+                        result += $"\n\nTelegram  :  <a href='https://t.me/{tlgrm}'>点击聊天</a>";
                 }
                 else
                 {

@@ -37,6 +37,7 @@ using static libx.storeEngr4Nodesqlt;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using DocumentFormat.OpenXml;
+using System.Reflection;
 namespace prj202405.lib
 {
     internal class tglib
@@ -78,6 +79,30 @@ namespace prj202405.lib
             }
             dbgCls.setDbgValRtval(__METHOD__, 0);
           
+        }
+
+     public   static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
+        {
+            var __METHOD__ = "SendMp3ToGroupAsync";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
+
+            try
+            {
+             //   var botClient = new TelegramBotClient(BotToken);
+
+                using (var mp3Stream = System.IO.File.Open(mp3FilePath, FileMode.Open))
+                {
+                    //  var mp3InputFile = new InputOnlineMedia(mp3Stream, "file.mp3");
+                  //  await using Stream stream = System.IO.File.OpenRead("/path/to/voice-nfl_commentary.ogg");
+                    object value = await botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream),caption:"搜索结果",title: GetBaseFileName(mp3FilePath));
+                }
+
+                Console.WriteLine("MP3 文件已发送到群组！");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"发送 MP3 文件时出错：{ex.Message}");
+            }
         }
         public static async Task bot_sendMsgToMltV2(string imgPath, string msgtxt,    string wdss)
         {

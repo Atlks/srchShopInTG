@@ -37,37 +37,47 @@ namespace mdsj.lib
     internal class adChkr
     {
 
-        public static void lgc_chkad(string text, string uid, long grpid, Action act)
+        public static async Task logic_chkad(string text, string uid, long grpid, Action act)
         {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), text, uid, grpid));
+            var __METHOD__ = "logic_chkad";
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));
 
-            string prjdir = @"../../";
-            prjdir = filex.GetAbsolutePath(prjdir);
-            string adwdlib = $"{prjdir}/gbwd垃圾关键词词库/ads_word.txt";
-            HashSet<string> adwds = splitFileByChrs(adwdlib, ",\r \n");
-           int ctnScr= containCalcCntScoreSetfmt(text, adwds);
-
-            Console.WriteLine("广告词包含分数=》" + ctnScr);
-
-
-            if (text.Length < 10)
-                return;
-            string timestampMM = DateTime.Now.ToString("MM");
-            string fnameFrmTxt = ConvertToValidFileName(text);
-            string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + fnameFrmTxt.Substring(0, 50) + ".txt";
-            if (System.IO.File.Exists(fname))
+            try
             {
-                Console.WriteLine("是重复消息了" + fname);
-                file_put_contents(fname, "\n\n" + text + "", true);
+                string prjdir = @"../../../";
+                prjdir = filex.GetAbsolutePath(prjdir);
+                string adwdlib = $"{prjdir}/gbwd垃圾关键词词库/ads_word.txt";
+                HashSet<string> adwds = splitFileByChrs(adwdlib, ",\r \n");
+                int ctnScr = containCalcCntScoreSetfmt(text, adwds);
+
+                Console.WriteLine("广告词包含分数=》" + ctnScr);
 
 
-                act();
+                if (text.Length < 10)
+                    return;
+                string timestampMM = DateTime.Now.ToString("MM");
+                string fnameFrmTxt = ConvertToValidFileName(text);
+                Console.WriteLine("fnameFrmTxt=>" + fnameFrmTxt);
+                string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + fnameFrmTxt.Substring(0, 50) + ".txt";
+                if (System.IO.File.Exists(fname))
+                {
+                    Console.WriteLine("是重复消息了" + fname);
+                    file_put_contents(fname, "\n\n" + text + "", true);
 
 
+                    act();
+
+
+                }
+                else
+                    file_put_contents(fname, "\n\n" + text, true);
             }
-            else
-                file_put_contents(fname, "\n\n" + text, true);
+            catch(Exception e)
+            {
+                Console.WriteLine("catch in ()=>" + __METHOD__ + "()");
+                Console.WriteLine(e);
+            }
+          
 
             dbgCls.setDbgValRtval(__METHOD__, 0);
         }

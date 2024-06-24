@@ -39,6 +39,7 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
+using static mdsj.lib.web3;
 using static mdsj.libBiz.tgBiz;
 using System.Collections;
 namespace mdsj.lib
@@ -52,6 +53,39 @@ namespace mdsj.lib
         private const string USDTContractAddress = "0x1234567890abcdef1234567890abcdef12345678"; // Replace with actual USDT contract address on the selected chain
         private const string UniswapRouterAddress = "0xUniswapRouterAddress"; // Replace with actual Uniswap router address
 
+
+        public static async Task<Dictionary<string, double>> GetCryptoPricesAsync(string cryptoSymbols)
+        {
+            try
+            {
+                var prices = new Dictionary<string, double>();
+                using (var client = new HttpClient())
+                {
+                    string[] symbols = cryptoSymbols.Split(',');
+                    foreach (var symbol in symbols)
+                    {
+                        string url = $"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd";
+                        Console.WriteLine(url);
+                        var response = await client.GetStringAsync(url);
+                        Console.WriteLine(response);
+                        var json = JObject.Parse(response);
+                        if (json[symbol] != null && json[symbol]["usd"] != null)
+                        {
+                            prices[symbol] = json[symbol]["usd"].Value<double>();
+                        }
+                        else
+                        {
+                            Console.WriteLine($"未能获取 {symbol} 的价格。");
+                        }
+                    }
+                }
+                return prices;
+            }
+            catch (Exception) {
+                return null;
+            }
+         
+        }
         //public async Task BuyEthereumAsync(decimal usdAmount, string network)
         //{
         //    string url = network switch
@@ -163,6 +197,9 @@ namespace mdsj.lib
         //        Console.WriteLine($"Error placing order: {orderResult.Error}");
         //    }
         //}
+
+
+
         public static void rdCnPrs()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;

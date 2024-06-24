@@ -13,6 +13,16 @@ namespace prj202405.lib
 {
     internal class filex
     {
+        public static string GetBaseFileName(string filePath)
+        {
+            // 获取文件名（带扩展名）
+            string fileName = Path.GetFileName(filePath);
+
+            // 去掉扩展名，获取基本名字
+            string baseFileName = Path.GetFileNameWithoutExtension(fileName);
+
+            return baseFileName;
+        }
         public static string GetFilePathsCommaSeparated(string directoryPath)
         {
             // 获取目录下的所有文件路径
@@ -69,6 +79,20 @@ namespace prj202405.lib
             }
         }
 
+        public static void mkdir_forFile(string filePath )
+        {
+            // 获取文件目录
+            string dir = System.IO.Path.GetDirectoryName(filePath);
+
+            // 检查目录是否存在，如果不存在，则创建目录
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+          //  File.WriteAllText(filePath, txt);
+
+
+        }
         public static string GetAbsolutePath(string relativePath)
         {
             // 获取当前工作目录

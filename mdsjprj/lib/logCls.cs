@@ -115,7 +115,8 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+                //Newtonsoft.Json.JsonSerializationException:
+                Console.WriteLine(ex.Message.ToString());
             }
 
 

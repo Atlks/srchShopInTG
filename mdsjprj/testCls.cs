@@ -67,9 +67,14 @@ using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Store;
 using Lucene.Net.Index;
 using DocumentFormat.OpenXml.Wordprocessing;
+
+using Microsoft.EntityFrameworkCore.Metadata;
+using Xabe.FFmpeg.Downloader;
+using static mdsj.lib.music;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using Microsoft.EntityFrameworkCore.Metadata;
+using static prj202405.lib.tglib;
+using static mdsj.lib.web3;
 namespace prj202405
 {
     internal class testCls
@@ -97,9 +102,29 @@ namespace prj202405
         //}
 
 
-        internal static void test()
+        internal static async Task testAsync()
         {
-            sim2trand("D:\\0prj\\inputmthd\\lib\\常用字3000.txt");
+            // 设置 FFmpeg 路径
+            await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
+
+            // 指定加密货币符号，例如 "bitcoin,ethereum,ripple"
+            string cryptoSymbols = "bitcoin,ethereum,optimism,arbitrum,chainlink,dogecoin,binancecoin,solana,shiba-inu,ripple";
+            //  
+            // 启动一个新线程执行获取加密货币价格的任务
+            Task.Run(async () => {
+
+                var prices = await GetCryptoPricesAsync(cryptoSymbols);
+                Console.WriteLine(json_encode(prices));
+            });
+          
+         //  
+
+            // 替换为你想下载的歌曲名称
+            string songName = "Sweet Like Cola";
+            songName = "sweet like cola";
+          //  await DownloadSongAsMp3(songName,"downld");
+         //   SendMp3ToGroupAsync("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\Sweet Like Cola.mp3", -1002206103554);
+            //  sim2trand("D:\\0prj\\inputmthd\\lib\\常用字3000.txt");
             //   z_wucan();   tglib    //  if(chatid== -1002206103554)
             //  ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
@@ -116,7 +141,7 @@ namespace prj202405
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
                 object o = new Hashtable();
-                wrtLgTypeDate("msgrcvDir", o);
+             //   wrtLgTypeDate("msgrcvDir", o);
                 // timerCls.z_actSj();
                 //   z_actSj();
                 //   callx((id: 11, dbf: "dbf"));
