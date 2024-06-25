@@ -181,6 +181,23 @@ namespace libx
             string str = call_exe_retStr(execpath, scriptPath, prm);
             return int.Parse(str);
         }
+
+        public static List<SortedList> rnd4jsonFl(string dbf)
+        {
+            if (!dbf.EndsWith(".json"))
+            {
+                string ext = ".json";
+                dbf = dbf + ext;
+            }
+
+            SortedList prm = new SortedList();
+
+            //   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
+
+
+            prm.Add("dbf", ($"{dbf}"));
+            return ormJSonFL.qry(dbf);
+        }
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {
             if (!dbf.EndsWith(".db"))

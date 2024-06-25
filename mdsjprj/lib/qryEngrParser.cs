@@ -67,38 +67,73 @@ namespace libx
             return n;
         }
 
+        //public static List<t> xxxx<t>()
+        //{
+        //    SortedList row = new SortedList();
+        //    List<t> rsRztInlnKbdBtn = new List<t>();
+        //    rsRztInlnKbdBtn.Add( row);
+        //    return rsRztInlnKbdBtn;
+        //}
+
+
+
         public static List<t> Qe_qryV2<t>(string fromDdataDir, string partnsExprs,
                     Func<SortedList, bool> whereFun,
                     Func<SortedList, int> ordFun,
                     Func<SortedList, t> selktFun,
                     Func<string, List<SortedList>> rndFun)
         {
-            if (rndFun is null)
-            {
-                throw new ArgumentNullException(nameof(rndFun));
-            }
 
-            List<SortedList> rztLi = new List<SortedList>();
-            var patns_dbfs = _calcPatnsV3(fromDdataDir, partnsExprs);
-            string[] arr = patns_dbfs.Split(',');
-            foreach (string dbf in arr)
-            {
-                List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
-                rztLi = array_merge(rztLi, li);
-            }
-
-            List<SortedList> list = rztLi.Cast<SortedList>()
-                                .OrderBy(ordFun)
-                                .ToList();
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
-            for (int i = 0; i < rztLi.Count; i++)
+            try
             {
-                SortedList row = list[i];
-                rsRztInlnKbdBtn.Add(selktFun(row));
-            }
+                if (rndFun is null)
+                {
+                    throw new ArgumentNullException(nameof(rndFun));
+                }
 
+                List<SortedList> rztLi = new List<SortedList>();
+                var patns_dbfs = _calcPatnsV3(fromDdataDir, partnsExprs);
+                string[] arr = patns_dbfs.Split(',');
+                foreach (string dbf in arr)
+                {
+                    List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
+                    rztLi = array_merge(rztLi, li);
+                }
+
+                if (ordFun != null)
+                {
+                    rztLi = rztLi.Cast<SortedList>()
+                                   .OrderBy(ordFun)
+                                   .ToList();
+                }
+
+
+                if (selktFun == null)
+                    throw new ArgumentNullException("  need slktfun ,u can use def slktfun");
+
+                for (int i = 0; i < rztLi.Count; i++)
+                {
+                    SortedList row = rztLi[i];
+
+                    rsRztInlnKbdBtn.Add(selktFun(row));
+
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                logErr2025(e, __METHOD__, "errdir");
+                //  return rsRztInlnKbdBtn;
+            }
+            dbgCls.setDbgValRtval(__METHOD__, 0);
             return rsRztInlnKbdBtn;
         }
 
@@ -209,7 +244,7 @@ namespace libx
 
 
             SortedList results = rztLi[0];
-            dbgCls.setDbgValRtval(__METHOD__, "results.Count=>"+ results.Count);
+            dbgCls.setDbgValRtval(__METHOD__, "results.Count=>" + results.Count);
             return results;
         }
 

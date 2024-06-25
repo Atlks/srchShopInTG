@@ -1,4 +1,5 @@
 ﻿using ClosedXML.Excel;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -136,9 +137,60 @@ namespace prj202405.lib
         {
 
         }
+        public static void del(string id, string Strfile)
+        {
+            SortedList d = new SortedList();
+            d.Add("id", id);
+            delete_row(d, Strfile);
+
+        }
         public static void del(SortedList objSave, string Strfile)
         {
+            delete_row(objSave, Strfile);
 
+        }
+        public static void delete_row(SortedList objSave, string Strfile)
+        {
+            List<SortedList> liDel = new List<SortedList>();
+            liDel.Add(objSave);
+            List<SortedList> li = qrySglFL(Strfile);
+
+            List<SortedList> diff = arr_Difference(li, liDel);
+
+            SortedList listIot = db.lst2IOT(diff);
+
+
+            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
+            wriToDbf(saveList_hpmod, Strfile);
+        }
+
+
+        public static List<SortedList> arr_Difference(
+        List<SortedList> list1,
+        List<SortedList> list2)
+        {
+            var difference = new List<SortedList>();
+            var set2Ids = new HashSet<string>();
+
+            // 将list2的id存入HashSet
+            foreach (var item in list2)
+            {
+                if (item.ContainsKey("id") )
+                {
+                    set2Ids.Add(item["id"].ToString());
+                }
+            }
+
+            // 查找list1中不在list2中的元素
+            foreach (var item in list1)
+            {
+                if (item.ContainsKey("id") && !set2Ids.Contains(item["id"].ToString()))
+                {
+                    difference.Add(item);
+                }
+            }
+
+            return difference;
         }
         public static void update(SortedList objSave, string Strfile)
         {

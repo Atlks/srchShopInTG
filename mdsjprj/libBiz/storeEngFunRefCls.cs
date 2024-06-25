@@ -27,8 +27,18 @@ namespace WindowsFormsApp1.libbiz
                 return rnd_next4nodeSqlt(prtnDbfNoExt);
             };
         }
+        public static Func<string, List<SortedList>> rnd4jsonFlRf()
+        {
+            Func<string, List<SortedList>> rndFun = (dbf) =>
+            {
+                return rnd4jsonFl(dbf);
+            };
+            return rndFun;
+        }
 
-       
+      
+
+
 
         public static Func<SortedList, int> wrt_row4nodeSqltRef(string saveDataDir)
         {

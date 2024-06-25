@@ -3,6 +3,7 @@ using prj202405.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,9 +14,28 @@ namespace mdsj.lib
     internal class util
     {
 
+        public static int GetBatteryPercentage()
+        {
+            try
+            {
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Battery");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    int estimatedChargeRemaining = Convert.ToInt32(obj["EstimatedChargeRemaining"]);
+                    return estimatedChargeRemaining;
+                }
+
+                throw new Exception("Battery not found");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving battery information: " + ex.Message);
+            }
+        }
+
         void loopForever()
         {
-            while(true)
+            while (true)
             {
                 Console.WriteLine(DateTime.Now);
                 Thread.Sleep(5000);
@@ -25,20 +45,30 @@ namespace mdsj.lib
 
         public static string mp3FilePathEmgcy = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
 
-        public static void tipDayu(string msg2056)
+        public static void tipDayu(string msg2056, Telegram.Bot.Types.Update update)
         {
             try
             {
                 if (msg2056.Contains("xxx007") || msg2056.Contains("大鱼") || msg2056.Contains("鱼总"))
                     playMp3(mp3FilePathEmgcy);
-            }catch (Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
                 logCls.error_logV2(ex, "err.log");
             }
-          
+            try
+            {
+                if (update.Message.ReplyToMessage.From.FirstName.Contains("大鱼"))
+                    playMp3(mp3FilePathEmgcy);
+            }
+            catch (Exception ex) { }
+
+
+
         }
-        public static async Task playMp3(string mp3FilePath,int sec)
+        public static async Task playMp3(string mp3FilePath, int sec)
         {
             try
             {
@@ -54,7 +84,7 @@ namespace mdsj.lib
                     Console.WriteLine("Playing... Press any key to stop.");
                     // Console.ReadKey(); // 按任意键停止播放
                     // 使当前线程休眠5秒钟
-                    Thread.Sleep(sec*1000);
+                    Thread.Sleep(sec * 1000);
                     //async maosi nt wk ..only slp wk...maybe same thrd..
                     //yaos ma slp mthis thrd just finish fast..
                     ExecuteAfterDelay(sec * 1000, () =>
@@ -112,12 +142,12 @@ namespace mdsj.lib
                 dbgCls.setDbgValRtval(__METHOD__, 0);
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
 
-           
+
         }
     }
 }

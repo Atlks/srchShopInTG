@@ -16,6 +16,23 @@ namespace prj202405.lib
 {
     internal class strCls
     {
+
+        public static string left(string str, int len)
+        {
+            if (str == null)
+            {
+                return "";
+              //  throw new ArgumentNullException(nameof(str), "Input string cannot be null.");
+            }
+
+          //  const int len = 3;
+            if (str.Length <= len)
+            {
+                return str;
+            }
+
+            return str.Substring(0, len);
+        }
         public static Dictionary<string, StringValues> ParseQuery2024(string qerystr)
         {
             if (!qerystr.StartsWith("http"))
@@ -64,7 +81,8 @@ namespace prj202405.lib
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(marker))
             {
-                throw new ArgumentException("Input and marker cannot be null or empty.");
+                return "";
+              //  throw new ArgumentException("Input and marker cannot be null or empty.");
             }
 
             int markerIndex = input.IndexOf(marker);
@@ -199,7 +217,28 @@ namespace prj202405.lib
             return caption.Contains(v);
         }
 
-      public  static string str_sub(string input, int startIndex, int length)
+
+        //默认分割
+        public static string[] SplitAndTrim(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return Array.Empty<string>();
+            }
+
+            // 分割字符串，使用 StringSplitOptions.RemoveEmptyEntries 去除多余的空项
+            string[] splitResult = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 对每个成员进行 Trim 操作
+            for (int i = 0; i < splitResult.Length; i++)
+            {
+                splitResult[i] = splitResult[i].Trim();
+            }
+
+            return splitResult;
+        }
+
+        public  static string str_sub(string input, int startIndex, int length)
         {
             // 如果起始位置小于字符串长度，则截取指定长度
             if (startIndex < input.Length)

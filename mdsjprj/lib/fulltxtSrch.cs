@@ -25,41 +25,63 @@ using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.dsl;
 using static mdsj.lib.util;
+using static libx.storeEngr4Nodesqlt;
 using JiebaNet.Segmenter;
 using prj202405.lib;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
+using prj202405;
 namespace mdsj.lib
 {
     internal class fulltxtSrch
     {
+
+        public static List<SortedList> qry_ContainMatch(string fldIdx_dataDir, string shareNameS_matchKwds,
+              Func<SortedList, bool> whereFun = null,
+                    Func<SortedList, int> ordFun = null,
+                    Func<SortedList, object> selktFun = null
+            )
+        {
+            //存储引擎部分。应该需要注入吧
+
+            //   List<Dictionary<string, object>> maparr = ReadJSONFileToMapArray(fpath);
+
+            Func<string, List<SortedList>> rndFun = (dbf) =>
+            {
+                return rnd4jsonFl(dbf);
+            };
+
+            return qry_ContainMatch(fldIdx_dataDir, shareNameS_matchKwds, rndFun);
+
+        }
+
+        //这里分片读取，做join操作。。以前的qery是做union操作的。。
+        //  ContainMatch(string dataDir,string CONTAINS_fld  数据库思维
+        //索引文件模式的化，直接所谓datadir就是主记录。。
+        //类似查询引擎  datadir,where order fun, storeEngr
         //   ContainMatch
-        public static List<Dictionary<string, object>> ContainMatch(string dataDir,string CONTAINS_fld,string matchKwds)
+        public static List<SortedList> qry_ContainMatch(string fldIdx_dataDir, string matchKwds, Func<string, List<SortedList>> rndFun)
         {
             // Split the matchKwds string into individual keywords
-            string[] splitStr = matchKwds.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] sharsStrarrFmt = SplitAndTrim(matchKwds);
 
-            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+            List<SortedList> result = new List<SortedList>();
             bool needini = true;
 
             // Iterate through each keyword
-            foreach (var value in splitStr)
+            foreach (var shareNm1 in sharsStrarrFmt)
             {
-                string trimmedValue = value.Trim();
-                if (trimmedValue.Length > 0)
+                string fpath = Path.Combine(fldIdx_dataDir, $"{shareNm1}");
+                //List<SortedList> rnd4jsonFl(string dbf)
+                List<SortedList> maparr = rndFun(fpath);
+                if (needini)
                 {
-                    string fpath = Path.Combine(dataDir, $"{trimmedValue}.json");
-                    List<Dictionary<string, object>> maparr = ReadJSONFileToMapArray(fpath);
-
-                    if (needini)
-                    {
-                        result = maparr;
-                        needini = false;
-                    }
-                    else
-                    {
-                        result = IntersectArrays(result, maparr);
-                    }
+                    result = maparr;
+                    needini = false;
+                }
+                else
+                {
+                    result = IntersectArrays(result, maparr);
                 }
             }
 
@@ -67,34 +89,34 @@ namespace mdsj.lib
         }
 
         // Function to read JSON file and return List of Dictionary<string, object>
-        public static List<Dictionary<string, object>> ReadJSONFileToMapArray(string filePath)
-        {
-            if (!File.Exists(filePath))
-            {
-                return new List<Dictionary<string, object>>(); // Return empty list if file doesn't exist
-            }
+        //public static List<Dictionary<string, object>> ReadJSONFileToMapArray(string filePath)
+        //{
+        //    if (!File.Exists(filePath))
+        //    {
+        //        return new List<Dictionary<string, object>>(); // Return empty list if file doesn't exist
+        //    }
 
-            string jsonContent = File.ReadAllText(filePath);
-            JArray jsonArray = JArray.Parse(jsonContent);
+        //    string jsonContent = File.ReadAllText(filePath);
+        //    JArray jsonArray = JArray.Parse(jsonContent);
 
-            List<Dictionary<string, object>> mapArray = new List<Dictionary<string, object>>();
+        //    List<Dictionary<string, object>> mapArray = new List<Dictionary<string, object>>();
 
-            foreach (JObject obj in jsonArray)
-            {
-                Dictionary<string, object> dict = obj.ToObject<Dictionary<string, object>>();
-                mapArray.Add(dict);
-            }
+        //    foreach (JObject obj in jsonArray)
+        //    {
+        //        Dictionary<string, object> dict = obj.ToObject<Dictionary<string, object>>();
+        //        mapArray.Add(dict);
+        //    }
 
-            return mapArray;
-        }
+        //    return mapArray;
+        //}
 
         // Function to compute intersection of two List of Dictionary<string, object>
-        public static List<Dictionary<string, object>> IntersectArrays(List<Dictionary<string, object>> arr1, List<Dictionary<string, object>> arr2)
+        public static List<SortedList> IntersectArrays(List<SortedList> arr1, List<SortedList> arr2)
         {
-            List<Dictionary<string, object>> result = new List<Dictionary<string, object>>();
+            List<SortedList> result = new List<SortedList>();
 
             // Create a dictionary for arr1 elements with id as key
-            Dictionary<string, Dictionary<string, object>> map1 = new Dictionary<string, Dictionary<string, object>>();
+            Dictionary<string, SortedList> map1 = new Dictionary<string, SortedList>();
             foreach (var m in arr1)
             {
                 string id = m["id"].ToString();
@@ -147,15 +169,15 @@ namespace mdsj.lib
             return double.TryParse(input, out _);
         }
 
-        public static void ReadAndCreateIndex4tgmsg(string directoryPath)
+        public static void wrtRowss_ReadAndCreateIndex4tgmsg(string directoryPath_msg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
 
             try
             {
                 // 获取目录中所有的 JSON 文件
-                string[] jsonFiles = System.IO.Directory.GetFiles(directoryPath, "*.json");
+                string[] jsonFiles = System.IO.Directory.GetFiles(directoryPath_msg, "*.json");
 
                 foreach (string jsonFile in jsonFiles)
                 {
@@ -163,34 +185,8 @@ namespace mdsj.lib
                     string jsonContent = System.IO.File.ReadAllText(jsonFile);
 
                     // 解析 JSON 内容
-                    using (JsonDocument doc = JsonDocument.Parse(jsonContent))
-                    {
-                        // 检查是否包含 "message" 属性
-                        if (doc.RootElement.TryGetProperty("message", out JsonElement messageElement))
-                        {
-                            // 检查 "message" 属性是否为对象
-                            if (messageElement.ValueKind == JsonValueKind.Object)
-                            {
-                                // 获取 message 对象中的 text 属性
-                                if (messageElement.TryGetProperty("text", out JsonElement textElement))
-                                {
-                                    // 输出 text 属性的值
-                                    Console.WriteLine(textElement.GetString());
-                                      string DataDir = "fullTxtSrchIdxdataDir";
-                                    SortedList o= tgMsg2row(messageElement, textElement);
-                                    var msgx = ChineseCharacterConvert.Convert.ToSimple(o["txt"].ToString());
-                                    o["txt"] = msgx;
-                                    wrt_row4tgmsg(o, DataDir);
-                                }
-
-                            }
-                            else
-                            {
-                                Console.WriteLine($"The 'message' property in the file {jsonFile} is not an object.");
-                            }
-                        }
-
-                    }
+                    string DataDir = "fullTxtSrchIdxdataDir";
+                    wrt_rows4fulltxt( jsonContent, DataDir);
                 }
             }
             catch (Exception ex)
@@ -199,22 +195,62 @@ namespace mdsj.lib
             }
         }
 
-        private static void wrt_row4tgmsg(SortedList tgmsg, string DataDir)
+        public static void wrt_rows4fulltxt( string jsonContent, string DataDir)
         {
             try
             {
-               
-                CreateIndex_part2( tgmsg, DataDir);
+                using (JsonDocument doc = JsonDocument.Parse(jsonContent))
+                {
+                    // 检查是否包含 "message" 属性
+                    if (doc.RootElement.TryGetProperty("message", out JsonElement messageElement))
+                    {
+                        // 检查 "message" 属性是否为对象
+                        if (messageElement.ValueKind == JsonValueKind.Object)
+                        {
+                            // 获取 message 对象中的 text 属性
+                            if (messageElement.TryGetProperty("text", out JsonElement textElement))
+                            {
+                                // 输出 text 属性的值
+                                Console.WriteLine(textElement.GetString());
+                                //    string DataDir = "fullTxtSrchIdxdataDir";
+                                SortedList o = tgMsg2row(messageElement, textElement);
+                                var msgx = ChineseCharacterConvert.Convert.ToSimple(o["txt"].ToString());
+                                o["txt"] = msgx;
+                                wrt_row4tgmsgSafe(o, DataDir);
+                            }
+
+                        }
+                        else
+                        {
+                            Console.WriteLine($"The 'message' property in the file {jsonContent} is not an object.");
+                        }
+                    }
+
+                }
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+       }
+
+        private static void wrt_row4tgmsgSafe(SortedList tgmsg, string DataDir)
+        {
+            try
+            {
+
+                wrt_row4tgmsg(tgmsg, DataDir);
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
         }
 
-    
 
-        public static void CreateIndex_part2(  SortedList o,string dataDir)
+
+        public static void wrt_row4tgmsg(SortedList o, string dataDir)
         {
-           
+
             var segmenter = new JiebaSegmenter();
             //------------自定词
             segmenter.LoadUserDict("user_dict.txt");
@@ -247,16 +283,17 @@ namespace mdsj.lib
                 if (IsAllPunctuation(wd)) continue;
                 //todo 常见没意义词的过滤 虚词过滤
 
-            //    SortedList doc = new SortedList();
+                //    SortedList doc = new SortedList();
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string msgidx = o["chatid"] + "." + o["timeStamp"] + "." + o["msgid"];
                 o.Add("id", msgidx);
-                o.Add("msgid", msgidx);
-                o.Add("kwd", wd); 
-        //        doc.Add("txt", o["txt"]);
-         //       doc.Add("grpinfo", o);
-         //       o["txt"] = "";
+                stfld_replaceKeyV(o, "msgid", msgidx);
+              //  o.Add("msgid", msgidx);
+                o.Add("kwd", wd);
+                //        doc.Add("txt", o["txt"]);
+                //       doc.Add("grpinfo", o);
+                //       o["txt"] = "";
                 ormJSonFL.wrt_row(o, $"{dataDir}/{wd}.json");
 
             }

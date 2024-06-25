@@ -202,6 +202,7 @@ namespace mdsj.lib
 
         public static void rdCnPrs()
         {
+            return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             Console.WriteLine(DateTime.Now);
@@ -210,7 +211,7 @@ namespace mdsj.lib
             //file_put_contents("cn2004.htm", htm);
             Console.WriteLine("GetEthPrice()");
             double prs = (double)GetEthPrice();
-            double bijiaoPrc = 3500;
+            double bijiaoPrc = 3400;
             double pre = bijiaoPrc * 0.85;
             double next = bijiaoPrc * 1.015;
             Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
