@@ -75,6 +75,7 @@ using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
 using static mdsj.lib.web3;
+using mdsj.libBiz;
 namespace prj202405
 {
     internal class testCls
@@ -104,10 +105,15 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
+
+            var id = "0624按摩552110457";
+                    long uid = 879006550;
+            //     ormJSonFL.del(id, $"blshtDir/blsht{uid}.json");
+          //  Qunzhushou.logic_addCashflow(uid, "嗨小爱童鞋 记账 0625 13 吃饭");
             // 设置 FFmpeg 路径
             await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
 
-
+            int btr = GetBatteryPercentage();
             string apiKey = "sk-proj-N2Fq9Z6KNZ7xx98ssXshT3BlbkFJ2HyoaRNCbxEkQtYcGOu6";
             string question = "世界一共多少个城市";
 

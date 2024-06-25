@@ -1,4 +1,4 @@
-﻿ 
+﻿
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,12 +29,12 @@ namespace prj202405.lib
     {
 
 
-      public static List<SortedList> qryV7(List<SortedList> rows,
-  Func<SortedList, bool> whereFun,
-  Func<SortedList, int> ordFun = null,
-  Func<SortedList, SortedList> selktFun = null
-          
-          )
+        public static List<SortedList> qryV7(List<SortedList> rows,
+    Func<SortedList, bool> whereFun,
+    Func<SortedList, int> ordFun = null,
+    Func<SortedList, SortedList> selktFun = null
+
+            )
         {
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
@@ -108,7 +108,7 @@ namespace prj202405.lib
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,
   Func<SortedList, t> selktFun
-            
+
             )
         {
             ArrayList rows_rzt4srch = [];
@@ -240,7 +240,10 @@ namespace prj202405.lib
             foreach (var item in arrayList)
             {
                 SortedList itemx = (SortedList)item;
-                hash.Add(itemx["id"], item);
+                if (hash.ContainsKey(itemx["id"]))
+                    hash[itemx["id"]] = item;
+                else
+                    hash.Add(itemx["id"], item);
             }
 
             return hash;
@@ -254,7 +257,7 @@ namespace prj202405.lib
 
             foreach (SortedList item in arrayList)
             {
-                
+
                 hash.Add(item["id"], item);
             }
 
@@ -267,18 +270,20 @@ namespace prj202405.lib
 
             foreach (InlineKeyboardButton[] item in arrayList)
             {
-               
+
                 //   SortedList itemx = (SortedList)item;
-                try {
+                try
+                {
                     InlineKeyboardButton btn = item[0];
                     map_add(obj, btn.CallbackData, item);
-                   
+
                 }
-                catch(Exception e) {
+                catch (Exception e)
+                {
                     Console.WriteLine(e.Message);
 
                 }
-                
+
             }
 
             return obj;
@@ -287,14 +292,14 @@ namespace prj202405.lib
         private static void map_add(SortedList obj, string? callbackData, object item)
         {
             try { obj.Add(callbackData, item); }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
-           
+
         }
 
-        public static SortedList lst2IOT(ArrayList arrayList,string idColmName)
+        public static SortedList lst2IOT(ArrayList arrayList, string idColmName)
         {
             SortedList obj = new SortedList();
 
@@ -307,7 +312,7 @@ namespace prj202405.lib
 
             return obj;
         }
-        public static object getRowVal(List<SortedList > lst, string fld, string v2)
+        public static object getRowVal(List<SortedList> lst, string fld, string v2)
         {
             if (lst.Count > 0)
             {
@@ -365,7 +370,7 @@ namespace prj202405.lib
         //parti spt
         public static List<SortedList> qry888(string dataDir, string partnsExprs,
             Func<SortedList, bool> whereFun, Func<SortedList, int> ordFun = null,
-                Func<SortedList, SortedList> selktFun = null, Func<string, List<SortedList>> cfgStrEngr=null)
+                Func<SortedList, SortedList> selktFun = null, Func<string, List<SortedList>> cfgStrEngr = null)
         {
             if (cfgStrEngr is null)
             {
@@ -423,22 +428,22 @@ namespace prj202405.lib
 
         //if patn file not exist ,,flt..
         internal static string calcPatns(string dir, string partfile区块文件)
-        {  
+        {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
-            if (string.IsNullOrEmpty(   partfile区块文件))
+            if (string.IsNullOrEmpty(partfile区块文件))
             {
-              
+
                 string rzt = GetFilePathsCommaSeparated(dir);
                 dbgCls.setDbgValRtval(__METHOD__, rzt);
                 return rzt;
             }
-             ArrayList arrayList = new ArrayList();
+            ArrayList arrayList = new ArrayList();
             string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-            foreach(var dbf in dbArr)
+            foreach (var dbf in dbArr)
             {
-                string path = dir + "/" + dbf+".db";
+                string path = dir + "/" + dbf + ".db";
                 if (!File.Exists(path))
                 {
                     Console.WriteLine("not exist file dbf=>" + path);
@@ -454,7 +459,7 @@ namespace prj202405.lib
             string result = string.Join(",", objectArray);
 
             dbgCls.setDbgValRtval(__METHOD__, result);
-            
+
             return result;
         }
 

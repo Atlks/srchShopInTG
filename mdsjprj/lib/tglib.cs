@@ -18,6 +18,7 @@ using Newtonsoft.Json;
 using System.Collections;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
+using static mdsj.mrcht;
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
@@ -38,6 +39,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using DocumentFormat.OpenXml;
 using System.Reflection;
+using mdsj;
 namespace prj202405.lib
 {
     internal class tglib
@@ -168,8 +170,14 @@ namespace prj202405.lib
                 if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                     return false;
 
-                HashSet<string> curRowKywdSset = new HashSet<string>();
 
+                //--------------is lianixfsh empty
+                string lianxifsh =mrcht. getLianxifsh(row);
+                if (lianxifsh == "")
+                    return false;
+
+                HashSet<string> curRowKywdSset = new HashSet<string>();
+                arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "商家"));
                 arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
                 arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
                 if (curRowKywdSset.Contains(keyword))

@@ -198,7 +198,71 @@ namespace mdsj.libBiz
                 dbgCls.setDbgValRtval(__METHOD__, 0);
                 return;
             }
+            if (cmd.Equals("账单统计"))
+            {
+                evt_cashflowGrpby账单统计(update);
+                dbgCls.setDbgValRtval(__METHOD__, 0);
+                return;
+            }
+        }
 
+        private static void evt_cashflowGrpby账单统计(Update update)
+        {
+            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            var cmd = ldElmt(a, 1);
+
+            var month = ldElmt(a, 2);
+            long uid = update.Message.From.Id;
+
+            List<SortedList> li = Qe_qryV2<SortedList>("blshtDir", "blsht" + uid.ToString() + ".json",
+
+               (SortedList row) =>
+               {
+                   if (row["month"].ToString().Equals(month))
+                       return true;
+                   return false;
+               }, null,
+               (SortedList row) =>
+               {
+                   return row;
+               }
+               , rnd4jsonFlRf());
+
+            var rzt = SummarizeByCategory(li);
+            var msg=json_encode(rzt);
+            botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id,msg, replyToMessageId: update.Message.MessageId);
+
+        }
+
+
+        public static Dictionary<string, decimal> SummarizeByCategory(List<SortedList> dataList)
+        {
+
+            const string amt = "amt";
+            const string cate = "cate";
+            var categoryAmountMap = new Dictionary<string, decimal>();
+
+            foreach (var data in dataList)
+            {
+              
+                if (data.ContainsKey(cate) && data.ContainsKey(amt))
+                {
+                    string category = data[cate].ToString();
+               
+                    decimal amount = Convert.ToDecimal(data[amt]);
+
+                    if (categoryAmountMap.ContainsKey(category))
+                    {
+                        categoryAmountMap[category] += amount;
+                    }
+                    else
+                    {
+                        categoryAmountMap[category] = amount;
+                    }
+                }
+            }
+
+            return categoryAmountMap;
         }
 
         private static void evt_删除(Update update)
@@ -210,7 +274,7 @@ namespace mdsj.libBiz
 
 
             long uid = update.Message.From.Id;
-            ormJSonFL.del(id,$"blshtDir/blsht{uid}.json");
+            ormJSonFL.del(id, $"blshtDir/blsht{uid}.json");
 
 
             botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "删除ok", replyToMessageId: update.Message.MessageId);
@@ -223,27 +287,31 @@ namespace mdsj.libBiz
             var cmd = ldElmt(a, 1);
 
             var month = ldElmt(a, 2);
-
+            long uid = update.Message.From.Id;
 
             //   Func<SortedList, bool> whereFun = ;
 
 
-            List<string> li = Qe_qryV2<string>("blshtDir", null, 
+            List<string> li = Qe_qryV2<string>("blshtDir", "blsht" + uid.ToString() + ".json",
+
                 (SortedList row) =>
                 {
                     if (row["month"].ToString().Equals(month))
                         return true;
                     return false;
-                }, null,
+                }, (SortedList row) =>
+                {
+                    return int.Parse(row["date"].ToString());
+                },
 
 
                 (SortedList row) =>
                 {
-                    return $"{row["date"]} {row["cate"]} {row["amt"]} ";
+                    return $"{row["date"]} {row["cate"]} {row["amt"]} {row["demo"]}";
                 }
                 , rnd4jsonFlRf());
 
-            string msg=string.Join("\n", li);
+            string msg = string.Join("\n", li);
             if (msg.Trim() == "")
                 msg = "@没有结果为空";
 
@@ -255,13 +323,25 @@ namespace mdsj.libBiz
 
         private static void evt_记账(Update update)
         {
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+
+            long uid = update.Message.From.Id;
+            string? text = update.Message.Text;
+
+            string recID = logic_addCashflow(uid, text);
+            botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "ok..\n" + recID, replyToMessageId: update.Message.MessageId);
+
+
+        }
+
+        public static string logic_addCashflow(long uid, string? text)
+        {
+            string[] a = text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
             var cmd = ldElmt(a, 1);
 
             var date = ldElmt(a, 2);
             var amt = toNumber(ldElmt(a, 3));
             var cate = ldElmt(a, 4);
-            var demo = substr_AfterMarker(update.Message.Text.Trim(), cate);
+            var demo = substr_AfterMarker(text.Trim(), cate);
             SortedList map = new SortedList();
             map.Add("date", date);
             map.Add("amt", amt);
@@ -271,11 +351,9 @@ namespace mdsj.libBiz
             string recID = $"{date}{cate}{new Random().Next()}";
             map.Add("id", recID);
 
-            long uid = update.Message.From.Id;
+
             ormJSonFL.save(map, $"blshtDir/blsht{uid}.json");
-            botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "ok..\n" + recID, replyToMessageId: update.Message.MessageId);
-
-
+            return recID;
         }
 
         private static double toNumber(string str)

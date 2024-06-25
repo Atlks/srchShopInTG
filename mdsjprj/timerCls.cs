@@ -144,6 +144,12 @@ namespace prj202405
             renciNshangj(now);
             keepBtnMenu(now);
 
+            int btr = GetBatteryPercentage();
+            if(btr<90)
+            {
+                playMp3(mp3FilePathEmgcy);
+            }
+
             static void 早餐(DateTime now)
             {
                 // //早餐
@@ -227,8 +233,8 @@ namespace prj202405
                 if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
-                    var txt = "美好的一天从早上开始，当然美丽的心情从现在开始\n";
-                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txt+plchdTxt, tgBiz.tg_btmBtns());
+                    var txtkeepBtnMenu = "美好的心情从现在开始\n";
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu+plchdTxt, tgBiz.tg_btmBtns());
                 }
             }
         }
@@ -489,6 +495,7 @@ namespace prj202405
                 await bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
         }
 
+        string CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
         //todo 娱乐kwd 有空白
         public static async void z21_yule()
         {
@@ -498,7 +505,7 @@ namespace prj202405
 
 
             string Path = "娱乐消遣.gif";
-            var CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
+           
           //  if (results.Count > 0)
                 await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
@@ -512,7 +519,7 @@ namespace prj202405
 
 
             string Path = "早餐商家推荐.gif";
-            var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
+         //   var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
          //   if(results.Count>0)
             await bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);

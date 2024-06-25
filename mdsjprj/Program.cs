@@ -32,9 +32,12 @@ using Microsoft.Extensions.Primitives;
 using System.Runtime.CompilerServices;
 using mdsj;
 using mdsj.libBiz;
-using static mdsj.lib.afrmwk;
+
 using DocumentFormat.OpenXml.Bibliography;
 using mdsj.lib;
+
+using static mdsj.lib.afrmwk;
+using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
 using static prj202405.timerCls;
 using static mdsj.biz_other;
@@ -54,18 +57,21 @@ using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using static mdsj.lib.afrmwk;
-using RG3.PF.Abstractions.Entity;
-using System.Security.Cryptography;
+
 using static SqlParser.Ast.DataType;
-using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Drawing;
-using Lucene.Net.Index;
-using System.Security.Policy;
+
 using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.music;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
+using System.Net.Http.Json;
+using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Drawing;
+using Lucene.Net.Index;
+using System.Security.Policy;
+using RG3.PF.Abstractions.Entity;
+using System.Security.Cryptography;
 
 namespace prj202405
 {
@@ -73,8 +79,9 @@ namespace prj202405
     {
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         public const string botname = "LianXin_BianMinBot";
-        private const string serchTipsWd = "嗨小爱童鞋";
+       
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
+        //  @LianXin_QunBot
 
         // task grp
         //  public static long groupId = -1002206103554;
@@ -191,7 +198,10 @@ namespace prj202405
             setTimerTask4tmr();
 #warning 循环账号是否过期了
 
+            Qunzhushou.main1();
+
             //  Console.ReadKey();
+            //loopForever();
             while (true)
             {
                 Thread.Sleep(100);
@@ -352,7 +362,7 @@ namespace prj202405
             }
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
-            tipDayu(msg2056);
+            tipDayu(msg2056, update);
             if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             {
                 logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
@@ -665,77 +675,9 @@ namespace prj202405
 
         private static void OnMsg(Update update, string reqThreadId)
         {
-            if (update.Message.Text.Trim().StartsWith(serchTipsWd))
-            {
-                evt_嗨小爱同学Async(update, reqThreadId);
-                return;
-            }
 
-        }
+         
 
-        private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
-        {
-            var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
-            string prjdir = @"../../../";
-            if (update.Message.Text.Trim() == serchTipsWd)
-            {
-             
-                prjdir = filex.GetAbsolutePath(prjdir);
-
-                string path = $"{prjdir}/cfg/所有命令.txt";
-                string text = System.IO.File.ReadAllText(path);
-                text=text.Replace("%前导提示词%", serchTipsWd);
-                botClient.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-                return;
-            }
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = a[1].Trim().ToUpper();
-            if (cmd .Equals( "所有命令"))
-            {
-              
-                prjdir = filex.GetAbsolutePath(prjdir); string path = $"{prjdir}/cfg/所有命令.txt";
-                string text = System.IO.File.ReadAllText(path);
-                text = text.Replace("%前导提示词%", serchTipsWd);
-                botClient.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals( "搜索音乐")|| cmd.Equals("搜索歌曲"))
-            {
-                
-                prjdir = filex.GetAbsolutePath(prjdir);
-                var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
-                botClient.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName+"因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
-                string downdir = prjdir + "/downmp3";
-                string mp3path = $"{downdir}/{songName}.mp3";
-                Console.WriteLine(mp3path);
-                if (!System.IO.File.Exists(mp3path))
-                    await DownloadSongAsMp3(songName, downdir);
-                SendMp3ToGroupAsync(mp3path, update.Message.Chat.Id, update.Message.MessageId);
-                dbgpad = 0;
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals("搜索聊天记录"))
-            {
-               
-                prjdir = filex.GetAbsolutePath(prjdir);
-                var kwds = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
-
-                List<Dictionary<string, object>> li = ContainMatch("fullTxtSrchIdxdataDir","txt",kwds);
-                // 使用 LINQ 查询语法提取 txt 属性值
-                var txtValues = li.Select(dict => dict.TryGetValue("txt", out object txt) ? txt.ToString() : null)
-                                        .Where(txt => txt != null)
-                                        .ToArray();
-                botClient.SendTextMessageAsync(update.Message.Chat.Id,json_encode(txtValues), replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
-                return;
-            }
-            
         }
 
         private static void evt_lookmenu(CallbackQuery? callbackQuery)
@@ -2187,7 +2129,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);

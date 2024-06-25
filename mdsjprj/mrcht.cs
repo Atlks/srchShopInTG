@@ -34,6 +34,7 @@ using static mdsj.libBiz.tgBiz;
 using static prj202405.lib.strCls;
 using static libx.qryEngrParser;
 using static libx.storeEngr4Nodesqlt;
+using static mdsj.mrcht;
 namespace mdsj
 {
     internal class mrcht
@@ -144,6 +145,12 @@ namespace mdsj
                     if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                         return false;
 
+                    //--------------is lianixfsh empty
+                    string lianxifsh = getLianxifsh(row);
+                    if (lianxifsh == "")
+                        return false;
+
+
                     //if condt  containxx(row,msgSpltKwArr)>0
 
                     var seasrchKwds = "__citykwds=> " + arrCls.ldFldDefEmpty(row, "城市关键词") +
@@ -151,13 +158,10 @@ namespace mdsj
                        "__mrcht_kwds=> " + arrCls.ldFldDefEmpty(row, "关键词") +
                        "__mrcht_CategoryStrKwds=> " + arrCls.ldFldDefEmpty(row, "分类关键词");
                     row["_seasrchKw2ds"] = seasrchKwds;
-                    HashSet<string> curRowKywdSset = new HashSet<string>();
 
-                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
-                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
-                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
-                    arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
 
+
+                    //-------------fuwuci panduan
                     HashSet<string> fuwuWds = new HashSet<string>();
                     arrCls.add_elmt2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "商家"));
                     arrCls.add_elmt2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "关键词"));
@@ -174,8 +178,17 @@ namespace mdsj
                     int containScore = 0;
 
                     //-------------weizhi condt
+
+                    //if fuwuWds and weizhici empty
                     if (weizhici == null)
                     {
+
+                        HashSet<string> curRowKywdSset = new HashSet<string>();
+
+                        arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
+                        arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
+                        arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
+                        arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "园区关键词"));
                         containScore = containCalcCntScoreSetfmt(curRowKywdSset, kwds);
                         if (containScore > 0)
                         {
@@ -217,7 +230,11 @@ namespace mdsj
 
             //    );
 
-            var rsRztInlnKbdBtn = Qe_qryV2<InlineKeyboardButton[]>(
+            Func<string, List<SortedList>> rndFun = (dbf) =>
+                        {
+                            return rnd_next4Sqlt(dbf);
+                        };
+            var rsRztInlnKbdBtn = Qe_qryV2(
                 "mercht商家数据", "",
                 whereFun, (SortedList sl) =>
                 {
@@ -229,13 +246,21 @@ namespace mdsj
                     string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
                     InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
                     return btnsInLine;
-                }, (dbf) =>
-            {
-                return rnd_next4Sqlt(dbf);
-            });
+                }, rndFun);
             //end fun
             dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
+        }
+
+        public static string getLianxifsh(SortedList row)
+        {
+            string lianxifsh = ldFldDefEmpty(row, "Telegram") + ldFldDefEmpty(row, "WhatsApp")
+
+             + ldFldDefEmpty(row, "微信") + ldFldDefEmpty(row, "Tel")
+              + ldFldDefEmpty(row, "Line");
+            lianxifsh = trim_RemoveUnnecessaryCharacters(lianxifsh);
+            lianxifsh = lianxifsh.Trim();
+            return lianxifsh;
         }
 
         private static string guiyihuaWeizhici(string weizhici)
@@ -474,16 +499,16 @@ namespace mdsj
             }
         }
 
-        public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
-        {
-            string park4srch = arrCls.ldfld_TryGetValue(whereExprsObj, v); ;
+        //public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
+        //{
+        //    string park4srch = arrCls.ldfld_TryGetValue(whereExprsObj, v); ;
 
-            if (park4srch == null)
-            {
-                return false;
-            }
-            return true;
-        }
+        //    if (park4srch == null)
+        //    {
+        //        return false;
+        //    }
+        //    return true;
+        //}
 
         private static void dbgooutput(ArrayList rows_rzt4srch, string dbgFl)
         {
