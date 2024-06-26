@@ -59,7 +59,11 @@ namespace prj202405.lib
  
             return list2;
         }
-
+        public static List<SortedList> qry5829(string dbfS)
+        {
+            throw new Exception("ex3333");
+            return null;
+        }
         public static List<SortedList> qry(string dbfS)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -71,6 +75,7 @@ namespace prj202405.lib
             {
                 // 检查文件所在目录是否存在，不存在则创建目录
                 string directory = System.IO.Path.GetDirectoryName(dbf);
+                if(directory.Length>0)
                 if (!Directory.Exists(directory))
                 {
                     Directory.CreateDirectory(directory);

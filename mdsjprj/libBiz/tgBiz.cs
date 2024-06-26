@@ -278,8 +278,9 @@ namespace mdsj.libBiz
                 Console.WriteLine(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string fileName = $"msgRcvDir/{timestamp}.json";
+                string fileName = $"msgRcvDir2024/{timestamp}.json";
                 Console.WriteLine(fileName);
+                filex.mkdir_forFile(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
             catch (Exception e)

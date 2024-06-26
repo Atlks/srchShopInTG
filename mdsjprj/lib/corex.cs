@@ -1,7 +1,10 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Scripting;
+﻿using mdsj.lib;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Win32;
 using NAudio.Wave;
+using Nethereum.Model;
+
 
 //using Mono.Web;
 using System;
@@ -83,11 +86,11 @@ namespace prj202405.lib
             return input is string;
         }
 
-         public static string soluPath = "";
-        public static string execpath="";
+        public static string soluPath = "";
+        public static string execpath = "";
 
         //D:\0prj\mdsj\WindowsFormsApp1\sqltnode\qry.js
-        public  static string call_exe_Pstr(String exec,string scriptPath, string arguments)
+        public static string call_exe_Pstr(String exec, string scriptPath, string arguments)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
@@ -105,7 +108,7 @@ namespace prj202405.lib
             process.StartInfo.StandardErrorEncoding = Encoding.UTF8;  // 设置标准错误输出编码
             // Capture the output from the process
             string output;
-            string errorOutput="";
+            string errorOutput = "";
 
             try
             {
@@ -151,143 +154,7 @@ namespace prj202405.lib
 
             return sortedList;
         }
-        /**
-         * // 示例用法
-        Action<int, int> add = (a, b) => Console.WriteLine($"Sum: {a + b}");
-        object[] args = { 10, 20 };
-        
-        // 调用委托并传递参数数组
-        call_user_func_array(add, args);
-
-        // 通过方法名称调用静态方法并传递参数数组
-        call_user_func_array("PrintMessage", args);
-         * 
-         * 
-         * 
-         * 
-         */
-        /// <summary>
-        /// 调用指定的委托或方法，并传递参数数组作为参数。
-        /// </summary>
-        /// <param name="callback">要调用的委托或方法</param>
-        /// <param name="args">参数数组</param>
-        public static void call_user_func_array(Delegate callback, object[] args)
-        {
-            callback.DynamicInvoke(args);
-        }
-
-        public static void call_user_func(string className, string methodName, object[] parameters)
-        {
-            try
-            {
-                // 获取当前程序集中所有的类型
-                var type = Assembly.GetExecutingAssembly().GetType(className);
-                if (type == null)
-                {
-                    Console.WriteLine($"找不到类 '{className}'。");
-                    return;
-                }
-
-                // 获取参数类型数组
-                Type[] paramTypes = parameters != null ? Array.ConvertAll(parameters, p => p.GetType()) : Type.EmptyTypes;
-
-                // 获取方法信息，尝试先找静态方法
-                var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic, null, paramTypes, null);
-
-                // 如果没有找到静态方法，再尝试找实例方法
-                if (method == null)
-                {
-                    method = type.GetMethod(methodName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic, null, paramTypes, null);
-                }
-
-                if (method == null)
-                {
-                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
-                    return;
-                }
-
-                // 如果是静态方法，直接调用
-                if (method.IsStatic)
-                {
-                    method.Invoke(null, parameters);
-                }
-                else
-                {
-                    // 如果是实例方法，需要先创建实例
-                    var instance = Activator.CreateInstance(type);
-                    method.Invoke(instance, parameters);
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
-            }
-        }
-
-        public static void call_user_func_array(string classAndMethod, object[] parameters)
-        {
-            // 分割类名和方法名
-            var parts = classAndMethod.Split('.');
-            if (parts.Length != 2)
-            {
-                Console.WriteLine("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
-                return;
-            }
-
-            string className = parts[0];
-            string methodName = parts[1];
-
-            try
-            {
-                // 获取当前程序集中所有的类型
-                var type = Assembly.GetExecutingAssembly().GetType(className);
-                if (type == null)
-                {
-                    Console.WriteLine($"找不到类 '{className}'。");
-                    return;
-                }
-
-                // 获取参数类型数组
-                Type[] paramTypes = parameters != null ? Array.ConvertAll(parameters, p => p.GetType()) : Type.EmptyTypes;
-
-                // 获取静态方法信息
-                var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public, null, paramTypes, null);
-                if (method == null)
-                {
-                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
-                    return;
-                }
-
-                // 调用静态方法
-                method.Invoke(null, parameters);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
-            }
-        }
-        /// <summary>
-        /// 检查某个类中是否存在指定名称的方法。
-        /// </summary>
-        /// <param name="type">要检查的类的类型</param>
-        /// <param name="methodName">要检查的方法名称</param>
-        /// <returns>如果存在具有指定名称的方法，则返回 true；否则返回 false</returns>
-        public static bool function_exists(Type type, string methodName)
-        {
-            // 获取该类型的所有公共方法
-            MethodInfo[] methods = type.GetMethods();
-
-            // 检查是否存在指定名称的方法
-            foreach (MethodInfo method in methods)
-            {
-                if (method.Name == methodName)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-        public  static SortedList ObjectToSortedList(object obj)
+         public static SortedList ObjectToSortedList(object obj)
         {
             SortedList sortedList = new SortedList();
 

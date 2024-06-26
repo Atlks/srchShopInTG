@@ -132,6 +132,10 @@ namespace mdsj
 
                 try
                 {
+
+                    if (ldFldDefEmpty(row, "TG有效") == "N")
+                        return false;
+
                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                     if (hasCondt(whereExprsObj, "城市"))
                         if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
@@ -153,11 +157,11 @@ namespace mdsj
 
                     //if condt  containxx(row,msgSpltKwArr)>0
 
-                    var seasrchKwds = "__citykwds=> " + arrCls.ldFldDefEmpty(row, "城市关键词") +
-                      "__pkkwds=> " + arrCls.ldFldDefEmpty(row, "园区关键词") +
-                       "__mrcht_kwds=> " + arrCls.ldFldDefEmpty(row, "关键词") +
-                       "__mrcht_CategoryStrKwds=> " + arrCls.ldFldDefEmpty(row, "分类关键词");
-                    row["_seasrchKw2ds"] = seasrchKwds;
+                    //var seasrchKwds = "__citykwds=> " + arrCls.ldFldDefEmpty(row, "城市关键词") +
+                    //  "__pkkwds=> " + arrCls.ldFldDefEmpty(row, "园区关键词") +
+                    //   "__mrcht_kwds=> " + arrCls.ldFldDefEmpty(row, "关键词") +
+                    //   "__mrcht_CategoryStrKwds=> " + arrCls.ldFldDefEmpty(row, "分类关键词");
+                    //row["_seasrchKw2ds"] = seasrchKwds;
 
 
 
@@ -179,12 +183,13 @@ namespace mdsj
 
                     //-------------weizhi condt
 
+                    //todo use udf
                     //if fuwuWds and weizhici empty
                     if (weizhici == null)
                     {
 
                         HashSet<string> curRowKywdSset = new HashSet<string>();
-
+                        arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "商家"));
                         arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
                         arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
                         arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "城市关键词"));
@@ -195,7 +200,7 @@ namespace mdsj
                             row["_containCntScore"] = containScore;
                             return true;
                         }
-                        return false;
+                        
                     }
                     else   //if has weizhici 
                     {
@@ -203,14 +208,16 @@ namespace mdsj
                         curRw_posnSet.Add(row["国家"].ToString());
                         curRw_posnSet.Add(row["城市"].ToString());
                         curRw_posnSet.Add(row["园区"].ToString());
-                        curRw_posnSet.Add(row["园区"].ToString().ToLower());
+                        curRw_posnSet.Add(row["城市关键词"].ToString().ToLower());
+                        curRw_posnSet.Add(row["园区关键词"].ToString().ToLower());
+                        
                         Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRw_posnSet));
                         Console.WriteLine(" weizhici=>" + weizhici);
                         if (curRw_posnSet.Contains(weizhici))
                             return true;
-                        else
-                            return false;
+                       
                     }
+                    return false;
                 }
                 catch (Exception e)
                 {
@@ -258,7 +265,7 @@ namespace mdsj
 
              + ldFldDefEmpty(row, "微信") + ldFldDefEmpty(row, "Tel")
               + ldFldDefEmpty(row, "Line");
-            lianxifsh = trim_RemoveUnnecessaryCharacters(lianxifsh);
+            lianxifsh = trim_RemoveUnnecessaryCharacters4tgWhtapExt(lianxifsh);
             lianxifsh = lianxifsh.Trim();
             return lianxifsh;
         }

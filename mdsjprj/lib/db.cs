@@ -36,10 +36,15 @@ namespace prj202405.lib
 
             )
         {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, func_get_args("someRows"));
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
             {
-                if (whereFun(row))
+                if(whereFun==null)
+                    rows_rzt4srch.Add(row);
+                else if (whereFun(row))
                 {
                     rows_rzt4srch.Add(row);
                 }
@@ -65,7 +70,7 @@ namespace prj202405.lib
                 else
                     list_Seleced.Add(row);
             }
-
+            dbgCls.setDbgValRtval(__METHOD__, 0);
             return list_Seleced;
 
         }

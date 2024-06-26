@@ -66,6 +66,15 @@ namespace WindowsFormsApp1.libbiz
             return del_rowFun;
         }
 
+        internal static Func<string, List<SortedList>> rnd_next4SqltRf()
+        {
+            Func<string, List<SortedList>> rndFun = (dbf) =>
+            {
+                return rnd_next4Sqlt(dbf);
+            };
+            return rndFun;
+        }
+
 
 
         //public static SortedList Qe_find4nodesqlt(string id, string dataDir)

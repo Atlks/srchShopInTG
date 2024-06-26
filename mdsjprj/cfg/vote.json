@@ -1,0 +1,37 @@
+{
+    "update_id": 839621673,
+    "message": {
+        "message_id": 1301,
+        "from": {
+            "id": 879006550,
+            "is_bot": false,
+            "first_name": "十 Adam 大鱼 刘洋 汤姆",
+            "username": "Xxx0079468",
+            "language_code": "zh-hans"
+        },
+        "date": 1719392726,
+        "chat": {
+            "id": -1002206103554,
+            "type": "supergroup",
+            "title": "Task grp"
+        },
+        "poll": {
+            "id": "6332176855516316059",
+            "question": "qqq",
+            "options": [{
+                    "text": "aaa",
+                    "voter_count": 0
+                },
+                {
+                    "text": "aa2",
+                    "voter_count": 0
+                }
+            ],
+            "total_voter_count": 0,
+            "is_closed": false,
+            "is_anonymous": true,
+            "type": "regular",
+            "allows_multiple_answers": false
+        }
+    }
+}

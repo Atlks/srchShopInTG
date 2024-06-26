@@ -20,6 +20,7 @@ using static prj202405.lib.corex;
 using static libx.storeEngr4Nodesqlt;
 using static libx.funCls;
 using static libx.storeEngr4Nodesqlt;
+using static mdsj.lib.FunCall;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using prj202405.lib;

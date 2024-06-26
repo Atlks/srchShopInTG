@@ -43,6 +43,36 @@ namespace prj202405.lib
             }
             return QueryHelpers.ParseQuery(qerystr); ;
         }
+        public static HashSet<string> splitTxtByChrs(string content, string spltChrs)
+        {
+            char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };
+
+            HashSet<string> words = new HashSet<string>();
+
+            try
+            {
+                // 读取文件内容
+              //  string content = System.IO.File.ReadAllText(filePath);
+
+                // 根据空格、回车符和逗号拆分单词
+
+                string[] wordArray = content.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+                // 将单词添加到HashSet中
+                foreach (string word in wordArray)
+                {
+                    string word1 = word.Trim();
+                    if (word1.Length > 0)
+                        words.Add(word1);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading file: {ex.Message}");
+            }
+
+            return words;
+        }
 
 
         public static HashSet<string> splitFileByChrs(string filePath, string spltChrs)
@@ -268,7 +298,7 @@ namespace prj202405.lib
             }
             return null;
         }
-        public static string trim_RemoveUnnecessaryCharacters(string input)
+        public static string trim_RemoveUnnecessaryCharacters4tgWhtapExt(string input)
         {
             // Define the characters to be removed
             char[] charsToRemove = new char[] { '\"', '[', ']' };

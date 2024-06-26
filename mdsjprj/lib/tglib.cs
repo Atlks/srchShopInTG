@@ -61,7 +61,7 @@ namespace prj202405.lib
             {
                 // var  = plchdTxt;
                 //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
-                var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));  
+                var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
                 //遍历方法三：遍历哈希表中的键值
                 foreach (DictionaryEntry de in chtsSess)
@@ -70,7 +70,7 @@ namespace prj202405.lib
                     //    continue;
                     var chatid = Convert.ToInt64(de.Key);
                     Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
-                      sendFoto(imgPath, msgtxt, results, chatid);
+                    sendFoto(imgPath, msgtxt, results, chatid);
                 }
             }
             catch (Exception e)
@@ -80,23 +80,23 @@ namespace prj202405.lib
 
             }
             dbgCls.setDbgValRtval(__METHOD__, 0);
-          
+
         }
 
-     public   static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
+        public static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
             dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
 
             try
             {
-             //   var botClient = new TelegramBotClient(BotToken);
+                //   var botClient = new TelegramBotClient(BotToken);
 
                 using (var mp3Stream = System.IO.File.Open(mp3FilePath, FileMode.Open))
                 {
                     //  var mp3InputFile = new InputOnlineMedia(mp3Stream, "file.mp3");
-                  //  await using Stream stream = System.IO.File.OpenRead("/path/to/voice-nfl_commentary.ogg");
-                    object value = await botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream),caption:"搜索结果",title: GetBaseFileName(mp3FilePath));
+                    //  await using Stream stream = System.IO.File.OpenRead("/path/to/voice-nfl_commentary.ogg");
+                    object value = await botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream), caption: "搜索结果", title: GetBaseFileName(mp3FilePath));
                 }
 
                 Console.WriteLine("MP3 文件已发送到群组！");
@@ -106,7 +106,7 @@ namespace prj202405.lib
                 Console.WriteLine($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
-        public static async Task bot_sendMsgToMltV2(string imgPath, string msgtxt,    string wdss)
+        public static async Task bot_sendMsgToMltV2(string imgPath, string msgtxt, string wdss)
         {
 
             var __METHOD__ = "sendMsg";
@@ -126,15 +126,15 @@ namespace prj202405.lib
                     var chatid = Convert.ToInt64(de.Key);
                     try
                     {
-                       //  if(chatid== -1002206103554)
-                        srchNsendFotoToGrp(imgPath, msgtxt,wdss, chatid);
+                        //  if(chatid== -1002206103554)
+                        srchNsendFotoToGrp(imgPath, msgtxt, wdss, chatid);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e);
                     }
                 }
-                
+
             }
             catch (Exception e)
             {
@@ -157,6 +157,9 @@ namespace prj202405.lib
             //----where
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
+
+                if (ldFldDefEmpty(row, "TG有效") == "N")
+                    return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                 if (hasCondt(whereExprsObj, "城市"))
                     if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
@@ -172,7 +175,7 @@ namespace prj202405.lib
 
 
                 //--------------is lianixfsh empty
-                string lianxifsh =mrcht. getLianxifsh(row);
+                string lianxifsh = mrcht.getLianxifsh(row);
                 if (lianxifsh == "")
                     return false;
 
@@ -488,11 +491,11 @@ namespace prj202405.lib
                 if (chatId != -1)
                     tglib.bot_AddChatIds(chatId);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-           
+
         }
 
 

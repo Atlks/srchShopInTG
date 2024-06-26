@@ -32,6 +32,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
     <PackageReference Include="MiniGuid" Version="1.1.2" />
+    <PackageReference Include="NAave" Version="1.0.2" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Nethereum.ABI" Version="4.21.0" />
     <PackageReference Include="Nethereum.Accounts" Version="4.21.0" />
@@ -66,7 +67,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="D:\0prj\mdsj\mdsjprj\lib\.editorconfig" />
     <None Include="D:\0prj\缅甸商家\缅甸商家\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\0prj\mdsj\mdsjprj\lib\.editorconfig" />
   </ItemGroup>
 
 </Project>

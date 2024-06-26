@@ -20,19 +20,20 @@ using static libx.qryEngrParser;
 using static libx.storeEngr4Nodesqlt;
 using Microsoft.Extensions.Primitives;
 using prj202405;
+using DocumentFormat.OpenXml.Wordprocessing;
 namespace libx
 {
     internal class qryEngrParser
     {
-        public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
+        public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string fld)
         {
-            string park4srch = ldfld_TryGetValue(whereExprsObj, v); ;
+            return whereExprsObj.ContainsKey(fld);
 
-            if (park4srch == null)
-            {
-                return false;
-            }
-            return true;
+            //if (park4srch == null)
+            //{
+            //    return false;
+            //}
+            //return true;
         }
         public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> rndFun, Func<(SortedList, string), int> del_row_Fun)
         {
@@ -114,7 +115,13 @@ namespace libx
 
 
                 if (selktFun == null)
+                {
                     throw new ArgumentNullException("  need slktfun ,u can use def slktfun");
+                    //   dbgCls.setDbgValRtval(__METHOD__, 0);
+                    //   return rztLi;
+
+                }
+
 
                 for (int i = 0; i < rztLi.Count; i++)
                 {
@@ -129,6 +136,7 @@ namespace libx
             }
             catch (Exception e)
             {
+                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, partnsExprs))}");
                 Console.WriteLine(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
@@ -292,9 +300,14 @@ namespace libx
         //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
         public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(dbf));
+
             List<SortedList> li = rndFun(dbf);
 
             li = db.qryV7(li, whereFun);
+
+            dbgCls.setDbgValRtval(__METHOD__, 0);
             return li;
         }
     }

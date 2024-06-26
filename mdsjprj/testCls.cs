@@ -20,7 +20,7 @@ using SqlParser.Ast;
 using mdsj.lib;
 using static mdsj.biz_other;
 using System.Collections.Generic;
-
+using static libx.qryEngrParser;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
@@ -34,7 +34,7 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 
-
+using static mdsj.lib.FunCall;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static prj202405.timerCls;
@@ -76,12 +76,15 @@ using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
 using static mdsj.lib.web3;
 using mdsj.libBiz;
+using Microsoft.ClearScript.V8;
+using static WindowsFormsApp1.libbiz.storeEngFunRefCls;
+using WindowsFormsApp1.libbiz;
 namespace prj202405
 {
     internal class testCls
     {
-      
-  
+
+
 
         //private static void CreateIndex(string texts)
         //{
@@ -106,10 +109,23 @@ namespace prj202405
         internal static async Task testAsync()
         {
 
+
+       //  await   AaveCollateralInfo.GetCollateralInfo("0xc54931775f7b9f2f9648c38c52b96ccb828bf8af");
+           //  chkTgVld();
+
+            //  call_user_func(qry5829,  "xxx.json" );
+
+            using (var engine = new V8ScriptEngine())
+            {
+                engine.Execute("a= 555");
+                var result = engine.Script.a;
+                Console.WriteLine(result); // 输出 8
+            }
+
             var id = "0624按摩552110457";
-                    long uid = 879006550;
+            long uid = 879006550;
             //     ormJSonFL.del(id, $"blshtDir/blsht{uid}.json");
-          //  Qunzhushou.logic_addCashflow(uid, "嗨小爱童鞋 记账 0625 13 吃饭");
+            //  Qunzhushou.logic_addCashflow(uid, "嗨小爱童鞋 记账 0625 13 吃饭");
             // 设置 FFmpeg 路径
             await FFmpegDownloader.GetLatestVersion(FFmpegVersion.Official);
 
@@ -117,30 +133,31 @@ namespace prj202405
             string apiKey = "sk-proj-N2Fq9Z6KNZ7xx98ssXshT3BlbkFJ2HyoaRNCbxEkQtYcGOu6";
             string question = "世界一共多少个城市";
 
-       //     string answer = await Program2024.srchByChtgpt(apiKey, question);
-       //     Console.WriteLine(answer);
+            //     string answer = await Program2024.srchByChtgpt(apiKey, question);
+            //     Console.WriteLine(answer);
 
 
             // 指定加密货币符号，例如 "bitcoin,ethereum,ripple"
             string cryptoSymbols = "bitcoin,ethereum,optimism,arbitrum,chainlink,dogecoin,binancecoin,solana,shiba-inu,ripple";
             //  
             // 启动一个新线程执行获取加密货币价格的任务
-            Task.Run(async () => {
+            Task.Run(async () =>
+            {
 
                 var prices = await GetCryptoPricesAsync(cryptoSymbols);
                 Console.WriteLine(json_encode(prices));
             });
-          
-         //  
+
+            //  
 
             // 替换为你想下载的歌曲名称
             string songName = "Sweet Like Cola";
             songName = "sweet like cola";
-          //  await DownloadSongAsMp3(songName,"downld");
-         //   SendMp3ToGroupAsync("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\Sweet Like Cola.mp3", -1002206103554);
+            //  await DownloadSongAsMp3(songName,"downld");
+            //   SendMp3ToGroupAsync("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\Sweet Like Cola.mp3", -1002206103554);
             //  sim2trand("D:\\0prj\\inputmthd\\lib\\常用字3000.txt");
             //   z_wucan();   tglib    //  if(chatid== -1002206103554)
-          //     ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
+            //     ReadAndCreateIndex4tgmsg("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\msgRcvDir");
             int n = 3513;
             double pre = n * 0.85;
             double next = n * 1.015;
@@ -155,7 +172,7 @@ namespace prj202405
             if (System.IO.File.Exists("c:/teststart.txt"))
             {
                 object o = new Hashtable();
-             //   wrtLgTypeDate("msgrcvDir", o);
+                //   wrtLgTypeDate("msgrcvDir", o);
                 // timerCls.z_actSj();
                 //   z_actSj();
                 //   callx((id: 11, dbf: "dbf"));
@@ -173,7 +190,7 @@ namespace prj202405
                 //    增加分类addcate();
 
 
-                //    http_GetHttpResponseAsync("https://t.me/aflknw202563");
+
 
                 //    json2dbMrcht();
 
@@ -293,13 +310,67 @@ namespace prj202405
 
         }
 
+        private static async Task chkTgVld()
+        {
+            List<SortedList> rsRztInlnKbdBtn = Qe_qryV2("mercht商家数据", "",
+              null, null, row => row, storeEngFunRefCls.rnd_next4SqltRf());
+
+            foreach (SortedList map in rsRztInlnKbdBtn)
+            {
+                try
+                {
+                    if (map["园区"] == "东风园区" && map["商家"] == "沙县 小吃")
+                    {
+                        Console.WriteLine("dbg");
+                    }
+
+                    if (map["id"] == "vekzrqwxkeyuxpcxzkjdnfdsbt")
+                    {
+                        Console.WriteLine("dbg");
+                    }
+                    string tg = trim_RemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
+                    if (tg == "")
+                    {
+                        logCls.log(map, "TestTg有效性logDir");
+                        //not exist 
+                        stfld_addRplsKeyV(map, "TG有效", "N");
+                        
+                        ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+                        continue;
+                    }
+                    string t = await http_GetHttpResponseAsync($"https://t.me/{tg}");
+                    HashSet<string> lines = splitTxtByChrs(t, "\n\r");
+                    if (lines.Count == 4)
+                    {
+                        logCls.log(map, "TestTg有效性logDir");
+                        //not exist 
+                        stfld_addRplsKeyV(map, "TG有效", "N");
+                        ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+
+                    }else
+                    {//exist tg numb
+                        if(ldfld(map, "TG有效","")=="N")
+                        {
+                            stfld_addRplsKeyV(map, "TG有效", "Y");
+                            ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+                        }
+                    }
+                }
+                catch(Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+               
+            }
+        }
+
         private static void sim2trand(string v)
         {
             ArrayList li = new ArrayList();
-            HashSet<string> wds= filex.ReadWordsFromFile(v);
+            HashSet<string> wds = filex.ReadWordsFromFile(v);
             int n = 0;
 
-            foreach(string wd in wds)
+            foreach (string wd in wds)
             {
                 SortedList o = new SortedList();
                 o.Add(ChineseCharacterConvert.Convert.ToTraditional(wd), wd);
@@ -308,12 +379,12 @@ namespace prj202405
                 li.Add(line);
                 n++;
                 Console.WriteLine(n);
-                
+
             }
             // file_put_contents("trd2smpLib.json",json_encode(li));
             file_put_contents("trd2smpLib.ini", string.Join("\r\n", li.ToArray()));
 
-         //   throw new NotImplementedException();
+            //   throw new NotImplementedException();
         }
 
         public static string GetHtmlContent(string url)

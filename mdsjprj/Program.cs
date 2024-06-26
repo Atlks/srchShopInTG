@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.WebUtilities;
+﻿
+global using static prj202405.lib.tglib;
+
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System.Collections;
@@ -64,7 +67,7 @@ using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.music;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using static prj202405.lib.tglib;
+
 using System.Net.Http.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Drawing;
@@ -79,7 +82,7 @@ namespace prj202405
     {
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         public const string botname = "LianXin_BianMinBot";
-       
+
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
         //  @LianXin_QunBot
 
@@ -240,7 +243,17 @@ namespace prj202405
             }
             dbgCls.setDbgValRtval(__METHOD__, 0);
         }
-
+        private static async Task SendThankYouMessage(long chatId)
+        {
+            try
+            {
+                await botClient.SendTextMessageAsync(chatId, "感谢投票");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending message: {ex.Message}");
+            }
+        }
 
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
@@ -252,7 +265,13 @@ namespace prj202405
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
+            bot_logRcvMsg(update);
 
+            if (update.Message.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
+            {
+                await SendThankYouMessage(update.Message.Chat.Id);
+                return;
+            }
             //----------if new user join
             if (update?.Message?.NewChatMembers != null)
             {
@@ -346,7 +365,7 @@ namespace prj202405
             {
                 bot_adChk(update);
             }
-            bot_logRcvMsg(update);
+           
             //auto add cht sess
             if (update?.Message != null)
             {
@@ -676,7 +695,7 @@ namespace prj202405
         private static void OnMsg(Update update, string reqThreadId)
         {
 
-         
+
 
         }
 
@@ -857,13 +876,15 @@ namespace prj202405
 
         private static async void evt_btm_btn_click_inPubgrp(Update update)
         {
+
+            //  ,
             try
             {
                 Message a = await Program.botClient.SendTextMessageAsync(
                  update.Message.Chat.Id,
                "要获取多级菜单，请私聊我",
                  parseMode: ParseMode.Html,
-                 //   replyMarkup: new InlineKeyboardMarkup([]),
+                 replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
                  protectContent: false,
                  replyToMessageId: update.Message.MessageId,
                  disableWebPagePreview: true
@@ -2129,7 +2150,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  update, reqThreadId));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
@@ -2582,31 +2603,26 @@ namespace prj202405
 
             static List<List<InlineKeyboardButton>> GetMenuDafen(string guid, string chkUidEq, string sndr)
             {
-                if (sndr == "tmr")
-                    return [
 
-                            [
+                List<InlineKeyboardButton> dafenmenu = [
                      InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
                      InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
                      InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
                      InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
                      InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
                      InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
-                 ],
+                 ];
+                if (sndr == "tmr")
+                    return [
+                        dafenmenu
+                         ,
                //  [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
              //    [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
                            ];
                 else
                     return [
-
-                                 [
-                     InlineKeyboardButton.WithCallbackData( "打分",  $"btn=dafenTips"),
-                     InlineKeyboardButton.WithCallbackData( "1",  $"id={guid}&ckuid={chkUidEq}&btn=df1"),
-                     InlineKeyboardButton.WithCallbackData( "2",  $"id={guid}&ckuid={chkUidEq}&btn=df2"),
-                     InlineKeyboardButton.WithCallbackData( "3",  $"id={guid}&ckuid={chkUidEq}&btn=df3"),
-                     InlineKeyboardButton.WithCallbackData( "4",  $"id={guid}&ckuid={chkUidEq}&btn=df4"),
-                     InlineKeyboardButton.WithCallbackData( "5",  $"id={guid}&ckuid={chkUidEq}&btn=df5"),
-                 ],
+                        dafenmenu
+                                 ,
                //  [ InlineKeyboardButton.WithUrl(text: "↖ 分享机器人", $"https://t.me/share/url?url=https://t.me/{botname}&text=这个机器人简直是神了，啥都有 !") ],
                  [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
                                 ];
@@ -2618,7 +2634,7 @@ namespace prj202405
             List<string> li = new List<string>();
             try
             {
-                li.Add(trim_RemoveUnnecessaryCharacters(ldfld(merchant1, v, "").ToString()));
+                li.Add(trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, v, "").ToString()));
 
             }
             catch (Exception e)

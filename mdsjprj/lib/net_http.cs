@@ -32,7 +32,7 @@ namespace mdsj.lib
         public static async Task<string> http_GetHttpResponseAsync(string url)
         {
             var __METHOD__ = "http_GetHttpResponseAsync";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args( url));
 
             // 创建 HttpClient 实例
             using (HttpClient client = new HttpClient())
@@ -51,7 +51,7 @@ namespace mdsj.lib
                     // 获取当前时间并格式化为文件名
                     string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                     file_put_contents("httplogDir/"+ timestamp+".log", responseBody);
-                    dbgCls.setDbgValRtval(__METHOD__, responseBody.Substring(0,500));
+                    dbgCls.setDbgValRtval(__METHOD__, str_sub(responseBody,0,500));
                     return responseBody;
                 }
                 catch (HttpRequestException e)

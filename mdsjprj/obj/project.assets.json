@@ -1595,6 +1595,18 @@
           "lib/netstandard1.0/MiniGuid.dll": {}
         }
       },
+      "NAave/1.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Nethereum.Web3": "3.8.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/NAave.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.1/NAave.dll": {}
+        }
+      },
       "NAudio/2.2.1": {
         "type": "package",
         "dependencies": {
@@ -2561,6 +2573,22 @@
           "lib/netstandard1.1/System.Buffers.dll": {}
         }
       },
+      "System.CodeDom/8.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/System.CodeDom.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/System.CodeDom.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      },
       "System.Collections/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -3091,6 +3119,31 @@
         },
         "runtime": {
           "lib/netstandard1.3/System.Linq.Queryable.dll": {}
+        }
+      },
+      "System.Management/8.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.CodeDom": "8.0.0"
+        },
+        "compile": {
+          "lib/net8.0/System.Management.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/System.Management.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Management.dll": {
+            "assetType": "runtime",
+            "rid": "win"
+          }
         }
       },
       "System.Memory/4.5.3": {
@@ -7249,6 +7302,18 @@
         "miniguid.nuspec"
       ]
     },
+    "NAave/1.0.2": {
+      "sha512": "1pFcb9tUuquBc0hbUbSn8H7K8EPFSI2qs2ADZK3MXJ9q1FPIFePK2DJ1ORjCJfOmBbzObSwKhYGmx/N2Uiftpg==",
+      "type": "package",
+      "path": "naave/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.1/NAave.dll",
+        "naave.1.0.2.nupkg.sha512",
+        "naave.nuspec"
+      ]
+    },
     "NAudio/2.2.1": {
       "sha512": "c0DzwiyyklM0TP39Y7RObwO3QkWecgM6H60ikiEnsV/aEAJPbj5MFCLaD8BSfKuZe0HGuh9GRGWWlJmSxDc9MA==",
       "type": "package",
@@ -8358,6 +8423,35 @@
         "lib/netstandard1.1/System.Buffers.dll",
         "system.buffers.4.3.0.nupkg.sha512",
         "system.buffers.nuspec"
+      ]
+    },
+    "System.CodeDom/8.0.0": {
+      "sha512": "WTlRjL6KWIMr/pAaq3rYqh0TJlzpouaQ/W1eelssHgtlwHAH25jXTkUphTYx9HaIIf7XA6qs/0+YhtLEQRkJ+Q==",
+      "type": "package",
+      "path": "system.codedom/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.CodeDom.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.CodeDom.targets",
+        "lib/net462/System.CodeDom.dll",
+        "lib/net462/System.CodeDom.xml",
+        "lib/net6.0/System.CodeDom.dll",
+        "lib/net6.0/System.CodeDom.xml",
+        "lib/net7.0/System.CodeDom.dll",
+        "lib/net7.0/System.CodeDom.xml",
+        "lib/net8.0/System.CodeDom.dll",
+        "lib/net8.0/System.CodeDom.xml",
+        "lib/netstandard2.0/System.CodeDom.dll",
+        "lib/netstandard2.0/System.CodeDom.xml",
+        "system.codedom.8.0.0.nupkg.sha512",
+        "system.codedom.nuspec",
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.Collections/4.3.0": {
@@ -9833,6 +9927,39 @@
         "ref/xamarinwatchos10/_._",
         "system.linq.queryable.4.3.0.nupkg.sha512",
         "system.linq.queryable.nuspec"
+      ]
+    },
+    "System.Management/8.0.0": {
+      "sha512": "jrK22i5LRzxZCfGb+tGmke2VH7oE0DvcDlJ1HAKYU8cPmD8XnpUT0bYn2Gy98GEhGjtfbR/sxKTVb+dE770pfA==",
+      "type": "package",
+      "path": "system.management/8.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Management.targets",
+        "lib/net462/_._",
+        "lib/net6.0/System.Management.dll",
+        "lib/net6.0/System.Management.xml",
+        "lib/net7.0/System.Management.dll",
+        "lib/net7.0/System.Management.xml",
+        "lib/net8.0/System.Management.dll",
+        "lib/net8.0/System.Management.xml",
+        "lib/netstandard2.0/System.Management.dll",
+        "lib/netstandard2.0/System.Management.xml",
+        "runtimes/win/lib/net6.0/System.Management.dll",
+        "runtimes/win/lib/net6.0/System.Management.xml",
+        "runtimes/win/lib/net7.0/System.Management.dll",
+        "runtimes/win/lib/net7.0/System.Management.xml",
+        "runtimes/win/lib/net8.0/System.Management.dll",
+        "runtimes/win/lib/net8.0/System.Management.xml",
+        "system.management.8.0.0.nupkg.sha512",
+        "system.management.nuspec",
+        "useSharedDesignerContext.txt"
       ]
     },
     "System.Memory/4.5.3": {
@@ -12407,6 +12534,7 @@
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.5",
       "Microsoft.NET.ILLink.Tasks >= 8.0.5",
       "MiniGuid >= 1.1.2",
+      "NAave >= 1.0.2",
       "NAudio >= 2.2.1",
       "NReco >= 2.0.3",
       "NReco.ImageGenerator.LT >= 1.1.3",
@@ -12427,6 +12555,7 @@
       "SQLitePCLRaw.bundle_e_sqlite3 >= 2.1.8",
       "SQLitePCLRaw.core >= 2.1.8",
       "SqlParserCS >= 0.3.1",
+      "System.Management >= 8.0.0",
       "Telegram.Bot >= 20.0.0-alpha.1",
       "Xabe.FFmpeg >= 5.2.6",
       "Xabe.FFmpeg.Downloader >= 5.2.6",
@@ -12569,6 +12698,10 @@
             "target": "Package",
             "version": "[1.1.2, )"
           },
+          "NAave": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
           "NAudio": {
             "target": "Package",
             "version": "[2.2.1, )"
@@ -12648,6 +12781,10 @@
           "SqlParserCS": {
             "target": "Package",
             "version": "[0.3.1, )"
+          },
+          "System.Management": {
+            "target": "Package",
+            "version": "[8.0.0, )"
           },
           "Telegram.Bot": {
             "target": "Package",

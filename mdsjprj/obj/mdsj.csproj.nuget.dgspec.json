@@ -133,6 +133,10 @@
               "target": "Package",
               "version": "[1.1.2, )"
             },
+            "NAave": {
+              "target": "Package",
+              "version": "[1.0.2, )"
+            },
             "NAudio": {
               "target": "Package",
               "version": "[2.2.1, )"
@@ -212,6 +216,10 @@
             "SqlParserCS": {
               "target": "Package",
               "version": "[0.3.1, )"
+            },
+            "System.Management": {
+              "target": "Package",
+              "version": "[8.0.0, )"
             },
             "Telegram.Bot": {
               "target": "Package",
