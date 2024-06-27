@@ -228,8 +228,41 @@ namespace prj202405.lib
         {
             return MergeHashSets(list1, list2);
         }
+        public static bool isMmsgHasMatchPostWd(HashSet<string> postnKywd位置词set, string[] kwds)
+        {
+            //if (text == null)
+            //    return null;
+            string[] spltWds = kwds;
+            foreach (string wd in spltWds)
+            {
+                if (postnKywd位置词set.Contains(wd))
+                {
+                    Console.WriteLine("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
+                    return true;
+                }
 
-            public static List<t> array_merge<t>(List<t> list1, List<t> list2)
+            }
+            return false;
+        }
+
+        public static bool isCcontainKwds42(HashSet<string> curRowKywdSset, string[] kwds)
+        {
+            kwds = Array.ConvertAll(kwds, s => s.ToUpper());
+            curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
+
+            return isMmsgHasMatchPostWd(curRowKywdSset, kwds);
+        }
+        public static void SetIdProperties(ArrayList arrayList)
+        {
+            foreach (var item in arrayList)
+            {
+                SortedList sortedList1 = (SortedList)item;
+                sortedList1.Add("id", sortedList1["Guid"]);
+
+            }
+        }
+
+        public static List<t> array_merge<t>(List<t> list1, List<t> list2)
         {
             List<t> result = new List<t>();
 

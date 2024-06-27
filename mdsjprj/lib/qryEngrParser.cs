@@ -1,4 +1,6 @@
-﻿using prj202405.lib;
+﻿global using static libx.qryEngrParser;
+
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,11 +18,12 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
-using static libx.qryEngrParser;
+
 using static libx.storeEngr4Nodesqlt;
 using Microsoft.Extensions.Primitives;
 using prj202405;
 using DocumentFormat.OpenXml.Wordprocessing;
+using mdsj;
 namespace libx
 {
     internal class qryEngrParser
@@ -309,6 +312,18 @@ namespace libx
 
             dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
             return li;
+        }
+
+
+
+        public static bool ChkCdtAllTrue(List<Condtn> li)
+        {
+            foreach (Condtn cdt in li)
+            {
+                if (cdt.left == false)
+                    return false;
+            }
+            return true;
         }
     }
 }

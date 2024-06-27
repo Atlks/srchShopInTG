@@ -42,12 +42,23 @@ namespace prj202405.lib
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
             {
-                if(whereFun==null)
-                    rows_rzt4srch.Add(row);
-                else if (whereFun(row))
+                try
                 {
-                    rows_rzt4srch.Add(row);
+                    if (whereFun == null)
+                        rows_rzt4srch.Add(row);
+                    else if (whereFun(row))
+                    {
+                        rows_rzt4srch.Add(row);
+                    }
                 }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+
+                    logErr2024(e, "whereFun", "errlog", null);
+                    //  return false;
+                }
+
 
             }
 

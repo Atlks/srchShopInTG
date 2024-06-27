@@ -1,10 +1,12 @@
-﻿using JiebaNet.Segmenter;
+﻿global using static mdsj.libBiz.strBiz;
+
+using JiebaNet.Segmenter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static mdsj.libBiz.strBiz;
+
 
 using static prj202405.lib.strCls;
 namespace mdsj.libBiz
@@ -80,7 +82,28 @@ namespace mdsj.libBiz
             }
             return n;
         }
+        public static string[] removeStopWd4biz(string[] kwds)
+        {
+            //todo 去除触发词，，只保留 服务次和位置词
+            HashSet<string> 搜索触发词 = ReadWordsFromFile("搜索触发词.txt");
 
+            HashSet<string> stopWdSet = new HashSet<string>();
+
+            //园区
+            stopWdSet.Add("店"); stopWdSet.Add("的"); stopWdSet.Add("号");
+            stopWdSet.Add("飞机号"); stopWdSet.Add("飞机");
+            stopWdSet.Add("园区");
+
+
+            // 使用HashSet的构造函数将字符串数组转换为HashSet
+            HashSet<string> kwdSt = new HashSet<string>(kwds);
+            // 移除set2中的元素
+            kwdSt.ExceptWith(搜索触发词);
+            kwdSt.ExceptWith(stopWdSet);
+
+            return kwdSt.ToArray();
+
+        }
         public static bool strBiz_isPostnWord(string kwd2)
         {
             HashSet<string> citys = ReadLinesToHashSet("位置词.txt");

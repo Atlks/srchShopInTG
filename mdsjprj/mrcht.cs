@@ -107,6 +107,7 @@ namespace mdsj
         //   c.CityKeywords + add.CityKeywords +
         //   am.KeywordString + am.KeywordString +
         //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
+        //todo sharnames
         public static List<InlineKeyboardButton[]> qryFromMrcht(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj, string msgCtain)
         {
 
@@ -131,87 +132,81 @@ namespace mdsj
             //   var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
 
             HashSet<string> postnKywd位置词set = getPostnWds(dbFrom, shareNames, whereExprsObj);
-            bool msgHasPostWd = msgHasMatchPostWd(postnKywd位置词set, kwds);
+            bool msgHasPostWd = isMmsgHasMatchPostWd(postnKywd位置词set, kwds);
             // weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
 
-                try
-                {
-                    //--------------is lianixfsh empty
-                  
-                    if(isEmptyLianxi(row)) return false;
-                    if (ldFldDefEmpty(row, "TG有效") == "N")
-                        return false;
-
-                    //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                    if (hasCondt(whereExprsObj, "城市"))
-                        if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
-                            return false;
-                    if (hasCondt(whereExprsObj, "园区"))
-                        if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
-                            return false;
-                    if (hasCondt(whereExprsObj, "国家"))
-                        if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
-                            return false;
-                  //  if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
-                   //     return false;
-
- 
-
-                    //-------------fuwuci panduan
-                  
-                    if(!isCotainFuwuci(row, msgCtain))
-                        return false;
-                    int containScore = 0;
-
-                    //-------------weizhi condt
-
-                    //todo use udf
-                    //if has fuwuWds and weizhici empty
-                    if (msgHasPostWd)
-                    {
-                        if (!isCotainPostnWd(row, kwds))
-                            return false;
-
-                        containScore = containCalcCntScoreSetfmt1(row, kwds);
-                        if (containScore > 0)
-                        {
-                            row["_containCntScore"] = containScore;
-                        }
+                //List<Condtn> li = new List<Condtn>();
+                //li.Add(new Condtn(isNotEmptyLianxi(row)));
+                //li.Add(new Condtn(isLianxifshValid(row)));
+                //li.Add(new Condtn(isFldValEq111(row, "城市", whereExprsObj)));
+                //li.Add(new Condtn(isFldValEq111(row, "园区", whereExprsObj)));
+                //li.Add(new Condtn(isFldValEq111(row, "国家", whereExprsObj)));
+                //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
+                //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
+                //if (!ChkCdtAllTrue(li))
+                //    return false;
 
 
-                    }
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    logErr2024(e, "whereFun", "errlog", null);
+                //   Condtn = [left:isEmptyLianxi(row)]
+                //--------------is lianixfsh empty
+                if (isEmptyLianxi(row)) return false;
+                if (!isLianxifshValid(row))
                     return false;
+
+                //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+                if (hasCondt(whereExprsObj, "城市"))
+                    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                        return false;
+                if (hasCondt(whereExprsObj, "园区"))
+                    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                        return false;
+                if (hasCondt(whereExprsObj, "国家"))
+                    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                        return false;
+                //  if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
+                //     return false;
+
+
+
+                //-------------fuwuci panduan
+
+                if (!isCotainFuwuci(row, msgCtain))
+                    return false;
+                int containScore = 0;
+
+                //-------------weizhi condt
+
+                //todo use udf
+                //if has fuwuWds and weizhici empty
+                if (msgHasPostWd)
+                {
+                    if (!isCotainPostnWd(row, kwds))
+                        return false;
+
+                    //zheg个用来排序的，放在order上。。
+                    containScore = containCalcCntScoreSetfmt1(row, kwds);
+                    if (containScore > 0)
+                    {
+                        row["_containCntScore"] = containScore;
+                    }
                 }
-
-
-
+                return true;
             };
 
-
-
-            //db.qryFrmSqlt_dep(dbfFroms, whereFun: whereFun,
-            //    ,
-
-
-            //    );
-
-            Func<string, List<SortedList>> rndFun = (dbf) =>
-            {
-                return rnd_next4Sqlt(dbf);
-            };
             //dbFrom sharesss
             var rsRztInlnKbdBtn = Qe_qryV2(
                 "mercht商家数据", "",
                 whereFun, (SortedList sl) =>
                 {
+                    //zheg个用来排序的，放在order上。。
+                    //containScore = containCalcCntScoreSetfmt1(row, kwds);
+                    //if (containScore > 0)
+                    //{
+                    //    row["_containCntScore"] = containScore;
+                    //}
                     //   (List<SortedList<string, object>>)
                     return 0 - (int)ldfld(sl, "_containCntScore", 0);
                 }, (SortedList row) =>
@@ -220,10 +215,53 @@ namespace mdsj
                     string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
                     InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
                     return btnsInLine;
-                }, rndFun);
+                }, rnd_next4SqltRf());
             //end fun
             dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
+        }
+
+
+        private static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, StringValues> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+
+        //private static bool isFldValEq(SortedList row, string v1, string v2)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        private static bool isNotEmptyLianxi(SortedList row)
+        {
+            return !isEmptyLianxi(row);
+        }
+
+        private static bool isLianxifshValid(SortedList row)
+        {
+            // string Fld = ;
+            if (getFldLianxifs(row, "Whatsapp") != "")
+                return true;
+            if (getFldLianxifs(row, "微信") != "")
+                return true;
+            if (getFldLianxifs(row, "Telegram") != "")
+                if (ldFldDefEmpty(row, "TG有效") == "N")// only tg and tg not vld
+                    return false;
+                else
+                    return true;
+            return false;
+
+        }
+
+        private static string getFldLianxifs(SortedList row, string Fld)
+        {
+            // const string Fld = "Telegram";
+            return trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldFldDefEmpty(row, Fld));
         }
 
         private static bool isEmptyLianxi(SortedList row)
@@ -236,14 +274,14 @@ namespace mdsj
 
         private static bool isCotainFuwuci(SortedList row, string msgCtain)
         {
-            HashSet<string> fuwuWds = new HashSet<string>();
-            arrCls.add_elmts2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "商家"));
-            arrCls.add_elmts2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "关键词"));
-            arrCls.add_elmts2hsst(fuwuWds, arrCls.ldFldDefEmpty(row, "分类关键词"));
-            fuwuWds.Remove("店");
-            fuwuWds = ConvertToUpperCase(fuwuWds);
+            HashSet<string> fuwuWds_row = new HashSet<string>();
+            arrCls.add_elmts2hsst(fuwuWds_row, arrCls.ldFldDefEmpty(row, "商家"));
+            arrCls.add_elmts2hsst(fuwuWds_row, arrCls.ldFldDefEmpty(row, "关键词"));
+            arrCls.add_elmts2hsst(fuwuWds_row, arrCls.ldFldDefEmpty(row, "分类关键词"));
+            fuwuWds_row.Remove("店");
+            fuwuWds_row = ConvertToUpperCase(fuwuWds_row);
 
-            if (strCls.containKwds(msgCtain, fuwuWds))
+            if (strCls.containKwds(msgCtain, fuwuWds_row))
                 return true;
             return false;
         }
@@ -272,16 +310,10 @@ namespace mdsj
             curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
             Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRowKywdSset));
             // Console.WriteLine(" weizhici=>" + weizhici);
-            return containKwds42(curRowKywdSset, kwds);
+            return isCcontainKwds42(curRowKywdSset, kwds);
         }
 
-        public static bool containKwds42(HashSet<string> curRowKywdSset, string[] kwds)
-        {
-              kwds = Array.ConvertAll(kwds, s => s.ToUpper());
-            curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
 
-            return msgHasMatchPostWd(curRowKywdSset, kwds);
-        }
 
         public static HashSet<string> getPostnWds(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)
         {
@@ -340,7 +372,7 @@ namespace mdsj
             HashSet<string> hashSet1 = array_merge(hs, hashSet);
 
             HashSet<string> hashSet2 = ConvertToUpperCase(hashSet1);
-            hashSet2= arr_remove(hashSet2, "市区 城市 国家 园区名称 城市名称 国家词 ");
+            hashSet2 = arr_remove(hashSet2, "市区 城市 国家 园区名称 城市名称 国家词 ");
 
             // 使用 LINQ 过滤非空元素并创建新的 HashSet<string>
             HashSet<string> filteredSet = new HashSet<string>(
@@ -352,7 +384,7 @@ namespace mdsj
         private static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
         {
             string[] a = v.Split(" ");
-            foreach( string wd in a)
+            foreach (string wd in a)
             {
                 hashSet2.Remove(wd);
             }
@@ -360,17 +392,7 @@ namespace mdsj
             return hashSet2;
         }
 
-        public static HashSet<string> ConvertToUpperCase(HashSet<string> originalSet)
-        {
-            return new HashSet<string>(originalSet.Select(s => s.ToUpper()));
-        }
-        private static HashSet<string> castArr2set(string[] stringArray)
-        {
-            HashSet<string> hashSet = new HashSet<string>(
-                     stringArray.Where(s => !string.IsNullOrWhiteSpace(s))
-                 );
-            return hashSet;
-        }
+
 
         public static string getLianxifsh(SortedList row)
         {
@@ -383,73 +405,36 @@ namespace mdsj
             return lianxifsh;
         }
 
-        private static string guiyihuaWeizhici(string weizhici)
-        {
-            SortedList<string, string> sortedList = new SortedList<string, string>();
-            sortedList.Add("kk", "kk园区"); try
-            {
-                return sortedList[weizhici].Trim().ToLower();
-            }
-            catch (Exception e)
-            {
-                return weizhici;
-            }
+        //private static string guiyihuaWeizhici(string weizhici)
+        //{
+        //    SortedList<string, string> sortedList = new SortedList<string, string>();
+        //    sortedList.Add("kk", "kk园区"); try
+        //    {
+        //        return sortedList[weizhici].Trim().ToLower();
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return weizhici;
+        //    }
 
-        }
+        //}
 
         //、、o 去除触发词，，只保留 服务次和位置词
-        private static string[] removeStopWd4biz(string[] kwds)
-        {
-            //todo 去除触发词，，只保留 服务次和位置词
-            HashSet<string> 搜索触发词 = ReadWordsFromFile("搜索触发词.txt");
-
-            HashSet<string> stopWdSet = new HashSet<string>();
-
-            //园区
-            stopWdSet.Add("店"); stopWdSet.Add("的"); stopWdSet.Add("号");
-            stopWdSet.Add("飞机号"); stopWdSet.Add("飞机");
-            stopWdSet.Add("园区");
 
 
-            // 使用HashSet的构造函数将字符串数组转换为HashSet
-            HashSet<string> kwdSt = new HashSet<string>(kwds);
-            // 移除set2中的元素
-            kwdSt.ExceptWith(搜索触发词);
-            kwdSt.ExceptWith(stopWdSet);
 
-            return kwdSt.ToArray();
-
-        }
-
-        private static bool msgHasMatchPostWd(HashSet<string> postnKywd位置词set, string[] kwds)
-        {
-            //if (text == null)
-            //    return null;
-            string[] spltWds = kwds;
-            foreach (string wd in spltWds)
-            {
-                if (postnKywd位置词set.Contains(wd))
-                {
-                    Console.WriteLine("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
-                    return true;
-                } 
-                  
-            }
-            return false;
-        }
-
-        private static string getWeizhici(HashSet<string> postnKywd位置词set, string[] kwds)
-        {
-            //if (text == null)
-            //    return null;
-            string[] spltWds = kwds;
-            foreach (string wd in spltWds)
-            {
-                if (postnKywd位置词set.Contains(wd))
-                    return wd;
-            }
-            return null;
-        }
+        //private static string getWeizhici(HashSet<string> postnKywd位置词set, string[] kwds)
+        //{
+        //    //if (text == null)
+        //    //    return null;
+        //    string[] spltWds = kwds;
+        //    foreach (string wd in spltWds)
+        //    {
+        //        if (postnKywd位置词set.Contains(wd))
+        //            return wd;
+        //    }
+        //    return null;
+        //}
 
         // seelct from dbfform patn(111) wehre xxxx   sekect  List<InlineKeyboardButton[
         //public static List<InlineKeyboardButton[]> qryByMsgKwdsV3dep(string dbfFrom, Dictionary<string, StringValues> whereExprsObj)
@@ -626,15 +611,7 @@ namespace mdsj
         //}
 
 
-        static void SetIdProperties(ArrayList arrayList)
-        {
-            foreach (var item in arrayList)
-            {
-                SortedList sortedList1 = (SortedList)item;
-                sortedList1.Add("id", sortedList1["Guid"]);
 
-            }
-        }
 
         //public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string v)
         //{
@@ -647,18 +624,18 @@ namespace mdsj
         //    return true;
         //}
 
-        private static void dbgooutput(ArrayList rows_rzt4srch, string dbgFl)
-        {
-            var updateString = JsonConvert.SerializeObject(rows_rzt4srch, Formatting.Indented);
+        //private static void dbgooutput(ArrayList rows_rzt4srch, string dbgFl)
+        //{
+        //    var updateString = JsonConvert.SerializeObject(rows_rzt4srch, Formatting.Indented);
 
-            Directory.CreateDirectory(dbgFl);
-            //    Console.WriteLine(updateString);
-            // 获取当前时间并格式化为文件名
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            string fileName = $"{dbgFl}/{timestamp}.txt";
-            //      Console.WriteLine(fileName);
-            System.IO.File.WriteAllText("" + fileName, updateString);
-        }
+        //    Directory.CreateDirectory(dbgFl);
+        //    //    Console.WriteLine(updateString);
+        //    // 获取当前时间并格式化为文件名
+        //    string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+        //    string fileName = $"{dbgFl}/{timestamp}.txt";
+        //    //      Console.WriteLine(fileName);
+        //    System.IO.File.WriteAllText("" + fileName, updateString);
+        //}
 
         //private static ArrayList cvt2IniRowMode(HashSet<City> citysobj)
         //{
@@ -797,5 +774,17 @@ namespace mdsj
         //    return citys;
 
         //}
+    }
+
+    internal class Condtn
+    {
+        public bool left;
+        public bool v2;
+
+        public Condtn(bool left)
+        {
+            this.left = left;
+            this.v2 = true;
+        }
     }
 }
