@@ -22,7 +22,7 @@ namespace mdsj.lib
        public static async Task DownloadSongAsMp3(string songName,string dir)
         {
             var __METHOD__ = "DownloadSongAsMp3";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  songName, dir));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  songName, dir));
 
             try
             {
@@ -57,8 +57,8 @@ namespace mdsj.lib
                 // 转换为 MP3
                 // 转换为 MP3
                 // 转换为 MP3
-               
-                var outputFilePath = $"{dir}/{songName}.mp3";
+                string fname = filex.ConvertToValidFileName2024(songName);
+                var outputFilePath = $"{dir}/{fname}.mp3";
                 Console.WriteLine($"outputFilePath =>{outputFilePath}");
                 await ConvertToMp3(tempFile, outputFilePath);
 

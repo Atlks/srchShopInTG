@@ -1,4 +1,5 @@
-﻿using System;
+﻿global using static prj202405.lib.filex;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;

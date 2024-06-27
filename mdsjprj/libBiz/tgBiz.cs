@@ -294,7 +294,7 @@ namespace mdsj.libBiz
         public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
 
             try
             {

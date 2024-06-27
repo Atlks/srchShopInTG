@@ -60,7 +60,7 @@ namespace mdsj
         {
           
             var __METHOD__ = "_SaveConfig";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             dbgCls.setDbgValRtval(__METHOD__, 0);
             return;
         //writeUser:
@@ -90,7 +90,7 @@ namespace mdsj
         public static HashSet<prj202405.City>   getCitysObj()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             //联系商家城市
             HashSet<prj202405.City> _citys = [];

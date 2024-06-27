@@ -32,7 +32,7 @@ namespace mdsj.lib
         public static async Task<string> http_GetHttpResponseAsync(string url)
         {
             var __METHOD__ = "http_GetHttpResponseAsync";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args( url));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args( url));
 
             // 创建 HttpClient 实例
             using (HttpClient client = new HttpClient())

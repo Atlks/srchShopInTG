@@ -172,7 +172,7 @@ namespace mdsj.lib
         public static void wrtRowss_ReadAndCreateIndex4tgmsg(string directoryPath_msg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
 
             try
             {
@@ -287,10 +287,12 @@ namespace mdsj.lib
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string msgidx = o["chatid"] + "." + o["timeStamp"] + "." + o["msgid"];
-                o.Add("id", msgidx);
+              //  o.Add("", msgidx);
+                stfld_replaceKeyV(o, "id", msgidx);
                 stfld_replaceKeyV(o, "msgid", msgidx);
               //  o.Add("msgid", msgidx);
-                o.Add("kwd", wd);
+              //  o.Add("kwd", wd);
+                stfld_replaceKeyV(o, "kwd", msgidx);
                 //        doc.Add("txt", o["txt"]);
                 //       doc.Add("grpinfo", o);
                 //       o["txt"] = "";

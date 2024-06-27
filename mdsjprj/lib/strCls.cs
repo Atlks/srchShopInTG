@@ -214,6 +214,7 @@ namespace prj202405.lib
 
         public static string ConvertToSimplifiedChinese(string traditionalChinese)
         {
+          //  ChineseConverter
             Dictionary<char, char> traditionalToSimplifiedMap = new Dictionary<char, char>
         {
             {'繁', '繁'},
@@ -464,6 +465,7 @@ namespace prj202405.lib
                     string line;
                     while ((line = reader.ReadLine()) != null)
                     {
+                        if(line.Trim().Length>0)
                         linesHashSet.Add(line);
                     }
                 }

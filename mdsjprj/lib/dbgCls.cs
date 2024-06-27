@@ -292,7 +292,7 @@ namespace prj202405.lib
          * @param string $METHOD__
          * @return void
          */
-        public static void setDbgFunEnter(string METHOD__, object func_get_args)
+        public static void dbg_setDbgFunEnter(string METHOD__, object func_get_args)
         {
            
             dbgpad = dbgpad + 4;

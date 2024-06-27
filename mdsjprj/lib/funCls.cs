@@ -1,11 +1,12 @@
-﻿using System;
+﻿global using static libx.funCls;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static libx.funCls;
+
 using static mdsj.lib.exCls;
 using static prj202405.lib.arrCls;//  prj202405.lib
 using static prj202405.lib.dbgCls;
@@ -26,6 +27,23 @@ namespace libx
     internal class funCls
     {
 
-      
+        public bool MethodExists(string typeName, string methodName)
+        {
+            Type type = Type.GetType(typeName);
+            if (type == null)
+            {
+                Console.WriteLine($"Type '{typeName}' not found.");
+                return false;
+            }
+
+            MethodInfo methodInfo = type.GetMethod(methodName);
+            if (methodInfo == null)
+            {
+                Console.WriteLine($"Method '{methodName}' not found in type '{typeName}'.");
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -38,7 +38,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, func_get_args("someRows"));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, func_get_args("someRows"));
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
             {
@@ -396,7 +396,7 @@ namespace prj202405.lib
         internal static string calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -435,7 +435,7 @@ namespace prj202405.lib
         internal static string calcPatns(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             if (string.IsNullOrEmpty(partfile区块文件))
             {

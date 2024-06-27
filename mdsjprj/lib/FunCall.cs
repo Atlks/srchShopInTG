@@ -45,7 +45,7 @@ namespace mdsj.lib
         public static string call_exe_retStr(string exePath, string scriptPath, SortedList prm)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -67,7 +67,7 @@ namespace mdsj.lib
         public static string call_exec_RetList(string execpath, string scriptPath, SortedList prm, string outputDir)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -117,7 +117,7 @@ namespace mdsj.lib
         public static void call_user_func(Delegate callback,params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(args));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {

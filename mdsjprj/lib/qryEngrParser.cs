@@ -86,7 +86,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
@@ -236,7 +236,7 @@ namespace libx
         public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -261,7 +261,7 @@ namespace libx
         internal static string _calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -301,7 +301,7 @@ namespace libx
         public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(dbf));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(dbf));
 
             List<SortedList> li = rndFun(dbf);
 

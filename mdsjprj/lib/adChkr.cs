@@ -40,7 +40,7 @@ namespace mdsj.lib
         public static async Task logic_chkad(string text, string uid, long grpid, Action act)
         {
             var __METHOD__ = "logic_chkad";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));
 
             try
             {

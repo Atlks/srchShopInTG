@@ -390,7 +390,7 @@ namespace prj202405
         public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
 
             using (HttpClient client = new HttpClient())
             {

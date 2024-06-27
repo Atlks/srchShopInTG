@@ -232,7 +232,7 @@ namespace prj202405
         private static async void Bot_OnUpdate(object sender, UpdateEventArgs e)
         {
             var __METHOD__ = "Bot_OnUpdate";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
 
             if (e.Update.Type == UpdateType.ChatMember && e.Update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
             {
@@ -261,13 +261,13 @@ namespace prj202405
             //  throw new Exception("myex");
 
             var __METHOD__ = "evt_aHandleUpdateAsync";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
             bot_logRcvMsg(update);
 
-            if (update.Message.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
+            if (update.Message?.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
             {
                 await SendThankYouMessage(update.Message.Chat.Id);
                 return;
@@ -619,7 +619,7 @@ namespace prj202405
 
                 //是否包含搜索词 商品或服务关键词
                 Console.WriteLine(" 商品或服务关键词 srch");
-                HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
                 if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
                     Console.WriteLine(" 不包含商品服务词，ret");
@@ -686,6 +686,7 @@ namespace prj202405
 
 
         }
+
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -804,7 +805,7 @@ namespace prj202405
             SortedList whereMap = new SortedList();
             whereMap.Add("fuwuci", fuwuWd);
             var __METHOD__ = "evt_msgTrgSrch";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx.Trim().StartsWith("@" + botname))
@@ -856,7 +857,7 @@ namespace prj202405
         private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
 
             logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
@@ -1022,7 +1023,7 @@ namespace prj202405
             if (text.StartsWith("@xxx007"))
                 return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
 
             HashSet<prj202405.City> _citys = getCitysObj();
             Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
@@ -1408,7 +1409,7 @@ namespace prj202405
         static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), msgx));
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(__METHOD__, msgx));
             logCls.log("fun GetList_qryV2", func_get_args(msgx, pagex, pagesizex, whereMapDep), "", "logDir", reqThreadId);
             if (msgx == null || msgx.Length == 0)
                 return;
@@ -1497,11 +1498,11 @@ namespace prj202405
 
                 //qry from mrcht by  where exprs  strFmt
                 Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
                 // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
-                results = mrcht.qryFromMrcht(patns_dbfs, whereExprsObj, msgx);
+                string sharNames = ldfld_TryGetValue(whereExprsObj, "@file");
+                results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObj, msgx);
 
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
@@ -2150,7 +2151,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);

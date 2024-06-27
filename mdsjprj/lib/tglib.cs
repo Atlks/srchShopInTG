@@ -55,7 +55,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
 
             try
             {
@@ -86,7 +86,7 @@ namespace prj202405.lib
         public static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
 
             try
             {
@@ -110,7 +110,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
 
             try
             {
@@ -180,9 +180,9 @@ namespace prj202405.lib
                     return false;
 
                 HashSet<string> curRowKywdSset = new HashSet<string>();
-                arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "商家"));
-                arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
-                arrCls.add_elmt2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
+                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "商家"));
+                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
+                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
                 if (curRowKywdSset.Contains(keyword))
                     return true;
                 return false;

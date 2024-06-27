@@ -224,9 +224,12 @@ namespace prj202405.lib
         //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
         //    return saveList_hpmod;
         //}
+        public static HashSet<string> array_merge (HashSet<string> list1, HashSet<string>  list2)
+        {
+            return MergeHashSets(list1, list2);
+        }
 
-
-        public static List<t> array_merge<t>(List<t> list1, List<t> list2)
+            public static List<t> array_merge<t>(List<t> list1, List<t> list2)
         {
             List<t> result = new List<t>();
 
@@ -514,11 +517,21 @@ namespace prj202405.lib
                 listIot.Add(key, objSave);
         }
 
-        internal static HashSet<string> add_elmt2hsst(HashSet<string> set, string txt)
+
+        public static HashSet<string> MergeHashSets(HashSet<string> set1, HashSet<string> set2)
         {
-            string[] a = txt.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            foreach (string wd in a)
+            HashSet<string> resultSet = new HashSet<string>(set1);
+            resultSet.UnionWith(set2);
+            return resultSet;
+        }
+
+        internal static HashSet<string> add_elmts2hsst(HashSet<string> set, string txtWds)
+        {
+            string[] a = txtWds.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            foreach (string wd1 in a)
             {
+              var  wd = wd1.Trim().ToUpper();
+                if(wd.Length >0)  
                 set.Add(wd);
             }
             return set;

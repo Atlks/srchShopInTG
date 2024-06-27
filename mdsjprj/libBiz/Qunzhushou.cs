@@ -114,7 +114,7 @@ namespace mdsj.libBiz
         private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
+            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
             string prjdir = @"../../../";
             if (update.Message.Text.Trim() == serchTipsWd)
             {
@@ -148,7 +148,8 @@ namespace mdsj.libBiz
                 var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName + "因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
                 string downdir = prjdir + "/downmp3";
-                string mp3path = $"{downdir}/{songName}.mp3";
+                string fname = filex.ConvertToValidFileName2024(songName);
+                string mp3path = $"{downdir}/{fname}.mp3";
                 Console.WriteLine(mp3path);
                 if (!System.IO.File.Exists(mp3path))
                     await DownloadSongAsMp3(songName, downdir);
