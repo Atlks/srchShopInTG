@@ -241,7 +241,7 @@ namespace prj202405
 
                 await evt_newUserjoinSngle(chatId, userId, e.Update.ChatMember.NewChatMember.User);
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
         private static async Task SendThankYouMessage(long chatId)
         {
@@ -363,7 +363,13 @@ namespace prj202405
             // if (update.Message != null)
             if (update?.Type is UpdateType.Message)
             {
-                bot_adChk(update);
+                Console.WriteLine(update.Message?.Type);
+                if (update.Message?.Type == MessageType.Text)
+                {
+                    Console.WriteLine(update.Message?.Type);
+                    bot_adChk(update);
+                }
+                   
             }
            
             //auto add cht sess
@@ -636,7 +642,7 @@ namespace prj202405
 
 
                 evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
@@ -825,14 +831,14 @@ namespace prj202405
             if (msgx != null && msgx.Length < 25)
             {
                 await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap, reqThreadId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
                 return;
             }
             else
             {
                 Console.WriteLine(" msg is null or leng>25");
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
@@ -871,7 +877,7 @@ namespace prj202405
                 return;
             }
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
 
 
@@ -1237,7 +1243,7 @@ namespace prj202405
                 }
             }
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
         }
 
@@ -1659,7 +1665,7 @@ namespace prj202405
 
 
             //   Console.WriteLine(" endfun  GetList()");
-            dbgCls.setDbgValRtval(__METHOD__, "");
+            dbgCls.dbg_setDbgValRtval(__METHOD__, "");
 
         }
 
@@ -2532,7 +2538,7 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(menu),
                    protectContent: false);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
             else//   (update.CallbackQuery.Data.StartsWith("Merchant?id="))
@@ -2555,7 +2561,7 @@ namespace prj202405
                 }
 
 
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
                 return;
             }

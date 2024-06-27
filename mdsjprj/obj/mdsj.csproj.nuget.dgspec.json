@@ -49,6 +49,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "AcoustID": {
+              "target": "Package",
+              "version": "[0.0.2, )"
+            },
+            "AcoustID.NET": {
+              "target": "Package",
+              "version": "[1.3.3, )"
+            },
             "Binance.Net": {
               "target": "Package",
               "version": "[9.10.0, )"
@@ -68,6 +76,10 @@
             "CryptoExchange.Net": {
               "target": "Package",
               "version": "[7.6.0, )"
+            },
+            "EchoPrintSharp.Netstandard": {
+              "target": "Package",
+              "version": "[1.1.1, )"
             },
             "FFMpegCore": {
               "target": "Package",
@@ -132,6 +144,10 @@
             "MiniGuid": {
               "target": "Package",
               "version": "[1.1.2, )"
+            },
+            "MusicApiCollection": {
+              "target": "Package",
+              "version": "[0.1.0, )"
             },
             "NAave": {
               "target": "Package",

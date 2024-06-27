@@ -241,7 +241,7 @@ namespace mdsj.lib
 
             //}
             Console.WriteLine(prs);
-            dbgCls.setDbgValRtval(__METHOD__, prs);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, prs);
         }
 
         private static void sendNotyfy2me()

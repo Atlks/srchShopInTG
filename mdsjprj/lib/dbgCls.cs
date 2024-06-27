@@ -1,6 +1,7 @@
-﻿ 
+﻿global using static prj202405.lib.dbgCls;
 using Newtonsoft.Json;
 using System;
+
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -311,7 +312,7 @@ namespace prj202405.lib
 
         }
 
-        public static void setDbgValRtval(object mETHOD__, object results)
+        public static void dbg_setDbgValRtval(object mETHOD__, object results)
         {
              
             var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);

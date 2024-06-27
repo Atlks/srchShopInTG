@@ -120,7 +120,7 @@ namespace prj202405.lib
 
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.setDbgValRtval(__METHOD__, ret);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
 
         }
 
@@ -219,7 +219,7 @@ namespace prj202405.lib
             {
                 Console.WriteLine(ex);
             }
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
             return results;
         }
 
@@ -268,7 +268,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
 
 
             return results;
@@ -318,7 +318,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
 
 
             return results;
@@ -349,7 +349,7 @@ namespace prj202405.lib
             SqliteCommand1.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(SqliteCommand1);
-            dbgCls.setDbgValRtval(__METHOD__, ret);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
         }
 
 
@@ -376,7 +376,7 @@ namespace prj202405.lib
             cmd.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.setDbgValRtval(__METHOD__, ret);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
         }
 
         internal static void saveMltHiPfm(List<SortedList> rows, string dbFileName)
@@ -423,7 +423,7 @@ namespace prj202405.lib
             cmd_cmt.CommandText = "commit;";
             ret = cmd_ExecuteNonQuery(cmd_cmt);
 
-            dbgCls.setDbgValRtval(__METHOD__, ret);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
         }
 
 
@@ -454,7 +454,7 @@ namespace prj202405.lib
 
 
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
 
 

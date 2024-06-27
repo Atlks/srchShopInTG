@@ -70,7 +70,7 @@ namespace prj202405.lib
                 else
                     list_Seleced.Add(row);
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
             return list_Seleced;
 
         }
@@ -404,7 +404,7 @@ namespace prj202405.lib
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -426,7 +426,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.setDbgValRtval(__METHOD__, result);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
 
             return result;
         }
@@ -441,7 +441,7 @@ namespace prj202405.lib
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -463,7 +463,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.setDbgValRtval(__METHOD__, result);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
 
             return result;
         }

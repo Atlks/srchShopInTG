@@ -302,7 +302,7 @@ namespace mdsj.libBiz
                     return;
                 if (user.Username.ToLower().StartsWith("lianxin_"))
                 {
-                    dbgCls.setDbgValRtval(__METHOD__, 0); return;
+                    dbgCls.dbg_setDbgValRtval(__METHOD__, 0); return;
                 }
 
 
@@ -346,7 +346,7 @@ namespace mdsj.libBiz
             {
                 Console.WriteLine(e);
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
         }
 

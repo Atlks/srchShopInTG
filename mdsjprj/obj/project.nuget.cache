@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "0KInL3fORsoZ7hb/YiXR5usOqftCxF5GVy1UjffAJPnoWrTxPFukAfXLuVOe2KEvcnc4N9W6EaEl4FpOimU+xA==",
+  "dgSpecHash": "Dmyqd7wkr8aZAz24mzv5vi2MrOlVAkDvwDpM+KiV7Go1pjjEzwobm/X6aZniF4tyXD99U19DpiQHDa6BxxXcqw==",
   "success": true,
   "projectFilePath": "D:\\0prj\\mdsj\\mdsjprj\\mdsj.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\Administrator\\.nuget\\packages\\acoustid\\0.0.2\\acoustid.0.0.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\acoustid.net\\1.3.3\\acoustid.net.1.3.3.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\adraffy.ensnormalize\\0.1.5\\adraffy.ensnormalize.0.1.5.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\anglesharp\\1.1.2\\anglesharp.1.1.2.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\binance.net\\9.10.0\\binance.net.9.10.0.nupkg.sha512",
@@ -14,12 +16,14 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\closedxml\\0.102.2\\closedxml.0.102.2.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\cryptoexchange.net\\7.6.0\\cryptoexchange.net.7.6.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\documentformat.openxml\\2.16.0\\documentformat.openxml.2.16.0.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\echoprintsharp.netstandard\\1.1.1\\echoprintsharp.netstandard.1.1.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\excelnumberformat\\1.1.0\\excelnumberformat.1.1.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\ffmpeg.autogen\\7.0.0\\ffmpeg.autogen.7.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\ffmpeg.nightly\\20200831.1.0\\ffmpeg.nightly.20200831.1.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\ffmpegcore\\5.1.0\\ffmpegcore.5.1.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\high_resolution_sleep\\2.0.0.11\\high_resolution_sleep.2.0.0.11.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\htmlagilitypack\\1.11.61\\htmlagilitypack.1.11.61.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\iconic.zlib.netstandard\\1.0.0\\iconic.zlib.netstandard.1.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\instances\\3.0.0\\instances.3.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\irony.netcore\\1.0.11\\irony.netcore.1.0.11.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\jetbrains.annotations\\2023.3.0\\jetbrains.annotations.2023.3.0.nupkg.sha512",
@@ -92,6 +96,7 @@
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\microsoft.win32.systemevents\\7.0.0\\microsoft.win32.systemevents.7.0.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\miniguid\\1.1.2\\miniguid.1.1.2.nupkg.sha512",
+    "C:\\Users\\Administrator\\.nuget\\packages\\musicapicollection\\0.1.0\\musicapicollection.0.1.0.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\naave\\1.0.2\\naave.1.0.2.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\naudio\\2.2.1\\naudio.2.2.1.nupkg.sha512",
     "C:\\Users\\Administrator\\.nuget\\packages\\naudio.asio\\2.2.1\\naudio.asio.2.2.1.nupkg.sha512",
@@ -250,6 +255,16 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“AcoustID 0.0.2”。此包可能与项目不完全兼容。",
+      "libraryId": "AcoustID",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“Lucene.Net 3.0.3”。此包可能与项目不完全兼容。",
       "libraryId": "Lucene.Net",
       "targetGraphs": [
@@ -272,6 +287,16 @@
       "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“Lucene.Net.Analysis.PanGu 2.4.1”。此包可能与项目不完全兼容。",
       "libraryId": "Lucene.Net.Analysis.PanGu",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“MusicApiCollection 0.1.0”。此包可能与项目不完全兼容。",
+      "libraryId": "MusicApiCollection",
       "targetGraphs": [
         "net8.0"
       ]

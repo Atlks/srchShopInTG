@@ -155,8 +155,8 @@ namespace mdsj
                     if (hasCondt(whereExprsObj, "国家"))
                         if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                             return false;
-                    if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
-                        return false;
+                  //  if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
+                   //     return false;
 
  
 
@@ -222,7 +222,7 @@ namespace mdsj
                     return btnsInLine;
                 }, rndFun);
             //end fun
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
         }
 

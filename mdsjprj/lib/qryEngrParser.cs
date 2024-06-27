@@ -141,7 +141,7 @@ namespace libx
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
             return rsRztInlnKbdBtn;
         }
 
@@ -252,7 +252,7 @@ namespace libx
 
 
             SortedList results = rztLi[0];
-            dbgCls.setDbgValRtval(__METHOD__, "results.Count=>" + results.Count);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, "results.Count=>" + results.Count);
             return results;
         }
 
@@ -269,7 +269,7 @@ namespace libx
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.setDbgValRtval(__METHOD__, rzt);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -291,7 +291,7 @@ namespace libx
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.setDbgValRtval(__METHOD__, result);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
 
             return result;
         }
@@ -307,7 +307,7 @@ namespace libx
 
             li = db.qryV7(li, whereFun);
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
             return li;
         }
     }

@@ -44,11 +44,15 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using libx;
 using prj202405;
 using Telegram.Bot.Types.ReplyMarkups;
+using NReco.VideoConverter;
+using Org.BouncyCastle.Crypto.IO;
+using mdsj.lib;
 namespace mdsj.libBiz
 {
     internal class Qunzhushou
     {
-        public static TelegramBotClient botClient_QunZzhushou = new("6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog");
+        private const string BotToken = "6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog";
+        public static TelegramBotClient botClient_QunZzhushou = new(token: BotToken);
 
         internal static void main1()
         {
@@ -72,21 +76,40 @@ namespace mdsj.libBiz
 
         private static async Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
         {
+
             string reqThreadId = geneReqid();
-            if (update.Type == UpdateType.Message)
+
+            try
             {
-                OnMsg(update, reqThreadId);
+                if (update.Message?.Type == MessageType.Video)
+                {
+                    Bot_OnVideo(update, reqThreadId);
+                    return;
+                }
+                if (update.Type == UpdateType.Message)
+                {
+                    OnMsg(update, reqThreadId); return;
+                }
+
+                if (update.Type == UpdateType.CallbackQuery)
+                {
+                    OnCallbk(update, reqThreadId); return;
+                }
+
+                if (update.Type == UpdateType.MyChatMember)
+                {
+                    OnChatMembr(update, reqThreadId); return;
+                }
+
+            }
+            catch (
+            Exception ex)
+            {
+                Console.WriteLine(ex);
             }
 
-            if (update.Type == UpdateType.CallbackQuery)
-            {
-                OnCallbk(update, reqThreadId);
-            }
 
-            if (update.Type == UpdateType.MyChatMember)
-            {
-                OnChatMembr(update, reqThreadId);
-            }
+
         }
 
         private static void OnChatMembr(Update update, string reqThreadId)
@@ -110,6 +133,117 @@ namespace mdsj.libBiz
             }
         }
 
+
+        private static async void Bot_OnVideo(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnVideo";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Video.FileId;
+            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
+            var filePath = file.FilePath;
+
+            // 下载视频
+            string basname = filenameBydtme();
+            var videoFilePath = await DownloadFile(filePath, $"tg3055video{basname}.mp4");
+
+            // 转换视频为 MP3
+            var YYMMmp3FilePath = $"d:/newmp3/{basname}.mp3";
+            ConvertVideoToMp3(videoFilePath, YYMMmp3FilePath);
+
+            MusicMetadata MusicMetadata1 = await RecognizeMusic(YYMMmp3FilePath);
+            string mp3title = MusicMetadata1.Title + "-" + MusicMetadata1.Artist;
+            string mp3titleFname = filex.ConvertToValidFileName2024(mp3title);
+
+            string finaMp3Fullpath = "d:/newmp3copy/" + mp3titleFname + ".mp3";
+            Copy2024(YYMMmp3FilePath, finaMp3Fullpath);
+            // 发送 MP3 文件回群
+            // using (var fileStream = new FileStream(mp3FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+              
+                var mp3Stream = System.IO.File.Open(finaMp3Fullpath, FileMode.Open);
+                var inputOnlineFile = InputFile.FromStream(mp3Stream);
+
+                await botClient_QunZzhushou.SendAudioAsync(caption: "搜索结果", title: mp3titleFname, chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+            }
+
+            // 删除临时文件
+            ////  System.IO.File.Delete(videoFilePath);
+            //   System.IO.File.Delete(mp3FilePath);
+            dbg_setDbgValRtval(__METHOD__, 0);
+
+        }
+        public static void Copy2024(string sourceFilePath, string destination_newFileName)
+        {
+            filex.mkdir_forFile(destination_newFileName);
+
+            // 构造目标文件的完整路径
+           // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
+
+            // 复制并重命名文件
+            System.IO.File.Copy(sourceFilePath, destination_newFileName, true);
+        }
+        public static void CopyAndRenameFile(string sourceFilePath, string destinationFolderPath, string newFileName)
+        {
+            // 如果目标文件夹不存在，则创建它
+            Directory.CreateDirectory(destinationFolderPath);
+
+            // 构造目标文件的完整路径
+            string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
+
+            // 复制并重命名文件
+            System.IO.File.Copy(sourceFilePath, destinationFilePath, true);
+        }
+
+        public static void CopyFileToFolder(string sourceFilePath, string targetFolderPath)
+        {
+            // 检查目标文件夹是否存在，如果不存在则创建
+            if (!Directory.Exists(targetFolderPath))
+            {
+                Directory.CreateDirectory(targetFolderPath);
+                Console.WriteLine($"Created directory: {targetFolderPath}");
+            }
+
+            // 获取源文件名
+            string fileName = System.IO.Path.GetFileName(sourceFilePath);
+
+            // 构建目标文件路径
+            string destinationFilePath = System.IO.Path.Combine(targetFolderPath, fileName);
+
+            // 复制文件
+            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+        }
+
+        private static async Task<string> DownloadFile(string filePath, string fileName)
+        {
+            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
+
+            using (var httpClient = new HttpClient())
+            {
+                // 设置超时时间为30秒
+                httpClient.Timeout = TimeSpan.FromSeconds(200);
+                var response = await httpClient.GetAsync(fileUrl);
+                // 检查响应是否成功
+                response.EnsureSuccessStatusCode();
+                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            return fileFullPath;
+        }
+
+        private static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
+        {
+            // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
+            var ffMpeg = new FFMpegConverter();
+            //   ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
+            // Convert video to MP3
+            // Convert video to MP3
+            ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
+            //return mp3FilePath;
+            Console.WriteLine($"Conversion completed: {mp3FilePath}");
+        }
         private const string serchTipsWd = "嗨小爱童鞋";
         private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
         {
@@ -125,7 +259,7 @@ namespace mdsj.libBiz
                 string text = System.IO.File.ReadAllText(path);
                 text = text.Replace("%前导提示词%", serchTipsWd);
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
             string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
@@ -137,7 +271,7 @@ namespace mdsj.libBiz
                 string text = System.IO.File.ReadAllText(path);
                 text = text.Replace("%前导提示词%", serchTipsWd);
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
@@ -155,7 +289,7 @@ namespace mdsj.libBiz
                     await DownloadSongAsMp3(songName, downdir);
                 SendMp3ToGroupAsync(mp3path, update.Message.Chat.Id, update.Message.MessageId);
                 dbgpad = 0;
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
@@ -174,14 +308,14 @@ namespace mdsj.libBiz
                                     .Where(txt => txt != null)
                                     .ToArray();
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, json_encode(txtValues), replyToMessageId: update.Message.MessageId);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
             if (cmd.Equals("记账"))
             {
                 evt_记账(update);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
@@ -189,20 +323,20 @@ namespace mdsj.libBiz
             if (cmd.Equals("账单清单"))
             {
                 evt_账单清单账(update);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
 
             if (cmd.Equals("删除"))
             {
                 evt_删除(update);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
             if (cmd.Equals("账单统计"))
             {
                 evt_cashflowGrpby账单统计(update);
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                 return;
             }
         }
@@ -230,8 +364,8 @@ namespace mdsj.libBiz
                , rnd4jsonFlRf());
 
             var rzt = SummarizeByCategory(li);
-            var msg=json_encode(rzt);
-            botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id,msg, replyToMessageId: update.Message.MessageId);
+            var msg = json_encode(rzt);
+            botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, msg, replyToMessageId: update.Message.MessageId);
 
         }
 
@@ -245,11 +379,11 @@ namespace mdsj.libBiz
 
             foreach (var data in dataList)
             {
-              
+
                 if (data.ContainsKey(cate) && data.ContainsKey(amt))
                 {
                     string category = data[cate].ToString();
-               
+
                     decimal amount = Convert.ToDecimal(data[amt]);
 
                     if (categoryAmountMap.ContainsKey(category))

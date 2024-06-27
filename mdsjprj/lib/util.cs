@@ -94,7 +94,7 @@ namespace mdsj.lib
 
                 }
 
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
             }
             catch (Exception ex)
@@ -139,7 +139,7 @@ namespace mdsj.lib
 
                 }
 
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
             }
             catch (Exception ex)

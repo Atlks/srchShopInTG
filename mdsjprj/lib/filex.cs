@@ -154,6 +154,16 @@ namespace prj202405.lib
             file_put_contents(fileName, json_encode(o), false);
 
         }
+
+        public static string filenameBydtme( )
+        {
+            // 创建目录
+          //  Directory.CreateDirectory(logdir);
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            return timestamp;
+
+        }
         /// <summary>
         /// Removes consecutive extra newline characters from the input string.
         /// </summary>

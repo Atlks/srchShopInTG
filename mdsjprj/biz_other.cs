@@ -61,7 +61,7 @@ namespace mdsj
           
             var __METHOD__ = "_SaveConfig";
             dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
             return;
         //writeUser:
         //    try
@@ -97,7 +97,7 @@ namespace mdsj
          //   var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
           //  if (!string.IsNullOrEmpty(merchants))
           //      _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
-            dbgCls.setDbgValRtval(__METHOD__," citys[]...");
+            dbgCls.dbg_setDbgValRtval(__METHOD__," citys[]...");
             return _citys;
         }
 

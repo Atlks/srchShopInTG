@@ -54,7 +54,7 @@ namespace prj202405.lib
             var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
             ArrayList list2 = new ArrayList(list);
           
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
 
  
             return list2;
@@ -91,7 +91,7 @@ namespace prj202405.lib
                 arr = array_merge(arr, sortedLists);
             }
 
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
 
 
             return arr;
@@ -121,7 +121,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
  
             return list;
         }
@@ -248,7 +248,7 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, dbfile);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
 
         }
 
@@ -288,7 +288,7 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
-            dbgCls.setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
+            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
         }
         internal static void saveMlt(List<SortedList> rows, string Strfile)
         {

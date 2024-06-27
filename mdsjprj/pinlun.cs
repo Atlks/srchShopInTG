@@ -84,7 +84,7 @@ namespace prj202405
             }
 
 
-            dbgCls.setDbgValRtval( __METHOD__, result);
+            dbgCls.dbg_setDbgValRtval( __METHOD__, result);
             return result;
         }
 

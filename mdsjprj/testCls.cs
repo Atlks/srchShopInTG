@@ -108,10 +108,11 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
-
+            var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
+            var rzt = await RecognizeMusic(s222);
 
        //  await   AaveCollateralInfo.GetCollateralInfo("0xc54931775f7b9f2f9648c38c52b96ccb828bf8af");
-           //  chkTgVld();
+       //  chkTgVld();
 
             //  call_user_func(qry5829,  "xxx.json" );
 
@@ -401,13 +402,13 @@ namespace prj202405
                     HttpResponseMessage response = client.GetAsync(url).Result;
                     response.EnsureSuccessStatusCode();
                     string htmlContent = response.Content.ReadAsStringAsync().Result;
-                    dbgCls.setDbgValRtval(__METHOD__, htmlContent.Substring(0, 300));
+                    dbgCls.dbg_setDbgValRtval(__METHOD__, htmlContent.Substring(0, 300));
                     return htmlContent;
                 }
                 catch (HttpRequestException e)
                 {
                     Console.WriteLine($"Request error: {e.Message}");
-                    dbgCls.setDbgValRtval(__METHOD__, 0);
+                    dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
                     return null;
                 }
             }

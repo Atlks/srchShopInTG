@@ -2,6 +2,28 @@
   "version": 3,
   "targets": {
     "net8.0": {
+      "AcoustID/0.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net40/AcoustID.dll": {}
+        },
+        "runtime": {
+          "lib/net40/AcoustID.dll": {}
+        }
+      },
+      "AcoustID.NET/1.3.3": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/AcoustID.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/AcoustID.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "ADRaffy.ENSNormalize/0.1.5": {
         "type": "package",
         "compile": {
@@ -152,6 +174,18 @@
           }
         }
       },
+      "EchoPrintSharp.Netstandard/1.1.1": {
+        "type": "package",
+        "dependencies": {
+          "Iconic.Zlib.Netstandard": "1.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/EchoPrintSharp.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/EchoPrintSharp.dll": {}
+        }
+      },
       "ExcelNumberFormat/1.1.0": {
         "type": "package",
         "compile": {
@@ -217,6 +251,22 @@
         "runtime": {
           "lib/netstandard2.0/HtmlAgilityPack.dll": {
             "related": ".deps.json;.pdb;.xml"
+          }
+        }
+      },
+      "Iconic.Zlib.Netstandard/1.0.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Iconic.Zlib.Netstandard.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard1.3/Iconic.Zlib.Netstandard.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -1593,6 +1643,19 @@
         },
         "runtime": {
           "lib/netstandard1.0/MiniGuid.dll": {}
+        }
+      },
+      "MusicApiCollection/0.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net461/MusicApiCollection.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/MusicApiCollection.dll": {
+            "related": ".pdb;.xml"
+          }
         }
       },
       "NAave/1.0.2": {
@@ -4242,6 +4305,33 @@
     }
   },
   "libraries": {
+    "AcoustID/0.0.2": {
+      "sha512": "aRmW6DqrrvJzyYgJQUz8CvBor5M/k4AP1eY1bKg5oBmpBKHFgozeC4BCcAHGwK6Sg7cOzkwjoaTd2Gtjv7AzcQ==",
+      "type": "package",
+      "path": "acoustid/0.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "acoustid.0.0.2.nupkg.sha512",
+        "acoustid.nuspec",
+        "lib/net40/AcoustID.dll"
+      ]
+    },
+    "AcoustID.NET/1.3.3": {
+      "sha512": "+PdS43kQIoJcQSpN3oilv8eSA13cm7stME0BrHlj8ucm9M+2sEZEbi6lDAKXJreQuzHqAGAI5vsj4UcIEmwNSg==",
+      "type": "package",
+      "path": "acoustid.net/1.3.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "acoustid.net.1.3.3.nupkg.sha512",
+        "acoustid.net.nuspec",
+        "lib/net45/AcoustID.dll",
+        "lib/net45/AcoustID.xml",
+        "lib/netstandard2.0/AcoustID.dll",
+        "lib/netstandard2.0/AcoustID.xml"
+      ]
+    },
     "ADRaffy.ENSNormalize/0.1.5": {
       "sha512": "cdCbVBXLqt+q6nF02MjY3NBAN024UfxLzvSgklidWG384h6Rqz5PCcyo55hqQbe7JS8w1+XJ5x5bSNaj07eqQw==",
       "type": "package",
@@ -4425,6 +4515,18 @@
         "lib/netstandard1.3/DocumentFormat.OpenXml.xml",
         "lib/netstandard2.0/DocumentFormat.OpenXml.dll",
         "lib/netstandard2.0/DocumentFormat.OpenXml.xml"
+      ]
+    },
+    "EchoPrintSharp.Netstandard/1.1.1": {
+      "sha512": "TSrrIl3kh7mqHrbsYvxhLkeUVgpWp8MX673eY7mgMNNsR9DdKkXAyM54BrMIGalPr9igTtA7SP0wUaQ92HAYXQ==",
+      "type": "package",
+      "path": "echoprintsharp.netstandard/1.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "echoprintsharp.netstandard.1.1.1.nupkg.sha512",
+        "echoprintsharp.netstandard.nuspec",
+        "lib/netstandard2.0/EchoPrintSharp.dll"
       ]
     },
     "ExcelNumberFormat/1.1.0": {
@@ -4707,6 +4809,19 @@
         "lib/uap10.0/HtmlAgilityPack.dll",
         "lib/uap10.0/HtmlAgilityPack.pdb",
         "lib/uap10.0/HtmlAgilityPack.pri"
+      ]
+    },
+    "Iconic.Zlib.Netstandard/1.0.0": {
+      "sha512": "1CqyBU2WER/qDzatH4zRv25/YrUYn5dyJ0zMkk7J78yjQ9VSfwkLoF1VGn6kyXAtMVe2wxQp4AFjj7gbGeIDhg==",
+      "type": "package",
+      "path": "iconic.zlib.netstandard/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "iconic.zlib.netstandard.1.0.0.nupkg.sha512",
+        "iconic.zlib.netstandard.nuspec",
+        "lib/netstandard1.3/Iconic.Zlib.Netstandard.dll",
+        "lib/netstandard1.3/Iconic.Zlib.Netstandard.xml"
       ]
     },
     "Instances/3.0.0": {
@@ -7300,6 +7415,38 @@
         "lib/netstandard1.0/MiniGuid.dll",
         "miniguid.1.1.2.nupkg.sha512",
         "miniguid.nuspec"
+      ]
+    },
+    "MusicApiCollection/0.1.0": {
+      "sha512": "83+suXEP3jAT1T2QIOPDv/Xb29IHxFiDbSVmKlalS1fX0Hso6hYbNC33CJLq96Y960kyuQ7LpYjlD4JT4+adtw==",
+      "type": "package",
+      "path": "musicapicollection/0.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net40-client/MusicApiCollection.dll",
+        "lib/net40-client/MusicApiCollection.pdb",
+        "lib/net40-client/MusicApiCollection.xml",
+        "lib/net40/MusicApiCollection.dll",
+        "lib/net40/MusicApiCollection.pdb",
+        "lib/net40/MusicApiCollection.xml",
+        "lib/net45/MusicApiCollection.dll",
+        "lib/net45/MusicApiCollection.pdb",
+        "lib/net45/MusicApiCollection.xml",
+        "lib/net451/MusicApiCollection.dll",
+        "lib/net451/MusicApiCollection.pdb",
+        "lib/net451/MusicApiCollection.xml",
+        "lib/net452/MusicApiCollection.dll",
+        "lib/net452/MusicApiCollection.pdb",
+        "lib/net452/MusicApiCollection.xml",
+        "lib/net461/MusicApiCollection.dll",
+        "lib/net461/MusicApiCollection.pdb",
+        "lib/net461/MusicApiCollection.xml",
+        "lib/netCore/MusicApiCollection.dll",
+        "lib/netCore/MusicApiCollection.pdb",
+        "lib/netCore/MusicApiCollection.xml",
+        "musicapicollection.0.1.0.nupkg.sha512",
+        "musicapicollection.nuspec"
       ]
     },
     "NAave/1.0.2": {
@@ -12514,11 +12661,14 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "AcoustID >= 0.0.2",
+      "AcoustID.NET >= 1.3.3",
       "Binance.Net >= 9.10.0",
       "BinanceAPI.NET >= 35.1.11",
       "ChineseCharacterConvert >= 1.0.2",
       "ClosedXML >= 0.102.2",
       "CryptoExchange.Net >= 7.6.0",
+      "EchoPrintSharp.Netstandard >= 1.1.1",
       "FFMpegCore >= 5.1.0",
       "FFmpeg.AutoGen >= 7.0.0",
       "FFmpeg.Nightly >= 20200831.1.0",
@@ -12534,6 +12684,7 @@
       "Microsoft.EntityFrameworkCore.Sqlite >= 8.0.5",
       "Microsoft.NET.ILLink.Tasks >= 8.0.5",
       "MiniGuid >= 1.1.2",
+      "MusicApiCollection >= 0.1.0",
       "NAave >= 1.0.2",
       "NAudio >= 2.2.1",
       "NReco >= 2.0.3",
@@ -12614,6 +12765,14 @@
       "net8.0": {
         "targetAlias": "net8.0",
         "dependencies": {
+          "AcoustID": {
+            "target": "Package",
+            "version": "[0.0.2, )"
+          },
+          "AcoustID.NET": {
+            "target": "Package",
+            "version": "[1.3.3, )"
+          },
           "Binance.Net": {
             "target": "Package",
             "version": "[9.10.0, )"
@@ -12633,6 +12792,10 @@
           "CryptoExchange.Net": {
             "target": "Package",
             "version": "[7.6.0, )"
+          },
+          "EchoPrintSharp.Netstandard": {
+            "target": "Package",
+            "version": "[1.1.1, )"
           },
           "FFMpegCore": {
             "target": "Package",
@@ -12697,6 +12860,10 @@
           "MiniGuid": {
             "target": "Package",
             "version": "[1.1.2, )"
+          },
+          "MusicApiCollection": {
+            "target": "Package",
+            "version": "[0.1.0, )"
           },
           "NAave": {
             "target": "Package",
@@ -12846,6 +13013,16 @@
       "code": "NU1701",
       "level": "Warning",
       "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“AcoustID 0.0.2”。此包可能与项目不完全兼容。",
+      "libraryId": "AcoustID",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“Lucene.Net 3.0.3”。此包可能与项目不完全兼容。",
       "libraryId": "Lucene.Net",
       "targetGraphs": [
@@ -12868,6 +13045,16 @@
       "warningLevel": 1,
       "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“Lucene.Net.Analysis.PanGu 2.4.1”。此包可能与项目不完全兼容。",
       "libraryId": "Lucene.Net.Analysis.PanGu",
+      "targetGraphs": [
+        "net8.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "已使用“.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1”而不是项目目标框架“net8.0”还原包“MusicApiCollection 0.1.0”。此包可能与项目不完全兼容。",
+      "libraryId": "MusicApiCollection",
       "targetGraphs": [
         "net8.0"
       ]

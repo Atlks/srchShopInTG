@@ -281,7 +281,7 @@ namespace prj202405
             string Path = "今日促销商家.gif";
             if (results.Count > 0)
                 await bot_sendMsgToMlt(Path, plchdTxt, results);
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
 
 
@@ -316,7 +316,7 @@ namespace prj202405
                 Console.WriteLine(ex.ToString());
             }
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
 
 
@@ -352,7 +352,7 @@ namespace prj202405
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
 
 
@@ -385,7 +385,7 @@ namespace prj202405
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
 
 

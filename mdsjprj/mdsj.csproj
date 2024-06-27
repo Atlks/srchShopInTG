@@ -13,11 +13,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AcoustID" Version="0.0.2" />
+    <PackageReference Include="AcoustID.NET" Version="1.3.3" />
     <PackageReference Include="Binance.Net" Version="9.10.0" />
     <PackageReference Include="BinanceAPI.NET" Version="35.1.11" />
     <PackageReference Include="ChineseCharacterConvert" Version="1.0.2" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
     <PackageReference Include="CryptoExchange.Net" Version="7.6.0" />
+    <PackageReference Include="EchoPrintSharp.Netstandard" Version="1.1.1" />
     <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
     <PackageReference Include="FFmpeg.Nightly" Version="20200831.1.0" />
     <PackageReference Include="FFMpegCore" Version="5.1.0" />
@@ -32,6 +35,7 @@
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.5" />
     <PackageReference Include="MiniGuid" Version="1.1.2" />
+    <PackageReference Include="MusicApiCollection" Version="0.1.0" />
     <PackageReference Include="NAave" Version="1.0.2" />
     <PackageReference Include="NAudio" Version="2.2.1" />
     <PackageReference Include="Nethereum.ABI" Version="4.21.0" />

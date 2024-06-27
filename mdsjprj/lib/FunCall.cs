@@ -59,7 +59,7 @@ namespace mdsj.lib
             string marker = "----------marker----------";
             str = substr_AfterMarker(str, marker);
             str = str.Trim();
-            dbgCls.setDbgValRtval(__METHOD__, str);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, str);
             return str;
         }
 
@@ -82,7 +82,7 @@ namespace mdsj.lib
             strAft = strAft.Trim();
             string prjDir = @"../../";
             string txt = File.ReadAllText(outputDir + "/" + strAft);
-            dbgCls.setDbgValRtval(__METHOD__, txt);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, txt);
             return txt;
         }
 
@@ -133,9 +133,9 @@ namespace mdsj.lib
             }
 
             if (o != null)
-                dbgCls.setDbgValRtval(__METHOD__, o);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, o);
             else
-                dbgCls.setDbgValRtval(__METHOD__, 0);
+                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
         }
         public static void call_user_func(string className, string methodName, object[] parameters)

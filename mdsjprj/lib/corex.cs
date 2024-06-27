@@ -136,7 +136,7 @@ namespace prj202405.lib
             {
                 output += Environment.NewLine + "Error output: " + errorOutput;
             }
-            dbgCls.setDbgValRtval(__METHOD__, output);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, output);
             return output;
         }
 

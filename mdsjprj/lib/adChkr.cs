@@ -79,7 +79,7 @@ namespace mdsj.lib
             }
           
 
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
     }
 }

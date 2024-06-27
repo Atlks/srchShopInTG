@@ -79,7 +79,7 @@ namespace prj202405.lib
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, results)));
 
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
 
         }
 
@@ -142,7 +142,7 @@ namespace prj202405.lib
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, wdss)));
 
             }
-            dbgCls.setDbgValRtval(__METHOD__, 0);
+            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
 
         private static void srchNsendFotoToGrp(string imgPath, string msgtxt, string wdss, long chatid)
