@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualBasic;
+﻿global using static mdsj.lib.logCls;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System.Collections;
 using System.Timers;
@@ -145,7 +146,7 @@ namespace prj202405
             keepBtnMenu(now);
 
             int btr = GetBatteryPercentage();
-            if(btr<90)
+            if (btr < 90)
             {
                 playMp3(mp3FilePathEmgcy);
             }
@@ -234,7 +235,7 @@ namespace prj202405
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
                     var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
-                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu+plchdTxt, tgBiz.tg_btmBtns());
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt, tgBiz.tg_btmBtns());
                 }
             }
         }
@@ -254,7 +255,8 @@ namespace prj202405
         /// <summary>
         /// /、、https://t.me/shibolianmeng
         /// </summary>
-        public static string plchdTxt = "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
+        public static string plchdTxt = "💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
+           // "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
 
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
@@ -273,8 +275,8 @@ namespace prj202405
 
 
             results = arrCls.rdmList<InlineKeyboardButton[]>(results);
-          
-                results = results.Skip(0 * 10).Take(5).ToList();
+
+            results = results.Skip(0 * 10).Take(5).ToList();
 
 
 
@@ -421,12 +423,12 @@ namespace prj202405
 
 
         }
-
+      
 
         public static async Task tmrEvt_sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
         {
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-        //    chtsSess.Add(Program.groupId, "");
+            //    chtsSess.Add(Program.groupId, "");
 
             //遍历方法三：遍历哈希表中的键值
             foreach (DictionaryEntry de in chtsSess)
@@ -442,10 +444,10 @@ namespace prj202405
                     var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                     //  Message message2dbg = await 
                     Program.botClient.SendTextMessageAsync(
-                Convert.ToInt64(de.Key), msgtxt,
-                    parseMode: ParseMode.Html,
-                   replyMarkup: rplyKbdMkp,
-                   protectContent: false, disableWebPagePreview: true);
+                 Convert.ToInt64(de.Key), msgtxt,
+                     parseMode: ParseMode.Html,
+                    replyMarkup: rplyKbdMkp,
+                    protectContent: false, disableWebPagePreview: true);
                     //   Console.WriteLine(JsonConvert.SerializeObject(message2));
 
                     //Program.botClient.SendTextMessageAsync(
@@ -501,51 +503,51 @@ namespace prj202405
         {
             //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧 马杀鸡
             var s = "ktv 水疗 会所 嫖娼 酒吧 足疗 spa  按摩 ";
-         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
             string Path = "娱乐消遣.gif";
-           
-          //  if (results.Count > 0)
-                await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
+
+            //  if (results.Count > 0)
+            await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
         }
 
         public static async void zaocan()
         {
             var s = "早餐 餐饮 早点 牛肉 火锅  炒粉";
-        //    List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            //    List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
 
 
             string Path = "早餐商家推荐.gif";
-         //   var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
+            //   var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
-         //   if(results.Count>0)
+            //   if(results.Count>0)
             await bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
         }
 
 
         public static async void tmEvt_z18_wancan()
         {
-            
+
             var s = "餐饮 牛肉 火锅 炒粉";
             List<InlineKeyboardButton[]> results = new List<InlineKeyboardButton[]>();
-                //qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            //qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
-         //   if (results.Count > 0)
-                await bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
+            //   if (results.Count > 0)
+            await bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
 
         }
         public static async void z_wucan()
         {
             var wdss = "餐饮 牛肉 火锅 炒粉";
-           
-         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
+
+            //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
-           // if (results.Count > 0)
-                await bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt,  wdss);
+            // if (results.Count > 0)
+            await bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
 
 
         }
@@ -554,10 +556,10 @@ namespace prj202405
         {
             var s = "奶茶 水果茶 水果";
             var msgtxt = "懂得享受下午茶时光。点一杯咖啡，点一杯奶茶 ，亦或自己静静思考，生活再忙碌，也要记得给自己喘口气";
-         //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
+            //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
-         //   if (results.Count > 0)
-                await bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
+            //   if (results.Count > 0)
+            await bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
 
 
 
@@ -572,7 +574,7 @@ namespace prj202405
 
         //    var arr = wdss.Split(" ", StringSplitOptions.RemoveEmptyEntries).ToArray();
         //    var rdm = new Random().Next(1, arr.Length);
-           
+
         //    string? keyword = arr[rdm - 1];
         //    dbgCls.setDbgVal(__METHOD__, "kwd", keyword);
         //    List<InlineKeyboardButton[]> results = qry_ByKwd_TmrMsgmode(keyword);

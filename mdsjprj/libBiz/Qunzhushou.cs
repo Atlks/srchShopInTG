@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
+using NAudio.Wave;
+using NAudio.Lame;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using static mdsj.lib.afrmwk;
@@ -144,6 +146,12 @@ namespace mdsj.libBiz
 
             try
             {
+
+                if (update.Message?.Type == MessageType.Voice)
+                {
+                    Bot_OnVoiceAsync(update, reqThreadId);
+                    return;
+                }
                 if (update.Type == UpdateType.ChatMember && update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
                 {
                     var chatId = update.ChatMember.Chat.Id;
@@ -165,6 +173,29 @@ namespace mdsj.libBiz
                 if (update.Message?.Type == MessageType.Audio)
                 {
                     Bot_OnAudioAsync(update, reqThreadId);
+                    return;
+                }
+
+                //  MessageType.Animation
+                //MessageType.contact
+                //   MessageType.Voice
+
+                if (update.Message?.Type == MessageType.Contact)
+                {
+                    Bot_OnContactAsync(update, reqThreadId);
+                    return;
+                }
+                if (update.Message?.Type == MessageType.VideoNote)
+                {
+                    Bot_OnVideoNoteAsync(update, reqThreadId);
+                    return;
+                }
+
+             
+
+                if (update.Message?.Type == MessageType.Document)
+                {
+                    Bot_OnDocAsync(update, reqThreadId);
                     return;
                 }
                 if (update.Type == UpdateType.Message)
@@ -191,6 +222,134 @@ namespace mdsj.libBiz
 
 
 
+        }
+
+        private static void Bot_OnContactAsync(Update update, string reqThreadId)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static async Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnVideoNoteAsync";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Voice.FileId;
+            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = filenameBydtme();
+            //  string songname = $"{update.Message.Audio.FileName}";
+            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+            string fileName1 = $"{basname}.mp4";
+            string saveDirectory = "saveVideoNoteDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            mkdir_forFile(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
+            Console.WriteLine($"{videoFilePath}");
+
+
+            saveDirectory = "saveVideoNoteDirMeta";
+            SortedList sortedList = ConvertToSortedList(update.Message.Audio);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+
+            dbg_setDbgValRtval(__METHOD__, 0);
+        }
+        public static void ConvertOggToMp3(string inputFilePath, string outputFilePath)
+        {
+            var __METHOD__ = "ConvertOggToMp3";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(inputFilePath, outputFilePath));
+            if (string.IsNullOrEmpty(inputFilePath))
+                throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
+
+            if (string.IsNullOrEmpty(outputFilePath))
+                throw new ArgumentException("Output file path cannot be null or empty", nameof(outputFilePath));
+
+            // Ensure the input file exists
+            if (!System.IO.File.Exists(inputFilePath))
+                throw new FileNotFoundException("Input file not found", inputFilePath);
+            try
+            {
+                inputFilePath=GetAbsolutePath(inputFilePath);
+                using (var vorbis = new NAudio.Vorbis.VorbisWaveReader(inputFilePath))
+                using (var mp3FileWriter = new LameMP3FileWriter(outputFilePath, vorbis.WaveFormat, LAMEPreset.VBR_90))
+                {
+                    vorbis.CopyTo(mp3FileWriter);
+                }
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e);
+            }
+          
+        }
+        private static async Task Bot_OnVoiceAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnVoiceAsync";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Voice.FileId;
+            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = filenameBydtme();
+            //  string songname = $"{update.Message.Audio.FileName}";
+            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+            string fileName1 = $"{basname}.ogg";
+            string saveDirectory = "saveVoiceDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            mkdir_forFile(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
+            Console.WriteLine($"{videoFilePath}");
+
+            string outputFilePathMp3 = fullfilepath + ".mp3";
+            ConvertOggToMp3(fullfilepath, outputFilePathMp3);
+
+
+            saveDirectory = "saveVoiceDirMeta";
+            SortedList sortedList = ConvertToSortedList(update.Message.Voice);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+
+            var mp3Stream = System.IO.File.Open(outputFilePathMp3, FileMode.Open);
+            var inputOnlineFile = InputFile.FromStream(mp3Stream);
+
+            await botClient_QunZzhushou.SendAudioAsync(caption: "搜索结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+
+
+            dbg_setDbgValRtval(__METHOD__, 0);
+        }
+
+        private static async Task Bot_OnDocAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnDoc";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Audio.FileId;
+            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = filenameBydtme();
+            string fnameOri = $"{update.Message.Audio.FileName}";
+            string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+
+            string saveDirectory = "saveFileDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            mkdir_forFile(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
+            Console.WriteLine($"{videoFilePath}");
+
+
+            saveDirectory = "fileData";
+            SortedList sortedList = ConvertToSortedList(update.Message.Audio);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList, $"{saveDirectory}/{fnameOri}.json");
+
+            dbg_setDbgValRtval(__METHOD__, 0);
         }
 
         private static async Task Bot_OnAudioAsync(Update update, string reqThreadId)
