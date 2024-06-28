@@ -316,14 +316,27 @@ namespace libx
 
 
 
-        public static bool ChkCdtAllTrue(List<Condtn> li)
+        public static bool ChkAllFltrTrue(List<Filtr> li)
         {
-            foreach (Condtn cdt in li)
+            foreach (Filtr cdt in li)
             {
                 if (cdt.left == false)
                     return false;
             }
             return true;
+        }
+    }
+
+
+    public class Filtr
+    {
+        public bool left;
+        public bool v2;
+
+        public Filtr(bool left)
+        {
+            this.left = left;
+            this.v2 = true;
         }
     }
 }

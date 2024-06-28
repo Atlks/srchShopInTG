@@ -56,6 +56,11 @@ namespace mdsj.libBiz
 
         internal static void main1()
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbg_setDbgFunEnter(__METHOD__, func_get_args());
+
+            //  botClient_QunZzhushou.GetUpdatesAsync().Wait();
+
             //  botClient_QunZzhushou.o
             botClient_QunZzhushou.StartReceiving(
                 updateHandler: OnUpdateHdl,
@@ -72,6 +77,62 @@ namespace mdsj.libBiz
                     //    UpdateType.ChatJoinRequest],
                     ThrowPendingUpdates = true,
                 });
+
+            //  StartSaveFotoAsync();
+            dbg_setDbgValRtval(__METHOD__, 0);
+        }
+
+
+        public static async Task StartSaveFotoAsync()
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbg_setDbgFunEnter(__METHOD__, func_get_args());
+            var bot = botClient_QunZzhushou;
+            string saveDirectory = "savePicDir";
+            mkdir(saveDirectory);
+            var offset = 0;
+            while (true)
+            {
+                Console.WriteLine(dtime.datetime());
+                Thread.Sleep(1000);
+                var updates = await bot.GetUpdatesAsync(offset);
+
+                foreach (var update in updates)
+                {
+                    if (update.Type == UpdateType.Message)
+                    {
+                        //message.Chat.Id.ToString() == groupId &&
+                        var message = update.Message;
+                        if (message.Type == MessageType.Photo)
+                        {
+                            try
+                            {
+                                var photo = message.Photo[message.Photo.Length - 1];
+                                //   photo.
+                                var fileId = photo.FileId;
+                                var fileName = photo.FileUniqueId;
+
+
+                                var filePath = System.IO.Path.Combine(saveDirectory, fileName);
+
+                                using var fileStream = System.IO.File.OpenWrite(filePath);
+                                await bot.DownloadFileAsync(fileId, fileStream);
+
+                                Console.WriteLine($"Saved image: {fileName}");
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
+
+                        }
+                    }
+                }
+
+                offset = updates.Last().Id + 1;
+            }
+
+            dbg_setDbgValRtval(__METHOD__, 0);
         }
 
         private static async Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
@@ -79,11 +140,31 @@ namespace mdsj.libBiz
 
             string reqThreadId = geneReqid();
 
+            bot_logRcvMsgV2(update, "msgRcvDir2025");
+
             try
             {
+                if (update.Type == UpdateType.ChatMember && update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
+                {
+                    var chatId = update.ChatMember.Chat.Id;
+                    var userId = update.ChatMember.NewChatMember.User.Id;
+
+                    await evt_newUserjoinSngle(chatId, userId, update.ChatMember.NewChatMember.User);
+                }
+                if (update.Message?.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
+                {
+                    await SendThankYouMessage(update.Message.Chat.Id);
+                    return;
+                }
                 if (update.Message?.Type == MessageType.Video)
                 {
                     Bot_OnVideo(update, reqThreadId);
+                    return;
+                }
+
+                if (update.Message?.Type == MessageType.Audio)
+                {
+                    Bot_OnAudioAsync(update, reqThreadId);
                     return;
                 }
                 if (update.Type == UpdateType.Message)
@@ -112,6 +193,54 @@ namespace mdsj.libBiz
 
         }
 
+        private static async Task Bot_OnAudioAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnAudioAsync";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Audio.FileId;
+            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = filenameBydtme();
+            string songname = $"{update.Message.Audio.FileName}";
+            string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+
+            string saveDirectory = "saveAudioDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            mkdir_forFile(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
+            Console.WriteLine($"{videoFilePath}");
+
+
+            saveDirectory = "saveAudioMetaDir";
+            SortedList sortedList = ConvertToSortedList(update.Message.Audio);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList,$"musicData/{songname}.json");
+
+            dbg_setDbgValRtval(__METHOD__, 0);
+        }
+
+
+        public static string InsertCurrentTimeToFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentException("File name cannot be null or empty", nameof(fileName));
+
+            // 获取文件名和扩展名
+            string nameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            string extension = System.IO.Path.GetExtension(fileName);
+
+            // 获取当前时间并格式化
+            string formattedTime = DateTime.Now.ToString("yyMMdd_HHmmss_fff");
+
+            // 构造新的文件名
+            string newFileName = $"{nameWithoutExtension}_{formattedTime}{extension}";
+
+            return newFileName;
+        }
+
         private static void OnChatMembr(Update update, string reqThreadId)
         {
             // throw new NotImplementedException();
@@ -126,13 +255,73 @@ namespace mdsj.libBiz
         {
             string DataDir = "fullTxtSrchIdxdataDir";
             wrt_rows4fulltxt(json_encode(update), DataDir);
-            if (update.Message.Text.Trim().StartsWith(serchTipsWd))
+
+            if (bot_getTxt(update).Trim().StartsWith(serchTipsWd))
             {
                 evt_嗨小爱同学Async(update, reqThreadId);
                 return;
             }
+
+            if (update.Type == UpdateType.Message)
+            {
+                //message.Chat.Id.ToString() == groupId &&
+                var message = update.Message;
+                if (message.Type == MessageType.Photo)
+                {
+                    onFotoAsync(message);
+
+                }
+            }
+
         }
 
+        private static async Task onFotoAsync(Message message)
+        {
+            try
+            {
+                var photo = message.Photo[message.Photo.Length - 1];
+                //   photo.
+                var fileId = photo.FileId;
+                var fileName = photo.FileUniqueId;
+
+                //  var videoFileId = update.Message.Video.FileId;
+                var file = await botClient_QunZzhushou.GetFileAsync(fileId);
+                var filePathInTg = file.FilePath;
+
+
+                // 下载视频
+                string basname = filenameBydtme();
+                string fileName1 = $"savepic{basname}.jpg";
+                string saveDirectory = "saveFotoDir";
+                string fullfilepath = $"{saveDirectory}/{fileName1}";
+                mkdir_forFile(fullfilepath);
+                 //   var fullfilepath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
+
+                //   var filePath = System.IO.Path.Combine(saveDirectory, fileName);
+                using var fileStream = System.IO.File.OpenWrite(fullfilepath);
+               await botClient_QunZzhushou.DownloadFileAsync(filePathInTg, fileStream);
+
+
+
+                Console.WriteLine($"Saved image: {fullfilepath}");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
+
+        public static async Task SendThankYouMessage(long chatId)
+        {
+            try
+            {
+                await botClient.SendTextMessageAsync(chatId, "感谢投票");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending message: {ex.Message}");
+            }
+        }
 
         private static async void Bot_OnVideo(Update update, string reqThreadId)
         {
@@ -141,11 +330,15 @@ namespace mdsj.libBiz
 
             var videoFileId = update.Message.Video.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
-            var filePath = file.FilePath;
+            var filePathInTg = file.FilePath;
 
             // 下载视频
             string basname = filenameBydtme();
-            var videoFilePath = await DownloadFile(filePath, $"tg3055video{basname}.mp4");
+            string fileName1 = $"tg3055video{basname}.mp4";
+            string saveDirectory = "saveVideoDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            mkdir_forFile(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
 
             // 转换视频为 MP3
             var YYMMmp3FilePath = $"d:/newmp3/{basname}.mp3";
@@ -160,7 +353,7 @@ namespace mdsj.libBiz
             // 发送 MP3 文件回群
             // using (var fileStream = new FileStream(mp3FilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
-              
+
                 var mp3Stream = System.IO.File.Open(finaMp3Fullpath, FileMode.Open);
                 var inputOnlineFile = InputFile.FromStream(mp3Stream);
 
@@ -178,7 +371,7 @@ namespace mdsj.libBiz
             filex.mkdir_forFile(destination_newFileName);
 
             // 构造目标文件的完整路径
-           // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
+            // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
 
             // 复制并重命名文件
             System.IO.File.Copy(sourceFilePath, destination_newFileName, true);
@@ -213,8 +406,25 @@ namespace mdsj.libBiz
             // 复制文件
             System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
         }
+        private static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
+        {
+            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
 
-        private static async Task<string> DownloadFile(string filePath, string fileName)
+            using (var httpClient = new HttpClient())
+            {
+                // 设置超时时间为30秒
+                httpClient.Timeout = TimeSpan.FromSeconds(200);
+                var response = await httpClient.GetAsync(fileUrl);
+                // 检查响应是否成功
+                response.EnsureSuccessStatusCode();
+                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            return fileFullPath;
+        }
+        private static async Task<string> DownloadFileThruTgApi(string filePath, string fileName)
         {
             var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
             var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);

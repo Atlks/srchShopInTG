@@ -245,6 +245,19 @@ namespace prj202405.lib
             return false;
         }
 
+        public static string[] RemoveShortWords(string[] words)
+        {
+            List<string> result = new List<string>();
+            foreach (string word in words)
+            {
+                if (word.Length >= 2)
+                {
+                    result.Add(word);
+                }
+            }
+            return result.ToArray();
+        }
+
         public static bool isCcontainKwds42(HashSet<string> curRowKywdSset, string[] kwds)
         {
             kwds = Array.ConvertAll(kwds, s => s.ToUpper());

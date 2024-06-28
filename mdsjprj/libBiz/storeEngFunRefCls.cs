@@ -37,9 +37,25 @@ namespace WindowsFormsApp1.libbiz
             return rndFun;
         }
 
-      
 
 
+        public static Func<SortedList, bool> castFltlst2whereFun(List<Filtr> li)
+        {
+            return (SortedList row) =>
+            {
+
+
+                //li.Add(new Condtn(isLianxifshValid(row)));
+                //li.Add(new Condtn(isFldValEq111(row, "城市", whereExprsObj)));
+                //li.Add(new Condtn(isFldValEq111(row, "园区", whereExprsObj)));
+                //li.Add(new Condtn(isFldValEq111(row, "国家", whereExprsObj)));
+                //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
+                //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
+                if (!ChkAllFltrTrue(li))
+                    return false;
+                return true;
+            };
+        }
 
         public static Func<SortedList, int> wrt_row4nodeSqltRef(string saveDataDir)
         {

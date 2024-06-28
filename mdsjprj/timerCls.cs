@@ -233,7 +233,7 @@ namespace prj202405
                 if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
-                    var txtkeepBtnMenu = "美好的心情从现在开始\n";
+                    var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
                     tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu+plchdTxt, tgBiz.tg_btmBtns());
                 }
             }

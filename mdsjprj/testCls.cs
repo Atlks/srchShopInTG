@@ -108,8 +108,8 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
-            var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
-            var rzt = await RecognizeMusic(s222);
+            //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
+            //var rzt = await RecognizeMusic(s222);
 
        //  await   AaveCollateralInfo.GetCollateralInfo("0xc54931775f7b9f2f9648c38c52b96ccb828bf8af");
        //  chkTgVld();

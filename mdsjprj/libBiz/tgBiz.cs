@@ -50,13 +50,14 @@ using static mdsj.lib.adChkr;
 namespace mdsj.libBiz
 {
     internal class tgBiz
-    {  public static void bot_adChk(Update update)
+    {
+        public static void bot_adChk(Update update)
         {
             try
             {
                 if (update?.Type is UpdateType.Message)
                 {
-                   
+
 
                     if (update.Message.Text.Length < 10)
                         return;
@@ -75,7 +76,7 @@ namespace mdsj.libBiz
                         obj.Add("user", update.Message.From);
                         ormJSonFL.save(obj, "aduser.json");
                         Console.WriteLine("可能广告");
-                      //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
+                        //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
 
                     };
                     logic_chkad(text, uid, grpid, act);
@@ -269,6 +270,31 @@ namespace mdsj.libBiz
                 Console.WriteLine($"An error occurred: {ex.Message}");
             }
         }
+
+        public static void bot_logRcvMsgV2(Update update, string dir)
+        {
+            try
+            {
+                var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
+              //  const string dir = "msgRcvDir";
+                Directory.CreateDirectory(dir);
+                Console.WriteLine("fun bot_logRcvMsgV2（）");
+                Console.WriteLine(updateString);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                string fileName = $"{dir}/{timestamp}.json";
+                Console.WriteLine(fileName);
+                filex.mkdir_forFile(fileName);
+                System.IO.File.WriteAllText("" + fileName, updateString);
+                Console.WriteLine("end fun bot_logRcvMsgV2（）");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
         public static void bot_logRcvMsg(Update update)
         {
             try
@@ -483,13 +509,13 @@ namespace mdsj.libBiz
                 {
                             new KeyboardButton[]
                             {
-                                new KeyboardButton("💸💸💸 世博博彩 💸💸💸")
+                                new KeyboardButton("💵💵💵 世博博彩 💵💵💵")
                             },
                             new KeyboardButton[]
                             {
                                 new KeyboardButton("商家"),
                                        new KeyboardButton("猎艳"),
-                                              new KeyboardButton("猎奇"),
+                                              new KeyboardButton("好奇"),
                                                 new KeyboardButton("买号")
 
                             },
@@ -514,8 +540,8 @@ namespace mdsj.libBiz
                               new KeyboardButton[]
                             {
                                  new KeyboardButton("跑腿") ,
-                                   new KeyboardButton("代购") ,
-                                    new KeyboardButton("优品") ,
+                                   new KeyboardButton("代付") ,
+                                    new KeyboardButton("好货") ,
                                      new KeyboardButton("兑换")
                             } ,
 
@@ -540,8 +566,21 @@ namespace mdsj.libBiz
                                 new KeyboardButton("办证")
 
 
+                            },
+                             new KeyboardButton[]
+                            {
+
+                                 new KeyboardButton("🔥助力本群"),
+
+                                  new KeyboardButton("🫂加入联信"),
+                                   new KeyboardButton("🤝商务洽谈")  
+
+
                             }
 
+
+
+                                  
 
 
 

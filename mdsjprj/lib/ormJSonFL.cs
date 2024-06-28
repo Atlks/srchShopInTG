@@ -3,6 +3,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using mdsj.lib;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -220,7 +221,7 @@ namespace prj202405.lib
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
-
+            mkdir_forFile(dbfile);
             // 创建目录
             // 使用 Path.GetDirectoryName 方法获取目录路径
             string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
@@ -242,6 +243,8 @@ namespace prj202405.lib
             ArrayList list = qryDep(dbfile);
             SortedList listIot = db.lst2IOT(list);
 
+            if (ldfld(SortedList1, "id","") == "")
+                stfld_addRplsKeyV(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
             string key = SortedList1["id"].ToString();
             arrCls.stfld_addRplsKeyV(listIot,key, SortedList1);          
             

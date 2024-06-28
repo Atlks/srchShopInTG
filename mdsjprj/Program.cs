@@ -234,26 +234,10 @@ namespace prj202405
             var __METHOD__ = "Bot_OnUpdate";
             dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
 
-            if (e.Update.Type == UpdateType.ChatMember && e.Update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
-            {
-                var chatId = e.Update.ChatMember.Chat.Id;
-                var userId = e.Update.ChatMember.NewChatMember.User.Id;
-
-                await evt_newUserjoinSngle(chatId, userId, e.Update.ChatMember.NewChatMember.User);
-            }
+       
             dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
         }
-        private static async Task SendThankYouMessage(long chatId)
-        {
-            try
-            {
-                await botClient.SendTextMessageAsync(chatId, "感谢投票");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending message: {ex.Message}");
-            }
-        }
+      
 
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
@@ -267,11 +251,7 @@ namespace prj202405
             Console.WriteLine(json_encode(update));
             bot_logRcvMsg(update);
 
-            if (update.Message?.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
-            {
-                await SendThankYouMessage(update.Message.Chat.Id);
-                return;
-            }
+       
             //----------if new user join
             if (update?.Message?.NewChatMembers != null)
             {
@@ -575,7 +555,7 @@ namespace prj202405
             //privt msg serch
             if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
             {
-                HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+                HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
                 if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
                     Console.WriteLine(" 不包含商品服务词，ret");

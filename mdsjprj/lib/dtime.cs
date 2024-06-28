@@ -64,5 +64,14 @@ namespace mdsj.lib
                 return -1; // 如果解析失败，返回 -1
             }
         }
+
+        internal static string datetime()
+        {
+            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        }
+        public static string uuidYYMMDDhhmmssfff()
+        {
+            return DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+        }
     }
 }
