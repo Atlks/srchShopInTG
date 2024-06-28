@@ -19,6 +19,8 @@
     <PackageReference Include="BinanceAPI.NET" Version="35.1.11" />
     <PackageReference Include="ChineseCharacterConvert" Version="1.0.2" />
     <PackageReference Include="ClosedXML" Version="0.102.2" />
+    <PackageReference Include="Concentus" Version="2.2.2" />
+    <PackageReference Include="Concentus.Oggfile" Version="1.0.6" />
     <PackageReference Include="CryptoExchange.Net" Version="7.6.0" />
     <PackageReference Include="EchoPrintSharp.Netstandard" Version="1.1.1" />
     <PackageReference Include="FFmpeg.AutoGen" Version="7.0.0" />
@@ -81,6 +83,10 @@
 
   <ItemGroup>
     <EditorConfigFiles Remove="D:\0prj\mdsj\mdsjprj\lib\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\WindowsFormsApp1\WindowsFormsApp1.csproj" />
   </ItemGroup>
 
 </Project>

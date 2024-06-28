@@ -31,7 +31,11 @@
         "frameworks": {
           "net8.0": {
             "targetAlias": "net8.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "D:\\0prj\\mdsj\\WindowsFormsApp1\\WindowsFormsApp1.csproj": {
+                "projectPath": "D:\\0prj\\mdsj\\WindowsFormsApp1\\WindowsFormsApp1.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -72,6 +76,14 @@
             "ClosedXML": {
               "target": "Package",
               "version": "[0.102.2, )"
+            },
+            "Concentus": {
+              "target": "Package",
+              "version": "[2.2.2, )"
+            },
+            "Concentus.Oggfile": {
+              "target": "Package",
+              "version": "[1.0.6, )"
             },
             "CryptoExchange.Net": {
               "target": "Package",
@@ -156,6 +168,22 @@
             "NAudio": {
               "target": "Package",
               "version": "[2.2.1, )"
+            },
+            "NAudio.Core": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "NAudio.Lame": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
+            "NAudio.Midi": {
+              "target": "Package",
+              "version": "[2.2.1, )"
+            },
+            "NAudio.Vorbis": {
+              "target": "Package",
+              "version": "[1.5.0, )"
             },
             "NReco": {
               "target": "Package",
@@ -290,6 +318,21 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.205/PortableRuntimeIdentifierGraph.json"
         }
+      }
+    },
+    "D:\\0prj\\mdsj\\WindowsFormsApp1\\WindowsFormsApp1.csproj": {
+      "restore": {
+        "projectUniqueName": "D:\\0prj\\mdsj\\WindowsFormsApp1\\WindowsFormsApp1.csproj",
+        "projectName": "WindowsFormsApp1",
+        "projectPath": "D:\\0prj\\mdsj\\WindowsFormsApp1\\WindowsFormsApp1.csproj",
+        "frameworks": {
+          "net481": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net481": {}
       }
     }
   }

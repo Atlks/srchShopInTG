@@ -5,6 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Concentus.Oggfile;
+using Concentus.Structs;
+using NAudio.Wave;
+using NAudio.Lame;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
@@ -49,6 +53,8 @@ using Telegram.Bot.Types.ReplyMarkups;
 using NReco.VideoConverter;
 using Org.BouncyCastle.Crypto.IO;
 using mdsj.lib;
+using Concentus.Structs;
+using RG3.PF.Abstractions.Entity;
 namespace mdsj.libBiz
 {
     internal class Qunzhushou
@@ -257,7 +263,62 @@ namespace mdsj.libBiz
 
             dbg_setDbgValRtval(__METHOD__, 0);
         }
+
+
         public static void ConvertOggToMp3(string inputFilePath, string outputFilePath)
+        {
+            if (string.IsNullOrEmpty(inputFilePath))
+                throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
+
+            if (string.IsNullOrEmpty(outputFilePath))
+                throw new ArgumentException("Output file path cannot be null or empty", nameof(outputFilePath));
+
+            // Ensure the input file exists
+            if (!System.IO.File.Exists(inputFilePath))
+                throw new FileNotFoundException("Input file not found", inputFilePath);
+
+            try
+            {
+                // Initialize the Opus decoder
+                OpusDecoder decoder = new OpusDecoder(48000, 2);
+
+                // Open the Ogg file
+                 FileStream oggFile = new FileStream(inputFilePath, FileMode.Open);
+                 OpusOggReadStream oggStream = new OpusOggReadStream(decoder, oggFile);
+                using (WaveFileWriter waveWriter = new WaveFileWriter(System.IO.Path.ChangeExtension(outputFilePath, ".wav"), new WaveFormat(48000, 16, 2)))
+                {
+                    // Read the Ogg file and write to a WAV file
+                    while (oggStream.HasNextPacket)
+                    {
+                        short[] packet = oggStream.DecodeNextPacket();
+                        if (packet != null)
+                        {
+                            byte[] buffer = new byte[packet.Length * sizeof(short)];
+                            Buffer.BlockCopy(packet, 0, buffer, 0, buffer.Length);
+                            waveWriter.Write(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+
+                // Convert WAV file to MP3
+                using (var reader = new AudioFileReader(System.IO.Path.ChangeExtension(outputFilePath, ".wav")))
+                using (var mp3Writer = new LameMP3FileWriter(outputFilePath, reader.WaveFormat, LAMEPreset.VBR_90))
+                {
+                    reader.CopyTo(mp3Writer);
+                }
+
+                // Delete the intermediate WAV file
+             //   File.Delete(System.IO.Path.ChangeExtension(outputFilePath, ".wav"));
+
+                Console.WriteLine($"Successfully converted {inputFilePath} to {outputFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during conversion: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
+        }
+        public static void ConvertOggToMp3_dep(string inputFilePath, string outputFilePath)
         {
             var __METHOD__ = "ConvertOggToMp3";
             dbg_setDbgFunEnter(__METHOD__, func_get_args(inputFilePath, outputFilePath));
@@ -567,13 +628,16 @@ namespace mdsj.libBiz
         }
         private static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
         {
+            var __METHOD__ = "DownloadFile2localThruTgApi";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args( filePath, fileFullPath));
+
             var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
             //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
 
             using (var httpClient = new HttpClient())
             {
                 // 设置超时时间为30秒
-                httpClient.Timeout = TimeSpan.FromSeconds(200);
+                httpClient.Timeout = TimeSpan.FromSeconds(300);
                 var response = await httpClient.GetAsync(fileUrl);
                 // 检查响应是否成功
                 response.EnsureSuccessStatusCode();
@@ -604,6 +668,9 @@ namespace mdsj.libBiz
 
         private static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
         {
+            var __METHOD__ = "ConvertVideoToMp3";
+            dbg_setDbgFunEnter(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
+
             // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
             var ffMpeg = new FFMpegConverter();
             //   ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
