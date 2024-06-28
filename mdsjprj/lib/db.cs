@@ -38,7 +38,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, func_get_args("someRows"));
+            dbgCls.print_call(__METHOD__, func_get_args("someRows"));
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
             {
@@ -81,7 +81,7 @@ namespace prj202405.lib
                 else
                     list_Seleced.Add(row);
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
             return list_Seleced;
 
         }
@@ -407,7 +407,7 @@ namespace prj202405.lib
         internal static string calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -415,7 +415,7 @@ namespace prj202405.lib
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
+                dbgCls.print_ret(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -437,7 +437,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
+            dbgCls.print_ret(__METHOD__, result);
 
             return result;
         }
@@ -446,13 +446,13 @@ namespace prj202405.lib
         internal static string calcPatns(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             if (string.IsNullOrEmpty(partfile区块文件))
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
+                dbgCls.print_ret(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -474,7 +474,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
+            dbgCls.print_ret(__METHOD__, result);
 
             return result;
         }

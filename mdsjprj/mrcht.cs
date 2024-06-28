@@ -116,7 +116,7 @@ namespace mdsj
             msgCtain = msgCtain.ToUpper();
             msgCtain = ChineseCharacterConvert.Convert.ToSimple(msgCtain);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(dbFrom, shareNames, whereExprsObj, msgCtain));
+            print_call(__METHOD__, func_get_args(dbFrom, shareNames, whereExprsObj, msgCtain));
 
             //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
@@ -222,7 +222,7 @@ namespace mdsj
                     return btnsInLine;
                 }, rnd_next4SqltRf());
             //end fun
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
         }
 

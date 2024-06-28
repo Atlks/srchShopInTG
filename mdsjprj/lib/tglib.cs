@@ -55,7 +55,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
 
             try
             {
@@ -79,14 +79,14 @@ namespace prj202405.lib
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, results)));
 
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
         }
 
         public static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
 
             try
             {
@@ -110,7 +110,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
 
             try
             {
@@ -142,7 +142,7 @@ namespace prj202405.lib
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, wdss)));
 
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
 
         private static void srchNsendFotoToGrp(string imgPath, string msgtxt, string wdss, long chatid)

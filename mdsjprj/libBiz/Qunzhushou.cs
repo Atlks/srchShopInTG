@@ -65,7 +65,7 @@ namespace mdsj.libBiz
         internal static void main1()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbg_setDbgFunEnter(__METHOD__, func_get_args());
+            print_call(__METHOD__, func_get_args());
 
             //  botClient_QunZzhushou.GetUpdatesAsync().Wait();
 
@@ -87,14 +87,14 @@ namespace mdsj.libBiz
                 });
 
             //  StartSaveFotoAsync();
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
 
         public static async Task StartSaveFotoAsync()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbg_setDbgFunEnter(__METHOD__, func_get_args());
+            print_call(__METHOD__, func_get_args());
             var bot = botClient_QunZzhushou;
             string saveDirectory = "savePicDir";
             mkdir(saveDirectory);
@@ -140,7 +140,7 @@ namespace mdsj.libBiz
                 offset = updates.Last().Id + 1;
             }
 
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
         private static async Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
@@ -238,7 +238,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVideoNoteAsync";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+            print_call(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Voice.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -261,7 +261,7 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
 
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
 
@@ -321,7 +321,7 @@ namespace mdsj.libBiz
         public static void ConvertOggToMp3_dep(string inputFilePath, string outputFilePath)
         {
             var __METHOD__ = "ConvertOggToMp3";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(inputFilePath, outputFilePath));
+            print_call(__METHOD__, func_get_args(inputFilePath, outputFilePath));
             if (string.IsNullOrEmpty(inputFilePath))
                 throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
 
@@ -349,7 +349,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnVoiceAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVoiceAsync";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+            print_call(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Voice.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -381,13 +381,13 @@ namespace mdsj.libBiz
             await botClient_QunZzhushou.SendAudioAsync(caption: "搜索结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
 
 
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
         private static async Task Bot_OnDocAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnDoc";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+            print_call(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -410,13 +410,13 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.save(sortedList, $"{saveDirectory}/{fnameOri}.json");
 
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
         private static async Task Bot_OnAudioAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnAudioAsync";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+            print_call(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -439,7 +439,7 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.save(sortedList,$"musicData/{songname}.json");
 
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
         }
 
 
@@ -546,7 +546,7 @@ namespace mdsj.libBiz
         private static async void Bot_OnVideo(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVideo";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(update, reqThreadId));
+            print_call(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Video.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -583,7 +583,7 @@ namespace mdsj.libBiz
             // 删除临时文件
             ////  System.IO.File.Delete(videoFilePath);
             //   System.IO.File.Delete(mp3FilePath);
-            dbg_setDbgValRtval(__METHOD__, 0);
+            print_ret(__METHOD__, 0);
 
         }
         public static void Copy2024(string sourceFilePath, string destination_newFileName)
@@ -629,7 +629,7 @@ namespace mdsj.libBiz
         private static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
         {
             var __METHOD__ = "DownloadFile2localThruTgApi";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args( filePath, fileFullPath));
+            print_call(__METHOD__, func_get_args( filePath, fileFullPath));
 
             var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
             //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
@@ -669,7 +669,7 @@ namespace mdsj.libBiz
         private static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
         {
             var __METHOD__ = "ConvertVideoToMp3";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
+            print_call(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
 
             // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
             var ffMpeg = new FFMpegConverter();
@@ -684,7 +684,7 @@ namespace mdsj.libBiz
         private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
             string prjdir = @"../../../";
             if (update.Message.Text.Trim() == serchTipsWd)
             {
@@ -695,7 +695,7 @@ namespace mdsj.libBiz
                 string text = System.IO.File.ReadAllText(path);
                 text = text.Replace("%前导提示词%", serchTipsWd);
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
             string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
@@ -707,7 +707,7 @@ namespace mdsj.libBiz
                 string text = System.IO.File.ReadAllText(path);
                 text = text.Replace("%前导提示词%", serchTipsWd);
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
@@ -725,7 +725,7 @@ namespace mdsj.libBiz
                     await DownloadSongAsMp3(songName, downdir);
                 SendMp3ToGroupAsync(mp3path, update.Message.Chat.Id, update.Message.MessageId);
                 dbgpad = 0;
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
@@ -744,14 +744,14 @@ namespace mdsj.libBiz
                                     .Where(txt => txt != null)
                                     .ToArray();
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, json_encode(txtValues), replyToMessageId: update.Message.MessageId);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
             if (cmd.Equals("记账"))
             {
                 evt_记账(update);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
@@ -759,20 +759,20 @@ namespace mdsj.libBiz
             if (cmd.Equals("账单清单"))
             {
                 evt_账单清单账(update);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
             if (cmd.Equals("删除"))
             {
                 evt_删除(update);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
             if (cmd.Equals("账单统计"))
             {
                 evt_cashflowGrpby账单统计(update);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
         }

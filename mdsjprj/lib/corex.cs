@@ -93,7 +93,7 @@ namespace prj202405.lib
         public static string call_exe_Pstr(String exec, string scriptPath, string arguments)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
 
             // Create a new process to run the Node.js script
             Process process = new Process();
@@ -136,7 +136,7 @@ namespace prj202405.lib
             {
                 output += Environment.NewLine + "Error output: " + errorOutput;
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, output);
+            dbgCls.print_ret(__METHOD__, output);
             return output;
         }
 

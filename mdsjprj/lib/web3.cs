@@ -204,7 +204,7 @@ namespace mdsj.lib
         {
             return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             Console.WriteLine(DateTime.Now);
             string url = "https://coinmarketcap.com/";
             //string htm = GetHtmlContent(url);
@@ -241,7 +241,7 @@ namespace mdsj.lib
 
             //}
             Console.WriteLine(prs);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, prs);
+            dbgCls.print_ret(__METHOD__, prs);
         }
 
         private static void sendNotyfy2me()

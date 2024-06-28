@@ -43,7 +43,7 @@ namespace mdsj.lib
 
             AcoustIDApiKey = "X7CFv1rFKI";
             var __METHOD__ = "RecognizeMusic";
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(mp3FilePath));
+            print_call(__METHOD__, func_get_args(mp3FilePath));
 
             // 读取音频文件的二进制数据
             byte[] audioData = File.ReadAllBytes(mp3FilePath);
@@ -73,7 +73,7 @@ namespace mdsj.lib
                     {
                         // 获取第一个匹配结果的元数据信息
                         var firstResult = result.Results[0];
-                        dbg_setDbgValRtval(__METHOD__, firstResult);
+                        print_ret(__METHOD__, firstResult);
                         return new MusicMetadata
                         {
                             Title = firstResult.Recordings[0].Title,
@@ -82,7 +82,7 @@ namespace mdsj.lib
                     }
                     else
                     {
-                        dbg_setDbgValRtval(__METHOD__, musicMetadataFft);
+                        print_ret(__METHOD__, musicMetadataFft);
                         return musicMetadataFft;
                     }
                 }
@@ -94,7 +94,7 @@ namespace mdsj.lib
              
             }
           
-            dbg_setDbgValRtval(__METHOD__, musicMetadataFft);
+            print_ret(__METHOD__, musicMetadataFft);
             return musicMetadataFft;
 
 
@@ -130,7 +130,7 @@ namespace mdsj.lib
         public static async Task DownloadSongAsMp3(string songName,string dir)
         {
             var __METHOD__ = "DownloadSongAsMp3";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(  songName, dir));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(  songName, dir));
 
             try
             {
@@ -178,7 +178,7 @@ namespace mdsj.lib
             {
                 Console.WriteLine(ex.ToString());
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
 
         static async Task ConvertToMp3(string inputFilePath, string outputFilePath)

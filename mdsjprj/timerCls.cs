@@ -262,7 +262,7 @@ namespace prj202405
         public static async void z_actSj()
         {
             var __METHOD__ = "z_actSj";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             HashSet<prj202405.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
@@ -283,7 +283,7 @@ namespace prj202405
             string Path = "今日促销商家.gif";
             if (results.Count > 0)
                 await bot_sendMsgToMlt(Path, plchdTxt, results);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
 
 
@@ -295,7 +295,7 @@ namespace prj202405
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
 
             //  Program.botClient.send
@@ -318,7 +318,7 @@ namespace prj202405
                 Console.WriteLine(ex.ToString());
             }
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
 
 
@@ -331,7 +331,7 @@ namespace prj202405
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
 
             //  Program.botClient.send
@@ -354,7 +354,7 @@ namespace prj202405
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
 
 
@@ -367,7 +367,7 @@ namespace prj202405
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
 
             //  Program.botClient.send
@@ -387,7 +387,7 @@ namespace prj202405
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
 
 

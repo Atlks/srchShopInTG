@@ -232,10 +232,10 @@ namespace prj202405
         private static async void Bot_OnUpdate(object sender, UpdateEventArgs e)
         {
             var __METHOD__ = "Bot_OnUpdate";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
 
        
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
       
 
@@ -245,7 +245,7 @@ namespace prj202405
             //  throw new Exception("myex");
 
             var __METHOD__ = "evt_aHandleUpdateAsync";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
@@ -622,7 +622,7 @@ namespace prj202405
 
 
                 evt_msgTrgSrch(botClient, update, fuwuWd, reqThreadId);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
@@ -791,7 +791,7 @@ namespace prj202405
             SortedList whereMap = new SortedList();
             whereMap.Add("fuwuci", fuwuWd);
             var __METHOD__ = "evt_msgTrgSrch";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             string? msgx = tglib.bot_getTxtMsgDep(update);
             if (msgx.Trim().StartsWith("@" + botname))
@@ -811,14 +811,14 @@ namespace prj202405
             if (msgx != null && msgx.Length < 25)
             {
                 await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap, reqThreadId);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
 
                 return;
             }
             else
             {
                 Console.WriteLine(" msg is null or leng>25");
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
@@ -843,7 +843,7 @@ namespace prj202405
         private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
 
             logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
@@ -857,7 +857,7 @@ namespace prj202405
                 return;
             }
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
 
 
@@ -1009,7 +1009,7 @@ namespace prj202405
             if (text.StartsWith("@xxx007"))
                 return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
 
             HashSet<prj202405.City> _citys = getCitysObj();
             Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
@@ -1223,7 +1223,7 @@ namespace prj202405
                 }
             }
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
         }
 
@@ -1395,7 +1395,7 @@ namespace prj202405
         static async Task GetList_qryV2(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
-            dbg_setDbgFunEnter(__METHOD__, func_get_args(__METHOD__, msgx));
+            print_call(__METHOD__, func_get_args(__METHOD__, msgx));
             logCls.log("fun GetList_qryV2", func_get_args(msgx, pagex, pagesizex, whereMapDep), "", "logDir", reqThreadId);
             if (msgx == null || msgx.Length == 0)
                 return;
@@ -1645,7 +1645,7 @@ namespace prj202405
 
 
             //   Console.WriteLine(" endfun  GetList()");
-            dbgCls.dbg_setDbgValRtval(__METHOD__, "");
+            dbgCls.print_ret(__METHOD__, "");
 
         }
 
@@ -2137,7 +2137,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
@@ -2518,7 +2518,7 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(menu),
                    protectContent: false);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
             else//   (update.CallbackQuery.Data.StartsWith("Merchant?id="))
@@ -2541,7 +2541,7 @@ namespace prj202405
                 }
 
 
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
 
                 return;
             }

@@ -45,7 +45,7 @@ namespace mdsj.lib
         public static string call_exe_retStr(string exePath, string scriptPath, SortedList prm)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -55,11 +55,11 @@ namespace mdsj.lib
 
             string str = call_exe_Pstr(exePath, scriptPath, prm_fileAbs);
 
-            dbgCls.setDbgVal(__METHOD__, "callNodePstr.ret", str);
+            dbgCls.print_varDump(__METHOD__, "callNodePstr.ret", str);
             string marker = "----------marker----------";
             str = substr_AfterMarker(str, marker);
             str = str.Trim();
-            dbgCls.dbg_setDbgValRtval(__METHOD__, str);
+            dbgCls.print_ret(__METHOD__, str);
             return str;
         }
 
@@ -67,7 +67,7 @@ namespace mdsj.lib
         public static string call_exec_RetList(string execpath, string scriptPath, SortedList prm, string outputDir)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -82,7 +82,7 @@ namespace mdsj.lib
             strAft = strAft.Trim();
             string prjDir = @"../../";
             string txt = File.ReadAllText(outputDir + "/" + strAft);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, txt);
+            dbgCls.print_ret(__METHOD__, txt);
             return txt;
         }
 
@@ -117,7 +117,7 @@ namespace mdsj.lib
         public static void call_user_func(Delegate callback,params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(args));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {
@@ -133,9 +133,9 @@ namespace mdsj.lib
             }
 
             if (o != null)
-                dbgCls.dbg_setDbgValRtval(__METHOD__, o);
+                dbgCls.print_ret(__METHOD__, o);
             else
-                dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                dbgCls.print_ret(__METHOD__, 0);
 
         }
         public static void call_user_func(string className, string methodName, object[] parameters)

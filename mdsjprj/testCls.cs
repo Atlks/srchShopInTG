@@ -394,7 +394,7 @@ namespace prj202405
         public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
 
             using (HttpClient client = new HttpClient())
             {
@@ -405,13 +405,13 @@ namespace prj202405
                     HttpResponseMessage response = client.GetAsync(url).Result;
                     response.EnsureSuccessStatusCode();
                     string htmlContent = response.Content.ReadAsStringAsync().Result;
-                    dbgCls.dbg_setDbgValRtval(__METHOD__, htmlContent.Substring(0, 300));
+                    dbgCls.print_ret(__METHOD__, htmlContent.Substring(0, 300));
                     return htmlContent;
                 }
                 catch (HttpRequestException e)
                 {
                     Console.WriteLine($"Request error: {e.Message}");
-                    dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+                    dbgCls.print_ret(__METHOD__, 0);
                     return null;
                 }
             }

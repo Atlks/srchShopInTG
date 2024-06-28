@@ -100,7 +100,7 @@ namespace prj202405.lib
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
             //--------------------- crt table
 
@@ -109,7 +109,7 @@ namespace prj202405.lib
 
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
-            dbgCls.setDbgVal(__METHOD__, "sql", sql);
+            dbgCls.print_varDump(__METHOD__, "sql", sql);
             // Console.WriteLine(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -120,7 +120,7 @@ namespace prj202405.lib
 
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
+            dbgCls.print_ret(__METHOD__, ret);
 
         }
 
@@ -186,7 +186,7 @@ namespace prj202405.lib
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             var results = new List<SortedList>();
             try
             {
@@ -219,7 +219,7 @@ namespace prj202405.lib
             {
                 Console.WriteLine(ex);
             }
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
             return results;
         }
 
@@ -232,7 +232,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -268,7 +268,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
 
 
             return results;
@@ -278,7 +278,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -318,7 +318,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
 
 
             return results;
@@ -330,7 +330,7 @@ namespace prj202405.lib
 
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
+            print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
 
             //--------------------- crt table
 
@@ -339,7 +339,7 @@ namespace prj202405.lib
 
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(SortedList1);
-            dbgCls.setDbgVal(__METHOD__, "sql", sql);
+            print_varDump(__METHOD__, "sql", sql);
             // Console.WriteLine(sql);
             SqliteConnection SqliteConnection1 = new SqliteConnection("data source=" + dbFileName);
             SqliteConnection1.Open();
@@ -349,7 +349,7 @@ namespace prj202405.lib
             SqliteCommand1.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(SqliteCommand1);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
+            print_ret(__METHOD__, ret);
         }
 
 
@@ -359,14 +359,14 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
 
 
 
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
-            dbgCls.setDbgVal(__METHOD__, "sql", sql);
+            dbgCls.print_varDump(__METHOD__, "sql", sql);
             // Console.WriteLine(sql);
             //SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             //cn.Open();
@@ -376,7 +376,7 @@ namespace prj202405.lib
             cmd.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
+            dbgCls.print_ret(__METHOD__, ret);
         }
 
         internal static void saveMltHiPfm(List<SortedList> rows, string dbFileName)
@@ -385,7 +385,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             int n = 0;
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
@@ -423,7 +423,7 @@ namespace prj202405.lib
             cmd_cmt.CommandText = "commit;";
             ret = cmd_ExecuteNonQuery(cmd_cmt);
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, ret);
+            dbgCls.print_ret(__METHOD__, ret);
         }
 
 
@@ -434,7 +434,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             foreach (SortedList objSave in rows)
             {
@@ -454,7 +454,7 @@ namespace prj202405.lib
 
 
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
         }
 
 

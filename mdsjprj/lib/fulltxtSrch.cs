@@ -172,7 +172,7 @@ namespace mdsj.lib
         public static void wrtRowss_ReadAndCreateIndex4tgmsg(string directoryPath_msg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
 
             try
             {

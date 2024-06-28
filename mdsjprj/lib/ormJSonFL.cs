@@ -43,7 +43,7 @@ namespace prj202405.lib
         {
  
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
                 File.WriteAllText(dbFileName, "[]");
@@ -55,7 +55,7 @@ namespace prj202405.lib
             var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
             ArrayList list2 = new ArrayList(list);
           
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
 
  
             return list2;
@@ -68,7 +68,7 @@ namespace prj202405.lib
         public static List<SortedList> qry(string dbfS)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfS));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfS));
             string[] dbArr = dbfS.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             List<SortedList> arr = new List<SortedList>();
@@ -92,7 +92,7 @@ namespace prj202405.lib
                 arr = array_merge(arr, sortedLists);
             }
 
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
 
 
             return arr;
@@ -104,7 +104,7 @@ namespace prj202405.lib
      
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
                 File.WriteAllText(dbFileName, "[]");
@@ -122,7 +122,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
  
             return list;
         }
@@ -220,7 +220,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
             mkdir_forFile(dbfile);
             // 创建目录
             // 使用 Path.GetDirectoryName 方法获取目录路径
@@ -251,7 +251,7 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, dbfile);
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, 0);
 
         }
 
@@ -277,7 +277,7 @@ namespace prj202405.lib
         internal static void saveMltV2(List<SortedList> rows, string Strfile)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
             ArrayList list = qryDep(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
@@ -291,7 +291,7 @@ namespace prj202405.lib
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
-            dbgCls.dbg_setDbgValRtval(MethodBase.GetCurrentMethod().Name, 0);
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, 0);
         }
         internal static void saveMlt(List<SortedList> rows, string Strfile)
         {

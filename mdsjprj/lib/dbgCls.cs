@@ -293,7 +293,7 @@ namespace prj202405.lib
          * @param string $METHOD__
          * @return void
          */
-        public static void dbg_setDbgFunEnter(string METHOD__, object func_get_args)
+        public static void print_call(string METHOD__, object func_get_args)
         {
            
             dbgpad = dbgpad + 4;
@@ -302,7 +302,7 @@ namespace prj202405.lib
             Console.WriteLine("\n\n\n" + msglog + "");
         }
 
-        public static void setDbgVal(string METHOD__, string vname, string val)
+        public static void print_varDump(string METHOD__, string vname, string val)
         {
             //if($GLOBALS['dbg_show']==false)
             //    return;
@@ -312,7 +312,7 @@ namespace prj202405.lib
 
         }
 
-        public static void dbg_setDbgValRtval(object mETHOD__, object results)
+        public static void print_ret(object mETHOD__, object results)
         {
              
             var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);

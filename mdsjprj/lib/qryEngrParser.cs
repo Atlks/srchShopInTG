@@ -89,7 +89,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
@@ -144,7 +144,7 @@ namespace libx
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
             return rsRztInlnKbdBtn;
         }
 
@@ -239,7 +239,7 @@ namespace libx
         public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -255,7 +255,7 @@ namespace libx
 
 
             SortedList results = rztLi[0];
-            dbgCls.dbg_setDbgValRtval(__METHOD__, "results.Count=>" + results.Count);
+            dbgCls.print_ret(__METHOD__, "results.Count=>" + results.Count);
             return results;
         }
 
@@ -264,7 +264,7 @@ namespace libx
         internal static string _calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -272,7 +272,7 @@ namespace libx
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.dbg_setDbgValRtval(__METHOD__, rzt);
+                dbgCls.print_ret(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -294,7 +294,7 @@ namespace libx
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, result);
+            dbgCls.print_ret(__METHOD__, result);
 
             return result;
         }
@@ -304,13 +304,13 @@ namespace libx
         public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(dbf));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(dbf));
 
             List<SortedList> li = rndFun(dbf);
 
             li = db.qryV7(li, whereFun);
 
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
             return li;
         }
 

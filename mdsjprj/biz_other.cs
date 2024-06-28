@@ -60,8 +60,8 @@ namespace mdsj
         {
           
             var __METHOD__ = "_SaveConfig";
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_ret(__METHOD__, 0);
             return;
         //writeUser:
         //    try
@@ -90,14 +90,14 @@ namespace mdsj
         public static HashSet<prj202405.City>   getCitysObj()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             //联系商家城市
             HashSet<prj202405.City> _citys = [];
          //   var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
           //  if (!string.IsNullOrEmpty(merchants))
           //      _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
-            dbgCls.dbg_setDbgValRtval(__METHOD__," citys[]...");
+            dbgCls.print_ret(__METHOD__," citys[]...");
             return _citys;
         }
 

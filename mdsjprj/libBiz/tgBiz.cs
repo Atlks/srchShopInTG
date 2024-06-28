@@ -320,7 +320,7 @@ namespace mdsj.libBiz
         public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.dbg_setDbgFunEnter(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
 
             try
             {
@@ -328,7 +328,7 @@ namespace mdsj.libBiz
                     return;
                 if (user.Username.ToLower().StartsWith("lianxin_"))
                 {
-                    dbgCls.dbg_setDbgValRtval(__METHOD__, 0); return;
+                    dbgCls.print_ret(__METHOD__, 0); return;
                 }
 
 
@@ -372,7 +372,7 @@ namespace mdsj.libBiz
             {
                 Console.WriteLine(e);
             }
-            dbgCls.dbg_setDbgValRtval(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, 0);
 
         }
 
