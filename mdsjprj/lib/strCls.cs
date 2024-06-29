@@ -1,4 +1,5 @@
-﻿using JiebaNet.Segmenter;
+﻿global using static prj202405.lib.strCls;
+using JiebaNet.Segmenter;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
 using Microsoft.VisualBasic;
@@ -11,6 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+
 //   prj202405.lib.strCls
 namespace prj202405.lib
 {

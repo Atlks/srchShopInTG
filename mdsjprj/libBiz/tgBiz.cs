@@ -315,7 +315,7 @@ namespace mdsj.libBiz
             }
 
         }
-        public static TelegramBotClient botClient;
+    //    public static TelegramBotClient botClient;
 
         public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
         {

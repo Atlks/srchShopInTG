@@ -547,12 +547,32 @@ namespace prj202405.lib
 
             return newList;
         }
-        internal static void stfld_addRplsKeyV(SortedList SortedList1_iot, string? key, SortedList objSave)
+        internal static void stfld_addRplsKeyV(SortedList SortedList1_iot, string key, SortedList objSave)
         {
             if (SortedList1_iot.ContainsKey(key))
-                SortedList1_iot[key] = objSave;
-            else
-                SortedList1_iot.Add(key, objSave);
+            {
+                SortedList1_iot.Remove(key.ToString());
+            }
+            SortedList1_iot.Add(key, objSave);
+        }
+        public static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
+        {
+            string[] a = v.Split(" ");
+            foreach (string wd in a)
+            {
+                hashSet2.Remove(wd);
+            }
+
+            return hashSet2;
+        }
+        public static void stfld4447(SortedList SortedList1_iot, string key, object objSave)
+        {
+            if (SortedList1_iot.ContainsKey(key))
+            {
+                //remove moshi 更好，因为可能不同的类型 原来的
+                SortedList1_iot.Remove(key.ToString());
+            }
+            SortedList1_iot.Add(key, objSave);
         }
 
         internal static void stfld_addRplsKeyV(SortedList listIot, string? key, object objSave)

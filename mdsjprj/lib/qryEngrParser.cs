@@ -81,7 +81,7 @@ namespace libx
 
 
 
-        public static List<t> Qe_qryV2<t>(string fromDdataDir, string partnsExprs,
+        public static List<t> Qe_qryV2<t>(string fromDdataDir, string shanrES,
                     Func<SortedList, bool> whereFun,
                     Func<SortedList, int> ordFun,
                     Func<SortedList, t> selktFun,
@@ -89,7 +89,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, partnsExprs));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
@@ -101,11 +101,12 @@ namespace libx
                 }
 
                 List<SortedList> rztLi = new List<SortedList>();
-                var patns_dbfs = _calcPatnsV3(fromDdataDir, partnsExprs);
-                string[] arr = patns_dbfs.Split(',');
-                foreach (string dbf in arr)
+                //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+                var share_dbfs = _calcPatnsV3(fromDdataDir, shanrES);
+                string[] arr = share_dbfs.Split(',');
+                foreach (string dbfCurShar in arr)
                 {
-                    List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
+                    List<SortedList> li = _qryBySnglePart(dbfCurShar, whereFun, rndFun);
                     rztLi = array_merge(rztLi, li);
                 }
 
@@ -139,7 +140,7 @@ namespace libx
             }
             catch (Exception e)
             {
-                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, partnsExprs))}");
+                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
                 Console.WriteLine(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
@@ -301,12 +302,12 @@ namespace libx
 
 
         //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
-        public static List<SortedList> _qryBySnglePart(string dbf, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
+        public static List<SortedList> _qryBySnglePart(string dbfName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(dbf));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(dbfName));
 
-            List<SortedList> li = rndFun(dbf);
+            List<SortedList> li = rndFun(dbfName);
 
             li = db.qryV7(li, whereFun);
 

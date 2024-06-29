@@ -1,4 +1,5 @@
-﻿using mdsj.lib;
+﻿global using static prj202405.lib.corex;
+using mdsj.lib;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Microsoft.Win32;
@@ -19,13 +20,20 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
-using static prj202405.lib.corex;
+
 namespace prj202405.lib
 {
+   
 
     //prj202405.lib.corex
     internal class corex
     {
+        public static void print(string v)
+        {
+            Console.WriteLine(v);
+        }
+        public static  string prjdir = @"../../../";
+       
         public static void ExecuteAfterDelay(int millisecondsDelay, Action action)
         {
             Task.Delay(millisecondsDelay).ContinueWith(_ => action());

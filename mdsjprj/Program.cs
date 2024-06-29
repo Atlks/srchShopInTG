@@ -1,6 +1,6 @@
 ﻿
 global using static prj202405.lib.tglib;
-
+global using static prj202405.Program;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
@@ -107,13 +107,13 @@ namespace prj202405
         public static async Task Main(string[] args)
         {
 
-
+           prjdir = filex.GetAbsolutePath(prjdir);
 
 
 
             evt_boot(() =>
             {
-                tgBiz.botClient = botClient;
+             //   botClient = botClient;
                 获取机器人的信息();
             });
 
@@ -387,9 +387,11 @@ namespace prj202405
                 logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
                 // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
                 // var rkm = new InlineKeyboardMarkup(Keyboard);
+                // KeyboardButton[][] kybd
                 var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
                 var rkm = new ReplyKeyboardMarkup(Keyboard);
-                timerCls.evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                rkm.ResizeKeyboard = true;
+                evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
 
                 //botClient.SendTextMessageAsync()
 
@@ -687,63 +689,9 @@ namespace prj202405
 
         }
 
-        private static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
-        {
+     
 
-            string prjdir = @"../../../";
-            prjdir = filex.GetAbsolutePath(prjdir);
-            string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
-
-
-            ///设置园区 东风园区
-            if (cmdFulltxt.StartsWith("/设置园区"))
-            {
-
-                var park = substr_AfterMarker(cmdFulltxt, "/设置园区");
-                SortedList cfg = findOne(dbfile);
-
-                cfg.Add("园区", park);
-                cfg.Add("id", update.Message.From.Id);
-                cfg.Add("from", update.Message.From);
-
-                ormJSonFL.save(cfg, dbfile);
-
-
-            }
-            ///设置城市 妙瓦底
-            if (cmdFulltxt == "/设置城市")
-            {
-                var park = substr_AfterMarker(cmdFulltxt, "/设置城市");
-                SortedList cfg = findOne(dbfile);
-                cfg.Add("城市", park);
-                cfg.Add("id", update.Message.From.Id);
-                cfg.Add("from", update.Message.From);
-
-                ormJSonFL.save(cfg, dbfile);
-
-            }
-
-            botClient.SendTextMessageAsync(
-              update.Message.Chat.Id,
-              "设置ok",
-              parseMode: ParseMode.Html,
-
-              protectContent: false,
-              disableWebPagePreview: true,
-              replyToMessageId: update.Message.MessageId);
-
-        }
-
-        private static SortedList findOne(string dbfile)
-        {
-            List<SortedList> sortedLists = ormJSonFL.qry(dbfile);
-
-
-            SortedList cfg = new SortedList();
-            if (sortedLists.Count > 0)
-                cfg = sortedLists[0];
-            return cfg;
-        }
+       
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -1009,7 +957,8 @@ namespace prj202405
             var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/商家.txt");
 
             var rkm = new ReplyKeyboardMarkup(Keyboard);
-            timerCls.evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+             rkm.ResizeKeyboard = true;
+            evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
 
             //  timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
             return;
@@ -1551,25 +1500,24 @@ namespace prj202405
 
                     //  List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
 
-                    List<SortedList> lst = ormJSonFL.qry($"grpCfgDir/grpcfg{chatid2249}.json");
+                    List<SortedList> lst = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{chatid2249}.json");
                     string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
                     //    city = "
 
                     //qry from mrcht by  where exprs  strFmt
-                    Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+                    Dictionary<string, StringValues> whereExprsObjFiltrs = QueryHelpers.ParseQuery(whereExprs);
                     // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                     //here only one db so no mlt ,todo need updt
                     // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
-                    string sharNames = ldfld_TryGetValue(whereExprsObj, "@file");
-                    results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObj, msgx);
+                    string sharNames = ldfld_TryGetValue(whereExprsObjFiltrs, "@share");
+                    results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObjFiltrs, msgx);
 
                 }
                 else
                 { //privet serach
                   // update.Message.Chat.Id;
                     string chatid2249 = tglib.bot_getChatid(update).ToString();
-                    string prjdir = @"../../../";
-                    prjdir = filex.GetAbsolutePath(prjdir);
+                  
                     string dbfile = $"{prjdir}/cfg_prvtChtPark/{chatid2249}.json";
 
                     SortedList cfg = findOne(dbfile);

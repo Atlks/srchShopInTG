@@ -250,19 +250,19 @@ namespace prj202405.lib
 
         public static SortedList lst2IOT(ArrayList arrayList)
         {
-            SortedList hash = new SortedList();
+            SortedList hashIOT = new SortedList();
 
 
             foreach (var item in arrayList)
             {
                 SortedList itemx = (SortedList)item;
-                if (hash.ContainsKey(itemx["id"]))
-                    hash[itemx["id"]] = item;
-                else
-                    hash.Add(itemx["id"], item);
+                if (hashIOT.ContainsKey(itemx["id"].ToString()))
+                    hashIOT.Remove(itemx["id"].ToString());
+
+                hashIOT.Add(itemx["id"].ToString(), item);
             }
 
-            return hash;
+            return hashIOT;
         }
 
 

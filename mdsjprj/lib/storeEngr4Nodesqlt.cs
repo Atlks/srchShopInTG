@@ -24,7 +24,8 @@ using static mdsj.lib.FunCall;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using prj202405.lib;
- 
+using System.Reflection;
+
 namespace libx
 {
     internal class storeEngr4Nodesqlt
@@ -201,20 +202,34 @@ namespace libx
         }
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            print_call(__METHOD__, dbgCls.func_get_args(dbf));
+
             if (!dbf.EndsWith(".db"))
             {
                 string ext = ".db";
                 dbf = dbf + ext;
             }
 
-            SortedList prm = new SortedList();
+            //SortedList prm = new SortedList();
 
-            //   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
+            ////   prm.Add("partns", ($"{mrchtDir}\\{partns}"));
 
 
-            prm.Add("dbf", ($"{dbf}"));
-            return ormSqlt.qryV2(dbf);
+            //prm.Add("dbf", ($"{dbf}"));
+            if (!File.Exists(dbf))
+            {
+                print("wanring...dbf not exist dbf=>" + dbf);
+                print_ret(__METHOD__, 0);
+                return [];
+            }
+        
+            List<SortedList> sortedLists = ormSqlt.qryV2(dbf);
+            print_ret(__METHOD__, "sortedLists.size("+ sortedLists.Count);
+            return sortedLists;
         }
+
+       
 
         //rd 
         public static List<SortedList> rnd_next4nodeSqlt(string dbf)

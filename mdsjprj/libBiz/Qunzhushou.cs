@@ -473,8 +473,18 @@ namespace mdsj.libBiz
 
         private static void OnMsg(Update update, string reqThreadId)
         {
-            string DataDir = "fullTxtSrchIdxdataDir";
-            wrt_rows4fulltxt(json_encode(update), DataDir);
+           
+
+            // 这是一个示例的异步任务
+              Task.Run(() =>
+            {
+                string DataDir = "fullTxtSrchIdxdataDir";
+                Thread.Sleep(7000);
+                Console.WriteLine("-----------------------------fulltxt index create thred----------");
+                wrt_rows4fulltxt(json_encode(update), DataDir);
+                Console.WriteLine("----------------fulltxt index create thred---- finish....");
+            });
+   
 
             if (bot_getTxt(update).Trim().StartsWith(serchTipsWd))
             {

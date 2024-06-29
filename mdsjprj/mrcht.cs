@@ -110,14 +110,14 @@ namespace mdsj
         //   am.KeywordString + am.KeywordString +
         //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
         //todo sharnames
-        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj, string msgCtain)
+        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain)
         {
 
 
             msgCtain = msgCtain.ToUpper();
             msgCtain = ChineseCharacterConvert.Convert.ToSimple(msgCtain);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args(dbFrom, shareNames, whereExprsObj, msgCtain));
+            print_call(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain));
 
             //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain)) { return []; }
@@ -135,8 +135,14 @@ namespace mdsj
 
             //   var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
 
-            HashSet<string> postnKywd位置词set = qry_getPostnWds(dbFrom, shareNames, whereExprsObj);
+
+            //-----------------calc weizhici-----
+            Console.WriteLine("--------------qry weizhici--------");
+            HashSet<string> postnKywd位置词set = qry_getPostnWds(dbFrom, shareNames, filters);
             bool msgHasPostWd = isMmsgHasMatchPostWd(postnKywd位置词set, kwds);
+            print_varDump(__METHOD__, "msgHasPostWd", msgHasPostWd);
+            Console.WriteLine("--------------qry weizhici finish--------");
+         
             // weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
 
@@ -148,9 +154,9 @@ namespace mdsj
                 List<Filtr> li = new List<Filtr>();
                 li.Add(new Filtr(isNotEmptyLianxi(row)));
                 li.Add(new Filtr(isLianxifshValid(row)));
-                li.Add(new Filtr(isFldValEq111(row, "城市", whereExprsObj)));
-                li.Add(new Filtr(isFldValEq111(row, "园区", whereExprsObj)));
-                li.Add(new Filtr(isFldValEq111(row, "国家", whereExprsObj)));
+                li.Add(new Filtr(isFldValEq111(row, "城市", filters)));
+                li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
+                li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
                 //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
                 //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
                 if (!ChkAllFltrTrue(li))
@@ -207,7 +213,7 @@ namespace mdsj
 
             //dbFrom sharesss
             var rsRztInlnKbdBtn = Qe_qryV2(
-                "mercht商家数据", "",
+                "mercht商家数据", shareNames,
                 whereFun, (SortedList sl) =>
                 {
                     //zheg个用来排序的，放在order上。。
@@ -401,23 +407,9 @@ namespace mdsj
                 return filteredSet;
             }
 
-        private static void print_catchEx(string v, Exception e)
-        {
-            Console.WriteLine($"------{v}() catch ex----------_");
-            Console.WriteLine(e);
-            Console.WriteLine($"------{v}() catch ex finish----------_");
-        }
+     
 
-        private static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
-            {
-                string[] a = v.Split(" ");
-                foreach (string wd in a)
-                {
-                    hashSet2.Remove(wd);
-                }
-
-                return hashSet2;
-            }
+     
 
 
 

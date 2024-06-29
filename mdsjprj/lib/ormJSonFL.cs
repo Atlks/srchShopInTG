@@ -1,4 +1,5 @@
-﻿using ClosedXML.Excel;
+﻿global using static prj202405.lib.ormJSonFL;
+using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Vml;
@@ -23,7 +24,16 @@ namespace prj202405.lib
 {
     internal class ormJSonFL
     {
+        public static SortedList findOne(string dbfile)
+        {
+            List<SortedList> sortedLists = ormJSonFL.qry(dbfile);
 
+
+            SortedList cfg = new SortedList();
+            if (sortedLists.Count > 0)
+                cfg = sortedLists[0];
+            return cfg;
+        }
         public static void WriteFileIfNotExist(string filePath, string txt)
         {
             // 获取文件目录
@@ -218,41 +228,66 @@ namespace prj202405.lib
         }
             public static void save(SortedList SortedList1, string dbfile)
         {
-
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
-            mkdir_forFile(dbfile);
-            // 创建目录
-            // 使用 Path.GetDirectoryName 方法获取目录路径
-            string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
 
-            // 检查目录是否存在
-            if(directoryPath.Length>0 ) 
-            if (!Directory.Exists(directoryPath))
+            try
             {
-                if(directoryPath.Length>5)  //maybe relt path is empty
-                {
-                    // 创建目录及所有上级目录
-                    Directory.CreateDirectory(directoryPath);
-                    Console.WriteLine($"Created directory: {directoryPath}");
-                }
-              
+          
+                mkdir_forFile(dbfile);
+                // 创建目录
+                // 使用 Path.GetDirectoryName 方法获取目录路径
+                string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
+
+                // 检查目录是否存在
+                if (directoryPath.Length > 0)
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        if (directoryPath.Length > 5)  //maybe relt path is empty
+                        {
+                            // 创建目录及所有上级目录
+                            Directory.CreateDirectory(directoryPath);
+                            Console.WriteLine($"Created directory: {directoryPath}");
+                        }
+
+                    }
+                //  Directory.CreateDirectory(logdir);
+                // 将JSON字符串转换为List<Dictionary<string, object>>
+                ArrayList list = qryDep(dbfile);
+                SortedList iotTable = db.lst2IOT(list);
+
+                if (ldfld(SortedList1, "id", "") == "")
+                    stfld4447(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
+                string key = SortedList1["id"].ToString();
+                stfld4447(iotTable, key, SortedList1);
+
+
+                ArrayList saveList_hpmod = db.lstFrmIot(iotTable);
+                wriToDbf(saveList_hpmod, dbfile);
+               
             }
-          //  Directory.CreateDirectory(logdir);
-            // 将JSON字符串转换为List<Dictionary<string, object>>
-            ArrayList list = qryDep(dbfile);
-            SortedList listIot = db.lst2IOT(list);
+            catch(Exception e)
+            {
+             
+                print_ex(__METHOD__, e);
+            }
 
-            if (ldfld(SortedList1, "id","") == "")
-                stfld_addRplsKeyV(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
-            string key = SortedList1["id"].ToString();
-            arrCls.stfld_addRplsKeyV(listIot,key, SortedList1);          
-            
+            print_ret(__METHOD__, 0);
+        }
 
-            ArrayList saveList_hpmod = db.lstFrmIot(listIot);
-            wriToDbf(saveList_hpmod, dbfile);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, 0);
+        public static void print_ex(string v, Exception e)
+        {
 
+            Console.WriteLine($"------{v}() catch ex----------_");
+            Console.WriteLine(e);
+            Console.WriteLine($"------{v}() catch ex finish----------_");
+        }
+
+        public static void print_catchEx(string v, Exception e)
+        {
+            Console.WriteLine($"------{v}() catch ex----------_");
+            Console.WriteLine(e);
+            Console.WriteLine($"------{v}() catch ex finish----------_");
         }
 
 

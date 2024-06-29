@@ -226,13 +226,13 @@ namespace prj202405.lib
         private static void calcPrtExprsNdefWhrCondt(long chatid, out Dictionary<string, StringValues> whereExprsObj, out string partfile区块文件Exprs)
         {
             var groupId = chatid;
-            List<SortedList> grpcfgObj = ormJSonFL.qry($"grpCfgDir/grpcfg{groupId}.json");
+            List<SortedList> grpcfgObj = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{groupId}.json");
             string whereExprs = (string)db.getRowVal(grpcfgObj, "whereExprs", "");
             //    city = "
 
             //qry from mrcht by  where exprs  strFmt
             whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-            partfile区块文件Exprs = arrCls.ldfld_TryGetValue(whereExprsObj, "@file");
+            partfile区块文件Exprs = arrCls.ldfld_TryGetValue(whereExprsObj, "@share");
         }
 
 
