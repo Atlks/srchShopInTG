@@ -70,11 +70,11 @@ using static mdsj.lib.fulltxtSrch;
 
 using System.Net.Http.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Drawing;
-using Lucene.Net.Index;
+
 using System.Security.Policy;
 using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
+
 
 namespace prj202405
 {
@@ -234,10 +234,10 @@ namespace prj202405
             var __METHOD__ = "Bot_OnUpdate";
             dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
 
-       
+
             dbgCls.print_ret(__METHOD__, 0);
         }
-      
+
 
         //收到消息时执行的方法
         static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
@@ -251,7 +251,7 @@ namespace prj202405
             Console.WriteLine(json_encode(update));
             bot_logRcvMsg(update);
 
-       
+
             //----------if new user join
             if (update?.Message?.NewChatMembers != null)
             {
@@ -260,6 +260,20 @@ namespace prj202405
 
                 return;
             }
+
+            if (update.Type == UpdateType.Message)
+            {
+                if (update.Message.Type == MessageType.Text)
+                {
+                    if (update.Message.Text.Trim().StartsWith("/"))
+                        if (update.Message.Chat.Type == ChatType.Private)
+                        {
+                            OnCmdPrvt(update.Message.Text.Trim(), update, reqThreadId);
+                            return;
+                        }
+                }
+            }
+
 
             if (update.Type == UpdateType.Message)
             {
@@ -349,9 +363,9 @@ namespace prj202405
                     Console.WriteLine(update.Message?.Type);
                     bot_adChk(update);
                 }
-                   
+
             }
-           
+
             //auto add cht sess
             if (update?.Message != null)
             {
@@ -673,6 +687,63 @@ namespace prj202405
 
         }
 
+        private static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
+        {
+
+            string prjdir = @"../../../";
+            prjdir = filex.GetAbsolutePath(prjdir);
+            string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+
+
+            ///设置园区 东风园区
+            if (cmdFulltxt.StartsWith("/设置园区"))
+            {
+
+                var park = substr_AfterMarker(cmdFulltxt, "/设置园区");
+                SortedList cfg = findOne(dbfile);
+
+                cfg.Add("园区", park);
+                cfg.Add("id", update.Message.From.Id);
+                cfg.Add("from", update.Message.From);
+
+                ormJSonFL.save(cfg, dbfile);
+
+
+            }
+            ///设置城市 妙瓦底
+            if (cmdFulltxt == "/设置城市")
+            {
+                var park = substr_AfterMarker(cmdFulltxt, "/设置城市");
+                SortedList cfg = findOne(dbfile);
+                cfg.Add("城市", park);
+                cfg.Add("id", update.Message.From.Id);
+                cfg.Add("from", update.Message.From);
+
+                ormJSonFL.save(cfg, dbfile);
+
+            }
+
+            botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+              "设置ok",
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId);
+
+        }
+
+        private static SortedList findOne(string dbfile)
+        {
+            List<SortedList> sortedLists = ormJSonFL.qry(dbfile);
+
+
+            SortedList cfg = new SortedList();
+            if (sortedLists.Count > 0)
+                cfg = sortedLists[0];
+            return cfg;
+        }
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -867,7 +938,7 @@ namespace prj202405
             //  ,
             try
             {
-                Message a = await Program.botClient.SendTextMessageAsync(
+                Telegram.Bot.Types.Message a = await Program.botClient.SendTextMessageAsync(
                  update.Message.Chat.Id,
                "要获取多级菜单，请私聊我",
                  parseMode: ParseMode.Html,
@@ -980,15 +1051,16 @@ namespace prj202405
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 
+            string plchdTxt1422 = "💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
 
             string imgPath = "推荐横幅.gif";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
 
 
             InlineKeyboardButton[][] btns = tglib.ConvertHtmlLinksToTelegramButtons("shiboTrm.htm");
-            Message message = await Program.botClient.SendPhotoAsync(
+            Telegram.Bot.Types.Message message = await Program.botClient.SendPhotoAsync(
                   update.Message.Chat.Id, Photo, null,
-              timerCls.plchdTxt,
+             plchdTxt1422,
                     parseMode: ParseMode.Html,
                      replyMarkup: new InlineKeyboardMarkup(btns),
                    protectContent: false);
@@ -1034,7 +1106,7 @@ namespace prj202405
                 //如果是评价
                 if (text.Length > 100)
                 {
-                    Message? msg = null;
+                    Telegram.Bot.Types.Message msg = null;
                     try
                     {
                         msg = await botClient.SendTextMessageAsync(chatId: update.Message!.Chat.Id, text: "评价失败,评价文字只能100个字以内!", replyToMessageId: update.Message.MessageId);
@@ -1472,23 +1544,41 @@ namespace prj202405
 
             {
                 //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
+                if (isGrpChat(update))
+                {
+                    // update.Message.Chat.Id;
+                    string chatid2249 = tglib.bot_getChatid(update).ToString();
 
-                // update.Message.Chat.Id;
-                string groupId = tglib.bot_getChatid(update).ToString();
+                    //  List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
 
-                //  List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
+                    List<SortedList> lst = ormJSonFL.qry($"grpCfgDir/grpcfg{chatid2249}.json");
+                    string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
+                    //    city = "
 
-                List<SortedList> lst = ormJSonFL.qry($"grpCfgDir/grpcfg{groupId}.json");
-                string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
-                //    city = "
+                    //qry from mrcht by  where exprs  strFmt
+                    Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+                    // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
+                    //here only one db so no mlt ,todo need updt
+                    // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
+                    string sharNames = ldfld_TryGetValue(whereExprsObj, "@file");
+                    results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObj, msgx);
 
-                //qry from mrcht by  where exprs  strFmt
-                Dictionary<string, StringValues> whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
-                //here only one db so no mlt ,todo need updt
-                // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
-                string sharNames = ldfld_TryGetValue(whereExprsObj, "@file");
-                results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObj, msgx);
+                }
+                else
+                { //privet serach
+                  // update.Message.Chat.Id;
+                    string chatid2249 = tglib.bot_getChatid(update).ToString();
+                    string prjdir = @"../../../";
+                    prjdir = filex.GetAbsolutePath(prjdir);
+                    string dbfile = $"{prjdir}/cfg_prvtChtPark/{chatid2249}.json";
+
+                    SortedList cfg = findOne(dbfile);
+
+                    Dictionary<string, StringValues> whereExprsObj = CopySortedListToDictionary(cfg);
+                    //todo set    limit  cdt into 
+                    results = mrcht.qryFromMrcht("mercht商家数据", null, whereExprsObj, msgx);
+
+                }
 
                 //  results = arrCls.rdmList<InlineKeyboardButton[]>(results);
                 count = results.Count;
@@ -1645,10 +1735,27 @@ namespace prj202405
 
 
             //   Console.WriteLine(" endfun  GetList()");
-            dbgCls.print_ret(__METHOD__, "");
+            print_ret(__METHOD__, "");
 
         }
 
+        static Dictionary<string, StringValues> CopySortedListToDictionary(SortedList sortedList)
+        {
+            Dictionary<string, StringValues> dictionary = new Dictionary<string, StringValues>();
+
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                string key = entry.Key as string;
+                string value = entry.Value as string;
+
+                if (key != null && value != null)
+                {
+                    dictionary[key] = new StringValues(value);
+                }
+            }
+
+            return dictionary;
+        }
 
 
         //static async Task evt_btnclick_Pt2_qryByKwd(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
@@ -2323,7 +2430,7 @@ namespace prj202405
                     Console.WriteLine("告知评分成功时出错:" + e.Message);
                 }
 
-                Message? scoreTipMsg = null;
+                Telegram.Bot.Types.Message scoreTipMsg = null;
                 try
                 {
                     //感谢打分
@@ -2342,7 +2449,7 @@ namespace prj202405
                 _ = Task.Run(async () =>
                 {
                     await Task.Delay(10000);
-                    if (scoreTipMsg != null)
+                    if (scoreTipMsg == null)
                     {
                         try
                         {
@@ -2362,7 +2469,7 @@ namespace prj202405
                 user.Views++;
                 contact_Merchant.Views++;
                 user.ViewTimes.Add(DateTime.Now);
-                Message? msg = null;
+                Telegram.Bot.Types.Message? msg = null;
             }
 
             var result = string.Empty;
@@ -2511,7 +2618,7 @@ namespace prj202405
                 // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
                 string imgPath = "搜索横幅.gif";
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                Message message2 = await Program.botClient.SendPhotoAsync(
+                Telegram.Bot.Types.Message message2 = await Program.botClient.SendPhotoAsync(
               chatId: cq.Message.Chat.Id
                   , Photo2, null,
                  caption: result,
@@ -2531,7 +2638,7 @@ namespace prj202405
                     obj.Add("txt", result);
                     obj.Add("menu", menu);
                     logCls.log(obj, "detailClickDir");
-                    Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+                    Telegram.Bot.Types.Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
 
                     logCls.log(m, "detailClickLogDir");
                 }

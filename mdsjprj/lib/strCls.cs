@@ -480,8 +480,8 @@ namespace prj202405.lib
 
         internal static bool eq(object? v, string cityName4srch)
         {
-            if (v == null) return false;
-            return v.Equals(cityName4srch);
+            if (v == null) return false; if (cityName4srch == null) return false;
+            return v.ToString().Trim().ToUpper().Equals(cityName4srch.Trim().ToUpper());
         }
 
 

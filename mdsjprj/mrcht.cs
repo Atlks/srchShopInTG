@@ -38,6 +38,7 @@ using static libx.storeEngr4Nodesqlt;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using libx;
+using System.Drawing.Printing;
 namespace mdsj
 {
     internal class mrcht
@@ -134,7 +135,7 @@ namespace mdsj
 
             //   var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
 
-            HashSet<string> postnKywd位置词set = getPostnWds(dbFrom, shareNames, whereExprsObj);
+            HashSet<string> postnKywd位置词set = qry_getPostnWds(dbFrom, shareNames, whereExprsObj);
             bool msgHasPostWd = isMmsgHasMatchPostWd(postnKywd位置词set, kwds);
             // weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
@@ -142,13 +143,14 @@ namespace mdsj
            // Func<SortedList, bool> whereFun22 = filtrList2whereFun111();
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
-
+                if (row["园区"].ToString().Contains("东风"))
+                    Console.WriteLine("dbg");
                 List<Filtr> li = new List<Filtr>();
                 li.Add(new Filtr(isNotEmptyLianxi(row)));
-                //li.Add(new Condtn(isLianxifshValid(row)));
-                //li.Add(new Condtn(isFldValEq111(row, "城市", whereExprsObj)));
-                //li.Add(new Condtn(isFldValEq111(row, "园区", whereExprsObj)));
-                //li.Add(new Condtn(isFldValEq111(row, "国家", whereExprsObj)));
+                li.Add(new Filtr(isLianxifshValid(row)));
+                li.Add(new Filtr(isFldValEq111(row, "城市", whereExprsObj)));
+                li.Add(new Filtr(isFldValEq111(row, "园区", whereExprsObj)));
+                li.Add(new Filtr(isFldValEq111(row, "国家", whereExprsObj)));
                 //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
                 //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
                 if (!ChkAllFltrTrue(li))
@@ -161,16 +163,18 @@ namespace mdsj
                 if (!isLianxifshValid(row))
                     return false;
 
+              
+
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                if (hasCondt(whereExprsObj, "城市"))
-                    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
-                        return false;
-                if (hasCondt(whereExprsObj, "园区"))
-                    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
-                        return false;
-                if (hasCondt(whereExprsObj, "国家"))
-                    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
-                        return false;
+                //if (hasCondt(whereExprsObj, "城市"))
+                //    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                //        return false;
+                //if (hasCondt(whereExprsObj, "园区"))
+                //    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                //        return false;
+                //if (hasCondt(whereExprsObj, "国家"))
+                //    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                //        return false;
                 //  if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                 //     return false;
 
@@ -222,7 +226,7 @@ namespace mdsj
                     return btnsInLine;
                 }, rnd_next4SqltRf());
             //end fun
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
+            print_ret(MethodBase.GetCurrentMethod().Name, array_slice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
         }
 
@@ -330,7 +334,7 @@ namespace mdsj
 
 
 
-            public static HashSet<string> getPostnWds(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)
+            public static HashSet<string> qry_getPostnWds(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)
             {
 
                 Func<SortedList, bool> whereFun = (SortedList row) =>
@@ -353,7 +357,8 @@ namespace mdsj
                     }
                     catch (Exception e)
                     {
-
+                        print_catchEx("getPostnWds",e);
+                        //print_varDump("getPostnWds","ex", e);
                     }
                     return false;
                 };
@@ -396,7 +401,14 @@ namespace mdsj
                 return filteredSet;
             }
 
-            private static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
+        private static void print_catchEx(string v, Exception e)
+        {
+            Console.WriteLine($"------{v}() catch ex----------_");
+            Console.WriteLine(e);
+            Console.WriteLine($"------{v}() catch ex finish----------_");
+        }
+
+        private static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
             {
                 string[] a = v.Split(" ");
                 foreach (string wd in a)

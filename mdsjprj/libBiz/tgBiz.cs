@@ -491,6 +491,11 @@ namespace mdsj.libBiz
 
         }
 
+        public static bool isGrpChat(Update update)
+        {
+            return isGrpChat(update?.Message?.Chat?.Type);
+        }
+      //  isGrpChat(update?.Message?.Chat?.Type)
         public static bool isGrpChat(ChatType? type)
         {
             if (type == ChatType.Private)
@@ -587,6 +592,7 @@ namespace mdsj.libBiz
 
                 };
             var rkm = new ReplyKeyboardMarkup(Keyboard);
+            
             return rkm;
         }
 

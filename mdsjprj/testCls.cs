@@ -63,9 +63,8 @@ using System.Threading;
 
 using System.Text.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
-using Lucene.Net.Analysis.Standard;
-using Lucene.Net.Store;
-using Lucene.Net.Index;
+ 
+ 
 using DocumentFormat.OpenXml.Wordprocessing;
 
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -109,7 +108,7 @@ namespace prj202405
         internal static async Task testAsync()
         {
 
-        //    tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt, tgBiz.tg_btmBtns());
+         //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt, tgBiz.tg_btmBtns());
 
             //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
             //var rzt = await RecognizeMusic(s222);

@@ -37,6 +37,7 @@ using static prj202405.lib.tglib;
 using static prj202405.timerCls;
 using static mdsj.lib.util;
 using NAudio.Wave;
+using Newtonsoft.Json.Linq;
 namespace prj202405
 {
     internal class timerCls
@@ -235,6 +236,7 @@ namespace prj202405
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
                     var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
+                  
                     tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt, tgBiz.tg_btmBtns());
                 }
             }
@@ -255,8 +257,7 @@ namespace prj202405
         /// <summary>
         /// /、、https://t.me/shibolianmeng
         /// </summary>
-        public static string plchdTxt = "💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
-           // "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
+        public static string plchdTxt = "💁博彩盘推荐：<a href='https://sb.game'><b>世博联盟</b></a>";
 
         //static string   plchdTxt = "💸 信誉博彩盘推荐 :  世博联盟飞投博彩 (https://t.me/shibolianmeng) 💸";
         public static async void z_actSj()
@@ -423,7 +424,17 @@ namespace prj202405
 
 
         }
-      
+        static KeyboardButton[][] RemoveButtonByName(KeyboardButton[][] keyboard, string buttonName)
+        {
+            for (int i = 0; i < keyboard.Length; i++)
+            {
+                List<KeyboardButton> buttons = new List<KeyboardButton>(keyboard[i]);
+                buttons.RemoveAll(button => button.Text == buttonName);
+                keyboard[i] = buttons.ToArray();
+            }
+
+            return keyboard;
+        }
 
         public static async Task tmrEvt_sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
         {
@@ -435,16 +446,34 @@ namespace prj202405
             {
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
-                var key = de.Key;
+                var chatid = de.Key;
                 Console.WriteLine(" SendPhotoAsync " + de.Key);
+                var map = de.Value;
+                JObject jo =(JObject) map;
+                string chtType = getFld(jo,"chat.type","");
+
 
                 //  Program.botClient.send
                 try
                 {
+                    //私聊不要助力本群
+                    if (!chtType.Contains("group"))
+                    {
+                        rplyKbdMkp = tgBiz.tg_btmBtns();
+                        KeyboardButton[][] kbtns =(KeyboardButton[][]) rplyKbdMkp.Keyboard;
+                        RemoveButtonByName(kbtns, "🔥助力本群");
+                    }else
+                    {
+                        rplyKbdMkp = tgBiz.tg_btmBtns();
+                    }
+                       
+
+                    //def is grp btns
+                    //tgBiz.tg_btmBtns()
                     var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                     //  Message message2dbg = await 
                     Program.botClient.SendTextMessageAsync(
-                 Convert.ToInt64(de.Key), msgtxt,
+                 Convert.ToInt64(chatid), msgtxt,
                      parseMode: ParseMode.Html,
                     replyMarkup: rplyKbdMkp,
                     protectContent: false, disableWebPagePreview: true);
@@ -465,6 +494,23 @@ namespace prj202405
 
 
 
+        }
+
+        public static string getFld(JObject? jo, string fld, string v2)
+        {
+            // 获取 chat.type 属性
+            JToken chatTypeToken = jo.SelectToken(fld);
+
+            if (chatTypeToken != null)
+            {
+                string chatType = chatTypeToken.ToString();
+                return chatType;
+              //  Console.WriteLine("chat.type: " + chatType);
+            }
+            else
+            {
+                return v2;
+            }
         }
 
         //private static void wancan()
