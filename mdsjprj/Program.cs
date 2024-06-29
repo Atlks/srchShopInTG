@@ -321,13 +321,7 @@ namespace prj202405
 
             }
 
-            if (update.Type == UpdateType.CallbackQuery)
-            {
-                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
-                if (ldfld2str(parse_str1, "btn") == "解除禁言")
-                    canSendBtn_click(update);
-
-            }
+          
 
             if (update.Type == UpdateType.CallbackQuery)
             {
@@ -789,18 +783,7 @@ namespace prj202405
 
 
 
-        private static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
-        {
-            if (text == null)
-                return null;
-            string[] spltWds = splt_by_fenci(ref text);
-            foreach (string wd in spltWds)
-            {
-                if (商品与服务词库.Contains(wd))
-                    return wd;
-            }
-            return null;
-        }
+   
 
 
 
@@ -1687,24 +1670,7 @@ namespace prj202405
 
         }
 
-        static Dictionary<string, StringValues> CopySortedListToDictionary(SortedList sortedList)
-        {
-            Dictionary<string, StringValues> dictionary = new Dictionary<string, StringValues>();
-
-            foreach (DictionaryEntry entry in sortedList)
-            {
-                string key = entry.Key as string;
-                string value = entry.Value as string;
-
-                if (key != null && value != null)
-                {
-                    dictionary[key] = new StringValues(value);
-                }
-            }
-
-            return dictionary;
-        }
-
+  
 
         //static async Task evt_btnclick_Pt2_qryByKwd(string msgx, int pagex, int pagesizex, ITelegramBotClient botClient, Update update)
         //{
@@ -2671,21 +2637,7 @@ namespace prj202405
             }
         }
 
-        private static List<string> cvt2list(SortedList merchant1, string v)
-        {
-            List<string> li = new List<string>();
-            try
-            {
-                li.Add(trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, v, "").ToString()));
-
-            }
-            catch (Exception e)
-            {
-
-            }
-
-            return li;
-        }
+    
 
         private static string evt_detail_rendLianxiFosh(Merchant? contact_Merchant, string result)
         {

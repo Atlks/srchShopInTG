@@ -429,23 +429,7 @@ namespace prj202405
 
         }
 
-        public static string getFld(JObject? jo, string fld, string v2)
-        {
-            // 获取 chat.type 属性
-            JToken chatTypeToken = jo.SelectToken(fld);
-
-            if (chatTypeToken != null)
-            {
-                string chatType = chatTypeToken.ToString();
-                return chatType;
-              //  Console.WriteLine("chat.type: " + chatType);
-            }
-            else
-            {
-                return v2;
-            }
-        }
-
+      
         //private static void wancan()
         //{
         //    throw new NotImplementedException();

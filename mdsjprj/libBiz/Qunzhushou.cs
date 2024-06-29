@@ -1,4 +1,5 @@
-﻿using prj202405.lib;
+﻿global using static mdsj.libBiz.Qunzhushou;
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -55,11 +56,12 @@ using Org.BouncyCastle.Crypto.IO;
 using mdsj.lib;
 using Concentus.Structs;
 using RG3.PF.Abstractions.Entity;
+
 namespace mdsj.libBiz
 {
     internal class Qunzhushou
     {
-        private const string BotToken = "6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog";
+        public const string BotToken = "6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog";
         public static TelegramBotClient botClient_QunZzhushou = new(token: BotToken);
 
         internal static void main1()
@@ -265,87 +267,6 @@ namespace mdsj.libBiz
         }
 
 
-        public static void ConvertOggToMp3(string inputFilePath, string outputFilePath)
-        {
-            if (string.IsNullOrEmpty(inputFilePath))
-                throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
-
-            if (string.IsNullOrEmpty(outputFilePath))
-                throw new ArgumentException("Output file path cannot be null or empty", nameof(outputFilePath));
-
-            // Ensure the input file exists
-            if (!System.IO.File.Exists(inputFilePath))
-                throw new FileNotFoundException("Input file not found", inputFilePath);
-
-            try
-            {
-                // Initialize the Opus decoder
-                OpusDecoder decoder = new OpusDecoder(48000, 2);
-
-                // Open the Ogg file
-                 FileStream oggFile = new FileStream(inputFilePath, FileMode.Open);
-                 OpusOggReadStream oggStream = new OpusOggReadStream(decoder, oggFile);
-                using (WaveFileWriter waveWriter = new WaveFileWriter(System.IO.Path.ChangeExtension(outputFilePath, ".wav"), new WaveFormat(48000, 16, 2)))
-                {
-                    // Read the Ogg file and write to a WAV file
-                    while (oggStream.HasNextPacket)
-                    {
-                        short[] packet = oggStream.DecodeNextPacket();
-                        if (packet != null)
-                        {
-                            byte[] buffer = new byte[packet.Length * sizeof(short)];
-                            Buffer.BlockCopy(packet, 0, buffer, 0, buffer.Length);
-                            waveWriter.Write(buffer, 0, buffer.Length);
-                        }
-                    }
-                }
-
-                // Convert WAV file to MP3
-                using (var reader = new AudioFileReader(System.IO.Path.ChangeExtension(outputFilePath, ".wav")))
-                using (var mp3Writer = new LameMP3FileWriter(outputFilePath, reader.WaveFormat, LAMEPreset.VBR_90))
-                {
-                    reader.CopyTo(mp3Writer);
-                }
-
-                // Delete the intermediate WAV file
-             //   File.Delete(System.IO.Path.ChangeExtension(outputFilePath, ".wav"));
-
-                Console.WriteLine($"Successfully converted {inputFilePath} to {outputFilePath}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error during conversion: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
-            }
-        }
-        public static void ConvertOggToMp3_dep(string inputFilePath, string outputFilePath)
-        {
-            var __METHOD__ = "ConvertOggToMp3";
-            print_call(__METHOD__, func_get_args(inputFilePath, outputFilePath));
-            if (string.IsNullOrEmpty(inputFilePath))
-                throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
-
-            if (string.IsNullOrEmpty(outputFilePath))
-                throw new ArgumentException("Output file path cannot be null or empty", nameof(outputFilePath));
-
-            // Ensure the input file exists
-            if (!System.IO.File.Exists(inputFilePath))
-                throw new FileNotFoundException("Input file not found", inputFilePath);
-            try
-            {
-                inputFilePath=GetAbsolutePath(inputFilePath);
-                using (var vorbis = new NAudio.Vorbis.VorbisWaveReader(inputFilePath))
-                using (var mp3FileWriter = new LameMP3FileWriter(outputFilePath, vorbis.WaveFormat, LAMEPreset.VBR_90))
-                {
-                    vorbis.CopyTo(mp3FileWriter);
-                }
-            }
-            catch(Exception e)
-            {
-                Console.WriteLine(e);
-            }
-          
-        }
         private static async Task Bot_OnVoiceAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVoiceAsync";
@@ -443,24 +364,6 @@ namespace mdsj.libBiz
         }
 
 
-        public static string InsertCurrentTimeToFileName(string fileName)
-        {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentException("File name cannot be null or empty", nameof(fileName));
-
-            // 获取文件名和扩展名
-            string nameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(fileName);
-            string extension = System.IO.Path.GetExtension(fileName);
-
-            // 获取当前时间并格式化
-            string formattedTime = DateTime.Now.ToString("yyMMdd_HHmmss_fff");
-
-            // 构造新的文件名
-            string newFileName = $"{nameWithoutExtension}_{formattedTime}{extension}";
-
-            return newFileName;
-        }
-
         private static void OnChatMembr(Update update, string reqThreadId)
         {
             // throw new NotImplementedException();
@@ -469,6 +372,13 @@ namespace mdsj.libBiz
         private static void OnCallbk(Update update, string reqThreadId)
         {
             // throw new NotImplementedException();
+            //if (update.Type == UpdateType.CallbackQuery)
+            //{
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if (ldfld2str(parse_str1, "btn") == "解除禁言")
+                    canSendBtn_click(update);
+
+          //  }
         }
 
         private static void OnMsg(Update update, string reqThreadId)
@@ -541,17 +451,7 @@ namespace mdsj.libBiz
             }
         }
 
-        public static async Task SendThankYouMessage(long chatId)
-        {
-            try
-            {
-                await botClient.SendTextMessageAsync(chatId, "感谢投票");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending message: {ex.Message}");
-            }
-        }
+ 
 
         private static async void Bot_OnVideo(Update update, string reqThreadId)
         {
@@ -595,100 +495,6 @@ namespace mdsj.libBiz
             //   System.IO.File.Delete(mp3FilePath);
             print_ret(__METHOD__, 0);
 
-        }
-        public static void Copy2024(string sourceFilePath, string destination_newFileName)
-        {
-            filex.mkdir_forFile(destination_newFileName);
-
-            // 构造目标文件的完整路径
-            // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
-
-            // 复制并重命名文件
-            System.IO.File.Copy(sourceFilePath, destination_newFileName, true);
-        }
-        public static void CopyAndRenameFile(string sourceFilePath, string destinationFolderPath, string newFileName)
-        {
-            // 如果目标文件夹不存在，则创建它
-            Directory.CreateDirectory(destinationFolderPath);
-
-            // 构造目标文件的完整路径
-            string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
-
-            // 复制并重命名文件
-            System.IO.File.Copy(sourceFilePath, destinationFilePath, true);
-        }
-
-        public static void CopyFileToFolder(string sourceFilePath, string targetFolderPath)
-        {
-            // 检查目标文件夹是否存在，如果不存在则创建
-            if (!Directory.Exists(targetFolderPath))
-            {
-                Directory.CreateDirectory(targetFolderPath);
-                Console.WriteLine($"Created directory: {targetFolderPath}");
-            }
-
-            // 获取源文件名
-            string fileName = System.IO.Path.GetFileName(sourceFilePath);
-
-            // 构建目标文件路径
-            string destinationFilePath = System.IO.Path.Combine(targetFolderPath, fileName);
-
-            // 复制文件
-            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
-        }
-        private static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
-        {
-            var __METHOD__ = "DownloadFile2localThruTgApi";
-            print_call(__METHOD__, func_get_args( filePath, fileFullPath));
-
-            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
-            //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
-
-            using (var httpClient = new HttpClient())
-            {
-                // 设置超时时间为30秒
-                httpClient.Timeout = TimeSpan.FromSeconds(300);
-                var response = await httpClient.GetAsync(fileUrl);
-                // 检查响应是否成功
-                response.EnsureSuccessStatusCode();
-                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                await response.Content.CopyToAsync(fileStream);
-            }
-
-            return fileFullPath;
-        }
-        private static async Task<string> DownloadFileThruTgApi(string filePath, string fileName)
-        {
-            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
-            var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
-
-            using (var httpClient = new HttpClient())
-            {
-                // 设置超时时间为30秒
-                httpClient.Timeout = TimeSpan.FromSeconds(200);
-                var response = await httpClient.GetAsync(fileUrl);
-                // 检查响应是否成功
-                response.EnsureSuccessStatusCode();
-                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
-                await response.Content.CopyToAsync(fileStream);
-            }
-
-            return fileFullPath;
-        }
-
-        private static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
-        {
-            var __METHOD__ = "ConvertVideoToMp3";
-            print_call(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
-
-            // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
-            var ffMpeg = new FFMpegConverter();
-            //   ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
-            // Convert video to MP3
-            // Convert video to MP3
-            ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
-            //return mp3FilePath;
-            Console.WriteLine($"Conversion completed: {mp3FilePath}");
         }
         private const string serchTipsWd = "嗨小爱童鞋";
         private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
@@ -760,7 +566,7 @@ namespace mdsj.libBiz
 
             if (cmd.Equals("记账"))
             {
-                evt_记账(update);
+                evt_cash记账(update);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
@@ -768,14 +574,14 @@ namespace mdsj.libBiz
 
             if (cmd.Equals("账单清单"))
             {
-                evt_账单清单账(update);
+                evt_cash账单清单账(update);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
             if (cmd.Equals("删除"))
             {
-                evt_删除(update);
+                evt_cash删除(update);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
@@ -789,108 +595,31 @@ namespace mdsj.libBiz
 
         private static void evt_cashflowGrpby账单统计(Update update)
         {
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = ldElmt(a, 1);
-
-            var month = ldElmt(a, 2);
+            string msg2 = update.Message.Text.Trim();
             long uid = update.Message.From.Id;
-
-            List<SortedList> li = Qe_qryV2<SortedList>("blshtDir", "blsht" + uid.ToString() + ".json",
-
-               (SortedList row) =>
-               {
-                   if (row["month"].ToString().Equals(month))
-                       return true;
-                   return false;
-               }, null,
-               (SortedList row) =>
-               {
-                   return row;
-               }
-               , rnd4jsonFlRf());
-
-            var rzt = SummarizeByCategory(li);
+            Dictionary<string, decimal> rzt = cash_sumByMonth(uid, msg2);
             var msg = json_encode(rzt);
             botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, msg, replyToMessageId: update.Message.MessageId);
 
         }
 
-
-        public static Dictionary<string, decimal> SummarizeByCategory(List<SortedList> dataList)
+        private static void evt_cash删除(Update update)
         {
-
-            const string amt = "amt";
-            const string cate = "cate";
-            var categoryAmountMap = new Dictionary<string, decimal>();
-
-            foreach (var data in dataList)
-            {
-
-                if (data.ContainsKey(cate) && data.ContainsKey(amt))
-                {
-                    string category = data[cate].ToString();
-
-                    decimal amount = Convert.ToDecimal(data[amt]);
-
-                    if (categoryAmountMap.ContainsKey(category))
-                    {
-                        categoryAmountMap[category] += amount;
-                    }
-                    else
-                    {
-                        categoryAmountMap[category] = amount;
-                    }
-                }
-            }
-
-            return categoryAmountMap;
-        }
-
-        private static void evt_删除(Update update)
-        {
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = ldElmt(a, 1);
-
-            var id = ldElmt(a, 2);
-
-
+            string msg = update.Message.Text.Trim();
             long uid = update.Message.From.Id;
-            ormJSonFL.del(id, $"blshtDir/blsht{uid}.json");
-
+            cash_del(msg, uid);
 
             botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "删除ok", replyToMessageId: update.Message.MessageId);
 
         }
 
-        private static void evt_账单清单账(Update update)
+    
+
+        private static void evt_cash账单清单账(Update update)
         {
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = ldElmt(a, 1);
+            string msg2 = update.Message.Text.Trim(); long uid = update.Message.From.Id;
 
-            var month = ldElmt(a, 2);
-            long uid = update.Message.From.Id;
-
-            //   Func<SortedList, bool> whereFun = ;
-
-
-            List<string> li = Qe_qryV2<string>("blshtDir", "blsht" + uid.ToString() + ".json",
-
-                (SortedList row) =>
-                {
-                    if (row["month"].ToString().Equals(month))
-                        return true;
-                    return false;
-                }, (SortedList row) =>
-                {
-                    return int.Parse(row["date"].ToString());
-                },
-
-
-                (SortedList row) =>
-                {
-                    return $"{row["date"]} {row["cate"]} {row["amt"]} {row["demo"]}";
-                }
-                , rnd4jsonFlRf());
+            List<string> li = cash_qry(msg2, uid);
 
             string msg = string.Join("\n", li);
             if (msg.Trim() == "")
@@ -902,7 +631,8 @@ namespace mdsj.libBiz
 
         }
 
-        private static void evt_记账(Update update)
+    
+        private static void evt_cash记账(Update update)
         {
 
             long uid = update.Message.From.Id;
@@ -914,63 +644,8 @@ namespace mdsj.libBiz
 
         }
 
-        public static string logic_addCashflow(long uid, string? text)
-        {
-            string[] a = text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = ldElmt(a, 1);
-
-            var date = ldElmt(a, 2);
-            var amt = toNumber(ldElmt(a, 3));
-            var cate = ldElmt(a, 4);
-            var demo = substr_AfterMarker(text.Trim(), cate);
-            SortedList map = new SortedList();
-            map.Add("date", date);
-            map.Add("amt", amt);
-            map.Add("month", DateTime.Now.Year + left(date, 2));
-            map.Add("cate", cate);
-            map.Add("demo", demo);
-            string recID = $"{date}{cate}{new Random().Next()}";
-            map.Add("id", recID);
-
-
-            ormJSonFL.save(map, $"blshtDir/blsht{uid}.json");
-            return recID;
-        }
-
-        private static double toNumber(string str)
-        {
-
-            if (string.IsNullOrWhiteSpace(str))
-            {
-                Console.WriteLine("Input string cannot be null or whitespace.");
-                return 0;
-                //    throw new ArgumentNullException(nameof(str), "Input string cannot be null or whitespace.");
-            }
-
-            if (double.TryParse(str, out double result))
-            {
-                return result;
-            }
-            else
-            {
-                Console.WriteLine("Input string is not in the correct format for a double.");
-                //  throw new FormatException("Input string is not in the correct format for a double.");
-                return 0;
-            }
-
-        }
-
-        public static string ldElmt(string[] array, int index)
-        {
-            if (index < 0 || index >= array.Length)
-            {
-                return "";
-            }
-
-            string element = array[index];
-
-            return element?.Trim().ToUpper();
-            //   return   array[index].Trim().ToUpper();
-        }
+      
+    
+     
     }
 }

@@ -13,6 +13,34 @@ namespace mdsj.libBiz
 {
     internal class otherlib
     {
+        public static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
+        {
+            if (text == null)
+                return null;
+            string[] spltWds = splt_by_fenci(ref text);
+            foreach (string wd in spltWds)
+            {
+                if (商品与服务词库.Contains(wd))
+                    return wd;
+            }
+            return null;
+        }
+
+        public static List<string> cvt2list(SortedList merchant1, string fld)
+        {
+            List<string> li = new List<string>();
+            try
+            {
+                li.Add(trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, fld, "").ToString()));
+
+            }
+            catch (Exception e)
+            {
+
+            }
+
+            return li;
+        }
         public static async Task foreachChtSesses(Action act)
         {
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;

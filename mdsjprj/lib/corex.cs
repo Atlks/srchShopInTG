@@ -28,6 +28,26 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
+
+        public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
+        {
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                //if (Convert.ToInt64(de.Key) == Program.groupId)
+                //    continue;
+                //  var chatid = Convert.ToInt64(de.Key);
+                try
+                {
+                    //  if(chatid== -1002206103554)
+                    fun(de);
+                }
+                catch (Exception e)
+                {
+                    print_catchEx("foreach_hashtable", e);
+                    //   Console.WriteLine(e);
+                }
+            }
+        }
         public static void print(string v)
         {
             Console.WriteLine(v);

@@ -1,6 +1,8 @@
-﻿using Newtonsoft.Json.Linq;
+﻿global using static prj202405.lib.arrCls;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
+
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +11,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections;
 using Microsoft.Extensions.Primitives;
 using System.Reflection;
+
 
 
 
@@ -555,6 +558,54 @@ namespace prj202405.lib
             }
             SortedList1_iot.Add(key, objSave);
         }
+        public static string ldElmt(string[] array, int index)
+        {
+            if (index < 0 || index >= array.Length)
+            {
+                return "";
+            }
+
+            string element = array[index];
+
+            return element?.Trim().ToUpper();
+            //   return   array[index].Trim().ToUpper();
+        }
+        public static Dictionary<string, StringValues> CopySortedListToDictionary(SortedList sortedList)
+        {
+            Dictionary<string, StringValues> dictionary = new Dictionary<string, StringValues>();
+
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                string key = entry.Key as string;
+                string value = entry.Value as string;
+
+                if (key != null && value != null)
+                {
+                    dictionary[key] = new StringValues(value);
+                }
+            }
+
+            return dictionary;
+        }
+
+
+        public static string getFld(JObject? jo, string fld, string v2)
+        {
+            // 获取 chat.type 属性
+            JToken chatTypeToken = jo.SelectToken(fld);
+
+            if (chatTypeToken != null)
+            {
+                string chatType = chatTypeToken.ToString();
+                return chatType;
+                //  Console.WriteLine("chat.type: " + chatType);
+            }
+            else
+            {
+                return v2;
+            }
+        }
+
         public static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
         {
             string[] a = v.Split(" ");

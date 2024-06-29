@@ -21,10 +21,103 @@ using EchoPrintSharp;
 //using ChromaWrapper.Fingerprint;
 using Newtonsoft.Json;
 using AcoustID;
+using NReco.VideoConverter;
+using Concentus.Oggfile;
+using Concentus.Structs;
+using NAudio.Lame;
+using NAudio.Wave;
 namespace mdsj.lib
 {
     internal class music
     {
+
+        public static async Task<string> DownloadFileThruTgApi(string filePath, string fileName)
+        {
+            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
+
+            using (var httpClient = new HttpClient())
+            {
+                // 设置超时时间为30秒
+                httpClient.Timeout = TimeSpan.FromSeconds(200);
+                var response = await httpClient.GetAsync(fileUrl);
+                // 检查响应是否成功
+                response.EnsureSuccessStatusCode();
+                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            return fileFullPath;
+        }
+        public static void ConvertOggToMp3(string inputFilePath, string outputFilePath)
+        {
+            if (string.IsNullOrEmpty(inputFilePath))
+                throw new ArgumentException("Input file path cannot be null or empty", nameof(inputFilePath));
+
+            if (string.IsNullOrEmpty(outputFilePath))
+                throw new ArgumentException("Output file path cannot be null or empty", nameof(outputFilePath));
+
+            // Ensure the input file exists
+            if (!System.IO.File.Exists(inputFilePath))
+                throw new FileNotFoundException("Input file not found", inputFilePath);
+
+            try
+            {
+                // Initialize the Opus decoder
+                OpusDecoder decoder = new OpusDecoder(48000, 2);
+
+                // Open the Ogg file
+                FileStream oggFile = new FileStream(inputFilePath, FileMode.Open);
+                OpusOggReadStream oggStream = new OpusOggReadStream(decoder, oggFile);
+                using (WaveFileWriter waveWriter = new WaveFileWriter(System.IO.Path.ChangeExtension(outputFilePath, ".wav"), new WaveFormat(48000, 16, 2)))
+                {
+                    // Read the Ogg file and write to a WAV file
+                    while (oggStream.HasNextPacket)
+                    {
+                        short[] packet = oggStream.DecodeNextPacket();
+                        if (packet != null)
+                        {
+                            byte[] buffer = new byte[packet.Length * sizeof(short)];
+                            Buffer.BlockCopy(packet, 0, buffer, 0, buffer.Length);
+                            waveWriter.Write(buffer, 0, buffer.Length);
+                        }
+                    }
+                }
+
+                // Convert WAV file to MP3
+                using (var reader = new AudioFileReader(System.IO.Path.ChangeExtension(outputFilePath, ".wav")))
+                using (var mp3Writer = new LameMP3FileWriter(outputFilePath, reader.WaveFormat, LAMEPreset.VBR_90))
+                {
+                    reader.CopyTo(mp3Writer);
+                }
+
+                // Delete the intermediate WAV file
+                //   File.Delete(System.IO.Path.ChangeExtension(outputFilePath, ".wav"));
+
+                Console.WriteLine($"Successfully converted {inputFilePath} to {outputFilePath}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error during conversion: {ex.Message}");
+                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+            }
+        }
+
+        public static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
+        {
+            var __METHOD__ = "ConvertVideoToMp3";
+            print_call(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
+
+            // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
+            var ffMpeg = new FFMpegConverter();
+            //   ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
+            // Convert video to MP3
+            // Convert video to MP3
+            ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
+            //return mp3FilePath;
+            Console.WriteLine($"Conversion completed: {mp3FilePath}");
+        }
+
         public static string AcoustIDApiKey = "AMsnvQgE0s";
         private const string AcoustIDApiUrl = "https://api.acoustid.org/v2/lookup";
         //public static string GenerateAudioFingerprint(string mp3FilePath)

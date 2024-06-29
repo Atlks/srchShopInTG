@@ -13,6 +13,29 @@ namespace mdsj.lib
 {
     internal class cast
     {
+        public static double toNumber(string str)
+        {
+
+            if (string.IsNullOrWhiteSpace(str))
+            {
+                Console.WriteLine("Input string cannot be null or whitespace.");
+                return 0;
+                //    throw new ArgumentNullException(nameof(str), "Input string cannot be null or whitespace.");
+            }
+
+            if (double.TryParse(str, out double result))
+            {
+                return result;
+            }
+            else
+            {
+                Console.WriteLine("Input string is not in the correct format for a double.");
+                //  throw new FormatException("Input string is not in the correct format for a double.");
+                return 0;
+            }
+
+        }
+
 
         public static SortedList ConvertToSortedList(object obj)
         {

@@ -40,6 +40,8 @@ using Microsoft.Extensions.Primitives;
 using DocumentFormat.OpenXml;
 using System.Reflection;
 using mdsj;
+using Newtonsoft.Json.Linq;
+using mdsj.libBiz;
 namespace prj202405.lib
 {
     internal class tglib
@@ -106,50 +108,140 @@ namespace prj202405.lib
                 Console.WriteLine($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
+        public static async Task SendThankYouMessage(long chatId)
+        {
+            try
+            {
+                await botClient.SendTextMessageAsync(chatId, "感谢投票");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error sending message: {ex.Message}");
+            }
+        }
+
+        public static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
+        {
+            var __METHOD__ = "DownloadFile2localThruTgApi";
+            print_call(__METHOD__, func_get_args(filePath, fileFullPath));
+
+            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
+
+            using (var httpClient = new HttpClient())
+            {
+                // 设置超时时间为30秒
+                httpClient.Timeout = TimeSpan.FromSeconds(300);
+                var response = await httpClient.GetAsync(fileUrl);
+                // 检查响应是否成功
+                response.EnsureSuccessStatusCode();
+                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            return fileFullPath;
+        }
+
         public static async Task bot_sendMsgToMltV2(string imgPath, string msgtxt, string wdss)
+        {
+            bot_sendMsgToMltV3(imgPath, msgtxt, wdss);
+            //var __METHOD__ = "sendMsg";
+            //dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
+
+            //try
+            //{
+            //    // var  = plchdTxt;
+            //    //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+            //    var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            //    var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //    //遍历方法三：遍历哈希表中的键值
+            //    foreach (DictionaryEntry de in chtsSess)
+            //    {
+            //        //if (Convert.ToInt64(de.Key) == Program.groupId)
+            //        //    continue;
+            //        var chatid = Convert.ToInt64(de.Key);
+            //        try
+            //        {
+            //            //  if(chatid== -1002206103554)
+            //            srchNsendFotoToGrp(imgPath, msgtxt, wdss, chatid);
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            Console.WriteLine(e);
+            //        }
+            //    }
+
+            //}
+            //catch (Exception e)
+            //{
+            //    Console.WriteLine(e);
+            //    logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, wdss)));
+
+            //}
+            //dbgCls.print_ret(__METHOD__, 0);
+        }
+
+
+        public static async Task bot_sendMsgToMltV3(string imgPath, string msgtxt, string wdss4srch)
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
 
-            try
+
+            // var  = plchdTxt;
+            //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+            var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            //遍历方法三：遍历哈希表中的键值
+            foreach_hashtable(chtsSess, (de) =>
             {
-                // var  = plchdTxt;
-                //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
-                var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-                //遍历方法三：遍历哈希表中的键值
-                foreach (DictionaryEntry de in chtsSess)
+                var chatid = Convert.ToInt64(de.Key);
+                var map = de.Value;
+                JObject jo = (JObject)map;
+                string chtType = getFld(jo, "chat.type", "");
+                //私聊不要助力本群
+                if (!chtType.Contains("group"))
                 {
-                    //if (Convert.ToInt64(de.Key) == Program.groupId)
-                    //    continue;
-                    var chatid = Convert.ToInt64(de.Key);
-                    try
-                    {
-                        //  if(chatid== -1002206103554)
-                        srchNsendFotoToGrp(imgPath, msgtxt, wdss, chatid);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e);
-                    }
+                    string chatid2249 = chatid.ToString();
+
+                    string dbfile = $"{prjdir}/cfg_prvtChtPark/{chatid2249}.json";
+
+                    SortedList cfg = findOne(dbfile);
+                    Dictionary<string, StringValues> whereExprsObjFltrs = CopySortedListToDictionary(cfg);
+                    //todo set    limit  cdt into 
+                    //   results = mrcht.qryFromMrcht("mercht商家数据", null, whereExprsObj, msgx);
+                    srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObjFltrs, null);
                 }
+                else
+                {
 
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, wdss)));
+                    var groupId = chatid;
+                    List<SortedList> grpcfgObj = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{groupId}.json");
+                    string whereExprs = (string)db.getRowVal(grpcfgObj, "whereExprs", "");
+                    //    city = "
 
-            }
+                    //qry from mrcht by  where exprs  strFmt
+                    var whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
+                    var shareNamess = arrCls.ldfld_TryGetValue(whereExprsObj, "@share");
+                    srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObj, shareNamess);
+                }
+                return 0;
+            });
+
+
+
+
             dbgCls.print_ret(__METHOD__, 0);
         }
 
-        private static void srchNsendFotoToGrp(string imgPath, string msgtxt, string wdss, long chatid)
+
+
+        private static void srchNsendFotoToChatSess(string imgPath, string msgtxt, string wdss, long chatid, Dictionary<string, StringValues> whereExprsObjFltrs, string partfile区块文件Exprs)
         {
-            Dictionary<string, StringValues> whereExprsObj;
-            string partfile区块文件Exprs;
-            calcPrtExprsNdefWhrCondt(chatid, out whereExprsObj, out partfile区块文件Exprs);
+            //   Dictionary<string, StringValues> whereExprsObj;
+            //  string partfile区块文件Exprs;
+            // calcPrtExprsNdefWhrCondt4grp(chatid, out whereExprsObj, out partfile区块文件Exprs);
             //  var patns_dbfs = db.calcPatns("mercht商家数据", partfile区块文件Exprs);
 
             string keyword = getRdmKwd(wdss);
@@ -161,14 +253,14 @@ namespace prj202405.lib
                 if (ldFldDefEmpty(row, "TG有效") == "N")
                     return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                if (hasCondt(whereExprsObj, "城市"))
-                    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                if (hasCondt(whereExprsObjFltrs, "城市"))
+                    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
                         return false;
-                if (hasCondt(whereExprsObj, "园区"))
-                    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                if (hasCondt(whereExprsObjFltrs, "园区"))
+                    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
                         return false;
-                if (hasCondt(whereExprsObj, "国家"))
-                    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                if (hasCondt(whereExprsObjFltrs, "国家"))
+                    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
                         return false;
                 if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                     return false;
@@ -223,7 +315,7 @@ namespace prj202405.lib
             return keyword;
         }
 
-        private static void calcPrtExprsNdefWhrCondt(long chatid, out Dictionary<string, StringValues> whereExprsObj, out string partfile区块文件Exprs)
+        private static void calcPrtExprsNdefWhrCondt4grp(long chatid, out Dictionary<string, StringValues> whereExprsObj, out string partfile区块文件Exprs)
         {
             var groupId = chatid;
             List<SortedList> grpcfgObj = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{groupId}.json");

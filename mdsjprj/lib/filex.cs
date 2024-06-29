@@ -14,6 +14,67 @@ namespace prj202405.lib
 {
     internal class filex
     {
+        public static void Copy2024(string sourceFilePath, string destination_newFileName)
+        {
+            filex.mkdir_forFile(destination_newFileName);
+
+            // 构造目标文件的完整路径
+            // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
+
+            // 复制并重命名文件
+            System.IO.File.Copy(sourceFilePath, destination_newFileName, true);
+        }
+
+
+        public static string InsertCurrentTimeToFileName(string fileName)
+        {
+            if (string.IsNullOrEmpty(fileName))
+                throw new ArgumentException("File name cannot be null or empty", nameof(fileName));
+
+            // 获取文件名和扩展名
+            string nameWithoutExtension = System.IO.Path.GetFileNameWithoutExtension(fileName);
+            string extension = System.IO.Path.GetExtension(fileName);
+
+            // 获取当前时间并格式化
+            string formattedTime = DateTime.Now.ToString("yyMMdd_HHmmss_fff");
+
+            // 构造新的文件名
+            string newFileName = $"{nameWithoutExtension}_{formattedTime}{extension}";
+
+            return newFileName;
+        }
+
+        public static void CopyAndRenameFile(string sourceFilePath, string destinationFolderPath, string newFileName)
+        {
+            // 如果目标文件夹不存在，则创建它
+            Directory.CreateDirectory(destinationFolderPath);
+
+            // 构造目标文件的完整路径
+            string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
+
+            // 复制并重命名文件
+            System.IO.File.Copy(sourceFilePath, destinationFilePath, true);
+        }
+
+        public static void CopyFileToFolder(string sourceFilePath, string targetFolderPath)
+        {
+            // 检查目标文件夹是否存在，如果不存在则创建
+            if (!Directory.Exists(targetFolderPath))
+            {
+                Directory.CreateDirectory(targetFolderPath);
+                Console.WriteLine($"Created directory: {targetFolderPath}");
+            }
+
+            // 获取源文件名
+            string fileName = System.IO.Path.GetFileName(sourceFilePath);
+
+            // 构建目标文件路径
+            string destinationFilePath = System.IO.Path.Combine(targetFolderPath, fileName);
+
+            // 复制文件
+            System.IO.File.Copy(sourceFilePath, destinationFilePath, overwrite: true);
+        }
+
         public static string GetBaseFileName(string filePath)
         {
             // 获取文件名（带扩展名）
