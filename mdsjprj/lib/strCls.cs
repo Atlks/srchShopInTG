@@ -173,14 +173,14 @@ namespace prj202405.lib
             IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();
-            kwds = CleanStringArray(kwds);
+            kwds = removeEmptyItem(kwds);
             //  string[] kwds = enumerable; // 搜索引擎模式
             string kdwsJoin = string.Join("/", kwds);
             Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
 
-        public static string[] CleanStringArray(string[] input)
+        public static string[] removeEmptyItem(string[] input)
         {
             if (input == null)
             {
@@ -480,14 +480,14 @@ namespace prj202405.lib
             return linesHashSet;
         }
 
-        internal static bool eq(object? v, string cityName4srch)
+        internal static bool str_eq(object? v, string cityName4srch)
         {
             if (v == null) return false; if (cityName4srch == null) return false;
             return v.ToString().Trim().ToUpper().Equals(cityName4srch.Trim().ToUpper());
         }
 
 
-        internal static bool eqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
+        internal static bool str_eqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
         {
 
             string cityName4srch = arrCls.ldfld_TryGetValue(whereExprsObj, cityName4srchxx); ;
@@ -503,7 +503,7 @@ namespace prj202405.lib
 
         }
 
-        internal static string join2024(string v, ICollection keys)
+        internal static string str_join2024(string v, ICollection keys)
         {
             // 获取Hashtable的所有键
             //     ICollection keys = hashtable.Keys;

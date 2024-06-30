@@ -504,10 +504,36 @@ namespace mdsj.libBiz
                 return true;
             return false;
         }
+        public static KeyboardButton[][] RemoveButtonByName(KeyboardButton[][] keyboard, string buttonName)
+        {
+            for (int i = 0; i < keyboard.Length; i++)
+            {
+                List<KeyboardButton> buttons = new List<KeyboardButton>(keyboard[i]);
+                buttons.RemoveAll(button => button.Text == buttonName);
+                keyboard[i] = buttons.ToArray();
+            }
 
+            return keyboard;
+        }
         public const string botname = Program.botname;
 
-        public static ReplyKeyboardMarkup tg_btmBtns()
+        public static ReplyKeyboardMarkup tg_btmBtnsV2(object chattype1)
+        {
+         string   chattype = cast_toString(chattype1);
+            ReplyKeyboardMarkup rplyKbdMkp;
+            if (chattype.Trim().ToLower()=="private")
+            {  
+                rplyKbdMkp = tgBiz.tg_btmBtns();
+                KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
+                RemoveButtonByName(kbtns, "🔥助力本群");
+            }
+            else
+            {
+                rplyKbdMkp = tgBiz.tg_btmBtns();
+            }
+            return rplyKbdMkp;
+        }
+            public static ReplyKeyboardMarkup tg_btmBtns()
         {
             var Keyboard =
                 new KeyboardButton[][]

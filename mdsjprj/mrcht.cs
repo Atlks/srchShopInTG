@@ -251,7 +251,7 @@ namespace mdsj
             {
                 //  string Fld = "城市";
                 if (hasCondt(whereExprsObj, Fld))
-                    if (!strCls.eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                         return false;
 
                 return true;
@@ -351,13 +351,13 @@ namespace mdsj
 
                         //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                         if (hasCondt(whereExprsObj, "城市"))
-                            if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                            if (!strCls.str_eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
                                 return false;
                         if (hasCondt(whereExprsObj, "园区"))
-                            if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                            if (!strCls.str_eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
                                 return false;
                         if (hasCondt(whereExprsObj, "国家"))
-                            if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                            if (!strCls.str_eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                                 return false;
                         return true;
                     }

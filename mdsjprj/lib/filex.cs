@@ -317,7 +317,21 @@ namespace prj202405.lib
             }
             return wordList;
         }
+     public   static HashSet<string> ReadFileToHashSet(string filePath)
+        {
+            HashSet<string> lines = new HashSet<string>();
 
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            return lines;
+        }
         public static ArrayList rdWdsFromFile(string filePath)
         {
             // 创建一个 ArrayList 来存储所有的单词

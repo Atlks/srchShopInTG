@@ -20,21 +20,26 @@ namespace mdsj.libBiz
 
             RemoveSingleCharacterWords(商品与服务词库);
             RemoveWordsFromHashSet(商品与服务词库, " 档 湘");
-            return RemoveEmptyElements(ConvertToUpperCase(商品与服务词库));
-        }
 
-        static void RemoveWordsFromHashSet(HashSet<string> words, string input)
+            HashSet<string> hashSet = RemoveEmptyElements(ConvertToUpperCase(商品与服务词库));
+
+            HashSet<string> hashSetBlklst = ReadFileToHashSet($"{prjdir}/cfg/fuwuciBlklst.txt");
+            ConvertToUpperCase(hashSetBlklst);
+
+
+            return RemoveEmptyElements(removeByHashSets(hashSet, hashSetBlklst));
+        }
+        static HashSet<string> removeByHashSets(HashSet<string> set1, HashSet<string> set2)
         {
-            if (string.IsNullOrWhiteSpace(input)) return;
+            // 创建一个新的 HashSet 以保留 set1 的副本
+            HashSet<string> result = new HashSet<string>(set1);
 
-            string[] wordsToRemove = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            // 从 result 中移除 set2 中的所有元素
+            result.ExceptWith(set2);
 
-            foreach (var word in wordsToRemove)
-            {
-                if (word.Trim().Length > 0)
-                    words.Remove(word);
-            }
+            return result;
         }
+
         public static HashSet<string> RemoveEmptyElements(HashSet<string> words)
         {
             var wordsToRemove = new List<string>();

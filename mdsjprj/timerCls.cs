@@ -229,15 +229,15 @@ namespace prj202405
                 }
             }
 
-            static void keepBtnMenu(DateTime now)
+             static void keepBtnMenu(DateTime now)
             {
                 var tsoxiaoShjk = $"tmrlg/actMenuPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
                 if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
                 {
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
                     var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
-                  
-                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt, tgBiz.tg_btmBtns());
+
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt );
                 }
             }
         }
@@ -357,19 +357,9 @@ namespace prj202405
 
 
         }
-        static KeyboardButton[][] RemoveButtonByName(KeyboardButton[][] keyboard, string buttonName)
-        {
-            for (int i = 0; i < keyboard.Length; i++)
-            {
-                List<KeyboardButton> buttons = new List<KeyboardButton>(keyboard[i]);
-                buttons.RemoveAll(button => button.Text == buttonName);
-                keyboard[i] = buttons.ToArray();
-            }
 
-            return keyboard;
-        }
 
-        public static async Task tmrEvt_sendMsg4keepmenu(string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
+        public static async Task tmrEvt_sendMsg4keepmenu(string imgPath, string msgtxt)
         {
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
             //    chtsSess.Add(Program.groupId, "");
@@ -385,7 +375,7 @@ namespace prj202405
                 JObject jo =(JObject) map;
                 string chtType = getFld(jo,"chat.type","");
 
-
+                ReplyKeyboardMarkup rplyKbdMkp;
                 //  Program.botClient.send
                 try
                 {

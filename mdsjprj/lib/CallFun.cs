@@ -1,4 +1,6 @@
-﻿using prj202405.lib;
+﻿global using static mdsj.lib.CallFun;
+
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,7 +30,7 @@ using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using static mdsj.lib.afrmwk;
-using static mdsj.lib.FunCall;
+
 
 using static SqlParser.Ast.DataType;
 
@@ -40,7 +42,7 @@ using static prj202405.lib.tglib;
 
 namespace mdsj.lib
 {
-    internal class FunCall
+    internal class CallFun
     {
         public static string call_exe_retStr(string exePath, string scriptPath, SortedList prm)
         {

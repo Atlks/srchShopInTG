@@ -19,6 +19,19 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+
+        public static void RemoveWordsFromHashSet(HashSet<string> words, string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return;
+
+            string[] wordsToRemove = input.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (var word in wordsToRemove)
+            {
+                if (word.Trim().Length > 0)
+                    words.Remove(word);
+            }
+        }
         public static HashSet<string> MergeArrayWithHashSet(string s, HashSet<string> set)
         {
             string[] array = s.Split(" ");
@@ -558,7 +571,7 @@ namespace prj202405.lib
             }
             SortedList1_iot.Add(key, objSave);
         }
-        public static string ldElmt(string[] array, int index)
+        public static string getElmt(string[] array, int index)
         {
             if (index < 0 || index >= array.Length)
             {

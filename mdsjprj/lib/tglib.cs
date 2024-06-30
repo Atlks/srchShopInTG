@@ -254,13 +254,13 @@ namespace prj202405.lib
                     return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                 if (hasCondt(whereExprsObjFltrs, "城市"))
-                    if (!strCls.eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "园区"))
-                    if (!strCls.eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "国家"))
-                    if (!strCls.eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
                         return false;
                 if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
                     return false;

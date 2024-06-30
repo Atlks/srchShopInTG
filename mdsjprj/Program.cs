@@ -215,12 +215,17 @@ namespace prj202405
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
+            Task.Run(() =>
+            {
+           //     throw new InvalidOperationException("An error occurred in the task.");
+            });
             string reqThreadId = geneReqid();
             //  throw new Exception("myex");
+         //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
             try
             {
                 //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
-                evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
+           await      evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
             }
             catch (Exception e)
             {
@@ -394,7 +399,7 @@ namespace prj202405
 
             if (msgx2024 == "↩️ 返回主菜单")
             {
-                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, tgBiz.tg_btmBtns());
+                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, tgBiz.tg_btmBtnsV2(cast_toString( update?.Message?.Chat ?.Type)));
                 return;
             }
 
@@ -683,9 +688,12 @@ namespace prj202405
 
         }
 
-     
-
-       
+        public static string cast_toString(object type)
+        {
+            if (type == null)
+                return "";
+            return type.ToString();
+        }
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -983,7 +991,8 @@ namespace prj202405
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 
-            string plchdTxt1422 = "💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
+            string plchdTxt1422 = System.IO.File.ReadAllText("cfg/shibobc.txt");
+                //"💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
 
             string imgPath = "推荐横幅.gif";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
@@ -1246,7 +1255,7 @@ namespace prj202405
 
         private static void evt_botAddtoGrpEvtHdlr(Update update)
         {
-            ReplyKeyboardMarkup rkm = tgBiz.tg_btmBtns();
+            ReplyKeyboardMarkup rkm = tgBiz.tg_btmBtnsV2(update?.Message?.Chat?.Type);
             Program.botClient.SendTextMessageAsync(
                      update.MyChatMember.Chat.Id,
                      "我是便民助手,你们要问什么商家,我都知道哦!",
