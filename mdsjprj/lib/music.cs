@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NAudio.Wave;
+using NAudio.Midi;
+ 
 using System.Text;
 using System.Threading.Tasks;
 using YoutubeExplode;
@@ -26,6 +29,7 @@ using Concentus.Oggfile;
 using Concentus.Structs;
 using NAudio.Lame;
 using NAudio.Wave;
+using NAudio.Midi;
 namespace mdsj.lib
 {
     internal class music
@@ -33,6 +37,39 @@ namespace mdsj.lib
 
         public static async Task<string> DownloadFileThruTgApi(string filePath, string fileName)
         {
+
+            //static void ConvertAudioToMidi(string inputFilePath, string outputFilePath)
+            //{
+            //    // Load the audio file
+            //    using var reader = new AudioFileReader(inputFilePath);
+            //    float[] samples = new float[reader.Length / sizeof(float)];
+            //    reader.Read(samples, 0, samples.Length);
+
+            //    // Create a new MIDI file with one track
+            //    var midiFile = new MidiFile(1, 1);
+            //    var track = new MidiEventCollection(1, reader.WaveFormat.SampleRate);
+            //    midiFile.Events.Add(track);
+
+            //    // Perform simple pitch detection and add notes to the MIDI file
+            //    for (int i = 0; i < samples.Length; i += reader.WaveFormat.SampleRate / 10)  // Process in 0.1 second chunks
+            //    {
+            //        float[] chunk = new float[reader.WaveFormat.SampleRate / 10];
+            //        Array.Copy(samples, i, chunk, 0, Math.Min(chunk.Length, samples.Length - i));
+            //        float pitch = DetectPitch(chunk, reader.WaveFormat.SampleRate);
+
+            //        if (pitch > 0)
+            //        {
+            //            int pitchMidi = (int)Math.Round(69 + 12 * Math.Log2(pitch / 440.0));  // Convert frequency to MIDI note number
+            //            track.AddNoteOnEvent(0, 0, pitchMidi, i / (reader.WaveFormat.SampleRate / 10), 127);
+            //            track.AddNoteOffEvent(0, 0, pitchMidi, (i / (reader.WaveFormat.SampleRate / 10)) + 1, 127);
+            //        }
+            //    }
+
+            //    // Save the MIDI file
+            //    MidiFile.Export(outputFilePath, track);
+            //}
+
+
             var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
             var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
 

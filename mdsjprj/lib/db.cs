@@ -29,7 +29,7 @@ namespace prj202405.lib
     {
 
 
-        public static List<SortedList> qryV7(List<SortedList> rows,
+        public static List<SortedList> arr_fltr330(List<SortedList> rows,
     Func<SortedList, bool> whereFun,
     Func<SortedList, int> ordFun = null,
     Func<SortedList, SortedList> selktFun = null
@@ -81,7 +81,7 @@ namespace prj202405.lib
                 else
                     list_Seleced.Add(row);
             }
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, list_Seleced.Count);
             return list_Seleced;
 
         }

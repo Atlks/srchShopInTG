@@ -78,14 +78,144 @@ namespace libx
         //    rsRztInlnKbdBtn.Add( row);
         //    return rsRztInlnKbdBtn;
         //}
+        public static List<SortedList> arr_fltr4readDir(string fromDdataDir, string shanrES,
+            Func<SortedList, bool> whereFun
+          )
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+             print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES,"whereFun()"));
 
 
+         //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
+
+            //  List<t> rsRztInlnKbdBtn = new List<t>();
+
+            //if (shareCfgList is null)
+            //{
+            //    throw new ArgumentNullException(nameof(shareCfgList));
+            //}
+
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+          
+            string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (var shar in shareArr)
+            {
+                var CurSharFullpath = fromDdataDir + "/" + shar;
+                SortedList curShareCfg = getShareCfg(fromDdataDir, shar);
+                object storeeng = curShareCfg["rndFun"];
+            //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
+                var dbg = (shar: shar, storeEngr: storeeng, CurSharFullpath: CurSharFullpath);
+                List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, storeeng.ToString(), dbg);
+                rztLi = array_merge(rztLi, li);
+            }
+            print_ret(__METHOD__, "rztLi.size:"+rztLi.Count);
+            return rztLi;
+        }
+
+        public static List<SortedList> arr_fltr(string fromDdataDir, string shanrES,
+                 Func<SortedList, bool> whereFun,
+                 Func<string, List<SortedList>> rndFun)
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+
+
+            //  List<t> rsRztInlnKbdBtn = new List<t>();
+
+            if (rndFun is null)
+            {
+                throw new ArgumentNullException(nameof(rndFun));
+            }
+
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+            var share_dbfs = _calcPatnsV3(fromDdataDir, shanrES);
+            string[] arr = share_dbfs.Split(',');
+            foreach (string dbfCurShar in arr)
+            {
+                List<SortedList> li = _qryBySnglePart(dbfCurShar, whereFun, rndFun);
+                rztLi = array_merge(rztLi, li);
+            }
+
+            return rztLi;
+        }
+
+        public static List<t> Qe_qryV3<t>(string fromDdataDir, string shanrES,
+          Func<SortedList, bool> whereFun,
+          Func<SortedList, int> ordFun,
+          Func<SortedList, t> selktFun,
+          Func<string, List<SortedList>> rndFun)
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            List<t> listFnl = new List<t>();
+            try
+            {
+
+
+                if (rndFun is null)
+                {
+                    throw new ArgumentNullException(nameof(rndFun));
+                }
+
+                List<SortedList> rztLi = arr_fltr(fromDdataDir, shanrES, whereFun, rndFun);
+
+
+
+                if (ordFun != null)
+                {
+                    rztLi = rztLi.Cast<SortedList>()
+                                   .OrderBy(ordFun)
+                                   .ToList();
+                }
+
+
+                if (selktFun == null)
+                {
+                    throw new ArgumentNullException("  need slktfun ,u can use def slktfun");
+                    //   dbgCls.setDbgValRtval(__METHOD__, 0);
+                    //   return rztLi;
+
+                }
+
+                listFnl = arr_transfm_map(rztLi, selktFun);
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+                Console.WriteLine(e);
+                logErr2025(e, __METHOD__, "errdir");
+                //  return rsRztInlnKbdBtn;
+            }
+
+            print_ret(__METHOD__, 0);
+            return listFnl;
+        }
+
+        private static List<t> arr_transfm_map<t>(List<SortedList> rztLi, Func<SortedList, t> selktFun)
+        {
+            List<t> listFnl = new List<t>();
+            for (int i = 0; i < rztLi.Count; i++)
+            {
+                SortedList row = rztLi[i];
+
+                listFnl.Add(selktFun(row));
+
+
+            }
+            return listFnl;
+        }
 
         public static List<t> Qe_qryV2<t>(string fromDdataDir, string shanrES,
-                    Func<SortedList, bool> whereFun,
-                    Func<SortedList, int> ordFun,
-                    Func<SortedList, t> selktFun,
-                    Func<string, List<SortedList>> rndFun)
+            Func<SortedList, bool> whereFun,
+            Func<SortedList, int> ordFun,
+            Func<SortedList, t> selktFun,
+            Func<string, List<SortedList>> rndFun)
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -299,19 +429,43 @@ namespace libx
 
             return result;
         }
+        public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            print_call(__METHOD__, func_get_args(shareName, "whreFun()",rnd,dbg));
 
+             
+            List<SortedList> li = (List<SortedList>)call(rnd, shareName);
+            if(li.Count>0&& whereFun!=null)
+             li = db.arr_fltr330(li, whereFun);
 
+            dbgCls.print_ret(__METHOD__, li.Count);
+            return li;
+        }
+
+        public static List<SortedList> _qryByShare(string shareName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun, object dbg)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            print_call(__METHOD__, dbgCls.func_get_args(shareName, dbg));
+
+            List<SortedList> li = rndFun(shareName);
+
+            li = db.arr_fltr330(li, whereFun);
+
+            dbgCls.print_ret(__METHOD__, li.Count);
+            return li;
+        }
         //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
         public static List<SortedList> _qryBySnglePart(string dbfName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(dbfName));
+            print_call(__METHOD__, dbgCls.func_get_args(dbfName, rndFun));
 
             List<SortedList> li = rndFun(dbfName);
 
-            li = db.qryV7(li, whereFun);
+            li = db.arr_fltr330(li, whereFun);
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.print_ret(__METHOD__, li.Count);
             return li;
         }
 

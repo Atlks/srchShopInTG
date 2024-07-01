@@ -13,6 +13,40 @@ namespace mdsj.lib
 {
     internal class cast
     {
+
+        public static SortedList castUrlQueryString2hashtable(string queryString)
+        {
+            SortedList list = new SortedList();
+
+            // Extract query string from URL
+            //int queryStartIndex = url.IndexOf('?');
+            //if (queryStartIndex >= 0)
+            //{
+            //    string queryString = url.Substring(queryStartIndex + 1);
+
+            // Split query string into key-value pairs
+            string[] pairs = queryString.Split('&');
+
+            foreach (string pair in pairs)
+            {
+                string[] keyValue = pair.Split('=');
+
+                if (keyValue.Length == 2)
+                {
+                    string key = keyValue[0];
+                    string value = keyValue[1];
+
+                    // Add key-value pair to SortedList
+                    if (!list.ContainsKey(key))
+                    {
+                        list.Add(key, value.Trim());
+                    }
+                }
+                //  }
+            }
+
+            return list;
+        }
         public static double toNumber(string str)
         {
 

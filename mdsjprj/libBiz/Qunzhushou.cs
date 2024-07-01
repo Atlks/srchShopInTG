@@ -299,7 +299,7 @@ namespace mdsj.libBiz
             var mp3Stream = System.IO.File.Open(outputFilePathMp3, FileMode.Open);
             var inputOnlineFile = InputFile.FromStream(mp3Stream);
 
-            await botClient_QunZzhushou.SendAudioAsync(caption: "搜索结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+            await botClient_QunZzhushou.SendAudioAsync(caption: "转码结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
 
 
             print_ret(__METHOD__, 0);
@@ -455,6 +455,8 @@ namespace mdsj.libBiz
 
         private static async void Bot_OnVideo(Update update, string reqThreadId)
         {
+            return;
+           // qry_share. getShareCfg();
             var __METHOD__ = "Bot_OnVideo";
             print_call(__METHOD__, func_get_args(update, reqThreadId));
 
@@ -487,7 +489,7 @@ namespace mdsj.libBiz
                 var mp3Stream = System.IO.File.Open(finaMp3Fullpath, FileMode.Open);
                 var inputOnlineFile = InputFile.FromStream(mp3Stream);
 
-                await botClient_QunZzhushou.SendAudioAsync(caption: "搜索结果", title: mp3titleFname, chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+                await botClient_QunZzhushou.SendAudioAsync(caption: "音频结果", title: mp3titleFname, chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
             }
 
             // 删除临时文件

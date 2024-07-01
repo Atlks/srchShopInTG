@@ -1,4 +1,5 @@
 ﻿global using static mdsj.libBiz.cmdHdlr;
+using DocumentFormat.OpenXml;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace mdsj.libBiz
 {
@@ -21,6 +23,13 @@ namespace mdsj.libBiz
             prjdir = filex.GetAbsolutePath(prjdir);
             string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
 
+
+            //私聊消息  /start开始
+            if (cmdFulltxt == "/start")
+            {
+               call_user_func(     evt_startMsgEvtInPrvtAddBot,update);
+                return;
+            }
 
             ///设置园区 东风园区
             if (cmdFulltxt.StartsWith("/设置园区"))
@@ -61,13 +70,34 @@ namespace mdsj.libBiz
               replyToMessageId: update.Message.MessageId);
 
         }
-
-        private static void setFld(SortedList cfg, string f, object v)
+        public static void evt_startMsgEvtInPrvtAddBot(Update update)
         {
-            if (cfg.ContainsKey(f))
-                cfg.Remove(f);
+            botClient.SendTextMessageAsync(
+                    update.Message.Chat.Id,
+                    "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
+                    parseMode: ParseMode.Html,
+                    //   replyMarkup: new InlineKeyboardMarkup([]),
+                    protectContent: false,
+                    disableWebPagePreview: true);
 
-            cfg.Add(f, v);
+            tglib.bot_saveChtSesion(update.Message.Chat.Id, update.Message.From);
+
+            //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt));
+
+            var rplyKbdMkp = tgBiz.tg_btmBtns();
+            KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
+            RemoveButtonByName(kbtns, "🔥助力本群");
+
+            //  var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            long chatid = update.Message.Chat.Id;
+            //  Message message2dbg = await 
+            botClient.SendTextMessageAsync(
+         Convert.ToInt64(chatid), plchdTxt,
+             parseMode: ParseMode.Html,
+            replyMarkup: rplyKbdMkp,
+            protectContent: false, disableWebPagePreview: true);
         }
+
+
     }
 }

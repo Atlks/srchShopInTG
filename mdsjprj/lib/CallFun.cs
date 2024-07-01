@@ -119,7 +119,7 @@ namespace mdsj.lib
         public static void call_user_func(Delegate callback,params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(args));
+            print_call(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {
@@ -131,13 +131,13 @@ namespace mdsj.lib
                 Console.WriteLine(e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth",__METHOD__ + "((("+ json_encode_noFmt(func_get_args(args)) + ")))");
-                logCls.logErr2024(e, __METHOD__, "errdir", dbgobj);
+                logErr2024(e, __METHOD__, "errdir", dbgobj);
             }
 
             if (o != null)
-                dbgCls.print_ret(__METHOD__, o);
+                print_ret(__METHOD__, o);
             else
-                dbgCls.print_ret(__METHOD__, 0);
+                print_ret(__METHOD__, 0);
 
         }
         public static void call_user_func(string className, string methodName, object[] parameters)

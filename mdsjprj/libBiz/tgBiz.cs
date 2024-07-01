@@ -1,4 +1,5 @@
-﻿using prj202405.lib;
+﻿global using static mdsj.libBiz.tgBiz;
+using prj202405.lib;
 using prj202405;
 using System;
 using System.Collections;
@@ -44,7 +45,7 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
-using static mdsj.libBiz.tgBiz;
+
 using static prj202405.lib.strCls;
 using static mdsj.lib.adChkr;
 namespace mdsj.libBiz
@@ -604,7 +605,7 @@ namespace mdsj.libBiz
                                  new KeyboardButton("🔥助力本群"),
 
                                   new KeyboardButton("🫂加入联信"),
-                                   new KeyboardButton("🤝商务洽谈")  
+                                   new KeyboardButton("🤝合作洽谈")  
 
 
                             }

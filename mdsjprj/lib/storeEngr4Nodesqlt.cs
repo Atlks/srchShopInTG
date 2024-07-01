@@ -1,4 +1,5 @@
-﻿using System;
+﻿global using static libx.storeEngr4Nodesqlt;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -17,10 +18,10 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
-using static libx.storeEngr4Nodesqlt;
+
 using static libx.funCls;
 using static libx.storeEngr4Nodesqlt;
-using static mdsj.lib.FunCall;
+using static mdsj.lib.CallFun;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using prj202405.lib;
@@ -186,6 +187,7 @@ namespace libx
 
         public static List<SortedList> rnd4jsonFl(string dbf)
         {
+
             if (!dbf.EndsWith(".json"))
             {
                 string ext = ".json";
@@ -198,7 +200,7 @@ namespace libx
 
 
             prm.Add("dbf", ($"{dbf}"));
-            return ormJSonFL.qry(dbf);
+            return read2list(dbf);
         }
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {

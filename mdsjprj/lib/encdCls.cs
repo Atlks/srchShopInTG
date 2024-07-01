@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿global using static mdsj.lib.encdCls;
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 // mdsj.lib.encdCls
-using static mdsj.lib.encdCls;
+
 namespace mdsj.lib
 {
     internal class encdCls

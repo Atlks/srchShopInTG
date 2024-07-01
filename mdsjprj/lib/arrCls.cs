@@ -19,7 +19,13 @@ namespace prj202405.lib
 {
     internal class arrCls
     {
+        public static void setFld(SortedList cfg, string f, object v)
+        {
+            if (cfg.ContainsKey(f))
+                cfg.Remove(f);
 
+            cfg.Add(f, v);
+        }
         public static void RemoveWordsFromHashSet(HashSet<string> words, string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return;

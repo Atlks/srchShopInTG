@@ -20,6 +20,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using static SqlParser.Ast.DataType;
 
 namespace prj202405.lib
 {
@@ -28,6 +29,71 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
+        public static object call(string methodName,params object[] args)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public));
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+
+            if (methodInfo == null) return null;
+
+            var delegateType = typeof(Func<string, List<SortedList>>);
+            //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
+
+            // 假设你想要执行 YourMethodName 方法
+         //   object[] args = { };
+            var result = methodInfo.Invoke(null, args);
+            return result;
+            //Delegate.CreateDelegate(delegateType, methodInfo);
+        }
+
+        public static object GetFunc (string methodName)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public));
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+
+            if (methodInfo == null) return null;
+
+            var delegateType = typeof(Func<string, List<SortedList>>);
+            //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
+
+            // 假设你想要执行 YourMethodName 方法
+            object[] args = {  };
+            var result =  methodInfo.Invoke(null, args);
+            return result;
+                //Delegate.CreateDelegate(delegateType, methodInfo);
+        }
+
+        static string GetFuncName(Delegate del)
+        {
+            // 获取委托的类型
+            Type type = del.GetType();
+
+            // 检查类型是否为 Func<...>
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Func<,>).GetGenericTypeDefinition())
+            {
+                // 获取目标方法的信息
+                var methodInfo = del.Method;
+
+                // 返回方法的名称
+                return methodInfo.Name;
+            }
+
+            return "Not a Func type";
+        }
 
         public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
         {

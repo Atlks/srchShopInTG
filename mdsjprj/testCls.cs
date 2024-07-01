@@ -34,7 +34,7 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 
-using static mdsj.lib.FunCall;
+using static mdsj.lib.CallFun;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static prj202405.timerCls;
@@ -108,7 +108,15 @@ namespace prj202405
         internal static async Task testAsync()
         {
 
-         //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt, tgBiz.tg_btmBtns());
+            var mymm4shareCfg = "name=缅甸&fmt=sqlt&storeEngr=rnd_next4SqltRf";
+            SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
+            testShareCfg();
+
+
+
+
+
+            //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt, tgBiz.tg_btmBtns());
 
             //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
             //var rzt = await RecognizeMusic(s222);
@@ -179,15 +187,7 @@ namespace prj202405
                 // timerCls.z_actSj();
                 //   z_actSj();
                 //   callx((id: 11, dbf: "dbf"));
-                List<SortedList> rws = ormIni.qryV2("cateECns.ini");
-
-                SortedList map = rws[0];
-                //  foreach (SortedList item in map)
-                foreach (var value in map.Values)
-                {
-                    String s = $" <option value=\"{value}\">";
-                    Console.WriteLine(s);
-                }
+            //    rdCateGeneH5list();
                 //   getProdSvrWdlib();
 
                 //    增加分类addcate();
@@ -311,6 +311,39 @@ namespace prj202405
 
             // 
 
+        }
+
+        private static void rdCateGeneH5list()
+        {
+            List<SortedList> rws = ormIni.qryV2("cateECns.ini");
+
+            SortedList map = rws[0];
+            //  foreach (SortedList item in map)
+            foreach (var value in map.Values)
+            {
+                String s = $" <option value=\"{value}\">";
+                Console.WriteLine(s);
+            }
+        }
+
+        private static void testShareCfg()
+        {
+            try
+            {
+                List<SortedList> rztLi = arr_fltr4readDir("mercht商家数据", "缅甸,老挝", (SortedList row) =>
+                {
+                    if (row["商家"].ToString().Contains("理发"))
+                        return true;
+                    return false;
+                } );
+
+                Console.WriteLine(json_encode(rztLi));
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private static async Task chkTgVld()

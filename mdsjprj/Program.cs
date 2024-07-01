@@ -254,6 +254,7 @@ namespace prj202405
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
+            Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
 
 
@@ -390,7 +391,8 @@ namespace prj202405
                 var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
                 var rkm = new ReplyKeyboardMarkup(Keyboard);
                 rkm.ResizeKeyboard = true;
-                evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+                var msg = $"已为您切换至{msgx2024}菜单";
+                evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", msg, rkm, update);
 
                 //botClient.SendTextMessageAsync()
 
@@ -442,12 +444,7 @@ namespace prj202405
             }
 
 
-            //私聊消息  /start开始
-            if (update?.Message?.Text == "/start")
-            {
-                evt_startMsgEvtInPrvtAddBot(update);
-                return;
-            }
+         
 
             //add grp msgHDL
             if (update?.MyChatMember?.NewChatMember != null)
@@ -872,9 +869,7 @@ namespace prj202405
 
 
         private static async void evt_btm_btn_click_inPubgrp(Update update)
-        {
-
-            //  ,
+        {  //  ,
             try
             {
                 Telegram.Bot.Types.Message a = await Program.botClient.SendTextMessageAsync(
@@ -1002,9 +997,10 @@ namespace prj202405
             Telegram.Bot.Types.Message message = await Program.botClient.SendPhotoAsync(
                   update.Message.Chat.Id, Photo, null,
              plchdTxt1422,
+             replyToMessageId: update.Message.MessageId,
                     parseMode: ParseMode.Html,
                      replyMarkup: new InlineKeyboardMarkup(btns),
-                   protectContent: false);
+                   protectContent: false); ;
 
             //ori 64
             //Message message = await Program.botClient.SendPhotoAsync(
@@ -1240,25 +1236,14 @@ namespace prj202405
 
         }
 
-        private static void evt_startMsgEvtInPrvtAddBot(Update update)
-        {
-            Program.botClient.SendTextMessageAsync(
-                    update.Message.Chat.Id,
-                    "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
-                    parseMode: ParseMode.Html,
-                    //   replyMarkup: new InlineKeyboardMarkup([]),
-                    protectContent: false,
-                    disableWebPagePreview: true);
-
-            tglib.bot_saveChtSesion(update.Message.Chat.Id, update.Message.From);
-        }
+ 
 
         private static void evt_botAddtoGrpEvtHdlr(Update update)
         {
             ReplyKeyboardMarkup rkm = tgBiz.tg_btmBtnsV2(update?.Message?.Chat?.Type);
             Program.botClient.SendTextMessageAsync(
                      update.MyChatMember.Chat.Id,
-                     "我是便民助手,你们要问什么商家,我都知道哦!",
+                     "我是联信便民助手,你们要问什么商家我都知道.联信是一个集纵网观察、信息搜集、资源整合，旨在为大家解决信息不透明和资源不可信的权威便民助手.",
                      parseMode: ParseMode.Html,
                       replyMarkup: rkm,
                      protectContent: false,

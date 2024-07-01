@@ -102,10 +102,39 @@ namespace prj202405.lib
                 arr = array_merge(arr, sortedLists);
             }
 
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 2));
+            print_ret(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 1));
 
 
             return arr;
+        }
+
+        public static List<SortedList> read2list(string dbFileName)
+        {
+
+
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+
+            if (!File.Exists(dbFileName))
+                File.WriteAllText(dbFileName, "[]");
+
+            // 将JSON字符串转换为List<Dictionary<string, object>>
+            string txt = File.ReadAllText(dbFileName);
+            if (txt.Trim().Length == 0)
+                txt = "[]";
+            var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
+
+            //   ArrayList list = (ArrayList)JsonConvert.DeserializeObject(File.ReadAllText(dbFileName));
+
+            // 获取当前方法的信息
+            //MethodBase method = );
+
+            //// 输出当前方法的名称
+            //Console.WriteLine("Current Method Name: " + method.Name);
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+
+            return list;
         }
 
         public static List<SortedList> qrySglFL(string dbFileName)

@@ -297,12 +297,12 @@ namespace prj202405.lib
         {
            
             dbgpad = dbgpad + 4;
-            var msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + JsonConvert.SerializeObject(func_get_args) + "))";
+            var msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
             // array_push($GLOBALS['dbg'],$logmsg   );
             Console.WriteLine("\n\n\n" + msglog + "");
         }
 
-        public static void print_varDump(string METHOD__, string vname, string val)
+        public static void print_varDump(string METHOD__, string vname, object val)
         {
             //if($GLOBALS['dbg_show']==false)
             //    return;
