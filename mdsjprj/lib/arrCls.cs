@@ -20,8 +20,35 @@ namespace prj202405.lib
     public class arrCls
     {
 
+        public static void transfmVal(SortedList list,Func<string,object> fun            )
+        {
+            // 创建一个临时的 ArrayList 来存储键
+            ArrayList keys = new ArrayList(list.Keys);
 
-     public   static string GetKeysCommaSeparated(SortedList list)
+            // 遍历每个键并更新值
+            foreach (string key in keys)
+            {
+                string value = (string)list[key];
+                list.Remove(key);
+                list.Add(key, fun(value)) ;
+            }
+        }
+        public static void castVal2hashtable(SortedList list)
+        {
+            // 创建一个临时的 ArrayList 来存储键
+            ArrayList keys = new ArrayList(list.Keys);
+
+            // 遍历每个键并更新值
+            foreach (string key in keys)
+            {
+                string value = (string)list[key];
+                list.Remove(key);
+                list.Add(key, castUrlQueryString2hashtable(value));
+            //    list[key] = castUrlQueryString2hashtable(value); ;
+            }
+        }
+
+        public   static string GetKeysCommaSeparated(SortedList list)
         {
             // 检查输入参数是否为 null
             if (list == null)

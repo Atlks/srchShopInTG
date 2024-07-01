@@ -110,7 +110,7 @@ namespace prj202405
 
             var mymm4shareCfg = "name=缅甸&fmt=sqlt&storeEngr=rnd_next4SqltRf";
             SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
-            testShareCfg();
+          //  testShareCfg();
 
 
 

@@ -1,4 +1,5 @@
 ﻿global using static prj202405.lib.filex;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,8 +13,35 @@ using static mdsj.lib.encdCls;
 // prj202405.lib.filex
 namespace prj202405.lib
 {
-    internal class filex
+    public class filex
     {
+
+        public static SortedList ReadJsonToSortedList(string filePath)
+        {
+            SortedList sortedList = new SortedList();
+
+            try
+            {
+                // 读取JSON文件内容
+                string jsonContent = File.ReadAllText(filePath);
+
+                // 解析JSON对象
+                JObject jsonObject = JObject.Parse(jsonContent);
+
+                // 遍历JSON对象并将键值对添加到SortedList
+                foreach (var property in jsonObject.Properties())
+                {
+                    sortedList.Add(property.Name, property.Value.ToString());
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+            }
+
+            return sortedList;
+        }
+
         public static void Copy2024(string sourceFilePath, string destination_newFileName)
         {
             filex.mkdir_forFile(destination_newFileName);

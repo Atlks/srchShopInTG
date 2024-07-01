@@ -110,18 +110,18 @@ namespace mdsj
         //   am.KeywordString + am.KeywordString +
         //   am.Program._categoryKeyValue[(int)am.Category]).Contains(s))
         //todo sharnames
-        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain)
+        public static List<InlineKeyboardButton[]> qryFromMrcht(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain_msgx_remvTrigWd2)
         {
 
 
-            msgCtain = msgCtain.ToUpper();
-            msgCtain = ChineseCharacterConvert.Convert.ToSimple(msgCtain);
+            msgCtain_msgx_remvTrigWd2 = msgCtain_msgx_remvTrigWd2.ToUpper();
+            msgCtain_msgx_remvTrigWd2 = ChineseCharacterConvert.Convert.ToSimple(msgCtain_msgx_remvTrigWd2);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain));
+            print_call(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain_msgx_remvTrigWd2));
 
             //  string msgx = whereExprsObj["msgCtain"];
-            if (string.IsNullOrEmpty(msgCtain)) { return []; }
-            string[] kwds = strCls.splt_by_fenci(ref msgCtain);
+            if (string.IsNullOrEmpty(msgCtain_msgx_remvTrigWd2)) { return []; }
+            string[] kwds = strCls.splt_by_fenci(ref msgCtain_msgx_remvTrigWd2);
             kwds = RemoveShortWords(kwds);
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
@@ -131,7 +131,7 @@ namespace mdsj
 
             //c----calc fuwuci 
             HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
-            string fuwuci = substr_getFuwuci(msgCtain, 商品与服务词库);
+            string fuwuci = substr_getFuwuci(msgCtain_msgx_remvTrigWd2, 商品与服务词库);
 
             //   var patns_dbfs = db.calcPatns("mercht商家数据", arrCls.ldfld_TryGetValue(whereExprsObj, "@file"));
 
@@ -188,7 +188,7 @@ namespace mdsj
 
                 //-------------fuwuci panduan
 
-                if (!isCotainFuwuci(row, msgCtain))
+                if (!isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2))
                     return false;
                 int containScore = 0;
 

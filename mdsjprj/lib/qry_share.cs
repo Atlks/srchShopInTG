@@ -39,18 +39,18 @@ namespace mdsj.lib
             /////-----cfg  mercht商家数据 share
             var mymm4shareCfg = "name=缅甸&fmt=sqlt&rndFun=" + nameof(rnd_next4Sqlt);
             var laos4shareCfg = "name=老挝&fmt=json&rndFun=" + nameof(rnd4jsonFl);
-            SortedList shareCfgList4dataDir = new SortedList();
-            SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
-            shareCfgList4dataDir.Add("缅甸", valueMM);
-            shareCfgList4dataDir.Add("老挝", castUrlQueryString2hashtable(laos4shareCfg));
+            //   SortedList shareCfgList4dataDir = new SortedList();
+            //SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
+            //shareCfgList4dataDir.Add("缅甸", valueMM);
+            //shareCfgList4dataDir.Add("老挝", castUrlQueryString2hashtable(laos4shareCfg));
+            //SortedList cfgFnal = new SortedList();
+            //cfgFnal.Add(dataType, shareCfgList4dataDir);
+            //return (SortedList)cfgFnal[dataType];
+            SortedList shareCfgList4dataDir = ReadJsonToSortedList($"{prjdir}/cfgShare/{dataType}.json");
+            castVal2hashtable(shareCfgList4dataDir);
+            return shareCfgList4dataDir;
 
-            SortedList cfgFnal = new SortedList();
-            cfgFnal.Add("mercht商家数据",shareCfgList4dataDir);
 
-
-
-
-            return (SortedList)cfgFnal[dataType];
         }
     }
 }

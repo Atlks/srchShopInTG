@@ -1,0 +1,4 @@
+{
+    "缅甸": "name=缅甸&fmt=sqlt&rndFun=rnd_next4Sqlt",
+    "老挝": "name=老挝&fmt=json&rndFun=rnd4jsonFl"
+}

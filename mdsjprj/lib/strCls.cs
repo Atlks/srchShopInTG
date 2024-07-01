@@ -403,7 +403,32 @@ namespace prj202405.lib
         //    }
         //    return n;
         //}
+
+
         public static string replace_RemoveWords(string inputText, HashSet<string> wordsToRemove)
+        {
+            // 使用正则表达式拆分文本为单词
+           // string[] words = Regex.Split(inputText, @"\W+");
+
+            // 使用 StringBuilder 构建最终的字符串
+          //  StringBuilder result = new StringBuilder();
+            
+            
+                foreach (string word in wordsToRemove)
+                {
+                    // 如果当前单词不在要去除的单词集合中，则将其添加到结果中
+                    if (inputText.Contains(word))
+                    {
+                        inputText = inputText.Replace(word, "");
+                    }
+                }
+            
+            
+
+            // 返回结果并去除末尾多余的空格
+            return inputText.ToString().Trim();
+        }
+        public static string replace_RemoveWordsDep(string inputText, HashSet<string> wordsToRemove)
         {
             // 使用正则表达式拆分文本为单词
             string[] words = Regex.Split(inputText, @"\W+");
