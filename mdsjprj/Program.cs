@@ -2152,7 +2152,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
+            dbgCls.print_call(__METHOD__, func_get_args(update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
@@ -2523,16 +2523,18 @@ namespace prj202405
             if (ldfld2str(parse_str1, "sdr") == "tmr") //def is not
 
             {
+                string tailmsg = "\n提示:本消息将在20秒后销毁";
                 // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
                 string imgPath = "搜索横幅.gif";
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 Telegram.Bot.Types.Message message2 = await Program.botClient.SendPhotoAsync(
               chatId: cq.Message.Chat.Id
                   , Photo2, null,
-                 caption: result,
+                 caption: result+ tailmsg,
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(menu),
                    protectContent: false);
+                bot_DeleteMessageV2(cq.Message.Chat.Id, message2.MessageId, 30);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
@@ -2629,9 +2631,13 @@ namespace prj202405
                  [ InlineKeyboardButton.WithCallbackData(text: "↪️ 返回商家列表", $"Merchant?return")]
                                 ];
             }
+      
+        //end eve detal click()
         }
 
     
+
+        //----------------------
 
         private static string evt_detail_rendLianxiFosh(Merchant? contact_Merchant, string result)
         {

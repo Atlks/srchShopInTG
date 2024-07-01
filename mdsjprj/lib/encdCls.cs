@@ -246,7 +246,7 @@ namespace mdsj.lib
 
             var settings = new JsonSerializerSettings
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+               ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
             };
             //  string json = JsonConvert.SerializeObject(obj, settings);
@@ -261,8 +261,8 @@ namespace mdsj.lib
 
             var settings = new JsonSerializerSettings
             {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                //  Formatting = Formatting.Indented
+                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+              //   Formatting = Formatting.Indented
             };
             //  string json = JsonConvert.SerializeObject(obj, settings);
             string jsonString = JsonConvert.SerializeObject(results, settings);

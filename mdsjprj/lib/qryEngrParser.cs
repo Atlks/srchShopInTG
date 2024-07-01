@@ -84,10 +84,10 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-             print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES,"whereFun()"));
+            print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
 
 
-         //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
+            //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
 
             //  List<t> rsRztInlnKbdBtn = new List<t>();
 
@@ -98,20 +98,49 @@ namespace libx
 
             List<SortedList> rztLi = new List<SortedList>();
             //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
-          
-            string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+           // string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+            string shareStr = _calcPatnsV4(fromDdataDir, shanrES);
+            string[] shareArr = shareStr.Split(',');
             foreach (var shar in shareArr)
             {
                 var CurSharFullpath = fromDdataDir + "/" + shar;
+                string rndFun;
                 SortedList curShareCfg = getShareCfg(fromDdataDir, shar);
-                object storeeng = curShareCfg["rndFun"];
-            //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
-                var dbg = (shar: shar, storeEngr: storeeng, CurSharFullpath: CurSharFullpath);
-                List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, storeeng.ToString(), dbg);
+                rndFun = (string)curShareCfg["rndFun"];
+
+                //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
+                var dbg = (shar: shar, storeEngr: rndFun, CurSharFullpath: CurSharFullpath);
+                List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, rndFun.ToString(), dbg);
                 rztLi = array_merge(rztLi, li);
             }
-            print_ret(__METHOD__, "rztLi.size:"+rztLi.Count);
+            print_ret(__METHOD__, "rztLi.size:" + rztLi.Count);
             return rztLi;
+        }
+
+        private static string getRndFun(string fromDdataDir, string shanrES, string shar)
+        {
+            string rndFun;
+            if (string.IsNullOrEmpty(shanrES))
+            {
+                if(shar.EndsWith(".db"))
+                    return nameof(rnd_next4Sqlt);
+                if (shar.EndsWith(".json"))
+                    return nameof(rnd4jsonFl);
+                if (shar.EndsWith(".ini"))
+                    return nameof(rnd4jsonFl);
+                if (shar.EndsWith(".xlsx"))
+                    return nameof(rnd4jsonFl);
+                return nameof(rnd4jsonFl);
+            }
+            else
+            {
+                SortedList curShareCfg = getShareCfg(fromDdataDir, shar);
+                rndFun = (string)curShareCfg["rndFun"];
+            }
+
+            return rndFun;
         }
 
         public static List<SortedList> arr_fltr(string fromDdataDir, string shanrES,
@@ -291,8 +320,15 @@ namespace libx
             string[] arr = patns_dbfs.Split(',');
             foreach (string dbf in arr)
             {
-                List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
-                rztLi = arrCls.array_merge(rztLi, li);
+                try
+                {
+                    List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
+                    rztLi = arrCls.array_merge(rztLi, li);
+                }catch(Exception e)
+                {
+                    print_ex("Qe_qry",e);
+                }
+              
             }
 
             return rztLi;
@@ -390,16 +426,35 @@ namespace libx
             return results;
         }
 
-
-
-        internal static string _calcPatnsV3(string dir, string partfile区块文件)
+        internal static string _calcPatnsV4(string FromdataDir, string shareFiles)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
+
+            string result = shareFiles;
+
+            if( string.IsNullOrEmpty(shareFiles))
+            {
+                SortedList sharecfg = getShareCfg4table(FromdataDir);
+                result = GetKeysCommaSeparated(sharecfg);
+            }
+        
+
+
+            dbgCls.print_ret(__METHOD__, result);
+
+            return result;
+        }
+
+
+        internal static string _calcPatnsV3(string dir, string shareFiles)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, shareFiles));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
-            if (string.IsNullOrEmpty(partfile区块文件))
+            if (string.IsNullOrEmpty(shareFiles))
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
@@ -407,7 +462,7 @@ namespace libx
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
-            string[] dbArr = partfile区块文件.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] dbArr = shareFiles.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var dbf in dbArr)
             {
                 string path = dir + "/" + dbf + "";
@@ -432,12 +487,12 @@ namespace libx
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args(shareName, "whreFun()",rnd,dbg));
+            print_call(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
-             
+
             List<SortedList> li = (List<SortedList>)call(rnd, shareName);
-            if(li.Count>0&& whereFun!=null)
-             li = db.arr_fltr330(li, whereFun);
+            if (li.Count > 0 && whereFun != null)
+                li = db.arr_fltr330(li, whereFun);
 
             dbgCls.print_ret(__METHOD__, li.Count);
             return li;
@@ -459,7 +514,7 @@ namespace libx
         public static List<SortedList> _qryBySnglePart(string dbfName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, dbgCls.func_get_args(dbfName, rndFun));
+            print_call(__METHOD__, dbgCls.func_get_args(dbfName, "rndFun"));
 
             List<SortedList> li = rndFun(dbfName);
 

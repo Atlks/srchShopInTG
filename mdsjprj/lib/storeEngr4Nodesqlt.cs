@@ -187,8 +187,10 @@ namespace libx
 
         public static List<SortedList> rnd4jsonFl(string dbf)
         {
+            if (dbf.EndsWith(".db"))
+                return [];
 
-            if (!dbf.EndsWith(".json"))
+                if (!dbf.EndsWith(".json"))
             {
                 string ext = ".json";
                 dbf = dbf + ext;

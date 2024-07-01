@@ -362,6 +362,17 @@ namespace prj202405.lib
          */
         public static object func_get_args(MethodBase method, params object[] paramValues)
         {
+            return paramValues;
+            // 获取当前方法
+            // MethodBase method = new StackFrame(1).GetMethod();
+ 
+            // 序列化为 JSON 字符串
+            //  return JsonConvert.SerializeObject(parameterValues, Formatting.Indented);
+        }
+
+        public static object func_get_argsDetao (MethodBase method, params object[] paramValues)
+        {
+            return paramValues;
             // 获取当前方法
             // MethodBase method = new StackFrame(1).GetMethod();
 
@@ -372,7 +383,7 @@ namespace prj202405.lib
             // 检查参数数量是否匹配
             if (parameters.Length != paramValues.Length)
             {
-              //  throw new ArgumentException("Parameter count does not match.");
+                //  throw new ArgumentException("Parameter count does not match.");
             }
 
             // 获取当前方法的参数值
@@ -387,13 +398,14 @@ namespace prj202405.lib
                             p = p.Name,
                             v = paramValues[index]
                         };
-                    }catch(Exception e)
+                    }
+                    catch (Exception e)
                     {
                         Hashtable hash = new Hashtable();
                         hash.Add("func_get_args.p1.method_Name", method.Name);
                         hash.Add("func_get_args.p2.prm", paramValues);
-                         
-                        logErr2024(e, "func_get_args", "errlogDir2024",hash);
+
+                        logErr2024(e, "func_get_args", "errlogDir2024", hash);
                         print_r(e);
                         return new
                         {
@@ -401,9 +413,9 @@ namespace prj202405.lib
                             v = "vxxx"
                         };
                     }
-                   
+
                 }
-             
+
             ).ToList();
             return parameterValues;
             // 序列化为 JSON 字符串

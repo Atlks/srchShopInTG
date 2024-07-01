@@ -13,7 +13,7 @@ namespace mdsj.lib
         //
         public static SortedList getShareCfg(string FromdataDir, string shareName)
         {
-            SortedList cfg4curDatatype = getShareCfgLst(FromdataDir);
+            SortedList cfg4curDatatype = getShareCfg4table(FromdataDir);
             Console.WriteLine(json_encode(cfg4curDatatype));
 
           //  SortedList cfg4curDatatype= shareCfgList[]
@@ -22,7 +22,7 @@ namespace mdsj.lib
             return sortedList;
         }
 
-        public static SortedList getShareCfgLst(string dataType)
+        public static SortedList getShareCfg4table(string dataType)
         {
 
             //SortedList shareCfg1 = new SortedList();

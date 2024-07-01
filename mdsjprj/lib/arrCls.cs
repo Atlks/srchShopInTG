@@ -17,8 +17,35 @@ using System.Reflection;
 
 namespace prj202405.lib
 {
-    internal class arrCls
+    public class arrCls
     {
+
+
+     public   static string GetKeysCommaSeparated(SortedList list)
+        {
+            // 检查输入参数是否为 null
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            // 创建一个 StringBuilder 来构建结果字符串
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+            foreach (var key in list.Keys)
+            {
+                // 将每个键添加到 StringBuilder 中，并附加逗号
+                sb.Append(key).Append(",");
+            }
+
+            // 移除最后一个多余的逗号
+            if (sb.Length > 0)
+            {
+                sb.Length--; // 或者 sb.Remove(sb.Length - 1, 1);
+            }
+
+            return sb.ToString();
+        }
         public static void setFld(SortedList cfg, string f, object v)
         {
             if (cfg.ContainsKey(f))

@@ -155,11 +155,7 @@ namespace mdsj.libBiz
             try
             {
 
-                if (update.Message?.Type == MessageType.Voice)
-                {
-                    Bot_OnVoiceAsync(update, reqThreadId);
-                    return;
-                }
+              
                 if (update.Type == UpdateType.ChatMember && update.ChatMember.NewChatMember.Status == ChatMemberStatus.Member)
                 {
                     var chatId = update.ChatMember.Chat.Id;
@@ -172,40 +168,7 @@ namespace mdsj.libBiz
                     await SendThankYouMessage(update.Message.Chat.Id);
                     return;
                 }
-                if (update.Message?.Type == MessageType.Video)
-                {
-                    Bot_OnVideo(update, reqThreadId);
-                    return;
-                }
-
-                if (update.Message?.Type == MessageType.Audio)
-                {
-                    Bot_OnAudioAsync(update, reqThreadId);
-                    return;
-                }
-
-                //  MessageType.Animation
-                //MessageType.contact
-                //   MessageType.Voice
-
-                if (update.Message?.Type == MessageType.Contact)
-                {
-                    Bot_OnContactAsync(update, reqThreadId);
-                    return;
-                }
-                if (update.Message?.Type == MessageType.VideoNote)
-                {
-                    Bot_OnVideoNoteAsync(update, reqThreadId);
-                    return;
-                }
-
-             
-
-                if (update.Message?.Type == MessageType.Document)
-                {
-                    Bot_OnDocAsync(update, reqThreadId);
-                    return;
-                }
+          
                 if (update.Type == UpdateType.Message)
                 {
                     OnMsg(update, reqThreadId); return;
@@ -221,6 +184,12 @@ namespace mdsj.libBiz
                     OnChatMembr(update, reqThreadId); return;
                 }
 
+                if(isFileMesg(update))
+                {
+                    return;
+                }
+
+             
             }
             catch (
             Exception ex)
@@ -230,6 +199,54 @@ namespace mdsj.libBiz
 
 
 
+        }
+
+        private static bool isFileMesg(Update update)
+        {
+            return false;
+
+        }
+
+            private static void isFileMesg22(Update update,string reqThreadId)
+        {
+            if (update.Message?.Type == MessageType.Video)
+            {
+                Bot_OnVideo(update, reqThreadId);
+                return  ;
+            }
+
+            if (update.Message?.Type == MessageType.Audio)
+            {
+                Bot_OnAudioAsync(update, reqThreadId);
+                return;
+            }
+
+            //  MessageType.Animation
+            //MessageType.contact
+            //   MessageType.Voice
+
+            if (update.Message?.Type == MessageType.Contact)
+            {
+                Bot_OnContactAsync(update, reqThreadId);
+                return;
+            }
+            if (update.Message?.Type == MessageType.VideoNote)
+            {
+                Bot_OnVideoNoteAsync(update, reqThreadId);
+                return;
+            }
+
+            if (update.Message?.Type == MessageType.Voice)
+            {
+                Bot_OnVoiceAsync(update, reqThreadId);
+                return;
+            }
+
+            if (update.Message?.Type == MessageType.Document)
+            {
+                Bot_OnDocAsync(update, reqThreadId);
+                return;
+            }
         }
 
         private static void Bot_OnContactAsync(Update update, string reqThreadId)

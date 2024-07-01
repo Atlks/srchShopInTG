@@ -117,7 +117,11 @@ namespace prj202405.lib
             dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
-                File.WriteAllText(dbFileName, "[]");
+            {
+                print_ret(__METHOD__, 0);
+                return [];
+            }
+            //    File.WriteAllText(dbFileName, "[]");
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
             string txt = File.ReadAllText(dbFileName);
@@ -304,12 +308,12 @@ namespace prj202405.lib
             print_ret(__METHOD__, 0);
         }
 
-        public static void print_ex(string v, Exception e)
+        public static void print_ex(string mthdName, Exception e)
         {
 
-            Console.WriteLine($"------{v}() catch ex----------_");
+            Console.WriteLine($"------{mthdName}() catch ex----------_");
             Console.WriteLine(e);
-            Console.WriteLine($"------{v}() catch ex finish----------_");
+            Console.WriteLine($"------{mthdName}() catch ex finish----------_");
         }
 
         public static void print_catchEx(string v, Exception e)

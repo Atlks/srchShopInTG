@@ -330,7 +330,8 @@ namespace prj202405
         {
             try
             {
-                List<SortedList> rztLi = arr_fltr4readDir("mercht商家数据", "缅甸,老挝", (SortedList row) =>
+                //缅甸,老挝
+                List<SortedList> rztLi = arr_fltr4readDir("mercht商家数据", "", (SortedList row) =>
                 {
                     if (row["商家"].ToString().Contains("理发"))
                         return true;
