@@ -74,7 +74,9 @@ namespace mdsj.libBiz
         {
             botClient.SendTextMessageAsync(
                     update.Message.Chat.Id,
-                    "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!",
+                    "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!\n"
+                    +"\n可以设置园区方便搜索，指令如下:\n"
+                    +"/设置园区 东风园区",
                     parseMode: ParseMode.Html,
                     //   replyMarkup: new InlineKeyboardMarkup([]),
                     protectContent: false,
@@ -86,7 +88,7 @@ namespace mdsj.libBiz
 
             var rplyKbdMkp = tgBiz.tg_btmBtns();
             KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
-            RemoveButtonByName(kbtns, "🔥助力本群");
+            RemoveButtonByName(kbtns, juliBencyon);
 
             //  var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             long chatid = update.Message.Chat.Id;

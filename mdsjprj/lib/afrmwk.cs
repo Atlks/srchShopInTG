@@ -55,7 +55,7 @@ namespace mdsj.lib
                 Thread newThread = new Thread(() =>
                 {
                     Console.WriteLine("新线程开始执行");
-                    playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\新疆美丽公主组合 - 欢乐地跳吧.mp3", 5);
+                    playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\新疆美丽公主组合 - 欢乐地跳吧.mp3", 2);
 
                     Console.WriteLine("新线程完成工作");
                 });
@@ -68,7 +68,9 @@ namespace mdsj.lib
             {
                 Console.WriteLine(e);
             }
-            actBiz();
+
+            call(actBiz, []);
+           // actBiz();
 
 
 

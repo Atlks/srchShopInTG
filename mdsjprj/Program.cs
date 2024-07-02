@@ -81,7 +81,7 @@ namespace prj202405
     internal class Program
     {
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
-        public const string botname = "LianXin_BianMinBot";
+        // public const string botname = "LianXin_BianMinBot";
 
         public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
         //  @LianXin_QunBot
@@ -257,16 +257,17 @@ namespace prj202405
             Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
 
-
-            //----------if new user join
-            if (update?.Message?.NewChatMembers != null)
+            if (update?.Type == UpdateType.MyChatMember)
             {
 
-                evt_newUserJoin2024(update.Message.Chat.Id, update?.Message?.NewChatMembers);
+                evt_newUserJoin2024(update?.Message?.Chat?.Id, update?.Message?.NewChatMembers, update);
 
                 return;
             }
 
+            string cmd = getCmdFun(update?.Message?.Text?.Trim());
+            string methodName = "On" + cmd + update?.Message?.Chat?.Type ?? "" + "";
+            callx(methodName, update, reqThreadId);
             if (update.Type == UpdateType.Message)
             {
                 if (update.Message.Type == MessageType.Text)
@@ -275,6 +276,11 @@ namespace prj202405
                         if (update.Message.Chat.Type == ChatType.Private)
                         {
                             OnCmdPrvt(update.Message.Text.Trim(), update, reqThreadId);
+                            return;
+                        }
+                        else
+                        {
+                            OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
                             return;
                         }
                 }
@@ -684,6 +690,12 @@ namespace prj202405
 
         }
 
+        private static string getCmdFun(string? v)
+        {
+            if ( string.IsNullOrEmpty(v)) return "";
+            return v.ToString().Substring(1);
+        }
+
         public static string cast_toString(object type)
         {
             if (type == null)
@@ -777,12 +789,20 @@ namespace prj202405
 
         }
 
-        private static void evt_newUserJoin2024(long chatId, Telegram.Bot.Types.User[]? newChatMembers)
+        private static void evt_newUserJoin2024(long? chatId, Telegram.Bot.Types.User[]? newChatMembers, Update? update)
         {
-            foreach (Telegram.Bot.Types.User u in newChatMembers)
+            if (newChatMembers != null)
             {
-                evt_newUserjoinSngle(chatId, u.Id, u);
+                foreach (Telegram.Bot.Types.User u in newChatMembers)
+                {
+                    if (u != null)
+                        evt_newUserjoinSngle(chatId, u?.Id, u, update);
+                }
+
             }
+
+            if (newChatMembers == null)
+                evt_newUserjoinSngle(chatId, update.MyChatMember.NewChatMember.User.Id, update.MyChatMember.NewChatMember.User, update);
         }
 
 
@@ -840,7 +860,7 @@ namespace prj202405
 
             if (msgx != null)
             {
-                if (msgx.Trim().StartsWith("@" + Program.botname))
+                if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
                 await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap2, reqThreadId);
@@ -858,7 +878,7 @@ namespace prj202405
             // if msg==null ..just from timer send msg..ret no op
             if (msgx != null)
             {
-                if (msgx.Trim().StartsWith("@" + Program.botname))
+                if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
                 await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci, reqThreadId);
@@ -873,16 +893,36 @@ namespace prj202405
         {  //  ,
             try
             {
-                Telegram.Bot.Types.Message a = await Program.botClient.SendTextMessageAsync(
-                 update.Message.Chat.Id,
-               "要获取多级菜单，请私聊我",
-                 parseMode: ParseMode.Html,
-                 replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
-                 protectContent: false,
-                 replyToMessageId: update.Message.MessageId,
-                 disableWebPagePreview: true
+                Telegram.Bot.Types.Message a;
+                var msg = bot_getTxt(update);
+                if (msg.Trim() == "商家")
+                {
+                    var tips = "您可以直接发送文字搜索商家联系方式,比如:\"烧烤店联系方式\",或者私聊我直接查看商家分类.";
+                    a = await Program.botClient.SendTextMessageAsync(
+                    update.Message.Chat.Id,
+                 tips,
+                    parseMode: ParseMode.Html,
+                    replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
+                    protectContent: false,
+                    replyToMessageId: update.Message.MessageId,
+                    disableWebPagePreview: true
 
-                 );
+                    );
+                }
+                else
+                {
+                    a = await Program.botClient.SendTextMessageAsync(
+               update.Message.Chat.Id,
+             "要获取多级菜单，请私聊我",
+               parseMode: ParseMode.Html,
+               replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
+               protectContent: false,
+               replyToMessageId: update.Message.MessageId,
+               disableWebPagePreview: true
+
+               );
+                }
+
                 tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
                 tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
             }
@@ -1458,7 +1498,7 @@ namespace prj202405
             //kwd if ret list btn cmd cmd
             if (update.Type == UpdateType.CallbackQuery)
             {
-                if (msgx_remvTrigWd2.Trim().StartsWith("@" + Program.botname))
+                if (msgx_remvTrigWd2.Trim().StartsWith("@" + botname))
                     msgx_remvTrigWd2 = msgx_remvTrigWd2.Substring(19).Trim();
                 else
                     msgx_remvTrigWd2 = msgx_remvTrigWd2.Trim();
@@ -1475,14 +1515,15 @@ namespace prj202405
 
 
             //    List<InlineKeyboardButton[]> results = [];  &park=世纪新城园区
-            if (isGrpChat(update))
+            if (tg_isGrpChat(update))
             {
                 // update.Message.Chat.Id;
                 string chatid2249 = tglib.bot_getChatid(update).ToString();
 
                 //  List<Dictionary<string, string>> lst = ormSqlt._qryV2($"select * from grp_loc_tb where grpid='{groupId}'", "grp_loc.db");
 
-                List<SortedList> lst = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{chatid2249}.json");
+                string grpcfg = $"{prjdir}/grpCfgDir/grpcfg{chatid2249}.json";
+                List<SortedList> lst = ormJSonFL.qry(grpcfg);
                 string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
                 //    city = "
 

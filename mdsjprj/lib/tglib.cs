@@ -112,7 +112,7 @@ namespace prj202405.lib
         {
             try
             {
-                await botClient.SendTextMessageAsync(chatId, "感谢投票");
+                await botClient_QunZzhushou.SendTextMessageAsync(chatId, "感谢投票");
             }
             catch (Exception ex)
             {

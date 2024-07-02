@@ -385,7 +385,7 @@ namespace prj202405
                     {
                         rplyKbdMkp = tgBiz.tg_btmBtns();
                         KeyboardButton[][] kbtns =(KeyboardButton[][]) rplyKbdMkp.Keyboard;
-                        RemoveButtonByName(kbtns, "🔥助力本群");
+                        RemoveButtonByName(kbtns, juliBencyon);
                     }else
                     {
                         rplyKbdMkp = tgBiz.tg_btmBtns();

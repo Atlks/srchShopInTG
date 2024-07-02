@@ -1,4 +1,5 @@
-﻿using NAudio.Wave;
+﻿global using static mdsj.lib.util;
+using NAudio.Wave;
 using prj202405.lib;
 using System;
 using System.Collections.Generic;
@@ -7,13 +8,13 @@ using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static mdsj.lib.util;
+
 using static prj202405.lib.corex;
 namespace mdsj.lib
 {
     internal class util
     {
-
+        public const string botname = "LianXin_BianMinBot";
         public static int GetBatteryPercentage()
         {
             try

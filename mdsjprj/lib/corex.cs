@@ -24,12 +24,12 @@ using static SqlParser.Ast.DataType;
 
 namespace prj202405.lib
 {
-   
+
 
     //prj202405.lib.corex
     internal class corex
     {
-        public static object call(string methodName,params object[] args)
+        public static object call2025(string methodName, params object[] args)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             IEnumerable<Type> typeList = assemblies
@@ -47,13 +47,13 @@ namespace prj202405.lib
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
 
             // 假设你想要执行 YourMethodName 方法
-         //   object[] args = { };
+            //   object[] args = { };
             var result = methodInfo.Invoke(null, args);
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
-        public static object GetFunc (string methodName)
+        public static object GetFunc(string methodName)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             IEnumerable<Type> typeList = assemblies
@@ -71,10 +71,10 @@ namespace prj202405.lib
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
 
             // 假设你想要执行 YourMethodName 方法
-            object[] args = {  };
-            var result =  methodInfo.Invoke(null, args);
+            object[] args = { };
+            var result = methodInfo.Invoke(null, args);
             return result;
-                //Delegate.CreateDelegate(delegateType, methodInfo);
+            //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
         static string GetFuncName(Delegate del)
@@ -95,7 +95,7 @@ namespace prj202405.lib
             return "Not a Func type";
         }
 
-        public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
+        public static void foreach_hashtable2025(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
         {
             foreach (DictionaryEntry de in chtsSess)
             {
@@ -118,11 +118,19 @@ namespace prj202405.lib
         {
             Console.WriteLine(v);
         }
-        public static  string prjdir = @"../../../";
-       
+        public static string prjdir = @"../../../";
+
         public static void ExecuteAfterDelay(int millisecondsDelay, Action action)
         {
-            Task.Delay(millisecondsDelay).ContinueWith(_ => action());
+            Task.Delay(millisecondsDelay).ContinueWith(_ =>
+            {
+
+
+                call_user_func(action, []);
+            }
+
+
+                );
         }
 
         public static object 运行(string 代码)
@@ -248,7 +256,7 @@ namespace prj202405.lib
 
             return sortedList;
         }
-         public static SortedList ObjectToSortedList(object obj)
+        public static SortedList ObjectToSortedList(object obj)
         {
             SortedList sortedList = new SortedList();
 

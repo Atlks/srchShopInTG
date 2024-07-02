@@ -1,5 +1,16 @@
 [
   {
+    "grpid": "-1002248404945",
+    "grpinfo": {
+      "id": -1002248404945,
+      "type": "supergroup",
+      "title": "grd 做空"
+    },
+    "id": "-1002248404945",
+    "whereExprs": "园区= kk园区",
+    "园区": "KK园区"
+  },
+  {
     "from": {
       "id": 879006550,
       "is_bot": false,

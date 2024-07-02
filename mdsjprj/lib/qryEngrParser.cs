@@ -107,7 +107,7 @@ namespace libx
             {
                 var CurSharFullpath = fromDdataDir + "/" + shar;
                 string rndFun;
-                SortedList curShareCfg = getShareCfg(fromDdataDir, shar);
+                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
 
                 //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
@@ -136,7 +136,7 @@ namespace libx
             }
             else
             {
-                SortedList curShareCfg = getShareCfg(fromDdataDir, shar);
+                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
             }
 
@@ -435,7 +435,7 @@ namespace libx
 
             if( string.IsNullOrEmpty(shareFiles))
             {
-                SortedList sharecfg = getShareCfg4table(FromdataDir);
+                SortedList sharecfg = shareList(FromdataDir);
                 result = GetKeysCommaSeparated(sharecfg);
             }
         
@@ -490,7 +490,7 @@ namespace libx
             print_call(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
 
-            List<SortedList> li = (List<SortedList>)call(rnd, shareName);
+            List<SortedList> li = (List<SortedList>)callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
                 li = db.arr_fltr330(li, whereFun);
 

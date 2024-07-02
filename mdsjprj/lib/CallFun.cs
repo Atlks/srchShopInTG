@@ -112,11 +112,11 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="callback">要调用的委托或方法</param>
         /// <param name="args">参数数组</param>
-        public static void call_user_func_array(Delegate callback, object[] args)
+        public static object call_user_func_array(Delegate callback, object[] args)
         {
-            callback.DynamicInvoke(args);
+         return   callback.DynamicInvoke(args);
         }
-        public static void call_user_func(Delegate callback,params object[] args)
+        public static object call_user_func(Delegate callback,params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
             print_call(__METHOD__, dbgCls.func_get_args(args));
@@ -133,11 +133,12 @@ namespace mdsj.lib
                 dbgobj.Add("mtth",__METHOD__ + "((("+ json_encode_noFmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
             }
-
+        //    call
             if (o != null)
                 print_ret(__METHOD__, o);
             else
                 print_ret(__METHOD__, 0);
+            return o;
 
         }
         public static void call_user_func(string className, string methodName, object[] parameters)
