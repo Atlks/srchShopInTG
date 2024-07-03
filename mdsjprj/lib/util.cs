@@ -74,7 +74,7 @@ namespace mdsj.lib
             try
             {
                 var __METHOD__ = "playMp3";
-                dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
+                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
 
                 using (var audioFile = new AudioFileReader(mp3FilePath))
                 using (var outputDevice = new WaveOutEvent())
@@ -119,7 +119,7 @@ namespace mdsj.lib
             try
             {
                 var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-                dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
+                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
 
                 using (var audioFile = new AudioFileReader(mp3FilePath))
                 using (var outputDevice = new WaveOutEvent())

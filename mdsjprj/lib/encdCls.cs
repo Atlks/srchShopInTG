@@ -8,6 +8,7 @@ using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
@@ -236,6 +237,16 @@ namespace mdsj.lib
             return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
         }
 
+        public static JsonObject json_decodeJonObj(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<JsonObject>(jsonString);
+        }
+
+        public static object json_decodeObj(string jsonString)
+        {
+            return JsonConvert.DeserializeObject<object>(jsonString);
+        }
+
         public static t json_decode<t>(string jsonString)
         {
             return JsonConvert.DeserializeObject<t>(jsonString);
@@ -258,16 +269,22 @@ namespace mdsj.lib
         public static string json_encode_noFmt(object results)
         {
             //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
-
-            var settings = new JsonSerializerSettings
+            try
             {
-                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-              //   Formatting = Formatting.Indented
-            };
-            //  string json = JsonConvert.SerializeObject(obj, settings);
-            string jsonString = JsonConvert.SerializeObject(results, settings);
-            // Console.WriteLine(jsonString);
-            return jsonString;
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    //   Formatting = Formatting.Indented
+                };
+                //  string json = JsonConvert.SerializeObject(obj, settings);
+                string jsonString = JsonConvert.SerializeObject(results, settings);
+                // Console.WriteLine(jsonString);
+                return jsonString;
+            }catch(Exception e)
+            {
+                return "{}";
+            }
+         
         }
 
     }

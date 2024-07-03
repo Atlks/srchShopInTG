@@ -296,16 +296,39 @@ namespace mdsj.libBiz
 
         }
 
+        public static void bot_logRcvMsg(Update update, string dir1)
+        {
+            try
+            {
+                var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
+          //      const string dir1 = "msgRcvDir1115";
+                Directory.CreateDirectory(dir1);
+                Console.WriteLine(updateString);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+                string fileName = $"{dir1}/{timestamp}.json";
+                Console.WriteLine(fileName);
+                filex.mkdir_forFile(fileName);
+                System.IO.File.WriteAllText("" + fileName, updateString);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+        }
+
         public static void bot_logRcvMsg(Update update)
         {
             try
             {
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
-                Directory.CreateDirectory("msgRcvDir");
+                const string dir1 = "msgRcvDir1115";
+                Directory.CreateDirectory(dir1);
                 Console.WriteLine(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-                string fileName = $"msgRcvDir2024/{timestamp}.json";
+                string fileName = $"{dir1}/{timestamp}.json";
                 Console.WriteLine(fileName);
                 filex.mkdir_forFile(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
@@ -318,10 +341,25 @@ namespace mdsj.libBiz
         }
     //    public static TelegramBotClient botClient;
 
-        public static async Task evt_newUserjoinSngle(long chatId, long userId, Telegram.Bot.Types.User user)
+        public static async Task evt_newUserjoinSngle(long? chatId, long? userId, Telegram.Bot.Types.User user, Update? update)
         {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+            var __METHOD__ = "evt_newUserjoinSngle";
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+
+
+            //记录拉如机器人记录，谁拉到哪个群了。。未来权限判断
+            try
+            {
+                var grpid = update.MyChatMember.Chat.Id;
+                var uid = update.MyChatMember.From.Id;
+                var botNme = update.MyChatMember.NewChatMember.User.Username;
+                string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{uid}.addBot.{botNme}.json";
+                WriteAllText( f, update);
+            }catch(Exception e)
+            {
+                print_catchEx(__METHOD__,e);
+            }
+           
 
             try
             {
@@ -334,7 +372,7 @@ namespace mdsj.libBiz
 
 
                 // 禁言用户
-                await Program.botClient.RestrictChatMemberAsync(chatId, userId, permissions: new Telegram.Bot.Types.ChatPermissions
+                await Program.botClient.RestrictChatMemberAsync(chatId, userId ?? 0, permissions: new Telegram.Bot.Types.ChatPermissions
                 {
                     CanSendDocuments = false,
                     CanSendPhotos = false,
@@ -377,6 +415,23 @@ namespace mdsj.libBiz
 
         }
 
+        public static void WriteAllText(string f, object update)
+        {
+            var __METHOD__ = nameof(WriteAllText);
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(update,f));
+ 
+            try
+            {
+                mkdir_forFile(f);
+                System.IO.File.WriteAllText( f, json_encode(update));
+            }catch(Exception e)
+            {
+                print_ex("WriteAllText", e);
+            }
+            print_ret(__METHOD__, 0);
+          
+        }
+
         public static bool tg_isBtm_btnClink_in_pubGrp(Update update)
         {
             if (update.Type != UpdateType.Message)
@@ -417,7 +472,7 @@ namespace mdsj.libBiz
 
             //if rply n frmuser is bot n textContain(我是便民助手
             if (update?.Message?.ReplyToMessage != null
-                && update.Message.ReplyToMessage.From.Username == Program.botname
+                && update.Message.ReplyToMessage.From.Username == botname
                 && strCls.isStartsWith(update.Message?.ReplyToMessage?.Text, "我是便民助手")
                 )
             {
@@ -492,9 +547,12 @@ namespace mdsj.libBiz
 
         }
 
-        public static bool isGrpChat(Update update)
+        public static bool tg_isGrpChat(Update update)
         {
+            if(update.Type==UpdateType.CallbackQuery)
+                return isGrpChat(update?.CallbackQuery.Message?.Chat?.Type);
             return isGrpChat(update?.Message?.Chat?.Type);
+
         }
       //  isGrpChat(update?.Message?.Chat?.Type)
         public static bool isGrpChat(ChatType? type)
@@ -516,7 +574,8 @@ namespace mdsj.libBiz
 
             return keyboard;
         }
-        public const string botname = Program.botname;
+      
+        public const string juliBencyon = "🔥 助力本群";
 
         public static ReplyKeyboardMarkup tg_btmBtnsV2(object chattype1)
         {
@@ -526,7 +585,7 @@ namespace mdsj.libBiz
             {  
                 rplyKbdMkp = tgBiz.tg_btmBtns();
                 KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
-                RemoveButtonByName(kbtns, "🔥助力本群");
+                RemoveButtonByName(kbtns, juliBencyon);
             }
             else
             {
@@ -602,10 +661,10 @@ namespace mdsj.libBiz
                              new KeyboardButton[]
                             {
 
-                                 new KeyboardButton("🔥助力本群"),
+                                 new KeyboardButton(juliBencyon),
 
-                                  new KeyboardButton("🫂加入联信"),
-                                   new KeyboardButton("🤝合作洽谈")  
+                                  new KeyboardButton("🫂 加入联信"),
+                                   new KeyboardButton("🤝 合作洽谈")  
 
 
                             }

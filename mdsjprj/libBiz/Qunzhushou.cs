@@ -42,7 +42,7 @@ using static WindowsFormsApp1.libbiz.storeEngFunRefCls;
 using static SqlParser.Ast.DataType;
 
 using static SqlParser.Ast.CharacterLength;
-using static mdsj.lib.music;
+using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
@@ -67,7 +67,7 @@ namespace mdsj.libBiz
         internal static void main1()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args());
+            print_call_FunArgs(__METHOD__, func_get_args());
 
             //  botClient_QunZzhushou.GetUpdatesAsync().Wait();
 
@@ -96,7 +96,7 @@ namespace mdsj.libBiz
         public static async Task StartSaveFotoAsync()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args());
+            print_call_FunArgs(__METHOD__, func_get_args());
             var bot = botClient_QunZzhushou;
             string saveDirectory = "savePicDir";
             mkdir(saveDirectory);
@@ -161,7 +161,7 @@ namespace mdsj.libBiz
                     var chatId = update.ChatMember.Chat.Id;
                     var userId = update.ChatMember.NewChatMember.User.Id;
 
-                    await evt_newUserjoinSngle(chatId, userId, update.ChatMember.NewChatMember.User);
+                    await evt_newUserjoinSngle(chatId, userId, update.ChatMember.NewChatMember.User, update);
                 }
                 if (update.Message?.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
                 {
@@ -257,7 +257,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVideoNoteAsync";
-            print_call(__METHOD__, func_get_args(update, reqThreadId));
+            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Voice.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -287,7 +287,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnVoiceAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVoiceAsync";
-            print_call(__METHOD__, func_get_args(update, reqThreadId));
+            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Voice.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -325,7 +325,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnDocAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnDoc";
-            print_call(__METHOD__, func_get_args(update, reqThreadId));
+            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -354,7 +354,7 @@ namespace mdsj.libBiz
         private static async Task Bot_OnAudioAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnAudioAsync";
-            print_call(__METHOD__, func_get_args(update, reqThreadId));
+            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -475,7 +475,7 @@ namespace mdsj.libBiz
             return;
            // qry_share. getShareCfg();
             var __METHOD__ = "Bot_OnVideo";
-            print_call(__METHOD__, func_get_args(update, reqThreadId));
+            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Video.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
@@ -519,7 +519,7 @@ namespace mdsj.libBiz
         private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
             string prjdir = @"../../../";
             if (update.Message.Text.Trim() == serchTipsWd)
             {

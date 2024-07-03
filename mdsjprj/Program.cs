@@ -64,7 +64,7 @@ using static mdsj.lib.afrmwk;
 using static SqlParser.Ast.DataType;
 
 using static SqlParser.Ast.CharacterLength;
-using static mdsj.lib.music;
+using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 
@@ -237,7 +237,7 @@ namespace prj202405
         private static async void Bot_OnUpdate(object sender, UpdateEventArgs e)
         {
             var __METHOD__ = "Bot_OnUpdate";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), e));
 
 
             dbgCls.print_ret(__METHOD__, 0);
@@ -250,12 +250,23 @@ namespace prj202405
             //  throw new Exception("myex");
 
             var __METHOD__ = "evt_aHandleUpdateAsync";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
             Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
+
+
+            if (update?.Message?.Text == "\U0001fac2 加入联信")
+            {
+                if (update.Message.Chat.Type == ChatType.Private)
+                {
+                   callx(  evt_btm_btn_click_inPrivtAsync,update);
+                    return;
+                }
+                  
+            }
 
             if (update?.Type == UpdateType.MyChatMember)
             {
@@ -690,18 +701,49 @@ namespace prj202405
 
         }
 
-        private static string getCmdFun(string? v)
+        //private static void callx(Func<Update, Task> evt_btm_btn_click_inPrivtAsync, Update update)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public static async Task evt_btm_btn_click_inPrivtAsync(Update update)
         {
-            if ( string.IsNullOrEmpty(v)) return "";
-            return v.ToString().Substring(1);
+
+            
+                Telegram.Bot.Types.Message a;
+                var msg = bot_getTxt(update);
+                //if (msg.Trim() == "🫂 加入联信")
+                //{
+                string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
+                if (System.IO.File.Exists(f))
+                {
+                    var tips = ReadAllText(f);
+                    IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
+                    a = await Program.botClient.SendTextMessageAsync(
+                            update.Message.Chat.Id,
+                         tips,
+                            parseMode: ParseMode.Html,
+                            replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
+                            protectContent: false,
+                            replyToMessageId: update.Message.MessageId,
+                            disableWebPagePreview: true
+
+                    );
+                  //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
+                  //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
+
+                }
+
+               
+
+
         }
 
-        public static string cast_toString(object type)
-        {
-            if (type == null)
-                return "";
-            return type.ToString();
-        }
+       
+
+    
+
+      
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -817,7 +859,7 @@ namespace prj202405
             SortedList whereMap = new SortedList();
             whereMap.Add("fuwuci", fuwuWd);
             var __METHOD__ = "evt_msgTrgSrch";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             string? msgx = msgx_remvTrigWd;
             //tglib.bot_getTxtMsgDep(update);
@@ -871,7 +913,7 @@ namespace prj202405
         private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
 
             logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
@@ -897,12 +939,13 @@ namespace prj202405
                 var msg = bot_getTxt(update);
                 if (msg.Trim() == "商家")
                 {
-                    var tips = "您可以直接发送文字搜索商家联系方式,比如:\"烧烤店联系方式\",或者私聊我直接查看商家分类.";
+                    var tips = "请打开商家目录";
+                    IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "打开商家目录", $"https://t.me/LianXin_BianMinBot/ShangJia")];
                     a = await Program.botClient.SendTextMessageAsync(
                     update.Message.Chat.Id,
                  tips,
                     parseMode: ParseMode.Html,
-                    replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
+                    replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
                     protectContent: false,
                     replyToMessageId: update.Message.MessageId,
                     disableWebPagePreview: true
@@ -923,8 +966,8 @@ namespace prj202405
                );
                 }
 
-                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
-                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
+                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 39);
+                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 30);
             }
             catch (Exception e)
             {
@@ -1030,7 +1073,7 @@ namespace prj202405
             string plchdTxt1422 = System.IO.File.ReadAllText("cfg/shibobc.txt");
             //"💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
 
-            string imgPath = "推荐横幅.gif";
+            string imgPath = "推荐横幅.jpg";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
 
 
@@ -1059,7 +1102,7 @@ namespace prj202405
             if (text.StartsWith("@xxx007"))
                 return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
 
             HashSet<prj202405.City> _citys = getCitysObj();
             Console.WriteLine(" evt  @回复了商家详情信息  评价商家");
@@ -1434,7 +1477,7 @@ namespace prj202405
         static async Task GetList_qryV2(string msgx_remvTrigWd2, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
-            print_call(__METHOD__, func_get_args(__METHOD__, msgx_remvTrigWd2));
+            print_call_FunArgs(__METHOD__, func_get_args(__METHOD__, msgx_remvTrigWd2));
             logCls.log("fun GetList_qryV2", func_get_args(msgx_remvTrigWd2, pagex, pagesizex, whereMapDep), "", "logDir", reqThreadId);
             if (msgx_remvTrigWd2 == null || msgx_remvTrigWd2.Length == 0)
                 return;
@@ -2203,7 +2246,7 @@ namespace prj202405
         static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
-            dbgCls.print_call(__METHOD__, func_get_args(update, reqThreadId));
+            dbgCls.print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
             logCls.log("FUN " + __METHOD__, func_get_args(reqThreadId, update), null, "logDir", reqThreadId);
 
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);

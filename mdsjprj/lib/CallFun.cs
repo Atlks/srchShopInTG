@@ -35,7 +35,7 @@ using static mdsj.lib.afrmwk;
 using static SqlParser.Ast.DataType;
 
 using static SqlParser.Ast.CharacterLength;
-using static mdsj.lib.music;
+using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
@@ -47,7 +47,7 @@ namespace mdsj.lib
         public static string call_exe_retStr(string exePath, string scriptPath, SortedList prm)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -69,7 +69,7 @@ namespace mdsj.lib
         public static string call_exec_RetList(string execpath, string scriptPath, SortedList prm, string outputDir)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -119,7 +119,7 @@ namespace mdsj.lib
         public static object call_user_func(Delegate callback,params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
-            print_call(__METHOD__, dbgCls.func_get_args(args));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {

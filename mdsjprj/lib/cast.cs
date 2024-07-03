@@ -13,7 +13,12 @@ namespace mdsj.lib
 {
     internal class cast
     {
-
+        public static string cast_toString(object type)
+        {
+            if (type == null)
+                return "";
+            return type.ToString();
+        }
         public static SortedList castUrlQueryString2hashtable(string queryString)
         {
             SortedList list = new SortedList();

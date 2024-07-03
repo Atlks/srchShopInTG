@@ -204,7 +204,7 @@ namespace mdsj.lib
         {
             return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             Console.WriteLine(DateTime.Now);
             string url = "https://coinmarketcap.com/";
             //string htm = GetHtmlContent(url);

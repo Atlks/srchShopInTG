@@ -100,7 +100,7 @@ namespace prj202405.lib
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
             //--------------------- crt table
 
@@ -186,7 +186,7 @@ namespace prj202405.lib
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             var results = new List<SortedList>();
             try
             {
@@ -232,7 +232,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -278,7 +278,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -330,7 +330,7 @@ namespace prj202405.lib
 
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
+            print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
 
             //--------------------- crt table
 
@@ -359,7 +359,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
 
 
@@ -385,7 +385,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             int n = 0;
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
@@ -434,7 +434,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             foreach (SortedList objSave in rows)
             {

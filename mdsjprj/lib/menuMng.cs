@@ -29,7 +29,7 @@ namespace mdsj.lib
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
             //  Program.botClient.send
             try
@@ -63,7 +63,7 @@ namespace mdsj.lib
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
      //       rplyKbdMkp.ResizeKeyboard = true;
             //  Program.botClient.send

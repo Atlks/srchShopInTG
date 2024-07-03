@@ -15,6 +15,10 @@ namespace prj202405.lib
 {
     public class filex
     {
+        public static string ReadAllText(string f)
+        {
+            return System.IO.File.ReadAllText(f);
+        }
 
         public static SortedList ReadJsonToSortedList(string filePath)
         {

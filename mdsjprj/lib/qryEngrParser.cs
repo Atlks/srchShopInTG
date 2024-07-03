@@ -84,7 +84,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
 
 
             //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
@@ -149,7 +149,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             //  List<t> rsRztInlnKbdBtn = new List<t>();
@@ -180,7 +180,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
             List<t> listFnl = new List<t>();
             try
             {
@@ -248,7 +248,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
@@ -406,7 +406,7 @@ namespace libx
         public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -429,7 +429,7 @@ namespace libx
         internal static string _calcPatnsV4(string FromdataDir, string shareFiles)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
 
             string result = shareFiles;
 
@@ -450,7 +450,7 @@ namespace libx
         internal static string _calcPatnsV3(string dir, string shareFiles)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, shareFiles));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, shareFiles));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -487,7 +487,7 @@ namespace libx
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
+            print_call_FunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
 
             List<SortedList> li = (List<SortedList>)callx(rnd, shareName);
@@ -501,7 +501,7 @@ namespace libx
         public static List<SortedList> _qryByShare(string shareName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, dbgCls.func_get_args(shareName, dbg));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(shareName, dbg));
 
             List<SortedList> li = rndFun(shareName);
 
@@ -514,7 +514,7 @@ namespace libx
         public static List<SortedList> _qryBySnglePart(string dbfName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, dbgCls.func_get_args(dbfName, "rndFun"));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(dbfName, "rndFun"));
 
             List<SortedList> li = rndFun(dbfName);
 

@@ -264,7 +264,7 @@ namespace prj202405
         public static async void z_actSj()
         {
             var __METHOD__ = "z_actSj";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             HashSet<prj202405.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
@@ -297,7 +297,7 @@ namespace prj202405
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
 
             //  Program.botClient.send

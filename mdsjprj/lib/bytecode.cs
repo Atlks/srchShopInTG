@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static SqlParser.Ast.Statement;
 
@@ -13,6 +14,30 @@ namespace mdsj.lib
 {
     internal class bytecode
     {
+        public static void WriteObj(string f, object obj)
+        { 
+            System.IO.File.WriteAllText( f, json_encode(obj));
+        }
+        public static void WriteAllText(string f,string txt)
+        {
+             System.IO.File.WriteAllText(f, txt);
+        }
+        public static string ReadAllText(string f)
+        {
+            return System.IO.File.ReadAllText(f);
+        }
+        public static List<SortedList> ReadAsListHashtable(string f)
+        {
+            return   json_decode( System.IO.File.ReadAllText(f));
+        }
+        public static object ReadAsObj(string f)
+        {
+            return json_decodeObj(System.IO.File.ReadAllText(f));
+        }
+        public static JsonObject ReadAsJson(string f)
+        {
+            return json_decodeJonObj(System.IO.File.ReadAllText(f));
+        }
         public static void echo(object v)
         {
             Console.WriteLine(v);
@@ -100,7 +125,7 @@ namespace mdsj.lib
             }
         }
 
-        private static object ldfld(object obj, string fld, object defVal)
+        public static object ldfld(object obj, string fld, object defVal)
         {
             Type type = obj.GetType();
             PropertyInfo propertyInfo = type.GetProperty(fld);
@@ -112,6 +137,14 @@ namespace mdsj.lib
             return defVal;
         }
 
+        public static bool And(bool left, bool right)
+        {
+            return left && right;
+        }
+        public static bool Or(bool left, bool right)
+        {
+            return left && right;
+        }
         public static void setFld(object Obj, string fld, object v)
         {
             if (Obj is SortedList)
@@ -143,6 +176,11 @@ namespace mdsj.lib
         public static object invoke(string methodName, params object[] args)
         {
             return callx(methodName, args);
+        }
+
+        public static string castToStr(  object args)
+        {
+            return args.ToString();
         }
 
         public static async Task<object> callAsync(Func<object> task1)
@@ -182,7 +220,7 @@ namespace mdsj.lib
             return o;
         }
 
-        public static object callWzlg(Delegate callback, params object[] args)
+        public static object callx(Delegate callback, params object[] args)
         {
             return call_user_func(callback, args);
         }
@@ -193,7 +231,7 @@ namespace mdsj.lib
         {
 
             var __METHOD__ = methodName;
-            print_call(methodName, dbgCls.func_get_args(args));
+            print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             IEnumerable<Type> typeList = assemblies
@@ -205,7 +243,12 @@ namespace mdsj.lib
                     method.Name == methodName
                   );
 
-            if (methodInfo == null) return null;
+            if (methodInfo == null)
+            {
+                Console.WriteLine("..waring  .methodinfo is null");
+                return null;
+            }
+
 
             var delegateType = typeof(Func<string, List<SortedList>>);
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
@@ -231,6 +274,10 @@ namespace mdsj.lib
 
         private static void print_ret_adv(string mETHOD__, object? result)
         {
+            //try
+            //{
+
+            //}cat
             if (result is System.Collections.IList)
             {
                 IList lst = (IList)result;

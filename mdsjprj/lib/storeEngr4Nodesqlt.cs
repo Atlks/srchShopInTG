@@ -207,7 +207,7 @@ namespace libx
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, dbgCls.func_get_args(dbf));
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(dbf));
 
             if (!dbf.EndsWith(".db"))
             {

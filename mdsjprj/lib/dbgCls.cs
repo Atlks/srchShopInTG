@@ -9,7 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
- 
+
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
@@ -33,7 +33,7 @@ namespace prj202405.lib
             // 获取主线程 ID
             // 获取当前时间并格式化为文件名
             string timestamp = DateTime.Now.ToString("dd_HH");
-            return timestamp+ (Thread.CurrentThread.ManagedThreadId);
+            return timestamp + (Thread.CurrentThread.ManagedThreadId);
         }
 
         public static string ToString(object managedThreadId)
@@ -244,11 +244,12 @@ namespace prj202405.lib
                 {
                     Console.WriteLine($"{indent}{obj}");
                 }
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Console.WriteLine(e);
             }
-           
+
         }
 
         /**
@@ -293,12 +294,20 @@ namespace prj202405.lib
          * @param string $METHOD__
          * @return void
          */
-        public static void print_call(string METHOD__, object func_get_args)
+        public static void print_call_FunArgs(string METHOD__, object func_get_args)
         {
-           
             dbgpad = dbgpad + 4;
-            var msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
-            // array_push($GLOBALS['dbg'],$logmsg   );
+            var msglog = "";
+            try
+            {
+                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
+                // array_push($GLOBALS['dbg'],$logmsg   );
+            }
+            catch (Exception e)
+            {
+                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "( )";
+                logErr2025(e, "print_ret", "errdirSysMeth");
+            }
             Console.WriteLine("\n\n\n" + msglog + "");
         }
 
@@ -314,9 +323,18 @@ namespace prj202405.lib
 
         public static void print_ret(object mETHOD__, object results)
         {
-             
-            var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
-            Console.WriteLine(msglog + "");
+            try
+            {
+                var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
+                Console.WriteLine(msglog + "");
+            }
+            catch (Exception e)
+            {
+                var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>";
+                Console.WriteLine(msglog + "");
+                logErr2025(e, "print_ret", "errdirSysMeth");
+            }
+
             //    array_push($GLOBALS['dbg'], $msglog);
             dbgpad = dbgpad - 4;
         }
@@ -334,21 +352,21 @@ namespace prj202405.lib
         public static object func_get_args(params object[] args)
         {
             // 输出每个参数的值
-           // Console.WriteLine("Arguments:");
+            // Console.WriteLine("Arguments:");
             //foreach (object arg in args)
             //{
             //    Console.WriteLine(arg);
             //}
-          //  return paramValues;
+            //  return paramValues;
             return args;
         }
 
-        public static object func_get_args4async( params object[] paramValues)
+        public static object func_get_args4async(params object[] paramValues)
         {
             // 获取当前方法
             // MethodBase method = new StackFrame(1).GetMethod();
 
-            
+
             return paramValues;
             // 序列化为 JSON 字符串
             //  return JsonConvert.SerializeObject(parameterValues, Formatting.Indented);
@@ -365,12 +383,12 @@ namespace prj202405.lib
             return paramValues;
             // 获取当前方法
             // MethodBase method = new StackFrame(1).GetMethod();
- 
+
             // 序列化为 JSON 字符串
             //  return JsonConvert.SerializeObject(parameterValues, Formatting.Indented);
         }
 
-        public static object func_get_argsDetao (MethodBase method, params object[] paramValues)
+        public static object func_get_argsDetao(MethodBase method, params object[] paramValues)
         {
             return paramValues;
             // 获取当前方法

@@ -18,7 +18,7 @@ namespace prj202405
         public static string pinlun_getpinlun(Merchant? contact_Merchant)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
 
             string result = "";
             //  ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");

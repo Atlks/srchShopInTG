@@ -57,7 +57,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
 
             try
             {
@@ -88,7 +88,7 @@ namespace prj202405.lib
         public static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
 
             try
             {
@@ -123,7 +123,7 @@ namespace prj202405.lib
         public static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
         {
             var __METHOD__ = "DownloadFile2localThruTgApi";
-            print_call(__METHOD__, func_get_args(filePath, fileFullPath));
+            print_call_FunArgs(__METHOD__, func_get_args(filePath, fileFullPath));
 
             var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
             //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
@@ -186,7 +186,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
 
 
             // var  = plchdTxt;

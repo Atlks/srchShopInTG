@@ -69,7 +69,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 using Microsoft.EntityFrameworkCore.Metadata;
 using Xabe.FFmpeg.Downloader;
-using static mdsj.lib.music;
+using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static prj202405.lib.tglib;
@@ -427,7 +427,7 @@ namespace prj202405
         public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
 
             using (HttpClient client = new HttpClient())
             {

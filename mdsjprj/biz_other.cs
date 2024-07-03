@@ -60,7 +60,7 @@ namespace mdsj
         {
           
             var __METHOD__ = "_SaveConfig";
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             dbgCls.print_ret(__METHOD__, 0);
             return;
         //writeUser:
@@ -90,7 +90,7 @@ namespace mdsj
         public static HashSet<prj202405.City>   getCitysObj()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             //联系商家城市
             HashSet<prj202405.City> _citys = [];
@@ -101,7 +101,7 @@ namespace mdsj
             return _citys;
         }
 
-        public const string botname = Program.botname;
+     //   public const string botname = Program.botname;
 
 
         //是否在营业时间内

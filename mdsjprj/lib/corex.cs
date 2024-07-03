@@ -195,7 +195,7 @@ namespace prj202405.lib
         public static string call_exe_Pstr(String exec, string scriptPath, string arguments)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
 
             // Create a new process to run the Node.js script
             Process process = new Process();

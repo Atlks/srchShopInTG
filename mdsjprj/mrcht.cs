@@ -117,7 +117,7 @@ namespace mdsj
             msgCtain_msgx_remvTrigWd2 = msgCtain_msgx_remvTrigWd2.ToUpper();
             msgCtain_msgx_remvTrigWd2 = ChineseCharacterConvert.Convert.ToSimple(msgCtain_msgx_remvTrigWd2);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain_msgx_remvTrigWd2));
+            print_call_FunArgs(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain_msgx_remvTrigWd2));
 
             //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain_msgx_remvTrigWd2)) { return []; }
