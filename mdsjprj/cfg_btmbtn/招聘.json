@@ -1,0 +1,19 @@
+{
+    "btn": "",
+    "tips": "联信求职招聘平台, 为海外企业和职员提供可信的优质工作岗位.更多好企业和优秀员工, 可联系联信猎头为您挑选好工作, 好员工!",
+    "btns": [{
+            "btnname": "在线求职招聘",
+            "url": "https://t.me/LianXin_BianMinBot/GongZuo"
+        },
+
+        {
+            "btnname": "进入求职招聘群",
+            "url": "https://t.me/LianXin_GongZuo"
+        },
+
+        {
+            "btnname": "联系联信猎头",
+            "url": "https://t.me/LianXin_ShangWu"
+        }
+    ]
+}

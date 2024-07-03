@@ -74,6 +74,8 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using System.Security.Policy;
 using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
+using Newtonsoft.Json.Linq;
+using System.Security.Cryptography.Xml;
 
 
 namespace prj202405
@@ -227,6 +229,9 @@ namespace prj202405
                 //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
                 await evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
             }
+            catch (retFunStpNxtEx e22)
+            {
+            }
             catch (Exception e)
             {
                 logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
@@ -262,10 +267,19 @@ namespace prj202405
             {
                 if (update.Message.Chat.Type == ChatType.Private)
                 {
-                   callx(  evt_btm_btn_click_inPrivtAsync,update);
+                    callx(evt_btm_btn_click_inPrivtAsync, update);
                     return;
                 }
-                  
+            }
+
+
+            if (update?.Message?.Text == juliBencyon)
+            {
+                if (update.Message.Chat.Type != ChatType.Private)
+                {
+                    callx(evt_btm_btn_zhuliBenqunAsync, update);
+                    return;
+                }
             }
 
             if (update?.Type == UpdateType.MyChatMember)
@@ -449,14 +463,14 @@ namespace prj202405
                strCls.contain(update?.Message?.Text, "世博博彩")
                 )
             {
-                evt_shiboBocai_click(update);
+                callx(evt_shiboBocai_click, update);
                 return;
             }
 
             if (strCls.contain(update?.Message?.Text, "世博博彩")
               )
             {
-                evt_shiboBocai_click(update);
+                callx(evt_shiboBocai_click, update);
                 return;
             }
 
@@ -701,6 +715,26 @@ namespace prj202405
 
         }
 
+        private static async Task evt_btm_btn_zhuliBenqunAsync(Update update)
+        {
+            string tips = "如果您是Telegram VIP会员,请为本群助力, 提升群功能! ";
+            var btn = "🔥 点击助力本群";
+            var grp = update.Message.Chat.Username;
+            var url = $"https://t.me/boost/{grp}";
+            InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
+
+            IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
+            InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
+            var msgNew = await Program.botClient.SendTextMessageAsync(
+                                  update.Message.Chat.Id, tips,
+                                  replyMarkup: InlineKeyboardMarkup1,
+                                  replyToMessageId: update.Message.MessageId
+
+                          );
+
+            dltMsgDelay(update, msgNew);
+        }
+
         //private static void callx(Func<Update, Task> evt_btm_btn_click_inPrivtAsync, Update update)
         //{
         //    throw new NotImplementedException();
@@ -709,41 +743,38 @@ namespace prj202405
         public static async Task evt_btm_btn_click_inPrivtAsync(Update update)
         {
 
-            
-                Telegram.Bot.Types.Message a;
-                var msg = bot_getTxt(update);
-                //if (msg.Trim() == "🫂 加入联信")
-                //{
-                string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
-                if (System.IO.File.Exists(f))
-                {
-                    var tips = ReadAllText(f);
-                    IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
-                    a = await Program.botClient.SendTextMessageAsync(
-                            update.Message.Chat.Id,
-                         tips,
-                            parseMode: ParseMode.Html,
-                            replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
-                            protectContent: false,
-                            replyToMessageId: update.Message.MessageId,
-                            disableWebPagePreview: true
 
-                    );
-                  //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
-                  //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
+            Telegram.Bot.Types.Message a;
+            var msg = bot_getTxt(update);
+            //if (msg.Trim() == "🫂 加入联信")
+            //{
+            string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
+            if (System.IO.File.Exists(f))
+            {
+                var tips2 = ReadAllText(f);
+                IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
+                a = await Program.botClient.SendTextMessageAsync(
+                        update.Message.Chat.Id,
+                     tips2,
+                        parseMode: ParseMode.Html,
+                        replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
+                        protectContent: false,
+                        replyToMessageId: update.Message.MessageId,
+                        disableWebPagePreview: true
 
-                }
+                );
+                throw new retFunStpNxtEx();
+                return;
+                //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
+                //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
 
-               
+            }
+
+
 
 
         }
 
-       
-
-    
-
-      
 
         private static void OnCallbk(Update update, string reqThreadId)
         {
@@ -935,39 +966,55 @@ namespace prj202405
         {  //  ,
             try
             {
-                Telegram.Bot.Types.Message a;
+                Telegram.Bot.Types.Message msgNew = null;
                 var msg = bot_getTxt(update);
-                if (msg.Trim() == "商家")
+
+                string f1 = $"{prjdir}/cfg_btmbtn/{msg}.json";
+                if (System.IO.File.Exists(f1))
                 {
-                    var tips = "请打开商家目录";
-                    IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "打开商家目录", $"https://t.me/LianXin_BianMinBot/ShangJia")];
-                    a = await Program.botClient.SendTextMessageAsync(
-                    update.Message.Chat.Id,
-                 tips,
-                    parseMode: ParseMode.Html,
-                    replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
-                    protectContent: false,
-                    replyToMessageId: update.Message.MessageId,
-                    disableWebPagePreview: true
 
-                    );
+                    SortedList table = ReadAsHashtable(f1);
+
+
+                    var tips = table["tips"].ToString();
+                    InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
+                    if (table.ContainsKey("url"))
+                    {
+                        IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: "请打开网页搜寻", table["url"].ToString())];
+                        InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
+                    }
+                    else
+                    {
+                        JArray btns = (JArray)table["btns"];
+                        InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtons(btns);
+                    }
+
+                    msgNew = await Program.botClient.SendTextMessageAsync(
+                                update.Message.Chat.Id, tips,
+                                replyMarkup: InlineKeyboardMarkup1,
+                                replyToMessageId: update.Message.MessageId
+
+                        );
+
+                    dltMsgDelay(update, msgNew);
+
+
+                    return;
+
                 }
-                else
+
+
+
                 {
-                    a = await Program.botClient.SendTextMessageAsync(
-               update.Message.Chat.Id,
-             "要获取多级菜单，请私聊我",
-               parseMode: ParseMode.Html,
-               replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
-               protectContent: false,
-               replyToMessageId: update.Message.MessageId,
-               disableWebPagePreview: true
-
-               );
+                    msgNew = await Program.botClient.SendTextMessageAsync(
+                           update.Message.Chat.Id,
+                         "要获取多级菜单，请私聊我",
+                           replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
+                              replyToMessageId: update.Message.MessageId
+                           );
                 }
 
-                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 39);
-                tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 30);
+                dltMsgDelay(update, msgNew);
             }
             catch (Exception e)
             {
@@ -975,6 +1022,35 @@ namespace prj202405
             }
 
             //todo reply
+        }
+
+        private static async Task<Message> evt_btmbtn_clk_mltBtns(Update update, Message? msgNew, string f1)
+        {
+
+            return msgNew;
+        }
+
+        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtons(JArray ja)
+        {
+
+            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
+            foreach (JObject jo1 in ja)
+            {
+                //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
+                InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["btnname"].ToString(), jo1["url"].ToString());
+                lst.Add(new List<InlineKeyboardButton> { btn });
+
+
+            }
+
+
+            return new InlineKeyboardMarkup(lst);
+        }
+
+        public static void dltMsgDelay(Update update, Message msgNew)
+        {
+            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 39);
+            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, msgNew.MessageId, 30);
         }
 
         //private static async Task evt_btmBtnclick(ITelegramBotClient botClient, Update update)
@@ -1066,7 +1142,7 @@ namespace prj202405
         //    return;
         //}
 
-        private static async void evt_shiboBocai_click(Update? update)
+        public static async void evt_shiboBocai_click(Update? update)
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 

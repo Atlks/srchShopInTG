@@ -1,0 +1,38 @@
+{
+  "update_id": 839627867,
+  "my_chat_member": {
+    "chat": {
+      "id": 6622885073,
+      "type": "private",
+      "username": "cuz268",
+      "first_name": "A😂H 资金请语音电话确定"
+    },
+    "from": {
+      "id": 6622885073,
+      "is_bot": false,
+      "first_name": "A😂H 资金请语音电话确定",
+      "username": "cuz268",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1719983865,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

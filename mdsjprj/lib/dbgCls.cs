@@ -23,6 +23,7 @@ using static prj202405.lib.ormJSonFL;
 using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using DocumentFormat.OpenXml.Drawing;
+using mdsj.libBiz;
 namespace prj202405.lib
 {
     internal class dbgCls
@@ -461,7 +462,13 @@ namespace prj202405.lib
             // 序列化为 JSON 字符串
             return JsonConvert.SerializeObject(parameterValues, Formatting.Indented);
         }
-
+        public static string str_repeatV2(string str, int count)
+        {
+            if (count < 0)
+                count = 0;
+            char[] charArray = str.ToCharArray();
+            return new string(charArray[0], count);
+        }
         public static string str_repeat(string v, int count)
         {
             if (count < 0)

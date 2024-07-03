@@ -15,7 +15,7 @@ namespace prj202405.lib
 {
     public class filex
     {
-        public static string ReadAllText(string f)
+        public static string fl_ReadAllText(string f)
         {
             return System.IO.File.ReadAllText(f);
         }
@@ -384,7 +384,8 @@ namespace prj202405.lib
                 {
                     if (word.Trim().Length > 0)
                     {
-                        wordList.Add(word);
+                     var   word1 = HttpUtility.UrlDecode(word);
+                        wordList.Add(word1);
                         // { CallbackData = $"Merchant?id={guid}" }
                       
                     }

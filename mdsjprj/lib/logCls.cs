@@ -23,7 +23,8 @@ namespace mdsj.lib
     {
         public static void logErr2024(object e, string funName, string logdir,object othInf)
         {
-
+            if (e is retFunStpNxtEx)
+                return;
             try
             {
                 // 创建目录
@@ -75,6 +76,8 @@ namespace mdsj.lib
 
         public static void error_logV2(object messageObj, string filePath)
         {
+            if (messageObj is retFunStpNxtEx)
+                return;
             try
             {
                 string message=json_encode(messageObj);
@@ -100,7 +103,8 @@ namespace mdsj.lib
 
         public static void logErr2025(object e, string funName, string logdir)
         {
-
+            if (e is retFunStpNxtEx)
+                return;
             try
             {
                 // 创建目录

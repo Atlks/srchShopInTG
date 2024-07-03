@@ -1,0 +1,14 @@
+{
+    "btn": "",
+    "tips": "联信官方售卖,安全有保障,技术过硬!",
+    "btns": [{
+            "btnname": "在线购买账号",
+            "url": "https://t.me/LianXin_BianMinBot/MaiHao"
+        },
+
+        {
+            "btnname": "联系买号客服",
+            "url": "https://t.me/LianXin_ShangWu"
+        }
+    ]
+}

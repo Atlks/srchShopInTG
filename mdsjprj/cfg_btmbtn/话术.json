@@ -1,0 +1,8 @@
+{
+    "btn": "话术",
+    "tips": "请直接进入联信话术群组搜索.!",
+    "btns": [{
+        "btnname": "进入话术群组",
+        "url": "https://t.me/LianXin_HuaShu"
+    }]
+}

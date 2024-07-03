@@ -53,15 +53,31 @@ namespace WindowsFormsApp1
 
             List<SortedList> rztLi =   Qe_qry(fromDdataDir, partns, whereFun, rndFun: rnd4nodeSqltRef());
           //  Qe_qry4NodeSqltMode(fromDdataDir, partns, whereFun);
+          foreach( SortedList results in rztLi)
+            {
+                results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty(results, "Telegram"));
+                results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
+                results["微信"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "微信"));
 
+            }
 
             //ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
             return json_encode(rztLi);
         }
 
-     
- 
-        public string find(string id)
+        public int del_click(string id)
+        {
+            var obj = new SortedList();
+            obj.Add("id", id);
+            //  { "id":id};
+            string soluDir = @"../../../";
+            soluDir = filex.GetAbsolutePath(soluDir);
+            var dataDir = $"{soluDir}\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据";
+            return Qe_delV2(id, dataDir,nameof  (delete_row4nodeSqlt));
+
+        }
+
+            public string find(string id)
         {
 
             string soluDir = @"../../../";
@@ -72,6 +88,7 @@ namespace WindowsFormsApp1
           
             results["Telegram"] = trim_RemoveUnnecessaryCharacters(TryGetValueAsStrDfEmpty(results, "Telegram"));
             results["WhatsApp"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "WhatsApp"));
+            results["微信"] = trim_RemoveUnnecessaryCharacters(arrCls.TryGetValueAsStrDfEmpty(results, "微信"));
 
 
             return json_encode(results);

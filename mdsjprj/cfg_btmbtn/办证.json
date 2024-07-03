@@ -1,0 +1,14 @@
+{
+    "btn": "",
+    "tips": "办理制作各类证件护照,为您推荐!",
+    "btns": [{
+            "btnname": "在线办理制作各种证件",
+            "url": "https://t.me/LianXin_BianMinBot/BanZheng"
+        },
+
+        {
+            "btnname": "联系办证客服",
+            "url": "https://t.me/LianXin_ShangWu"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "btn": "",
+    "tips": "联信在线商城挑选各类好货,为您推荐!",
+    "btns": [{
+            "btnname": "在线联信商城",
+            "url": "https://t.me/LianXin_BianMinBot/ShangCheng"
+        },
+
+        {
+            "btnname": "联系代购客服",
+            "url": "https://t.me/LianXin_ShangWu"
+        }
+    ]
+}

@@ -1,0 +1,37 @@
+{
+  "update_id": 839628288,
+  "my_chat_member": {
+    "chat": {
+      "id": 7164481874,
+      "type": "private",
+      "username": "qiang6666666",
+      "first_name": "小钻风"
+    },
+    "from": {
+      "id": 7164481874,
+      "is_bot": false,
+      "first_name": "小钻风",
+      "username": "qiang6666666",
+      "language_code": "zh-hans"
+    },
+    "date": 1720004527,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

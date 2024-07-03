@@ -107,7 +107,11 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
-
+            //for(int i=0;i<100;i++)
+            //{
+            //    Thread.Sleep(50);
+            //    Console.WriteLine(str_repeatV2("=", i) + "=>");
+            //}
             var mymm4shareCfg = "name=缅甸&fmt=sqlt&storeEngr=rnd_next4SqltRf";
             SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
           //  testShareCfg();
@@ -116,7 +120,7 @@ namespace prj202405
 
 
 
-            //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt, tgBiz.tg_btmBtns());
+         // tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
 
             //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
             //var rzt = await RecognizeMusic(s222);

@@ -60,6 +60,12 @@ namespace mdsj.lib
                     Console.WriteLine("新线程完成工作");
                 });
 
+                //动画金字塔logo
+                for (int i = 0; i < 100; i++)
+                {
+                    Thread.Sleep(50);
+                    Console.WriteLine(str_repeatV2("=", i) + "=>");
+                }
                 // 启动新线程
                 newThread.Start();
                 

@@ -1,0 +1,40 @@
+{
+  "update_id": 839628106,
+  "my_chat_member": {
+    "chat": {
+      "id": 6667377729,
+      "type": "private",
+      "username": "Xiaolutong9909",
+      "first_name": "(涉及资金语音确认）",
+      "last_name": "A-叁"
+    },
+    "from": {
+      "id": 6667377729,
+      "is_bot": false,
+      "first_name": "(涉及资金语音确认）",
+      "last_name": "A-叁",
+      "username": "Xiaolutong9909",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1719995692,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

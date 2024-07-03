@@ -18,6 +18,15 @@
             (window.external.save_click($("form").serialize()));
         }
 
+        function del_click() {
+            // window.external.m1();
+            var result = confirm("确认删除");
+            if (result) {
+                (window.external.del_clck($("#id").val()));
+            }
+           
+        }
+
 
     </script>
 
@@ -126,7 +135,12 @@
         </div>
         <!-- 提交按钮 -->
         <div>
-            <button type="submit" onclick="save_click()">提交</button>
+            <p></p> <p></p>
+            <button type="submit" onclick="save_click()" style="width:80%">提交</button>
+
+
+            <p></p> <p></p>
+            <button type="button" onclick="del_click()">删除</button>
         </div>
     </form>
 

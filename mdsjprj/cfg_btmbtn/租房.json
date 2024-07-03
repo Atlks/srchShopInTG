@@ -1,0 +1,14 @@
+{
+    "btn": "",
+    "tips": "办公场地,别墅和公寓,房间出租求租!!",
+    "btns": [{
+            "btnname": "在线租房卖房",
+            "url": "https://t.me/LianXin_BianMinBot/ZuFang"
+        },
+
+        {
+            "btnname": "联系租房客服",
+            "url": "https://t.me/LianXin_ShangWu"
+        }
+    ]
+}

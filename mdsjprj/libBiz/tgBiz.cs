@@ -442,7 +442,7 @@ namespace mdsj.libBiz
 
             if (update?.Message?.Chat?.Type != ChatType.Private)
             {
-                ArrayList a = filex.rdWdsFromFile("menu/底部公共菜单.txt");
+                ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
                 return a.Contains(msgx2024);
             }
             return false;
@@ -632,7 +632,7 @@ namespace mdsj.libBiz
                             {
                                  new KeyboardButton("跑腿") ,
                                    new KeyboardButton("代付") ,
-                                    new KeyboardButton("好货") ,
+                                    new KeyboardButton("商城") ,
                                      new KeyboardButton("兑换")
                             } ,
 

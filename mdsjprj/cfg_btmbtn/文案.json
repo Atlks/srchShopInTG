@@ -1,0 +1,8 @@
+{
+    "btn": "文案",
+    "tips": "请直接进入联信文案群组搜索.!",
+    "btns": [{
+        "btnname": "进入文案群组",
+        "url": "https://t.me/LianXin_WenAn"
+    }]
+}

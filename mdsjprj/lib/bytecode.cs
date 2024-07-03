@@ -30,6 +30,11 @@ namespace mdsj.lib
         {
             return   json_decode( System.IO.File.ReadAllText(f));
         }
+
+        public static SortedList ReadAsHashtable(string f)
+        {
+            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
+        }
         public static object ReadAsObj(string f)
         {
             return json_decodeObj(System.IO.File.ReadAllText(f));
