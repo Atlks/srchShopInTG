@@ -1,5 +1,10 @@
 {
     "btn": "",
-    "tips": "打开商家目录",
-    "url": "https://t.me/LianXin_BianMinBot/ShangJia"
+    "tips": "",
+
+
+    "btns": [{
+        "btnname": "打开商家目录",
+        "url": "https://t.me/LianXin_BianMinBot/ShangJia"
+    }]
 }

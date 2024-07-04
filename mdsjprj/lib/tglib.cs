@@ -1,4 +1,5 @@
-﻿using prj202405;
+﻿global using static prj202405.lib.tglib;
+using prj202405;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,7 +34,7 @@ using static mdsj.lib.net_http;
 using static prj202405.lib.db;
 using static libx.qryEngrParser;
 using static mdsj.libBiz.tgBiz;
-using static prj202405.lib.tglib;
+
 using static libx.storeEngr4Nodesqlt;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;

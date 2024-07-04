@@ -114,6 +114,18 @@ namespace prj202405.lib
                 }
             }
         }
+
+        public static async Task tts(string txt)
+        {
+            if (txt == null)
+                return;
+            var pty = "D:\\PycharmProjects\\pythonProject\\.venv\\Scripts\\python.exe";
+            SortedList prm = new SortedList();
+            prm.Add("txt", txt);
+         string mp3=   call_exe_retStr(pty, "D:\\0prj\\mdsj\\mdsjprj\\libBiz\\ttsScrpt.py", prm);
+            print_varDump("tts", "mp3", mp3);
+            playMp3V2(mp3);
+        }
         public static void print(string v)
         {
             Console.WriteLine(v);
@@ -199,8 +211,11 @@ namespace prj202405.lib
 
             // Create a new process to run the Node.js script
             Process process = new Process();
+         //   process.StartInfo.
             process.StartInfo.FileName = exec;
-            process.StartInfo.Arguments = $"\"{scriptPath}\" \"{arguments}\"";
+       // D:\0prj\mdsj\mdsjprj >
+
+        process.StartInfo.Arguments = $"\"{scriptPath}\" \"{arguments}\"";
             process.StartInfo.RedirectStandardOutput = true;
             process.StartInfo.RedirectStandardError = true;
             process.StartInfo.UseShellExecute = false;

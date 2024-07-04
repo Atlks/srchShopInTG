@@ -1,4 +1,6 @@
 ﻿global using static mdsj.lib.bytecode;
+using HtmlAgilityPack;
+using Nethereum.Contracts.QueryHandlers.MultiCall;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -15,12 +17,12 @@ namespace mdsj.lib
     internal class bytecode
     {
         public static void WriteObj(string f, object obj)
-        { 
-            System.IO.File.WriteAllText( f, json_encode(obj));
-        }
-        public static void WriteAllText(string f,string txt)
         {
-             System.IO.File.WriteAllText(f, txt);
+            System.IO.File.WriteAllText(f, json_encode(obj));
+        }
+        public static void WriteAllText(string f, string txt)
+        {
+            System.IO.File.WriteAllText(f, txt);
         }
         public static string ReadAllText(string f)
         {
@@ -28,7 +30,7 @@ namespace mdsj.lib
         }
         public static List<SortedList> ReadAsListHashtable(string f)
         {
-            return   json_decode( System.IO.File.ReadAllText(f));
+            return json_decode(System.IO.File.ReadAllText(f));
         }
 
         public static SortedList ReadAsHashtable(string f)
@@ -77,7 +79,7 @@ namespace mdsj.lib
 
             foreach (string str in originalSet)
             {
-                updatedSet.Add(fun(str) );
+                updatedSet.Add(fun(str));
             }
 
             return updatedSet;
@@ -183,7 +185,7 @@ namespace mdsj.lib
             return callx(methodName, args);
         }
 
-        public static string castToStr(  object args)
+        public static string castToStr(object args)
         {
             return args.ToString();
         }
@@ -231,6 +233,67 @@ namespace mdsj.lib
         }
 
 
+        // await callback
+        public static async Task<object> callxAsync(Delegate callback, params object[] args)
+        {
+
+            var __METHOD__ = callback.Method.Name;
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
+            object o = null;
+            //      try
+            // Get the MethodInfo of the delegate
+            MethodInfo methodInfo = callback.Method;
+
+            try
+            {
+                // Check if the method is asynchronous (returns a Task or Task<T>)
+                if (typeof(Task).IsAssignableFrom(methodInfo.ReturnType))
+                {
+                    // Invoke the delegate and get the Task
+                    var task = (Task)methodInfo.Invoke(callback.Target, args);
+                    await task.ConfigureAwait(false);
+
+                    // If the task has a result (i.e., it's a Task<T>), get the result
+                    if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+                    {
+                        var resultProperty = methodInfo.ReturnType.GetProperty("Result");
+                        o = resultProperty.GetValue(task);
+                    }
+                }
+                else
+                {
+                    // Invoke the delegate synchronously
+                    o = methodInfo.Invoke(callback.Target, args);
+                }
+             
+            }catch(jmp2exitEx e1)
+            {
+                throw e1;
+            }
+            catch (Exception ex)
+            {
+                print_catchEx(__METHOD__, ex);
+                SortedList dbgobj = new SortedList();
+                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
+                logErr2024(ex, __METHOD__, "errdir", dbgobj);
+            }
+            //    call
+            if (o != null)
+                print_ret(__METHOD__, o);
+            else
+                print_ret(__METHOD__, 0);
+            return o;
+
+        }
+
+
+
+
+        public static void jmp2exit()
+        {
+            // jmp2exitFlag = true;
+            throw new jmp2exitEx();
+        }
 
         public static object callx(string methodName, params object[] args)
         {

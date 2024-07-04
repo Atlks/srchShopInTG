@@ -236,7 +236,10 @@ namespace mdsj.lib
         {
             return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
         }
-
+        public static string encodeJson(object obj)
+        {
+            return json_encode(obj);
+        }
         public static JsonObject json_decodeJonObj(string jsonString)
         {
             return JsonConvert.DeserializeObject<JsonObject>(jsonString);

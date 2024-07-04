@@ -54,10 +54,10 @@ namespace mdsj.lib
             File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
             string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
 
-
+            Console.WriteLine(prm_fileAbs);
             string str = call_exe_Pstr(exePath, scriptPath, prm_fileAbs);
 
-            dbgCls.print_varDump(__METHOD__, "callNodePstr.ret", str);
+            print_varDump(__METHOD__, $"call_exe_Pstr.retRaw", str);
             string marker = "----------marker----------";
             str = substr_AfterMarker(str, marker);
             str = str.Trim();
@@ -114,26 +114,31 @@ namespace mdsj.lib
         /// <param name="args">参数数组</param>
         public static object call_user_func_array(Delegate callback, object[] args)
         {
-         return   callback.DynamicInvoke(args);
+            return callback.DynamicInvoke(args);
         }
-        public static object call_user_func(Delegate callback,params object[] args)
+        public static object call_user_func(Delegate callback, params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
             print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {
-                o = callback.DynamicInvoke(args);
+                
+             //   else
+                    o = callback.DynamicInvoke(args);
+            }catch(jmp2exitEx e1)
+            {
+                throw e1;
             }
             catch (Exception e)
             {
                 Console.WriteLine($"---catch ex----mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
                 Console.WriteLine(e);
                 SortedList dbgobj = new SortedList();
-                dbgobj.Add("mtth",__METHOD__ + "((("+ json_encode_noFmt(func_get_args(args)) + ")))");
+                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
             }
-        //    call
+            //    call
             if (o != null)
                 print_ret(__METHOD__, o);
             else

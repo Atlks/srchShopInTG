@@ -1,4 +1,5 @@
-﻿using prj202405.lib;
+﻿ using static libx.qryEngrParser;
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,14 +17,26 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static prj202405.lib.corex;
-using static libx.qryEngrParser;
+
 using static libx.storeEngr4Nodesqlt;
 namespace libx
 {
     internal class qryEngrParser
     {
-
-        public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> rndFun, Func<(SortedList, string), int> del_row_Fun)
+        public static int Qe_delV2(string id, string fromDdataDir,  string del_row_Fun)
+        {
+            var patns_dbfs = _calcPatnsV3(fromDdataDir, "缅甸");
+            string[] arr = patns_dbfs.Split(',');
+            int n = 0;
+            var obj = new SortedList();
+            obj.Add("id", id);
+            foreach (string dbf in arr)
+            {
+              n=n+ (int)call( del_row_Fun, obj,  dbf);
+            }
+            return n;
+        }
+            public static int Qe_del(string id, string fromDdataDir, Func<string, List<SortedList>> rndFun, Func<(SortedList, string), int> del_row_Fun)
         {
 
             var patns_dbfs = _calcPatnsV3(fromDdataDir, "");

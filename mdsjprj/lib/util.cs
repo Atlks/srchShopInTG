@@ -105,6 +105,45 @@ namespace mdsj.lib
 
 
         }
+
+
+        public static async Task playMp3V2(string mp3FilePath)
+        {
+            try
+            {
+                var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
+
+                using (var audioFile = new AudioFileReader(mp3FilePath))
+                using (var outputDevice = new WaveOutEvent())
+                {
+                    outputDevice.Init(audioFile);
+                    outputDevice.Play();
+
+                    Console.WriteLine("Playing... Press any key to stop.");
+                    // Console.ReadKey(); // 按任意键停止播放
+                    // 使当前线程休眠30秒钟  使得启可以播放audio不会退出
+                    Thread.Sleep(15*1000);
+                    //async maosi nt wk ..only slp wk...maybe same thrd..
+                    //yaos ma slp mthis thrd just finish fast..
+                    ExecuteAfterDelay(5000, () =>
+                    {
+                        outputDevice.Stop();
+                    });
+
+                }
+
+                dbgCls.print_ret(__METHOD__, 0);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+
+        }
+
         /*
          open com ..beri show tips com disable
          <Project Sdk="Microsoft.NET.Sdk">

@@ -186,7 +186,7 @@ namespace mdsj.lib
             }
             return btnTable.ToArray();
         }
-        public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtons(string filePath)
+        public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtonsV1001(string filePath)
         {
             // 读取HTML文件内容
             var htmlContent = System.IO.File.ReadAllText(filePath);

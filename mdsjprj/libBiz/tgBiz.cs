@@ -431,7 +431,22 @@ namespace mdsj.libBiz
             print_ret(__METHOD__, 0);
           
         }
+        public static bool tg_isBtm_btnClink_in_prvt(Update update)
+        {
+            if (update.Type != UpdateType.Message)
+            {
+                return false;
+            }
+            string msgx2024 = tglib.bot_getTxt(update);
 
+            if (update?.Message?.Chat?.Type == ChatType.Private)
+            {
+                ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+                return a.Contains(msgx2024);
+            }
+            return false;
+
+        }
         public static bool tg_isBtm_btnClink_in_pubGrp(Update update)
         {
             if (update.Type != UpdateType.Message)

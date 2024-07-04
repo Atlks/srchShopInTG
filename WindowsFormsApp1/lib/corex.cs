@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+﻿ using static prj202405.lib.corex;
+using mdsj.lib;
+ 
+using Microsoft.Win32;
 using Mono.Web;
 using System;
 using System.Collections;
@@ -17,6 +20,29 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
+        public static object call(string methodName,params object[] args)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public));
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+
+            if (methodInfo == null) return null;
+
+            var delegateType = typeof(Func<string, List<SortedList>>);
+            //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
+
+            // 假设你想要执行 YourMethodName 方法
+         //   object[] args = { };
+            var result = methodInfo.Invoke(null, args);
+            return result;
+            //Delegate.CreateDelegate(delegateType, methodInfo);
+        }
         //dep name
         public static SortedList urlqry2hashtb(string urlqryStr)
         {

@@ -63,8 +63,8 @@ using System.Threading;
 
 using System.Text.Json;
 using DocumentFormat.OpenXml.Spreadsheet;
- 
- 
+
+
 using DocumentFormat.OpenXml.Wordprocessing;
 
 using Microsoft.EntityFrameworkCore.Metadata;
@@ -107,6 +107,17 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
+            //  tts("此消息来了11");
+            geenBtns();
+            try
+            {
+                int x = 1;
+                var y = 2;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("除法错误：" + ex.Message);
+            }
             //for(int i=0;i<100;i++)
             //{
             //    Thread.Sleep(50);
@@ -114,13 +125,13 @@ namespace prj202405
             //}
             var mymm4shareCfg = "name=缅甸&fmt=sqlt&storeEngr=rnd_next4SqltRf";
             SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
-          //  testShareCfg();
+            //  testShareCfg();
 
 
 
 
 
-         // tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+            // tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
 
             //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
             //var rzt = await RecognizeMusic(s222);
@@ -191,7 +202,7 @@ namespace prj202405
                 // timerCls.z_actSj();
                 //   z_actSj();
                 //   callx((id: 11, dbf: "dbf"));
-            //    rdCateGeneH5list();
+                //    rdCateGeneH5list();
                 //   getProdSvrWdlib();
 
                 //    增加分类addcate();
@@ -317,6 +328,59 @@ namespace prj202405
 
         }
 
+        private static void geenBtns()
+        { // Create the keyboard object
+          
+            // Create the first row of buttons
+            var firstRow = new List<InlineKeyboardButton>();
+            firstRow.Add(
+                new InlineKeyboardButton("代购须知")
+                {
+                    Text = "代购须知",
+                    CallbackData = "daigou"
+                }
+            );
+            firstRow.Add(
+                new InlineKeyboardButton("代收须知")
+                {
+                    Text = "代收须知",
+                    CallbackData = "daishou"
+                }
+            );
+            firstRow.Add(
+              new InlineKeyboardButton("代付须知")
+              {
+                    Text = "代付须知",
+                    CallbackData = "daifu"
+                }
+            );
+
+            // Create the second row of buttons
+            var secondRow = new List<InlineKeyboardButton>();
+            secondRow.Add(
+                new InlineKeyboardButton("联系代购/付客服")
+                {
+                    Text = "联系代购/付客服",
+                    Url = "https://t.me/LianXin_ShangWu"
+                }
+            );
+
+
+           
+
+            // Add the rows of buttons to the keyboard
+            var lstBtns = new List<List<InlineKeyboardButton>>();
+            lstBtns.Add(firstRow);
+            lstBtns.Add(secondRow);
+
+            var keyboard = new InlineKeyboardMarkup(lstBtns);
+            // Serialize the keyboard to JSON
+            var keyboardJson = JsonConvert.SerializeObject(keyboard);
+
+            // Print the JSON string to the console
+            Console.WriteLine(keyboardJson);
+        }
+
         private static void rdCateGeneH5list()
         {
             List<SortedList> rws = ormIni.qryV2("cateECns.ini");
@@ -340,7 +404,7 @@ namespace prj202405
                     if (row["商家"].ToString().Contains("理发"))
                         return true;
                     return false;
-                } );
+                });
 
                 Console.WriteLine(json_encode(rztLi));
 
@@ -375,7 +439,7 @@ namespace prj202405
                         logCls.log(map, "TestTg有效性logDir");
                         //not exist 
                         stfld_addRplsKeyV(map, "TG有效", "N");
-                        
+
                         ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
                         continue;
                     }
@@ -388,20 +452,21 @@ namespace prj202405
                         stfld_addRplsKeyV(map, "TG有效", "N");
                         ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
 
-                    }else
+                    }
+                    else
                     {//exist tg numb
-                        if(ldfld(map, "TG有效","")=="N")
+                        if (ldfld(map, "TG有效", "") == "N")
                         {
                             stfld_addRplsKeyV(map, "TG有效", "Y");
                             ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
                         }
                     }
                 }
-                catch(Exception e)
+                catch (Exception e)
                 {
                     Console.WriteLine(e);
                 }
-               
+
             }
         }
 

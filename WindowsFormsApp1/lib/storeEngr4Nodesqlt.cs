@@ -208,7 +208,7 @@ namespace libx
 
         //  buf参数包含要删除行的内容。对于大多数存储引擎，该参数可被忽略，
         //  但事务性存储引擎可能需要保存删除的数据，以供回滚操作使用。
-        internal static int delete_row4nodeSqlt(SortedList buf_row, string dbf)
+        public static int delete_row4nodeSqlt(SortedList buf_row, string dbf)
         {
 
             SortedList prm = new SortedList();

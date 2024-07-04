@@ -397,6 +397,39 @@ namespace mdsj.libBiz
 
           //  }
         }
+        public static void canSendBtn_click(Update e)
+        {
+            Dictionary<string, string> parse_str1 = parse_str(e.CallbackQuery.Data);
+            string uid = ldfld2str(parse_str1, "uid");
+            if (uid != e.CallbackQuery.From.Id.ToString())
+            {
+                botClient.AnswerCallbackQueryAsync(
+                          callbackQueryId: e.CallbackQuery.Id,
+                          text: "只能本人解除",
+                          showAlert: true); // 这是显示对话框的关键);
+                return;
+            }
+
+
+            botClient.RestrictChatMemberAsync(e.CallbackQuery.Message.Chat.Id, e.CallbackQuery.From.Id, permissions: new Telegram.Bot.Types.ChatPermissions
+            {
+                CanSendMessages = true,
+                // CanSendMediaMessages = true,
+                CanSendOtherMessages = true,
+                CanAddWebPagePreviews = true,
+                CanSendDocuments = true,
+                CanSendPhotos = false,
+                CanSendPolls = true,
+                CanSendVideoNotes = true,
+                CanSendVideos = true,
+                CanSendVoiceNotes = true,
+                CanSendAudios = true
+
+            });
+
+            botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "已解除禁言！");
+
+        }
 
         private static void OnMsg(Update update, string reqThreadId)
         {

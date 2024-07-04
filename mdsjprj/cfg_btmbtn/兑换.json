@@ -1,0 +1,10 @@
+{
+    "btn": "",
+    "tips": "支持机器人TRX/USDT,ETH/USDT自助兑换
+    ",
+    "btns": [{
+        "btnname": "打开USDT兑TRX机器人",
+        "url": "https://t.me/LianXin_DuiHuanBot
+        "
+    }]
+}

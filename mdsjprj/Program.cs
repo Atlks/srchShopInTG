@@ -103,8 +103,7 @@ namespace prj202405
 
         //搜索用户
         public static Dictionary<long, User> _users = [];
-
-
+        public static bool jmp2exitFlag;
 
         public static async Task Main(string[] args)
         {
@@ -229,8 +228,9 @@ namespace prj202405
                 //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
                 await evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
             }
-            catch (retFunStpNxtEx e22)
+            catch (jmp2exitEx e22)
             {
+                Console.WriteLine("jmp2exitEx");
             }
             catch (Exception e)
             {
@@ -258,20 +258,34 @@ namespace prj202405
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
+            //    tts(update?.Message?.Text);
             Console.WriteLine(json_encode(update));
             Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
 
-
+            // ----------btm btn hdlr 
             if (update?.Message?.Text == "\U0001fac2 加入联信")
             {
-                if (update.Message.Chat.Type == ChatType.Private)
+                //if (update.Message.Chat.Type == ChatType.Private)
                 {
                     callx(evt_btm_btn_click_inPrivtAsync, update);
                     return;
                 }
             }
 
+
+
+            if (tg_isBtm_btnClink_in_prvt(update))
+            {
+                callx(evt_btm_btn_click_inPrivtAsync, update);
+                return;
+            }
+            //menu proces   evt_btmBtnclick
+            if (tgBiz.tg_isBtm_btnClink_in_pubGrp(update))
+            {
+                await callxAsync(evt_btm_btn_click_inPubgrp, update);
+                return;
+            }
 
             if (update?.Message?.Text == juliBencyon)
             {
@@ -281,6 +295,10 @@ namespace prj202405
                     return;
                 }
             }
+            //---end btm btn
+
+
+
 
             if (update?.Type == UpdateType.MyChatMember)
             {
@@ -319,7 +337,15 @@ namespace prj202405
 
             if (update.Type == UpdateType.CallbackQuery)
             {
-                OnCallbk(update, reqThreadId);
+                try
+                {
+                    await OnCallbk(update, reqThreadId);
+                }
+                catch (jmp2exitEx e)
+                {
+                    return;
+                }
+
             }
 
             if (update.Type == UpdateType.ChatMember)
@@ -404,31 +430,26 @@ namespace prj202405
             }
 
 
-            //menu proces   evt_btmBtnclick
-            if (tgBiz.tg_isBtm_btnClink_in_pubGrp(update))
-            {
-                evt_btm_btn_click_inPubgrp(update);
-                return;
-            }
+
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
             tipDayu(msg2056, update);
-            if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
-            {
-                logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
-                // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
-                // var rkm = new InlineKeyboardMarkup(Keyboard);
-                // KeyboardButton[][] kybd
-                var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
-                var rkm = new ReplyKeyboardMarkup(Keyboard);
-                rkm.ResizeKeyboard = true;
-                var msg = $"已为您切换至{msgx2024}菜单";
-                evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", msg, rkm, update);
+            //if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
+            //{
+            //    logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
+            //    // var Keyboard = filex.wdsFromFileRendrToBtnmenu("menu/" + msgx2024 + ".txt");
+            //    // var rkm = new InlineKeyboardMarkup(Keyboard);
+            //    // KeyboardButton[][] kybd
+            //    var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/" + msgx2024 + ".txt");
+            //    var rkm = new ReplyKeyboardMarkup(Keyboard);
+            //    rkm.ResizeKeyboard = true;
+            //    var msg = $"已为您切换至{msgx2024}菜单";
+            //    evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", msg, rkm, update);
 
-                //botClient.SendTextMessageAsync()
+            //    //botClient.SendTextMessageAsync()
 
-                return;
-            }
+            //    return;
+            //}
 
             if (msgx2024 == "↩️ 返回主菜单")
             {
@@ -715,70 +736,43 @@ namespace prj202405
 
         }
 
-        private static async Task evt_btm_btn_zhuliBenqunAsync(Update update)
-        {
-            string tips = "如果您是Telegram VIP会员,请为本群助力, 提升群功能! ";
-            var btn = "🔥 点击助力本群";
-            var grp = update.Message.Chat.Username;
-            var url = $"https://t.me/boost/{grp}";
-            InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
+     
 
-            IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
-            var msgNew = await Program.botClient.SendTextMessageAsync(
-                                  update.Message.Chat.Id, tips,
-                                  replyMarkup: InlineKeyboardMarkup1,
-                                  replyToMessageId: update.Message.MessageId
-
-                          );
-
-            dltMsgDelay(update, msgNew);
-        }
 
         //private static void callx(Func<Update, Task> evt_btm_btn_click_inPrivtAsync, Update update)
         //{
         //    throw new NotImplementedException();
         //}
 
-        public static async Task evt_btm_btn_click_inPrivtAsync(Update update)
+     
+
+        private static async
+        Task
+OnCallbk(Update update, string reqThreadId)
         {
-
-
-            Telegram.Bot.Types.Message a;
-            var msg = bot_getTxt(update);
-            //if (msg.Trim() == "🫂 加入联信")
-            //{
-            string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
-            if (System.IO.File.Exists(f))
-            {
-                var tips2 = ReadAllText(f);
-                IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
-                a = await Program.botClient.SendTextMessageAsync(
-                        update.Message.Chat.Id,
-                     tips2,
-                        parseMode: ParseMode.Html,
-                        replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
-                        protectContent: false,
-                        replyToMessageId: update.Message.MessageId,
-                        disableWebPagePreview: true
-
-                );
-                throw new retFunStpNxtEx();
-                return;
-                //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
-                //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
-
-            }
-
-
-
-
-        }
-
-
-        private static void OnCallbk(Update update, string reqThreadId)
-        {
+            //daifu fun
             // throw new NotImplementedException();
+            //string path = $"{prjdir}/cfg/{update.CallbackQuery.Data}.txt";
+            //if (System.IO.File.Exists(path))
+            //{ // Create the chat ID
+            //    var chatId = 123456789;
+            //    var txt = ReadAllText(path);
+            //    //   botClient.SendChatActionAsync(chatId, ChatAction.al);
+            //    try
+            //    {
+            //        await botClient.AnswerCallbackQueryAsync(
+            //               callbackQueryId: update.CallbackQuery.Id,
+            //               text: txt,
+            //               showAlert: true); // 这是显示对话框的关键);
+            //    }catch(Exception e)
+            //    {
+            //        Console.WriteLine(e);
+            //    }
+                 
+            //    jmp2exit();
+            //    return ;
+            //}
+            //// if(update.CallbackQuery.Data)
         }
 
         private static void OnMsg(Update update, string reqThreadId)
@@ -828,40 +822,7 @@ namespace prj202405
             return;
         }
 
-        public static void canSendBtn_click(Update e)
-        {
-            Dictionary<string, string> parse_str1 = parse_str(e.CallbackQuery.Data);
-            string uid = ldfld2str(parse_str1, "uid");
-            if (uid != e.CallbackQuery.From.Id.ToString())
-            {
-                botClient.AnswerCallbackQueryAsync(
-                          callbackQueryId: e.CallbackQuery.Id,
-                          text: "只能本人解除",
-                          showAlert: true); // 这是显示对话框的关键);
-                return;
-            }
-
-
-            botClient.RestrictChatMemberAsync(e.CallbackQuery.Message.Chat.Id, e.CallbackQuery.From.Id, permissions: new Telegram.Bot.Types.ChatPermissions
-            {
-                CanSendMessages = true,
-                // CanSendMediaMessages = true,
-                CanSendOtherMessages = true,
-                CanAddWebPagePreviews = true,
-                CanSendDocuments = true,
-                CanSendPhotos = false,
-                CanSendPolls = true,
-                CanSendVideoNotes = true,
-                CanSendVideos = true,
-                CanSendVoiceNotes = true,
-                CanSendAudios = true
-
-            });
-
-            botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id, "已解除禁言！");
-
-        }
-
+      
         private static void evt_newUserJoin2024(long? chatId, Telegram.Bot.Types.User[]? newChatMembers, Update? update)
         {
             if (newChatMembers != null)
@@ -962,96 +923,15 @@ namespace prj202405
         }
 
 
-        private static async void evt_btm_btn_click_inPubgrp(Update update)
-        {  //  ,
-            try
-            {
-                Telegram.Bot.Types.Message msgNew = null;
-                var msg = bot_getTxt(update);
+     
+        //private static async Task<Message> evt_btmbtn_clk_mltBtns(Update update, Message? msgNew, string f1)
+        //{
 
-                string f1 = $"{prjdir}/cfg_btmbtn/{msg}.json";
-                if (System.IO.File.Exists(f1))
-                {
+        //    return msgNew;
+        //}
 
-                    SortedList table = ReadAsHashtable(f1);
-
-
-                    var tips = table["tips"].ToString();
-                    InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
-                    if (table.ContainsKey("url"))
-                    {
-                        IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: "请打开网页搜寻", table["url"].ToString())];
-                        InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
-                    }
-                    else
-                    {
-                        JArray btns = (JArray)table["btns"];
-                        InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtons(btns);
-                    }
-
-                    msgNew = await Program.botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, tips,
-                                replyMarkup: InlineKeyboardMarkup1,
-                                replyToMessageId: update.Message.MessageId
-
-                        );
-
-                    dltMsgDelay(update, msgNew);
-
-
-                    return;
-
-                }
-
-
-
-                {
-                    msgNew = await Program.botClient.SendTextMessageAsync(
-                           update.Message.Chat.Id,
-                         "要获取多级菜单，请私聊我",
-                           replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
-                              replyToMessageId: update.Message.MessageId
-                           );
-                }
-
-                dltMsgDelay(update, msgNew);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-
-            //todo reply
-        }
-
-        private static async Task<Message> evt_btmbtn_clk_mltBtns(Update update, Message? msgNew, string f1)
-        {
-
-            return msgNew;
-        }
-
-        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtons(JArray ja)
-        {
-
-            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
-            foreach (JObject jo1 in ja)
-            {
-                //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
-                InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["btnname"].ToString(), jo1["url"].ToString());
-                lst.Add(new List<InlineKeyboardButton> { btn });
-
-
-            }
-
-
-            return new InlineKeyboardMarkup(lst);
-        }
-
-        public static void dltMsgDelay(Update update, Message msgNew)
-        {
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 39);
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, msgNew.MessageId, 30);
-        }
+       
+     
 
         //private static async Task evt_btmBtnclick(ITelegramBotClient botClient, Update update)
         //{
@@ -1141,37 +1021,6 @@ namespace prj202405
         //    await evt_btnclick_Pt2_qryByKwd(msgx, 1, 5, botClient, update);
         //    return;
         //}
-
-        public static async void evt_shiboBocai_click(Update? update)
-        {
-            //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
-
-            string plchdTxt1422 = System.IO.File.ReadAllText("cfg/shibobc.txt");
-            //"💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
-
-            string imgPath = "推荐横幅.jpg";
-            var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-
-
-            InlineKeyboardButton[][] btns = tglib.ConvertHtmlLinksToTelegramButtons("shiboTrm.htm");
-            Telegram.Bot.Types.Message message = await Program.botClient.SendPhotoAsync(
-                  update.Message.Chat.Id, Photo, null,
-             plchdTxt1422,
-             replyToMessageId: update.Message.MessageId,
-                    parseMode: ParseMode.Html,
-                     replyMarkup: new InlineKeyboardMarkup(btns),
-                   protectContent: false); ;
-
-            //ori 64
-            //Message message = await Program.botClient.SendPhotoAsync(
-            //        update.Message.Chat.Id, Photo, null,
-            //      System.IO.File.ReadAllText("shiboTrm.htm"),
-            //          parseMode: ParseMode.Html,
-            //         //   replyMarkup: new InlineKeyboardMarkup(results),
-            //         protectContent: false);
-            Console.WriteLine(JsonConvert.SerializeObject(message));
-        }
-
 
         private static async Task evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
         {
