@@ -268,7 +268,7 @@ namespace prj202405
             {
                 //if (update.Message.Chat.Type == ChatType.Private)
                 {
-                    callx(evt_btm_btn_click_inPrivtAsync, update);
+                 await   callxAsync(evt_btm_btn_click_inPrivtAsync, update);
                     return;
                 }
             }
@@ -295,7 +295,7 @@ namespace prj202405
                     return;
                 }
             }
-            //---end btm btn
+            //---------------end btm btn
 
 
 

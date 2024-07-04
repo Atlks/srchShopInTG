@@ -590,7 +590,7 @@ namespace mdsj.libBiz
             return keyboard;
         }
       
-        public const string juliBencyon = "🔥 助力本群";
+    
 
         public static ReplyKeyboardMarkup tg_btmBtnsV2(object chattype1)
         {

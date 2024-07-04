@@ -619,6 +619,55 @@ namespace prj202405.lib
                 System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
         }
 
+        public static InlineKeyboardMarkup ConvertHtmlToinlineKeyboard(string html)
+        {
+            string json = ConvertHtmlToJson(html);
+            return ConvertJsonToInlineKeyboardMarkup(json);
+        }
+
+        public static string ConvertHtmlToJson(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            var rows = doc.DocumentNode.SelectNodes("//tr");
+            var inlineKeyboard = new List<List<Dictionary<string, string>>>();
+
+            foreach (var row in rows)
+            {
+                var buttons = row.SelectNodes(".//button");
+                var buttonList = new List<Dictionary<string, string>>();
+
+                foreach (var button in buttons)
+                {
+                    var buttonData = new Dictionary<string, string>();
+                    var textNode = button.InnerText.Trim();
+
+                    buttonData["text"] = textNode;
+
+                    if (button.Attributes["data-callback_data"] != null)
+                    {
+                        buttonData["callback_data"] = button.Attributes["data-callback_data"].Value;
+                    }
+
+                    if (button.Attributes["data-url"] != null)
+                    {
+                        buttonData["url"] = button.Attributes["data-url"].Value;
+                    }
+
+                    buttonList.Add(buttonData);
+                }
+
+                inlineKeyboard.Add(buttonList);
+            }
+
+            var result = new
+            {
+                inline_keyboard = inlineKeyboard
+            };
+
+            return JsonConvert.SerializeObject(result, Formatting.Indented);
+        }
 
         public static ChatId bot_getChatid(Update update)
         {

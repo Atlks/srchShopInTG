@@ -289,7 +289,7 @@ namespace mdsj.lib
 
 
 
-        public static void jmp2exit()
+        public static void jmp2end()
         {
             // jmp2exitFlag = true;
             throw new jmp2exitEx();

@@ -111,19 +111,19 @@ namespace mdsj.libBiz
                         disableWebPagePreview: true
 
                 );
-                jmp2exit();
+                jmp2end();
                 return;
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
 
             }
 
-            callx(btm_btnClk_inCfg, update);
-            jmp2exit();
+         await   callxAsync(btm_btnClk_inCfg, update);
+            jmp2end();
 
         }
 
-        private static InlineKeyboardMarkup daifubtns()
+        public static InlineKeyboardMarkup daifubtns()
         { // Create the keyboard object
 
             // Create the first row of buttons
@@ -312,7 +312,7 @@ namespace mdsj.libBiz
             //    return;
             //}
         }
-
+        public const string juliBencyon = "🔥 助力本群";
         public static async Task btm_btnClk_inCfg(Update update)
         {
             Telegram.Bot.Types.Message msgNew = null;
@@ -350,14 +350,14 @@ namespace mdsj.libBiz
                 catch (Exception e)
                 {
                     print_catchEx(nameof(btm_btnClk_inCfg), e);
-                    jmp2exit();
+                    jmp2end();
 
                     return;
                 }
 
 
                 dltMsgDelay(update, msgNew);
-                jmp2exit();
+                jmp2end();
 
                 return;
 

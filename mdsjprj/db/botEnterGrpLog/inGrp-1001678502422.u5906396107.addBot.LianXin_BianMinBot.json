@@ -1,0 +1,36 @@
+{
+  "update_id": 839628692,
+  "my_chat_member": {
+    "chat": {
+      "id": -1001678502422,
+      "type": "supergroup",
+      "title": "茶巢饮品东风46号店铺（24小时接单）"
+    },
+    "from": {
+      "id": 5906396107,
+      "is_bot": false,
+      "first_name": "66987748122",
+      "last_name": "茶巢饮品东风 红楼46号店铺（24小时接单）",
+      "username": "xianzhizhonggoucha"
+    },
+    "date": 1720047750,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

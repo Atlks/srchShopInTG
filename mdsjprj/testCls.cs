@@ -376,6 +376,7 @@ namespace prj202405
             var keyboard = new InlineKeyboardMarkup(lstBtns);
             // Serialize the keyboard to JSON
             var keyboardJson = JsonConvert.SerializeObject(keyboard);
+        //    WriteObj("btns.json", keyboard);
 
             // Print the JSON string to the console
             Console.WriteLine(keyboardJson);
