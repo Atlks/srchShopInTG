@@ -357,7 +357,11 @@ namespace prj202405.lib
 
             return "";
         }
-
+        public static string containRetMatchWd(string? text,string wdsFromfilePath)
+        {
+            HashSet<string> st = LdHsstWordsFromFile(wdsFromfilePath);
+            return (containRetMatchWd(text, st));
+        }
         public static bool containKwdsV2(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)

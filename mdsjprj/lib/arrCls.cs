@@ -19,6 +19,24 @@ namespace prj202405.lib
 {
     public class arrCls
     {
+        public static SortedList arr_ReverseSortedList(SortedList originalList)
+        {
+            SortedList reversedList = new SortedList();
+
+            foreach (DictionaryEntry entry in originalList)
+            {
+                var value = entry.Value.ToString();
+                string[] a = value.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                foreach (string w in a)
+                {
+                    reversedList.Add(w.Trim().ToUpper(), entry.Key);
+                }
+
+            }
+
+            return reversedList;
+        }
+
 
         public static void transfmVal(SortedList list,Func<string,object> fun            )
         {

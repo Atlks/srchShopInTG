@@ -263,40 +263,11 @@ namespace prj202405
             Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
 
-            // ----------btm btn hdlr 
-            if (update?.Message?.Text == "\U0001fac2 加入联信")
-            {
-                //if (update.Message.Chat.Type == ChatType.Private)
-                {
-                    await callxAsync(evt_btm_btn_click_inPrivtAsync, update);
-                    return;
-                }
-            }
 
-
-
-            if (tg_isBtm_btnClink_in_prvt(update))
-            {
-                callx(evt_btm_btn_click_inPrivtAsync, update);
-                return;
-            }
-            //menu proces   evt_btmBtnclick
-            if (tgBiz.tg_isBtm_btnClink_in_pubGrp(update))
-            {
-                await callxAsync(evt_btm_btn_click_inPubgrp, update);
-                return;
-            }
-
-            if (update?.Message?.Text == juliBencyon)
-            {
-                if (update.Message.Chat.Type != ChatType.Private)
-                {
-                    callx(evt_btm_btn_zhuliBenqunAsync, update);
-                    return;
-                }
-            }
-            //---------------end btm btn
-
+            Task.Run(() => {
+                Thread.Sleep(6000);
+                dbgpad = 0;
+            });
 
 
 
@@ -335,8 +306,14 @@ namespace prj202405
                 // 使用 Task.Run 启动一个新的任务
                 Task newTask = Task.Run(() =>
                 {
-
-                    callx(OnMsg, update, reqThreadId);
+                    try
+                    {
+                        callx(OnMsg, update, reqThreadId);
+                    }catch(jmp2endEx e)
+                    {
+                        print_catchEx("recvHdlr",e);
+                    }
+                  
 
 
                 });
@@ -786,104 +763,105 @@ OnCallbk(Update update, string reqThreadId)
         public static void OnMsg(Update update, string reqThreadId)
         {
 
-            msgTrigBtmbtnEvtHdlr(update);
-
+            //callxTryJmp(xxcc, update);
+            callx(msgTrgBtmbtnEvtHdlr11, update);
+            callx(msgxTrigBtmbtnEvtHdlr, update);
+         
+            
+          
+         
 
         }
 
-        private static void msgTrigBtmbtnEvtHdlr(Update update)
+        public static void msgTrgBtmbtnEvtHdlr11(Update update)
         {
-            try
+            // ----------btm btn hdlr 
+            //if (update?.Message?.Text == "\U0001fac2 加入联信")
+            //{
+            //    //if (update.Message.Chat.Type == ChatType.Private)
+            //    {
+            //        callx(evt_btm_btn_click_inPrivtAsync, update);
+            //        return;
+            //    }
+            //}
+
+
+
+           // if (tg_isBtm_btnClink_in_prvt(update))
+           // {
+           //加入联系和   btnCfgForeach
+                callx(evt_btm_btn_click, update);
+             //   return;
+          //  }
+            //menu proces   evt_btmBtnclick
+            //if (tgBiz.tg_isBtm_btnClink_in_pubGrp(update))
+            //{
+            //    callx(evt_btm_btn_click_inPubgrp, update);
+            //    return;
+            //}
+
+            if (update?.Message?.Text == juliBencyon)
             {
-                Console.WriteLine("--------btm btn trig start...----------");
-                HashSet<string> hs = LdHsstWordsFromFile("搜索触发词.txt");
-                if (!containKwdsV2(update?.Message?.Text, hs))
+                if (update.Message.Chat.Type != ChatType.Private)
                 {
-                    Console.WriteLine(" 不包含触发词，ret");
+                    callx(evt_btm_btn_zhuliBenqunAsync, update);
                     return;
                 }
-                var btnName = getBtnnameFromTxt(update.Message.Text);
-                print_varDump(nameof(OnMsg), "包含btnName", btnName);
-                if (btnName == "")
-                {
-                    Console.WriteLine(" 不包含btnName，ret");
-                  //  return;
-                }
-                else
-                {
-                    callx(btm_btnClk_inCfgV2, update, btnName);
-                    return;
-                }
-
-
-                var extWd = getBtnExtWdFromTxt(update.Message.Text);
-                print_varDump(nameof(OnMsg), "get extWd", extWd);
-                if (extWd == "")
-                {
-                    Console.WriteLine(" 不包含extWd，ret");
-                    return;
-                }
-                btnName = convertExtWd2btnname(extWd);              
-              
-                // if (tg_isBtm_btnClink_in_pubGrp(update))
-                {
-
-                    callx(btm_btnClk_inCfgV2, update, btnName);
-                    //  await callxAsync(btm_btnClk, update);
-
-
-                }
-                Console.WriteLine("-------- end btm btn trig start...----------");
             }
-            catch (jmp2endEx e)
+         //   callx(update?.Message?.Text == juliBencyon&& update.Message.Chat.Type != ChatType.Private, evt_btm_btn_zhuliBenqunAsync, update);
+            //---------------end btm btn
+        }
+
+
+        private static void msgxTrigBtmbtnEvtHdlr(Update update)
+        {
+            const string METHOD__ = nameof(msgxTrigBtmbtnEvtHdlr);
+
+            Console.WriteLine("--------btm btn trig start...----------");
+            HashSet<string> hs = LdHsstWordsFromFile("搜索触发词.txt");
+            if (!containKwdsV2(update?.Message?.Text, hs))
             {
-                Console.WriteLine("-------- end btm btn trig start...----------");
+                Console.WriteLine(" 不包含触发词，ret");
+                return;
             }
-        }
+            var btnName = getBtnnameFromTxt(update.Message.Text);
 
-        private static object convertExtWd2btnname(string extWd)
-        {
-            SortedList st = ldHstbFromIni($"{prjdir}/cfg/底部按钮扩展词.ini");
-            SortedList st2 = arr_ReverseSortedList(st);
-            return ldfld(st2, extWd,"");
-        }
-
-        static SortedList arr_ReverseSortedList(SortedList originalList)
-        {
-            SortedList reversedList = new SortedList();
-
-            foreach (DictionaryEntry entry in originalList)
+            print_varDump(METHOD__, "包含btnName", btnName);
+            if (btnName == "")
             {
-                var value = entry.Value.ToString();
-                string[] a = value.Split(" ",StringSplitOptions.RemoveEmptyEntries);
-                foreach(string w in a)
-                {
-                    reversedList.Add(w.Trim().ToUpper(), entry.Key);
-                }
-              
+                Console.WriteLine(" 不包含btnName，ret");
+                //  return;
+            }
+            else
+            {
+                callx(btm_btnClk_inCfgByMsg, update, btnName);
+                return;
             }
 
-            return reversedList;
+
+            var extWd = getBtnExtWdFromTxt(update.Message.Text);
+            print_varDump(METHOD__, "get extWd", extWd);
+            if (extWd == "")
+            {
+                Console.WriteLine(" 不包含extWd，ret");
+                return;
+            }
+            btnName = convertExtWd2btnname(extWd);
+
+            // if (tg_isBtm_btnClink_in_pubGrp(update))
+            {
+
+                callx(btm_btnClk_inCfgByMsg, update, btnName);
+                //  await callxAsync(btm_btnClk, update);
+
+
+            }
+            Console.WriteLine("-------- end btm btn trig start...----------");
+
         }
 
-        private static SortedList ldHstbFromIni(string f)
-        {
-            List<SortedList> li= ormIni.qryV2(f);
-            return li[0];
-        }
 
-        private static string getBtnExtWdFromTxt(string? text)
-        {
-            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
-            return (containRetMatchWd(text, st));
-        }
 
-        private static object getBtnnameFromTxt(string? text)
-        {
-            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
-            return (containRetMatchWd(text, st));
-
-        }
 
         private static void evt_lookmenu(CallbackQuery? callbackQuery)
         {

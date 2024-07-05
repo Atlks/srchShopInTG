@@ -88,7 +88,7 @@ namespace mdsj.libBiz
 {
     public class tg_btmBtnCls
     {
-        public static async Task evt_btm_btn_click_inPrivtAsync(Update update)
+        public static void evt_btm_btn_click(Update update)
         {
 
 
@@ -99,27 +99,36 @@ namespace mdsj.libBiz
             string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
             if (System.IO.File.Exists(f))
             {
-                var tips2 = ReadAllText(f);
-                IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
-                a = await botClient.SendTextMessageAsync(
-                        update.Message.Chat.Id,
-                     tips2,
-                        parseMode: ParseMode.Html,
-                        replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
-                        protectContent: false,
-                        replyToMessageId: update.Message.MessageId,
-                        disableWebPagePreview: true
+                try
+                {
+                    var tips2 = ReadAllText(f);
+                    IEnumerable<InlineKeyboardButton> inlineKeyboardRow = [InlineKeyboardButton.WithUrl(text: "金娱科技招聘频道", $"https://t.me/JinYuKeJi")];
+                    a = botClient.SendTextMessageAsync(
+                            update.Message.Chat.Id,
+                         tips2,
+                            parseMode: ParseMode.Html,
+                            replyMarkup: new InlineKeyboardMarkup(inlineKeyboardRow),
+                            protectContent: false,
+                            replyToMessageId: update.Message.MessageId,
+                            disableWebPagePreview: true
 
-                );
-                jmp2end();
+                    ).Result;
+                    jmp2end();
+                }
+                catch (Exception e)
+                {
+                    print_catchEx(nameof(evt_btm_btn_click), e); jmp2end();
+                }
+
                 return;
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, a.MessageId, 10);
 
             }
 
-            await callxAsync(btm_btnClk_inCfg, update);
-            jmp2end();
+            callx(btm_btnClk_inCfg, update);
+            return;
+            //  jmp2end();
 
         }
 
@@ -226,37 +235,37 @@ namespace mdsj.libBiz
         }
 
 
-        public static async void evt_btm_btn_click_inPubgrp(Update update)
+        public static void evt_btm_btn_click_inPubgrp(Update update)
         {  //  ,
-            try
-            {
-                //  await btm_btnClk_inCfg(update);
-                await callxAsync(btm_btnClk_inCfg, update);
-                await callxAsync(btm_btnClk, update);
-            }
-            catch (jmp2endEx e)
-            {
-                return;
-            }
-            catch (Exception e)
-            {
-                print_catchEx("evt_btm_btn_click_inPubgrp", e);
-                //  return;
-            }
+           //try
+           //{
+           //  await btm_btnClk_inCfg(update);
+            callx(btm_btnClk_inCfg, update);
+            //  await callxAsync(btm_btnClk, update);
+            //}
+            //catch (jmp2endEx e)
+            //{
+            //    return;
+            //}
+            //catch (Exception e)
+            //{
+            //    print_catchEx("evt_btm_btn_click_inPubgrp", e);
+            //    //  return;
+            //}
 
 
 
             //brch------other btm btn not in cfg
-            Telegram.Bot.Types.Message msgNew2 = await botClient.SendTextMessageAsync(
-                               update.Message.Chat.Id,
-                             "要获取多级菜单，请私聊我",
-                               replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
-                                  replyToMessageId: update.Message.MessageId
-                               );
+            //Telegram.Bot.Types.Message msgNew2 =  botClient.SendTextMessageAsync(
+            //                   update.Message.Chat.Id,
+            //                 "要获取多级菜单，请私聊我",
+            //                   replyMarkup: new InlineKeyboardMarkup([InlineKeyboardButton.WithUrl(text: "私聊我", $"https://t.me/{botname}")]),
+            //                      replyToMessageId: update.Message.MessageId
+            //                   ).Result;
 
 
 
-            dltMsgDelay(update, msgNew2);
+            //dltMsgDelay(update, msgNew2);
             //  jmp2exit();
             //}
             //catch (Exception e)
@@ -289,6 +298,32 @@ namespace mdsj.libBiz
             dltMsgDelay(update, msgNew);
         }
 
+
+        private static SortedList ldHstbFromIni(string f)
+        {
+            List<SortedList> li = ormIni.qryV2(f);
+            return li[0];
+        }
+        public static object convertExtWd2btnname(string extWd)
+        {
+            SortedList st = ldHstbFromIni($"{prjdir}/cfg/底部按钮扩展词.ini");
+            SortedList st2 = arr_ReverseSortedList(st);
+            return ldfld(st2, extWd, "");
+        }
+
+        public static string getBtnExtWdFromTxt(string? text)
+        {
+            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
+            return (containRetMatchWd(text, st));
+        }
+
+        public static object getBtnnameFromTxt(string? text)
+        {
+            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+            return (containRetMatchWd(text, st));
+
+        }
+
         public static void dltMsgDelay(Update update, Message msgNew)
         {
             tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 121);
@@ -313,26 +348,29 @@ namespace mdsj.libBiz
             //}
         }
         public const string juliBencyon = "🔥 助力本群";
-        public static async Task btm_btnClk_inCfg(Update update)
+        public static void btm_btnClk_inCfg(Update update)
         {
 
             var msg = bot_getTxt(update);
-
-            btm_btnClk_inCfgV2(update, msg);
+            //  btm_btnClk_inCfgV2(msg);
+            callx(btm_btnClk_inCfgByMsg, update, msg);
         }
 
-        public static void btm_btnClk_inCfgV2(Update update, string msg)
+        public static void btm_btnClk_inCfgByMsg
+            (Update update, string msg)
         {
             Telegram.Bot.Types.Message msgNew = null;
             string f1 = $"{prjdir}/cfg_btmbtn/{msg}.json";
+            //  print_varDump(, " Exists(f1)"+f1)
             if (System.IO.File.Exists(f1))
             {
-
+                print_varDump(nameof(btm_btnClk_inCfgByMsg), " Exists f", f1);
                 SortedList table = ReadAsHashtable(f1);
 
 
                 var tips = table["tips"].ToString() + $"\n{plchdTxt}";
                 InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
+                //  ReplyKeyboardMarkup
                 if (table.ContainsKey("url"))
                 {
                     IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: "打开目录", table["url"].ToString())];
@@ -355,7 +393,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(btm_btnClk_inCfg), e);
+                    print_catchEx(nameof(btm_btnClk_inCfgByMsg), e);
                     jmp2end();
 
                     return;
@@ -368,6 +406,7 @@ namespace mdsj.libBiz
                 return;
 
             }
+
         }
     }
 }

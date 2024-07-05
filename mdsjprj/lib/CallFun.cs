@@ -123,19 +123,23 @@ namespace mdsj.lib
             object o = null;
             try
             {
-                
-             //   else
-                    o = callback.DynamicInvoke(args);
-            }catch(jmp2endEx e1)
+
+                //   else
+                o = callback.DynamicInvoke(args);
+            }
+            catch (jmp2endEx e1)
             {
                 throw e1;
             }
             catch (Exception e)
             {
-                if( e is System.Reflection.TargetInvocationException )
+                if (e is System.Reflection.TargetInvocationException)
                 {
                     if (e.ToString().Contains("jmp2endEx"))
-                        jmp2end();
+                    {
+                        print_ret(__METHOD__, 0); jmp2end();
+                    }
+
                 }
                 Console.WriteLine($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
                 Console.WriteLine(e);

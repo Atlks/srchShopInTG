@@ -300,7 +300,24 @@ namespace mdsj.lib
 
             return words;
         }
-        
+        public static void callxTryJmp(Delegate callback, Update update)
+        {
+            try
+            {
+                callx(callback, update);
+
+            }
+            catch (jmp2endEx e)
+            {
+                Console.WriteLine("jmp2endEx from meth=>" + callback.Method.Name);
+            }
+            //catch (Exception e)
+            //{
+            //    print_catchEx(nameof(MsgHdlrProcess), e);
+            //}
+
+        }
+
         public static object callx(string authExp, Delegate callback, params object[] args)
         {
             return call_user_func(callback, args);

@@ -43,6 +43,7 @@ using System.Reflection;
 using mdsj;
 using Newtonsoft.Json.Linq;
 using mdsj.libBiz;
+using mdsj.lib;
 namespace prj202405.lib
 {
     internal class tglib
@@ -618,6 +619,62 @@ namespace prj202405.lib
             if (!System.IO.File.Exists(timerCls.chatSessStrfile))
                 System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
         }
+        public static ReplyKeyboardMarkup ConvertTextToReplyKeyboardMarkup(string text)
+        {
+            var lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            var keyboard = new List<List<KeyboardButton>>();
+
+            foreach (var line in lines)
+            {
+                List<KeyboardButton> buttonRow = castLine2ListKybdBtn(line);
+
+                keyboard.Add(buttonRow);
+            }
+            ReplyKeyboardMarkup mkup = new ReplyKeyboardMarkup(keyboard);
+            mkup.ResizeKeyboard = true;
+            return mkup;
+            //new ReplyKeyboardMarkup { Keyboard = keyboard, ResizeKeyboard = true, OneTimeKeyboard = true };
+        }
+
+        //public static void MsgHdlrProcess(Delegate callback, Update update)
+        //{
+            
+             
+
+           
+
+        //}
+
+      
+        public static List<KeyboardButton> castLine2ListKybdBtn(string line)
+        {
+            var words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var buttonRow = new List<KeyboardButton>();
+
+            foreach (var word in words)
+            {
+                var button = new KeyboardButton(word);
+
+                buttonRow.Add(button);
+            }
+
+            return buttonRow;
+        }
+
+        public static List<InlineKeyboardButton> castLine2ListInlineKybdBtn(string line)
+        {
+            var words = line.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            var buttonRow = new List<InlineKeyboardButton>();
+
+            foreach (var word in words)
+            {
+                var button = new InlineKeyboardButton(word);
+
+                buttonRow.Add(button);
+            }
+
+            return buttonRow;
+        }
 
         public static InlineKeyboardMarkup ConvertHtmlToinlineKeyboard(string html)
         {
@@ -715,4 +772,23 @@ namespace prj202405.lib
             });
         }
     }
+
+
+    //public class KeyboardButton
+    //{
+    //    [JsonProperty("text")]
+    //    public string Text { get; set; }
+    //}
+
+    //public class ReplyKeyboardMarkup
+    //{
+    //    [JsonProperty("keyboard")]
+    //    public List<List<KeyboardButton>> Keyboard { get; set; }
+
+    //    [JsonProperty("resize_keyboard")]
+    //    public bool ResizeKeyboard { get; set; }
+
+    //    [JsonProperty("one_time_keyboard")]
+    //    public bool OneTimeKeyboard { get; set; }
+    //}
 }
