@@ -228,7 +228,7 @@ namespace prj202405
                 //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
                 await evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
             }
-            catch (jmp2exitEx e22)
+            catch (jmp2endEx e22)
             {
                 Console.WriteLine("jmp2exitEx");
             }
@@ -268,7 +268,7 @@ namespace prj202405
             {
                 //if (update.Message.Chat.Type == ChatType.Private)
                 {
-                 await   callxAsync(evt_btm_btn_click_inPrivtAsync, update);
+                    await callxAsync(evt_btm_btn_click_inPrivtAsync, update);
                     return;
                 }
             }
@@ -332,7 +332,15 @@ namespace prj202405
 
             if (update.Type == UpdateType.Message)
             {
-                OnMsg(update, reqThreadId);
+                // 使用 Task.Run 启动一个新的任务
+                Task newTask = Task.Run(() =>
+                {
+
+                    callx(OnMsg, update, reqThreadId);
+
+
+                });
+
             }
 
             if (update.Type == UpdateType.CallbackQuery)
@@ -341,7 +349,7 @@ namespace prj202405
                 {
                     await OnCallbk(update, reqThreadId);
                 }
-                catch (jmp2exitEx e)
+                catch (jmp2endEx e)
                 {
                     return;
                 }
@@ -736,7 +744,7 @@ namespace prj202405
 
         }
 
-     
+
 
 
         //private static void callx(Func<Update, Task> evt_btm_btn_click_inPrivtAsync, Update update)
@@ -744,7 +752,7 @@ namespace prj202405
         //    throw new NotImplementedException();
         //}
 
-     
+
 
         private static async
         Task
@@ -768,17 +776,112 @@ OnCallbk(Update update, string reqThreadId)
             //    {
             //        Console.WriteLine(e);
             //    }
-                 
+
             //    jmp2exit();
             //    return ;
             //}
             //// if(update.CallbackQuery.Data)
         }
 
-        private static void OnMsg(Update update, string reqThreadId)
+        public static void OnMsg(Update update, string reqThreadId)
         {
 
+            msgTrigBtmbtnEvtHdlr(update);
 
+
+        }
+
+        private static void msgTrigBtmbtnEvtHdlr(Update update)
+        {
+            try
+            {
+                Console.WriteLine("--------btm btn trig start...----------");
+                HashSet<string> hs = LdHsstWordsFromFile("搜索触发词.txt");
+                if (!containKwdsV2(update?.Message?.Text, hs))
+                {
+                    Console.WriteLine(" 不包含触发词，ret");
+                    return;
+                }
+                var btnName = getBtnnameFromTxt(update.Message.Text);
+                print_varDump(nameof(OnMsg), "包含btnName", btnName);
+                if (btnName == "")
+                {
+                    Console.WriteLine(" 不包含btnName，ret");
+                  //  return;
+                }
+                else
+                {
+                    callx(btm_btnClk_inCfgV2, update, btnName);
+                    return;
+                }
+
+
+                var extWd = getBtnExtWdFromTxt(update.Message.Text);
+                print_varDump(nameof(OnMsg), "get extWd", extWd);
+                if (extWd == "")
+                {
+                    Console.WriteLine(" 不包含extWd，ret");
+                    return;
+                }
+                btnName = convertExtWd2btnname(extWd);              
+              
+                // if (tg_isBtm_btnClink_in_pubGrp(update))
+                {
+
+                    callx(btm_btnClk_inCfgV2, update, btnName);
+                    //  await callxAsync(btm_btnClk, update);
+
+
+                }
+                Console.WriteLine("-------- end btm btn trig start...----------");
+            }
+            catch (jmp2endEx e)
+            {
+                Console.WriteLine("-------- end btm btn trig start...----------");
+            }
+        }
+
+        private static object convertExtWd2btnname(string extWd)
+        {
+            SortedList st = ldHstbFromIni($"{prjdir}/cfg/底部按钮扩展词.ini");
+            SortedList st2 = arr_ReverseSortedList(st);
+            return ldfld(st2, extWd,"");
+        }
+
+        static SortedList arr_ReverseSortedList(SortedList originalList)
+        {
+            SortedList reversedList = new SortedList();
+
+            foreach (DictionaryEntry entry in originalList)
+            {
+                var value = entry.Value.ToString();
+                string[] a = value.Split(" ",StringSplitOptions.RemoveEmptyEntries);
+                foreach(string w in a)
+                {
+                    reversedList.Add(w.Trim().ToUpper(), entry.Key);
+                }
+              
+            }
+
+            return reversedList;
+        }
+
+        private static SortedList ldHstbFromIni(string f)
+        {
+            List<SortedList> li= ormIni.qryV2(f);
+            return li[0];
+        }
+
+        private static string getBtnExtWdFromTxt(string? text)
+        {
+            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
+            return (containRetMatchWd(text, st));
+        }
+
+        private static object getBtnnameFromTxt(string? text)
+        {
+            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+            return (containRetMatchWd(text, st));
 
         }
 
@@ -822,7 +925,7 @@ OnCallbk(Update update, string reqThreadId)
             return;
         }
 
-      
+
         private static void evt_newUserJoin2024(long? chatId, Telegram.Bot.Types.User[]? newChatMembers, Update? update)
         {
             if (newChatMembers != null)
@@ -923,15 +1026,15 @@ OnCallbk(Update update, string reqThreadId)
         }
 
 
-     
+
         //private static async Task<Message> evt_btmbtn_clk_mltBtns(Update update, Message? msgNew, string f1)
         //{
 
         //    return msgNew;
         //}
 
-       
-     
+
+
 
         //private static async Task evt_btmBtnclick(ITelegramBotClient botClient, Update update)
         //{

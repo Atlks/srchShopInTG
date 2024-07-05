@@ -118,7 +118,7 @@ namespace mdsj.libBiz
 
             }
 
-         await   callxAsync(btm_btnClk_inCfg, update);
+            await callxAsync(btm_btnClk_inCfg, update);
             jmp2end();
 
         }
@@ -234,7 +234,7 @@ namespace mdsj.libBiz
                 await callxAsync(btm_btnClk_inCfg, update);
                 await callxAsync(btm_btnClk, update);
             }
-            catch (jmp2exitEx e)
+            catch (jmp2endEx e)
             {
                 return;
             }
@@ -291,8 +291,8 @@ namespace mdsj.libBiz
 
         public static void dltMsgDelay(Update update, Message msgNew)
         {
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 39);
-            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, msgNew.MessageId, 30);
+            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 121);
+            tglib.bot_DeleteMessageV2(update.Message.Chat.Id, msgNew.MessageId, 120);
         }
         public static async Task btm_btnClk(Update update)
         {
@@ -315,9 +315,15 @@ namespace mdsj.libBiz
         public const string juliBencyon = "🔥 助力本群";
         public static async Task btm_btnClk_inCfg(Update update)
         {
-            Telegram.Bot.Types.Message msgNew = null;
+
             var msg = bot_getTxt(update);
 
+            btm_btnClk_inCfgV2(update, msg);
+        }
+
+        public static void btm_btnClk_inCfgV2(Update update, string msg)
+        {
+            Telegram.Bot.Types.Message msgNew = null;
             string f1 = $"{prjdir}/cfg_btmbtn/{msg}.json";
             if (System.IO.File.Exists(f1))
             {
@@ -340,12 +346,12 @@ namespace mdsj.libBiz
 
                 try
                 {
-                    msgNew = await botClient.SendTextMessageAsync(
+                    msgNew = botClient.SendTextMessageAsync(
                                               update.Message.Chat.Id, tips,
                                               replyMarkup: InlineKeyboardMarkup1,
                                               replyToMessageId: update.Message.MessageId,
                                                parseMode: ParseMode.Html
-                                      );
+                                      ).Result;
                 }
                 catch (Exception e)
                 {
@@ -363,6 +369,5 @@ namespace mdsj.libBiz
 
             }
         }
-
     }
 }

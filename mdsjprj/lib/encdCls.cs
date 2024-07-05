@@ -268,6 +268,17 @@ namespace mdsj.lib
             // Console.WriteLine(jsonString);
             return jsonString;
         }
+        public static string encodeJsonNofmt(object results)
+        {
+            try
+            {
+                return json_encode_noFmt(results);
+            }catch(Exception e)
+            {
+                return "[]";
+            }
+     
+        }
 
         public static string json_encode_noFmt(object results)
         {

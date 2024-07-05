@@ -32,7 +32,15 @@ namespace mdsj.lib
         {
             return json_decode(System.IO.File.ReadAllText(f));
         }
-
+        public static SortedList ldHstb
+            (string f)
+        {
+            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
+        }
+        public static SortedList LoadHashtable(string f)
+        {
+            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
+        }
         public static SortedList ReadAsHashtable(string f)
         {
             return json_decode<SortedList>(System.IO.File.ReadAllText(f));
@@ -207,6 +215,39 @@ namespace mdsj.lib
             //   await Task.Run(action);
         }
 
+        public static void print_ex(string mthdName, Exception e)
+        {
+
+            Console.WriteLine($"------{mthdName}() catch ex----------_");
+            Console.WriteLine(e);
+            Console.WriteLine($"------{mthdName}() catch ex finish----------_");
+        }
+
+        public static void print_catchEx(string v, Exception e)
+        {
+            Console.WriteLine($"------{v}() catch ex----------_");
+            Console.WriteLine(e);
+            Console.WriteLine($"------{v}() catch ex finish----------_");
+        }
+        public static object call(string authExprs, Delegate callback, params object[] args)
+        {
+
+            var __METHOD__ = callback.Method.Name;
+            object o = null;
+            try
+            {
+                o = callback.DynamicInvoke(args);
+            }
+            catch (Exception e)
+            {
+                print_catchEx(__METHOD__, e);
+                SortedList dbgobj = new SortedList();
+                dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(args)) + ")))");
+                logErr2024(e, __METHOD__, "errdir", dbgobj);
+            }
+            return o;
+        }
+
         public static object call(Delegate callback, params object[] args)
         {
 
@@ -218,18 +259,108 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine($"---catch ex----mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
-                Console.WriteLine(e);
+                print_catchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
-                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
+                dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
             }
             return o;
         }
 
+        public static object callx(bool authExpRzt, Delegate callback, params object[] args)
+        {
+            return call_user_func(callback, args);
+        }
+
+        public static HashSet<string> LdHsstWordsFromFile(string filePath)
+        {
+            var words = new HashSet<string>();
+
+            try
+            {
+                using (StreamReader reader = new StreamReader(filePath))
+                {
+                    string line;
+                    while ((line = reader.ReadLine()) != null)
+                    {
+                        // 拆分行中的单词，按空格和回车拆分
+                        var splitWords = line.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                        foreach (var word in splitWords)
+                        {
+                            var word1 = word.Trim();
+                            words.Add(word1);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error reading file: " + ex.Message);
+            }
+
+            return words;
+        }
+        
+        public static object callx(string authExp, Delegate callback, params object[] args)
+        {
+            return call_user_func(callback, args);
+        }
         public static object callx(Delegate callback, params object[] args)
         {
             return call_user_func(callback, args);
+        }
+        //wz auth
+        public static async Task<object> callxAsyncV2(string authExprs, Delegate callback, params object[] args)
+        {
+
+            var __METHOD__ = callback.Method.Name;
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
+            object o = null;
+            //      try
+            // Get the MethodInfo of the delegate
+            MethodInfo methodInfo = callback.Method;
+
+            try
+            {
+                // Check if the method is asynchronous (returns a Task or Task<T>)
+                if (typeof(Task).IsAssignableFrom(methodInfo.ReturnType))
+                {
+                    // Invoke the delegate and get the Task
+                    var task = (Task)methodInfo.Invoke(callback.Target, args);
+                    await task.ConfigureAwait(false);
+
+                    // If the task has a result (i.e., it's a Task<T>), get the result
+                    if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
+                    {
+                        var resultProperty = methodInfo.ReturnType.GetProperty("Result");
+                        o = resultProperty.GetValue(task);
+                    }
+                }
+                else
+                {
+                    // Invoke the delegate synchronously
+                    o = methodInfo.Invoke(callback.Target, args);
+                }
+
+            }
+            catch (jmp2endEx e1)
+            {
+                throw e1;
+            }
+            catch (Exception ex)
+            {
+                print_catchEx(__METHOD__, ex);
+                SortedList dbgobj = new SortedList();
+                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
+                logErr2024(ex, __METHOD__, "errdir", dbgobj);
+            }
+            //    call
+            if (o != null)
+                print_ret(__METHOD__, o);
+            else
+                print_ret(__METHOD__, 0);
+            return o;
+
         }
 
 
@@ -265,8 +396,9 @@ namespace mdsj.lib
                     // Invoke the delegate synchronously
                     o = methodInfo.Invoke(callback.Target, args);
                 }
-             
-            }catch(jmp2exitEx e1)
+
+            }
+            catch (jmp2endEx e1)
             {
                 throw e1;
             }
@@ -292,7 +424,7 @@ namespace mdsj.lib
         public static void jmp2end()
         {
             // jmp2exitFlag = true;
-            throw new jmp2exitEx();
+            throw new jmp2endEx();
         }
 
         public static object callx(string methodName, params object[] args)

@@ -126,13 +126,18 @@ namespace mdsj.lib
                 
              //   else
                     o = callback.DynamicInvoke(args);
-            }catch(jmp2exitEx e1)
+            }catch(jmp2endEx e1)
             {
                 throw e1;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"---catch ex----mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
+                if( e is System.Reflection.TargetInvocationException )
+                {
+                    if (e.ToString().Contains("jmp2endEx"))
+                        jmp2end();
+                }
+                Console.WriteLine($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
                 Console.WriteLine(e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");

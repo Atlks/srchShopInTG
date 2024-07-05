@@ -67,7 +67,7 @@ namespace mdsj.lib
                     Program.Main(null);
                     // Restart or recover logic here
                 }).Start();
-            }catch(jmp2exitEx e1)
+            }catch(jmp2endEx e1)
             {
 
             }
@@ -117,7 +117,7 @@ namespace mdsj.lib
                 logCls.logErr2025((Exception)e.Exception, "TaskScheduler_UnobservedTaskException", "errlog");
                 Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
 
-            }catch(jmp2exitEx e1)
+            }catch(jmp2endEx e1)
             {
 
             }

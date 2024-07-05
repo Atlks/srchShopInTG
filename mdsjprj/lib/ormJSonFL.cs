@@ -308,21 +308,6 @@ namespace prj202405.lib
             print_ret(__METHOD__, 0);
         }
 
-        public static void print_ex(string mthdName, Exception e)
-        {
-
-            Console.WriteLine($"------{mthdName}() catch ex----------_");
-            Console.WriteLine(e);
-            Console.WriteLine($"------{mthdName}() catch ex finish----------_");
-        }
-
-        public static void print_catchEx(string v, Exception e)
-        {
-            Console.WriteLine($"------{v}() catch ex----------_");
-            Console.WriteLine(e);
-            Console.WriteLine($"------{v}() catch ex finish----------_");
-        }
-
 
         //replace insert one row
         //public static void save(object objSave, string Strfile)

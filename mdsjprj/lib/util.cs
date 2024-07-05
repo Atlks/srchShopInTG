@@ -69,40 +69,47 @@ namespace mdsj.lib
 
 
         }
-        public static async Task playMp3(string mp3FilePath, int sec)
+        public static void playMp3(string mp3FilePath, int sec)
         {
-            try
-            {
-                var __METHOD__ = "playMp3";
-                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
 
-                using (var audioFile = new AudioFileReader(mp3FilePath))
-                using (var outputDevice = new WaveOutEvent())
+            // 使用 Task.Run 启动一个新的任务
+            Task newTask = Task.Run(() => {
+                try
                 {
-                    outputDevice.Init(audioFile);
-                    outputDevice.Play();
+                    var __METHOD__ = "playMp3";
+                    dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
 
-                    Console.WriteLine("Playing... Press any key to stop.");
-                    // Console.ReadKey(); // 按任意键停止播放
-                    // 使当前线程休眠5秒钟
-                    Thread.Sleep(sec * 1000);
-                    //async maosi nt wk ..only slp wk...maybe same thrd..
-                    //yaos ma slp mthis thrd just finish fast..
-                    ExecuteAfterDelay(sec * 1000, () =>
+                    using (var audioFile = new AudioFileReader(mp3FilePath))
+                    using (var outputDevice = new WaveOutEvent())
                     {
+                        outputDevice.Init(audioFile);
+                        outputDevice.Play();
+
+                        Console.WriteLine("Playing... Press any key to stop.");
+                        // Console.ReadKey(); // 按任意键停止播放
+                        // 使当前线程休眠5秒钟
+                        Thread.Sleep(sec * 1000);
+                        //     await Task.Delay(sec*1000);
+                        //async maosi nt wk ..only slp wk...maybe same thrd..
+                        //yaos ma slp mthis thrd just finish fast..
+                        ExecuteAfterDelay(sec * 1000, () =>
+                        {
+                            outputDevice.Stop();
+                        });
                         outputDevice.Stop();
-                    });
+
+                    }
+
+                    dbgCls.print_ret(__METHOD__, 0);
 
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex);
+                }
 
-                dbgCls.print_ret(__METHOD__, 0);
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-            }
-
+            });
+          
 
         }
 

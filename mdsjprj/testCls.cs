@@ -107,6 +107,13 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
+            Console.WriteLine("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
+         
+            // 使用 Task.Run 启动一个新的任务
+            Task newTask = Task.Run(() =>{
+                asyncF();
+            });
+            Console.WriteLine("sync  log");
             //  tts("此消息来了11");
             geenBtns();
             try
@@ -381,6 +388,23 @@ namespace prj202405
             // Print the JSON string to the console
             Console.WriteLine(keyboardJson);
         }
+        private static async Task<object> asyncF()
+        {
+            Console.WriteLine("enter asyncfun ");
+            Console.WriteLine("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
+            //弹框
+            //await botClient.AnswerCallbackQueryAsync(
+            //  callbackQueryId: update.CallbackQuery.Id,
+            //  text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+            //  showAlert: true); // 这是显示对话框的关键);
+            //return;
+            await Task.Delay(3000);
+            Console.WriteLine("...exit from async ");
+            return 888;
+            
+        }
+      
+
 
         private static void rdCateGeneH5list()
         {

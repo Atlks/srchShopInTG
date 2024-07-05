@@ -23,7 +23,7 @@ namespace mdsj.lib
     {
         public static void logErr2024(object e, string funName, string logdir,object othInf)
         {
-            if (e is jmp2exitEx)
+            if (e is jmp2endEx)
                 return;
             try
             {
@@ -76,7 +76,7 @@ namespace mdsj.lib
 
         public static void error_logV2(object messageObj, string filePath)
         {
-            if (messageObj is jmp2exitEx)
+            if (messageObj is jmp2endEx)
                 return;
             try
             {
@@ -103,7 +103,7 @@ namespace mdsj.lib
 
         public static void logErr2025(object e, string funName, string logdir)
         {
-            if (e is jmp2exitEx)
+            if (e is jmp2endEx)
                 return;
             try
             {

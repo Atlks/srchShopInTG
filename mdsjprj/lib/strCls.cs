@@ -333,6 +333,55 @@ namespace prj202405.lib
             string v = new string(result, 0, resultIndex);
             return v.Trim();
         }
+        public static string containRetMatchWd(string? text, HashSet<string> trgSearchKwds)
+        {
+            if (text == null)
+                return "";
+            text = text.Trim().ToLower();
+            //string[] kwds = trgSearchKwds.Split(" ");
+            foreach (string kwd in trgSearchKwds)
+            {
+                var kwd2 = kwd.Trim().ToLower();
+                if (kwd2.Length == 0)
+                    continue;
+
+                if (text.Contains(kwd2))
+                {
+                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                    return kwd2;
+                }
+
+            }
+
+
+
+            return "";
+        }
+
+        public static bool containKwdsV2(string? text, HashSet<string> trgSearchKwds)
+        {
+            if (text == null)
+                return false;
+            text = text.Trim().ToLower();
+            //string[] kwds = trgSearchKwds.Split(" ");
+            foreach (string kwd in trgSearchKwds)
+            {
+                var kwd2 = kwd.Trim().ToLower();
+                if (kwd2.Length == 0)
+                    continue;
+
+                if (text.Contains(kwd2))
+                {
+                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                    return true;
+                }
+
+            }
+
+
+
+            return false;
+        }
 
         public static bool containKwds(string? text, HashSet<string> trgSearchKwds)
         {
