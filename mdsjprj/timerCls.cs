@@ -452,7 +452,7 @@ namespace prj202405
         }
 
         string CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-        //todo 娱乐kwd 有空白
+        
         public static async void z21_yule()
         {
             //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧 马杀鸡

@@ -356,6 +356,9 @@ namespace mdsj.libBiz
             callx(btm_btnClk_inCfgByMsg, update, msg);
         }
 
+
+
+
         public static void btm_btnClk_inCfgByMsg
             (Update update, string msg)
         {
@@ -368,7 +371,7 @@ namespace mdsj.libBiz
                 SortedList table = ReadAsHashtable(f1);
 
 
-                var tips = table["tips"].ToString() + $"\n{plchdTxt}";
+                var tips = table["tips"].ToString() + $"\n\n{plchdTxt}";
                 InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
                 //  ReplyKeyboardMarkup
                 if (table.ContainsKey("url"))
@@ -399,8 +402,9 @@ namespace mdsj.libBiz
                     return;
                 }
 
-
-                dltMsgDelay(update, msgNew);
+                //aop  auth where exprs
+                if(update?.Message?.Chat?.Type!=ChatType.Private)
+                     dltMsgDelay(update, msgNew);
                 jmp2end();
 
                 return;

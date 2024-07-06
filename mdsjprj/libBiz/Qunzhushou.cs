@@ -442,7 +442,7 @@ namespace mdsj.libBiz
                 Thread.Sleep(7000);
                 Console.WriteLine("-----------------------------fulltxt index create thred----------");
                 wrt_rows4fulltxt(json_encode(update), DataDir);
-                Console.WriteLine("----------------fulltxt index create thred---- finish....");
+                Console.WriteLine("----------------END fulltxt index create thred---- finish....");
             });
    
 

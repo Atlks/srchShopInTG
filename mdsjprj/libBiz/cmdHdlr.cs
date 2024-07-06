@@ -157,7 +157,8 @@ namespace mdsj.libBiz
                     update.Message.Chat.Id,
                     "请直接搜索园区/城市+商家/菜单即可,比如”金三角 会所”!\n"
                     + "\n可以设置园区方便搜索，指令如下:\n"
-                    + "/设置园区 东风园区",
+                    + "/设置园区 东风园区\n",
+                   //  + "/设置园区 不限制\n",
                     parseMode: ParseMode.Html,
                     //   replyMarkup: new InlineKeyboardMarkup([]),
                     protectContent: false,

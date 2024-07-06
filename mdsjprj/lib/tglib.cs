@@ -498,9 +498,7 @@ namespace prj202405.lib
 
         }
         public static void bot_saveChtSesion(object chtid, object frm)
-        {
-            try
-            {
+        { 
                 if (!System.IO.File.Exists(timerCls.chatSessStrfile))
                     System.IO.File.WriteAllText(timerCls.chatSessStrfile, "{}");
 
@@ -518,11 +516,7 @@ namespace prj202405.lib
                     System.IO.File.WriteAllText(timerCls.chatSessStrfile, JsonConvert.SerializeObject(chtsSesss, Newtonsoft.Json.Formatting.Indented));
 
                 }
-            }
-            catch (Exception e)
-            {
-
-            }
+            
 
         }
         //新增加入的聊天Id
@@ -595,8 +589,9 @@ namespace prj202405.lib
 
         public static void bot_saveGrpInf2db(ChatMemberUpdated myChatMember)
         {
-            try
-            {
+            if (myChatMember == null)
+                return;
+            
                 if (myChatMember.Chat.Type.ToString().ToLower() == "supergroup")
                 {
                     SortedList chtsSesss = new SortedList();
@@ -605,11 +600,7 @@ namespace prj202405.lib
                     chtsSesss.Add("loc", "Unk");
                     ormSqlt._saveDep("grpinfo", chtsSesss, "grpinfoDB.db");
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+           
 
 
         }

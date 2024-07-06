@@ -471,9 +471,23 @@ namespace prj202405.lib
         }
         public static string str_repeat(string v, int count)
         {
+            //if (count < 0)
+            //    count = 0;
+            //return new string('*', count);
+            return repeat(count);
+        }
+
+        public static string repeat(int count)
+        {
             if (count < 0)
                 count = 0;
-            return new string(' ', count);
+            return new string('$', count);
+        }
+        public static string str_repeat(  int count)
+        {
+            if (count < 0)
+                count = 0;
+            return new string('$', count);
         }
     }
 }

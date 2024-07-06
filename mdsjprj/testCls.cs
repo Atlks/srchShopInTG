@@ -107,6 +107,9 @@ namespace prj202405
 
         internal static async Task testAsync()
         {
+
+            Console.WriteLine("Column1\tColumn2\tColumn3");
+            Console.WriteLine("Data1\tData2\tData3");
             Console.WriteLine("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
          
             // 使用 Task.Run 启动一个新的任务

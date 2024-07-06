@@ -264,7 +264,8 @@ namespace prj202405
             bot_logRcvMsg(update);
 
 
-            Task.Run(() => {
+            Task.Run(() =>
+            {
                 Thread.Sleep(6000);
                 dbgpad = 0;
             });
@@ -306,15 +307,8 @@ namespace prj202405
                 // 使用 Task.Run 启动一个新的任务
                 Task newTask = Task.Run(() =>
                 {
-                    try
-                    {
-                        callx(OnMsg, update, reqThreadId);
-                    }catch(jmp2endEx e)
-                    {
-                        print_catchEx("recvHdlr",e);
-                    }
-                  
 
+                    callxTryJmp(OnMsg, update, reqThreadId);
 
                 });
 
@@ -396,17 +390,7 @@ namespace prj202405
 
             await biz_other._readMerInfo();
 
-            // if (update.Message != null)
-            if (update?.Type is UpdateType.Message)
-            {
-                Console.WriteLine(update.Message?.Type);
-                if (update.Message?.Type == MessageType.Text)
-                {
-                    Console.WriteLine(update.Message?.Type);
-                    bot_adChk(update);
-                }
 
-            }
 
             //auto add cht sess
             if (update?.Message != null)
@@ -418,7 +402,7 @@ namespace prj202405
 
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
-            tipDayu(msg2056, update);
+            //       tipDayu(msg2056, update);
             //if (System.IO.File.Exists("menu/" + msgx2024 + ".txt"))
             //{
             //    logCls.log(__METHOD__, func_get_args(), "Exists " + "menu/" + msgx2024 + ".txt", "logDir", reqThreadId);
@@ -436,18 +420,18 @@ namespace prj202405
             //    return;
             //}
 
-            if (msgx2024 == "↩️ 返回主菜单")
-            {
-                timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, tgBiz.tg_btmBtnsV2(cast_toString(update?.Message?.Chat?.Type)));
-                return;
-            }
+            //if (msgx2024 == "↩️ 返回主菜单")
+            //{
+            //    timerCls.evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, tgBiz.tg_btmBtnsV2(cast_toString(update?.Message?.Chat?.Type)));
+            //    return;
+            //}
 
-            if (msgx2024 == "↩️ 返回商家菜单")
-            {
-                evt_retMchrtBtn_click(update);
-                //     await evt_btmBtnclick(botClient, update);
-                return;
-            }
+            //if (msgx2024 == "↩️ 返回商家菜单")
+            //{
+            //    evt_retMchrtBtn_click(update);
+            //    //     await evt_btmBtnclick(botClient, update);
+            //    return;
+            //}
             //endFUN  evt_btmBtnclick
 
             //if (msgx2024 == "↩️ 返回资源菜单")
@@ -465,20 +449,7 @@ namespace prj202405
             //}
 
 
-            if (update?.Message?.ReplyToMessage?.From?.Username == botname &&
-               strCls.contain(update?.Message?.Text, "世博博彩")
-                )
-            {
-                callx(evt_shiboBocai_click, update);
-                return;
-            }
 
-            if (strCls.contain(update?.Message?.Text, "世博博彩")
-              )
-            {
-                callx(evt_shiboBocai_click, update);
-                return;
-            }
 
 
 
@@ -486,9 +457,10 @@ namespace prj202405
             //add grp msgHDL
             if (update?.MyChatMember?.NewChatMember != null)
             {
-                evt_botAddtoGrpEvtHdlr(update);
+                callx(evt_BotEnterGrpEvtHdlr, update);
                 return;
             }
+
 
 
             //   logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
@@ -584,22 +556,75 @@ namespace prj202405
 
 
             //if nmrl msg  n notStartWith   @bot   ingor
-            if (tgBiz.bot_isNnmlMsgInGrp(update))
-            {
-                Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
-                return;
-            }
+            //if (tgBiz.bot_isNnmlMsgInGrp(update))
+            //{
+            //    Console.WriteLine(" bot_isNnmlMsgInGrp():ret=>true");
+            //    return;
+            //}
 
 
 
             // if (msgx2024=="商家")
 
-            #region sezrch
+            //   SortedList whereMap2;
+            //    msgHdlr4searchPrejude(botClient, update, reqThreadId);
+            //pre page evt???  todo
+            //next page evt,,,
+            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
+            {
+                await evt_nextPrePage(botClient, update, reqThreadId);
+                return;
+            }
 
+            //return evt
+            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
+            {
+                await evt_ret_mchrt_list(botClient, update, reqThreadId);
+                return;
+            }
+
+
+            //查看商家结果 defalt is detail view
+            //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
+            if (update.Type is UpdateType.CallbackQuery)
+            {
+                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
+                if (ldfld2str(parse_str1, "btn") == "dtl")
+                {
+                    evt_View(botClient, update, reqThreadId);
+                }
+                // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
+
+            }
+
+
+
+            #region add chatids
+            await tglib.tg_addChtid(update);
+
+            #endregion
+            //}, cancellationToken);
+            #endregion
+
+            //}
+            //catch (Exception e)
+            //{
+            //    logCls.logErr2025(e, "evt_msg_rcv", "errlog");
+            //}
+
+
+        }
+
+        public static void msgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)
+        {
+            string __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            #region sezrch
+            string msgx2024 = tglib.bot_getTxtMsgDep(update);
+            string msg2056 = str_trim_tolower(msgx2024);
             HashSet<string> 商品与服务词库2 = ReadWordsFromFile("商品与服务词库.txt");
             string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
-            SortedList whereMap2 = new SortedList();
-            whereMap2.Add("fuwuci", fuwuci);
+            //whereMap2 = new SortedList();
+            //whereMap2.Add("fuwuci", fuwuci);
 
             //privt msg serch
             if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
@@ -609,7 +634,11 @@ namespace prj202405
                 {
                     Console.WriteLine(" 不包含商品服务词，ret");
 
-                    Program.botClient.SendTextMessageAsync(update.Message!.Chat.Id, "未搜索到商家,您可以向我们提交商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
+
+                    ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+                    if (a.Contains(msg2056))
+                        return;
+                    botClient.SendTextMessageAsync(update.Message!.Chat.Id, "未搜索到商家,您可以向我们提交商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
 
                     //tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                     return;
@@ -617,7 +646,7 @@ namespace prj202405
                 }
                 string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
                 // logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
-                evt_msgTrgSrch(botClient, update, update?.Message?.Text, fuwuWd, reqThreadId);
+                msgHdlr4srch(botClient, update, update?.Message?.Text, fuwuWd, reqThreadId);
                 return;
             }
 
@@ -669,56 +698,13 @@ namespace prj202405
 
 
 
-                evt_msgTrgSrch(botClient, update, msgx_remvTrigWd, fuwuWd, reqThreadId);
+                msgHdlr4srch(botClient, update, msgx_remvTrigWd, fuwuWd, reqThreadId);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
 
-            //pre page evt???  todo
-            //next page evt,,,
-            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
-            {
-                await evt_nextPrePage(botClient, update, whereMap2, reqThreadId);
-                return;
-            }
-
-            //return evt
-            if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
-            {
-                await evt_ret_mchrt_list(botClient, update, whereMap2, reqThreadId);
-                return;
-            }
-
-
-            //查看商家结果 defalt is detail view
-            //         if (update.CallbackQuery.Data.StartsWith("Merchant?id="))
-            if (update.Type is UpdateType.CallbackQuery)
-            {
-                Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
-                if (ldfld2str(parse_str1, "btn") == "dtl")
-                {
-                    evt_View(botClient, update, reqThreadId);
-                }
-                // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
-
-            }
-            #endregion
-
-
-            #region add chatids
-            await tglib.tg_addChtid(update);
 
             #endregion
-            //}, cancellationToken);
-            #endregion
-
-            //}
-            //catch (Exception e)
-            //{
-            //    logCls.logErr2025(e, "evt_msg_rcv", "errlog");
-            //}
-
-
         }
 
 
@@ -762,16 +748,61 @@ OnCallbk(Update update, string reqThreadId)
 
         public static void OnMsg(Update update, string reqThreadId)
         {
+            int n = containCalcCntScoreSetfmt(update.Message.Text, LdHsst(" 盘口 博彩 菠菜 玩家 赔率 世博 杀大赔小 赔率"));
+            if (n > 1)
+            {
+                callx(evt_shiboBocai_click, update);
+                return;
+            }
+            if (update?.Message?.ReplyToMessage?.From?.Username == botname &&
+            strCls.contain(update?.Message?.Text, "世博博彩")
+             )
+            {
+                callx(evt_shiboBocai_click, update);
+                return;
+            }
 
-            //callxTryJmp(xxcc, update);
-            callx(msgTrgBtmbtnEvtHdlr11, update);
-            callx(msgxTrigBtmbtnEvtHdlr, update);
-         
-            
-          
-         
+            if (strCls.contain(update?.Message?.Text, "世博博彩")
+              )
+            {
+                callx(evt_shiboBocai_click, update);
+                return;
+            }
+            if (update?.Message?.NewChatMembers != null)
+            {
+                callx(evt_BotEnterGrpEvtHdlr, update);
+                return;
+            }
+            //todo 
+            //当检测到用户再聊菠菜相关话题时,也要提示:
+
+            //callxTryJmp(xxcc, update); 
+
+            callTryAll(() =>
+            {
+                callx(msgTrgBtmbtnEvtHdlr11, update);
+                callx(msgxTrigBtmbtnEvtHdlr, update);
+
+                callx(msgHdlr4searchPrejude, botClient, update, "111");
+            });
+
+
+
+            //ad chk
+
+            Console.WriteLine(update.Message?.Type);
+            if (update.Message?.Type == MessageType.Text)
+            {
+                Console.WriteLine(update.Message?.Type);
+                bot_adChk(update);
+            }
+            string msgx2024 = tglib.bot_getTxtMsgDep(update);
+            string msg2056 = str_trim_tolower(msgx2024);
+            tipDayu(msg2056, update);
 
         }
+
+
 
         public static void msgTrgBtmbtnEvtHdlr11(Update update)
         {
@@ -787,12 +818,12 @@ OnCallbk(Update update, string reqThreadId)
 
 
 
-           // if (tg_isBtm_btnClink_in_prvt(update))
-           // {
-           //加入联系和   btnCfgForeach
-                callx(evt_btm_btn_click, update);
-             //   return;
-          //  }
+            // if (tg_isBtm_btnClink_in_prvt(update))
+            // {
+            //加入联系和   btnCfgForeach
+            callx(evt_btm_btn_click, update);
+            //   return;
+            //  }
             //menu proces   evt_btmBtnclick
             //if (tgBiz.tg_isBtm_btnClink_in_pubGrp(update))
             //{
@@ -808,7 +839,7 @@ OnCallbk(Update update, string reqThreadId)
                     return;
                 }
             }
-         //   callx(update?.Message?.Text == juliBencyon&& update.Message.Chat.Type != ChatType.Private, evt_btm_btn_zhuliBenqunAsync, update);
+            //   callx(update?.Message?.Text == juliBencyon&& update.Message.Chat.Type != ChatType.Private, evt_btm_btn_zhuliBenqunAsync, update);
             //---------------end btm btn
         }
 
@@ -926,7 +957,7 @@ OnCallbk(Update update, string reqThreadId)
 
 
 
-        private static async Task evt_msgTrgSrch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
+        private static async Task msgHdlr4srch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
         {
             logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
             SortedList whereMap = new SortedList();
@@ -953,7 +984,7 @@ OnCallbk(Update update, string reqThreadId)
 
             if (msgx != null && msgx.Length < 25)
             {
-                await GetList_qryV2(msgx_remvTrigWd2, 1, 5, botClient, update, whereMap, reqThreadId);
+                await GetList_qryV2(msgx_remvTrigWd2, 1, 5, botClient, update, reqThreadId);
                 dbgCls.print_ret(__METHOD__, 0);
 
                 return;
@@ -969,7 +1000,7 @@ OnCallbk(Update update, string reqThreadId)
         }
 
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, SortedList whereMap2, string reqThreadId)
+        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -978,17 +1009,17 @@ OnCallbk(Update update, string reqThreadId)
                 if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, whereMap2, reqThreadId);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
                 return;
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, SortedList fuwuci, string reqThreadId)
+        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), fuwuci, reqThreadId));
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
 
-            logCls.log("fun evt_ret_mchrt_list", func_get_args(fuwuci), "", "logDir", reqThreadId);
+            logCls.log("fun evt_ret_mchrt_list", func_get_args(update, reqThreadId), "", "logDir", reqThreadId);
             string? msgx = tglib.bot_getTxtMsgDep(update);
             // if msg==null ..just from timer send msg..ret no op
             if (msgx != null)
@@ -996,7 +1027,7 @@ OnCallbk(Update update, string reqThreadId)
                 if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, fuwuci, reqThreadId);
+                await GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
                 return;
             }
 
@@ -1328,18 +1359,25 @@ OnCallbk(Update update, string reqThreadId)
 
 
 
-        private static void evt_botAddtoGrpEvtHdlr(Update update)
+        public static void evt_BotEnterGrpEvtHdlr(Update update)
         {
+            var chatid = update?.MyChatMember?.Chat?.Id;
+            if (chatid == null)
+                chatid = update?.Message?.Chat?.Id;
             ReplyKeyboardMarkup rkm = tgBiz.tg_btmBtnsV2(update?.Message?.Chat?.Type);
-            Program.botClient.SendTextMessageAsync(
-                     update.MyChatMember.Chat.Id,
-                     "我是联信便民助手,你们要问什么商家我都知道.联信是一个集纵网观察、信息搜集、资源整合，旨在为大家解决信息不透明和资源不可信的权威便民助手.",
+            botClient.SendTextMessageAsync(
+                    chatid,
+                     "我是联信便民助手,你们要问什么商家我都知道.联信是一个集纵网观察、信息搜集、资源整合，旨在为大家解决信息不透明和资源不可信的权威便民助手."
+                        + "\n可以设置园区方便搜索，指令如下:\n"
+                    + "/设置园区 东风园区\n",
                      parseMode: ParseMode.Html,
                       replyMarkup: rkm,
                      protectContent: false,
                      disableWebPagePreview: true);
-            tglib.bot_saveGrpInf2db(update.MyChatMember);
-            tglib.bot_saveChtSesion(update.MyChatMember.Chat.Id, update.MyChatMember);
+            callx(bot_saveGrpInf2db, update.MyChatMember);
+            callx(bot_saveChtSesion, chatid, update.MyChatMember);
+
+
         }
 
 
@@ -1480,11 +1518,11 @@ OnCallbk(Update update, string reqThreadId)
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task GetList_qryV2(string msgx_remvTrigWd2, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, SortedList whereMapDep, string reqThreadId)
+        static async Task GetList_qryV2(string msgx_remvTrigWd2, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             print_call_FunArgs(__METHOD__, func_get_args(__METHOD__, msgx_remvTrigWd2));
-            logCls.log("fun GetList_qryV2", func_get_args(msgx_remvTrigWd2, pagex, pagesizex, whereMapDep), "", "logDir", reqThreadId);
+            logCls.log("fun GetList_qryV2", func_get_args(msgx_remvTrigWd2, pagex, pagesizex), "", "logDir", reqThreadId);
             if (msgx_remvTrigWd2 == null || msgx_remvTrigWd2.Length == 0)
                 return;
             //  Console.WriteLine(" fun  GetList()");
@@ -1606,7 +1644,9 @@ OnCallbk(Update update, string reqThreadId)
             //GetList_qryV2 
             if (count == 0 && (update?.Message?.Chat?.Type == ChatType.Private))
             {
-
+                ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+                if (a.Contains(update?.Message?.Text))
+                    return;
                 await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                 return;
             }

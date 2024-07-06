@@ -300,16 +300,17 @@ namespace mdsj.lib
 
             return words;
         }
-        public static void callxTryJmp(Delegate callback, Update update)
+        public static void callxTryJmp(Delegate callback, params object[] objs)
         {
             try
             {
-                callx(callback, update);
+                callx(callback, objs);
 
             }
             catch (jmp2endEx e)
             {
-                Console.WriteLine("jmp2endEx from meth=>" + callback.Method.Name);
+                print_catchEx("callxTryJmp", e);
+                Console.WriteLine("callxTryJmp  callmeth=>" + callback.Method.Name);
             }
             //catch (Exception e)
             //{
@@ -325,6 +326,19 @@ namespace mdsj.lib
         public static object callx(Delegate callback, params object[] args)
         {
             return call_user_func(callback, args);
+        }
+
+        public static HashSet<string> LdHsst(string input)
+        {
+            // 分割字符串并转换为 HashSet
+            string[] elements = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            HashSet<string> stringSet = new HashSet<string>(elements);
+
+            return stringSet;
+        }
+        public static HashSet<string> LdHsstFrmF(string f)
+        {
+            return LdHsst(ReadAllText(f));
         }
         //wz auth
         public static async Task<object> callxAsyncV2(string authExprs, Delegate callback, params object[] args)
@@ -436,7 +450,18 @@ namespace mdsj.lib
         }
 
 
+        public static void callTryAll(Action value)
+        {
+            try
+            {
+                value();
+            }
+            catch (Exception e)
+            {
+                print_catchEx("callTryAll", e);
+            }
 
+        }
 
         public static void jmp2end()
         {
