@@ -216,26 +216,32 @@ namespace prj202405
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
-            Task.Run(() =>
-            {
-                //     throw new InvalidOperationException("An error occurred in the task.");
-            });
+
             string reqThreadId = geneReqid();
             //  throw new Exception("myex");
             //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
-            try
+
+            Task.Run(async () =>
             {
-                //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
-                await evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
-            }
-            catch (jmp2endEx e22)
-            {
-                Console.WriteLine("jmp2exitEx");
-            }
-            catch (Exception e)
-            {
-                logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
-            }
+                try
+                {
+                      evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
+                    //     throw new InvalidOperationException("An error occurred in the task.");
+
+                }
+                catch (jmp2endEx e22)
+                {
+                    Console.WriteLine("jmp2exitEx");
+                }
+                catch (Exception e)
+                {
+                    logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
+                }
+
+
+            });
+            //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
+
 
         }
 
@@ -250,7 +256,7 @@ namespace prj202405
 
 
         //收到消息时执行的方法
-        static async Task evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
+        static void  evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
         {
             //  throw new Exception("myex");
 
@@ -318,7 +324,7 @@ namespace prj202405
             {
                 try
                 {
-                    await OnCallbk(update, reqThreadId);
+                      OnCallbk(update, reqThreadId);
                 }
                 catch (jmp2endEx e)
                 {
@@ -342,7 +348,7 @@ namespace prj202405
                 {
                     if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
                     {
-                        await botClient.AnswerCallbackQueryAsync(
+                          botClient.AnswerCallbackQueryAsync(
                            callbackQueryId: update.CallbackQuery.Id,
                            text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
                            showAlert: true); // 这是显示对话框的关键);
@@ -352,7 +358,7 @@ namespace prj202405
 
                 if (ldfld2str(parse_str1, "btn") == "lkmenu") //def is not
                 {
-                    evt_lookmenu(update.CallbackQuery);
+                    btnHdl_lookmenu(update.CallbackQuery);
                     return;
                 }
 
@@ -380,7 +386,7 @@ namespace prj202405
                 string btnname = ldfld2str(parse_str1, "btn");
                 if (btnname.StartsWith("df") && btnname != "dafenTips")
                 {
-                    await evtDafen(botClient, update, parse_str1);
+                      btnHdl_evtDafen(botClient, update, parse_str1);
                     return;
                 }
 
@@ -388,7 +394,7 @@ namespace prj202405
             }
 
 
-            await biz_other._readMerInfo();
+               biz_other._readMerInfo();
 
 
 
@@ -483,7 +489,7 @@ namespace prj202405
             //    && update?.Message?.ReplyToMessage?.Caption?.Contains("联系方式") == true
             )
             {
-                await evt_pinlunShangjia(botClient, update, isAdminer, text);
+                  btnHdl_evt_pinlunShangjia(botClient, update, isAdminer, text);
                 return;
             }
             #endregion
@@ -496,7 +502,7 @@ namespace prj202405
             && string.IsNullOrEmpty(update.Message.ReplyToMessage?.Text)
             && update.Message.MessageThreadId == 111389)
             {
-                await 添加商家信息(botClient, update, text);
+                  添加商家信息(botClient, update, text);
 
                 return;
 
@@ -512,7 +518,7 @@ namespace prj202405
             {
                 try
                 {
-                    await botClient.SendTextMessageAsync(update.Message.Chat.Id, "@回复本信息,搜商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
+                      botClient.SendTextMessageAsync(update.Message.Chat.Id, "@回复本信息,搜商家联系方式", parseMode: ParseMode.Html, replyToMessageId: update.Message.MessageId);
                 }
                 catch (Exception e)
                 {
@@ -529,7 +535,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价 !(100字以内)", true);
+                          botClient.AnswerCallbackQueryAsync(update.CallbackQuery.Id, "@回复本消息,即可对本商家评价 !(100字以内)", true);
                     }
                     catch (Exception e)
                     {
@@ -572,14 +578,14 @@ namespace prj202405
             //next page evt,,,
             if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("page"))
             {
-                await evt_nextPrePage(botClient, update, reqThreadId);
+                  btnHdl_evt_nextPrePage(botClient, update, reqThreadId);
                 return;
             }
 
             //return evt
             if (update.Type == UpdateType.CallbackQuery && update.CallbackQuery!.Data!.Contains("return"))
             {
-                await evt_ret_mchrt_list(botClient, update, reqThreadId);
+                  btnHdl_evt_ret_mchrt_list(botClient, update, reqThreadId);
                 return;
             }
 
@@ -591,7 +597,7 @@ namespace prj202405
                 Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
                 if (ldfld2str(parse_str1, "btn") == "dtl")
                 {
-                    evt_View(botClient, update, reqThreadId);
+                    btnHdl_evt_View(botClient, update, reqThreadId);
                 }
                 // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
 
@@ -600,7 +606,7 @@ namespace prj202405
 
 
             #region add chatids
-            await tglib.tg_addChtid(update);
+              tglib.tg_addChtid(update);
 
             #endregion
             //}, cancellationToken);
@@ -621,7 +627,7 @@ namespace prj202405
             #region sezrch
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
-            HashSet<string> 商品与服务词库2 = ReadWordsFromFile("商品与服务词库.txt");
+            HashSet<string> 商品与服务词库2 = GetHsst商品与服务词库();
             string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
             //whereMap2 = new SortedList();
             //whereMap2.Add("fuwuci", fuwuci);
@@ -665,7 +671,7 @@ namespace prj202405
                     msgx = msgx.Substring(botname.Length + 1).Trim();
                 msgx = msgx.Trim();
 
-                HashSet<string> trgWdSt = ReadWordsFromFile("搜索触发词.txt");
+                HashSet<string> trgWdSt = ReadWordsFromFile($"{prjdir}/cfg/搜索触发词.txt");
                 var trgWd = string.Join(" ", trgWdSt);
                 Console.WriteLine(" 触发词 chk");
                 if (!strCls.containKwds(update?.Message?.Text, trgWd))
@@ -678,7 +684,7 @@ namespace prj202405
 
                 //去除搜索触发词，比如哪里有
                 msgx = msgx.Replace("联系方式", " ");
-                HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
+                HashSet<string> hs = GetSrchTrgWds();
                 string msgx_remvTrigWd = replace_RemoveWords(msgx, hs);
 
                 //是否包含搜索词 商品或服务关键词
@@ -717,9 +723,7 @@ namespace prj202405
 
 
 
-        private static async
-        Task
-OnCallbk(Update update, string reqThreadId)
+        private static  void OnCallbk(Update update, string reqThreadId)
         {
             //daifu fun
             // throw new NotImplementedException();
@@ -849,7 +853,7 @@ OnCallbk(Update update, string reqThreadId)
             const string METHOD__ = nameof(msgxTrigBtmbtnEvtHdlr);
 
             Console.WriteLine("--------btm btn trig start...----------");
-            HashSet<string> hs = LdHsstWordsFromFile("搜索触发词.txt");
+            HashSet<string> hs = GetSrchTrgWds();
             if (!containKwdsV2(update?.Message?.Text, hs))
             {
                 Console.WriteLine(" 不包含触发词，ret");
@@ -893,8 +897,8 @@ OnCallbk(Update update, string reqThreadId)
 
 
 
-
-        private static void evt_lookmenu(CallbackQuery? callbackQuery)
+        //todo btnHdl_lookmenu
+        private static void btnHdl_lookmenu(CallbackQuery? callbackQuery)
         {
             //如果展开菜单
             // if ( string.IsNullOrEmpty(contact_Merchant.Menu))
@@ -911,14 +915,14 @@ OnCallbk(Update update, string reqThreadId)
             }
         }
 
-        private static async Task evtDafen(ITelegramBotClient botClient, Update update, Dictionary<string, string> parse_str1)
+        private static void  btnHdl_evtDafen(ITelegramBotClient botClient, Update update, Dictionary<string, string> parse_str1)
         {
             //evet dafen 
             if (ldfld2str(parse_str1, "ckuid") == "y")
             {
                 if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
                 {
-                    await botClient.AnswerCallbackQueryAsync(
+                      botClient.AnswerCallbackQueryAsync(
                   callbackQueryId: update.CallbackQuery.Id,
                   text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
                   showAlert: true); // 这是显示对话框的关键);
@@ -957,7 +961,7 @@ OnCallbk(Update update, string reqThreadId)
 
 
 
-        private static async Task msgHdlr4srch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
+        private static void msgHdlr4srch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
         {
             logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
             SortedList whereMap = new SortedList();
@@ -973,7 +977,7 @@ OnCallbk(Update update, string reqThreadId)
 
             msgx = msgx.Replace("联系方式", " ");
             //去除搜索触发词，比如哪里有
-            HashSet<string> hs = ReadWordsFromFile("搜索触发词.txt");
+            HashSet<string> hs = GetSrchTrgWds();
             msgx = replace_RemoveWords(msgx, hs);
             // 搜索触发词
             string msgx_remvTrigWd2 = msgx;
@@ -984,7 +988,7 @@ OnCallbk(Update update, string reqThreadId)
 
             if (msgx != null && msgx.Length < 25)
             {
-                await GetList_qryV2(msgx_remvTrigWd2, 1, 5, botClient, update, reqThreadId);
+                  GetList_qryV2(msgx_remvTrigWd2, 1, 5, botClient, update, reqThreadId);
                 dbgCls.print_ret(__METHOD__, 0);
 
                 return;
@@ -1000,7 +1004,7 @@ OnCallbk(Update update, string reqThreadId)
         }
 
 
-        private static async Task evt_nextPrePage(ITelegramBotClient botClient, Update update, string reqThreadId)
+        private static void btnHdl_evt_nextPrePage(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             string? msgx = tglib.bot_getTxtMsgDep(update);
 
@@ -1009,12 +1013,12 @@ OnCallbk(Update update, string reqThreadId)
                 if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
+                  GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
                 return;
             }
         }
 
-        private static async Task evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, string reqThreadId)
+        private static void  btnHdl_evt_ret_mchrt_list(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(update, reqThreadId));
@@ -1027,7 +1031,7 @@ OnCallbk(Update update, string reqThreadId)
                 if (msgx.Trim().StartsWith("@" + botname))
                     msgx = msgx.Substring(19).Trim();
                 msgx = msgx.Trim();
-                await GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
+                   GetList_qryV2(msgx, 1, 5, botClient, update, reqThreadId);
                 return;
             }
 
@@ -1090,17 +1094,17 @@ OnCallbk(Update update, string reqThreadId)
         //    return;
         //}
 
-        private static void evt_retMchrtBtn_click(Update update)
-        {
-            var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/商家.txt");
+        //private static void evt_retMchrtBtn_click(Update update)
+        //{
+        //    var Keyboard = filex.wdsFromFileRendrToTgBtmBtnmenuBycomma("menu/商家.txt");
 
-            var rkm = new ReplyKeyboardMarkup(Keyboard);
-            rkm.ResizeKeyboard = true;
-            evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+        //    var rkm = new ReplyKeyboardMarkup(Keyboard);
+        //    rkm.ResizeKeyboard = true;
+        //    evt_btm_menuitem_clickV2(update?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
 
-            //  timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
-            return;
-        }
+        //    //  timerCls.evt_inline_menuitem_click_showSubmenu(update?.CallbackQuery?.Message?.Chat?.Id, "今日促销商家.gif", timerCls.plchdTxt, rkm, update);
+        //    return;
+        //}
 
 
         //LOOK DEP    INLINE BTN CLICK
@@ -1134,7 +1138,7 @@ OnCallbk(Update update, string reqThreadId)
         //    return;
         //}
 
-        private static async Task evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
+        private static async Task btnHdl_evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
         {
             if (text.StartsWith("@xxx007"))
                 return;
@@ -2289,7 +2293,7 @@ OnCallbk(Update update, string reqThreadId)
         //}
 
         //获取商家结果 detail click
-        static async Task evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
+        static async Task btnHdl_evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -2601,7 +2605,7 @@ OnCallbk(Update update, string reqThreadId)
             contact_Merchant.WhatsApp = cvt2list(Merchant1, "WhatsApp");
             contact_Merchant.WeiXin = cvt2list(Merchant1, "微信");
             contact_Merchant.Tel = cvt2list(Merchant1, "电话");
-            result = evt_detail_rendLianxiFosh(contact_Merchant, result);
+            result = btnHdl_detail_rendLianxiFosh(contact_Merchant, result);
             //查看菜单 (如果已经显示了,就不再显示)
             if (isShowMenu)
             {
@@ -2779,7 +2783,7 @@ OnCallbk(Update update, string reqThreadId)
 
         //----------------------
 
-        private static string evt_detail_rendLianxiFosh(Merchant? contact_Merchant, string result)
+        private static string btnHdl_detail_rendLianxiFosh(Merchant? contact_Merchant, string result)
         {
 
             #region 联系方式

@@ -534,7 +534,7 @@ namespace mdsj.libBiz
                 // 
                 Console.WriteLine("搜索触发词 in isNumlMsgInGrp()");
                 var trgSearchKwds = " ";
-                var trgWd = biz_other.getTrgwdHash("搜索触发词.txt");
+                var trgWd = biz_other.getTrgwdHash($"{prjdir}/cfg/搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
                 if (strCls.containKwds(update?.Message?.Text, trgSearchKwds))
                 {

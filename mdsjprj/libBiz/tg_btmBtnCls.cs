@@ -208,14 +208,14 @@ namespace mdsj.libBiz
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
 
-            string plchdTxt1422 = System.IO.File.ReadAllText("cfg/shibobc.txt");
+            string plchdTxt1422 = System.IO.File.ReadAllText($"{prjdir}/cfg/shibobc.txt");
             //"💁 联信与世博联盟正式达成长期战略合作，联信为世博联盟旗下所有盘口提供双倍担保，确保100%真实可靠。\r\n\r\n在娱乐过程中，如发现世博联盟存在杀客、不予提现、杀大赔小等违规行为，请立即向联信负责人及运营团队举报。经核实后，联信将对您在世博联盟里因世博盘口违规行为造成的损失给予双倍赔偿！";
 
             string imgPath = "推荐横幅.jpg";
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
 
 
-            InlineKeyboardButton[][] btns = ConvertHtmlLinksToTelegramButtons("shiboTrm.htm");
+            InlineKeyboardButton[][] btns = ConvertHtmlLinksToTelegramButtons($"{prjdir}/cfg/shiboTrm.htm");
             Telegram.Bot.Types.Message message = await botClient.SendPhotoAsync(
                   update.Message.Chat.Id, Photo, null,
              plchdTxt1422,

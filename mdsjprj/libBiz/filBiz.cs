@@ -13,7 +13,7 @@ namespace mdsj.libBiz
 
         public static HashSet<string> file_getWords商品与服务词库()
         {
-            HashSet<string> 商品与服务词库 = ReadWordsFromFile("商品与服务词库.txt");
+            HashSet<string> 商品与服务词库 = GetHsst商品与服务词库();
             商品与服务词库.Remove("店"); 商品与服务词库.Remove("针");
             商品与服务词库.Remove("处"); 商品与服务词库.Remove("院");
 
@@ -29,7 +29,13 @@ namespace mdsj.libBiz
 
             return RemoveEmptyElements(removeByHashSets(hashSet, hashSetBlklst));
         }
-        static HashSet<string> removeByHashSets(HashSet<string> set1, HashSet<string> set2)
+
+        public static HashSet<string> GetHsst商品与服务词库()
+        {
+            return ReadWordsFromFile($"{prjdir}/cfg/商品与服务词库.txt");
+        }
+
+     public   static HashSet<string> removeByHashSets(HashSet<string> set1, HashSet<string> set2)
         {
             // 创建一个新的 HashSet 以保留 set1 的副本
             HashSet<string> result = new HashSet<string>(set1);

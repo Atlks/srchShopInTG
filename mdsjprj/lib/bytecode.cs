@@ -198,19 +198,25 @@ namespace mdsj.lib
             return args.ToString();
         }
 
-        public static async Task<object> callAsync(Func<object> task1)
+        public static  void callAsync(Func<object> task1)
         {
-
-            try
+            // 使用 Task.Run 启动一个新的任务
+            Task newTask = Task.Run(() =>
             {
-                return task1();
-            }
-            catch (Exception e)
-            {
-                print_ex("call", e);
-                return null;
-            }
+                // callxTryJmp(task1);
+                try
+                {
+                    task1();
+                }catch(Exception e)
+                {
+                    print_catchEx("callAsync", e);
+                }
 
+               
+              //  callxTryJmp(OnMsg, update, reqThreadId);
+
+            });
+          
 
             //   await Task.Run(action);
         }
@@ -340,115 +346,8 @@ namespace mdsj.lib
         {
             return LdHsst(ReadAllText(f));
         }
-        //wz auth
-        public static async Task<object> callxAsyncV2(string authExprs, Delegate callback, params object[] args)
-        {
-
-            var __METHOD__ = callback.Method.Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
-            object o = null;
-            //      try
-            // Get the MethodInfo of the delegate
-            MethodInfo methodInfo = callback.Method;
-
-            try
-            {
-                // Check if the method is asynchronous (returns a Task or Task<T>)
-                if (typeof(Task).IsAssignableFrom(methodInfo.ReturnType))
-                {
-                    // Invoke the delegate and get the Task
-                    var task = (Task)methodInfo.Invoke(callback.Target, args);
-                    await task.ConfigureAwait(false);
-
-                    // If the task has a result (i.e., it's a Task<T>), get the result
-                    if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
-                    {
-                        var resultProperty = methodInfo.ReturnType.GetProperty("Result");
-                        o = resultProperty.GetValue(task);
-                    }
-                }
-                else
-                {
-                    // Invoke the delegate synchronously
-                    o = methodInfo.Invoke(callback.Target, args);
-                }
-
-            }
-            catch (jmp2endEx e1)
-            {
-                throw e1;
-            }
-            catch (Exception ex)
-            {
-                print_catchEx(__METHOD__, ex);
-                SortedList dbgobj = new SortedList();
-                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
-                logErr2024(ex, __METHOD__, "errdir", dbgobj);
-            }
-            //    call
-            if (o != null)
-                print_ret(__METHOD__, o);
-            else
-                print_ret(__METHOD__, 0);
-            return o;
-
-        }
-
-
-        // await callback
-        public static async Task<object> callxAsync(Delegate callback, params object[] args)
-        {
-
-            var __METHOD__ = callback.Method.Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
-            object o = null;
-            //      try
-            // Get the MethodInfo of the delegate
-            MethodInfo methodInfo = callback.Method;
-
-            try
-            {
-                // Check if the method is asynchronous (returns a Task or Task<T>)
-                if (typeof(Task).IsAssignableFrom(methodInfo.ReturnType))
-                {
-                    // Invoke the delegate and get the Task
-                    var task = (Task)methodInfo.Invoke(callback.Target, args);
-                    await task.ConfigureAwait(false);
-
-                    // If the task has a result (i.e., it's a Task<T>), get the result
-                    if (methodInfo.ReturnType.IsGenericType && methodInfo.ReturnType.GetGenericTypeDefinition() == typeof(Task<>))
-                    {
-                        var resultProperty = methodInfo.ReturnType.GetProperty("Result");
-                        o = resultProperty.GetValue(task);
-                    }
-                }
-                else
-                {
-                    // Invoke the delegate synchronously
-                    o = methodInfo.Invoke(callback.Target, args);
-                }
-
-            }
-            catch (jmp2endEx e1)
-            {
-                throw e1;
-            }
-            catch (Exception ex)
-            {
-                print_catchEx(__METHOD__, ex);
-                SortedList dbgobj = new SortedList();
-                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
-                logErr2024(ex, __METHOD__, "errdir", dbgobj);
-            }
-            //    call
-            if (o != null)
-                print_ret(__METHOD__, o);
-            else
-                print_ret(__METHOD__, 0);
-            return o;
-
-        }
-
+     
+  
 
         public static void callTryAll(Action value)
         {

@@ -16,6 +16,8 @@ namespace mdsj.libBiz
 
         public static int containCalcCntScoreSetfmt(string segments, HashSet<string> set)
         {
+            if (segments == null)
+                return 0;
             //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
             //   Console.WriteLine();
             set.Remove("店");
@@ -85,7 +87,7 @@ namespace mdsj.libBiz
         public static string[] removeStopWd4biz(string[] kwds)
         {
             //todo 去除触发词，，只保留 服务次和位置词
-            HashSet<string> 搜索触发词 = ReadWordsFromFile("搜索触发词.txt");
+            HashSet<string> 搜索触发词 = GetSrchTrgWds();
 
             HashSet<string> stopWdSet = new HashSet<string>();
 
@@ -104,6 +106,12 @@ namespace mdsj.libBiz
             return kwdSt.ToArray();
 
         }
+
+        public static HashSet<string> GetSrchTrgWds()
+        {
+            return ReadWordsFromFile($"{prjdir}/cfg/搜索触发词.txt");
+        }
+
         public static bool strBiz_isPostnWord(string kwd2)
         {
             HashSet<string> citys = ReadLinesToHashSet("位置词.txt");
