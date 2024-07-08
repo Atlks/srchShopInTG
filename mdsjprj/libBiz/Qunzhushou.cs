@@ -446,11 +446,6 @@ namespace mdsj.libBiz
             });
    
 
-            if (bot_getTxt(update).Trim().StartsWith(serchTipsWd))
-            {
-                evt_嗨小爱同学Async(update, reqThreadId);
-                return;
-            }
 
             if (update.Type == UpdateType.Message)
             {
@@ -548,103 +543,7 @@ namespace mdsj.libBiz
             print_ret(__METHOD__, 0);
 
         }
-        private const string serchTipsWd = "嗨小爱童鞋";
-        private static async Task evt_嗨小爱同学Async(Update update, string reqThreadId)
-        {
-            var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
-            string prjdir = @"../../../";
-            if (update.Message.Text.Trim() == serchTipsWd)
-            {
-
-                prjdir = filex.GetAbsolutePath(prjdir);
-
-                string path = $"{prjdir}/cfg/所有命令.txt";
-                string text = System.IO.File.ReadAllText(path);
-                text = text.Replace("%前导提示词%", serchTipsWd);
-                botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-            string[] a = update.Message.Text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = a[1].Trim().ToUpper();
-            if (cmd.Equals("所有命令"))
-            {
-
-                prjdir = filex.GetAbsolutePath(prjdir); string path = $"{prjdir}/cfg/所有命令.txt";
-                string text = System.IO.File.ReadAllText(path);
-                text = text.Replace("%前导提示词%", serchTipsWd);
-                botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals("搜索音乐") || cmd.Equals("搜索歌曲"))
-            {
-
-                prjdir = filex.GetAbsolutePath(prjdir);
-                var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
-                botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName + "因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
-                string downdir = prjdir + "/downmp3";
-                string fname = filex.ConvertToValidFileName2024(songName);
-                string mp3path = $"{downdir}/{fname}.mp3";
-                Console.WriteLine(mp3path);
-                if (!System.IO.File.Exists(mp3path))
-                    await DownloadSongAsMp3(songName, downdir);
-                SendMp3ToGroupAsync(mp3path, update.Message.Chat.Id, update.Message.MessageId);
-                dbgpad = 0;
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals("搜索聊天记录"))
-            {
-
-                prjdir = filex.GetAbsolutePath(prjdir);
-                var kwds = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
-
-                List<SortedList> li = qry_ContainMatch("fullTxtSrchIdxdataDir", kwds);
-                // 使用 LINQ 查询语法提取 txt 属性值
-                var txtValues = li.Select(dict =>
-                {
-                    return ldfld(dict, "txt", null);
-                })
-                                    .Where(txt => txt != null)
-                                    .ToArray();
-                botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, json_encode(txtValues), replyToMessageId: update.Message.MessageId);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals("记账"))
-            {
-                evt_cash记账(update);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-
-
-            if (cmd.Equals("账单清单"))
-            {
-                evt_cash账单清单账(update);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-
-            if (cmd.Equals("删除"))
-            {
-                evt_cash删除(update);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-            if (cmd.Equals("账单统计"))
-            {
-                evt_cashflowGrpby账单统计(update);
-                dbgCls.print_ret(__METHOD__, 0);
-                return;
-            }
-        }
-
+     
         private static void evt_cashflowGrpby账单统计(Update update)
         {
             string msg2 = update.Message.Text.Trim();

@@ -372,10 +372,10 @@ namespace mdsj.lib
             }
 
         }
-        public static bool IsStr(object input)
+        public static bool IsStr(object obj1)
         {
             
-            return input is string;
+            return obj1 is string;
         }
         public static bool IsInt(string str)
         {

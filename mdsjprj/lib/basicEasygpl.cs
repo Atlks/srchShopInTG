@@ -40,9 +40,30 @@ namespace mdsj.lib
         }
         private static string 参数类型(object obj)
         {
+           
             return obj.GetType().ToString();
         }
-        
+        private static bool 是否字符串(object obj)
+        {
+            if (取类型名(obj) == "string")
+                return true;
+            else
+                return false;
+        }
+
+        private static string 取类型名(object obj)
+        {
+            return obj.GetType().ToString();
+        }
+
+        private static string json编码(object obj)
+        {
+            return json_encode_noFmt(obj);
+        }
+        private static string json解码(object obj)
+        {
+            return json_encode_noFmt(obj);
+        }
 
         private static string json文本(object obj)
         {
@@ -54,7 +75,10 @@ namespace mdsj.lib
         {
             return obj.ToString();
         }
-
+        private static int 取长度(string obj)
+        {
+            return obj.ToString().Length;
+        }
         private static int 取文本长度(string obj)
         {
             return obj.ToString().Length;

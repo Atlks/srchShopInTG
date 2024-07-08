@@ -8,7 +8,7 @@ using mdsj.lib;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
- 
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,7 +51,7 @@ namespace prj202405.lib
         //qry just use path as qry dsl  ,,
         public static ArrayList qryDep(string dbFileName)
         {
- 
+
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
@@ -64,10 +64,10 @@ namespace prj202405.lib
                 txt = "[]";
             var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
             ArrayList list2 = new ArrayList(list);
-          
+
             dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
 
- 
+
             return list2;
         }
         public static List<SortedList> qry5829(string dbfS)
@@ -86,13 +86,13 @@ namespace prj202405.lib
             {
                 // 检查文件所在目录是否存在，不存在则创建目录
                 string directory = System.IO.Path.GetDirectoryName(dbf);
-                if(directory.Length>0)
-                if (!Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
- 
- 
+                if (directory.Length > 0)
+                    if (!Directory.Exists(directory))
+                    {
+                        Directory.CreateDirectory(directory);
+                    }
+
+
                 if (!File.Exists(dbf))
                 {
                     Console.WriteLine("not exist file dbf=>" + dbf);
@@ -144,7 +144,7 @@ namespace prj202405.lib
         public static List<SortedList> qrySglFL(string dbFileName)
         {
 
-     
+
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
@@ -166,7 +166,7 @@ namespace prj202405.lib
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
             dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
- 
+
             return list;
         }
 
@@ -224,7 +224,7 @@ namespace prj202405.lib
             // 将list2的id存入HashSet
             foreach (var item in list2)
             {
-                if (item.ContainsKey("id") )
+                if (item.ContainsKey("id"))
                 {
                     set2Ids.Add(item["id"].ToString());
                 }
@@ -259,14 +259,14 @@ namespace prj202405.lib
             save(objSave, Strfile);
 
         }
-            public static void save(SortedList SortedList1, string dbfile)
+        public static void save(SortedList SortedList1, string dbfile)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
 
             try
             {
-          
+
                 mkdir_forFile(dbfile);
                 // 创建目录
                 // 使用 Path.GetDirectoryName 方法获取目录路径
@@ -297,11 +297,11 @@ namespace prj202405.lib
 
                 ArrayList saveList_hpmod = db.lstFrmIot(iotTable);
                 wriToDbf(saveList_hpmod, dbfile);
-               
+
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-             
+
                 print_ex(__METHOD__, e);
             }
 

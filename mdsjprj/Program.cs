@@ -207,7 +207,9 @@ namespace prj202405
             setTimerTask4tmr();
 #warning 循环账号是否过期了
 
+
             Qunzhushou.main1();
+            audioBot.main1();
 
             webapiStart();
 

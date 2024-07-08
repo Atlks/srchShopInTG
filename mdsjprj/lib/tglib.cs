@@ -87,7 +87,7 @@ namespace prj202405.lib
 
         }
 
-        public static async Task SendMp3ToGroupAsync(string mp3FilePath, long ChatId, int messageId)
+        public static void  SendMp3ToGroupAsync(ITelegramBotClient botClient, string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
@@ -100,7 +100,7 @@ namespace prj202405.lib
                 {
                     //  var mp3InputFile = new InputOnlineMedia(mp3Stream, "file.mp3");
                     //  await using Stream stream = System.IO.File.OpenRead("/path/to/voice-nfl_commentary.ogg");
-                    object value = await botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream), caption: "搜索结果", title: GetBaseFileName(mp3FilePath));
+                    object value =   botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream), caption: "搜索结果", title: GetBaseFileName(mp3FilePath)).Result;
                 }
 
                 Console.WriteLine("MP3 文件已发送到群组！");

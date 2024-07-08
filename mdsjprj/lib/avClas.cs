@@ -257,7 +257,7 @@ namespace mdsj.lib
         //    //    throw new Exception("No matching music found.");
         //    //}
         //}
-        public static async Task DownloadSongAsMp3(string songName,string dir)
+        public static string  DownloadSongAsMp3(string songName,string dir)
         {
             var __METHOD__ = "DownloadSongAsMp3";
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(  songName, dir));
@@ -267,30 +267,35 @@ namespace mdsj.lib
                 var youtube = new YoutubeClient();
 
                 // 搜索视频
-                var searchResults = await youtube.Search.GetVideosAsync(songName);
+                var searchResults = youtube.Search.GetVideosAsync(songName).GetAwaiter().GetResult(); ;
+                //Task.Run(async () =>
+                //{
+                //    await
+                //}).aw
+                    
                 var video = searchResults.FirstOrDefault();
 
                 if (video == null)
                 {
                     Console.WriteLine("未找到歌曲！");
-                    return;
+                    return "";
                 }
 
-                var streamManifest = await youtube.Videos.Streams.GetManifestAsync(video.Id);
+                var streamManifest =   youtube.Videos.Streams.GetManifestAsync(video.Id).Result;
                 var audioStreams = streamManifest.GetAudioOnlyStreams();
                 var streamInfo = audioStreams.OrderByDescending(s => s.Bitrate).FirstOrDefault();
 
                 if (streamInfo == null)
                 {
                     Console.WriteLine("未找到音频流！");
-                    return;
+                    return "";
                 }
                 Directory.CreateDirectory(dir);
                 // 下载音频流
                 var tempFile = Path.GetTempFileName();
               // string filePathTmp = dir + "/" + tempFile;
                 Console.WriteLine($"down tmpfile=>{tempFile}");
-                await youtube.Videos.Streams.DownloadAsync(streamInfo, tempFile);
+                youtube.Videos.Streams.DownloadAsync(streamInfo, tempFile).GetAwaiter().GetResult(); ;
 
                 // 转换为 MP3
                 // 转换为 MP3
@@ -298,20 +303,23 @@ namespace mdsj.lib
                 string fname = filex.ConvertToValidFileName2024(songName);
                 var outputFilePath = $"{dir}/{fname}.mp3";
                 Console.WriteLine($"outputFilePath =>{outputFilePath}");
-                await ConvertToMp3(tempFile, outputFilePath);
+                  ConvertToMp3(tempFile, outputFilePath);
 
                 // 删除临时文件
               //  File.Delete(tempFile);
 
                 Console.WriteLine($"歌曲已下载并转换为 MP3：{outputFilePath}");
-            }catch (Exception ex)
+                return outputFilePath;
+            }
+            catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
             }
             dbgCls.print_ret(__METHOD__, 0);
+            return "";
         }
 
-        static async Task ConvertToMp3(string inputFilePath, string outputFilePath)
+        static void  ConvertToMp3(string inputFilePath, string outputFilePath)
         {
             var ffmpeg = new NReco.VideoConverter.FFMpegConverter();
             ffmpeg.ConvertMedia(inputFilePath, outputFilePath, "mp3");
