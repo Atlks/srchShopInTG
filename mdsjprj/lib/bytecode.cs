@@ -9,6 +9,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using static SqlParser.Ast.Statement;
 
@@ -139,7 +140,10 @@ namespace mdsj.lib
                 return ldfld(Obj, fld, defVal);
             }
         }
-
+        public static string ldfldAsStr(object obj, string fld, object defVal)
+        {
+            return ldfld(obj, fld, "").ToString();
+        }
         public static object ldfld(object obj, string fld, object defVal)
         {
             Type type = obj.GetType();
@@ -198,7 +202,7 @@ namespace mdsj.lib
             return args.ToString();
         }
 
-        public static  void callAsync(Func<object> task1)
+        public static void callAsync(Func<object> task1)
         {
             // 使用 Task.Run 启动一个新的任务
             Task newTask = Task.Run(() =>
@@ -207,16 +211,17 @@ namespace mdsj.lib
                 try
                 {
                     task1();
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     print_catchEx("callAsync", e);
                 }
 
-               
-              //  callxTryJmp(OnMsg, update, reqThreadId);
+
+                //  callxTryJmp(OnMsg, update, reqThreadId);
 
             });
-          
+
 
             //   await Task.Run(action);
         }
@@ -254,6 +259,12 @@ namespace mdsj.lib
             return o;
         }
 
+        /*
+         
+         .子程序 call, 公开, 通用型
+.参数 callback, 句柄型
+.参数 args, 数据组
+         */
         public static object call(Delegate callback, params object[] args)
         {
 
@@ -346,8 +357,8 @@ namespace mdsj.lib
         {
             return LdHsst(ReadAllText(f));
         }
-     
-  
+
+
 
         public static void callTryAll(Action value)
         {
@@ -361,6 +372,26 @@ namespace mdsj.lib
             }
 
         }
+        public static bool IsStr(object input)
+        {
+            
+            return input is string;
+        }
+        public static bool IsInt(string str)
+        {
+            return int.TryParse(str, out _);
+        }
+        public static bool IsNumeric(string str)
+        {
+            // 匹配整数或带小数点的数字
+            return Regex.IsMatch(str, @"^[0-9]+(\.[0-9]+)?$");
+        }
+        public virtual string? ToString(object o)
+        {
+            // The default for an object is to return the fully qualified name of the class.
+            return o.ToString();
+        }
+
 
         public static void jmp2end()
         {
@@ -387,6 +418,7 @@ namespace mdsj.lib
             if (methodInfo == null)
             {
                 Console.WriteLine("..waring  .methodinfo is null");
+                print_ret_adv(__METHOD__, "");
                 return null;
             }
 

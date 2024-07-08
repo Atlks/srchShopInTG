@@ -1,0 +1,36 @@
+{
+  "update_id": 839630496,
+  "my_chat_member": {
+    "chat": {
+      "id": -1002210674007,
+      "type": "supergroup",
+      "title": "永和豆浆 Xúc xích"
+    },
+    "from": {
+      "id": 6569724239,
+      "is_bot": false,
+      "first_name": "永和豆浆",
+      "last_name": "营业时间晚上九点到下午五点。可以添加新软件 Signal 点餐 号码：+66 818652379 糯米鸡和糍粑 烧麦正常可",
+      "username": "sjyhdj"
+    },
+    "date": 1720306021,
+    "old_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

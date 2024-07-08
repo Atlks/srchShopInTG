@@ -121,11 +121,11 @@ namespace mdsj.libBiz
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
             var segmenter = new JiebaSegmenter();
-            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.LoadUserDict(userDictFile);
             segmenter.AddWord("会所"); // 可添加一个新词
             segmenter.AddWord("妙瓦底"); // 可添加一个新词
             segmenter.AddWord("御龙湾"); // 可添加一个新词
-            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            HashSet<string> user_dict = GetUser_dict();
             foreach (string line in user_dict)
             {
                 segmenter.AddWord(line);
@@ -146,6 +146,11 @@ namespace mdsj.libBiz
             string kdwsJoin = string.Join("/", kwds);
             Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
+        }
+
+        public static HashSet<string> GetUser_dict()
+        {
+            return ReadLinesToHashSet($"{prjdir}/cfg/user_dict.txt");
         }
         public static string substr_getFuwuci(string? text, HashSet<string> 商品与服务词库)
         {

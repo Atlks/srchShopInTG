@@ -308,7 +308,7 @@ namespace prj202405
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
-                segmenter.LoadUserDict("user_dict.txt");
+                segmenter.LoadUserDict(userDictFile);
                 segmenter.AddWord("会所"); // 可添加一个新词
 
                 //var segments = segmenter.Cut("我来到北京清华大学", cutAll: true);

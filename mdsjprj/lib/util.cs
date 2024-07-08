@@ -69,6 +69,8 @@ namespace mdsj.lib
 
 
         }
+
+        public static string userDictFile = $"{prjdir}/cfg/user_dict.txt";
         public static void playMp3(string mp3FilePath, int sec)
         {
 

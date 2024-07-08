@@ -316,6 +316,15 @@ namespace prj202405.lib
         {
             //if($GLOBALS['dbg_show']==false)
             //    return;
+            var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{json_encode_noFmt( val)}";
+            // array_push($GLOBALS['dbg'],        $msg);
+            Console.WriteLine(msglog + "");
+
+        }
+        public static void print_varDump(string METHOD__, string vname, string val)
+        {
+            //if($GLOBALS['dbg_show']==false)
+            //    return;
             var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{val}";
             // array_push($GLOBALS['dbg'],        $msg);
             Console.WriteLine(msglog + "");

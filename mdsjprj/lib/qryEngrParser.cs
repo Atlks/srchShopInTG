@@ -70,6 +70,46 @@ namespace libx
 
             return n;
         }
+        public static List<SortedList> getListFltr(string fromDdataDir, string shanrES,
+         Func<SortedList, bool> whereFun
+       )
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+
+
+            //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
+
+            //  List<t> rsRztInlnKbdBtn = new List<t>();
+
+            //if (shareCfgList is null)
+            //{
+            //    throw new ArgumentNullException(nameof(shareCfgList));
+            //}
+
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+
+            // string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+            string shareStr = _calcPatnsV4(fromDdataDir, shanrES);
+            string[] shareArr = shareStr.Split(',');
+            foreach (var shar in shareArr)
+            {
+                var CurSharFullpath = fromDdataDir + "/" + shar;
+                string rndFun;
+                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
+                rndFun = (string)curShareCfg["rndFun"];
+
+                //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
+                var dbg = (shar: shar, storeEngr: rndFun, CurSharFullpath: CurSharFullpath);
+                List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, rndFun.ToString(), dbg);
+                rztLi = array_merge(rztLi, li);
+            }
+            print_ret(__METHOD__, "rztLi.size:" + rztLi.Count);
+            return rztLi;
+        }
 
         //public static List<t> xxxx<t>()
         //{
@@ -143,7 +183,37 @@ namespace libx
             return rndFun;
         }
 
-        public static List<SortedList> arr_fltr(string fromDdataDir, string shanrES,
+        //arr_fltr4readDir
+        public static List<SortedList> arr_fltrV2(string fromDdataDir, string shanrES,
+           Func<SortedList, bool> whereFun,
+           Func<string, List<SortedList>> rndFun)
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+
+
+            //  List<t> rsRztInlnKbdBtn = new List<t>();
+
+            if (rndFun is null)
+            {
+                throw new ArgumentNullException(nameof(rndFun));
+            }
+
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+            var share_dbfs = _calcPatnsV3(fromDdataDir, shanrES);
+            string[] arr = share_dbfs.Split(',');
+            foreach (string dbfCurShar in arr)
+            {
+                List<SortedList> li = _qryBySnglePart(dbfCurShar, whereFun, rndFun);
+                rztLi = array_merge(rztLi, li);
+            }
+
+            return rztLi;
+        }
+
+        public static List<SortedList> arr_fltrDep2024(string fromDdataDir, string shanrES,
                  Func<SortedList, bool> whereFun,
                  Func<string, List<SortedList>> rndFun)
         {
@@ -191,7 +261,7 @@ namespace libx
                     throw new ArgumentNullException(nameof(rndFun));
                 }
 
-                List<SortedList> rztLi = arr_fltr(fromDdataDir, shanrES, whereFun, rndFun);
+                List<SortedList> rztLi = arr_fltrDep2024(fromDdataDir, shanrES, whereFun, rndFun);
 
 
 

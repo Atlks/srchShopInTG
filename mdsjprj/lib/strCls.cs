@@ -152,11 +152,12 @@ namespace prj202405.lib
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
             var segmenter = new JiebaSegmenter();
-            segmenter.LoadUserDict("user_dict.txt");
+        
+            segmenter.LoadUserDict(userDictFile);
             segmenter.AddWord("会所"); // 可添加一个新词
             segmenter.AddWord("妙瓦底"); // 可添加一个新词
             segmenter.AddWord("御龙湾"); // 可添加一个新词
-            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            HashSet<string> user_dict = GetUser_dict();
             foreach (string line in user_dict)
             {
                 segmenter.AddWord(line);

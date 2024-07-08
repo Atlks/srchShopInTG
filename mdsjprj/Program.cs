@@ -1,6 +1,9 @@
 ﻿
 global using static prj202405.lib.tglib;
 global using static prj202405.Program;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
@@ -76,6 +79,8 @@ using RG3.PF.Abstractions.Entity;
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography.Xml;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 
 
 namespace prj202405
@@ -110,7 +115,7 @@ namespace prj202405
 
             prjdir = filex.GetAbsolutePath(prjdir);
 
-
+            userDictFile = $"{prjdir}/cfg/user_dict.txt";
 
             evt_boot(() =>
             {
@@ -204,6 +209,8 @@ namespace prj202405
 
             Qunzhushou.main1();
 
+            webapiStart();
+
             //  Console.ReadKey();
             //loopForever();
             while (true)
@@ -212,7 +219,32 @@ namespace prj202405
             }
         }
 
+        private static void webapiStart()
+        {
+            var builder = WebApplication.CreateBuilder();
 
+            // Configure Kestrel to listen on a specific port
+            builder.WebHost.ConfigureKestrel(serverOptions =>
+            {
+                serverOptions.ListenAnyIP(5001); // 自定义端口号，例如5001
+            });
+            var app = builder.Build();
+
+            //http://localhost:5000/api?callGetlistFromDb=yourValue11
+            app.MapGet("/api", (string callGetlistFromDb,string 园区=null,int page=1) => {
+                Console.WriteLine("Received getlist: " + callGetlistFromDb);
+                //  return Results.Ok("OK");
+                SortedList map = new SortedList();
+                map.Add("limit", 5);
+                var list = getListFltr("mercht商家数据", null, null);
+                int start = (page - 1) * 10;
+
+                list = list.Slice(start, 10);
+                return encodeJson(list);
+            });
+
+            app.Run();
+        }
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
@@ -261,11 +293,11 @@ namespace prj202405
             //  throw new Exception("myex");
 
             var __METHOD__ = "evt_aHandleUpdateAsync";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.print_call_FunArgs(__METHOD__, func_get_args(update));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Console.WriteLine(update?.Message?.Text);
             //    tts(update?.Message?.Text);
-            Console.WriteLine(json_encode(update));
+          //  Console.WriteLine(json_encode(update));
             Console.WriteLine("tag4520");
             bot_logRcvMsg(update);
 

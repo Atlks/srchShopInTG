@@ -178,6 +178,10 @@ namespace prj202405.lib
             // 获取文件目录
             string dir = System.IO.Path.GetDirectoryName(filePath);
 
+
+            //rltv path
+            if (dir == "")
+                return;
             // 检查目录是否存在，如果不存在，则创建目录
             if (!Directory.Exists(dir))
             {

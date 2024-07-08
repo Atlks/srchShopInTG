@@ -253,11 +253,11 @@ namespace mdsj.lib
 
             var segmenter = new JiebaSegmenter();
             //------------自定词
-            segmenter.LoadUserDict("user_dict.txt");
+            segmenter.LoadUserDict($"{prjdir}/cfg/user_dict.txt");
             segmenter.AddWord("会所"); // 可添加一个新词
             segmenter.AddWord("妙瓦底"); // 可添加一个新词
             segmenter.AddWord("御龙湾"); // 可添加一个新词
-            HashSet<string> user_dict = ReadLinesToHashSet("user_dict.txt");
+            HashSet<string> user_dict = GetUser_dict();
             foreach (string line in user_dict)
             {
                 segmenter.AddWord(line);
@@ -287,11 +287,11 @@ namespace mdsj.lib
 
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string msgidx = o["chatid"] + "." + o["timeStamp"] + "." + o["msgid"];
-              //  o.Add("", msgidx);
+                //  o.Add("", msgidx);
                 stfld_replaceKeyV(o, "id", msgidx);
                 stfld_replaceKeyV(o, "msgid", msgidx);
-              //  o.Add("msgid", msgidx);
-              //  o.Add("kwd", wd);
+                //  o.Add("msgid", msgidx);
+                //  o.Add("kwd", wd);
                 stfld_replaceKeyV(o, "kwd", msgidx);
                 //        doc.Add("txt", o["txt"]);
                 //       doc.Add("grpinfo", o);
@@ -301,6 +301,7 @@ namespace mdsj.lib
             }
         }
 
+      
 
         private static SortedList tgMsg2row(JsonElement messageElement, JsonElement textElement)
         {
