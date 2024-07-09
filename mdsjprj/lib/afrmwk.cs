@@ -98,7 +98,7 @@ namespace mdsj.lib
 
 
         }
-        static async Task PrintLogo()
+        static void  PrintLogo()
         {
 
             Console.WriteLine(@"

@@ -81,6 +81,7 @@ using Newtonsoft.Json.Linq;
 using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Windows.UI.Xaml;
 
 
 namespace prj202405
@@ -110,7 +111,7 @@ namespace prj202405
         public static Dictionary<long, User> _users = [];
         public static bool jmp2exitFlag;
 
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
 
             prjdir = filex.GetAbsolutePath(prjdir);
@@ -172,7 +173,7 @@ namespace prj202405
 
             #region 读取商家信息
             //  读取加入的群Ids           
-            await biz_other._readMerInfo();
+            biz_other._readMerInfo();
             #endregion
             #endregion
 
@@ -221,9 +222,9 @@ namespace prj202405
             }
         }
 
-      
 
-        static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+
+        static async System.Threading.Tasks.Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
             string reqThreadId = geneReqid();
@@ -231,7 +232,7 @@ namespace prj202405
             //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
 
             //try todo map evt
-            Task.Run(async () =>
+            callAsync(() =>
             {
                 try
                 {
@@ -247,9 +248,11 @@ namespace prj202405
                 {
                     logErr2024(e, "evt_aHandleUpdateAsyncSafe", "errlogDir", null);
                 }
+                return 0;
 
 
             });
+            //     Task.Run(async );
             //  int reqThreadId = Thread.CurrentThread.ManagedThreadId;
 
 
@@ -280,11 +283,11 @@ namespace prj202405
             bot_logRcvMsg(update);
 
 
-            Task.Run(() =>
-            {
-                Thread.Sleep(6000);
-                dbgpad = 0;
-            });
+            callAsync(() =>
+             {
+                 Thread.Sleep(6000);
+                 dbgpad = 0;
+             });
 
 
 
@@ -321,12 +324,12 @@ namespace prj202405
             if (update.Type == UpdateType.Message)
             {
                 // 使用 Task.Run 启动一个新的任务
-                Task newTask = Task.Run(() =>
-                {
+                callAsync(() =>
+                 {
 
-                    callxTryJmp(OnMsg, update, reqThreadId);
+                     return callxTryJmp(OnMsg, update, reqThreadId);
 
-                });
+                 });
 
             }
 
@@ -1148,7 +1151,7 @@ namespace prj202405
         //    return;
         //}
 
-        private static async Task msgHdl_evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
+        private static void msgHdl_evt_pinlunShangjia(ITelegramBotClient botClient, Update update, bool isAdminer, string? text)
         {
             if (text.StartsWith("@xxx007"))
                 return;
@@ -1181,7 +1184,7 @@ namespace prj202405
                     Telegram.Bot.Types.Message msg = null;
                     try
                     {
-                        msg = await botClient.SendTextMessageAsync(chatId: update.Message!.Chat.Id, text: "评价失败,评价文字只能100个字以内!", replyToMessageId: update.Message.MessageId);
+                        msg = botClient.SendTextMessageAsync(chatId: update.Message!.Chat.Id, text: "评价失败,评价文字只能100个字以内!", replyToMessageId: update.Message.MessageId).Result;
                     }
                     catch (Exception ex)
                     {
@@ -1190,10 +1193,10 @@ namespace prj202405
 
                     if (msg != null)
                     {
-                        await Task.Delay(5000);
+                        System.Threading.Tasks.Task.Delay(5000);
                         try
                         {
-                            await botClient.DeleteMessageAsync(msg.Chat.Id, msg.MessageId);
+                            botClient.DeleteMessageAsync(msg.Chat.Id, msg.MessageId).GetAwaiter().GetResult();
                         }
                         catch (Exception ex)
                         {
@@ -1237,10 +1240,10 @@ namespace prj202405
                 ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
                 user.Comments++;
-                await biz_other._SaveConfig();
+                biz_other._SaveConfig();
                 try
                 {
-                    await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
+                    tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "成功点评了商家,本消息10秒后删除!", 10);
                 }
                 catch (Exception ex)
                 {
@@ -1256,7 +1259,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -1346,7 +1349,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
+                        tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "编辑信息格式有误!", 5);
                     }
                     catch (Exception ex)
                     {
@@ -1355,11 +1358,11 @@ namespace prj202405
                     return;
                 }
 
-                await biz_other._SaveConfig();
+                biz_other._SaveConfig();
 
                 try
                 {
-                    await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
+                    tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家信息编辑成功!", 5);
                 }
                 catch (Exception ex)
                 {
@@ -1532,7 +1535,7 @@ namespace prj202405
 
         //qry shaojia
         //获取列表,或者是返回至列表
-        static async Task GetList_qryV2(string msgx_remvTrigWd2, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, string reqThreadId)
+        static void GetList_qryV2(string msgx_remvTrigWd2, int pagex, int pagesizex, ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "GetList_qryV2";  //bcs in task so cant get currentmethod
             print_call_FunArgs(__METHOD__, func_get_args(__METHOD__, msgx_remvTrigWd2));
@@ -1661,7 +1664,7 @@ namespace prj202405
                 ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
                 if (a.Contains(update?.Message?.Text))
                     return;
-                await tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
+                tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "未搜索到商家,您可以向我们提交商家联系方式", 5);
                 return;
             }
 
@@ -1733,14 +1736,14 @@ namespace prj202405
                     //     var text = "——————————————";
                     //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
                     var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
-                    await botClient.SendPhotoAsync(
-                        update.Message.Chat.Id,
-                        Photo, null, text,
-                        parseMode: ParseMode.Html,
-                        replyMarkup: new InlineKeyboardMarkup(results),
-                        protectContent: false,
+                    botClient.SendPhotoAsync(
+                      update.Message.Chat.Id,
+                      Photo, null, text,
+                      parseMode: ParseMode.Html,
+                      replyMarkup: new InlineKeyboardMarkup(results),
+                      protectContent: false,
 
-                        replyToMessageId: update.Message.MessageId);
+                      replyToMessageId: update.Message.MessageId);
 
 
                     //await botClient.SendTextMessageAsync(
@@ -1762,14 +1765,14 @@ namespace prj202405
                     var Photo = InputFile.FromStream(System.IO.File.OpenRead(Path));
                     //   botClient.edit
 
-                    await botClient.EditMessageCaptionAsync(
-                     update.CallbackQuery.Message.Chat.Id,
-                   caption: text,
+                    _ = botClient.EditMessageCaptionAsync(
+                   update.CallbackQuery.Message.Chat.Id,
+                 caption: text,
 
-                     replyMarkup: new InlineKeyboardMarkup(results),
-                   messageId: update.CallbackQuery.Message.MessageId,
-                    parseMode: ParseMode.Html
-                    );
+                   replyMarkup: new InlineKeyboardMarkup(results),
+                 messageId: update.CallbackQuery.Message.MessageId,
+                  parseMode: ParseMode.Html
+                  ).Result;
                     //await botClient.EditMessageTextAsync(
                     //    chatId: update!.CallbackQuery!.Message!.Chat.Id,
                     //    messageId: update.CallbackQuery.Message.MessageId,
@@ -1783,7 +1786,7 @@ namespace prj202405
                 //每个商家搜索量
                 setPerMerchtSerchCnt(results, _citys);
 
-                await biz_other._SaveConfig();
+                biz_other._SaveConfig();
             }
             catch (Exception e)
             {
@@ -2303,7 +2306,7 @@ namespace prj202405
         //}
 
         //获取商家结果 detail click
-        static async Task btnHdl_evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
+        static void btnHdl_evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -2317,7 +2320,7 @@ namespace prj202405
 
 
                         Console.WriteLine("not same user...ret");
-                        await botClient.AnswerCallbackQueryAsync(
+                          botClient.AnswerCallbackQueryAsync(
                                   callbackQueryId: update.CallbackQuery.Id,
                                   text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
                                   showAlert: true); // 这是显示对话框的关键);
@@ -2434,7 +2437,7 @@ namespace prj202405
                 score = Convert.ToInt32(sc);
             }
             #region 受限了
-            var operaCount = await biz_other._SetUserOperas(cq.From.Id);
+            var operaCount =   biz_other._SetUserOperas(cq.From.Id).Result;
             var answer = string.Empty;
             //24小时10个   一周30个    一个月50个   一年150个  
             if (operaCount.Years > 150)
@@ -2472,7 +2475,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botClient.AnswerCallbackQueryAsync(cq.Id, "一个账号只能打分一次,请勿重复打分!", true);
+                          botClient.AnswerCallbackQueryAsync(cq.Id, "一个账号只能打分一次,请勿重复打分!", true);
                     }
                     catch (Exception e)
                     {
@@ -2485,7 +2488,7 @@ namespace prj202405
                 user.Scores++;
                 try
                 {
-                    await botClient.AnswerCallbackQueryAsync(cq.Id, "评分成功", true);
+                      botClient.AnswerCallbackQueryAsync(cq.Id, "评分成功", true);
                 }
                 catch (Exception e)
                 {
@@ -2496,21 +2499,21 @@ namespace prj202405
                 try
                 {
                     //感谢打分
-                    scoreTipMsg = await botClient.SendTextMessageAsync(
+                    scoreTipMsg =   botClient.SendTextMessageAsync(
                         chatId: cq.Message.Chat.Id,
                         text: $"😙 <b>匿名用户对商家进行了打分</b>",
                         parseMode: ParseMode.Html,
                         replyToMessageId: cq.Message.MessageId,
-                        disableNotification: false);
+                        disableNotification: false).Result;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("感谢打分时出错:" + e.Message);
                 }
 
-                _ = Task.Run(async () =>
+                 TaskRun(async () =>
                 {
-                    await Task.Delay(10000);
+                    await System.Threading.Tasks.Task.Delay(10000);
                     if (scoreTipMsg == null)
                     {
                         try
@@ -2522,6 +2525,7 @@ namespace prj202405
                             Console.WriteLine("删除评分提示时出错:" + e.Message);
                         }
                     }
+                 //   return 0;
                 });
             }
 
@@ -2681,13 +2685,13 @@ namespace prj202405
                 // await botClient.SendTextMessageAsync(chatId: cq.Message.Chat.Id, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu), disableWebPagePreview: true);
                 string imgPath = "搜索横幅.gif";
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                Telegram.Bot.Types.Message message2 = await Program.botClient.SendPhotoAsync(
+                Telegram.Bot.Types.Message message2 = Program.botClient.SendPhotoAsync(
               chatId: cq.Message.Chat.Id
                   , Photo2, null,
                  caption: result + tailmsg,
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(menu),
-                   protectContent: false);
+                   protectContent: false).Result;
                 bot_DeleteMessageV2(cq.Message.Chat.Id, message2.MessageId, 30);
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
@@ -2702,7 +2706,7 @@ namespace prj202405
                     obj.Add("txt", result);
                     obj.Add("menu", menu);
                     logCls.log(obj, "detailClickDir");
-                    Telegram.Bot.Types.Message m = await botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+                    Telegram.Bot.Types.Message m =   botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu)).Result;
 
                     logCls.log(m, "detailClickLogDir");
                 }
@@ -2726,7 +2730,7 @@ namespace prj202405
                 //  botClient.SendTextMessageAsync()
                 //  botClient.EditMessageCaptionAsync
                 //  botClient.EditMessageTextAsync
-                await botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+                  botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
             }
             catch (Exception e)
             {
@@ -2742,7 +2746,7 @@ namespace prj202405
                 {
                     try
                     {
-                        await botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
+                        botClient.AnswerCallbackQueryAsync(cq.Id, "已经显示了", true);
                     }
                     catch (Exception ex)
                     {
@@ -2753,7 +2757,7 @@ namespace prj202405
                 {
                     Console.WriteLine("编辑联系方式时出错:" + e.Message);
                 }
-                await biz_other._SaveConfig();
+                  biz_other._SaveConfig();
                 // }
 
 

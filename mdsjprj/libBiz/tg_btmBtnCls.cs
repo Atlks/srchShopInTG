@@ -276,7 +276,7 @@ namespace mdsj.libBiz
             //todo reply
         }
 
-        public static async Task evt_btm_btn_zhuliBenqunAsync(Update update)
+        public static void evt_btm_btn_zhuliBenqunAsync(Update update)
         {
             string tips = "如果您是Telegram VIP会员,请为本群助力, 提升群功能! ";
             var btn = "🔥 点击助力本群";
@@ -288,12 +288,12 @@ namespace mdsj.libBiz
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
             Console.WriteLine(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
-            var msgNew = await botClient.SendTextMessageAsync(
+            var msgNew =   botClient.SendTextMessageAsync(
                                   update.Message.Chat.Id, tips,
                                   replyMarkup: InlineKeyboardMarkup1,
                                   replyToMessageId: update.Message.MessageId
 
-                          );
+                          ).Result;
 
             dltMsgDelay(update, msgNew);
         }
@@ -329,7 +329,7 @@ namespace mdsj.libBiz
             tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 121);
             tglib.bot_DeleteMessageV2(update.Message.Chat.Id, msgNew.MessageId, 120);
         }
-        public static async Task btm_btnClk(Update update)
+        public static async System.Threading.Tasks.Task btm_btnClk(Update update)
         {
             //if (update?.Message?.Text == "代付")
             //{

@@ -284,7 +284,7 @@ namespace prj202405
 
             string Path = "今日促销商家.gif";
             if (results.Count > 0)
-                await bot_sendMsgToMlt(Path, plchdTxt, results);
+                  bot_sendMsgToMlt(Path, plchdTxt, results);
             dbgCls.print_ret(__METHOD__, 0);
         }
 
@@ -448,7 +448,7 @@ namespace prj202405
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
             if (results.Count > 0)
-                await bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
+                   bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
         }
 
         string CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
@@ -463,7 +463,7 @@ namespace prj202405
             string Path = "娱乐消遣.gif";
 
             //  if (results.Count > 0)
-            await bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
+              bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
         }
 
@@ -478,7 +478,7 @@ namespace prj202405
             //   var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
             //   if(results.Count>0)
-            await bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
+              bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
         }
 
 
@@ -491,7 +491,7 @@ namespace prj202405
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
             //   if (results.Count > 0)
-            await bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
+              bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
 
         }
         public static async void z_wucan()
@@ -501,7 +501,7 @@ namespace prj202405
             //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
             // if (results.Count > 0)
-            await bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
+              bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
 
 
         }
@@ -513,7 +513,7 @@ namespace prj202405
             //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
             //   if (results.Count > 0)
-            await bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
+              bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
 
 
 

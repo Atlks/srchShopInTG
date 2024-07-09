@@ -105,7 +105,7 @@ namespace prj202405
         //}
 
 
-        internal static async Task testAsync()
+        internal static async System.Threading.Tasks.Task testAsync()
         {
 
             Console.WriteLine("Column1\tColumn2\tColumn3");
@@ -113,9 +113,9 @@ namespace prj202405
             Console.WriteLine("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
          
             // 使用 Task.Run 启动一个新的任务
-            Task newTask = Task.Run(() =>{
-                asyncF();
-            });
+            //Task newTask = Task.Run(() =>{
+            //    asyncF();
+            //});
             Console.WriteLine("sync  log");
             //  tts("此消息来了11");
             geenBtns();
@@ -177,7 +177,7 @@ namespace prj202405
             string cryptoSymbols = "bitcoin,ethereum,optimism,arbitrum,chainlink,dogecoin,binancecoin,solana,shiba-inu,ripple";
             //  
             // 启动一个新线程执行获取加密货币价格的任务
-            Task.Run(async () =>
+            TaskRun(async () =>
             {
 
                 var prices = await GetCryptoPricesAsync(cryptoSymbols);
@@ -338,6 +338,8 @@ namespace prj202405
 
         }
 
+      
+
         private static void geenBtns()
         { // Create the keyboard object
           
@@ -401,7 +403,7 @@ namespace prj202405
             //  text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
             //  showAlert: true); // 这是显示对话框的关键);
             //return;
-            await Task.Delay(3000);
+            await System.Threading.Tasks.Task.Delay(3000);
             Console.WriteLine("...exit from async ");
             return 888;
             
@@ -443,7 +445,7 @@ namespace prj202405
             }
         }
 
-        private static async Task chkTgVld()
+        private static async System.Threading.Tasks.Task chkTgVld()
         {
             List<SortedList> rsRztInlnKbdBtn = Qe_qryV2("mercht商家数据", "",
               null, null, row => row, storeEngFunRefCls.rnd_next4SqltRf());

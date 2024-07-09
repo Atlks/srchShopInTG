@@ -17,7 +17,7 @@ namespace mdsj.lib
         //
         public static string _subgraphUrl = "https://api.thegraph.com/subgraphs/name/aave/protocol-multy-raw";
 
-        public static async Task GetCollateralInfo(string userAddress)
+        public static void GetCollateralInfo(string userAddress)
         {
             try
             {
@@ -63,10 +63,10 @@ namespace mdsj.lib
                         Content = content
                     };
 
-                    using (var response = await client.SendAsync(request))
+                    using (var response =   client.SendAsync(request).Result)
                     {
                         response.EnsureSuccessStatusCode();
-                        var responseContent = await response.Content.ReadAsStringAsync();
+                        var responseContent =  response.Content.ReadAsStringAsync().Result;
                         File.WriteAllText("aave.json", responseContent);
                         var responseData = JsonConvert.DeserializeObject<JObject>(responseContent);
 

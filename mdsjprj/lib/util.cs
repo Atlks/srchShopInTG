@@ -75,7 +75,7 @@ namespace mdsj.lib
         {
 
             // 使用 Task.Run 启动一个新的任务
-            Task newTask = Task.Run(() => {
+            callAsync(() => {
                 try
                 {
                     var __METHOD__ = "playMp3";
@@ -116,7 +116,7 @@ namespace mdsj.lib
         }
 
 
-        public static async Task playMp3V2(string mp3FilePath)
+        public static void playMp3V2(string mp3FilePath)
         {
             try
             {
@@ -162,7 +162,7 @@ namespace mdsj.lib
   <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
   <EnableComHosting>true</EnableComHosting>
          */
-        public static async Task playMp3(string mp3FilePath)
+        public static void playMp3(string mp3FilePath)
         {
             try
             {

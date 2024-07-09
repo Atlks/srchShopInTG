@@ -248,7 +248,7 @@ namespace mdsj.libBiz
             await biz_other._SaveConfig();
             try
             {
-                await tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
+                  tglib.bot_dltMsgThenSendmsg(update.Message.Chat.Id, update.Message.MessageId, "商家添加成功", 5);
             }
             catch (Exception ex)
             {

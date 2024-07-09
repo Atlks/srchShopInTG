@@ -93,7 +93,7 @@ namespace mdsj.libBiz
         }
 
 
-        public static async Task StartSaveFotoAsync()
+        public static async System.Threading.Tasks.Task StartSaveFotoAsync()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             print_call_FunArgs(__METHOD__, func_get_args());
@@ -145,7 +145,7 @@ namespace mdsj.libBiz
             print_ret(__METHOD__, 0);
         }
 
-        private static async Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
+        private static async System.Threading.Tasks.Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
         {
 
             string reqThreadId = geneReqid();
@@ -165,7 +165,7 @@ namespace mdsj.libBiz
                 }
                 if (update.Message?.Type == Telegram.Bot.Types.Enums.MessageType.Voice)  // Adjust this condition based on your voting mechanism
                 {
-                    await SendThankYouMessage(update.Message.Chat.Id);
+                      SendThankYouMessage(update.Message.Chat.Id);
                     return;
                 }
           
@@ -254,7 +254,7 @@ namespace mdsj.libBiz
             throw new NotImplementedException();
         }
 
-        private static async Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
+        private static async System.Threading.Tasks.Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVideoNoteAsync";
             print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -284,7 +284,7 @@ namespace mdsj.libBiz
         }
 
 
-        private static async Task Bot_OnVoiceAsync(Update update, string reqThreadId)
+        private static async System.Threading.Tasks.Task Bot_OnVoiceAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnVoiceAsync";
             print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -322,7 +322,7 @@ namespace mdsj.libBiz
             print_ret(__METHOD__, 0);
         }
 
-        private static async Task Bot_OnDocAsync(Update update, string reqThreadId)
+        private static async System.Threading.Tasks.Task Bot_OnDocAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnDoc";
             print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -351,7 +351,7 @@ namespace mdsj.libBiz
             print_ret(__METHOD__, 0);
         }
 
-        private static async Task Bot_OnAudioAsync(Update update, string reqThreadId)
+        private static async System.Threading.Tasks.Task Bot_OnAudioAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnAudioAsync";
             print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -436,7 +436,7 @@ namespace mdsj.libBiz
            
 
             // 这是一个示例的异步任务
-              Task.Run(() =>
+              TaskRun(() =>
             {
                 string DataDir = "fullTxtSrchIdxdataDir";
                 Thread.Sleep(7000);
@@ -460,7 +460,7 @@ namespace mdsj.libBiz
 
         }
 
-        private static async Task onFotoAsync(Message message)
+        private static async System.Threading.Tasks.Task onFotoAsync(Message message)
         {
             try
             {
@@ -470,7 +470,7 @@ namespace mdsj.libBiz
                 var fileName = photo.FileUniqueId;
 
                 //  var videoFileId = update.Message.Video.FileId;
-                var file = await botClient_QunZzhushou.GetFileAsync(fileId);
+                var file =   botClient_QunZzhushou.GetFileAsync(fileId).Result;
                 var filePathInTg = file.FilePath;
 
 

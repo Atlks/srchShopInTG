@@ -37,7 +37,7 @@ namespace mdsj.lib
     internal class adChkr
     {
 
-        public static async Task logic_chkad(string text, string uid, long grpid, Action act)
+        public static void logic_chkad(string text, string uid, long grpid, Action act)
         {
             var __METHOD__ = "logic_chkad";
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));

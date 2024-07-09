@@ -115,7 +115,7 @@ namespace prj202405.lib
             }
         }
 
-        public static async Task tts(string txt)
+        public static void tts(string txt)
         {
             if (txt == null)
                 return;
@@ -134,7 +134,7 @@ namespace prj202405.lib
 
         public static void ExecuteAfterDelay(int millisecondsDelay, Action action)
         {
-            Task.Delay(millisecondsDelay).ContinueWith(_ =>
+            System.Threading.Tasks.Task.Delay(millisecondsDelay).ContinueWith(_ =>
             {
 
 

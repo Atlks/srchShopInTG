@@ -22,7 +22,7 @@ namespace mdsj.lib
     internal class menuMng
     {
 
-        public static async Task evt_btm_menuitem_clickV2(long? chat_id, string imgPath, string msgtxt, IReplyMarkup rplyKbdMkp, Update? update)
+        public static void evt_btm_menuitem_clickV2(long? chat_id, string imgPath, string msgtxt, IReplyMarkup rplyKbdMkp, Update? update)
         {
             // [CallerMemberName] string methodName = ""
             //  CallerMemberName 只能获取上一级的调用方法，不能本级别的，只好手工赋值了
@@ -36,13 +36,13 @@ namespace mdsj.lib
             {
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //   Message message2 =   await Program.botClient.EditMessageReplyMarkupAsync(chat_id,(int)update?.Message?.MessageId, rplyKbdMkp);
-                Message message2 = await Program.botClient.SendTextMessageAsync(
+                Message message2 = botClient.SendTextMessageAsync(
                 chat_id, msgtxt,
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true
                    , replyToMessageId: update.Message.MessageId
-                   );
+                   ).Result;
                 //  Program.botClient.SendTextMessageAsync()
                 Console.WriteLine(JsonConvert.SerializeObject(message2));
 
@@ -56,7 +56,7 @@ namespace mdsj.lib
 
 
         }
-        public static async Task evt_btm_menuitem_click(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
+        public static void evt_btm_menuitem_click(long? chat_id, string imgPath, string msgtxt, InlineKeyboardMarkup rplyKbdMkp, Update? update)
         {
             // [CallerMemberName] string methodName = ""
             //  CallerMemberName 只能获取上一级的调用方法，不能本级别的，只好手工赋值了
@@ -72,11 +72,11 @@ namespace mdsj.lib
                 
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //   Message message2 =   await Program.botClient.EditMessageReplyMarkupAsync(chat_id,(int)update?.Message?.MessageId, rplyKbdMkp);
-                Message message2 = await Program.botClient.SendTextMessageAsync(                    
+                Message message2 =  botClient.SendTextMessageAsync(                    
                 chat_id, msgtxt,
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
-                   protectContent: false, disableWebPagePreview: true);
+                   protectContent: false, disableWebPagePreview: true).Result;
                 Console.WriteLine(JsonConvert.SerializeObject(message2));
 
 

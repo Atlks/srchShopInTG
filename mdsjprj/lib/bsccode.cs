@@ -31,6 +31,7 @@ namespace mdsj.lib
         }
         public static List<SortedList> ReadAsListHashtable(string f)
         {
+         //   File
             return json_decode(System.IO.File.ReadAllText(f));
         }
         public static SortedList ldHstb
@@ -94,14 +95,15 @@ namespace mdsj.lib
             return updatedSet;
         }
 
-        static async Task foreachProcessFilesAsync(string folderPath, Func<string, Task> fileAction)
+        static void foreachProcessFilesAsync(string folderPath, Func<string, Task> fileAction)
         {
             if (System.IO.Directory.Exists(folderPath))
             {
                 string[] files = System.IO.Directory.GetFiles(folderPath);
                 foreach (string file in files)
                 {
-                    await fileAction(file);
+                    
+                      fileAction(file);
                 }
             }
             else
@@ -214,11 +216,42 @@ namespace mdsj.lib
         {
             return args.ToString();
         }
+        public static void TaskRun(Action value)
+        {
+            callAsync(value);
+        }
+        public static void TaskRun(Func<System.Threading.Tasks.Task> value)
+        {
+            callAsync(value);
+        }
+        public static void callAsync(Action task1)
+        {
+            // 使用 Task.Run 启动一个新的任务
+            System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
+            {
+                // callxTryJmp(task1);
+                try
+                {
+                    task1();
+                }
+                catch (Exception e)
+                {
+                    print_catchEx("callAsync", e);
+                }
+
+
+                //  callxTryJmp(OnMsg, update, reqThreadId);
+
+            });
+
+
+            //   await Task.Run(action);
+        }
 
         public static void callAsync(Func<object> task1)
         {
             // 使用 Task.Run 启动一个新的任务
-            Task newTask = Task.Run(() =>
+            System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
             {
                 // callxTryJmp(task1);
                 try
@@ -330,11 +363,11 @@ namespace mdsj.lib
 
             return words;
         }
-        public static void callxTryJmp(Delegate callback, params object[] objs)
+        public static object callxTryJmp(Delegate callback, params object[] objs)
         {
             try
             {
-                callx(callback, objs);
+           return     callx(callback, objs);
 
             }
             catch (jmp2endEx e)
@@ -346,7 +379,7 @@ namespace mdsj.lib
             //{
             //    print_catchEx(nameof(MsgHdlrProcess), e);
             //}
-
+            return 0;
         }
 
         public static object callx(string authExp, Delegate callback, params object[] args)

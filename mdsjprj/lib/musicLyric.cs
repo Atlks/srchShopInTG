@@ -43,12 +43,12 @@ namespace mdsj.lib
     // 使用示例
     public class Program22
     {
-        public static async Task Main2(string[] args)
-        {
-            LyricsFetcher fetcher = new LyricsFetcher();
-            string lyrics = await fetcher.GetLyricsAsync("Coldplay", "Adventure of a Lifetime");
-            Console.WriteLine(lyrics);
-        }
+        //public static void Main2(string[] args)
+        //{
+        //    LyricsFetcher fetcher = new LyricsFetcher();
+        //    string lyrics = await fetcher.GetLyricsAsync("Coldplay", "Adventure of a Lifetime");
+        //    Console.WriteLine(lyrics);
+        //}
     }
 
 }

@@ -55,7 +55,7 @@ namespace prj202405.lib
          
          */
         // sendmsg4timrtask
-        public static async Task bot_sendMsgToMlt(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
+        public static void bot_sendMsgToMlt(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results)
         {
 
             var __METHOD__ = "sendMsg";
@@ -110,11 +110,11 @@ namespace prj202405.lib
                 Console.WriteLine($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
-        public static async Task SendThankYouMessage(long chatId)
+        public static void SendThankYouMessage(long chatId)
         {
             try
             {
-                await botClient_QunZzhushou.SendTextMessageAsync(chatId, "感谢投票");
+                  botClient_QunZzhushou.SendTextMessageAsync(chatId, "感谢投票");
             }
             catch (Exception ex)
             {
@@ -144,7 +144,7 @@ namespace prj202405.lib
             return fileFullPath;
         }
 
-        public static async Task bot_sendMsgToMltV2(string imgPath, string msgtxt, string wdss)
+        public static void bot_sendMsgToMltV2(string imgPath, string msgtxt, string wdss)
         {
             bot_sendMsgToMltV3(imgPath, msgtxt, wdss);
             //var __METHOD__ = "sendMsg";
@@ -184,7 +184,7 @@ namespace prj202405.lib
         }
 
 
-        public static async Task bot_sendMsgToMltV3(string imgPath, string msgtxt, string wdss4srch)
+        public static void bot_sendMsgToMltV3(string imgPath, string msgtxt, string wdss4srch)
         {
 
             var __METHOD__ = "sendMsg";
@@ -338,18 +338,18 @@ namespace prj202405.lib
         //         protectContent: false,
         //         disableWebPagePreview: true);
 
-        private static async Task sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
+        private static void sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
         {
             try
             {
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                Message message2 = await Program.botClient.SendPhotoAsync(
+                Message message2 =   Program.botClient.SendPhotoAsync(
                chatid
                   , Photo2, null,
                   msgtxt,
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(results),
-                   protectContent: false);
+                   protectContent: false).Result;
                 Console.WriteLine(JsonConvert.SerializeObject(message2));
             }
             catch (Exception ex) { Console.WriteLine(ex.ToString()); }
@@ -456,7 +456,7 @@ namespace prj202405.lib
 
         }
         //出错后执行的方法
-        public static Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
+        public static System.Threading.Tasks.Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
             Console.WriteLine("FUN bot_pollingErrorHandler()");
             try
@@ -476,15 +476,15 @@ namespace prj202405.lib
 
             }
             Console.WriteLine("END FUN bot_pollingErrorHandler()");
-            return Task.CompletedTask;
+            return System.Threading.Tasks.Task.CompletedTask;
         }
         //删除别人信息
-        public static async Task bot_DeleteMessageV2(long chatId, int msgid, int second)
+        public static void bot_DeleteMessageV2(long chatId, int msgid, int second)
 
         {
-            _ = Task.Run(async () =>
+           callAsync(async () =>
                 {
-                    await Task.Delay(second * 1000);
+                    await System.Threading.Tasks.Task.Delay(second * 1000);
 
                     try
                     {
@@ -494,6 +494,7 @@ namespace prj202405.lib
                     {
                         Console.WriteLine("删除他人商家搜索信息时出错:" + e.Message);
                     }
+                    
                 });
 
         }
@@ -537,7 +538,7 @@ namespace prj202405.lib
                 }
             }
         }
-        public static async Task tg_addChtid(Update update)
+        public static void tg_addChtid(Update update)
         {
             try
             {
@@ -724,12 +725,12 @@ namespace prj202405.lib
             //  if (update?.CallbackQuery?.Message?.Chat?.Id != null)
             return update?.CallbackQuery?.Message?.Chat?.Id;
         }
-        public static async Task bot_dltMsgThenSendmsg(long chatId, int msgid, string text, int second)
+        public static void bot_dltMsgThenSendmsg(long chatId, int msgid, string text, int second)
         {
             Message? msg = null;
             try
             {
-                msg = await Program.botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Html, replyToMessageId: msgid);
+                msg =   Program.botClient.SendTextMessageAsync(chatId, text, parseMode: ParseMode.Html, replyToMessageId: msgid).Result;
             }
             catch (Exception e)
             {
@@ -739,9 +740,9 @@ namespace prj202405.lib
             if (msg == null)
                 return;
 
-            _ = Task.Run(async () =>
+            callAsync(async () =>
             {
-                await Task.Delay(second * 1000);
+                await System.Threading.Tasks.Task.Delay(second * 1000);
 
                 try
                 {
