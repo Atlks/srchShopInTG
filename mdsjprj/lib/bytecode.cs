@@ -128,6 +128,19 @@ namespace mdsj.lib
                 }
             }
         }
+
+        public static object gtfld(object Obj, string fld, object defVal)
+        {
+
+            if (Obj is SortedList)
+            {
+                return arrCls.ldfld((SortedList)Obj, fld, defVal);
+            }
+            else
+            {
+                return ldfld(Obj, fld, defVal);
+            }
+        }
         public static object getFld(object Obj, string fld, object defVal)
         {
 
@@ -398,6 +411,54 @@ namespace mdsj.lib
             // jmp2exitFlag = true;
             throw new jmp2endEx();
         }
+        public static object callxTryx(string methodName, params object[] args)
+        {
+
+            var __METHOD__ = methodName;
+            print_call_FunArgs(methodName, dbgCls.func_get_args(args));
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Console.WriteLine("assemblies.Len=>" + assemblies.Length);
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            Console.WriteLine("typeList.Len=>" + typeList.Count());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
+            Console.WriteLine("methodss.Len=>" + methodss.Count());
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+
+            if (methodInfo == null)
+            {
+                Console.WriteLine("......$$waring  .methodinfo is null");
+                print_ret_adv(__METHOD__, "");
+                return null;
+            }
+
+
+            var delegateType = typeof(Func<string, List<SortedList>>);
+            //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
+
+            // 假设你想要执行 YourMethodName 方法
+            //   object[] args = { };
+            object result = null;
+            try
+            {
+                result = methodInfo.Invoke(null, args);
+
+            }
+            catch (Exception e)
+            {
+                print_ex( nameof(callxTryx), e);
+            }
+
+
+            print_ret_adv(__METHOD__, result);
+            return result;
+            //Delegate.CreateDelegate(delegateType, methodInfo);
+        }
 
         public static object callx(string methodName, params object[] args)
         {
@@ -406,10 +467,13 @@ namespace mdsj.lib
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Console.WriteLine("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
+            Console.WriteLine("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods(BindingFlags.Static | BindingFlags.Public));
+                            .SelectMany(type => type.GetMethods( ));  //BindingFlags.Static| BindingFlags.Public
+            Console.WriteLine("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -417,7 +481,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                Console.WriteLine("..waring  .methodinfo is null");
+                Console.WriteLine("......$$waring  .methodinfo is null");
                 print_ret_adv(__METHOD__, "");
                 return null;
             }
@@ -444,8 +508,18 @@ namespace mdsj.lib
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
-
-        private static void print_ret_adv(string mETHOD__, object? result)
+        public static void CallAsAsyncTaskRun(Action act)
+        {
+            try
+            {
+                act();
+            }
+            catch (Exception e)
+            {
+                print_catchEx(nameof(CallAsAsyncTaskRun), e);
+            }
+        }
+        public static void print_ret_adv(string mETHOD__, object? result)
         {
             //try
             //{

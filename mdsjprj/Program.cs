@@ -228,24 +228,52 @@ namespace prj202405
             // Configure Kestrel to listen on a specific port
             builder.WebHost.ConfigureKestrel(serverOptions =>
             {
-                serverOptions.ListenAnyIP(5001); // 自定义端口号，例如5001
+                serverOptions.ListenAnyIP(5000); // 自定义端口号，例如5001
             });
             var app = builder.Build();
 
-            //http://localhost:5000/api?callGetlistFromDb=yourValue11
-            app.MapGet("/api", (string callGetlistFromDb,string 园区=null,int page=1) => {
-                Console.WriteLine("Received getlist: " + callGetlistFromDb);
-                //  return Results.Ok("OK");
-                SortedList map = new SortedList();
-                map.Add("limit", 5);
-                var list = getListFltr("mercht商家数据", null, null);
-                int start = (page - 1) * 10;
+            //http://localhost:5000/dafen?callGetlistFromDb=yourValue11
+           
+           
 
-                list = list.Slice(start, 10);
-                return encodeJson(list);
+            //拦截所有请求：
+            app.Run(async (HttpContext context) =>
+            {
+                // 获取当前请求的 URL
+                var request = context.Request;
+                var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
+
+                // 获取查询字符串
+                var queryString = request.QueryString.ToString();
+                string methd = request.Path;
+                methd = methd.Substring(1);
+                object rzt = callxTryx("Wbapi_" + methd, queryString.Substring(1));
+                await context.Response.WriteAsync(rzt.ToString());
             });
-
             app.Run();
+        }
+
+        //   http://localhost:5000/dafen?shangjiaID=yourValue11&dafen=3&uid=007
+        public static string Wbapi_dafen( string qrystr)
+        {
+            //shangjiaID,uid,dafen
+            SortedList dafenObj = getHstbFromQrystr(qrystr);
+            ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
+            return "ok";
+        }
+        public static string Wbapi_getlist(string qrystr)
+        {
+            //   Console.WriteLine("Received getlist: " + callGetlistFromDb);
+            //  return Results.Ok("OK");
+            SortedList dafenObj = getHstbFromQrystr(qrystr);
+            int page = (int)gtfld(dafenObj, "page",0);
+            SortedList map = new SortedList();
+            map.Add("limit", 5);
+            var list = getListFltr("mercht商家数据", null, null);
+            int start = (page - 1) * 10;
+
+            list = list.Slice(start, 10);
+            return encodeJson(list);
         }
 
         static async Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
@@ -255,6 +283,7 @@ namespace prj202405
             //  throw new Exception("myex");
             //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
 
+            //try todo map evt
             Task.Run(async () =>
             {
                 try

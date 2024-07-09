@@ -6,6 +6,7 @@ using Microsoft.VisualBasic;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -363,6 +364,37 @@ namespace prj202405.lib
             HashSet<string> st = LdHsstWordsFromFile(wdsFromfilePath);
             return (containRetMatchWd(text, st));
         }
+        public static SortedList getHstbFromQrystr(string queryString)
+        {
+            return ParseQueryStringToSortedList(queryString);
+        }
+            public static SortedList ParseQueryStringToSortedList(string queryString)
+        {
+            // 使用 HttpUtility.ParseQueryString 解析查询字符串
+            NameValueCollection queryParameters = HttpUtility.ParseQueryString(queryString);
+
+            // 创建一个新的 SortedList
+            SortedList sortedList = new SortedList();
+
+            // 将解析后的查询字符串参数添加到 SortedList 中
+            foreach (string key in queryParameters)
+            {
+                sortedList.Add(key, queryParameters[key]);
+            }
+
+            return sortedList;
+        }
+        public static string[] trimUper(string[] inputArray)
+        {
+            if (inputArray == null) return [];
+
+            return inputArray
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Select(s => s.Trim().ToUpper())
+            .ToArray();
+            //  return resultArray;
+        }
+
         public static bool containKwdsV2(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)
@@ -387,7 +419,13 @@ namespace prj202405.lib
 
             return false;
         }
-
+        public static string[] splt(string? text)
+        {
+            if (text == null)
+                return [];
+            else
+                return text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+        }
         public static bool containKwds(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)
