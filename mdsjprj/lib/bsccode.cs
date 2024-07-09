@@ -1,4 +1,4 @@
-﻿global using static mdsj.lib.bytecode;
+﻿global using static mdsj.lib.bsccode;
 using HtmlAgilityPack;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using prj202405.lib;
@@ -15,7 +15,7 @@ using static SqlParser.Ast.Statement;
 
 namespace mdsj.lib
 {
-    internal class bytecode
+    internal class bsccode
     {
         public static void WriteObj(string f, object obj)
         {

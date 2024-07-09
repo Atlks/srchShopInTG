@@ -19,6 +19,26 @@ namespace mdsj.lib
         {
             return obj.GetType().ToString();
         }
+
+
+        public static int gtfldInt(SortedList dafenObj, string fld, int df)
+        {
+            try
+            {
+                var obj = gtfld(dafenObj, fld, df);
+                return toInt(obj);
+            }catch(Exception e)
+            {
+                print_catchEx(nameof(gtfldInt), e);
+                return df;
+            }
+           
+        }
+
+        public static int toInt(object obj)
+        {
+            return Convert.ToInt32(obj);
+        }
         public static  int len(object obj)
         {
             if (IsString(obj))
