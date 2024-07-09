@@ -57,7 +57,7 @@ namespace mdsj.lib
                 catch (HttpRequestException e)
                 {
                     // 捕获并处理请求异常
-                    Console.WriteLine($"Request exception: {e.Message}");
+                   print($"Request exception: {e.Message}");
                     dbgCls.print_ret(__METHOD__, -0);
                     return null;
                 }

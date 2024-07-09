@@ -20,13 +20,13 @@ namespace mdsj.lib
         public void ob_start()
         {
             // 保存原始的输出
-            originalOutput = Console.Out;
+            originalOutput =System.  Console.Out;
 
             // 创建一个新的 StringWriter 实例
             stringWriter = new StringWriter();
 
             // 将 Console.Out 设置为 StringWriter 实例
-            Console.SetOut(stringWriter);
+          //  Console.SetOut(stringWriter);
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace mdsj.lib
             string output = stringWriter.ToString();
 
             // 恢复原始的输出
-            Console.SetOut(originalOutput);
+            System. Console.SetOut(originalOutput);
 
             // 释放 StringWriter
             stringWriter.Dispose();
@@ -76,13 +76,13 @@ namespace mdsj.lib
     //        ob.ob_start();
 
     //        // 输出一些内容
-    //        Console.WriteLine("Hello, World!");
-    //        Console.WriteLine("This is a test.");
+    //       print("Hello, World!");
+    //       print("This is a test.");
 
     //        // 获取并打印缓冲区内容
     //        string output = ob.ob_end();
-    //        Console.WriteLine("Buffered Output:");
-    //        Console.WriteLine(output);
+    //       print("Buffered Output:");
+    //       print(output);
     //    }
     //}
 

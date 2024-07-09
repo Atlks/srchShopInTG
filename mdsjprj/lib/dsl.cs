@@ -31,7 +31,7 @@ namespace mdsj.lib
 
         private static void dsl_parseLine(string line, int linenum, string[] lines)
         {
-            //   Console.WriteLine($"FUN dsl_parseLine() line:${line} linenum:${linenum}");
+            //  print($"FUN dsl_parseLine() line:${line} linenum:${linenum}");
             line = line.Trim();
             if (line.Length == 0)
             {
@@ -70,7 +70,7 @@ namespace mdsj.lib
             if (fun == "call")
                 dsl_funEvt_call(line);
 
-            //   Console.WriteLine($"ENDFUN dsl_parseLine()  ");
+            //  print($"ENDFUN dsl_parseLine()  ");
         }
 
         private static void dsl_funEvt_call(string line)
@@ -176,7 +176,7 @@ namespace mdsj.lib
 
         public static void echo(string line)
         {
-            Console.WriteLine(line);
+            print(line);
         }
         public static void JumpLoop指令()
         {

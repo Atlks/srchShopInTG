@@ -38,7 +38,7 @@ namespace mdsj.lib
         {
             while (true)
             {
-                Console.WriteLine(DateTime.Now);
+               print(DateTime.Now);
                 Thread.Sleep(5000);
             }
         }
@@ -56,7 +56,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
                 logCls.error_logV2(ex, "err.log");
             }
             try
@@ -87,7 +87,7 @@ namespace mdsj.lib
                         outputDevice.Init(audioFile);
                         outputDevice.Play();
 
-                        Console.WriteLine("Playing... Press any key to stop.");
+                       print("Playing... Press any key to stop.");
                         // Console.ReadKey(); // 按任意键停止播放
                         // 使当前线程休眠5秒钟
                         Thread.Sleep(sec * 1000);
@@ -107,7 +107,7 @@ namespace mdsj.lib
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex);
+                   print(ex);
                 }
 
             });
@@ -129,7 +129,7 @@ namespace mdsj.lib
                     outputDevice.Init(audioFile);
                     outputDevice.Play();
 
-                    Console.WriteLine("Playing... Press any key to stop.");
+                   print("Playing... Press any key to stop.");
                     // Console.ReadKey(); // 按任意键停止播放
                     // 使当前线程休眠30秒钟  使得启可以播放audio不会退出
                     Thread.Sleep(15*1000);
@@ -147,7 +147,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
             }
 
 
@@ -175,7 +175,7 @@ namespace mdsj.lib
                     outputDevice.Init(audioFile);
                     outputDevice.Play();
 
-                    Console.WriteLine("Playing... Press any key to stop.");
+                   print("Playing... Press any key to stop.");
                     // Console.ReadKey(); // 按任意键停止播放
                     // 使当前线程休眠5秒钟
                     Thread.Sleep(60000);
@@ -193,7 +193,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
             }
 
 

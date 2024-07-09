@@ -103,7 +103,7 @@ namespace libx
             {
                 // Create a process to execute the sqlite3 command
                 string cmdprm = $"\"{dbFilePath}\" \"{sqlQuery}\"";
-                Console.WriteLine(cmdprm);
+               print(cmdprm);
                 var processStartInfo = new ProcessStartInfo
                 {
                     FileName = "d:\\sqlite3.exe",

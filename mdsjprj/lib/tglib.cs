@@ -64,7 +64,7 @@ namespace prj202405.lib
             try
             {
                 // var  = plchdTxt;
-                //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+                // print(string.Format("{0}-{1}", de.Key, de.Value));
                 var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
                 //遍历方法三：遍历哈希表中的键值
@@ -73,13 +73,13 @@ namespace prj202405.lib
                     //if (Convert.ToInt64(de.Key) == Program.groupId)
                     //    continue;
                     var chatid = Convert.ToInt64(de.Key);
-                    Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
+                   print(" SendPhotoAsync " + chatid);//  Program.botClient.send
                     sendFoto(imgPath, msgtxt, results, chatid);
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, results)));
 
             }
@@ -103,11 +103,11 @@ namespace prj202405.lib
                     object value =   botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream), caption: "搜索结果", title: GetBaseFileName(mp3FilePath)).Result;
                 }
 
-                Console.WriteLine("MP3 文件已发送到群组！");
+               print("MP3 文件已发送到群组！");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"发送 MP3 文件时出错：{ex.Message}");
+               print($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
         public static void SendThankYouMessage(long chatId)
@@ -118,7 +118,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error sending message: {ex.Message}");
+               print($"Error sending message: {ex.Message}");
             }
         }
 
@@ -153,7 +153,7 @@ namespace prj202405.lib
             //try
             //{
             //    // var  = plchdTxt;
-            //    //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+            //    // print(string.Format("{0}-{1}", de.Key, de.Value));
             //    var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //    var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
             //    //遍历方法三：遍历哈希表中的键值
@@ -169,14 +169,14 @@ namespace prj202405.lib
             //        }
             //        catch (Exception e)
             //        {
-            //            Console.WriteLine(e);
+            //           print(e);
             //        }
             //    }
 
             //}
             //catch (Exception e)
             //{
-            //    Console.WriteLine(e);
+            //   print(e);
             //    logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, wdss)));
 
             //}
@@ -192,7 +192,7 @@ namespace prj202405.lib
 
 
             // var  = plchdTxt;
-            //  Console.WriteLine(string.Format("{0}-{1}", de.Key, de.Value));
+            // print(string.Format("{0}-{1}", de.Key, de.Value));
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
             //遍历方法三：遍历哈希表中的键值
@@ -303,7 +303,7 @@ namespace prj202405.lib
 
 
             var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
-            Console.WriteLine(" SendPhotoAsync " + chatid);//  Program.botClient.send
+           print(" SendPhotoAsync " + chatid);//  Program.botClient.send
             if (results3.Count > 0)
                 sendFoto(imgPath, msgtxt, results3, chatid);
         }
@@ -350,9 +350,9 @@ namespace prj202405.lib
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(results),
                    protectContent: false).Result;
-                Console.WriteLine(JsonConvert.SerializeObject(message2));
+               print(JsonConvert.SerializeObject(message2));
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {print(ex.ToString()); }
         }
 
         public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtons(string filePath)
@@ -458,7 +458,7 @@ namespace prj202405.lib
         //出错后执行的方法
         public static System.Threading.Tasks.Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-            Console.WriteLine("FUN bot_pollingErrorHandler()");
+           print("FUN bot_pollingErrorHandler()");
             try
             {
                 logErr2024(exception, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
@@ -467,7 +467,7 @@ namespace prj202405.lib
                     ApiRequestException apiRequestException => $"Telegram API 错误:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                     _ => exception.ToString()
                 };
-                Console.WriteLine(ErrorMessage);
+               print(ErrorMessage);
 
             }
             catch (Exception e)
@@ -475,7 +475,7 @@ namespace prj202405.lib
                 logErr2024(e, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
 
             }
-            Console.WriteLine("END FUN bot_pollingErrorHandler()");
+           print("END FUN bot_pollingErrorHandler()");
             return System.Threading.Tasks.Task.CompletedTask;
         }
         //删除别人信息
@@ -492,7 +492,7 @@ namespace prj202405.lib
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("删除他人商家搜索信息时出错:" + e.Message);
+                       print("删除他人商家搜索信息时出错:" + e.Message);
                     }
                     
                 });
@@ -555,7 +555,7 @@ namespace prj202405.lib
                         //}
                         //catch (Exception ex)
                         //{
-                        //    Console.WriteLine("告知不可二次编辑时出错:" + ex.Message);
+                        //   print("告知不可二次编辑时出错:" + ex.Message);
                         //}
                         break;
                     case UpdateType.CallbackQuery:
@@ -582,7 +582,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
         }
@@ -734,7 +734,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine("他人发了不合规的商家搜索信息,告知对方时出错:" + e.Message);
+               print("他人发了不合规的商家搜索信息,告知对方时出错:" + e.Message);
             }
 
             if (msg == null)
@@ -750,7 +750,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("删除他人商家搜索信息时出错:" + e.Message);
+                   print("删除他人商家搜索信息时出错:" + e.Message);
                 }
 
                 try
@@ -759,7 +759,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("他人发了不合规的商家搜索信息,删除信息时出错:" + e.Message);
+                   print("他人发了不合规的商家搜索信息,删除信息时出错:" + e.Message);
                 }
             });
         }

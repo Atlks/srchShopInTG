@@ -37,7 +37,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
 
 
@@ -68,7 +68,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-                Console.WriteLine($"Failed to log error: {ex.Message}");
+               print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -93,7 +93,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-                Console.WriteLine($"Failed to log error: {ex.Message}");
+               print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -114,7 +114,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
 
 

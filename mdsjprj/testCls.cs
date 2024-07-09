@@ -108,15 +108,15 @@ namespace prj202405
         internal static async System.Threading.Tasks.Task testAsync()
         {
 
-            Console.WriteLine("Column1\tColumn2\tColumn3");
-            Console.WriteLine("Data1\tData2\tData3");
-            Console.WriteLine("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
+           print("Column1\tColumn2\tColumn3");
+           print("Data1\tData2\tData3");
+           print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
          
             // 使用 Task.Run 启动一个新的任务
             //Task newTask = Task.Run(() =>{
             //    asyncF();
             //});
-            Console.WriteLine("sync  log");
+           print("sync  log");
             //  tts("此消息来了11");
             geenBtns();
             try
@@ -126,12 +126,12 @@ namespace prj202405
             }
             catch (Exception ex)
             {
-                Console.WriteLine("除法错误：" + ex.Message);
+               print("除法错误：" + ex.Message);
             }
             //for(int i=0;i<100;i++)
             //{
             //    Thread.Sleep(50);
-            //    Console.WriteLine(str_repeatV2("=", i) + "=>");
+            //   print(str_repeatV2("=", i) + "=>");
             //}
             var mymm4shareCfg = "name=缅甸&fmt=sqlt&storeEngr=rnd_next4SqltRf";
             SortedList valueMM = castUrlQueryString2hashtable(mymm4shareCfg);
@@ -155,7 +155,7 @@ namespace prj202405
             {
                 engine.Execute("a= 555");
                 var result = engine.Script.a;
-                Console.WriteLine(result); // 输出 8
+               print(result); // 输出 8
             }
 
             var id = "0624按摩552110457";
@@ -170,7 +170,7 @@ namespace prj202405
             string question = "世界一共多少个城市";
 
             //     string answer = await Program2024.srchByChtgpt(apiKey, question);
-            //     Console.WriteLine(answer);
+            //    print(answer);
 
 
             // 指定加密货币符号，例如 "bitcoin,ethereum,ripple"
@@ -181,7 +181,7 @@ namespace prj202405
             {
 
                 var prices = await GetCryptoPricesAsync(cryptoSymbols);
-                Console.WriteLine(json_encode(prices));
+               print(json_encode(prices));
             });
 
             //  
@@ -263,7 +263,7 @@ namespace prj202405
                 //Sequence<Statement> ast = new Parser().ParseSql(sql_dbf);
                 //var updateString = JsonConvert.SerializeObject(ast, Formatting.Indented);
 
-                //     Console.WriteLine(updateString);
+                //    print(updateString);
                 //   ast.
                 //    ArrayList a = filex.rdWdsFromFile("底部公共菜单.txt");
                 //   timerCls.tmrEvt_sendMsg4keepmenu("今日促销商家.gif", timerCls.plchdTxt, Program._btmBtns());
@@ -293,18 +293,18 @@ namespace prj202405
 
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
-                Console.WriteLine("line1633");
+               print("line1633");
 
-                Console.WriteLine(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
-
-
-
-                Console.WriteLine(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+               print(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
 
 
-                Console.WriteLine(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
 
-                Console.WriteLine(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+               print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+
+
+               print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
+
+               print(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
@@ -321,7 +321,7 @@ namespace prj202405
                 //Console.WriteLine("【新词识别】：{0}", string.Join("/ ", segments));
 
                 var segments = segmenter.CutForSearch("谁知道会所联系方式呢"); // 搜索引擎模式
-                Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+               print("【搜索引擎模式】：{0}", string.Join("/ ", segments));
                 // timerCls.z_actSj();
                 //  timerCls.renqi();
                 //     timerCls.z21_yule();
@@ -391,12 +391,12 @@ namespace prj202405
         //    WriteObj("btns.json", keyboard);
 
             // Print the JSON string to the console
-            Console.WriteLine(keyboardJson);
+           print(keyboardJson);
         }
         private static async Task<object> asyncF()
         {
-            Console.WriteLine("enter asyncfun ");
-            Console.WriteLine("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
+           print("enter asyncfun ");
+           print("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
             //弹框
             //await botClient.AnswerCallbackQueryAsync(
             //  callbackQueryId: update.CallbackQuery.Id,
@@ -404,7 +404,7 @@ namespace prj202405
             //  showAlert: true); // 这是显示对话框的关键);
             //return;
             await System.Threading.Tasks.Task.Delay(3000);
-            Console.WriteLine("...exit from async ");
+           print("...exit from async ");
             return 888;
             
         }
@@ -420,7 +420,7 @@ namespace prj202405
             foreach (var value in map.Values)
             {
                 String s = $" <option value=\"{value}\">";
-                Console.WriteLine(s);
+               print(s);
             }
         }
 
@@ -436,12 +436,12 @@ namespace prj202405
                     return false;
                 });
 
-                Console.WriteLine(json_encode(rztLi));
+               print(json_encode(rztLi));
 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+               print(e.Message);
             }
         }
 
@@ -456,12 +456,12 @@ namespace prj202405
                 {
                     if (map["园区"] == "东风园区" && map["商家"] == "沙县 小吃")
                     {
-                        Console.WriteLine("dbg");
+                       print("dbg");
                     }
 
                     if (map["id"] == "vekzrqwxkeyuxpcxzkjdnfdsbt")
                     {
-                        Console.WriteLine("dbg");
+                       print("dbg");
                     }
                     string tg = trim_RemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
                     if (tg == "")
@@ -494,7 +494,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
 
             }
@@ -514,7 +514,7 @@ namespace prj202405
                 string line = ChineseCharacterConvert.Convert.ToTraditional(wd) + "=" + wd;
                 li.Add(line);
                 n++;
-                Console.WriteLine(n);
+               print(n);
 
             }
             // file_put_contents("trd2smpLib.json",json_encode(li));
@@ -542,7 +542,7 @@ namespace prj202405
                 }
                 catch (HttpRequestException e)
                 {
-                    Console.WriteLine($"Request error: {e.Message}");
+                   print($"Request error: {e.Message}");
                     dbgCls.print_ret(__METHOD__, 0);
                     return null;
                 }
@@ -673,7 +673,7 @@ namespace prj202405
                 System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
                 cityMap.Remove("Address");
                 cityMap.Add("cityname", city.Name);
-                Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
+               print(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
                 var addrS = (from ca in city.Address
                              select ca
                          )
@@ -684,7 +684,7 @@ namespace prj202405
                     addMap.Remove("Merchant");
                     addMap.Add("parkname", addx.Name);
                     addMap.Add("parkkwd", addx.CityKeywords);
-                    Console.WriteLine(JsonConvert.SerializeObject(addMap, Formatting.Indented));
+                   print(JsonConvert.SerializeObject(addMap, Formatting.Indented));
                     var rws = (from m in addx.Merchant
                                select m
                               )
@@ -696,15 +696,15 @@ namespace prj202405
                         mcht.Add("cityname", city.Name);
                         mcht.Add("parkname", addx.Name);
                         mcht.Add("parkkwd", addx.CityKeywords);
-                        Console.WriteLine(mcht["Category"]);
+                       print(mcht["Category"]);
                         //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
                         mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
                         mcht.Add("cateInt", (int)m.Category);
                         mcht.Add("cateEgls", m.Category.ToString());
                         //   mcht
 
-                        Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
-                        Console.WriteLine("..");
+                       print(JsonConvert.SerializeObject(mcht, Formatting.Indented));
+                       print("..");
                     }
 
                 }
@@ -735,7 +735,7 @@ namespace prj202405
                            select jo).ToList();
 
 
-            Console.WriteLine(JsonConvert.SerializeObject(results));
+           print(JsonConvert.SerializeObject(results));
 
 
             string showtitle = "spatime(ms):";
@@ -748,7 +748,7 @@ namespace prj202405
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
 
-            Console.WriteLine(showtitle + spantime);
+           print(showtitle + spantime);
         }
 
         private static void addData()
@@ -770,7 +770,7 @@ namespace prj202405
 
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
-            Console.WriteLine("spatime(ms):" + spantime);
+           print("spatime(ms):" + spantime);
 
         }
     }
@@ -792,7 +792,7 @@ namespace prj202405
 //        var shopsarr = it.Value<JArray>("Merchant");
 //        foreach (JObject shop in shopsarr)
 //        {
-//            Console.WriteLine(shop.GetValue("KeywordString").ToString());
+//           print(shop.GetValue("KeywordString").ToString());
 //        }
 
 //        }

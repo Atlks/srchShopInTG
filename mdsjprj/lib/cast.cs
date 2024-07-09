@@ -57,7 +57,7 @@ namespace mdsj.lib
 
             if (string.IsNullOrWhiteSpace(str))
             {
-                Console.WriteLine("Input string cannot be null or whitespace.");
+               print("Input string cannot be null or whitespace.");
                 return 0;
                 //    throw new ArgumentNullException(nameof(str), "Input string cannot be null or whitespace.");
             }
@@ -68,7 +68,7 @@ namespace mdsj.lib
             }
             else
             {
-                Console.WriteLine("Input string is not in the correct format for a double.");
+               print("Input string is not in the correct format for a double.");
                 //  throw new FormatException("Input string is not in the correct format for a double.");
                 return 0;
             }

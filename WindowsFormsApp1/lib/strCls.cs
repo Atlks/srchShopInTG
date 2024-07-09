@@ -1,4 +1,4 @@
-﻿ 
+﻿using static prj202405.lib.corex;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
@@ -142,7 +142,7 @@ namespace prj202405.lib
                 {
                     if (text.Contains(kwd2))
                     {
-                        Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                       print(" str.containKwds() kwd=>" + kwd2);
                         return true;
                     }
                        
@@ -169,7 +169,7 @@ namespace prj202405.lib
                     if (seasrchKw2ds.Contains(kwd2))
                     {
                         n++;
-                        Console.WriteLine(" contain kwd=>" + kwd2);
+                       print(" contain kwd=>" + kwd2);
                     }
                       
                 }
@@ -207,7 +207,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while reading the file: {ex.Message}");
+               print($"An error occurred while reading the file: {ex.Message}");
             }
 
             return linesHashSet;

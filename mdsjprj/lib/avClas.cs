@@ -131,12 +131,12 @@ namespace mdsj.lib
                 // Delete the intermediate WAV file
                 //   File.Delete(System.IO.Path.ChangeExtension(outputFilePath, ".wav"));
 
-                Console.WriteLine($"Successfully converted {inputFilePath} to {outputFilePath}");
+               print($"Successfully converted {inputFilePath} to {outputFilePath}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error during conversion: {ex.Message}");
-                Console.WriteLine($"Stack Trace: {ex.StackTrace}");
+               print($"Error during conversion: {ex.Message}");
+               print($"Stack Trace: {ex.StackTrace}");
             }
         }
 
@@ -152,7 +152,7 @@ namespace mdsj.lib
             // Convert video to MP3
             ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
             //return mp3FilePath;
-            Console.WriteLine($"Conversion completed: {mp3FilePath}");
+           print($"Conversion completed: {mp3FilePath}");
         }
 
         public static string AcoustIDApiKey = "AMsnvQgE0s";
@@ -220,7 +220,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
              
             }
           
@@ -277,7 +277,7 @@ namespace mdsj.lib
 
                 if (video == null)
                 {
-                    Console.WriteLine("未找到歌曲！");
+                   print("未找到歌曲！");
                     return "";
                 }
 
@@ -287,14 +287,14 @@ namespace mdsj.lib
 
                 if (streamInfo == null)
                 {
-                    Console.WriteLine("未找到音频流！");
+                   print("未找到音频流！");
                     return "";
                 }
                 Directory.CreateDirectory(dir);
                 // 下载音频流
                 var tempFile = Path.GetTempFileName();
               // string filePathTmp = dir + "/" + tempFile;
-                Console.WriteLine($"down tmpfile=>{tempFile}");
+               print($"down tmpfile=>{tempFile}");
                 youtube.Videos.Streams.DownloadAsync(streamInfo, tempFile).GetAwaiter().GetResult(); ;
 
                 // 转换为 MP3
@@ -302,18 +302,18 @@ namespace mdsj.lib
                 // 转换为 MP3
                 string fname = filex.ConvertToValidFileName2024(songName);
                 var outputFilePath = $"{dir}/{fname}.mp3";
-                Console.WriteLine($"outputFilePath =>{outputFilePath}");
+               print($"outputFilePath =>{outputFilePath}");
                   ConvertToMp3(tempFile, outputFilePath);
 
                 // 删除临时文件
               //  File.Delete(tempFile);
 
-                Console.WriteLine($"歌曲已下载并转换为 MP3：{outputFilePath}");
+               print($"歌曲已下载并转换为 MP3：{outputFilePath}");
                 return outputFilePath;
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
             dbgCls.print_ret(__METHOD__, 0);
             return "";

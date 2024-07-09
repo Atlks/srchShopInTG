@@ -76,13 +76,13 @@ namespace mdsj.lib
     //        ob.ob_start();
 
     //        // 输出一些内容
-    //        Console.WriteLine("Hello, World!");
-    //        Console.WriteLine("This is a test.");
+    //       print("Hello, World!");
+    //       print("This is a test.");
 
     //        // 获取并打印缓冲区内容
     //        string output = ob.ob_end();
-    //        Console.WriteLine("Buffered Output:");
-    //        Console.WriteLine(output);
+    //       print("Buffered Output:");
+    //       print(output);
     //    }
     //}
 

@@ -95,7 +95,7 @@ namespace prj202405.lib
 
                 if (!File.Exists(dbf))
                 {
-                    Console.WriteLine("not exist file dbf=>" + dbf);
+                   print("not exist file dbf=>" + dbf);
                     continue;
                 }
                 List<SortedList> sortedLists = qrySglFL(dbf);
@@ -280,7 +280,7 @@ namespace prj202405.lib
                         {
                             // 创建目录及所有上级目录
                             Directory.CreateDirectory(directoryPath);
-                            Console.WriteLine($"Created directory: {directoryPath}");
+                           print($"Created directory: {directoryPath}");
                         }
 
                     }
@@ -360,7 +360,7 @@ namespace prj202405.lib
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                   print(ex.Message);
                 }
                 listIot[objSave["id"]] = objSave;
             }

@@ -110,7 +110,7 @@ namespace prj202405.lib
                 catch (Exception e)
                 {
                     print_catchEx("foreach_hashtable", e);
-                    //   Console.WriteLine(e);
+                    //  print(e);
                 }
             }
         }
@@ -126,9 +126,13 @@ namespace prj202405.lib
             print_varDump("tts", "mp3", mp3);
             playMp3V2(mp3);
         }
-        public static void print(string v)
+        public static void print(object v)
         {
-            Console.WriteLine(v);
+          System.Console. WriteLine(v);
+        }
+        public static void print(string format, object arg0)
+        {
+            System.Console.WriteLine(format, arg0);
         }
         public static string prjdir = @"../../../";
 

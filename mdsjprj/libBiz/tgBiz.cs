@@ -76,7 +76,7 @@ namespace mdsj.libBiz
                         obj.Add("id", uid);
                         obj.Add("user", update.Message.From);
                         ormJSonFL.save(obj, "aduser.json");
-                        Console.WriteLine("可能广告");
+                       print("可能广告");
                         //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
 
                     };
@@ -98,7 +98,7 @@ namespace mdsj.libBiz
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
             }
 
 
@@ -114,7 +114,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("告知新增联系方式时获取到时出错:" + ex.Message);
+                   print("告知新增联系方式时获取到时出错:" + ex.Message);
                 }
             };
             var merchant = new Merchant();
@@ -252,7 +252,7 @@ namespace mdsj.libBiz
             }
             catch (Exception ex)
             {
-                Console.WriteLine("告知商家添加成功时出错:" + ex.Message);
+               print("告知商家添加成功时出错:" + ex.Message);
             }
         }
 
@@ -262,13 +262,13 @@ namespace mdsj.libBiz
             {
                 // 获取机器人的信息
                 Telegram.Bot.Types.User me = await botClient.GetMeAsync();
-                Console.WriteLine($"Bot ID: {me.Id}");
-                Console.WriteLine($"Bot Name: {me.FirstName}");
-                Console.WriteLine($"Bot Username: {me.Username}");
+               print($"Bot ID: {me.Id}");
+               print($"Bot Name: {me.FirstName}");
+               print($"Bot Username: {me.Username}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -279,19 +279,19 @@ namespace mdsj.libBiz
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
               //  const string dir = "msgRcvDir";
                 Directory.CreateDirectory(dir);
-                Console.WriteLine("fun bot_logRcvMsgV2（）");
-                Console.WriteLine(updateString);
+               print("fun bot_logRcvMsgV2（）");
+               print(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir}/{timestamp}.json";
-                Console.WriteLine(fileName);
+               print(fileName);
                 filex.mkdir_forFile(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
-                Console.WriteLine("end fun bot_logRcvMsgV2（）");
+               print("end fun bot_logRcvMsgV2（）");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
         }
@@ -303,17 +303,17 @@ namespace mdsj.libBiz
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
           //      const string dir1 = "msgRcvDir1115";
                 Directory.CreateDirectory(dir1);
-                Console.WriteLine(updateString);
+               print(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir1}/{timestamp}.json";
-                Console.WriteLine(fileName);
+               print(fileName);
                 filex.mkdir_forFile(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
         }
@@ -325,17 +325,17 @@ namespace mdsj.libBiz
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
                 const string dir1 = "msgRcvDir1115";
                 Directory.CreateDirectory(dir1);
-               // Console.WriteLine(updateString);
+               //print(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir1}/{timestamp}.json";
-                Console.WriteLine(fileName);
+               print(fileName);
                 filex.mkdir_forFile(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
         }
@@ -389,7 +389,7 @@ namespace mdsj.libBiz
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
 
@@ -409,7 +409,7 @@ namespace mdsj.libBiz
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
             dbgCls.print_ret(__METHOD__, 0);
 
@@ -532,7 +532,7 @@ namespace mdsj.libBiz
                     return false;
 
                 // 
-                Console.WriteLine("搜索触发词 in isNumlMsgInGrp()");
+               print("搜索触发词 in isNumlMsgInGrp()");
                 var trgSearchKwds = " ";
                 var trgWd = biz_other.getTrgwdHash($"{prjdir}/cfg/搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
@@ -554,7 +554,7 @@ namespace mdsj.libBiz
                     return false;
                 }
 
-                Console.WriteLine("nml msg");
+               print("nml msg");
                 return true;
             }
             else  //prvt mode  ,,,not nml msg

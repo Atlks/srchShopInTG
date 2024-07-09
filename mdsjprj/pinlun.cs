@@ -79,7 +79,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                   print(e.Message);
                 }
             }
 

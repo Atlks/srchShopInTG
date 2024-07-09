@@ -54,7 +54,7 @@ namespace mdsj.lib
             File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
             string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
 
-            Console.WriteLine(prm_fileAbs);
+           print(prm_fileAbs);
             string str = call_exe_Pstr(exePath, scriptPath, prm_fileAbs);
 
             print_varDump(__METHOD__, $"call_exe_Pstr.retRaw", str);
@@ -94,7 +94,7 @@ namespace mdsj.lib
         }
         /**
       * // 示例用法
-     Action<int, int> add = (a, b) => Console.WriteLine($"Sum: {a + b}");
+     Action<int, int> add = (a, b) =>print($"Sum: {a + b}");
      object[] args = { 10, 20 };
      
      // 调用委托并传递参数数组
@@ -141,8 +141,8 @@ namespace mdsj.lib
                     }
 
                 }
-                Console.WriteLine($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
-                Console.WriteLine(e);
+               print($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
+               print(e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
@@ -163,7 +163,7 @@ namespace mdsj.lib
                 var type = Assembly.GetExecutingAssembly().GetType(className);
                 if (type == null)
                 {
-                    Console.WriteLine($"找不到类 '{className}'。");
+                   print($"找不到类 '{className}'。");
                     return;
                 }
 
@@ -181,7 +181,7 @@ namespace mdsj.lib
 
                 if (method == null)
                 {
-                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
+                   print($"找不到方法 '{methodName}' 或参数不匹配。");
                     return;
                 }
 
@@ -199,7 +199,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
+               print($"调用方法时发生错误：{ex.Message}");
             }
         }
 
@@ -209,7 +209,7 @@ namespace mdsj.lib
             var parts = classAndMethod.Split('.');
             if (parts.Length != 2)
             {
-                Console.WriteLine("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
+               print("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
                 return;
             }
 
@@ -222,7 +222,7 @@ namespace mdsj.lib
                 var type = Assembly.GetExecutingAssembly().GetType(className);
                 if (type == null)
                 {
-                    Console.WriteLine($"找不到类 '{className}'。");
+                   print($"找不到类 '{className}'。");
                     return;
                 }
 
@@ -233,7 +233,7 @@ namespace mdsj.lib
                 var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public, null, paramTypes, null);
                 if (method == null)
                 {
-                    Console.WriteLine($"找不到方法 '{methodName}' 或参数不匹配。");
+                   print($"找不到方法 '{methodName}' 或参数不匹配。");
                     return;
                 }
 
@@ -242,7 +242,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"调用方法时发生错误：{ex.Message}");
+               print($"调用方法时发生错误：{ex.Message}");
             }
         }
         /// <summary>

@@ -1,5 +1,5 @@
 ﻿
-
+using static prj202405.lib.corex;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -88,11 +88,11 @@ namespace prj202405.lib
                 //if (!File.Exists(filePath))
                 //{
                 //    File.WriteAllText(filePath, content);
-                //    Console.WriteLine("File created and content written.");
+                //   print("File created and content written.");
                 //}
                 if (!File.Exists(dbf))
                 {
-                    Console.WriteLine("not exist file dbf=>" + dbf);
+                   print("not exist file dbf=>" + dbf);
                     continue;
                 }
                 List<SortedList> sortedLists = qrySglFL(dbf);
@@ -242,7 +242,7 @@ namespace prj202405.lib
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.Message);
+                   print(ex.Message);
                 }
                 listIot[objSave["id"]] = objSave;
             }

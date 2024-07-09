@@ -65,9 +65,9 @@ namespace mdsj.lib
                     foreach (var symbol in symbols)
                     {
                         string url = $"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd";
-                        Console.WriteLine(url);
+                       print(url);
                         var response = await client.GetStringAsync(url);
-                        Console.WriteLine(response);
+                       print(response);
                         var json = JObject.Parse(response);
                         if (json[symbol] != null && json[symbol]["usd"] != null)
                         {
@@ -75,7 +75,7 @@ namespace mdsj.lib
                         }
                         else
                         {
-                            Console.WriteLine($"未能获取 {symbol} 的价格。");
+                           print($"未能获取 {symbol} 的价格。");
                         }
                     }
                 }
@@ -124,7 +124,7 @@ namespace mdsj.lib
         //    var gas = new HexBigInteger(300000);
         //    var receipt = await web3.Eth.Transactions.SendTransactionAndWaitForReceiptAsync(swapFunction.CreateTransactionInput(gas));
 
-        //    Console.WriteLine("Swap successful, transaction hash: " + receipt.TransactionHash);
+        //   print("Swap successful, transaction hash: " + receipt.TransactionHash);
         //}
 
 
@@ -149,7 +149,7 @@ namespace mdsj.lib
         //    var gas = new HexBigInteger(300000);
         //    var receipt = await web3.Eth.Transactions.SendTransactionAndWaitForReceiptAsync(approveFunction.CreateTransactionInput(account.Address, gas));
 
-        //    Console.WriteLine("Approval successful, transaction hash: " + receipt.TransactionHash);
+        //   print("Approval successful, transaction hash: " + receipt.TransactionHash);
         //}
 
         private const string ApiKey = "your_api_key";
@@ -169,16 +169,16 @@ namespace mdsj.lib
         //    var priceResult = await client.Spot.Market.GetPriceAsync("ETHUSDT");
         //    if (!priceResult.Success)
         //    {
-        //        Console.WriteLine($"Error retrieving ETH price: {priceResult.Error}");
+        //       print($"Error retrieving ETH price: {priceResult.Error}");
         //        return;
         //    }
 
         //    var ethPrice = priceResult.Data.Price;
-        //    Console.WriteLine($"Current ETH price: {ethPrice}");
+        //   print($"Current ETH price: {ethPrice}");
 
         //    // 计算需要购买的ETH数量
         //    var ethQuantity = usdAmount / ethPrice;
-        //    Console.WriteLine($"ETH quantity to buy: {ethQuantity}");
+        //   print($"ETH quantity to buy: {ethQuantity}");
 
         //    // 购买ETH
         //    var orderResult = await client.Spot.Order.PlaceOrderAsync(
@@ -190,11 +190,11 @@ namespace mdsj.lib
 
         //    if (orderResult.Success)
         //    {
-        //        Console.WriteLine("Order placed successfully");
+        //       print("Order placed successfully");
         //    }
         //    else
         //    {
-        //        Console.WriteLine($"Error placing order: {orderResult.Error}");
+        //       print($"Error placing order: {orderResult.Error}");
         //    }
         //}
 
@@ -205,16 +205,16 @@ namespace mdsj.lib
             return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            Console.WriteLine(DateTime.Now);
+           print(DateTime.Now);
             string url = "https://coinmarketcap.com/";
             //string htm = GetHtmlContent(url);
             //file_put_contents("cn2004.htm", htm);
-            Console.WriteLine("GetEthPrice()");
+           print("GetEthPrice()");
             double prs = (double)GetEthPrice();
             double bijiaoPrc = 3400;
             double pre = bijiaoPrc * 0.85;
             double next = bijiaoPrc * 1.015;
-            Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
+           print(json_encode((prs: prs, pre: pre, next: next)));
             if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
@@ -226,8 +226,8 @@ namespace mdsj.lib
             bijiaoPrc = 64255;
             pre = bijiaoPrc * 0.85;
             next = bijiaoPrc * 1.015;
-            Console.WriteLine("GetBitcoinPrice()");
-            Console.WriteLine(json_encode((prs: prs, pre: pre, next: next)));
+           print("GetBitcoinPrice()");
+           print(json_encode((prs: prs, pre: pre, next: next)));
             if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
@@ -240,7 +240,7 @@ namespace mdsj.lib
             //    sendNotyfy2me();
 
             //}
-            Console.WriteLine(prs);
+           print(prs);
             dbgCls.print_ret(__METHOD__, prs);
         }
 
@@ -252,7 +252,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+               print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
             }
 
             try
@@ -261,7 +261,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+               print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
             }
         }
 
@@ -269,7 +269,7 @@ namespace mdsj.lib
         {
             try
             {
-                Console.WriteLine("FUN GetBitcoinPrice()");
+               print("FUN GetBitcoinPrice()");
                 using (HttpClient client = new HttpClient())
                 {
                     // 请求CoinGecko API获取比特币当前价格
@@ -283,14 +283,14 @@ namespace mdsj.lib
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     JObject json = JObject.Parse(jsonResponse);
                     decimal price = json["bitcoin"]["usd"].Value<decimal>();
-                    Console.WriteLine(json_encode(json));
-                    Console.WriteLine("end FUN GetBitcoinPrice");
+                   print(json_encode(json));
+                   print("end FUN GetBitcoinPrice");
                     return price;
                 }
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error: {e.Message}"); return 0;
+               print($"Error: {e.Message}"); return 0;
             }
 
         }
@@ -303,7 +303,7 @@ namespace mdsj.lib
         {
             try
             {
-                Console.WriteLine("FUN GetEthPrice()");
+               print("FUN GetEthPrice()");
                 string url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd";
 
                 using (HttpClient client = new HttpClient())
@@ -317,13 +317,13 @@ namespace mdsj.lib
                         JObject json = JObject.Parse(responseBody);
                         file_put_contents("cns.json", json_encode(json));
                         decimal ethPrice = json["ethereum"]["usd"].Value<decimal>();
-                        Console.WriteLine(json_encode(json));
-                        Console.WriteLine("end FUN GetEthPric");
+                       print(json_encode(json));
+                       print("end FUN GetEthPric");
                         return ethPrice;
                     }
                     catch (HttpRequestException e)
                     {
-                        Console.WriteLine($"Request error: {e.Message}");
+                       print($"Request error: {e.Message}");
                         return 0;
                     }
                 }
@@ -331,7 +331,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine($"Error: {e.Message}"); return 0;
+               print($"Error: {e.Message}"); return 0;
             }
         }
 

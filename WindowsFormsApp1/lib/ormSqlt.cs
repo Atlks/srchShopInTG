@@ -108,7 +108,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
             dbgCls.setDbgVal(__METHOD__, "sql", sql);
-           // Console.WriteLine(sql);
+           //print(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
 
@@ -326,7 +326,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
             dbgCls.setDbgVal(__METHOD__, "sql", sql);
-            // Console.WriteLine(sql);
+            //print(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
 
@@ -353,7 +353,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
             dbgCls.setDbgVal(__METHOD__, "sql", sql);
-            // Console.WriteLine(sql);
+            //print(sql);
             //SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             //cn.Open();
 
@@ -397,7 +397,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
 
 
@@ -430,7 +430,7 @@ namespace prj202405.lib
                     save(objSave, dbFileName);
                 }catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
               
 
@@ -454,7 +454,7 @@ namespace prj202405.lib
         //    //return;
         //    // ENDFUN
         //    var msglog = str_repeat(" ", dbgpad) + "" + mETHOD__ + ":: ret=>" + json_encode(results);
-        //    Console.WriteLine(msglog + "\n");
+        //   print(msglog + "\n");
         //    //    array_push($GLOBALS['dbg'], $msglog);
         //    dbgpad = dbgpad - 4;
         //}
@@ -462,7 +462,7 @@ namespace prj202405.lib
         //private static string json_encode(object results)
         //{
         //    string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
-        //    // Console.WriteLine(jsonString);
+        //    //print(jsonString);
         //    return jsonString;
         //}
 

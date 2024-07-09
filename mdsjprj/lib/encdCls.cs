@@ -265,7 +265,7 @@ namespace mdsj.lib
             };
             //  string json = JsonConvert.SerializeObject(obj, settings);
             string jsonString = JsonConvert.SerializeObject(results, settings);
-            // Console.WriteLine(jsonString);
+            //print(jsonString);
             return jsonString;
         }
         public static string encodeJsonNofmt(object results)
@@ -292,7 +292,7 @@ namespace mdsj.lib
                 };
                 //  string json = JsonConvert.SerializeObject(obj, settings);
                 string jsonString = JsonConvert.SerializeObject(results, settings);
-                // Console.WriteLine(jsonString);
+                //print(jsonString);
                 return jsonString;
             }catch(Exception e)
             {

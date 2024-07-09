@@ -70,7 +70,7 @@ namespace mdsj
         //    }
         //    catch (Exception e)
         //    {
-        //        Console.WriteLine("向本地写入限制用户时出错：" + e.Message);
+        //       print("向本地写入限制用户时出错：" + e.Message);
         //        goto writeUser;
         //    }
 
@@ -81,7 +81,7 @@ namespace mdsj
         //    }
         //    catch (Exception e)
         //    {
-        //        Console.WriteLine("向本地写入商家时出错：" + e.Message);
+        //       print("向本地写入商家时出错：" + e.Message);
         //        goto writeMerchant;
         //    }
         //    dbgCls.setDbgValRtval(__METHOD__, 0);

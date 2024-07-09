@@ -13,7 +13,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-
+using static prj202405.lib.corex;
 //   prj202405.lib.strCls
 namespace prj202405.lib
 {
@@ -71,7 +71,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading file: {ex.Message}");
+               print($"Error reading file: {ex.Message}");
             }
 
             return words;
@@ -103,7 +103,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error reading file: {ex.Message}");
+               print($"Error reading file: {ex.Message}");
             }
 
             return words;
@@ -178,7 +178,7 @@ namespace prj202405.lib
             kwds = removeEmptyItem(kwds);
             //  string[] kwds = enumerable; // 搜索引擎模式
             string kdwsJoin = string.Join("/", kwds);
-            Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+           print("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
 
@@ -202,7 +202,7 @@ namespace prj202405.lib
         //    segmenter.AddWord("妙瓦底"); // 可添加一个新词
         //    var kwds = segmenter.CutForSearch(msgx); // 搜索引擎模式
         //    string kdwsJoin = string.Join("/", kwds);
-        //    Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+        //   print("【搜索引擎模式】：{0}", kdwsJoin);
         //    return kdwsJoin;
         //}
 
@@ -349,7 +349,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                   print(" str.containKwds() kwd=>" + kwd2);
                     return kwd2;
                 }
 
@@ -409,7 +409,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                   print(" str.containKwds() kwd=>" + kwd2);
                     return true;
                 }
 
@@ -439,7 +439,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                    Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                   print(" str.containKwds() kwd=>" + kwd2);
                     return true;
                 }
 
@@ -461,7 +461,7 @@ namespace prj202405.lib
                 {
                     if (text.Contains(kwd2))
                     {
-                        Console.WriteLine(" str.containKwds() kwd=>" + kwd2);
+                       print(" str.containKwds() kwd=>" + kwd2);
                         return true;
                     }
 
@@ -488,7 +488,7 @@ namespace prj202405.lib
         //            if (seasrchKw2ds.Contains(kwd2))
         //            {
         //                n++;
-        //                Console.WriteLine(" contain kwd=>" + kwd2);
+        //               print(" contain kwd=>" + kwd2);
         //            }
 
         //        }
@@ -556,7 +556,7 @@ namespace prj202405.lib
         //            if (seasrchKw2ds.Contains(kwd2))
         //            {
         //                n++;
-        //                Console.WriteLine(" contain kwd=>" + kwd2);
+        //               print(" contain kwd=>" + kwd2);
         //            }
 
         //        }
@@ -591,7 +591,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while reading the file: {ex.Message}");
+               print($"An error occurred while reading the file: {ex.Message}");
             }
 
             return linesHashSet;

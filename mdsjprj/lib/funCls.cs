@@ -32,14 +32,14 @@ namespace libx
             Type type = Type.GetType(typeName);
             if (type == null)
             {
-                Console.WriteLine($"Type '{typeName}' not found.");
+               print($"Type '{typeName}' not found.");
                 return false;
             }
 
             MethodInfo methodInfo = type.GetMethod(methodName);
             if (methodInfo == null)
             {
-                Console.WriteLine($"Method '{methodName}' not found in type '{typeName}'.");
+               print($"Method '{methodName}' not found in type '{typeName}'.");
                 return false;
             }
 

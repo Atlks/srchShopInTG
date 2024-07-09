@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using static prj202405.lib.corex;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -135,7 +136,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+               print(e.Message);
 
             }
         }
@@ -249,7 +250,7 @@ namespace prj202405.lib
                            select jo).ToList();
 
 
-            Console.WriteLine(JsonConvert.SerializeObject(results));
+           print(JsonConvert.SerializeObject(results));
 
 
             string showtitle = "spatime(ms):";
@@ -262,7 +263,7 @@ namespace prj202405.lib
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
 
-            Console.WriteLine(showtitle + spantime);
+           print(showtitle + spantime);
         }
  
 

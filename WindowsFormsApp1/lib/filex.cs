@@ -1,4 +1,5 @@
-﻿using Mono.Web;
+﻿  using static prj202405.lib.corex;
+using Mono.Web;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using Telegram.Bot.Types.ReplyMarkups;
+  
 
 // prj202405.lib.filex
 namespace prj202405.lib
@@ -68,7 +70,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -102,7 +104,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -152,7 +154,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -304,12 +306,12 @@ namespace prj202405.lib
             catch (UnauthorizedAccessException)
             {
                 // 处理无权访问的文件夹
-                Console.WriteLine($"Access to {currentDirectory} is denied.");
+               print($"Access to {currentDirectory} is denied.");
             }
             catch (Exception ex)
             {
                 // 处理其他异常
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
     }

@@ -129,7 +129,7 @@ namespace mdsj.libBiz
             string downdir = prjdir + "/downmp3";
             string fname = filex.ConvertToValidFileName2024(songName);
             string mp3path = $"{downdir}/{fname}.mp3";
-            Console.WriteLine(mp3path);
+           print(mp3path);
             if (!System.IO.File.Exists(mp3path))
                 mp3path = DownloadSongAsMp3(songName, downdir);
             if (System.IO.File.Exists(mp3path))

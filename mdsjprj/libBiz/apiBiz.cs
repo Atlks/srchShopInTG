@@ -23,7 +23,7 @@ namespace mdsj.libBiz
         }
         public static string Wbapi_pinlun(string qrystr)
         {
-            //   Console.WriteLine("Received getlist: " + callGetlistFromDb);
+            //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList dafenObj = getHstbFromQrystr(qrystr);
             SortedList obj1 = new SortedList();
@@ -45,7 +45,7 @@ namespace mdsj.libBiz
 
         public static string Wbapi_getlist(string qrystr)
         {
-            //   Console.WriteLine("Received getlist: " + callGetlistFromDb);
+            //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList dafenObj = getHstbFromQrystr(qrystr);
             int page = gtfldInt(dafenObj, "page", 0);

@@ -22,7 +22,7 @@ namespace WindowsFormsApp1
         internal static void test()
         {
             //  string result = ExecuteSqlQuery(dbFilePath, sqlQuery);
-            //   Console.WriteLine(result);
+            //  print(result);
             new ScriptManager(null).del_clck("20240614_143544_253");
         //    qryEngrParser.d
         }

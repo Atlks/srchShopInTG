@@ -39,7 +39,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
 
 
@@ -70,7 +70,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-                Console.WriteLine($"Failed to log error: {ex.Message}");
+               print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -97,7 +97,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-                Console.WriteLine($"Failed to log error: {ex.Message}");
+               print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -120,7 +120,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 //Newtonsoft.Json.JsonSerializationException:
-                Console.WriteLine(ex.Message.ToString());
+               print(ex.Message.ToString());
             }
 
 
@@ -134,8 +134,8 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{logdir}/{timestamp}.json";
-                Console.WriteLine(" logdir=>"+logdir);
-                Console.WriteLine(" fileName=>" + fileName);
+               print(" logdir=>"+logdir);
+               print(" fileName=>" + fileName);
                 if (IsString(m))
                 {
                     System.IO.File.WriteAllText(  fileName, m.ToString());
@@ -144,7 +144,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
         }
 
@@ -157,8 +157,8 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
                 string fileName = $"{logdir}/{timestamp}.{reqThreadId}.txt";
-                Console.WriteLine(" logdir=>" + logdir);
-                Console.WriteLine(" fileName=>" + fileName);
+               print(" logdir=>" + logdir);
+               print(" fileName=>" + fileName);
                 string msg = $"{timestampPx} {mETHOD__}({json_encode_noFmt(prm)})::{json_encode_noFmt(val)} \n"; 
                 if (IsString(msg))
                 {
@@ -170,7 +170,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
             
         }

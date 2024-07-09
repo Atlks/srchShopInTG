@@ -126,7 +126,7 @@ namespace mdsj
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
             kwds = removeStopWd4biz(kwds);
-            Console.WriteLine(" now kwd for srarch is =>" + string.Join(" ", kwds));
+           print(" now kwd for srarch is =>" + string.Join(" ", kwds));
 
 
             //c----calc fuwuci 
@@ -137,11 +137,11 @@ namespace mdsj
 
 
             //-----------------calc weizhici-----
-            Console.WriteLine("--------------qry weizhici--------");
+           print("--------------qry weizhici--------");
             HashSet<string> postnKywd位置词set = qry_getPostnWds(dbFrom, shareNames, filters);
             bool msgHasPostWd = isMmsgHasMatchPostWd(postnKywd位置词set, kwds);
             print_varDump(__METHOD__, "msgHasPostWd", msgHasPostWd);
-            Console.WriteLine("--------------qry weizhici finish--------");
+           print("--------------qry weizhici finish--------");
 
             // weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
@@ -150,7 +150,7 @@ namespace mdsj
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
-                    Console.WriteLine("dbg");
+                   print("dbg");
                 List<Filtr> li = new List<Filtr>();
                 li.Add(new Filtr(isNotEmptyLianxi(row)));
                 li.Add(new Filtr(isLianxifshValid(row)));
@@ -343,8 +343,8 @@ namespace mdsj
             add_elmts2hsst(curRowKywdSset, ldFldDefEmpty(row, "城市关键词"));
             add_elmts2hsst(curRowKywdSset, ldFldDefEmpty(row, "园区关键词"));
             curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
-            Console.WriteLine(" curRw_posnSet=>" + String.Join(" ", curRowKywdSset));
-            // Console.WriteLine(" weizhici=>" + weizhici);
+           print(" curRw_posnSet=>" + String.Join(" ", curRowKywdSset));
+            //print(" weizhici=>" + weizhici);
             return isCcontainKwds42(curRowKywdSset, kwds);
         }
 
@@ -545,7 +545,7 @@ namespace mdsj
         //            rows_rzt4srch.Add(row);
         //        }
         //        //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
-        //        // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+        //        //print(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
         //    }
         //    const string dbgFlDir = "rows_rzt4srchDirdbg";
         //    dbgooutput(rows_rzt4srch, dbgFlDir);
@@ -604,7 +604,7 @@ namespace mdsj
         //    segmenter.AddWord("会所"); // 可添加一个新词
         //    segmenter.AddWord("妙瓦底"); // 可添加一个新词
         //    var segments = segmenter.CutForSearch(msg); // 搜索引擎模式
-        //    Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+        //   print("【搜索引擎模式】：{0}", string.Join("/ ", segments));
 
 
         //    ArrayList rows_rzt4srch = [];
@@ -693,11 +693,11 @@ namespace mdsj
         //    var updateString = JsonConvert.SerializeObject(rows_rzt4srch, Formatting.Indented);
 
         //    Directory.CreateDirectory(dbgFl);
-        //    //    Console.WriteLine(updateString);
+        //    //   print(updateString);
         //    // 获取当前时间并格式化为文件名
         //    string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
         //    string fileName = $"{dbgFl}/{timestamp}.txt";
-        //    //      Console.WriteLine(fileName);
+        //    //     print(fileName);
         //    System.IO.File.WriteAllText("" + fileName, updateString);
         //}
 
@@ -711,7 +711,7 @@ namespace mdsj
         //        System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
         //        cityMap.Remove("Address");
         //        cityMap.Add("cityname", city.Name);
-        //        //    Console.WriteLine(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
+        //        //   print(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
         //        var addrS = (from ca in city.Address
         //                     select ca
         //                 )
@@ -722,7 +722,7 @@ namespace mdsj
         //            addMap.Remove("Merchant");
         //            addMap.Add("parkname", addx_park.Name);
         //            addMap.Add("parkkwd", addx_park.CityKeywords);
-        //            //     Console.WriteLine(JsonConvert.SerializeObject(addMap, Formatting.Indented));
+        //            //    print(JsonConvert.SerializeObject(addMap, Formatting.Indented));
         //            var rws = (from m in addx_park.Merchant
         //                       select m
         //                      )
@@ -734,7 +734,7 @@ namespace mdsj
         //                mcht.Add("cityname", city.Name);
         //                mcht.Add("parkname", addx_park.Name);
         //                mcht.Add("parkkwd", addx_park.CityKeywords);
-        //                //   Console.WriteLine(mcht["Category"]);
+        //                //  print(mcht["Category"]);
         //                //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
         //                mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
         //                mcht.Add("cateInt", (int)m.Category);
@@ -743,8 +743,8 @@ namespace mdsj
 
         //                mcht.Add("_parent", city.Name + "_" + addx_park.Name);
         //                a.Add(mcht);
-        //                //   Console.WriteLine(JsonConvert.SerializeObject(mcht, Formatting.Indented));
-        //                //  Console.WriteLine("..");
+        //                //  print(JsonConvert.SerializeObject(mcht, Formatting.Indented));
+        //                // print("..");
         //            }
 
         //        }
@@ -779,7 +779,7 @@ namespace mdsj
         //        }
         //        catch (Exception e)
         //        {
-        //            Console.WriteLine(e.Message);
+        //           print(e.Message);
         //            return 0;
         //        }
 
@@ -800,7 +800,7 @@ namespace mdsj
         //        }
         //        catch (Exception e)
         //        {
-        //            Console.WriteLine(e.Message);
+        //           print(e.Message);
         //        }
 
         //    }

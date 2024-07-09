@@ -36,12 +36,12 @@ namespace prj202405.lib
 
             if (obj == null)
             {
-                Console.WriteLine($"{indent}null");
+               print($"{indent}null");
             }
             else
             {
                 Type type = obj.GetType();
-                Console.WriteLine($"{indent}{type}({GetObjectSize(obj)}) {obj}");
+               print($"{indent}{type}({GetObjectSize(obj)}) {obj}");
                 indentLevel++;
 
                 if (obj is IDictionary dictionary)
@@ -66,14 +66,14 @@ namespace prj202405.lib
                         foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                         {
                             object value = property.GetValue(obj, null);
-                            Console.WriteLine($"{indent}{property.Name}:");
+                           print($"{indent}{property.Name}:");
                             var_dump(value, indentLevel + 1);
                         }
 
                         foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Instance))
                         {
                             object value = field.GetValue(obj);
-                            Console.WriteLine($"{indent}{field.Name}:");
+                           print($"{indent}{field.Name}:");
                             var_dump(value, indentLevel + 1);
                         }
                     }
@@ -205,11 +205,11 @@ namespace prj202405.lib
 
                 if (obj == null)
                 {
-                    Console.WriteLine($"{indent}null");
+                   print($"{indent}null");
                 }
                 else if (obj is IDictionary dictionary)
                 {
-                    Console.WriteLine($"{indent}Dictionary:");
+                   print($"{indent}Dictionary:");
                     foreach (DictionaryEntry entry in dictionary)
                     {
                         Console.Write($"{indent}  [{entry.Key}] => ");
@@ -218,7 +218,7 @@ namespace prj202405.lib
                 }
                 else if (obj is IEnumerable enumerable && !(obj is string))
                 {
-                    Console.WriteLine($"{indent}List:");
+                   print($"{indent}List:");
                     foreach (var item in enumerable)
                     {
                         print_r(item, indentLevel + 1);
@@ -226,11 +226,11 @@ namespace prj202405.lib
                 }
                 else
                 {
-                    Console.WriteLine($"{indent}{obj}");
+                   print($"{indent}{obj}");
                 }
             }catch(Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
            
         }
@@ -261,7 +261,7 @@ namespace prj202405.lib
                 AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
                 {
                     Exception e = (Exception)args.ExceptionObject;
-                    Console.WriteLine($"An error occurred: {e.Message}");
+                   print($"An error occurred: {e.Message}");
                 };
             }
         }
@@ -283,7 +283,7 @@ namespace prj202405.lib
             dbgpad = dbgpad + 4;
             var msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + JsonConvert.SerializeObject(func_get_args) + "))";
             // array_push($GLOBALS['dbg'],$logmsg   );
-            Console.WriteLine("\n\n\n" + msglog + "");
+           print("\n\n\n" + msglog + "");
         }
 
         public static void setDbgVal(string METHOD__, string vname, string val)
@@ -292,7 +292,7 @@ namespace prj202405.lib
             //    return;
             var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{val}";
             // array_push($GLOBALS['dbg'],        $msg);
-            Console.WriteLine(msglog + "");
+           print(msglog + "");
 
         }
 
@@ -305,7 +305,7 @@ namespace prj202405.lib
             //return;
             // ENDFUN
             var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
-            Console.WriteLine(msglog + "");
+           print(msglog + "");
             //    array_push($GLOBALS['dbg'], $msglog);
             dbgpad = dbgpad - 4;
         }
@@ -323,10 +323,10 @@ namespace prj202405.lib
         public static object func_get_args(params object[] args)
         {
             // 输出每个参数的值
-            Console.WriteLine("Arguments:");
+           print("Arguments:");
             //foreach (object arg in args)
             //{
-            //    Console.WriteLine(arg);
+            //   print(arg);
             //}
             return args;
         }

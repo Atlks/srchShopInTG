@@ -50,18 +50,18 @@ namespace mdsj.lib
                 HashSet<string> adwds = splitFileByChrs(adwdlib, ",\r \n");
                 int ctnScr = containCalcCntScoreSetfmt(text, adwds);
 
-                Console.WriteLine("广告词包含分数=》" + ctnScr);
+               print("广告词包含分数=》" + ctnScr);
 
 
                 if (text.Length < 10)
                     return;
                 string timestampMM = DateTime.Now.ToString("MM");
                 string fnameFrmTxt = ConvertToValidFileName(text);
-                Console.WriteLine("fnameFrmTxt=>" + fnameFrmTxt);
+               print("fnameFrmTxt=>" + fnameFrmTxt);
                 string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + str_sub (fnameFrmTxt,0, 50) + ".txt";
                 if (System.IO.File.Exists(fname))
                 {
-                    Console.WriteLine("是重复消息了" + fname);
+                   print("是重复消息了" + fname);
                     file_put_contents(fname, "\n\n" + text + "", true);
 
 
@@ -74,8 +74,8 @@ namespace mdsj.lib
             }
             catch(Exception e)
             {
-                Console.WriteLine("catch in ()=>" + __METHOD__ + "()");
-                Console.WriteLine(e);
+               print("catch in ()=>" + __METHOD__ + "()");
+               print(e);
             }
           
 

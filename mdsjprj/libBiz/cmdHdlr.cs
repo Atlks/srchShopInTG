@@ -39,8 +39,8 @@ namespace mdsj.libBiz
                 string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
                 if (!System.IO.File.Exists(f))
                 {
-                    Console.WriteLine("no auth " + f);
-                    //  Console.WriteLine("no auth ");
+                   print("no auth " + f);
+                    // print("no auth ");
                     botClient.SendTextMessageAsync(
              update.Message.Chat.Id,
              "权限不足",
@@ -87,11 +87,11 @@ namespace mdsj.libBiz
         }
         public static void On我是谁Supergroup(Update update, string reqThreadId)
         {
-            Console.WriteLine("我是打游戏");
+           print("我是打游戏");
         }
         public static void On设置城市supergroup(  Update update, string reqThreadId)
         {
-            Console.WriteLine("oo617");
+           print("oo617");
         }
             public static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
         {

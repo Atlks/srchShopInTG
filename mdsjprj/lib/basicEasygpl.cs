@@ -36,7 +36,7 @@ namespace mdsj.lib
 
         public static void  调试输出(object obj)
         {
-            Console.WriteLine(json文本(obj));
+           print(json文本(obj));
         }
         private static string 参数类型(object obj)
         {

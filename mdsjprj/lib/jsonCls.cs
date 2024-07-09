@@ -19,7 +19,7 @@ namespace mdsj.lib
         //    List<JToken> result = QueryJsonArray(filePath, query);
         //    foreach (JToken item in result)
         //    {
-        //        Console.WriteLine(item);
+        //       print(item);
         //    }
         //}
 
@@ -69,7 +69,7 @@ namespace mdsj.lib
             catch (Exception)
             {
                 // 查询条件格式不正确
-                Console.WriteLine("Invalid query format.");
+               print("Invalid query format.");
                 return false;
             }
         }

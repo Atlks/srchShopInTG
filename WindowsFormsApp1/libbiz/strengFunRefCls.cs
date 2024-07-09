@@ -48,7 +48,7 @@ namespace WindowsFormsApp1.libbiz
         {
             Func<(SortedList, string), int> del_rowFun = ((SortedList, string) tpl) =>
             {
-                Console.WriteLine(tpl);
+               print(tpl);
                 //del row dbf retVal
                 int strx = storeEngr4Nodesqlt.delete_row4nodeSqlt(tpl.Item1, tpl.Item2);
                 return strx;

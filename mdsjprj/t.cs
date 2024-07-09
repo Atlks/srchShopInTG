@@ -11,7 +11,7 @@ namespace prj202405
 
         static async Task Main2(string[] args)
         {
-            Console.WriteLine(11);
+           print(11);
 
 
             try
@@ -21,7 +21,7 @@ namespace prj202405
             }
             catch (Exception ex)
             {
-                Console.WriteLine("除法错误：" + ex.Message);
+               print("除法错误：" + ex.Message);
             }
         }
     }

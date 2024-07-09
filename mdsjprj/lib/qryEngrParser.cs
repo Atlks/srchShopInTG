@@ -286,8 +286,8 @@ namespace libx
 
             catch (Exception e)
             {
-                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-                Console.WriteLine(e);
+               print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+               print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
@@ -369,8 +369,8 @@ namespace libx
             }
             catch (Exception e)
             {
-                Console.WriteLine($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-                Console.WriteLine(e);
+               print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+               print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
@@ -538,7 +538,7 @@ namespace libx
                 string path = dir + "/" + dbf + "";
                 //if (!File.Exists(path))
                 //{
-                //    Console.WriteLine("not exist file dbf=>" + path);
+                //   print("not exist file dbf=>" + path);
                 //    continue;
                 //}
                 arrayList.Add(path);

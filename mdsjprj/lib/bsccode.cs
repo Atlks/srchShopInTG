@@ -57,7 +57,7 @@ namespace mdsj.lib
         }
         public static void echo(object v)
         {
-            Console.WriteLine(v);
+           print(v);
         }
         public static void foreach_objKey(object obj, Func<PropertyInfo, object> fun)
         {
@@ -77,7 +77,7 @@ namespace mdsj.lib
                 catch (Exception e)
                 {
                     print_catchEx("foreach_hashtable", e);
-                    //   Console.WriteLine(e);
+                    //  print(e);
                 }
             }
 
@@ -108,7 +108,7 @@ namespace mdsj.lib
             }
             else
             {
-                Console.WriteLine("The specified folder does not exist.");
+               print("The specified folder does not exist.");
             }
         }
         public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
@@ -126,7 +126,7 @@ namespace mdsj.lib
                 catch (Exception e)
                 {
                     print_catchEx("foreach_hashtable", e);
-                    //   Console.WriteLine(e);
+                    //  print(e);
                 }
             }
         }
@@ -204,7 +204,7 @@ namespace mdsj.lib
             }
             else
             {
-                Console.WriteLine("The object does not have a writable 'Name' property.");
+               print("The object does not have a writable 'Name' property.");
             }
         }
         public static object invoke(string methodName, params object[] args)
@@ -275,16 +275,16 @@ namespace mdsj.lib
         public static void print_ex(string mthdName, Exception e)
         {
 
-            Console.WriteLine($"------{mthdName}() catch ex----------_");
-            Console.WriteLine(e);
-            Console.WriteLine($"------{mthdName}() catch ex finish----------_");
+           print($"------{mthdName}() catch ex----------_");
+           print(e);
+           print($"------{mthdName}() catch ex finish----------_");
         }
 
         public static void print_catchEx(string v, Exception e)
         {
-            Console.WriteLine($"------{v}() catch ex----------_");
-            Console.WriteLine(e);
-            Console.WriteLine($"------{v}() catch ex finish----------_");
+           print($"------{v}() catch ex----------_");
+           print(e);
+           print($"------{v}() catch ex finish----------_");
         }
         public static object call(string authExprs, Delegate callback, params object[] args)
         {
@@ -358,7 +358,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error reading file: " + ex.Message);
+               print("Error reading file: " + ex.Message);
             }
 
             return words;
@@ -373,7 +373,7 @@ namespace mdsj.lib
             catch (jmp2endEx e)
             {
                 print_catchEx("callxTryJmp", e);
-                Console.WriteLine("callxTryJmp  callmeth=>" + callback.Method.Name);
+               print("callxTryJmp  callmeth=>" + callback.Method.Name);
             }
             //catch (Exception e)
             //{
@@ -451,13 +451,13 @@ namespace mdsj.lib
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Console.WriteLine("assemblies.Len=>" + assemblies.Length);
+           print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-            Console.WriteLine("typeList.Len=>" + typeList.Count());
+           print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            Console.WriteLine("methodss.Len=>" + methodss.Count());
+           print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -465,7 +465,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                Console.WriteLine("......$$waring  .methodinfo is null");
+               print("......$$waring  .methodinfo is null");
                 print_ret_adv(__METHOD__, "");
                 return null;
             }
@@ -500,13 +500,13 @@ namespace mdsj.lib
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Console.WriteLine("assemblies.Len=>" + assemblies.Length);
+           print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-            Console.WriteLine("typeList.Len=>" + typeList.Count());
+           print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods( ));  //BindingFlags.Static| BindingFlags.Public
-            Console.WriteLine("methodss.Len=>" + methodss.Count());
+           print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -514,7 +514,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                Console.WriteLine("......$$waring  .methodinfo is null");
+               print("......$$waring  .methodinfo is null");
                 print_ret_adv(__METHOD__, "");
                 return null;
             }

@@ -40,7 +40,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+               print($"Error: {ex.Message}");
             }
 
             return sortedList;
@@ -94,7 +94,7 @@ namespace prj202405.lib
             if (!Directory.Exists(targetFolderPath))
             {
                 Directory.CreateDirectory(targetFolderPath);
-                Console.WriteLine($"Created directory: {targetFolderPath}");
+               print($"Created directory: {targetFolderPath}");
             }
 
             // 获取源文件名
@@ -169,7 +169,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -221,7 +221,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -290,7 +290,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -317,7 +317,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error reading file: " + ex.Message);
+               print("Error reading file: " + ex.Message);
             }
 
             return words;
@@ -549,12 +549,12 @@ namespace prj202405.lib
             catch (UnauthorizedAccessException)
             {
                 // 处理无权访问的文件夹
-                Console.WriteLine($"Access to {currentDirectory} is denied.");
+               print($"Access to {currentDirectory} is denied.");
             }
             catch (Exception ex)
             {
                 // 处理其他异常
-                Console.WriteLine($"An error occurred: {ex.Message}");
+               print($"An error occurred: {ex.Message}");
             }
         }
     }

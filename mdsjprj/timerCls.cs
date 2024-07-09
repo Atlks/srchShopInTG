@@ -131,7 +131,7 @@ namespace prj202405
         {
 
             System.IO.Directory.CreateDirectory("tmrlg");
-            Console.WriteLine("定时任务。。");
+           print("定时任务。。");
 
             DateTime now = DateTime.Now;
 
@@ -174,7 +174,7 @@ namespace prj202405
                 if (now.Hour == 11 && now.Minute == 1 && (!System.IO.File.Exists(lauch)))
 
                 {
-                    Console.WriteLine("push luch time。");
+                   print("push luch time。");
                     System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
                     //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
                     z_wucan();
@@ -310,14 +310,14 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-                Console.WriteLine(JsonConvert.SerializeObject(message2));
+               print(JsonConvert.SerializeObject(message2));
 
 
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
+               print(ex.ToString());
             }
 
             dbgCls.print_ret(__METHOD__, 0);
@@ -340,7 +340,7 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-                Console.WriteLine(JsonConvert.SerializeObject(message2));
+               print(JsonConvert.SerializeObject(message2));
 
                 //Program.botClient.SendTextMessageAsync(
                 //         Program.groupId,
@@ -351,7 +351,7 @@ namespace prj202405
                 //         disableWebPagePreview: true);
 
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {print(ex.ToString()); }
 
 
 
@@ -371,7 +371,7 @@ namespace prj202405
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
                 var chatid = de.Key;
-                Console.WriteLine(" SendPhotoAsync " + de.Key);
+               print(" SendPhotoAsync " + de.Key);
                 var map = de.Value;
                 JObject jo =(JObject) map;
                 string chtType = getFld(jo,"chat.type","");
@@ -401,7 +401,7 @@ namespace prj202405
                      parseMode: ParseMode.Html,
                     replyMarkup: rplyKbdMkp,
                     protectContent: false, disableWebPagePreview: true);
-                    //   Console.WriteLine(JsonConvert.SerializeObject(message2));
+                    //  print(JsonConvert.SerializeObject(message2));
 
                     //Program.botClient.SendTextMessageAsync(
                     //         Program.groupId,
@@ -412,7 +412,7 @@ namespace prj202405
                     //         disableWebPagePreview: true);
 
                 }
-                catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+                catch (Exception ex) {print(ex.ToString()); }
 
             }
 
@@ -574,7 +574,7 @@ namespace prj202405
         //    segmenter.LoadUserDict("user_dict.txt");
         //    segmenter.AddWord("会所"); // 可添加一个新词
         //    var segments = segmenter.CutForSearch(msg); // 搜索引擎模式
-        //    Console.WriteLine("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+        //   print("【搜索引擎模式】：{0}", string.Join("/ ", segments));
 
 
         //    List<InlineKeyboardButton[]> rows_rzt = [];
@@ -583,8 +583,8 @@ namespace prj202405
         //        if (kwd.Length < 2)
         //            continue;
         //        var rows = qryByKwd(kwd);
-        //        Console.WriteLine("kwd=>" + kwd);
-        //        Console.WriteLine("qryByKwd(kwd) cnt=>" + rows.Count);
+        //       print("kwd=>" + kwd);
+        //       print("qryByKwd(kwd) cnt=>" + rows.Count);
         //        rows_rzt = arrCls.MergeLists(rows_rzt, rows);
 
         //    }

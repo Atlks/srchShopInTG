@@ -260,7 +260,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.Message);
+               print(e.Message);
 
             }
         }
@@ -331,7 +331,7 @@ namespace prj202405.lib
             {
                 if (postnKywd位置词set.Contains(wd))
                 {
-                    Console.WriteLine("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
+                   print("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
                     return true;
                 }
 
@@ -444,7 +444,7 @@ namespace prj202405.lib
         //                   select jo).ToList();
 
 
-        //    Console.WriteLine(JsonConvert.SerializeObject(results));
+        //   print(JsonConvert.SerializeObject(results));
 
 
         //    string showtitle = "spatime(ms):";
@@ -554,14 +554,14 @@ namespace prj202405.lib
                         }
                         catch (Exception e)
                         {
-                           Console.WriteLine(e);
+                          print(e);
                         }
 
                     }
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
             }
         }
@@ -689,7 +689,7 @@ namespace prj202405.lib
             {
                 string chatType = chatTypeToken.ToString();
                 return chatType;
-                //  Console.WriteLine("chat.type: " + chatType);
+                // print("chat.type: " + chatType);
             }
             else
             {

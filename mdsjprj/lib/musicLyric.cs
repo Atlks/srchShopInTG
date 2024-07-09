@@ -29,7 +29,7 @@ namespace mdsj.lib
             }
             catch (HttpRequestException e)
             {
-                Console.WriteLine($"Request error: {e.Message}");
+               print($"Request error: {e.Message}");
                 return "Lyrics not found.";
             }
         }
@@ -47,7 +47,7 @@ namespace mdsj.lib
         //{
         //    LyricsFetcher fetcher = new LyricsFetcher();
         //    string lyrics = await fetcher.GetLyricsAsync("Coldplay", "Adventure of a Lifetime");
-        //    Console.WriteLine(lyrics);
+        //   print(lyrics);
         //}
     }
 

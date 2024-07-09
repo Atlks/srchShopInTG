@@ -53,7 +53,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
 
                     logErr2024(e, "whereFun", "errlog", null);
                     //  return false;
@@ -99,7 +99,7 @@ namespace prj202405.lib
                     rows_rzt4srch.Add(row);
                 }
                 //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
-                // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+                //print(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
             }
 
 
@@ -136,7 +136,7 @@ namespace prj202405.lib
                     rows_rzt4srch.Add(row);
                 }
                 //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
-                // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+                //print(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
             }
 
 
@@ -171,7 +171,7 @@ namespace prj202405.lib
                     rows_rzt4srch.Add(row);
                 }
                 //  遍历一个大概40ms   case trycat 模式，给为if else 模式，立马变为1ms
-                // Console.WriteLine(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
+                //print(DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));  
             }
 
 
@@ -296,7 +296,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                   print(e.Message);
 
                 }
 
@@ -425,7 +425,7 @@ namespace prj202405.lib
                 string path = dir + "/" + dbf + "";
                 //if (!File.Exists(path))
                 //{
-                //    Console.WriteLine("not exist file dbf=>" + path);
+                //   print("not exist file dbf=>" + path);
                 //    continue;
                 //}
                 arrayList.Add(path);
@@ -462,7 +462,7 @@ namespace prj202405.lib
                 string path = dir + "/" + dbf + ".db";
                 if (!File.Exists(path))
                 {
-                    Console.WriteLine("not exist file dbf=>" + path);
+                   print("not exist file dbf=>" + path);
                     continue;
                 }
                 arrayList.Add(path);

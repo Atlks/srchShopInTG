@@ -1,4 +1,5 @@
-﻿using prj202405.lib;
+﻿using static prj202405.lib.corex;
+using prj202405.lib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -40,9 +41,9 @@ namespace WindowsFormsApp1
             string filePath = @"../../idx.htm";
             filePath = filex.GetAbsolutePath(filePath);
             //  filePath = @"idx.htm";
-            Console.WriteLine(filePath);
+           print(filePath);
             File.AppendAllText("log2024.log", filePath);
-            Console.WriteLine("File.Exists(filePath=>" + File.Exists(filePath));
+           print("File.Exists(filePath=>" + File.Exists(filePath));
             File.AppendAllText("log2024.log", "\nFile.Exists(filePath=>" + File.Exists(filePath));
             // Enable JavaScript in the WebBrowser control
             webBrowser1.ObjectForScripting = new ScriptManager(this);
@@ -56,9 +57,9 @@ namespace WindowsFormsApp1
         //{
         //    string filePath = @"D:\0prj\mdsj\WindowsFormsApp1\idx.htm";
         //    //  filePath = @"idx.htm";
-        //    Console.WriteLine(filePath);
+        //   print(filePath);
         //    File.AppendAllText("log2024.log", filePath);
-        //    Console.WriteLine("File.Exists(filePath=>"+File.Exists(filePath));
+        //   print("File.Exists(filePath=>"+File.Exists(filePath));
         //    File.AppendAllText("log2024.log", "\nFile.Exists(filePath=>" + File.Exists(filePath));
         //    // Enable JavaScript in the WebBrowser control
         //    webBrowser1.ObjectForScripting = new ScriptManager(this);

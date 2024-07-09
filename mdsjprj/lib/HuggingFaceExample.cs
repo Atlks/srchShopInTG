@@ -26,7 +26,7 @@
 //                request.AddParameter("application/json", "{\"inputs\":\"Hello, world!\"}", ParameterType.RequestBody);
 
 //                IRestResponse response = await client.ExecuteAsync(request);
-//                Console.WriteLine(response.Content);
+//               print(response.Content);
 //            }
 //        }
 //    }

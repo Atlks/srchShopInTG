@@ -36,9 +36,9 @@ namespace mdsj.lib
         public static void HandleException(Exception ex)
         {
             // 在这里处理异常，例如记录日志或显示错误信息
-            Console.WriteLine("捕获到未处理的异常:");
-            Console.WriteLine($"消息: {ex.Message}");
-            Console.WriteLine($"堆栈跟踪: {ex.StackTrace}");
+            print("捕获到未处理的异常:");
+            print($"消息: {ex.Message}");
+            print($"堆栈跟踪: {ex.StackTrace}");
         }
 
         public static void set_error_handler()
@@ -52,29 +52,30 @@ namespace mdsj.lib
         {
             try
             {
-                Console.WriteLine("FUN CurrentDomain_UnhandledException()");
-                Console.WriteLine("捕获未处理的同步异常：");
-                Console.WriteLine(((Exception)e.ExceptionObject).Message);
+                print("FUN CurrentDomain_UnhandledException()");
+                print("捕获未处理的同步异常：");
+                print(((Exception)e.ExceptionObject).Message);
                 // 这里可以记录日志或执行其他处理
                 logCls.logErr2025((Exception)e.ExceptionObject, "CurrentDomain_UnhandledException", "errlog");
-                Console.WriteLine("END FUN CurrentDomain_UnhandledException()");
+                print("END FUN CurrentDomain_UnhandledException()");
 
                 // 延迟启动一个新的线程
                 new System.Threading.Thread(() =>
                 {
                     // 恢复应用程序逻辑
-                    // Console.WriteLine("Application is recovering...");
+                    //print("Application is recovering...");
                     Program.Main(null);
                     // Restart or recover logic here
                 }).Start();
-            }catch(jmp2endEx e1)
+            }
+            catch (jmp2endEx e1)
             {
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine("END FUN CurrentDomain_UnhandledException()");
+                print(ex.ToString());
+                print("END FUN CurrentDomain_UnhandledException()");
             }
 
         }
@@ -83,22 +84,22 @@ namespace mdsj.lib
         {
             try
             {
-                Console.WriteLine("FUN TaskScheduler_UnobservedTaskException()");
-                Console.WriteLine("捕获未处理的异步异常：");
-                Console.WriteLine("sender=》 "+sender );
-                Console.WriteLine("emsg=>"+e.Exception.Message);
+                print("FUN TaskScheduler_UnobservedTaskException()");
+                print("捕获未处理的异步异常：");
+                print("sender=》 " + sender);
+                print("emsg=>" + e.Exception.Message);
 
                 // 解析堆栈跟踪，获取出错的异步函数名称
-                if(e.Exception.StackTrace!=null)
-                foreach (var stackFrame in e.Exception.StackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
-                {
-                    Console.WriteLine(stackFrame);
-                    if (stackFrame.Contains("ThrowExceptionAsync"))
+                if (e.Exception.StackTrace != null)
+                    foreach (var stackFrame in e.Exception.StackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
                     {
-                        Console.WriteLine($"出错的异步函数: {stackFrame.Trim()}");
-                        break;
+                        print(stackFrame);
+                        if (stackFrame.Contains("ThrowExceptionAsync"))
+                        {
+                            print($"出错的异步函数: {stackFrame.Trim()}");
+                            break;
+                        }
                     }
-                }
                 // 这里可以记录日志或执行其他处理
                 e.SetObserved(); // 标记异常已观察到，防止程序崩溃   // 阻止异常传播
 
@@ -110,21 +111,22 @@ namespace mdsj.lib
                 //new System.Threading.Thread(() =>
                 //{
                 //    // 恢复应用程序逻辑
-                //    // Console.WriteLine("Application is recovering...");
+                //    //print("Application is recovering...");
                 //    Program.Main(null);
                 //    // Restart or recover logic here
                 //}).Start();
                 logCls.logErr2025((Exception)e.Exception, "TaskScheduler_UnobservedTaskException", "errlog");
-                Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
+                Console.print("END FUN TaskScheduler_UnobservedTaskException()");
 
-            }catch(jmp2endEx e1)
+            }
+            catch (jmp2endEx e1)
             {
 
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.ToString());
-                Console.WriteLine("END FUN TaskScheduler_UnobservedTaskException()");
+                Console.print(ex.ToString());
+                Console.print("END FUN TaskScheduler_UnobservedTaskException()");
             }
         }
     }

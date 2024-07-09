@@ -199,7 +199,7 @@ namespace libx
                 string path = dir + "/" + dbf + "";
                 //if (!File.Exists(path))
                 //{
-                //    Console.WriteLine("not exist file dbf=>" + path);
+                //   print("not exist file dbf=>" + path);
                 //    continue;
                 //}
                 arrayList.Add(path);

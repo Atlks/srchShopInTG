@@ -191,7 +191,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred: {ex.Message}");
+                Console.print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -211,7 +211,7 @@ namespace mdsj.lib
                             if (messageElement.TryGetProperty("text", out JsonElement textElement))
                             {
                                 // 输出 text 属性的值
-                                Console.WriteLine(textElement.GetString());
+                               print(textElement.GetString());
                                 //    string DataDir = "fullTxtSrchIdxdataDir";
                                 SortedList o = tgMsg2row(messageElement, textElement);
                                 var msgx = ChineseCharacterConvert.Convert.ToSimple(o["txt"].ToString());
@@ -222,7 +222,7 @@ namespace mdsj.lib
                         }
                         else
                         {
-                            Console.WriteLine($"The 'message' property in the file {jsonContent} is not an object.");
+                           print($"The 'message' property in the file {jsonContent} is not an object.");
                         }
                     }
 
@@ -231,7 +231,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
        }
 
@@ -242,7 +242,7 @@ namespace mdsj.lib
 
                 wrt_row4tgmsg(tgmsg, DataDir);
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {print(ex.ToString()); }
 
         }
 

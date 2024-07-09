@@ -14,7 +14,7 @@ namespace mdsj.lib
         public static SortedList shareDetail(string FromdataDir, string shareName)
         {
             SortedList cfg4curDatatype = shareList(FromdataDir);
-            Console.WriteLine(json_encode(cfg4curDatatype));
+           print(json_encode(cfg4curDatatype));
 
           //  SortedList cfg4curDatatype= shareCfgList[]
             SortedList? sortedList = (SortedList)cfg4curDatatype[shareName];

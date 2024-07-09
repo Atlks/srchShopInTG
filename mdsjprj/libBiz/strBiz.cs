@@ -18,8 +18,8 @@ namespace mdsj.libBiz
         {
             if (segments == null)
                 return 0;
-            //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
-            //   Console.WriteLine();
+            // print(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
+            //  print();
             set.Remove("店");
             set.Remove("飞机号");
 
@@ -42,7 +42,7 @@ namespace mdsj.libBiz
                 if (segments.Contains(kwd2))
                 {
                     n++;
-                    Console.WriteLine(" containChk2024. kwd=>" + kwd2);
+                   print(" containChk2024. kwd=>" + kwd2);
                 }
 
 
@@ -52,8 +52,8 @@ namespace mdsj.libBiz
 
         public static int containCalcCntScoreSetfmt(HashSet<string> set, string[] segments)
         {
-            //  Console.WriteLine(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
-            //   Console.WriteLine();
+            // print(" containCalcCntScoreSetfmt() "+string.Join(' ', segments));
+            //  print();
             set.Remove("店");
             set.Remove("飞机号");
 
@@ -77,7 +77,7 @@ namespace mdsj.libBiz
                     if (set.Contains(kwd2))
                     {
                         n++;
-                        Console.WriteLine(" contain. kwd=>" + kwd2);
+                       print(" contain. kwd=>" + kwd2);
                     }
 
                 }
@@ -144,9 +144,12 @@ namespace mdsj.libBiz
             string[] kwds = enumerable.ToArray();
             //  string[] kwds = enumerable; // 搜索引擎模式
             string kdwsJoin = string.Join("/", kwds);
-            Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
+           print("【搜索引擎模式】：{0}", kdwsJoin);
+          //  System.Console.WriteLine("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
+
+        
 
         public static HashSet<string> GetUser_dict()
         {

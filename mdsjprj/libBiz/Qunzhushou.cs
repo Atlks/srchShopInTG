@@ -103,7 +103,7 @@ namespace mdsj.libBiz
             var offset = 0;
             while (true)
             {
-                Console.WriteLine(dtime.datetime());
+               print(dtime.datetime());
                 Thread.Sleep(1000);
                 var updates = await bot.GetUpdatesAsync(offset);
 
@@ -128,11 +128,11 @@ namespace mdsj.libBiz
                                 using var fileStream = System.IO.File.OpenWrite(filePath);
                                 await bot.DownloadFileAsync(fileId, fileStream);
 
-                                Console.WriteLine($"Saved image: {fileName}");
+                               print($"Saved image: {fileName}");
                             }
                             catch (Exception e)
                             {
-                                Console.WriteLine(e);
+                               print(e);
                             }
 
                         }
@@ -194,7 +194,7 @@ namespace mdsj.libBiz
             catch (
             Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
             }
 
 
@@ -272,7 +272,7 @@ namespace mdsj.libBiz
             string fullfilepath = $"{saveDirectory}/{fileName1}";
             mkdir_forFile(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-            Console.WriteLine($"{videoFilePath}");
+           print($"{videoFilePath}");
 
 
             saveDirectory = "saveVideoNoteDirMeta";
@@ -302,7 +302,7 @@ namespace mdsj.libBiz
             string fullfilepath = $"{saveDirectory}/{fileName1}";
             mkdir_forFile(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-            Console.WriteLine($"{videoFilePath}");
+           print($"{videoFilePath}");
 
             string outputFilePathMp3 = fullfilepath + ".mp3";
             ConvertOggToMp3(fullfilepath, outputFilePathMp3);
@@ -340,7 +340,7 @@ namespace mdsj.libBiz
             string fullfilepath = $"{saveDirectory}/{fileName1}";
             mkdir_forFile(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-            Console.WriteLine($"{videoFilePath}");
+           print($"{videoFilePath}");
 
 
             saveDirectory = "fileData";
@@ -369,7 +369,7 @@ namespace mdsj.libBiz
             string fullfilepath = $"{saveDirectory}/{fileName1}";
             mkdir_forFile(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-            Console.WriteLine($"{videoFilePath}");
+           print($"{videoFilePath}");
 
 
             saveDirectory = "saveAudioMetaDir";
@@ -440,9 +440,9 @@ namespace mdsj.libBiz
             {
                 string DataDir = "fullTxtSrchIdxdataDir";
                 Thread.Sleep(7000);
-                Console.WriteLine("-----------------------------fulltxt index create thred----------");
+               print("-----------------------------fulltxt index create thred----------");
                 wrt_rows4fulltxt(json_encode(update), DataDir);
-                Console.WriteLine("----------------END fulltxt index create thred---- finish....");
+               print("----------------END fulltxt index create thred---- finish....");
             });
    
 
@@ -488,11 +488,11 @@ namespace mdsj.libBiz
 
 
 
-                Console.WriteLine($"Saved image: {fullfilepath}");
+               print($"Saved image: {fullfilepath}");
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
         }
 

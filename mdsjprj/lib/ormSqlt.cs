@@ -110,7 +110,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
             dbgCls.print_varDump(__METHOD__, "sql", sql);
-            // Console.WriteLine(sql);
+            //print(sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
 
@@ -217,7 +217,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+               print(ex);
             }
             dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
             return results;
@@ -340,7 +340,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(SortedList1);
             print_varDump(__METHOD__, "sql", sql);
-            // Console.WriteLine(sql);
+            //print(sql);
             SqliteConnection SqliteConnection1 = new SqliteConnection("data source=" + dbFileName);
             SqliteConnection1.Open();
 
@@ -367,7 +367,7 @@ namespace prj202405.lib
 
             var sql = $"replace into {tblx}" + sqlCls.arr_toSqlPrms4insert(mapx);
             dbgCls.print_varDump(__METHOD__, "sql", sql);
-            // Console.WriteLine(sql);
+            //print(sql);
             //SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             //cn.Open();
 
@@ -411,7 +411,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
 
 
@@ -445,7 +445,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e);
+                   print(e);
                 }
 
 
@@ -469,7 +469,7 @@ namespace prj202405.lib
         //    //return;
         //    // ENDFUN
         //    var msglog = str_repeat(" ", dbgpad) + "" + mETHOD__ + ":: ret=>" + json_encode(results);
-        //    Console.WriteLine(msglog + "\n");
+        //   print(msglog + "\n");
         //    //    array_push($GLOBALS['dbg'], $msglog);
         //    dbgpad = dbgpad - 4;
         //}
@@ -477,7 +477,7 @@ namespace prj202405.lib
         //private static string json_encode(object results)
         //{
         //    string jsonString = JsonConvert.SerializeObject(results, Formatting.Indented);
-        //    // Console.WriteLine(jsonString);
+        //    //print(jsonString);
         //    return jsonString;
         //}
 

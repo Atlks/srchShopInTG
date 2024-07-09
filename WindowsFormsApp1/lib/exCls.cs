@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using static prj202405.lib.corex;
 namespace mdsj.lib
 {
     public class exCls
@@ -34,9 +34,9 @@ namespace mdsj.lib
         public static void HandleException(Exception ex)
         {
             // 在这里处理异常，例如记录日志或显示错误信息
-            Console.WriteLine("捕获到未处理的异常:");
-            Console.WriteLine($"消息: {ex.Message}");
-            Console.WriteLine($"堆栈跟踪: {ex.StackTrace}");
+           print("捕获到未处理的异常:");
+           print($"消息: {ex.Message}");
+           print($"堆栈跟踪: {ex.StackTrace}");
         }
 
         public static void set_error_handler()
@@ -48,16 +48,16 @@ namespace mdsj.lib
         // set_error_handler
         public static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            Console.WriteLine("捕获未处理的同步异常：");
-            Console.WriteLine(((Exception)e.ExceptionObject).Message);
+           print("捕获未处理的同步异常：");
+           print(((Exception)e.ExceptionObject).Message);
             // 这里可以记录日志或执行其他处理
             logCls.logErr2025((Exception)e.ExceptionObject, "CurrentDomain_UnhandledException", "errlog");
         }
 
         public static void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
-            Console.WriteLine("捕获未处理的异步异常：");
-            Console.WriteLine(e.Exception.Message);
+           print("捕获未处理的异步异常：");
+           print(e.Exception.Message);
             // 这里可以记录日志或执行其他处理
             e.SetObserved(); // 标记异常已观察到，防止程序崩溃
 

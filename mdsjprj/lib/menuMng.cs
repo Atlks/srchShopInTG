@@ -44,12 +44,12 @@ namespace mdsj.lib
                    , replyToMessageId: update.Message.MessageId
                    ).Result;
                 //  Program.botClient.SendTextMessageAsync()
-                Console.WriteLine(JsonConvert.SerializeObject(message2));
+               print(JsonConvert.SerializeObject(message2));
 
 
 
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {print(ex.ToString()); }
 
             dbgCls.print_ret(__METHOD__, 0);
 
@@ -77,12 +77,12 @@ namespace mdsj.lib
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true).Result;
-                Console.WriteLine(JsonConvert.SerializeObject(message2));
+               print(JsonConvert.SerializeObject(message2));
 
 
 
             }
-            catch (Exception ex) { Console.WriteLine(ex.ToString()); }
+            catch (Exception ex) {print(ex.ToString()); }
 
             dbgCls.print_ret(__METHOD__, 0);
 

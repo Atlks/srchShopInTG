@@ -81,7 +81,7 @@ namespace prj202405.lib
 
         private static void wriToDbf(object  List_mapx, string dbf)
         {
-            Console.WriteLine(" wriToDbf（）：" + dbf);
+           print(" wriToDbf（）：" + dbf);
             File.Delete(dbf);
 
             System.Collections. ArrayList List_map = (ArrayList)List_mapx;

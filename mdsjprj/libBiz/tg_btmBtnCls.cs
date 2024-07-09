@@ -182,7 +182,7 @@ namespace mdsj.libBiz
             var keyboardJson = JsonConvert.SerializeObject(keyboard);
 
             // Print the JSON string to the console
-            Console.WriteLine(keyboardJson);
+           print(keyboardJson);
             return keyboard;
         }
 
@@ -231,7 +231,7 @@ namespace mdsj.libBiz
             //          parseMode: ParseMode.Html,
             //         //   replyMarkup: new InlineKeyboardMarkup(results),
             //         protectContent: false);
-            Console.WriteLine(JsonConvert.SerializeObject(message));
+           print(JsonConvert.SerializeObject(message));
         }
 
 
@@ -270,7 +270,7 @@ namespace mdsj.libBiz
             //}
             //catch (Exception e)
             //{
-            //    Console.WriteLine(e);
+            //   print(e);
             //}
 
             //todo reply
@@ -286,7 +286,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            Console.WriteLine(encodeJson(inlineKeyboardRow1));
+           print(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew =   botClient.SendTextMessageAsync(
                                   update.Message.Chat.Id, tips,

@@ -36,7 +36,7 @@ namespace mdsj.lib
             }
             catch(Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
                 logErr2024(e, "", "errlog", "");
             }
            
@@ -54,17 +54,17 @@ namespace mdsj.lib
                 // 启动一个新线程，执行匿名函数
                 Thread newThread = new Thread(() =>
                 {
-                    Console.WriteLine("新线程开始执行");
+                   print("新线程开始执行");
                     playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\新疆美丽公主组合 - 欢乐地跳吧.mp3", 2);
 
-                    Console.WriteLine("新线程完成工作");
+                   print("新线程完成工作");
                 });
 
                 //动画金字塔logo
                 for (int i = 0; i < 40; i++)
                 {
                     Thread.Sleep(50);
-                    Console.WriteLine(str_repeatV2("=", i) + "=>");
+                   print(str_repeatV2("=", i) + "=>");
                 }
                 // 启动新线程
                 newThread.Start();
@@ -72,7 +72,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
             call(actBiz, []);
@@ -93,7 +93,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+               print(e);
             }
 
 
@@ -101,7 +101,7 @@ namespace mdsj.lib
         static void  PrintLogo()
         {
 
-            Console.WriteLine(@"
+           print(@"
         ,--./,-.
        / #      \
       |          |
@@ -112,7 +112,7 @@ namespace mdsj.lib
         |
         `.___.
         ");
-            Console.WriteLine(System.IO.File.ReadAllText("logo.txt"));
+           print(System.IO.File.ReadAllText("logo.txt"));
         }
 
 

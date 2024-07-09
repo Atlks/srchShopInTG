@@ -52,7 +52,7 @@ namespace mdsj.libBiz
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
                 var key = de.Key;
-                Console.WriteLine(" SendPhotoAsync " + de.Key);
+               print(" SendPhotoAsync " + de.Key);
 
                 //  Program.botClient.send
                 try
@@ -62,7 +62,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine(ex.ToString());
+                   print(ex.ToString());
                     logErr2024(ex, "foreachChtSesses", "errlog", null);
 
                 }

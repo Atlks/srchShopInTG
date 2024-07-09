@@ -20,6 +20,15 @@ namespace prj202405.lib
     //prj202405.lib.corex
     internal class corex
     {
+        public static void print(object v)
+        {
+            System.Console.WriteLine(v);
+        }
+
+        public static void print(string format, object arg0)
+        {
+            System.Console.WriteLine(format, arg0);
+        }
         public static object call(string methodName,params object[] args)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -169,7 +178,7 @@ namespace prj202405.lib
         }
         /**
          * // 示例用法
-        Action<int, int> add = (a, b) => Console.WriteLine($"Sum: {a + b}");
+        Action<int, int> add = (a, b) =>print($"Sum: {a + b}");
         object[] args = { 10, 20 };
         
         // 调用委托并传递参数数组
