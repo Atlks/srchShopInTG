@@ -1,4 +1,5 @@
 ﻿global using static mdsj.lib.bytecdExt;
+using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,6 +34,135 @@ namespace mdsj.lib
                 return df;
             }
            
+        }
+        //todo
+//        十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
+//"ToLower",
+//  "Replace",
+//  "Trim",
+
+//十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
+//        ToUpper
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:28]
+//ToSimple
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
+//Join
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
+//Remove
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+//TryGetValue
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+//ToList
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+//SerializeObject
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
+//"Sort",
+//  "CompareTo",
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
+//Exists
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+//Run
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+//log
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+//StartsWith
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+//endwith
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
+//Match
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
+//Parse
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+//Insert
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+//"AddDocument",
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+//GetFiles
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+//Execute
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+//ToTraditional
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+//ReadAsStringAsync
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+//"Value<JArray>",
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+//GetStringAsync
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+//Count
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+//AddDays
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+//Find
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
+//ElementAt
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
+//IsWindowVisible
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+//NewPageAsync
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+//newx
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+//Exit
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
+//LoadHtml
+
+//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
+//SetValue
+        public static List<SortedList> foreach_Sqlt(string sqltFl, Func<SortedList, SortedList> fun)
+        {
+            List<SortedList> li = new List<SortedList>();
+
+
+            List<SortedList> liFrmFl = ormSqlt.qryV2(sqltFl);
+            foreach (SortedList rw in liFrmFl)
+            {
+                li.Add(fun(rw));
+            }
+
+            ormSqlt.saveMltHiPfm(li, sqltFl);
+
+            return li;
+        }
+
+        public static void print(object v)
+        {
+            System.Console.WriteLine(v);
+        }
+        public static void print(string format, object arg0)
+        {
+            System.Console.WriteLine(format, arg0);
         }
 
         public static int toInt(object obj)

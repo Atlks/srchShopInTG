@@ -104,10 +104,38 @@ namespace prj202405
         //    writer.Flush(triggerMerge: false, applyAllDeletes: false);
         //}
 
+        public static HashSet<string> ProcessFiles(string directoryPath)
+        {
+            var resultSet = new HashSet<string>();
 
+            // Get all .cs files in the directory and subdirectories
+            var csFiles = Directory.GetFiles(directoryPath, "*.cs", SearchOption.AllDirectories);
+
+            foreach (var file in csFiles)
+            {
+                // Read all lines from the current file
+                var lines = System.IO.File.ReadAllLines(file);
+                foreach (var line in lines)
+                {
+                    // Use regular expression to find characters between dot and left parenthesis
+                    var matches = Regex.Matches(line, @"\.(.*?)\(");
+                    foreach (Match match in matches)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            resultSet.Add(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+
+            return resultSet;
+        }
         internal static async System.Threading.Tasks.Task testAsync()
         {
 
+            var set = ProcessFiles("D:\\0prj\\mdsj");
+            WriteAllText("wds.json", set);
            print("Column1\tColumn2\tColumn3");
            print("Data1\tData2\tData3");
            print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
