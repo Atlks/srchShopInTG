@@ -80,6 +80,30 @@ namespace libx
 
             return n;
         }
+        public static List<bool> getLstFltrsFrmQrystr(string qrystr, SortedList row)
+        {
+            List<bool> li = new List<bool>();
+
+
+            Dictionary<string, string> filters = ldDic4qryCdtn(qrystr);
+            foreach_DictionaryKeys(filters, (string key) =>
+            {
+                li.Add((isFldValEq111(row, key, filters)));
+            });
+            return li;
+        }
+        public static List<Filtr> getLstFltrCdtnsFrmQrystr(string qrystr, SortedList row)
+        {
+            List<Filtr> li = new List<Filtr>();
+          
+
+            Dictionary<string, string> filters = ldDic4qryCdtn(qrystr);
+            foreach_DictionaryKeys(filters, (string key) =>
+            {
+                li.Add(new Filtr(isFldValEq111(row, key, filters)));
+            });
+            return li;
+        }
         public static List<SortedList> getListFltr(string fromDdataDir, string shanrES,
          Func<SortedList, bool> whereFun
        )
@@ -604,9 +628,18 @@ namespace libx
             return li;
         }
 
-
-
-        public static bool ChkAllFltrTrue(List<Filtr> li)
+      
+        public static bool ChkAllFltrTrue(List<bool> li)
+        {
+            foreach (bool cdt in li)
+            {
+                if (cdt == false)
+                    return false;
+            }
+            return true;
+        }
+        //dep
+        public static bool ChkAllFltrTrueDep(List<Filtr> li)
         {
             foreach (Filtr cdt in li)
             {
@@ -618,6 +651,7 @@ namespace libx
     }
 
 
+    //dep
     public class Filtr
     {
         public bool left;

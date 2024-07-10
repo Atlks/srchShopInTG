@@ -1,14 +1,17 @@
 ﻿global using static mdsj.lib.util;
 using NAudio.Wave;
+using Newtonsoft.Json;
 using prj202405.lib;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Xml;
+using System.Xml.Linq;
 using static prj202405.lib.corex;
 namespace mdsj.lib
 {
@@ -69,7 +72,72 @@ namespace mdsj.lib
 
 
         }
+        public static void ConvertXmlToHtml(string xmlFilePath, string htmlFilePath)
+        {
+            var sb = new StringBuilder();
 
+            sb.AppendLine("<html>");
+            sb.AppendLine("<head><title>XML Documentation</title></head>");
+            sb.AppendLine("<body>");
+            sb.AppendLine("<h1>api文档</h1>");
+
+            using (var reader = XmlReader.Create(xmlFilePath))
+            {
+                while (reader.Read())
+                {
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "member")
+                    {
+                        string name = reader.GetAttribute("name");
+                        sb.AppendLine($"<h2>{name}</h2>");
+
+                        while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "member"))
+                        {
+                            if (reader.NodeType == XmlNodeType.Element)
+                            {
+                                string elementName = reader.Name;
+                                if (elementName == "example")
+                                {
+                                    reader.Read(); // Move to the text node or CDATA
+                                    if (reader.NodeType == XmlNodeType.CDATA || reader.NodeType == XmlNodeType.Text)
+                                    {
+                                        string exampleText = reader.Value;
+                                        sb.AppendLine($"<p><strong>范例:</strong> {exampleText}</p>");
+                                    }
+                                }
+                                else
+                                {
+                                    string prmname = reader.GetAttribute("name");
+                                    SortedList stlst = new SortedList();
+                                    stlst.Add("summary", "功能");
+
+                                    stlst.Add("returns", "返回值");
+                                    stlst.Add("param", "----参数");
+                                    reader.Read(); // Move to the text node
+
+                                    if (reader.NodeType == XmlNodeType.Text)
+                                    {
+                                        string text = reader.Value;
+
+                                        sb.AppendLine($"<p><strong>{stlst[elementName]+"  " + prmname}:</strong> {text}</p>");
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            }
+
+            sb.AppendLine("</body>");
+            sb.AppendLine("</html>");
+
+            System.IO.File.WriteAllText(htmlFilePath, sb.ToString());
+        }
+        public static string ConvertXmlToJson(string xmlFilePath)
+        {
+            XDocument doc = XDocument.Load(xmlFilePath);
+            return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, true);
+        }
         public static string userDictFile = $"{prjdir}/cfg/user_dict.txt";
         public static void playMp3(string mp3FilePath, int sec)
         {

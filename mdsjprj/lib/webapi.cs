@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -18,14 +19,36 @@ namespace mdsj.lib
         {
             var builder = WebApplication.CreateBuilder();
 
+           
+
+
             // Configure Kestrel to listen on a specific port
             ConfigureWebHostBuilder webHost = builder.WebHost;
             webHost.ConfigureKestrel(serverOptions =>
             {
                 serverOptions.ListenAnyIP(5000); // 自定义端口号，例如5001
             });
+            //   var app = builder.Build();
+
+
+
+            //----------------------------------swag
+            // Add services to the container.
+            builder.Services.AddSwagger();
+
             var app = builder.Build();
 
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c =>
+                {
+                    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Mini API V1");
+                });
+            }
+            //--------------------end swag----
             //http://localhost:5000/dafen?callGetlistFromDb=yourValue11
 
 

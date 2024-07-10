@@ -1,9 +1,12 @@
 ﻿global using static mdsj.lib.bytecdExt;
+using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -168,6 +171,67 @@ namespace mdsj.lib
             }
         }
 
+        public static List<SortedList> LdHstbEsFrmDbf(string dbFileName)
+        {
+
+
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+
+            if (!File.Exists(dbFileName))
+                File.WriteAllText(dbFileName, "[]");
+
+            // 将JSON字符串转换为List<Dictionary<string, object>>
+            string txt = File.ReadAllText(dbFileName);
+            if (txt.Trim().Length == 0)
+                txt = "[]";
+            var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
+
+            //   ArrayList list = (ArrayList)JsonConvert.DeserializeObject(File.ReadAllText(dbFileName));
+
+            // 获取当前方法的信息
+            //MethodBase method = );
+
+            //// 输出当前方法的名称
+            //Console.WriteLine("Current Method Name: " + method.Name);
+            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+
+            return list;
+        }
+
+
+        public static void foreach_hstbEs(List<SortedList> list2, Action<SortedList> act)
+        {
+            foreach (SortedList rw in list2)
+            {
+                try
+                {
+                    act(rw);
+                }catch(Exception e)
+                {
+                    print_catchEx(nameof(foreach_hstbEs), e);
+                }
+             
+            }
+        }
+        public static string ldfldDfempty(Dictionary<string, StringValues> whereexprsobj, string v)
+        {
+            var x = ldfld(ConvertToStringDictionary(whereexprsobj), v);
+            return x;
+        }
+
+        public static Dictionary<string, string> ConvertToStringDictionary(Dictionary<string, StringValues> input)
+        {
+            var result = new Dictionary<string, string>();
+
+            foreach (var kvp in input)
+            {
+                result[kvp.Key] = kvp.Value.ToString();
+            }
+
+            return result;
+        }
         public static List<SortedList> SliceX<SortedList>(List<SortedList> list, int start, int length)
         {
             if (start < 0) start = 0;
@@ -182,7 +246,7 @@ namespace mdsj.lib
         public static Dictionary<string, string> ldDic4qryCdtn(string qrystr)
         {
             var filters2 = ldDicFromQrystr(qrystr);
-            var filters = RemoveKeys(filters2, "page limit");
+            var filters = RemoveKeys(filters2, "page limit pagesize from");
             return filters;
         }
         public static void foreach_DictionaryKeys(Dictionary<string, string> dictionary, Action<string> keyAction)

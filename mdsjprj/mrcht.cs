@@ -159,7 +159,7 @@ namespace mdsj
                 li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
                 //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
                 //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
-                if (!ChkAllFltrTrue(li))
+                if (!ChkAllFltrTrueDep(li))
                     return false;
 
 

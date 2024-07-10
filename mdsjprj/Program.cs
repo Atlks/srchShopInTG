@@ -82,6 +82,7 @@ using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Windows.UI.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace prj202405
@@ -110,7 +111,26 @@ namespace prj202405
         //搜索用户
         public static Dictionary<long, User> _users = [];
         public static bool jmp2exitFlag;
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddControllers();
+            services.AddSwaggerGen();
+        }
 
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
+
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        }
         public static void Main(string[] args)
         {
 

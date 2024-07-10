@@ -1,5 +1,6 @@
 ﻿global using static mdsj.libBiz.apiBiz;
 using libx;
+using Microsoft.Extensions.Primitives;
 using prj202405;
 using prj202405.lib;
 using System;
@@ -14,7 +15,28 @@ namespace mdsj.libBiz
 {
     internal class apiBiz
     {
-        //   http://localhost:5000/dafen?shangjiaID=yourValue11&dafen=3&uid=007
+        //todo  setcity  setpark
+
+        //  http://localhost:5000/setpark?park=东风园区&uid=007
+        public static string Wbapi_setpark(string qrystr)
+        {
+            //shangjiaID,uid,dafen
+            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            qrystrMap["id"] = qrystrMap["uid"];
+            string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
+            ormJSonFL.save(qrystrMap, dbfile);
+            return "ok";
+        }
+        /// <summary>
+        /// 打分
+        ///  
+        /// <example><![CDATA[ http://localhost:5000/dafen?shangjiaID=yourValue11&dafen=3&uid=007]]></example>
+        /// </summary>
+        /// <param name="shangjiaID">商家id</param>
+        /// <param name="dafen">分数</param>
+        ///     <param name="uid">用户id</param>
+     
+  
         public static string Wbapi_dafen(string qrystr)
         {
             //shangjiaID,uid,dafen
@@ -24,7 +46,44 @@ namespace mdsj.libBiz
         }
 
 
-        // http://localhost:5000/getlistPinlun?shangjiaID=avymrhifuyzkfetlnifryraazk 
+
+
+        /// <summary>
+        /// 评论商家
+        /// 
+        /// <example><![CDATA[  http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646 ]]></example>
+        /// </summary>
+        /// <param name="shangjiaID">商家id</param>
+        ///     <param name="pinlun">评论内容</param>
+        public static string Wbapi_pinlun(string qrystr)
+        {
+            //  print("Received getlist: " + callGetlistFromDb);
+            //  return Results.Ok("OK");
+            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            SortedList obj1 = new SortedList();
+            CopySortedList(qrystrMap, obj1);
+            obj1.Add("id", DateTime.Now.ToString());
+            obj1.Add("商家guid", qrystrMap["shangjiaID"]);
+            //    obj1.Add("商家", merchant.Name);
+            obj1.Add("时间", DateTime.Now.ToString());
+            obj1.Add("评论内容", qrystrMap["pinlun"]);
+            //    obj1.Add("评论人", update.Message.From.Username);
+            obj1.Add("评论人id", qrystrMap["uid"]);
+            System.IO.Directory.CreateDirectory("pinlunDir");
+            //    ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
+            ormJSonFL.save(obj1, "pinlunDir/" + qrystrMap["shangjiaID"] + ".json");
+
+            //    ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
+            return "ok";
+        }
+
+        /// <summary>
+        /// 查询评论
+        /// 
+        /// <example><![CDATA[http://localhost:5000/getlistPinlun?shangjiaID=avymrhifuyzkfetlnifryraazk]]></example>
+        /// </summary>
+        /// <param name="shangjiaID">商家id</param>
+        ///  <returns>返回json数组.</returns>
         public static string Wbapi_getlistPinlun(string qrystr)
         {
             SortedList qrystrHstb = getHstbFromQrystr(qrystr);
@@ -32,37 +91,26 @@ namespace mdsj.libBiz
             return encodeJson(li);
         }
 
-        // http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646
+        /// <summary>
+        /// 查询商家
+        ///  
+        /// <example><![CDATA[http://localhost:5000/getlist?id=avymrhifuyzkfetlnifryraazk]]></example>
+        /// <example><![CDATA[http://localhost:5000/getlist?分类=娱乐&page=1]]></example>
+        /// </summary>
+        /// 
+        ///          <param name="id">商家id</param>
+        /// <param name="分类">商家分类</param>
+        ///  <param name="page">页数</param>
+        ///        <param name="pagesize">每页数量</param>
+        ///  <returns>返回json数组.</returns>
 
-        public static string Wbapi_pinlun(string qrystr)
-        {
-            //  print("Received getlist: " + callGetlistFromDb);
-            //  return Results.Ok("OK");
-            SortedList dafenObj = getHstbFromQrystr(qrystr);
-            SortedList obj1 = new SortedList();
-            CopySortedList(dafenObj, obj1);
-            obj1.Add("id", DateTime.Now.ToString());
-            obj1.Add("商家guid", dafenObj["shangjiaID"]);
-            //    obj1.Add("商家", merchant.Name);
-            obj1.Add("时间", DateTime.Now.ToString());
-            obj1.Add("评论内容", dafenObj["pinlun"]);
-            //    obj1.Add("评论人", update.Message.From.Username);
-            obj1.Add("评论人id", dafenObj["uid"]);
-            System.IO.Directory.CreateDirectory("pinlunDir");
-            //    ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-            ormJSonFL.save(obj1, "pinlunDir/" + dafenObj["shangjiaID"] + ".json");
-
-            //    ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
-            return "ok";
-        }
-
-        //   http://localhost:5000/getlist?id=avymrhifuyzkfetlnifryraazk
-        //   http://localhost:5000/getlist?分类=娱乐&page=1
         public static string Wbapi_getlist(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList dafenObj = getHstbFromQrystr(qrystr);
+            int page = gtfldInt(dafenObj, "page", 0);
+            int pagesize = gtfldInt(dafenObj, "pagesize", 10);
             SortedList map = new SortedList();
             map.Add("limit", 5);
 
@@ -71,29 +119,79 @@ namespace mdsj.libBiz
                 if (row["园区"].ToString().Contains("东风"))
                     print("dbg");
 
-                List<Filtr> li = new List<Filtr>();
+                List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
+
                 //  li.Add(new Filtr(isNotEmptyLianxi(row)));
                 //   li.Add(new Filtr(isLianxifshValid(row)));
 
-                Dictionary<string, string> filters = ldDic4qryCdtn(qrystr);
-                foreach_DictionaryKeys(filters, (string key) =>
-                {
-                    li.Add(new Filtr(isFldValEq111(row, key, filters)));
-                });
-
                 //li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
                 //li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
+
+                //string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
+                //SortedList cfg = findOne(dbfile);
+                //Dictionary<string, StringValues> cdtMap = CopySortedListToDictionary(cfg);
+                //   li.Add(new Filtr(str_eq(row["园区"], ldfldDfempty(cdtMap, "park"))));
 
                 if (!ChkAllFltrTrue(li))
                     return false;
                 return true;
             };
             var list = getListFltr("mercht商家数据", null, whereFun);
-            int start = (page - 1) * 10;
+            int start = (page - 1) * pagesize;
             //if (start < 0)
             //    start = 0;
 
-            var list2 = SliceX(list, start, 10);
+            var list2 = SliceX(list, start, pagesize);
+            return encodeJson(list2);
+        }
+
+
+        //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
+        public static string Wbapi_getDetail(string qrystr)
+        {
+            //  print("Received getlist: " + callGetlistFromDb);
+            //  return Results.Ok("OK");
+            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            int page = gtfldInt(qrystrMap, "page", 0);
+            int pagesize = gtfldInt(qrystrMap, "pagesize", 10);
+            SortedList map = new SortedList();
+            map.Add("limit", 5);
+
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
+                if (row["园区"].ToString().Contains("东风"))
+                    print("dbg");
+
+                List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
+
+                //  li.Add(new Filtr(isNotEmptyLianxi(row)));
+                //   li.Add(new Filtr(isLianxifshValid(row)));
+
+                //li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
+                //li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
+
+                //string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
+                //SortedList cfg = findOne(dbfile);
+                //Dictionary<string, StringValues> cdtMap = CopySortedListToDictionary(cfg);
+                //   li.Add(new Filtr(str_eq(row["园区"], ldfldDfempty(cdtMap, "park"))));
+
+                if (!ChkAllFltrTrue(li))
+                    return false;
+                return true;
+            };
+            var list = getListFltr("mercht商家数据", null, whereFun);
+            int start = (page - 1) * pagesize;
+            //if (start < 0)
+            //    start = 0;
+
+            var list2 = SliceX(list, start, pagesize);
+            //    foreach_hashtable
+            //Func<DictionaryEntry, object> fun
+            foreach_hstbEs(list2, (SortedList rw) =>
+            {
+                rw.Add("pinlun", ormJSonFL.qrySglFL("pinlunDir/" + qrystrMap["id"] + ".json"));
+                rw.Add("dafen", "555");
+            });
             return encodeJson(list2);
         }
 

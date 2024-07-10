@@ -78,6 +78,9 @@ using mdsj.libBiz;
 using Microsoft.ClearScript.V8;
 using static WindowsFormsApp1.libbiz.storeEngFunRefCls;
 using WindowsFormsApp1.libbiz;
+using System.Text;
+using System.Xml;
+using System.Xml.Linq;
 namespace prj202405
 {
     internal class testCls
@@ -131,20 +134,25 @@ namespace prj202405
 
             return resultSet;
         }
+
+   
+
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
+            WriteAllText("mdsj.xml.json", ConvertXmlToJson("mdsj.xml"));
 
             var set = ProcessFiles("D:\\0prj\\mdsj");
             WriteAllText("wds.json", set);
-           print("Column1\tColumn2\tColumn3");
-           print("Data1\tData2\tData3");
-           print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
-         
+            print("Column1\tColumn2\tColumn3");
+            print("Data1\tData2\tData3");
+            print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
+
             // 使用 Task.Run 启动一个新的任务
             //Task newTask = Task.Run(() =>{
             //    asyncF();
             //});
-           print("sync  log");
+            print("sync  log");
             //  tts("此消息来了11");
             geenBtns();
             try
@@ -154,7 +162,7 @@ namespace prj202405
             }
             catch (Exception ex)
             {
-               print("除法错误：" + ex.Message);
+                print("除法错误：" + ex.Message);
             }
             //for(int i=0;i<100;i++)
             //{
@@ -183,7 +191,7 @@ namespace prj202405
             {
                 engine.Execute("a= 555");
                 var result = engine.Script.a;
-               print(result); // 输出 8
+                print(result); // 输出 8
             }
 
             var id = "0624按摩552110457";
@@ -209,7 +217,7 @@ namespace prj202405
             {
 
                 var prices = await GetCryptoPricesAsync(cryptoSymbols);
-               print(json_encode(prices));
+                print(json_encode(prices));
             });
 
             //  
@@ -321,18 +329,18 @@ namespace prj202405
 
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
-               print("line1633");
+                print("line1633");
 
-               print(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
-
-
-
-               print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+                print(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
 
 
-               print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
 
-               print(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+                print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+
+
+                print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
+
+                print(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
@@ -349,7 +357,7 @@ namespace prj202405
                 //Console.WriteLine("【新词识别】：{0}", string.Join("/ ", segments));
 
                 var segments = segmenter.CutForSearch("谁知道会所联系方式呢"); // 搜索引擎模式
-               print("【搜索引擎模式】：{0}", string.Join("/ ", segments));
+                print("【搜索引擎模式】：{0}", string.Join("/ ", segments));
                 // timerCls.z_actSj();
                 //  timerCls.renqi();
                 //     timerCls.z21_yule();
@@ -366,11 +374,11 @@ namespace prj202405
 
         }
 
-      
+
 
         private static void geenBtns()
         { // Create the keyboard object
-          
+
             // Create the first row of buttons
             var firstRow = new List<InlineKeyboardButton>();
             firstRow.Add(
@@ -390,9 +398,9 @@ namespace prj202405
             firstRow.Add(
               new InlineKeyboardButton("代付须知")
               {
-                    Text = "代付须知",
-                    CallbackData = "daifu"
-                }
+                  Text = "代付须知",
+                  CallbackData = "daifu"
+              }
             );
 
             // Create the second row of buttons
@@ -406,7 +414,7 @@ namespace prj202405
             );
 
 
-           
+
 
             // Add the rows of buttons to the keyboard
             var lstBtns = new List<List<InlineKeyboardButton>>();
@@ -416,15 +424,15 @@ namespace prj202405
             var keyboard = new InlineKeyboardMarkup(lstBtns);
             // Serialize the keyboard to JSON
             var keyboardJson = JsonConvert.SerializeObject(keyboard);
-        //    WriteObj("btns.json", keyboard);
+            //    WriteObj("btns.json", keyboard);
 
             // Print the JSON string to the console
-           print(keyboardJson);
+            print(keyboardJson);
         }
         private static async Task<object> asyncF()
         {
-           print("enter asyncfun ");
-           print("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
+            print("enter asyncfun ");
+            print("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
             //弹框
             //await botClient.AnswerCallbackQueryAsync(
             //  callbackQueryId: update.CallbackQuery.Id,
@@ -432,11 +440,11 @@ namespace prj202405
             //  showAlert: true); // 这是显示对话框的关键);
             //return;
             await System.Threading.Tasks.Task.Delay(3000);
-           print("...exit from async ");
+            print("...exit from async ");
             return 888;
-            
+
         }
-      
+
 
 
         private static void rdCateGeneH5list()
@@ -448,7 +456,7 @@ namespace prj202405
             foreach (var value in map.Values)
             {
                 String s = $" <option value=\"{value}\">";
-               print(s);
+                print(s);
             }
         }
 
@@ -464,12 +472,12 @@ namespace prj202405
                     return false;
                 });
 
-               print(json_encode(rztLi));
+                print(json_encode(rztLi));
 
             }
             catch (Exception e)
             {
-               print(e.Message);
+                print(e.Message);
             }
         }
 
@@ -484,12 +492,12 @@ namespace prj202405
                 {
                     if (map["园区"] == "东风园区" && map["商家"] == "沙县 小吃")
                     {
-                       print("dbg");
+                        print("dbg");
                     }
 
                     if (map["id"] == "vekzrqwxkeyuxpcxzkjdnfdsbt")
                     {
-                       print("dbg");
+                        print("dbg");
                     }
                     string tg = trim_RemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
                     if (tg == "")
@@ -522,7 +530,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                    print(e);
                 }
 
             }
@@ -542,7 +550,7 @@ namespace prj202405
                 string line = ChineseCharacterConvert.Convert.ToTraditional(wd) + "=" + wd;
                 li.Add(line);
                 n++;
-               print(n);
+                print(n);
 
             }
             // file_put_contents("trd2smpLib.json",json_encode(li));
@@ -570,7 +578,7 @@ namespace prj202405
                 }
                 catch (HttpRequestException e)
                 {
-                   print($"Request error: {e.Message}");
+                    print($"Request error: {e.Message}");
                     dbgCls.print_ret(__METHOD__, 0);
                     return null;
                 }
@@ -701,7 +709,7 @@ namespace prj202405
                 System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
                 cityMap.Remove("Address");
                 cityMap.Add("cityname", city.Name);
-               print(JsonConvert.SerializeObject(cityMap, Formatting.Indented));
+                print(JsonConvert.SerializeObject(cityMap, Newtonsoft.Json.Formatting.Indented));
                 var addrS = (from ca in city.Address
                              select ca
                          )
@@ -712,7 +720,7 @@ namespace prj202405
                     addMap.Remove("Merchant");
                     addMap.Add("parkname", addx.Name);
                     addMap.Add("parkkwd", addx.CityKeywords);
-                   print(JsonConvert.SerializeObject(addMap, Formatting.Indented));
+                    print(JsonConvert.SerializeObject(addMap, Newtonsoft.Json.Formatting.Indented));
                     var rws = (from m in addx.Merchant
                                select m
                               )
@@ -724,15 +732,15 @@ namespace prj202405
                         mcht.Add("cityname", city.Name);
                         mcht.Add("parkname", addx.Name);
                         mcht.Add("parkkwd", addx.CityKeywords);
-                       print(mcht["Category"]);
+                        print(mcht["Category"]);
                         //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
                         mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
                         mcht.Add("cateInt", (int)m.Category);
                         mcht.Add("cateEgls", m.Category.ToString());
                         //   mcht
 
-                       print(JsonConvert.SerializeObject(mcht, Formatting.Indented));
-                       print("..");
+                        print(JsonConvert.SerializeObject(mcht, Newtonsoft.Json.Formatting.Indented));
+                        print("..");
                     }
 
                 }
@@ -763,7 +771,7 @@ namespace prj202405
                            select jo).ToList();
 
 
-           print(JsonConvert.SerializeObject(results));
+            print(JsonConvert.SerializeObject(results));
 
 
             string showtitle = "spatime(ms):";
@@ -776,7 +784,7 @@ namespace prj202405
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
 
-           print(showtitle + spantime);
+            print(showtitle + spantime);
         }
 
         private static void addData()
@@ -798,7 +806,7 @@ namespace prj202405
 
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
-           print("spatime(ms):" + spantime);
+            print("spatime(ms):" + spantime);
 
         }
     }

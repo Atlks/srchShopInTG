@@ -51,7 +51,7 @@ namespace WindowsFormsApp1.libbiz
                 //li.Add(new Condtn(isFldValEq111(row, "国家", whereExprsObj)));
                 //li.Add(new Condtn(isCotainFuwuci(row, msgCtain)));
                 //li.Add(new Condtn(msgHasPostWd && isCotainPostnWd(row, kwds)));
-                if (!ChkAllFltrTrue(li))
+                if (!ChkAllFltrTrueDep(li))
                     return false;
                 return true;
             };
