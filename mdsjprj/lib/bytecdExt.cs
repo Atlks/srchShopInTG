@@ -156,6 +156,49 @@ namespace mdsj.lib
             return li;
         }
 
+        public static void CopySortedList(SortedList source, SortedList destination)
+        {
+            foreach (DictionaryEntry entry in source)
+            {
+                if (destination.ContainsKey(entry.Key))
+                    destination[entry.Key] = entry.Value;
+                else
+                    destination.Add(entry.Key, entry.Value);
+
+            }
+        }
+
+        public static List<SortedList> SliceX<SortedList>(List<SortedList> list, int start, int length)
+        {
+            if (start < 0) start = 0;
+            if (start >= list.Count) return new List<SortedList>();
+
+            if (length < 0) length = 0;
+            if (start + length > list.Count) length = list.Count - start;
+
+            return list.GetRange(start, length);
+        }
+
+        public static Dictionary<string, string> ldDic4qryCdtn(string qrystr)
+        {
+            var filters2 = ldDicFromQrystr(qrystr);
+            var filters = RemoveKeys(filters2, "page limit");
+            return filters;
+        }
+        public static void foreach_DictionaryKeys(Dictionary<string, string> dictionary, Action<string> keyAction)
+        {
+            foreach (var key in dictionary.Keys)
+            {
+                keyAction(key);
+            }
+        }
+        public static string ldfld(Dictionary<string, string> whereExprsObj, string fld)
+        {
+            if (whereExprsObj.ContainsKey(fld))
+                return whereExprsObj[fld];
+            return "";
+        }
+
         public static void print(object v)
         {
             System.Console.WriteLine(v);

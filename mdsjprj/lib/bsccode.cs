@@ -5,12 +5,15 @@ using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
+using static SqlParser.Ast.Expression;
 using static SqlParser.Ast.Statement;
 
 namespace mdsj.lib
@@ -31,7 +34,7 @@ namespace mdsj.lib
         }
         public static List<SortedList> ReadAsListHashtable(string f)
         {
-         //   File
+            //   File
             return json_decode(System.IO.File.ReadAllText(f));
         }
         public static SortedList ldHstb
@@ -57,7 +60,7 @@ namespace mdsj.lib
         }
         public static void echo(object v)
         {
-           print(v);
+            print(v);
         }
         public static void foreach_objKey(object obj, Func<PropertyInfo, object> fun)
         {
@@ -83,6 +86,69 @@ namespace mdsj.lib
 
         }
 
+        public static Dictionary<string, string> RemoveKeys(Dictionary<string, string> originalDictionary, string commaSeparatedKeys)
+        {
+            // 分割逗号分割的字符串并移除前后空白
+            var keysToRemove = new HashSet<string>(commaSeparatedKeys.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries), StringComparer.OrdinalIgnoreCase);
+
+            // 创建新的字典，只保留不在 keysToRemove 中的键值对
+            var newDictionary = new Dictionary<string, string>(originalDictionary.Count);
+            foreach (var kvp in originalDictionary)
+            {
+                if (!keysToRemove.Contains(kvp.Key))
+                {
+                    newDictionary.Add(kvp.Key, kvp.Value);
+                }
+            }
+
+            return newDictionary;
+        }
+        public static Dictionary<string, string> ldDicFromQrystr(string queryString)
+        {
+            return ConvertToDictionary(queryString);
+        }
+        public static Dictionary<string, string> ConvertToDictionary(string queryString)
+        {
+            var dictionary = new Dictionary<string, string>();
+
+            // Use HttpUtility to parse the query string
+            var queryParams = HttpUtility.ParseQueryString(queryString);
+
+            foreach (string key in queryParams)
+            {
+                dictionary[key] = queryParams[key];
+            }
+
+            return dictionary;
+        }
+        public static Hashtable ldHstbFromQrystr(string queryString)
+        {
+            var hashtable = new Hashtable();
+
+            // Use HttpUtility to parse the query string
+            NameValueCollection queryParams = HttpUtility.ParseQueryString(queryString);
+
+            foreach (string key in queryParams)
+            {
+                hashtable[key] = queryParams[key];
+            }
+
+            return hashtable;
+        }
+        public static Hashtable ConvertToHashtable(string queryString)
+        {
+            var hashtable = new Hashtable();
+
+            // Use HttpUtility to parse the query string
+            NameValueCollection queryParams = HttpUtility.ParseQueryString(queryString);
+
+            foreach (string key in queryParams)
+            {
+                hashtable[key] = queryParams[key];
+            }
+
+            return hashtable;
+        }
         public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
         {
             HashSet<string> updatedSet = new HashSet<string>();
@@ -102,13 +168,13 @@ namespace mdsj.lib
                 string[] files = System.IO.Directory.GetFiles(folderPath);
                 foreach (string file in files)
                 {
-                    
-                      fileAction(file);
+
+                    fileAction(file);
                 }
             }
             else
             {
-               print("The specified folder does not exist.");
+                print("The specified folder does not exist.");
             }
         }
         public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
@@ -204,7 +270,7 @@ namespace mdsj.lib
             }
             else
             {
-               print("The object does not have a writable 'Name' property.");
+                print("The object does not have a writable 'Name' property.");
             }
         }
         public static object invoke(string methodName, params object[] args)
@@ -275,16 +341,16 @@ namespace mdsj.lib
         public static void print_ex(string mthdName, Exception e)
         {
 
-           print($"------{mthdName}() catch ex----------_");
-           print(e);
-           print($"------{mthdName}() catch ex finish----------_");
+            print($"------{mthdName}() catch ex----------_");
+            print(e);
+            print($"------{mthdName}() catch ex finish----------_");
         }
 
         public static void print_catchEx(string v, Exception e)
         {
-           print($"------{v}() catch ex----------_");
-           print(e);
-           print($"------{v}() catch ex finish----------_");
+            print($"------{v}() catch ex----------_");
+            print(e);
+            print($"------{v}() catch ex finish----------_");
         }
         public static object call(string authExprs, Delegate callback, params object[] args)
         {
@@ -358,7 +424,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print("Error reading file: " + ex.Message);
+                print("Error reading file: " + ex.Message);
             }
 
             return words;
@@ -367,13 +433,13 @@ namespace mdsj.lib
         {
             try
             {
-           return     callx(callback, objs);
+                return callx(callback, objs);
 
             }
             catch (jmp2endEx e)
             {
                 print_catchEx("callxTryJmp", e);
-               print("callxTryJmp  callmeth=>" + callback.Method.Name);
+                print("callxTryJmp  callmeth=>" + callback.Method.Name);
             }
             //catch (Exception e)
             //{
@@ -420,7 +486,7 @@ namespace mdsj.lib
         }
         public static bool IsStr(object obj1)
         {
-            
+
             return obj1 is string;
         }
         public static bool IsInt(string str)
@@ -451,13 +517,13 @@ namespace mdsj.lib
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-           print("assemblies.Len=>" + assemblies.Length);
+            print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-           print("typeList.Len=>" + typeList.Count());
+            print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-           print("methodss.Len=>" + methodss.Count());
+            print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -465,7 +531,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-               print("......$$waring  .methodinfo is null");
+                print("......$$waring  .methodinfo is null");
                 print_ret_adv(__METHOD__, "");
                 return null;
             }
@@ -484,7 +550,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_ex( nameof(callxTryx), e);
+                print_ex(nameof(callxTryx), e);
             }
 
 
@@ -500,13 +566,13 @@ namespace mdsj.lib
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-           print("assemblies.Len=>" + assemblies.Length);
+            print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-           print("typeList.Len=>" + typeList.Count());
+            print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods( ));  //BindingFlags.Static| BindingFlags.Public
-           print("methodss.Len=>" + methodss.Count());
+                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
+            print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -514,7 +580,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-               print("......$$waring  .methodinfo is null");
+                print("......$$waring  .methodinfo is null");
                 print_ret_adv(__METHOD__, "");
                 return null;
             }

@@ -257,6 +257,18 @@ namespace mdsj
             return true;
         }
 
+        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.str_eq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+
+      
+
         //private static bool isFldValEq(SortedList row, string v1, string v2)
         //{
         //    throw new NotImplementedException();
@@ -267,7 +279,7 @@ namespace mdsj
             return !isEmptyLianxi(row);
         }
 
-        private static bool isLianxifshValid(SortedList row)
+        public static bool isLianxifshValid(SortedList row)
         {
             // string Fld = ;
             if (getFldLianxifs(row, "Whatsapp") != "")

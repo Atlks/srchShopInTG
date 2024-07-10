@@ -1,5 +1,5 @@
 ﻿global using static libx.qryEngrParser;
-
+global using static libx.Filtr;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -28,6 +28,16 @@ namespace libx
 {
     internal class qryEngrParser
     {
+        public static bool hasCondt(Dictionary<string, string> whereExprsObj, string fld)
+        {
+            return whereExprsObj.ContainsKey(fld);
+
+            //if (park4srch == null)
+            //{
+            //    return false;
+            //}
+            //return true;
+        }
         public static bool hasCondt(Dictionary<string, StringValues> whereExprsObj, string fld)
         {
             return whereExprsObj.ContainsKey(fld);
