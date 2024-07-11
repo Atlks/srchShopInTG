@@ -1,4 +1,5 @@
 ﻿global using static mdsj.lib.bytecdExt;
+using libx;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using prj202405.lib;
@@ -216,6 +217,30 @@ namespace mdsj.lib
             }
             return listRzt;
         }
+        public static void encodeurl()
+        {
+
+        }
+        public static void arr_join()
+        {
+
+        }
+        public static void run()
+        {
+
+        }
+        public static void exec()
+        {
+
+        }
+        public static void file_rw()
+        {
+
+        }
+        public static void str_join()
+        {
+
+        }
 
 
         public static void foreach_hstbEs(List<SortedList> list2, Action<SortedList> act)
@@ -286,6 +311,53 @@ namespace mdsj.lib
                 keyAction(key);
             }
         }
+
+
+        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, StringValues> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.str_eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+
+        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.str_eq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+
+        public static object ldfldDfemp(SortedList row, string v)
+        {
+            return ldfld(row, v, "");
+        }
+
+        public static object ldfld(SortedList row, string fld, string dfv)
+        {
+            if (row.ContainsKey(fld))
+                return row[fld];
+            return dfv;
+        }
+
+        public static bool isEq4qrycdt(object rowVal, object cdtVal)
+        {
+            if (cdtVal == null || cdtVal.ToString() == "")
+                return true;
+            return rowVal.ToString().ToUpper().Equals(cdtVal.ToString().ToUpper());
+        }
+        public static bool isChkOK(List<Filtr> li)
+        {
+            if (!ChkAllFltrTrueDep(li))
+                return false;
+            return true;
+        }
+
         public static string ldfld(Dictionary<string, string> whereExprsObj, string fld)
         {
             if (whereExprsObj.ContainsKey(fld))

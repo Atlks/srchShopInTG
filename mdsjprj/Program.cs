@@ -238,15 +238,15 @@ namespace prj202405
             {
                 var request = context.Request;
                 string methd = request.Path;
-              ////  methd = methd.Substring(1);
+                ////  methd = methd.Substring(1);
                 if (methd == "/swag")
                 {
                     context.Response.ContentType = "text/html; charset=utf-8";
-                     var rzt= Wbapi_swagApi("mdsj.xml");
+                    var rzt = Wbapi_swagApi("mdsj.xml", context);
                     context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
                     jmp2end();
                 }
-                  
+
             });
 
             //  Console.ReadKey();
@@ -277,7 +277,7 @@ namespace prj202405
                 }
                 catch (jmp2endEx e22)
                 {
-                   print("jmp2exitEx");
+                    print("jmp2exitEx");
                 }
                 catch (Exception e)
                 {
@@ -311,10 +311,10 @@ namespace prj202405
             var __METHOD__ = "evt_aHandleUpdateAsync";
             dbgCls.print_call_FunArgs(__METHOD__, func_get_args(update));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
-           print(update?.Message?.Text);
+            print(update?.Message?.Text);
             //    tts(update?.Message?.Text);
             // print(json_encode(update));
-           print("tag4520");
+            print("tag4520");
             bot_logRcvMsg(update);
 
 
@@ -570,7 +570,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+                    print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
                 }
             }
             #endregion
@@ -587,7 +587,7 @@ namespace prj202405
                     }
                     catch (Exception e)
                     {
-                       print("告诉别人怎么评价时出错:" + e.Message);
+                        print("告诉别人怎么评价时出错:" + e.Message);
                     }
                     return;
                 }
@@ -686,7 +686,7 @@ namespace prj202405
                 HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
                 if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
-                   print(" 不包含商品服务词，ret");
+                    print(" 不包含商品服务词，ret");
 
 
                     ArrayList a = filex.rdWdsFromFile($"{prjdir}/menu/底部公共菜单.txt");
@@ -711,7 +711,7 @@ namespace prj202405
                 string? msgx = tglib.bot_getTxt(update);
                 if (msgx == null || msgx.Length > 25)
                 {
-                   print(" msgx == null || msgx.Length > 25 ");
+                    print(" msgx == null || msgx.Length > 25 ");
                     return;
                 }
                 msgx = msgx.Trim();
@@ -721,10 +721,10 @@ namespace prj202405
 
                 HashSet<string> trgWdSt = ReadWordsFromFile($"{prjdir}/cfg/搜索触发词.txt");
                 var trgWd = string.Join(" ", trgWdSt);
-               print(" 触发词 chk");
+                print(" 触发词 chk");
                 if (!strCls.containKwds(update?.Message?.Text, trgWd))
                 {
-                   print(" 不包含触发词，ret");
+                    print(" 不包含触发词，ret");
                     return;
                 }
 
@@ -736,17 +736,17 @@ namespace prj202405
                 string msgx_remvTrigWd = replace_RemoveWords(msgx, hs);
 
                 //是否包含搜索词 商品或服务关键词
-               print(" 商品或服务关键词 srch");
+                print(" 商品或服务关键词 srch");
                 HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
                 if (!strCls.containKwds(msgx_remvTrigWd, string.Join(" ", 商品与服务词库)))
                 {
-                   print(" 不包含商品服务词，ret");
+                    print(" 不包含商品服务词，ret");
                     return;
                 }
                 string fuwuWd = getFuwuci(msgx_remvTrigWd, 商品与服务词库);
                 if (getFuwuci == null)
                 {
-                   print(" 不包含商品服务词，ret");
+                    print(" 不包含商品服务词，ret");
                     return;
                 }
 
@@ -842,10 +842,10 @@ namespace prj202405
 
             //ad chk
 
-           print(update.Message?.Type);
+            print(update.Message?.Type);
             if (update.Message?.Type == MessageType.Text)
             {
-               print(update.Message?.Type);
+                print(update.Message?.Type);
                 bot_adChk(update);
             }
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
@@ -900,11 +900,11 @@ namespace prj202405
         {
             const string METHOD__ = nameof(msgxTrigBtmbtnEvtHdlr);
 
-           print("--------btm btn trig start...----------");
+            print("--------btm btn trig start...----------");
             HashSet<string> hs = GetSrchTrgWds();
             if (!containKwdsV2(update?.Message?.Text, hs))
             {
-               print(" 不包含触发词，ret");
+                print(" 不包含触发词，ret");
                 return;
             }
             var btnName = getBtnnameFromTxt(update.Message.Text);
@@ -912,7 +912,7 @@ namespace prj202405
             print_varDump(METHOD__, "包含btnName", btnName);
             if (btnName == "")
             {
-               print(" 不包含btnName，ret");
+                print(" 不包含btnName，ret");
                 //  return;
             }
             else
@@ -926,7 +926,7 @@ namespace prj202405
             print_varDump(METHOD__, "get extWd", extWd);
             if (extWd == "")
             {
-               print(" 不包含extWd，ret");
+                print(" 不包含extWd，ret");
                 return;
             }
             btnName = convertExtWd2btnname(extWd);
@@ -939,7 +939,7 @@ namespace prj202405
 
 
             }
-           print("-------- end btm btn trig start...----------");
+            print("-------- end btm btn trig start...----------");
 
         }
 
@@ -957,7 +957,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print("点击查看菜单,告知未提供菜单时时出错:" + e.Message);
+                    print("点击查看菜单,告知未提供菜单时时出错:" + e.Message);
                 }
                 return;
             }
@@ -1043,7 +1043,7 @@ namespace prj202405
             }
             else
             {
-               print(" msg is null or leng>25");
+                print(" msg is null or leng>25");
                 dbgCls.print_ret(__METHOD__, 0);
                 return;
             }
@@ -1194,7 +1194,7 @@ namespace prj202405
             dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), isAdminer, text));
 
             HashSet<prj202405.City> _citys = getCitysObj();
-           print(" evt  @回复了商家详情信息  评价商家");
+            print(" evt  @回复了商家详情信息  评价商家");
             var updateString = JsonConvert.SerializeObject(update);
             Match match = Regex.Match(updateString, @"(?<=\?id=).*?(?=&)");
             Merchant? merchant = match.Success ? (from c in _citys
@@ -1206,7 +1206,7 @@ namespace prj202405
 
             if (merchant == null)
             {
-               print("未找到目标商家");
+                print("未找到目标商家");
                 return;
             }
 
@@ -1223,7 +1223,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("告知评价字数不超过100时出错:" + ex.Message);
+                        print("告知评价字数不超过100时出错:" + ex.Message);
                     }
 
                     if (msg != null)
@@ -1235,7 +1235,7 @@ namespace prj202405
                         }
                         catch (Exception ex)
                         {
-                           print("删除告知评价字数不可超过100字时出错:" + ex.Message);
+                            print("删除告知评价字数不可超过100字时出错:" + ex.Message);
                         }
                     }
                     return;
@@ -1247,7 +1247,7 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                    print(e);
                 }
 
 
@@ -1282,7 +1282,7 @@ namespace prj202405
                 }
                 catch (Exception ex)
                 {
-                   print("告知成功点评了商家时出错:" + ex.Message);
+                    print("告知成功点评了商家时出错:" + ex.Message);
                 }
             }
             //管理修改商家信息
@@ -1298,7 +1298,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("告知编辑消息时出错:" + ex.Message);
+                        print("告知编辑消息时出错:" + ex.Message);
                     }
                     return;
                 }
@@ -1316,7 +1316,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("编辑商家分类时出错:" + ex.Message);
+                        print("编辑商家分类时出错:" + ex.Message);
                         return;
                     }
                 }
@@ -1332,7 +1332,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("编辑商家开始营业时出错:" + ex.Message);
+                        print("编辑商家开始营业时出错:" + ex.Message);
                         return;
                     }
                 }
@@ -1344,7 +1344,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("编辑商家截止营业时出错:" + ex.Message);
+                        print("编辑商家截止营业时出错:" + ex.Message);
                         return;
                     }
                 }
@@ -1388,7 +1388,7 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("告知编辑消息时出错:" + ex.Message);
+                        print("告知编辑消息时出错:" + ex.Message);
                     }
                     return;
                 }
@@ -1401,7 +1401,7 @@ namespace prj202405
                 }
                 catch (Exception ex)
                 {
-                   print("告知编辑成功时出错:" + ex.Message);
+                    print("告知编辑成功时出错:" + ex.Message);
                 }
             }
 
@@ -1644,11 +1644,11 @@ namespace prj202405
             }
 
 
-           print("  msg=>" + msgx_remvTrigWd2);
+            print("  msg=>" + msgx_remvTrigWd2);
 
             if (string.IsNullOrEmpty(msgx_remvTrigWd2))
             {
-               print("IsNullOrEmpty(msgx_remvTrigWd2)");
+                print("IsNullOrEmpty(msgx_remvTrigWd2)");
                 return;
             }
 
@@ -1705,7 +1705,7 @@ namespace prj202405
 
             if (count == 0)   //in pubgrp
             {
-               print(" evt serch.  in public grp. srch rzt cnt =0,so ret");
+                print(" evt serch.  in public grp. srch rzt cnt =0,so ret");
                 return;
             }
 
@@ -1825,7 +1825,7 @@ namespace prj202405
             }
             catch (Exception e)
             {
-               print("返回商家联系方式列表时出错:" + e.Message);
+                print("返回商家联系方式列表时出错:" + e.Message);
             }
 
 
@@ -2355,10 +2355,10 @@ namespace prj202405
 
 
                         print("not same user...ret");
-                          botClient.AnswerCallbackQueryAsync(
-                                  callbackQueryId: update.CallbackQuery.Id,
-                                  text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
-                                  showAlert: true); // 这是显示对话框的关键);
+                        botClient.AnswerCallbackQueryAsync(
+                                callbackQueryId: update.CallbackQuery.Id,
+                                text: "这是别人搜索的联系方式,如果你要查看联系方式请自行搜索",
+                                showAlert: true); // 这是显示对话框的关键);
                         return;
 
                     }
@@ -2472,7 +2472,7 @@ namespace prj202405
                 score = Convert.ToInt32(sc);
             }
             #region 受限了
-            var operaCount =   biz_other._SetUserOperas(cq.From.Id).Result;
+            var operaCount = biz_other._SetUserOperas(cq.From.Id).Result;
             var answer = string.Empty;
             //24小时10个   一周30个    一个月50个   一年150个  
             if (operaCount.Years > 150)
@@ -2510,11 +2510,11 @@ namespace prj202405
                 {
                     try
                     {
-                          botClient.AnswerCallbackQueryAsync(cq.Id, "一个账号只能打分一次,请勿重复打分!", true);
+                        botClient.AnswerCallbackQueryAsync(cq.Id, "一个账号只能打分一次,请勿重复打分!", true);
                     }
                     catch (Exception e)
                     {
-                       print("告知已评过分时出错:" + e.Message);
+                        print("告知已评过分时出错:" + e.Message);
                     }
                     return;
                 }
@@ -2523,18 +2523,18 @@ namespace prj202405
                 user.Scores++;
                 try
                 {
-                      botClient.AnswerCallbackQueryAsync(cq.Id, "评分成功", true);
+                    botClient.AnswerCallbackQueryAsync(cq.Id, "评分成功", true);
                 }
                 catch (Exception e)
                 {
-                   print("告知评分成功时出错:" + e.Message);
+                    print("告知评分成功时出错:" + e.Message);
                 }
 
                 Telegram.Bot.Types.Message scoreTipMsg = null;
                 try
                 {
                     //感谢打分
-                    scoreTipMsg =   botClient.SendTextMessageAsync(
+                    scoreTipMsg = botClient.SendTextMessageAsync(
                         chatId: cq.Message.Chat.Id,
                         text: $"😙 <b>匿名用户对商家进行了打分</b>",
                         parseMode: ParseMode.Html,
@@ -2543,25 +2543,25 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print("感谢打分时出错:" + e.Message);
+                    print("感谢打分时出错:" + e.Message);
                 }
 
-                 TaskRun(async () =>
-                {
-                    await System.Threading.Tasks.Task.Delay(10000);
-                    if (scoreTipMsg == null)
-                    {
-                        try
-                        {
-                            await botClient.DeleteMessageAsync(scoreTipMsg.Chat.Id, scoreTipMsg.MessageId);
-                        }
-                        catch (Exception e)
-                        {
+                TaskRun(async () =>
+               {
+                   await System.Threading.Tasks.Task.Delay(10000);
+                   if (scoreTipMsg == null)
+                   {
+                       try
+                       {
+                           await botClient.DeleteMessageAsync(scoreTipMsg.Chat.Id, scoreTipMsg.MessageId);
+                       }
+                       catch (Exception e)
+                       {
                            print("删除评分提示时出错:" + e.Message);
-                        }
-                    }
-                 //   return 0;
-                });
+                       }
+                   }
+                   //   return 0;
+               });
             }
 
             //查看联系方式
@@ -2581,7 +2581,7 @@ namespace prj202405
             //名称路径
             result += "\n\n🏠<b>" + mrchtpath + "</b>";
 
-           print(result);
+            print(result);
             //人气排名   
             //int rank = merchants.OrderByDescending(e => e.Views).ToList().FindIndex(e => e.Guid == guid) + 1;
             //result += rank switch
@@ -2603,7 +2603,7 @@ namespace prj202405
             }
             catch (Exception e)
             {
-               print(e);
+                print(e);
             }
 
 
@@ -2671,7 +2671,7 @@ namespace prj202405
             #region 显示评价
             string pinlunRzt = pinlun.pinlun_getpinlun(contact_Merchant);
             result = result + pinlunRzt;
-           print(result);
+            print(result);
             #endregion
 
             //[
@@ -2741,7 +2741,7 @@ namespace prj202405
                     obj.Add("txt", result);
                     obj.Add("menu", menu);
                     logCls.log(obj, "detailClickDir");
-                    Telegram.Bot.Types.Message m =   botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu)).Result;
+                    Telegram.Bot.Types.Message m = botClient.EditMessageCaptionAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, caption: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu)).Result;
 
                     logCls.log(m, "detailClickLogDir");
                 }
@@ -2765,7 +2765,7 @@ namespace prj202405
                 //  botClient.SendTextMessageAsync()
                 //  botClient.EditMessageCaptionAsync
                 //  botClient.EditMessageTextAsync
-                  botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
+                botClient.EditMessageTextAsync(chatId: cq.Message.Chat.Id, messageId: cq.Message.MessageId, text: result, parseMode: ParseMode.Html, replyMarkup: new InlineKeyboardMarkup(menu));
             }
             catch (Exception e)
             {
@@ -2785,14 +2785,14 @@ namespace prj202405
                     }
                     catch (Exception ex)
                     {
-                       print("已经显示了,请勿重复点击时候出错:" + ex.Message);
+                        print("已经显示了,请勿重复点击时候出错:" + ex.Message);
                     }
                 }
                 else
                 {
-                   print("编辑联系方式时出错:" + e.Message);
+                    print("编辑联系方式时出错:" + e.Message);
                 }
-                  biz_other._SaveConfig();
+                biz_other._SaveConfig();
                 // }
 
 
@@ -2837,7 +2837,7 @@ namespace prj202405
 
             #region 联系方式
             result += "\n\n<b>-------------联系方式-------------</b>";
-           print(result);
+            print(result);
             if (contact_Merchant.Telegram.Any())
             {
                 if (contact_Merchant.Telegram.Count == 1)

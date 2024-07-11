@@ -33,6 +33,10 @@ namespace mdsj.lib
             });
          
          */
+        /// <summary>
+        /// /
+        /// </summary>
+        /// <param name="act"></param>
         public static void webapiStart(Action<HttpContext> act)
         {
             var builder = WebApplication.CreateBuilder();
@@ -96,8 +100,9 @@ namespace mdsj.lib
         //}
         //--------------------end swag----
 
-        public static string Wbapi_swagApi(string xmlpath)
+        public static string Wbapi_swagApi(string xmlpath, HttpContext context)
         {
+            context.Response.ContentType = "text/html; charset=utf-8";
             //shangjiaID,uid,dafen
             //     SortedList dafenObj = getHstbFromQrystr(qrystr);
             //   ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");

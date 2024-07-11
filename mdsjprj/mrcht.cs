@@ -237,7 +237,14 @@ namespace mdsj
         }
 
 
-
+        /// <summary>
+        ///    //先按照 服务词+地域词搜索，如果找不到则排除地域词只使用服务词搜索
+        /// </summary>
+        /// <param name="dbFrom"></param>
+        /// <param name="shareNames"></param>
+        /// <param name="filters"></param>
+        /// <param name="msgCtain_msgx_remvTrigWd2"></param>
+        /// <returns></returns>
         public static List<InlineKeyboardButton[]> qryFromMrchtV2(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain_msgx_remvTrigWd2)
         {
 
@@ -263,6 +270,7 @@ namespace mdsj
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
 
             // Func<SortedList, bool> whereFun22 = filtrList2whereFun111();
+            //先按照 服务词+地域词搜索，如果找不到则排除地域词只使用服务词搜索
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
@@ -331,41 +339,9 @@ namespace mdsj
             return ConvertToInlineKeyboardButtons(list_trans);
         }
 
-        private static object ldfldDfemp(SortedList row, string v)
-        {
-            return ldfld(row, v, "");
-        }
+    
 
-        private static bool isEq4qrycdt(object rowVal, object cdtVal)
-        {
-            if (cdtVal == null || cdtVal.ToString() == "")
-                return true;
-            return rowVal.ToString().ToUpper().Equals(cdtVal.ToString().ToUpper());
-        }
-
-        public static List<InlineKeyboardButton[]> ConvertToInlineKeyboardButtons(List<object> objects)
-        {
-            List<InlineKeyboardButton[]> result = new List<InlineKeyboardButton[]>();
-
-            foreach (var obj in objects)
-            {
-                // 假设 obj 是一个动态对象，并具有 Text 和 CallbackData 属性
-
-                InlineKeyboardButton[] button = (InlineKeyboardButton[])obj;
-                result.Add(button);
-
-            }
-
-            return result;
-        }
-
-        private static bool isChkOK(List<Filtr> li)
-        {
-            if (!ChkAllFltrTrueDep(li))
-                return false;
-            return true;
-        }
-
+ 
         //private static Func<SortedList, bool> filtrList2whereFun111()
         //{
 
@@ -376,26 +352,6 @@ namespace mdsj
         //}
 
 
-
-        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, StringValues> whereExprsObj)
-        {
-            //  string Fld = "城市";
-            if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.str_eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
-                    return false;
-
-            return true;
-        }
-
-        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
-        {
-            //  string Fld = "城市";
-            if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.str_eq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
-                    return false;
-
-            return true;
-        }
 
 
 
@@ -425,7 +381,7 @@ namespace mdsj
 
         }
 
-        private static string getFldLianxifs(SortedList row, string Fld)
+        public static string getFldLianxifs(SortedList row, string Fld)
         {
             // const string Fld = "Telegram";
             return trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldFldDefEmpty(row, Fld));
@@ -490,41 +446,41 @@ namespace mdsj
             return isCcontainKwds42(curRowKywdSset, kwds);
         }
 
-        public static List<SortedList> getList(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)
-        {
+        //public static List<SortedList> getList(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)
+        //{
 
-            Func<SortedList, bool> whereFun = (SortedList row) =>
-            {
+        //    Func<SortedList, bool> whereFun = (SortedList row) =>
+        //    {
 
-                try
-                {
+        //        try
+        //        {
 
-                    //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                    if (hasCondt(whereExprsObj, "城市"))
-                        if (!strCls.str_eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
-                            return false;
-                    if (hasCondt(whereExprsObj, "园区"))
-                        if (!strCls.str_eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
-                            return false;
-                    if (hasCondt(whereExprsObj, "国家"))
-                        if (!strCls.str_eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
-                            return false;
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    print_catchEx("getPostnWds", e);
-                    //print_varDump("getPostnWds","ex", e);
-                }
-                return false;
-            };
+        //            //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+        //            if (hasCondt(whereExprsObj, "城市"))
+        //                if (!strCls.str_eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+        //                    return false;
+        //            if (hasCondt(whereExprsObj, "园区"))
+        //                if (!strCls.str_eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+        //                    return false;
+        //            if (hasCondt(whereExprsObj, "国家"))
+        //                if (!strCls.str_eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+        //                    return false;
+        //            return true;
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            print_catchEx("getPostnWds", e);
+        //            //print_varDump("getPostnWds","ex", e);
+        //        }
+        //        return false;
+        //    };
 
-            List<SortedList> rsRztInlnKbdBtn = null;//= arr_fltr(dbFrom, shareNames, null);
+        //    List<SortedList> rsRztInlnKbdBtn = null;//= arr_fltr(dbFrom, shareNames, null);
 
 
 
-            return rsRztInlnKbdBtn;
-        }
+        //    return rsRztInlnKbdBtn;
+        //}
 
 
         public static HashSet<string> qry_getPostnWds(string dbFrom, string shareNames, Dictionary<string, StringValues> whereExprsObj)

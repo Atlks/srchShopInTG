@@ -110,6 +110,24 @@ namespace prj202405.lib
                print($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
+
+
+        public static List<InlineKeyboardButton[]> ConvertToInlineKeyboardButtons(List<object> objects)
+        {
+            List<InlineKeyboardButton[]> result = new List<InlineKeyboardButton[]>();
+
+            foreach (var obj in objects)
+            {
+                // 假设 obj 是一个动态对象，并具有 Text 和 CallbackData 属性
+
+                InlineKeyboardButton[] button = (InlineKeyboardButton[])obj;
+                result.Add(button);
+
+            }
+
+            return result;
+        }
+
         public static void SendThankYouMessage(long chatId)
         {
             try
