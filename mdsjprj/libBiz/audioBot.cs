@@ -176,6 +176,7 @@ namespace mdsj.libBiz
                 a = trimUper(a);
                 var cmd = getElmt(a, 1);
                 var hdlrname = "msgHdlr" + serchTipsWd + cmd;
+                //todo also should calltryx
                 callx(hdlrname, update);
             });
           

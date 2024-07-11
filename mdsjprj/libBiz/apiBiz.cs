@@ -45,17 +45,21 @@ namespace mdsj.libBiz
             return "ok";
         }
 
+        //public static string Wbapi_swag()
+        //{
+           
+        //}
 
 
 
-        /// <summary>
-        /// 评论商家
-        /// 
-        /// <example><![CDATA[  http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646 ]]></example>
-        /// </summary>
-        /// <param name="shangjiaID">商家id</param>
-        ///     <param name="pinlun">评论内容</param>
-        public static string Wbapi_pinlun(string qrystr)
+            /// <summary>
+            /// 评论商家
+            /// 
+            /// <example><![CDATA[  http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646 ]]></example>
+            /// </summary>
+            /// <param name="shangjiaID">商家id</param>
+            ///     <param name="pinlun">评论内容</param>
+            public static string Wbapi_pinlun(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
@@ -114,36 +118,25 @@ namespace mdsj.libBiz
             SortedList map = new SortedList();
             map.Add("limit", 5);
 
-            Func<SortedList, bool> whereFun = (SortedList row) =>
-            {
-                if (row["园区"].ToString().Contains("东风"))
-                    print("dbg");
-
-                List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
-
-                //  li.Add(new Filtr(isNotEmptyLianxi(row)));
-                //   li.Add(new Filtr(isLianxifshValid(row)));
-
-                //li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
-                //li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
-
-                //string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
-                //SortedList cfg = findOne(dbfile);
-                //Dictionary<string, StringValues> cdtMap = CopySortedListToDictionary(cfg);
-                //   li.Add(new Filtr(str_eq(row["园区"], ldfldDfempty(cdtMap, "park"))));
-
-                if (!ChkAllFltrTrue(li))
-                    return false;
-                return true;
-            };
+            Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
             var list = getListFltr("mercht商家数据", null, whereFun);
+            var list_aftFltr = arr_fltr(list, (SortedList row) =>
+            {
+                List<bool> li = new List<bool>();
+                li.Add((isNotEmptyLianxi(row)));
+                //   li.Add((isLianxifshValid(row)));
+                return isChkfltrOk(li);
+
+            });
             int start = (page - 1) * pagesize;
             //if (start < 0)
             //    start = 0;
 
-            var list2 = SliceX(list, start, pagesize);
-            return encodeJson(list2);
+            var list_rzt = SliceX(list_aftFltr, start, pagesize);
+            return encodeJson(list_rzt);
         }
+
+     
 
 
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
@@ -157,29 +150,19 @@ namespace mdsj.libBiz
             SortedList map = new SortedList();
             map.Add("limit", 5);
 
-            Func<SortedList, bool> whereFun = (SortedList row) =>
+            Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
+            var list = getListFltr("mercht商家数据", null, whereFun);
+            var list3 = arr_fltr(list, (SortedList row) =>
             {
-                if (row["园区"].ToString().Contains("东风"))
-                    print("dbg");
+                List<bool> li = new List<bool>();
 
-                List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
-
-                //  li.Add(new Filtr(isNotEmptyLianxi(row)));
-                //   li.Add(new Filtr(isLianxifshValid(row)));
-
-                //li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
-                //li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
-
-                //string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
-                //SortedList cfg = findOne(dbfile);
-                //Dictionary<string, StringValues> cdtMap = CopySortedListToDictionary(cfg);
-                //   li.Add(new Filtr(str_eq(row["园区"], ldfldDfempty(cdtMap, "park"))));
-
+                //  li.Add((isNotEmptyLianxi(row)));
+                //   li.Add((isLianxifshValid(row)));
                 if (!ChkAllFltrTrue(li))
                     return false;
                 return true;
-            };
-            var list = getListFltr("mercht商家数据", null, whereFun);
+
+            });
             int start = (page - 1) * pagesize;
             //if (start < 0)
             //    start = 0;
@@ -195,6 +178,6 @@ namespace mdsj.libBiz
             return encodeJson(list2);
         }
 
-
+      
     }
 }

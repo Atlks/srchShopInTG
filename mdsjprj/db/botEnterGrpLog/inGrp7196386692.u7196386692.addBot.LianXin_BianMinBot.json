@@ -1,0 +1,38 @@
+{
+  "update_id": 839632131,
+  "my_chat_member": {
+    "chat": {
+      "id": 7196386692,
+      "type": "private",
+      "username": "jiangshan339",
+      "first_name": "飛鸟"
+    },
+    "from": {
+      "id": 7196386692,
+      "is_bot": false,
+      "first_name": "飛鸟",
+      "username": "jiangshan339",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1720666875,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

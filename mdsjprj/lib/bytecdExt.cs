@@ -199,6 +199,23 @@ namespace mdsj.lib
 
             return list;
         }
+        public static List<object> foreach_hstbEs(List<SortedList> list2, Func<SortedList,object> act)
+        {
+            List<object> listRzt = new List<object>();
+            foreach (SortedList rw in list2)
+            {
+                try
+                {
+                    listRzt.Add( act(rw));
+                }
+                catch (Exception e)
+                {
+                    print_catchEx(nameof(foreach_hstbEs), e);
+                }
+
+            }
+            return listRzt;
+        }
 
 
         public static void foreach_hstbEs(List<SortedList> list2, Action<SortedList> act)
@@ -221,6 +238,19 @@ namespace mdsj.lib
             return x;
         }
 
+        public static string Substring(string queryString, int v)
+        {
+            if (queryString == "")
+                return "";
+            return queryString.Substring(v);
+        }
+
+        public static bool isChkfltrOk(List<bool> li)
+        {
+            if (!ChkAllFltrTrue(li))
+                return false;
+            return true;
+        }
         public static Dictionary<string, string> ConvertToStringDictionary(Dictionary<string, StringValues> input)
         {
             var result = new Dictionary<string, string>();

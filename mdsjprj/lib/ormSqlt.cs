@@ -402,9 +402,7 @@ namespace prj202405.lib
                 //--------------------- crt table
                 if (n == 0)
                     crtTable(tblx, objSave, dbFileName);
-
                 n++;
-
                 try
                 {
                     saveHipfm(objSave, dbFileName, cn);
@@ -413,8 +411,6 @@ namespace prj202405.lib
                 {
                    print(e);
                 }
-
-
             }
 
 

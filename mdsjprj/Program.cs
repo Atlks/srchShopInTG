@@ -82,7 +82,8 @@ using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Windows.UI.Xaml;
-using Microsoft.Extensions.DependencyInjection;
+using ClosedXML.Excel.CalcEngine.Functions;
+using System.Text;
 
 
 namespace prj202405
@@ -111,26 +112,27 @@ namespace prj202405
         //搜索用户
         public static Dictionary<long, User> _users = [];
         public static bool jmp2exitFlag;
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddControllers();
-            services.AddSwaggerGen();
-        }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
-        {
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+        //public void ConfigureServices(IServiceCollection services)
+        //{
+        //    services.AddControllers();
+        //    services.AddSwaggerGen();
+        //}
 
-            app.UseRouting();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-        }
+        //public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        //{
+        //    app.UseSwagger();
+        //    app.UseSwaggerUI(c =>
+        //    {
+        //        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        //    });
+
+        //    app.UseRouting();
+        //    app.UseEndpoints(endpoints =>
+        //    {
+        //        endpoints.MapControllers();
+        //    });
+        //}
         public static void Main(string[] args)
         {
 
@@ -232,7 +234,20 @@ namespace prj202405
             Qunzhushou.main1();
             audioBot.main1();
 
-            webapiStart();
+            webapiStart((context) =>
+            {
+                var request = context.Request;
+                string methd = request.Path;
+              ////  methd = methd.Substring(1);
+                if (methd == "/swag")
+                {
+                    context.Response.ContentType = "text/html; charset=utf-8";
+                     var rzt= Wbapi_swagApi("mdsj.xml");
+                    context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
+                    jmp2end();
+                }
+                  
+            });
 
             //  Console.ReadKey();
             //loopForever();
@@ -1671,7 +1686,7 @@ namespace prj202405
 
                 Dictionary<string, StringValues> whereExprsObj = CopySortedListToDictionary(cfg);
                 //todo set    limit  cdt into 
-                results = mrcht.qryFromMrcht("mercht商家数据", null, whereExprsObj, msgx_remvTrigWd2);
+                results = mrcht.qryFromMrchtV2("mercht商家数据", null, whereExprsObj, msgx_remvTrigWd2);
 
             }
 

@@ -126,7 +126,7 @@ namespace mdsj
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
             kwds = removeStopWd4biz(kwds);
-           print(" now kwd for srarch is =>" + string.Join(" ", kwds));
+            print(" now kwd for srarch is =>" + string.Join(" ", kwds));
 
 
             //c----calc fuwuci 
@@ -137,11 +137,11 @@ namespace mdsj
 
 
             //-----------------calc weizhici-----
-           print("--------------qry weizhici--------");
+            print("--------------qry weizhici--------");
             HashSet<string> postnKywd位置词set = qry_getPostnWds(dbFrom, shareNames, filters);
             bool msgHasPostWd = isMmsgHasMatchPostWd(postnKywd位置词set, kwds);
             print_varDump(__METHOD__, "msgHasPostWd", msgHasPostWd);
-           print("--------------qry weizhici finish--------");
+            print("--------------qry weizhici finish--------");
 
             // weizhici = guiyihuaWeizhici(weizhici);
             //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
@@ -150,7 +150,7 @@ namespace mdsj
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
-                   print("dbg");
+                    print("dbg");
                 List<Filtr> li = new List<Filtr>();
                 li.Add(new Filtr(isNotEmptyLianxi(row)));
                 li.Add(new Filtr(isLianxifshValid(row)));
@@ -236,6 +236,136 @@ namespace mdsj
             return rsRztInlnKbdBtn;
         }
 
+
+
+        public static List<InlineKeyboardButton[]> qryFromMrchtV2(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain_msgx_remvTrigWd2)
+        {
+
+
+            msgCtain_msgx_remvTrigWd2 = msgCtain_msgx_remvTrigWd2.ToUpper();
+            msgCtain_msgx_remvTrigWd2 = ChineseCharacterConvert.Convert.ToSimple(msgCtain_msgx_remvTrigWd2);
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            print_call_FunArgs(__METHOD__, func_get_args(dbFrom, shareNames, filters, msgCtain_msgx_remvTrigWd2));
+
+            //  string msgx = whereExprsObj["msgCtain"];
+            if (string.IsNullOrEmpty(msgCtain_msgx_remvTrigWd2)) { return []; }
+            string[] kwds = strCls.splt_by_fenci(ref msgCtain_msgx_remvTrigWd2);
+            kwds = RemoveShortWords(kwds);
+            //todo 去除触发词，，只保留 服务次和位置词
+            //园区
+            kwds = removeStopWd4biz(kwds);
+            print(" now kwd for srarch is =>" + string.Join(" ", kwds));
+
+
+
+
+            // weizhici = guiyihuaWeizhici(weizhici);
+            //Dictionary<string, StringValues> whereExprsObj = new Dictionary<string, StringValues>();
+
+            // Func<SortedList, bool> whereFun22 = filtrList2whereFun111();
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
+                if (row["园区"].ToString().Contains("东风"))
+                    print("dbg");
+                List<bool> li = new List<bool>();
+                li.Add((isNotEmptyLianxi(row)));
+                li.Add((isLianxifshValid(row)));
+         
+                var fltrs = ConvertToStringDictionary(filters);
+                li.Add(isEq4qrycdt(ldfldDfemp(row, "园区"), ldfld(fltrs, "园区")));
+                li.Add(isEq4qrycdt(ldfldDfemp(row, "城市"), ldfld(fltrs, "城市")));
+                //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
+                li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));               
+                li.Add((isCotainPostnWd(row, kwds)));
+                return isChkfltrOk(li);
+            };
+            var list = getListFltr("mercht商家数据", shareNames, whereFun);
+            if (list.Count == 0)
+            {
+                whereFun = (SortedList row) =>
+                  {
+                      if (row["园区"].ToString().Contains("东风"))
+                          print("dbg");
+                      List<bool> li = new List<bool>();
+                      //    li.Add(new Filtr(isNotEmptyLianxi(row)));
+                      //    li.Add(new Filtr(isLianxifshValid(row)));
+                      var fltrs = ConvertToStringDictionary(filters);
+                      li.Add( isEq4qrycdt(ldfldDfemp( row, "园区"),ldfld(fltrs, "园区")));
+                      li.Add(isEq4qrycdt(ldfldDfemp(row, "城市"), ldfld(fltrs, "城市")));
+                      //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
+                      li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));
+
+                      return isChkfltrOk(li);
+                  };
+                list = getListFltr("mercht商家数据", shareNames, whereFun);
+            }
+
+            //----------paixu 
+            foreach_hstbEs(list, (SortedList row) =>
+           {
+               var containScore = containCalcCntScoreSetfmt1(row, kwds);
+               if (containScore > 0)
+               {
+                   row["_containCntScore"] = containScore;
+               }
+           });
+            var ordFun = (SortedList sl) =>
+            {
+                return 0 - (int)ldfld(sl, "_containCntScore", 0);
+            };
+            var rztLi_afterOrd = list.Cast<SortedList>()
+                                   .OrderBy(ordFun)
+                                   .ToList();
+            //---------------
+            var list_trans = foreach_hstbEs(rztLi_afterOrd, (SortedList row) =>
+            {
+                string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
+                string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
+                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
+                return btnsInLine;
+            });
+
+
+            //end fun
+            print_ret(MethodBase.GetCurrentMethod().Name, array_slice<object>(list_trans, 0, 1));
+            return ConvertToInlineKeyboardButtons(list_trans);
+        }
+
+        private static object ldfldDfemp(SortedList row, string v)
+        {
+            return ldfld(row, v, "");
+        }
+
+        private static bool isEq4qrycdt(object rowVal, object cdtVal)
+        {
+            if (cdtVal == null || cdtVal.ToString() == "")
+                return true;
+            return rowVal.ToString().ToUpper().Equals(cdtVal.ToString().ToUpper());
+        }
+
+        public static List<InlineKeyboardButton[]> ConvertToInlineKeyboardButtons(List<object> objects)
+        {
+            List<InlineKeyboardButton[]> result = new List<InlineKeyboardButton[]>();
+
+            foreach (var obj in objects)
+            {
+                // 假设 obj 是一个动态对象，并具有 Text 和 CallbackData 属性
+
+                InlineKeyboardButton[] button = (InlineKeyboardButton[])obj;
+                result.Add(button);
+
+            }
+
+            return result;
+        }
+
+        private static bool isChkOK(List<Filtr> li)
+        {
+            if (!ChkAllFltrTrueDep(li))
+                return false;
+            return true;
+        }
+
         //private static Func<SortedList, bool> filtrList2whereFun111()
         //{
 
@@ -267,7 +397,7 @@ namespace mdsj
             return true;
         }
 
-      
+
 
         //private static bool isFldValEq(SortedList row, string v1, string v2)
         //{
@@ -355,7 +485,7 @@ namespace mdsj
             add_elmts2hsst(curRowKywdSset, ldFldDefEmpty(row, "城市关键词"));
             add_elmts2hsst(curRowKywdSset, ldFldDefEmpty(row, "园区关键词"));
             curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
-           print(" curRw_posnSet=>" + String.Join(" ", curRowKywdSset));
+            print(" curRw_posnSet=>" + String.Join(" ", curRowKywdSset));
             //print(" weizhici=>" + weizhici);
             return isCcontainKwds42(curRowKywdSset, kwds);
         }
@@ -389,10 +519,10 @@ namespace mdsj
                 return false;
             };
 
-            List<SortedList> rsRztInlnKbdBtn=null;//= arr_fltr(dbFrom, shareNames, null);
-            
+            List<SortedList> rsRztInlnKbdBtn = null;//= arr_fltr(dbFrom, shareNames, null);
 
-            
+
+
             return rsRztInlnKbdBtn;
         }
 

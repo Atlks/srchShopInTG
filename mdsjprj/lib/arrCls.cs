@@ -37,7 +37,16 @@ namespace prj202405.lib
             return reversedList;
         }
 
-
+        public static List<SortedList> arr_fltr(List<SortedList> list, Func<SortedList, bool> fn)
+        {
+            List<SortedList> list22 = new List<SortedList>();
+            foreach (SortedList rw in list)
+            {
+                if (fn(rw))
+                    list22.Add(rw);
+            }
+            return list22;
+        }
         public static void transfmVal(SortedList list,Func<string,object> fun            )
         {
             // 创建一个临时的 ArrayList 来存储键
