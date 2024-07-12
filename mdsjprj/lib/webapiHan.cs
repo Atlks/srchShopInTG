@@ -88,47 +88,44 @@ namespace mdsj.lib
                 }
             });
             //------------------other ext use down mode
-            string 文件扩展名 = Path.GetExtension(路径);
-            if (文件扩展名 != "")
+            string 文件路径 = $"{web根目录}{路径}";
+            文件路径 = 格式化路径(文件路径);
+            if (文件有扩展名(文件路径) && 文件存在(文件路径))
             {
-                string 文件路径 = $"{web根目录}{路径}";
-                文件路径 = 格式化路径(文件路径);
-                if (File.Exists(文件路径))
-                {
-                    FileInfo 文件信息 = new FileInfo(文件路径);
-                    long 文件体积 = 文件信息.Length;
-                    if (文件体积 < 1000 * 1000)
-                    {
-                        html文件处理器(http上下文); 跳转到结束();
-                    }
-                    else
-                    {
-                        fildown_httpHdlrFilDown(http上下文); 跳转到结束(); ;
-                    }
 
+                FileInfo 文件信息 = new FileInfo(文件路径);
+                long 文件体积 = 文件信息.Length;
+                if (文件体积 < 1000 * 1000)
+                {
+                    html文件处理器(http上下文); 跳转到结束();
                 }
                 else
                 {
-                    const string 提示 = "文件没有找到";
-                    发送响应_资源不存在(HTTP响应对象, 提示);
-                    跳转到结束();
+                    fildown_httpHdlrFilDown(http上下文); 跳转到结束(); ;
                 }
 
             }
+            if (文件有扩展名(文件路径) && !文件存在(文件路径))
+            {
+                const string 提示 = "文件没有找到";
+                发送响应_资源不存在(HTTP响应对象, 提示);
+                跳转到结束();
+            }
+
+
 
             //---------------- rest nt have ext
             //  var filepath = path.Substring(1);
-            if (文件扩展名 == "")
-                if (File.Exists($"{web根目录}{路径}"))
-                {
-                    html文件处理器(http上下文);
-                    跳转到结束();
-                }
+            if (!文件有扩展名(文件路径) && 文件存在(文件路径))
+            {
+                html文件处理器(http上下文);
+                跳转到结束();
+            }
 
 
         }
 
-
+     
 
         public static async System.Threading.Tasks.Task html文件处理器(HttpContext http上下文)
         {
@@ -140,7 +137,7 @@ namespace mdsj.lib
             string f = web根目录 + 解码URL(路径);
             object 内容 = 读入文本(f);
             发送响应(内容, http上下文);
-            jmp2end(); return;
+            跳转到结束();
 
         }
 

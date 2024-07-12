@@ -72,6 +72,20 @@ namespace mdsj.lib
             return castNormalizePath(路径);
 
         }
+        public static bool 文件有扩展名(string 路径)
+        {
+            string 文件扩展名 = Path.GetExtension(路径);
+            string 文件路径 = $"{web根目录}{路径}";
+            文件路径 = 格式化路径(文件路径);
+            if (文件扩展名 == "")
+                return false;
+            else
+                return true;
+        }
+        public static bool 文件存在(string 文件路径)
+        {
+            return existFil(文件路径);
+        }
         public static string[] 拆分(object key)
         {
             return de.Key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
