@@ -238,7 +238,7 @@ namespace prj202405
             {
                 webapi2.mainWbstartAsync();
             });
-            webapiStart((context) =>
+            startWebapi((context) =>
             {
                 var request = context.Request;
                 string methd = request.Path;
@@ -246,12 +246,12 @@ namespace prj202405
                 if (methd == "/swag")
                 {
                     context.Response.ContentType = "text/html; charset=utf-8";
-                    var rzt = Wbapi_swagApi("mdsj.xml", context);
+                    var rzt = docapi_httpHdlrApiSpelDocapi("mdsj.xml", context);
                     context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
                     jmp2end();
                 }
 
-            });
+            }, "Wbapi_");
             
 
             //  Console.ReadKey();

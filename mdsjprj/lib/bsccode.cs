@@ -28,6 +28,8 @@ namespace mdsj.lib
         {
             System.IO.File.WriteAllText(f, txt);
         }
+
+      
         public static string ReadAllText(string f)
         {
             return System.IO.File.ReadAllText(f);
@@ -530,8 +532,8 @@ namespace mdsj.lib
             // The default for an object is to return the fully qualified name of the class.
             return o.ToString();
         }
-
-
+     
+        
         public static void jmp2end()
         {
             // jmp2exitFlag = true;

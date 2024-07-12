@@ -7,8 +7,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace mdsj.lib
@@ -18,6 +20,30 @@ namespace mdsj.lib
         public static void ConsoleWriteLine(string v)
         {
             System.Console.WriteLine(v);
+        }
+      
+      
+        public static string decodeUrl(string path)
+        {
+            string decodedUrl = WebUtility.UrlDecode(path);
+            return decodedUrl;
+        }
+
+        public static string castNormalizePath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+            {
+                return "";
+                //   throw new ArgumentException("Path cannot be null or empty.", nameof(path));
+            }
+
+            // Replace all forward slashes with backslashes
+            string normalizedPath = path.Replace('/', '\\');
+
+            // Remove redundant backslashes
+            normalizedPath = Regex.Replace(normalizedPath, @"\\+", "\\");
+
+            return normalizedPath;
         }
         /*
          这些指令将参数加载到堆栈上，然后可以使用其他指令来处理参数，例如调用 GetType 方法获取其类型。
