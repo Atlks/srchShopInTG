@@ -15,6 +15,10 @@ namespace mdsj.lib
 {
     internal class bytecdExt
     {
+        public static void ConsoleWriteLine(string v)
+        {
+            System.Console.WriteLine(v);
+        }
         /*
          这些指令将参数加载到堆栈上，然后可以使用其他指令来处理参数，例如调用 GetType 方法获取其类型。
 
@@ -297,7 +301,10 @@ namespace mdsj.lib
 
             return list.GetRange(start, length);
         }
-
+        public static bool existFil(string path1)
+        {
+            return File.Exists(path1);
+        }
         public static Dictionary<string, string> ldDic4qryCdtn(string qrystr)
         {
             var filters2 = ldDicFromQrystr(qrystr);

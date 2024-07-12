@@ -234,6 +234,10 @@ namespace prj202405
             Qunzhushou.main1();
             audioBot.main1();
 
+            TaskRun(() =>
+            {
+                webapi2.mainWbstartAsync();
+            });
             webapiStart((context) =>
             {
                 var request = context.Request;
@@ -248,6 +252,7 @@ namespace prj202405
                 }
 
             });
+            
 
             //  Console.ReadKey();
             //loopForever();

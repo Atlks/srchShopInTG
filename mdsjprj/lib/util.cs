@@ -105,7 +105,7 @@ namespace mdsj.lib
                                     }
                                 }
                                 else
-                                {
+                                {//summar
                                     string prmname = reader.GetAttribute("name");
                                     SortedList stlst = new SortedList();
                                     stlst.Add("summary", "功能");
@@ -114,7 +114,7 @@ namespace mdsj.lib
                                     stlst.Add("param", "----参数");
                                     reader.Read(); // Move to the text node
 
-                                    if (reader.NodeType == XmlNodeType.Text)
+                                  //  if (reader.NodeType == XmlNodeType.Text)
                                     {
                                         string text = reader.Value;
 

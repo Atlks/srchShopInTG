@@ -238,13 +238,14 @@ namespace mdsj
 
 
         /// <summary>
+        ///   查询商家
         ///    //先按照 服务词+地域词搜索，如果找不到则排除地域词只使用服务词搜索
         /// </summary>
-        /// <param name="dbFrom"></param>
-        /// <param name="shareNames"></param>
+        /// <param name="dbFrom">数据源</param>
+        /// <param name="shareNames">分片</param>
         /// <param name="filters"></param>
-        /// <param name="msgCtain_msgx_remvTrigWd2"></param>
-        /// <returns></returns>
+        /// <param name="msgCtain_msgx_remvTrigWd2">消息内容</param>
+        /// <returns>tg按钮数组</returns>
         public static List<InlineKeyboardButton[]> qryFromMrchtV2(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain_msgx_remvTrigWd2)
         {
 

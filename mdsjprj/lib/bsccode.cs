@@ -196,6 +196,33 @@ namespace mdsj.lib
                 }
             }
         }
+        public static void foreach_hashtable(Hashtable chtsSess, Action<DictionaryEntry> fun)
+        {
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                //if (Convert.ToInt64(de.Key) == Program.groupId)
+                //    continue;
+                //  var chatid = Convert.ToInt64(de.Key);
+                try
+                {
+                    //  if(chatid== -1002206103554)
+                    fun(de);
+                }
+                catch (jmp2endEx e2)
+                {
+                    throw e2;
+                }               
+                catch (Exception e)
+                {
+                    if(e.ToString().Contains("jmp2endEx"))
+                    {
+                        jmp2end();
+                    }
+                    print_catchEx("foreach_hashtable", e);
+                    //  print(e);
+                }
+            }
+        }
 
         public static object gtfld(object Obj, string fld, object defVal)
         {
