@@ -61,8 +61,9 @@ namespace mdsj.lib
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
         }
-        public static void 发送响应_资源不存在(HttpResponse HTTP响应对象, string 提示)
+        public static void 发送响应_资源不存在(HttpResponse HTTP响应对象)
         {
+            const string 提示 = "file not find文件没有找到";
             HTTP响应对象.StatusCode = (int)HttpStatusCode.NotFound;
             StreamWriter writer = new StreamWriter(HTTP响应对象.Body);
             writer.Write(提示);
@@ -75,8 +76,8 @@ namespace mdsj.lib
         public static bool 文件有扩展名(string 路径)
         {
             string 文件扩展名 = Path.GetExtension(路径);
-            string 文件路径 = $"{web根目录}{路径}";
-            文件路径 = 格式化路径(文件路径);
+          //  string 文件路径 = $"{web根目录}{路径}";
+         //   文件路径 = 格式化路径(文件路径);
             if (文件扩展名 == "")
                 return false;
             else
@@ -86,14 +87,45 @@ namespace mdsj.lib
         {
             return existFil(文件路径);
         }
+        public static bool 文件不存在(string 文件路径)
+        {
+            return !existFil(文件路径);
+        }
         public static string[] 拆分(object key)
         {
-            return de.Key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+            return key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
         }
         public static void 跳转到结束()
         {
             // jmp2exitFlag = true;
             throw new jmp2endEx();
+        }
+        public static void 遍历数组(string[] chtsSess, Action<string> fun)
+        {
+            foreach (string de in chtsSess)
+            {
+                //if (Convert.ToInt64(de.Key) == Program.groupId)
+                //    continue;
+                //  var chatid = Convert.ToInt64(de.Key);
+                try
+                {
+                    //  if(chatid== -1002206103554)
+                    fun(de);
+                }
+                catch (jmp2endEx e2)
+                {
+                    throw e2;
+                }
+                catch (Exception e)
+                {
+                    if (e.ToString().Contains("jmp2endEx"))
+                    {
+                        jmp2end();
+                    }
+                    print_catchEx("foreach_hashtable", e);
+                    //  print(e);
+                }
+            }
         }
 
         public static void 遍历哈希表(Hashtable chtsSess, Action<DictionaryEntry> fun)

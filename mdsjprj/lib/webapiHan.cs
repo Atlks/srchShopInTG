@@ -63,20 +63,16 @@ namespace mdsj.lib
         public static void 文件响应处理(HttpContext http上下文, Hashtable 扩展名与处理器对应表)
         {
             // 获取当前请求的 URL
-            var request = http上下文.Request;
+            var HTTP请求对象 = http上下文.Request;
             var HTTP响应对象 = http上下文.Response;
-            var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
-
-            // 获取查询字符串
-            var 查询字符串 = request.QueryString.ToString();
-            string 路径 = request.Path;
-            路径 = 解码URL(路径);
+            var url = $"{HTTP请求对象.Scheme}://{HTTP请求对象.Host}{HTTP请求对象.Path}{HTTP请求对象.QueryString}";
+            string 路径 = 解码URL( HTTP请求对象.Path);       
             if (路径.Contains("analytics"))
                 调试输出("Dbg");
             遍历哈希表(扩展名与处理器对应表, (DictionaryEntry de) =>
             {
                 string[] 扩展名数组 = 拆分(de.Key);
-                foreach (string 扩展名 in 扩展名数组)
+                遍历数组(扩展名数组, ( 扩展名) =>
                 {
                     if (路径包含扩展名结尾(路径, 扩展名))
                     {
@@ -85,14 +81,13 @@ namespace mdsj.lib
                         等待异步任务执行完毕(结果task);
                         跳转到结束();
                     }
-                }
+                });
             });
             //------------------other ext use down mode
             string 文件路径 = $"{web根目录}{路径}";
             文件路径 = 格式化路径(文件路径);
             if (文件有扩展名(文件路径) && 文件存在(文件路径))
             {
-
                 FileInfo 文件信息 = new FileInfo(文件路径);
                 long 文件体积 = 文件信息.Length;
                 if (文件体积 < 1000 * 1000)
@@ -103,17 +98,12 @@ namespace mdsj.lib
                 {
                     fildown_httpHdlrFilDown(http上下文); 跳转到结束(); ;
                 }
-
             }
-            if (文件有扩展名(文件路径) && !文件存在(文件路径))
-            {
-                const string 提示 = "文件没有找到";
-                发送响应_资源不存在(HTTP响应对象, 提示);
+            if (文件有扩展名(文件路径) && 文件不存在(文件路径))
+            {             
+                发送响应_资源不存在(HTTP响应对象);
                 跳转到结束();
             }
-
-
-
             //---------------- rest nt have ext
             //  var filepath = path.Substring(1);
             if (!文件有扩展名(文件路径) && 文件存在(文件路径))
@@ -121,8 +111,6 @@ namespace mdsj.lib
                 html文件处理器(http上下文);
                 跳转到结束();
             }
-
-
         }
 
      
