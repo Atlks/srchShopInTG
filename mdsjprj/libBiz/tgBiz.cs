@@ -423,6 +423,12 @@ namespace mdsj.libBiz
             try
             {
                 mkdir_forFile(f);
+                if(IsStr(update))
+                {
+                    System.IO.File.WriteAllText(f,  (update.ToString()));
+                    return;
+                }
+                  
                 System.IO.File.WriteAllText( f, json_encode(update));
             }catch(Exception e)
             {

@@ -26,6 +26,7 @@ namespace mdsj.lib
         }
         public static void WriteAllText(string f, string txt)
         {
+            mkdir_forFile(f);
             System.IO.File.WriteAllText(f, txt);
         }
 
@@ -162,7 +163,17 @@ namespace mdsj.lib
 
             return updatedSet;
         }
+        public static void foreach_HashSet(HashSet<string> originalSet, Action<string> fun)
+        {
+            HashSet<string> updatedSet = new HashSet<string>();
 
+            foreach (string str in originalSet)
+            {
+                fun(str);
+            }
+
+            
+        }
         static void foreachProcessFilesAsync(string folderPath, Func<string, Task> fileAction)
         {
             if (System.IO.Directory.Exists(folderPath))

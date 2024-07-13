@@ -1,0 +1,38 @@
+{
+  "update_id": 839632675,
+  "my_chat_member": {
+    "chat": {
+      "id": 5530750810,
+      "type": "private",
+      "username": "FLX00001",
+      "first_name": "法兰西0007"
+    },
+    "from": {
+      "id": 5530750810,
+      "is_bot": false,
+      "first_name": "法兰西0007",
+      "username": "FLX00001",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1720793400,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}
