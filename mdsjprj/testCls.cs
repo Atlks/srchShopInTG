@@ -399,7 +399,7 @@ namespace prj202405
         private static void transltTest()
         {
             List<string> liRzt = new List<string>();
-            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t2.txt");
+            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li= RemoveEmptyElements(li);
             foreach_listStr(li, (string line) =>
             {
@@ -407,6 +407,7 @@ namespace prj202405
                 liRzt.Add(transed);
             });
             string rzt = JoinStringsWithNewlines(liRzt);
+            WriteAllText("transed.txt", rzt);
             print(rzt);
         }
 
@@ -416,15 +417,25 @@ namespace prj202405
             string[] wds = Tokenize(line);
             foreach(string wd in wds)
             {
-                if (wd.Contains("fraudulently"))
+                if (wd.Contains("sibl"))
                     print("dbg");
-                if (wd.Contains("visa"))
+                if (wd.Contains("ontivero"))
                     print("dbg");
                 if (IsWord(wd))
                 {
-                    string wdRoot = GetRoot(wd);
-                    string cnWd = transE2cWd(wdRoot);
-                    liRzt.Add(wdRoot+cnWd);
+                    if(StartsWithUppercase(wd))
+                    {
+                        string wdRoot = GetRoot(wd);
+                        string cnWd = transE2cWd(wdRoot);
+                        liRzt.Add(wd + " [" + cnWd + "]");
+                    }
+                    else
+                    {//normal 
+                        string wdRoot = GetRoot(wd);
+                        string cnWd = transE2cWd(wdRoot);
+                        liRzt.Add(wd + " ["+   cnWd+" "+ wdRoot + "]");
+                    }                       
+                 
                 }
                 else
                 {
@@ -438,7 +449,17 @@ namespace prj202405
             return result;
 
         }
+        static bool StartsWithUppercase(string input)
+        {
+            // 判断字符串是否为空或为null
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
 
+            // 检查第一个字符是否为大写字母
+            return char.IsUpper(input[0]);
+        }
         static bool IsWord(string input)
         {
             // 使用 Char 类的方法判断是否是字母或数字
@@ -462,12 +483,13 @@ namespace prj202405
 
             return tokens;
         }
-        private static string transE2cWd(string wd)
+        static Hashtable dicWord5k = getHstbFromIniFl($"{prjdir}/cfg/word5000.ini");
+        private static string transE2cWd(string wdRoot)
         {
-            Hashtable dic = getHstbFromIniFl($"{prjdir}/cfg/word5000.ini");
+            
        //     WriteAllText("wd5000.json", encodeJson(dic));
            // dic = ToLower(dic);
-            return (string)ldfld(dic, wd.ToLower(), wd);
+            return (string)ldfld(dicWord5k, wdRoot, wdRoot);
         }
 
         private static Hashtable ToLower(Hashtable dic)
