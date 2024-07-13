@@ -113,11 +113,11 @@ namespace mdsj.libBiz
                             disableWebPagePreview: true
 
                     ).Result;
-                    jmp2end();
+                    Jmp2end();
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(evt_btm_btn_click), e); jmp2end();
+                    print_catchEx(nameof(evt_btm_btn_click), e); Jmp2end();
                 }
 
                 return;
@@ -275,30 +275,49 @@ namespace mdsj.libBiz
 
             //todo reply
         }
-
+        public static string zhuli_tips = "如果您是Telegram VIP会员,请为本群助力, 提升群功能! ";
+        public static string zhuli_btn = "🔥 点击助力本群";
         public static void evt_btm_btn_zhuliBenqunAsync(Update update)
         {
-            string tips = "如果您是Telegram VIP会员,请为本群助力, 提升群功能! ";
-            var btn = "🔥 点击助力本群";
-            var grp = update.Message.Chat.Username;
+            
+            var grpUsername = update.Message.Chat.Username;
 
-            var url = $"https://t.me/boost/{grp}";
+            Message msgNew = sendZhuliGrp(update, zhuli_tips, zhuli_btn, grpUsername);
+
+            dltMsgDelay(update, msgNew);
+        }
+
+        public static Message sendZhuliGrp(Update update, string tips, string btn, string? grpUsername)
+        {
+            var url = $"https://t.me/boost/{grpUsername}";
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-           print(encodeJson(inlineKeyboardRow1));
+            print(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
-            var msgNew =   botClient.SendTextMessageAsync(
+            var msgNew = botClient.SendTextMessageAsync(
                                   update.Message.Chat.Id, tips,
                                   replyMarkup: InlineKeyboardMarkup1,
                                   replyToMessageId: update.Message.MessageId
 
                           ).Result;
-
-            dltMsgDelay(update, msgNew);
+            return msgNew;
         }
+        public static Message sendZhuliGrp(object ChatId, string tips, string btn, string? grpUsername)
+        {
+            var url = $"https://t.me/boost/{grpUsername}";
+            InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
+            IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
+            print(encodeJson(inlineKeyboardRow1));
+            InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
+            var msgNew = botClient.SendTextMessageAsync(
+                                  (ChatId)ChatId, tips,
+                                  replyMarkup: InlineKeyboardMarkup1 
 
+                          ).Result;
+            return msgNew;
+        }
         private static SortedList ldHstbFromIni(string f)
         {
             List<SortedList> li = ormIni.qryV2(f);
@@ -397,7 +416,7 @@ namespace mdsj.libBiz
                 catch (Exception e)
                 {
                     print_catchEx(nameof(btm_btnClk_inCfgByMsg), e);
-                    jmp2end();
+                    Jmp2end();
 
                     return;
                 }
@@ -405,7 +424,7 @@ namespace mdsj.libBiz
                 //aop  auth where exprs
                 if(update?.Message?.Chat?.Type!=ChatType.Private)
                      dltMsgDelay(update, msgNew);
-                jmp2end();
+                Jmp2end();
 
                 return;
 

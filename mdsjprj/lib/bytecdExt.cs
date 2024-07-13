@@ -1,5 +1,6 @@
 ﻿global using static mdsj.lib.bytecdExt;
 using libx;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using prj202405.lib;
@@ -28,7 +29,58 @@ namespace mdsj.lib
             string decodedUrl = WebUtility.UrlDecode(path);
             return decodedUrl;
         }
+        public static void WaitTaskExecFinish(System.Threading.Tasks.Task 结果task)
+        {
+            结果task.Wait();
+        }
+        public static void SetRespContentTypeNencode
+            (HttpContext http上下文, string 内容类型和编码)
+        {
+            http上下文.Response.ContentType = 内容类型和编码;
+        }
+        public static void SendResp(object 输出结果, HttpContext http上下文)
+        {
+            http上下文.Response.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
+        }
+        public static bool isStrEndWz(string 路径, string 扩展名)
+        {
+            return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
+        }
+        public static bool isPathEndwithExt(string 路径, string 扩展名)
+        {
+            return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
+        }
+        public static void sendResp_resNotExist404(HttpResponse HTTP响应对象)
+        {
+            const string 提示 = "file not find文件没有找到";
+            HTTP响应对象.StatusCode = (int)HttpStatusCode.NotFound;
+            StreamWriter writer = new StreamWriter(HTTP响应对象.Body);
+            writer.Write(提示);
+        }
+        public static string 格式化路径2(string 路径)
+        {
+            return castNormalizePath(路径);
+
+        }
+        public static bool fileHasExtname(string 路径)
+        {
+            string 文件扩展名 = Path.GetExtension(路径);
+            //  string 文件路径 = $"{web根目录}{路径}";
+            //   文件路径 = 格式化路径(文件路径);
+            if (文件扩展名 == "")
+                return false;
+            else
+                return true;
+        }
+        public static bool isFileExist(string 文件路径)
+        {
+            return existFil(文件路径);
+        }
+        public static bool isFileNotExist(string 文件路径)
+        {
+            return !existFil(文件路径);
+        }
         public static string castNormalizePath(string path)
         {
             if (string.IsNullOrEmpty(path))

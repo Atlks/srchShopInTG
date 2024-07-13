@@ -131,7 +131,7 @@ namespace prj202405
         {
 
             System.IO.Directory.CreateDirectory("tmrlg");
-           print("定时任务。。");
+            print("定时任务。。");
 
             DateTime now = DateTime.Now;
 
@@ -174,7 +174,7 @@ namespace prj202405
                 if (now.Hour == 11 && now.Minute == 1 && (!System.IO.File.Exists(lauch)))
 
                 {
-                   print("push luch time。");
+                    print("push luch time。");
                     System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
                     //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
                     z_wucan();
@@ -230,7 +230,7 @@ namespace prj202405
                 }
             }
 
-             static void keepBtnMenu(DateTime now)
+            static void keepBtnMenu(DateTime now)
             {
                 var tsoxiaoShjk = $"tmrlg/actMenuPushLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
                 if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(tsoxiaoShjk)))
@@ -238,10 +238,43 @@ namespace prj202405
                     System.IO.File.WriteAllText(tsoxiaoShjk, "pushlog");
                     var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
 
-                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt );
+                    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", txtkeepBtnMenu + plchdTxt);
                 }
             }
         }
+
+        static void tmrEvtLLLzhuligrp(DateTime now)
+        {
+            var zhuliLog = $"tmrlg/zhuliLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
+            if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(zhuliLog)))
+            {
+                System.IO.File.WriteAllText(zhuliLog, "pushlog");
+                var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
+
+                tmrEvtLLLzhuligrpSendmsg(null, null);
+                    }
+        }
+
+        public static void tmrEvtLLLzhuligrpSendmsg(string imgPath, string msgtxt)
+        {
+            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+            foreach_hashtable(chtsSess, (de) =>
+           {
+               var chatid = de.Key;
+               print(" SendPhotoAsync " + de.Key);
+               var map = de.Value;
+               JObject jo = (JObject)map;
+               string chtType = getFld(jo, "chat.type", "");
+               string grpusername = getFld(jo, "chat.username", "");
+               ReplyKeyboardMarkup rplyKbdMkp;
+               //私聊不要助力本群
+               if (chtType.Contains("group"))
+               {
+                   sendZhuliGrp(chatid, zhuli_tips, zhuli_btn, grpusername);
+               }
+           });
+        }
+
 
         private static void chktrg_yule(DateTime now)
         {
@@ -284,7 +317,7 @@ namespace prj202405
 
             string Path = "今日促销商家.gif";
             if (results.Count > 0)
-                  bot_sendMsgToMlt(Path, plchdTxt, results);
+                bot_sendMsgToMlt(Path, plchdTxt, results);
             dbgCls.print_ret(__METHOD__, 0);
         }
 
@@ -310,14 +343,14 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-               print(JsonConvert.SerializeObject(message2));
+                print(JsonConvert.SerializeObject(message2));
 
 
 
             }
             catch (Exception ex)
             {
-               print(ex.ToString());
+                print(ex.ToString());
             }
 
             dbgCls.print_ret(__METHOD__, 0);
@@ -327,7 +360,7 @@ namespace prj202405
         }
 
 
-      public static async Task evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(long? chat_id, string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
+        public static async Task evt_ret_mainmenu_sendMsg4keepmenu4btmMenu(long? chat_id, string imgPath, string msgtxt, ReplyKeyboardMarkup rplyKbdMkp)
         {
 
 
@@ -340,7 +373,7 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-               print(JsonConvert.SerializeObject(message2));
+                print(JsonConvert.SerializeObject(message2));
 
                 //Program.botClient.SendTextMessageAsync(
                 //         Program.groupId,
@@ -351,7 +384,7 @@ namespace prj202405
                 //         disableWebPagePreview: true);
 
             }
-            catch (Exception ex) {print(ex.ToString()); }
+            catch (Exception ex) { print(ex.ToString()); }
 
 
 
@@ -371,10 +404,10 @@ namespace prj202405
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
                 var chatid = de.Key;
-               print(" SendPhotoAsync " + de.Key);
+                print(" SendPhotoAsync " + de.Key);
                 var map = de.Value;
-                JObject jo =(JObject) map;
-                string chtType = getFld(jo,"chat.type","");
+                JObject jo = (JObject)map;
+                string chtType = getFld(jo, "chat.type", "");
 
                 ReplyKeyboardMarkup rplyKbdMkp;
                 //  Program.botClient.send
@@ -384,13 +417,14 @@ namespace prj202405
                     if (!chtType.Contains("group"))
                     {
                         rplyKbdMkp = tgBiz.tg_btmBtns();
-                        KeyboardButton[][] kbtns =(KeyboardButton[][]) rplyKbdMkp.Keyboard;
+                        KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
                         RemoveButtonByName(kbtns, juliBencyon);
-                    }else
+                    }
+                    else
                     {
                         rplyKbdMkp = tgBiz.tg_btmBtns();
                     }
-                       
+
 
                     //def is grp btns
                     //tgBiz.tg_btmBtns()
@@ -412,7 +446,7 @@ namespace prj202405
                     //         disableWebPagePreview: true);
 
                 }
-                catch (Exception ex) {print(ex.ToString()); }
+                catch (Exception ex) { print(ex.ToString()); }
 
             }
 
@@ -420,7 +454,7 @@ namespace prj202405
 
         }
 
-      
+
         //private static void wancan()
         //{
         //    throw new NotImplementedException();
@@ -448,11 +482,11 @@ namespace prj202405
             //count = results.Count;
             results = results.Skip(0 * 10).Take(5).ToList();
             if (results.Count > 0)
-                   bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
+                bot_sendMsgToMltV2("今日商家人气榜.gif", plchdTxt, "");
         }
 
         string CaptionTxt = "美好的一天从晚上开始，激动的心，颤抖的手,又到了娱乐时间啦";
-        
+
         public static async void z21_yule()
         {
             //咖啡爆 gogobar 啤酒吧 帝王浴 泡泡浴 nuru 咬吧 马杀鸡
@@ -463,7 +497,7 @@ namespace prj202405
             string Path = "娱乐消遣.gif";
 
             //  if (results.Count > 0)
-              bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
+            bot_sendMsgToMltV2("娱乐消遣.gif", plchdTxt, s);
 
         }
 
@@ -478,7 +512,7 @@ namespace prj202405
             //   var CaptionTxt = "美好的一天从早上开始，当然美丽的心情从早餐开始，别忘了吃早餐哦";
 
             //   if(results.Count>0)
-              bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
+            bot_sendMsgToMltV2("早餐商家推荐.gif", plchdTxt, s);
         }
 
 
@@ -491,7 +525,7 @@ namespace prj202405
             string CaptionTxt = "晚餐时间到了！让我们一起享受美食和愉快的时光吧！！";
 
             //   if (results.Count > 0)
-              bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
+            bot_sendMsgToMltV2("晚餐商家推荐.gif", plchdTxt, s);
 
         }
         public static async void z_wucan()
@@ -501,7 +535,7 @@ namespace prj202405
             //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
             // if (results.Count > 0)
-              bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
+            bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
 
 
         }
@@ -513,7 +547,7 @@ namespace prj202405
             //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(s);
 
             //   if (results.Count > 0)
-              bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
+            bot_sendMsgToMltV2("下午茶商家推荐.gif", plchdTxt, s);
 
 
 

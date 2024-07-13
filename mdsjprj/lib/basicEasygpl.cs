@@ -31,8 +31,16 @@ namespace mdsj.lib
             {
                 o = 函数.DynamicInvoke(参数组);
             }
+            catch(jmp2endEx e2)
+            {
+                throw e2;
+            }
             catch (Exception e)
             {
+                if (e.ToString().Contains("jmp2endEx"))
+                {
+                    Jmp2end();
+                }
                 print_catchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(参数组)) + ")))");
@@ -44,9 +52,18 @@ namespace mdsj.lib
         {
             结果task.Wait();
         }
+        public static void 设置响应内容类型和编码(HttpResponse http上下文, string 内容类型和编码)
+        {
+            http上下文.ContentType = 内容类型和编码;
+        }
         public static void 设置响应内容类型和编码(HttpContext http上下文, string 内容类型和编码)
         {
             http上下文.Response.ContentType = 内容类型和编码;
+        }
+        public static void 发送响应(object 输出结果, HttpResponse http上下文)
+        {
+            http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
+
         }
         public static void 发送响应(object 输出结果, HttpContext http上下文)
         {
@@ -120,7 +137,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        jmp2end();
+                        Jmp2end();
                     }
                     print_catchEx("foreach_hashtable", e);
                     //  print(e);
@@ -148,7 +165,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        jmp2end();
+                        Jmp2end();
                     }
                     print_catchEx("foreach_hashtable", e);
                     //  print(e);

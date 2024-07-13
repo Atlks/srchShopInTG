@@ -62,7 +62,7 @@ namespace mdsj.lib
                         {
                             try
                             {
-                                httpHdlr(httpHdlrSpel, context, api_prefix);
+                                httpHdlr(context, api_prefix, httpHdlrSpel);
                             }
                             catch (jmp2endEx e)
                             {
@@ -78,60 +78,60 @@ namespace mdsj.lib
             app.Run();
         }
       public  static string webrootDir = $"{prjdir}/webroot";
+
+
+        /*
+         
+           //txt   text / plain; charset = UTF - 8
+            //pdf word zip file
+            //css  text/css; charset=UTF-8
+            //js   text/javascript
+            //png   image/png
+            //ico  image/x-icon
+            // Invk(img_httpHdlrFilImg);
+            // 静态资源处理函数调用
+            object? audioRespAsync = null;
+            extNhdlrChoosrMaplist.Add("mp3", audioRespAsync);
+            object? videoRespAsync = null;
+            extNhdlrChoosrMaplist.Add("mp4", videoRespAsync);
+        
+         
+         */
         /// <summary>
         /// httpHdlr
         /// </summary>
         /// <param name="httpHdlrApiSpecl"></param>
         /// <param name="context"></param>
         /// <param name="api_prefix"></param>
-        private static void httpHdlr(Action<HttpContext> httpHdlrApiSpecl, HttpContext context, string api_prefix)
+        private static void httpHdlr( HttpContext context, string api_prefix, Action<HttpContext> httpHdlrApiSpecl)
         {
             HttpContext context2 = context;
             HttpResponse response = context2.Response;
             // 获取当前请求的 URL
             var request = context.Request;
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
-
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            
-
             //----------------static res
-         
+            // 静态资源处理器映射表
             Hashtable extNhdlrChoosrMaplist = new Hashtable();
-
-            extNhdlrChoosrMaplist.Add("txt   css js", Html_httpHdlrfilTxtHtml);
-            //txt   text / plain; charset = UTF - 8
-            //pdf word zip file
-            //css  text/css; charset=UTF-8
-            //js   text/javascript
+            extNhdlrChoosrMaplist.Add("txt   css js", Html_httpHdlrfilTxtHtml);          
             extNhdlrChoosrMaplist.Add(" html htm", Html_httpHdlrfilTxtHtml);
             extNhdlrChoosrMaplist.Add("json", jsonfl_httpHdlrFilJson);
-            extNhdlrChoosrMaplist.Add("jpg png", img_httpHdlrFilImg);
-            //png   image/png
-            //ico  image/x-icon
-            object? audioRespAsync = null;
-            extNhdlrChoosrMaplist.Add("mp3", audioRespAsync);
-            object? videoRespAsync = null;
-            extNhdlrChoosrMaplist.Add("mp4", videoRespAsync);
-            Invk(img_httpHdlrFilImg);
+            extNhdlrChoosrMaplist.Add("jpg png", img_httpHdlrFilImg);          
             httpHdlrFil(context, extNhdlrChoosrMaplist);
-
-
-
             //-------------------swag doc api
+            // 处理特定API
             httpHdlrApiSpecl(context);
-
-
             //------------httpHdlrApi--def json api mode
             // 设置响应内容类型和编码
-            context.Response.ContentType = "application/json; charset=utf-8";
+            SetRespContentTypeNencode(context, "application/json; charset=utf-8");        
             var fn = path.Substring(1);
             object rzt = callxTryx(api_prefix + fn, Substring(queryString, 1));
-            //   context.Response.ContentEncoding = Encoding.UTF8;
-            context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
-        }
+            // 发送响应
+            SendResp(rzt, context);
+         }
 
         private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
         {
@@ -204,7 +204,7 @@ namespace mdsj.lib
 
                         //   await task;
                         //   return;
-                        jmp2end();
+                        Jmp2end();
 
                     }
                 }
@@ -238,7 +238,7 @@ namespace mdsj.lib
                     response.StatusCode = (int)HttpStatusCode.NotFound;
                     StreamWriter writer = new StreamWriter(response.Body);
                     writer.Write("file not found");
-                    jmp2end();
+                    Jmp2end();
                     return;
                 }
                    
@@ -250,7 +250,7 @@ namespace mdsj.lib
                 if (File.Exists($"{prjdir}{path}"))
                 {
                     Html_httpHdlrfilTxtHtml(context);
-                    jmp2end();
+                    Jmp2end();
                 }
 
 
@@ -288,10 +288,39 @@ namespace mdsj.lib
                 string f = webrootDir + decodeUrl(path);
                 object rzt2 = ReadAllText(f);
                 await context.Response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
-                jmp2end(); return;
+                Jmp2end(); return;
             }
         }
 
+        public static async System.Threading.Tasks.Task fildown_httpHdlrFilDown(HttpRequest request, HttpResponse response)
+        {
+            
+          
+            string path = request.Path;
+            // 设置响应内容类型和编码
+
+
+            //    HttpListenerResponse response = (HttpListenerResponse)response2;
+            string path1 = webrootDir + path;
+            path1 = decodeUrl(path1);
+            if (!existFil(path1))
+            {
+                response.StatusCode = (int)HttpStatusCode.NotFound;
+                StreamWriter writer = new StreamWriter(response.Body);
+                writer.Write("res not found");
+                return;
+            }
+            byte[] buffer = File.ReadAllBytes(path1);
+            response.ContentType = "application/octet-stream";
+            response.ContentLength = buffer.Length;
+            //   await response.WriteAsync(buffer, 0, buffer.Length);
+            await response.Body.WriteAsync(buffer, 0, buffer.Length);
+            response.Body.Close();
+            Jmp2end();
+            return;
+
+
+        }
 
 
         public static async System.Threading.Tasks.Task fildown_httpHdlrFilDown(HttpContext context)
@@ -320,7 +349,7 @@ namespace mdsj.lib
             //   await response.WriteAsync(buffer, 0, buffer.Length);
             await response.Body.WriteAsync(buffer, 0, buffer.Length);
             response.Body.Close();
-            jmp2end();
+            Jmp2end();
             return;
 
 
@@ -345,7 +374,7 @@ namespace mdsj.lib
                 response.StatusCode = (int)HttpStatusCode.NotFound;
                 StreamWriter writer = new StreamWriter(response.Body);
                 writer.Write("Image not found");
-                jmp2end();
+                Jmp2end();
                 return;
             }
             byte[] buffer = File.ReadAllBytes(path1);
@@ -354,7 +383,7 @@ namespace mdsj.lib
             //   await response.WriteAsync(buffer, 0, buffer.Length);
             await response.Body.WriteAsync(buffer, 0, buffer.Length);
             response.Body.Close();
-            jmp2end();
+            Jmp2end();
             return;
 
 
@@ -376,7 +405,7 @@ namespace mdsj.lib
           
             object rzt2 = ReadAllText(webrootDir + path);
             await context.Response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
-            jmp2end();
+            Jmp2end();
             return;
 
         }
