@@ -45,6 +45,24 @@ namespace mdsj.libBiz
 
             return result;
         }
+        public static List<string> RemoveEmptyElements(List<string> words)
+        {
+            var wordsToRemove = new List<string>();
+
+            foreach (var word in words)
+            {
+                if (string.IsNullOrWhiteSpace(word))
+                {
+                    wordsToRemove.Add(word);
+                }
+            }
+
+            foreach (var word in wordsToRemove)
+            {
+                words.Remove(word);
+            }
+            return words;
+        }
 
         public static HashSet<string> RemoveEmptyElements(HashSet<string> words)
         {

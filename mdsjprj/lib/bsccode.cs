@@ -218,7 +218,7 @@ namespace mdsj.lib
                 {
                     if(e.ToString().Contains("jmp2endEx"))
                     {
-                        jmp2end();
+                        Jmp2end();
                     }
                     print_catchEx("foreach_hashtable", e);
                     //  print(e);
@@ -253,6 +253,13 @@ namespace mdsj.lib
         public static string ldfldAsStr(object obj, string fld, object defVal)
         {
             return ldfld(obj, fld, "").ToString();
+        }
+
+        public static object ldfld(Hashtable hstb, string fld, object defVal)
+        {
+            if (hstb.ContainsKey(fld))
+                return hstb[fld];
+            return defVal;
         }
         public static object ldfld(object obj, string fld, object defVal)
         {
@@ -534,7 +541,7 @@ namespace mdsj.lib
         }
      
         
-        public static void jmp2end()
+        public static void Jmp2end()
         {
             // jmp2exitFlag = true;
             throw new jmp2endEx();
@@ -594,18 +601,7 @@ namespace mdsj.lib
             var __METHOD__ = methodName;
             print_call_FunArgs(methodName, dbgCls.func_get_args(args));
 
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            print("assemblies.Len=>" + assemblies.Length);
-            IEnumerable<Type> typeList = assemblies
-                            .SelectMany(assembly => assembly.GetTypes());
-            print("typeList.Len=>" + typeList.Count());
-            IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            print("methodss.Len=>" + methodss.Count());
-            var methodInfo = methodss
-                .FirstOrDefault(method =>
-                    method.Name == methodName
-                  );
+            MethodInfo? methodInfo = getMethInfo(methodName);
 
             if (methodInfo == null)
             {
@@ -615,7 +611,7 @@ namespace mdsj.lib
             }
 
 
-            var delegateType = typeof(Func<string, List<SortedList>>);
+      //      var delegateType = typeof(Func<string, List<SortedList>>);
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
 
             // 假设你想要执行 YourMethodName 方法
@@ -636,6 +632,24 @@ namespace mdsj.lib
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
+
+        private static MethodInfo? getMethInfo(string methodName)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            print("assemblies.Len=>" + assemblies.Length);
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            print("typeList.Len=>" + typeList.Count());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
+            print("methodss.Len=>" + methodss.Count());
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+            return methodInfo;
+        }
+
         public static void CallAsAsyncTaskRun(Action act)
         {
             try

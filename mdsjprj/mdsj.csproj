@@ -45,6 +45,7 @@
     <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
     <PackageReference Include="NAudio.WaveFormRenderer" Version="2.0.0" />
     <PackageReference Include="NAudio.Wma" Version="1.0.1" />
+    <PackageReference Include="NCrontab.Signed" Version="3.3.3" />
     <PackageReference Include="Nethereum.ABI" Version="4.21.0" />
     <PackageReference Include="Nethereum.Accounts" Version="4.21.0" />
     <PackageReference Include="Nethereum.Contracts" Version="4.21.0" />
@@ -59,6 +60,9 @@
     <PackageReference Include="NReco" Version="2.0.3" />
     <PackageReference Include="NReco.ImageGenerator.LT" Version="1.1.3" />
     <PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
+    <PackageReference Include="Porter2Stemmer" Version="1.0.0" />
+    <PackageReference Include="Porter2StemmerStandard" Version="1.1.0" />
+    <PackageReference Include="PorterStemmer" Version="1.0.0" />
     <PackageReference Include="RG3.PF.PinYinScriptEngineCliWrap" Version="7.2.10" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />

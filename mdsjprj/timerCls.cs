@@ -251,11 +251,11 @@ namespace prj202405
                 System.IO.File.WriteAllText(zhuliLog, "pushlog");
                 var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
 
-                tmrEvtLLLzhuligrpSendmsg(null, null);
+                tmrEvtLLLzhuligrpSendmsg();
                     }
         }
 
-        public static void tmrEvtLLLzhuligrpSendmsg(string imgPath, string msgtxt)
+        public static void tmrEvtLLLzhuligrpSendmsg()
         {
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
             foreach_hashtable(chtsSess, (de) =>

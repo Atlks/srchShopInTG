@@ -81,6 +81,7 @@ using WindowsFormsApp1.libbiz;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using DocumentFormat.OpenXml.Office2010.ExcelAc;
 namespace prj202405
 {
     internal class testCls
@@ -139,6 +140,13 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            //
+           // getwdRoots();
+            var root = GetRoot("running");
+            transltTest();
+            tmrTask1start();
+          //  CallTmrTasks();
+
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
             WriteAllText("mdsj.xml.json", ConvertXmlToJson("mdsj.xml"));
 
@@ -374,7 +382,208 @@ namespace prj202405
 
         }
 
+        private static void getwdRoots()
+        {
+            List<string> liRzt = new List<string>();
+            List<string> li = getListFrmFil($"{prjdir}/cfg/wds.txt");
+            li = RemoveEmptyElements(li);
+            foreach_listStr(li, (string line) =>
+            {
+                var wd = line.Trim().ToLower();
+                string wdOri = GetRoot(wd);
+                liRzt.Add(wdOri);
+            });
+            string rzt = JoinStringsWithNewlines(liRzt);
+            print(rzt);
+        }
+        private static void transltTest()
+        {
+            List<string> liRzt = new List<string>();
+            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t2.txt");
+            li= RemoveEmptyElements(li);
+            foreach_listStr(li, (string line) =>
+            {
+                string transed = transedE2Cn(line);
+                liRzt.Add(transed);
+            });
+            string rzt = JoinStringsWithNewlines(liRzt);
+            print(rzt);
+        }
 
+        private static string transedE2Cn(string line)
+        {
+            List<string> liRzt = new List<string>();
+            string[] wds = Tokenize(line);
+            foreach(string wd in wds)
+            {
+                if (wd.Contains("fraudulently"))
+                    print("dbg");
+                if (wd.Contains("visa"))
+                    print("dbg");
+                if (IsWord(wd))
+                {
+                    string wdRoot = GetRoot(wd);
+                    string cnWd = transE2cWd(wdRoot);
+                    liRzt.Add(wdRoot+cnWd);
+                }
+                else
+                {
+                    //标点
+                    liRzt.Add(wd);
+                }
+               
+            }
+            // 将 List<string> 转换为用空格隔开的字符串
+            string result = String.Join(" ", liRzt);
+            return result;
+
+        }
+
+        static bool IsWord(string input)
+        {
+            // 使用 Char 类的方法判断是否是字母或数字
+            return input.All(c => char.IsLetterOrDigit(c));
+        }
+        static string[] Tokenize(string input)
+        {
+            // 定义正则表达式，匹配单词和标点符号
+            string pattern = @"([\w']+|[^\w\s])";
+            Regex regex = new Regex(pattern);
+
+            // 使用正则表达式拆分输入字符串
+            MatchCollection matches = regex.Matches(input);
+
+            // 构建结果数组
+            string[] tokens = new string[matches.Count];
+            for (int i = 0; i < matches.Count; i++)
+            {
+                tokens[i] = matches[i].Value;
+            }
+
+            return tokens;
+        }
+        private static string transE2cWd(string wd)
+        {
+            Hashtable dic = getHstbFromIniFl($"{prjdir}/cfg/word5000.ini");
+       //     WriteAllText("wd5000.json", encodeJson(dic));
+           // dic = ToLower(dic);
+            return (string)ldfld(dic, wd.ToLower(), wd);
+        }
+
+        private static Hashtable ToLower(Hashtable dic)
+        {
+            ConvertKeysToLowercase(dic);
+            return dic;
+        }
+
+        static void ConvertKeysToLowercase(Hashtable hashtable)
+        {
+            Hashtable newHashtable = new Hashtable();
+
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                string lowercaseKey = entry.Key.ToString().ToLower(); // 将键转换为小写
+                newHashtable[lowercaseKey] = entry.Value; // 保持值不变，添加到新的 Hashtable 中
+            }
+
+            // 清空原始 Hashtable 并将新的键值对复制回去
+            hashtable.Clear();
+            foreach (DictionaryEntry entry in newHashtable)
+            {
+                hashtable[entry.Key] = entry.Value;
+            }
+        }
+
+        private static Hashtable getHstbFromIniFl(string v)
+        {
+            return ReadIniFile(v);
+        }
+
+        static Hashtable ReadIniFile(string filePath)
+        {
+            Hashtable iniData = new Hashtable();
+
+            // 按行读取 INI 文件内容
+            string[] lines = ReadAllLines(filePath);
+
+            foreach (string line in lines)
+            {
+                string trimmedLine = line.Trim();
+
+                // 忽略空行和注释行
+                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#"))
+                    continue;
+
+                // 处理键值对行
+                int equalIndex = trimmedLine.IndexOf('=');
+                if (equalIndex > 0)
+                {
+                    string key = trimmedLine.Substring(0, equalIndex).Trim();
+                    string value = trimmedLine.Substring(equalIndex + 1).Trim();
+                    iniData[key] = value;
+                }
+            }
+
+            return iniData;
+        }
+
+        private static string[] ReadAllLines(string filePath)
+        {
+            return System.IO.File.ReadAllLines(filePath);
+        }
+
+        private static void foreach_listStr(List<string> li, Action<string> value)
+        {
+           foreach( string line in li)
+            {
+                value(line);
+            }
+        }
+
+        private static List<string> getListFrmFil(string v)
+        {
+            return ReadFileToLines(v);
+        }
+
+        public static List<string> ReadFileToLines(string filePath)
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"File not found: {filePath}");
+            }
+
+            List<string> lines = new List<string>();
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            return lines;
+        }
+
+        public static string JoinStringsWithNewlines(List<string> stringList)
+        {
+            if (stringList == null || stringList.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            foreach (string item in stringList)
+            {
+                builder.Append(item);
+                builder.AppendLine();
+            }
+
+            // Remove the last newline character
+            builder.Remove(builder.Length - 1, 1);
+
+            return builder.ToString();
+        }
 
         private static void geenBtns()
         { // Create the keyboard object
@@ -594,11 +803,7 @@ namespace prj202405
             file_put_contents(fileName, json_encode(o), false);
 
         }
-
-        private static void callx((int id, string dbf) value)
-        {
-            // throw new NotImplementedException();
-        }
+ 
 
         private static void getProdSvrWdlib()
         {

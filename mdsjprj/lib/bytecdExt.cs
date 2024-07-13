@@ -3,6 +3,7 @@ using libx;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -298,6 +299,83 @@ namespace mdsj.lib
 
             }
             return listRzt;
+        }
+
+
+        public static bool isIn(object hour, string[]? times)
+        {
+            foreach (string o in times)
+            {
+                if (hour.ToString().ToUpper().Equals(o.ToUpper()))
+                    return true;
+            }
+            return false;
+        }
+
+        public static List<Hashtable> foreach_listHstb(List<Hashtable> list, Action<Hashtable> act)
+        {
+            // List<Hashtable> listRzt = new List<object>();
+            foreach (Hashtable rw in list)
+            {
+                try
+                {
+                    act(rw);
+                }
+                catch (Exception e)
+                {
+                    print_catchEx(nameof(foreach_listHstb), e);
+                }
+
+            }
+            return list;
+        }
+
+        public static List<Hashtable> getListFrmDir(string directoryPath)
+        {
+            List<Hashtable> fileList = new List<Hashtable>();
+
+            // 获取目录中所有 JSON 文件的路径
+            string[] jsonFiles = Directory.GetFiles(directoryPath, "*.json");
+
+            foreach (string filePath in jsonFiles)
+            {
+                try
+                {
+                    // 读取文件内容
+                    string jsonContent = ReadAllText(filePath);
+
+                    // 解析 JSON 文件为 JObject
+                    JObject jsonObject = JObject.Parse(jsonContent);
+
+                    // 转换为 Hashtable
+                    Hashtable hashtable = ToHashtable(jsonObject);
+                    hashtable.Add("fname", Path.GetFileName( filePath));
+                    hashtable.Add("fpath", filePath);
+                    // 获取文件名（不包括扩展名）
+                    string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
+                    hashtable.Add("basename", fileNameWithoutExtension);
+                    // 添加到 List 中
+                    fileList.Add(hashtable);
+                }
+                catch (Exception ex)
+                {
+                    ConsoleWriteLine($"Error reading or parsing file {filePath}: {ex.Message}");
+                }
+            }
+
+            return fileList;
+        }
+        // 将 JObject 转换为 Hashtable
+        public static Hashtable ToHashtable(JObject jsonObject)
+        {
+            Hashtable hashtable = new Hashtable();
+
+            foreach (var property in jsonObject.Properties())
+            {
+                hashtable[property.Name] = property.Value.ToObject<object>();
+            }
+
+            return hashtable;
         }
         public static void encodeurl()
         {

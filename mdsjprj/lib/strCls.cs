@@ -419,12 +419,12 @@ namespace prj202405.lib
 
             return false;
         }
-        public static string[] splt(string? text)
+        public static string[] splt(object text)
         {
             if (text == null)
                 return [];
             else
-                return text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                return text.ToString().Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
         }
         public static bool containKwds(string? text, HashSet<string> trgSearchKwds)
         {

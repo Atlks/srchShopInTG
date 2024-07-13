@@ -238,6 +238,8 @@ namespace prj202405
             {
                 webapi2.mainWbstartAsync();
             });
+
+            RunTmrTasksCron();
             startWebapi((context) =>
             {
                 var request = context.Request;
@@ -248,7 +250,7 @@ namespace prj202405
                     context.Response.ContentType = "text/html; charset=utf-8";
                     var rzt = docapi_httpHdlrApiSpelDocapi("mdsj.xml", context);
                     context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
-                    jmp2end();
+                    Jmp2end();
                 }
 
             }, "Wbapi_");
