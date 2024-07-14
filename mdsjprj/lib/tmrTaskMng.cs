@@ -68,7 +68,8 @@ namespace mdsj.lib
                 if (Run_dateTime.Hour == now.Hour && Run_dateTime.Minute == now.Minute + 1)
                 {
                   //  DateTime now = DateTime.Now;
-                    var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
+                  //每天一次保证
+                    var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day  }_18.json";
                     if (!System.IO.File.Exists(zhuliLog))
                     {
                         System.IO.File.WriteAllText(zhuliLog, "pushlog");

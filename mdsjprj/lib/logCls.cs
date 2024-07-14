@@ -125,7 +125,32 @@ namespace mdsj.lib
 
 
         }
-
+        internal static void logF(object m, string logf)
+        {
+            try
+            {
+                mkdir_forFile(logf);
+                // 获取当前时间并格式化为文件名
+                string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+             
+                print(" fileName=>" + logf);
+                if (IsString(m))
+                {
+                    AppendTextToFile(logf, m.ToString());
+                }
+                else
+                    AppendTextToFile(logf, json_encode(m));
+            }
+            catch (Exception ex)
+            {
+                print(ex.ToString());
+            }
+        }
+        static void AppendTextToFile(string filePath, string content)
+        {
+            // 使用 File.AppendAllText 方法将内容追加到文件
+            File.AppendAllText(filePath, content + Environment.NewLine);
+        }
         internal static void log(object m, string logdir)
         {
             try

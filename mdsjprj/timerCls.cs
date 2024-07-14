@@ -243,17 +243,17 @@ namespace prj202405
             }
         }
 
-        static void tmrEvtLLLzhuligrp(DateTime now)
-        {
-            var zhuliLog = $"tmrlg/zhuliLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
-            if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(zhuliLog)))
-            {
-                System.IO.File.WriteAllText(zhuliLog, "pushlog");
-                var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
+        //static void tmrEvtLLLzhuligrp(DateTime now)
+        //{
+        //    var zhuliLog = $"tmrlg/zhuliLog{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
+        //    if ((now.Hour == 10 || now.Hour == 16) && now.Minute == 1 && (!System.IO.File.Exists(zhuliLog)))
+        //    {
+        //        System.IO.File.WriteAllText(zhuliLog, "pushlog");
+        //        var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
 
-                tmrEvtLLLzhuligrpSendmsg();
-                    }
-        }
+        //        tmrEvtLLLzhuligrpSendmsg();
+        //            }
+        //}
 
         public static void tmrEvtLLLzhuligrpSendmsg()
         {

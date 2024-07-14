@@ -16,6 +16,25 @@ namespace prj202405.lib
 {
     internal class ormIni
     {
+          
+
+        public static void saveIni(SortedList<string,string> sortedList, string Strfile)
+        {
+            //if (!File.Exists(Strfile))
+            //    File.WriteAllText(Strfile, "[]");
+            const bool Append = true;
+            // 使用StreamWriter追加写入文件
+            using (StreamWriter writer = new StreamWriter(Strfile, Append, Encoding.UTF8))
+            {
+                if(sortedList.ContainsKey("id"))
+                   writer.WriteLine($"\n\n[{sortedList["id"]}]");
+                foreach (KeyValuePair<string,string> entry in sortedList)
+                {
+                    writer.WriteLine($"{entry.Key}={entry.Value}");
+                }
+            }
+        }
+
         public static void save(SortedList sortedList, string Strfile)
         {
             //if (!File.Exists(Strfile))

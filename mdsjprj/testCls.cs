@@ -141,6 +141,7 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+           // mergeTransWdlib();
         //    tmrTask1startNow();
           //  ticyWdRoot();
            // ticyuWEdsTest();
@@ -149,7 +150,7 @@ namespace prj202405
            // getwdRoots();
             var root = GetRoot("running");
             transltTest();
-            tmrTask1start();
+          //  tmrTask1start();
           //  CallTmrTasks();
 
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
@@ -387,6 +388,167 @@ namespace prj202405
 
         }
 
+        private static void mergeTransWdlib()
+        {
+            SortedList<string, string> hs1 = LdHstbEsFrmIni($"{prjdir}/cfgNlp/word5000.ini");
+            SortedList<string, string> hs2 = LdHstbEsFrmJsonFile($"{prjdir}/cfgNlp/wd.engCns5k.json");
+            SortedList<string, string> hs4 = MergeSortedLists(hs1, hs2);
+            CleanupSortedListKeysLenLessthan3(hs4);
+            WriteAllText("wdlib.enNcn5k.delKenLenLess3.json", hs4);
+            CleanupSortedListValuesStartWzAlphbt(hs4);
+            WriteAllText("wdlib.enNcn5k.delKenLenLess3Fnl.json", hs4);
+            ormIni.saveIni(hs4, "wdlib.enNcn5k.delKenLenLess3Fnl.ini");
+        }
+
+        private static SortedList<string, string> LdHstbEsFrmJsonFile(string v)
+        {
+            return ReadJsonFileToSortedList(v);
+        }
+
+        static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的内容
+            string jsonContent = System.IO.File.ReadAllText(filePath);
+
+            // 解析 JSON 数据为字典
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
+
+            // 将字典数据添加到 SortedList 中
+            foreach (var kvp in data)
+            {
+                sortedList[kvp.Key] = kvp.Value;
+            }
+
+            return sortedList;
+        }
+        static SortedList<string, string> ReadIniFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            // 遍历每一行
+            foreach (var line in lines)
+            {
+                // 跳过空行和注释行
+                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";") || line.TrimStart().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                // 找到等号的位置
+                int equalsIndex = line.IndexOf('=');
+                if (equalsIndex > 0)
+                {
+                    // 提取键和值
+                    string key = line.Substring(0, equalsIndex).Trim();
+                    string value = line.Substring(equalsIndex + 1).Trim();
+
+                    // 将键值对添加到 SortedList 中
+                    sortedList[key] = value;
+                }
+            }
+
+            return sortedList;
+        }
+
+        private static SortedList<string, string> LdHstbEsFrmIni(string v)
+        {
+            return ReadIniFileToSortedList(v);
+        }
+
+        static SortedList<string, string> MergeSortedLists(SortedList<string, string> list1, SortedList<string, string> list2)
+        {
+            // 创建一个新的 SortedList 来存储合并后的结果
+            SortedList<string, string> mergedList = new SortedList<string, string>();
+
+            // 添加第一个 SortedList 的所有元素
+            foreach (var kvp in list1)
+            {
+                mergedList[kvp.Key] = kvp.Value;
+            }
+
+            // 添加第二个 SortedList 的所有元素，如果键已存在，则覆盖其值
+            foreach (var kvp in list2)
+            {
+                mergedList[kvp.Key] = kvp.Value;
+            }
+
+            return mergedList;
+        }
+        static void CleanupSortedListValuesStartWzAlphbt(SortedList<string, string> sortedList)
+        {
+            // 创建一个列表，存储需要移除的键
+            HashSet<string> keysToRemove = new HashSet<string>();
+
+            // 遍历 SortedList，找出以字母开头的值
+            foreach (var kvp in sortedList)
+            {
+                if(string.IsNullOrEmpty(kvp.Value))
+                {
+                    keysToRemove.Add(kvp.Key);return;
+
+                }
+                  
+                char c = kvp.Value[0];
+                if (!string.IsNullOrEmpty(kvp.Value) && IsEnglishLetter(c))
+                {
+                    keysToRemove.Add(kvp.Key);
+                }
+            }
+
+            // 移除找到的键
+            foreach (var key in keysToRemove)
+            {
+                sortedList.Remove(key);
+            }
+        }
+        static bool IsLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+
+        static bool IsEnglishLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+        static void CleanupSortedListKeysLenLessthan3(SortedList<string, string> sortedList)
+        {
+            // 创建一个列表，存储需要移除的键
+            List<string> keysToRemove = new List<string>();
+
+            // 遍历 SortedList，找出长度小于 4 的键
+            foreach (var key in sortedList.Keys)
+            {
+                if (key.Length < 3)
+                {
+                    keysToRemove.Add(key);
+                }
+            }
+
+            // 移除找到的键
+            foreach (var key in keysToRemove)
+            {
+                sortedList.Remove(key);
+            }
+        }
         private static void ticyWdRoot()
         {
             HashSet<string> hs = new HashSet<string>();

@@ -36,34 +36,72 @@ namespace mdsj.lib
                     print("dbg");
                 if (wd.Contains("ontivero"))
                     print("dbg");
-                if (IsWord(wd))
-                {
-                    if (StartsWithUppercase(wd))
-                    {
-                        string wdRoot = GetRoot(wd);
-                        string cnWd = transE2cWd(wdRoot);
-                        liRzt.Add(wd + " [" + cnWd + "]");
-                    }
-                    else
-                    {//normal 
-                        string wdRoot = GetRoot(wd);
-                        string cnWd = transE2cWd(wdRoot);
-                        liRzt.Add(wd + " [" + cnWd + " " + wdRoot + "]");
-                    }
-
-                }
-                else
-                {
-                    //标点
-                    liRzt.Add(wd);
-                }
+                transE2cn4wd(liRzt, wd);
 
             }
             // 将 List<string> 转换为用空格隔开的字符串
-            string result = String.Join(" ", liRzt);
+            string result = String.Join("    ", liRzt);
             return result;
 
         }
+
+        private static void transE2cn4wd(List<string> liRzt, string wd)
+        {
+            if (IsNumeric(wd))
+            { //数字
+                liRzt.Add(wd);
+                return;
+
+            }
+            if (!IsWord(wd))
+            {
+                // Or   标点
+                //标点
+                liRzt.Add(wd);
+            }
+            //is word
+            if (StartsWithUppercase(wd))
+            {
+                string wdRoot = GetRoot(wd);
+               // string cnWd = transE2cWd(wdRoot);
+                liRzt.Add(wd + "");
+                return;
+            }
+
+            //normal word
+            if (wd.Length <= 3)
+            {
+                liRzt.Add(wd + "");
+                return;
+            }
+
+            string cnWd = transE2cWd(wd);
+            if (cnWd != "")
+            {
+                //普通单词找到对于翻译词了
+                liRzt.Add(wd + "[" + cnWd + "." + wd + "]");
+                return;
+            }
+            else
+            {
+                //非普通单词，找不到翻译词，尝试 使用词干法
+                string wdRoot = GetRoot(wd);
+                cnWd = transE2cWd(wdRoot);
+                if(cnWd=="")
+                {
+                    //log miss wd
+                    logF($"\n miss wd=>{wd} wdroot=>{wdRoot}","misswd.log");
+                }
+                liRzt.Add(wd + "[" + cnWd + "." + wdRoot + "]");
+                return;
+            }
+
+
+
+
+
+        }
+
         static bool StartsWithUppercase(string input)
         {
             // 判断字符串是否为空或为null
@@ -78,7 +116,7 @@ namespace mdsj.lib
         static bool IsWord(string input)
         {
             // 使用 Char 类的方法判断是否是字母或数字
-            return input.All(c => char.IsLetterOrDigit(c));
+            return input.All(c => char.IsLetter(c));
         }
         static string[] Tokenize(string input)
         {
@@ -98,13 +136,13 @@ namespace mdsj.lib
 
             return tokens;
         }
-        static Hashtable dicWord5k = getHstbFromIniFl($"{prjdir}/cfg/word5000.ini");
-        private static string transE2cWd(string wdRoot)
+        static Hashtable dicWord5k = getHstbFromIniFl($"{prjdir}/cfgNlp/wdlib.enNcn5k.delKenLenLess3Fnl.ini");
+        private static string transE2cWd(string wdOrwdRoot)
         {
 
             //     WriteAllText("wd5000.json", encodeJson(dic));
             // dic = ToLower(dic);
-            return (string)ldfld(dicWord5k, wdRoot, wdRoot);
+            return (string)ldfld(dicWord5k, wdOrwdRoot, "");
         }
 
         private static Hashtable ToLower(Hashtable dic)
