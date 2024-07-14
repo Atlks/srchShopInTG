@@ -144,12 +144,14 @@ namespace prj202405
            // mergeTransWdlib();
         //    tmrTask1startNow();
           //  ticyWdRoot();
-           // ticyuWEdsTest();
-           // spdrTest();
+         //   ticyuWEdsTest();
+          //  spdrTest();
             //
            // getwdRoots();
             var root = GetRoot("running");
             transltTest();
+            var sss = string.Join("\n", hs_mswd);
+            WriteAllText("misswdFmt.txt",sss);
           //  tmrTask1start();
           //  CallTmrTasks();
 
@@ -625,104 +627,48 @@ namespace prj202405
 
             return jsonStringList;
         }
-        private static void ticyuWEdsTest()
-        {
-            var weds = ExtractWordsFromFiles("downHtmldir");
-            weds = RemoveElementsContainingNumbers(weds);
-            var wds = ConvertAndSortHashSet(weds);
-            WriteAllText("word7000.json", wds);
-        }
+     
 
-        static HashSet<string> RemoveElementsContainingNumbers(HashSet<string> hashSet)
-        {
-            // 使用 LINQ 和正则表达式过滤掉包含数字的元素
-            return new HashSet<string>(hashSet.Where(word => !Regex.IsMatch(word, @"\d")));
-        }
-        static List<string> ConvertAndSortHashSet(HashSet<string> hashSet)
-        {
-            // 将 HashSet 转换为 List
-            List<string> list = new List<string>(hashSet);
-
-            // 对 List 进行排序
-            list.Sort();
-
-            return list;
-        }
-        static HashSet<string> RemoveWordsStartingWithDigit(HashSet<string> words)
-        {
-            // 使用 LINQ 和正则表达式过滤掉数字开头的单词
-            return new HashSet<string>(words.Where(word => !Regex.IsMatch(word, @"^\d")));
-        }
-        static HashSet<string> RemoveElementsWithShortLength(HashSet<string> hashSet)
-        {
-            // 使用 LINQ 过滤掉长度小于 3 的元素
-            return new HashSet<string>(hashSet.Where(word => word.Length >= 3));
-        }
-        static HashSet<string> ExtractWordsFromFiles(string folderPath)
-        {
-            HashSet<string> words = new HashSet<string>();
-
-            // 获取文件夹中的所有文件
-            string[] files = Directory.GetFiles(folderPath);
-
-            foreach (string file in files)
-            {
-                // 读取文件内容
-                string content = System.IO.File.ReadAllText(file);
-
-                // 提取单词
-                var extractedWords = ExtractWords(content);
-
-                // 将提取的单词添加到 HashSet 中
-                foreach (var word in extractedWords)
-                {
-                    var a = word.Split("-");
-                    foreach( var wd in a )
-                    {
-                        var a2 = wd.Split("_");
-                        foreach (var w3 in a2)
-                        {
-                            if(w3.Length>3)
-                            words.Add(w3);
-                        }
-                    }
-                  
-                }
-            }
-
-            return words;
-        }
-
-        static IEnumerable<string> ExtractWords(string text)
-        {
-            // 使用正则表达式提取单词
-            MatchCollection matches = Regex.Matches(text, @"\b\w+\b");
-
-            foreach (Match match in matches)
-            {
-                yield return match.Value.ToLower(); // 转换为小写以确保唯一性
-            }
-        }
-
+    
+    
         private static void spdrTest()
         {
-            var url = "https://www.voanews.com/";
+            var url = "https://www.khmertimeskh.com/";
+            url = "https://www.khmertimeskh.com/category/national/#google_vignette";
+            url = "https://www.khmertimeskh.com/category/business/";
             var html=GetHtmlContent(url);
             WriteAllText("downHtmldir/main.htm", html);
             HashSet<string> urls = ExtractHrefAttributes(html);
             WriteAllText("url1119.json", urls);
-            urls = FilterHtmlUrls(urls);
+          //  urls = FilterHtmlUrls(urls);
             foreach_HashSet(urls, (string urlMaybeRltv) =>
             {
                 string ext = GetExtension(urlMaybeRltv);
-                if (ext.EndsWith("htm") || ext.EndsWith("html"))
+                if (EndsWith(ext, "js css jpg png gif"))
+                    return;
+               // if (ext.EndsWith("htm") || ext.EndsWith("html"))
                 {
-                    Download(url+urlMaybeRltv, "downHtmldir");
+                    string url1 = url + urlMaybeRltv;
+                    if (urlMaybeRltv.StartsWith("http"))
+                        url1 = urlMaybeRltv;
+                    Download(url1, "downHtmldir");
                 }
                 
             });
 
         }
+
+        private static bool EndsWith(string ext, string extss)
+        {
+            string[] a = extss.Split(" ");
+           foreach(string ex in a)
+            {
+                if (ext.EndsWith(ex))
+                    return true;
+            }
+            return false;
+        }
+
         static HashSet<string> FilterHtmlUrls(HashSet<string> urls)
         {
             return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));

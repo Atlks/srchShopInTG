@@ -14,7 +14,8 @@ namespace mdsj.lib
         public static void transltTest()
         {
             List<string> liRzt = new List<string>();
-            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
+            List<string> li = ldLstFrmDataDir();
+          //  getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li = RemoveEmptyElements(li);
             foreach_listStr(li, (string line) =>
             {
@@ -24,6 +25,88 @@ namespace mdsj.lib
             string rzt = JoinStringsWithNewlines(liRzt);
             WriteAllText("transed.txt", rzt);
             print(rzt);
+        }
+
+        private static List<string> ldLstFrmDataDir()
+        {
+            var weds = ExtractWordsFromFiles("downHtmldir");
+            weds = RemoveElementsContainingNumbers(weds);
+            var wds = ConvertAndSortHashSet(weds);
+            WriteAllText("word7000dep.json", wds);
+            return wds;
+
+        }
+
+
+        public static List<string> ConvertAndSortHashSet(HashSet<string> hashSet)
+        {
+            // 将 HashSet 转换为 List
+            List<string> list = new List<string>(hashSet);
+
+            // 对 List 进行排序
+            list.Sort();
+
+            return list;
+        }
+        public static HashSet<string> RemoveWordsStartingWithDigit(HashSet<string> words)
+        {
+            // 使用 LINQ 和正则表达式过滤掉数字开头的单词
+            return new HashSet<string>(words.Where(word => !Regex.IsMatch(word, @"^\d")));
+        }
+        public static HashSet<string> RemoveElementsWithShortLength(HashSet<string> hashSet)
+        {
+            // 使用 LINQ 过滤掉长度小于 3 的元素
+            return new HashSet<string>(hashSet.Where(word => word.Length >= 3));
+        }
+        public static HashSet<string> ExtractWordsFromFiles(string folderPath)
+        {
+            HashSet<string> words = new HashSet<string>();
+
+            // 获取文件夹中的所有文件
+            string[] files = Directory.GetFiles(folderPath);
+
+            foreach (string file in files)
+            {
+                // 读取文件内容
+                string content = System.IO.File.ReadAllText(file);
+
+                // 提取单词
+                var extractedWords = ExtractWords(content);
+
+                // 将提取的单词添加到 HashSet 中
+                foreach (var word in extractedWords)
+                {
+                    var a = word.Split("-");
+                    foreach (var wd in a)
+                    {
+                        var a2 = wd.Split("_");
+                        foreach (var w3 in a2)
+                        {
+                            if (w3.Length > 3)
+                                words.Add(w3);
+                        }
+                    }
+
+                }
+            }
+
+            return words;
+        }
+        public static HashSet<string> RemoveElementsContainingNumbers(HashSet<string> hashSet)
+        {
+            // 使用 LINQ 和正则表达式过滤掉包含数字的元素
+            return new HashSet<string>(hashSet.Where(word => !Regex.IsMatch(word, @"\d")));
+        }
+
+        public static IEnumerable<string> ExtractWords(string text)
+        {
+            // 使用正则表达式提取单词
+            MatchCollection matches = Regex.Matches(text, @"\b\w+\b");
+
+            foreach (Match match in matches)
+            {
+                yield return match.Value.ToLower(); // 转换为小写以确保唯一性
+            }
         }
 
         private static string transedE2Cn(string line)
@@ -44,6 +127,7 @@ namespace mdsj.lib
             return result;
 
         }
+      public  static HashSet<string> hs_mswd = new HashSet<string>();
 
         private static void transE2cn4wd(List<string> liRzt, string wd)
         {
@@ -90,7 +174,9 @@ namespace mdsj.lib
                 if(cnWd=="")
                 {
                     //log miss wd
-                    logF($"\n miss wd=>{wd} wdroot=>{wdRoot}","misswd.log");
+                    logF($"\n{wd}=\n{wdRoot}=","misswd.log");
+                    //for misswd.log then trans fill to wdlib.ini
+                    hs_mswd.Add(wd + ""); hs_mswd.Add(wdRoot + "");
                 }
                 liRzt.Add(wd + "[" + cnWd + "." + wdRoot + "]");
                 return;
