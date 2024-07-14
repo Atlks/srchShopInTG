@@ -305,6 +305,7 @@ namespace mdsj.libBiz
         }
         public static Message sendZhuliGrp(object ChatId, string tips, string btn, string? grpUsername)
         {
+          long  ChatId2 = long.Parse(ChatId.ToString());
             var url = $"https://t.me/boost/{grpUsername}";
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
@@ -312,7 +313,7 @@ namespace mdsj.libBiz
             print(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
-                                  (ChatId)ChatId, tips,
+                                   ChatId2, tips,
                                   replyMarkup: InlineKeyboardMarkup1 
 
                           ).Result;

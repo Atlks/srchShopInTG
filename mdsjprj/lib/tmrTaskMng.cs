@@ -45,12 +45,12 @@ namespace mdsj.lib
             var timer = new System.Threading.Timer(
                 callback: _ =>
                 {
-                    tmrTask1start();
+                    callxTryJmp(tmrTask1start);
                 },
                 state: null,
                 dueTime: TimeSpan.Zero,
                 period: TimeSpan.FromMinutes(1)); // 每分钟检查一次
-            
+
         }
 
         public static void tmrTask1start()
@@ -65,8 +65,9 @@ namespace mdsj.lib
                 CrontabSchedule schedule = CrontabSchedule.Parse(cronExpression);
                 // 检查是否需要执行任务
                 DateTime Run_dateTime = schedule.GetNextOccurrence(now);
-                if (Run_dateTime.Hour == now.Hour && Run_dateTime.Minute == now.Minute+1)
+                if (Run_dateTime.Hour == now.Hour && Run_dateTime.Minute == now.Minute + 1)
                 {
+                  //  DateTime now = DateTime.Now;
                     var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
                     if (!System.IO.File.Exists(zhuliLog))
                     {
@@ -78,6 +79,31 @@ namespace mdsj.lib
                 }
             });
         }
+
+
+        public static void tmrTask1startNow()
+        {
+            string tmrtaskDir = $"{prjdir}/cfg/tmrtask";
+            List<Hashtable> list = getListFrmDir(tmrtaskDir);
+            foreach_listHstb(list, (Hashtable hs) =>
+            {// 获取当前时间
+                DateTime now = DateTime.Now;
+                var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day }_19.json";
+                print(zhuliLog);
+                if (!System.IO.File.Exists(zhuliLog))
+                {
+                    System.IO.File.WriteAllText(zhuliLog, "pushlog");
+                    // 调用需要执行的函数
+                    //     fun1();
+                    callx(hs["fun"].ToString());
+                }
+
+            });
+        }
+
+
         //end fun
+
+
     }
 }

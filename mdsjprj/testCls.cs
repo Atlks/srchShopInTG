@@ -141,7 +141,8 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
-            ticyWdRoot();
+        //    tmrTask1startNow();
+          //  ticyWdRoot();
            // ticyuWEdsTest();
            // spdrTest();
             //
