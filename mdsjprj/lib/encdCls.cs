@@ -114,7 +114,7 @@ namespace mdsj.lib
             return result;
         }
 
-        private static string delEmpltyLines(string result)
+        public static string delEmpltyLines(string result)
         {
             string[] lines = result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
             lines = delEmptyLines(lines);

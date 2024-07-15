@@ -14,8 +14,8 @@ namespace mdsj.lib
         public static void transltTest()
         {
             List<string> liRzt = new List<string>();
-            List<string> li = ldLstFrmDataDir();
-          //  getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
+           // List<string> li = ldLstFrmDataDirHtml();
+            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li = RemoveEmptyElements(li);
             foreach_listStr(li, (string line) =>
             {
@@ -27,9 +27,9 @@ namespace mdsj.lib
             print(rzt);
         }
 
-        private static List<string> ldLstFrmDataDir()
+        private static List<string> ldLstFrmDataDirHtml()
         {
-            var weds = ExtractWordsFromFiles("downHtmldir");
+            var weds = ExtractWordsFromFilesHtml("downHtmldir");
             weds = RemoveElementsContainingNumbers(weds);
             var wds = ConvertAndSortHashSet(weds);
             WriteAllText("word7000dep.json", wds);
@@ -58,6 +58,42 @@ namespace mdsj.lib
             // 使用 LINQ 过滤掉长度小于 3 的元素
             return new HashSet<string>(hashSet.Where(word => word.Length >= 3));
         }
+
+        public static HashSet<string> ExtractWordsFromFilesHtml(string folderPath)
+        {
+            HashSet<string> words = new HashSet<string>();
+
+            // 获取文件夹中的所有文件
+            string[] files = Directory.GetFiles(folderPath);
+
+            foreach (string file in files)
+            {
+                // 读取文件内容
+                string content = System.IO.File.ReadAllText(file);
+                content = htm_strip_tags(content);
+                // 提取单词
+                var extractedWords = ExtractWords(content);
+
+                // 将提取的单词添加到 HashSet 中
+                foreach (var word in extractedWords)
+                {
+                    var a = word.Split("-");
+                    foreach (var wd in a)
+                    {
+                        var a2 = wd.Split("_");
+                        foreach (var w3 in a2)
+                        {
+                            if (w3.Length > 3)
+                                words.Add(w3);
+                        }
+                    }
+
+                }
+            }
+
+            return words;
+        }
+
         public static HashSet<string> ExtractWordsFromFiles(string folderPath)
         {
             HashSet<string> words = new HashSet<string>();
@@ -127,6 +163,7 @@ namespace mdsj.lib
             return result;
 
         }
+
       public  static HashSet<string> hs_mswd = new HashSet<string>();
 
         private static void transE2cn4wd(List<string> liRzt, string wd)
@@ -222,7 +259,7 @@ namespace mdsj.lib
 
             return tokens;
         }
-        static Hashtable dicWord5k = getHstbFromIniFl($"{prjdir}/cfgNlp/wdlib.enNcn5k.delKenLenLess3Fnl.ini");
+        static Hashtable dicWord5k = getHstbFromIniFl("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\wdlib.enNcn5k.v2.ini");
         private static string transE2cWd(string wdOrwdRoot)
         {
 

@@ -141,7 +141,7 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
-           // mergeTransWdlib();
+         //    mergeTransWdlib();
         //    tmrTask1startNow();
           //  ticyWdRoot();
          //   ticyuWEdsTest();
@@ -392,14 +392,20 @@ namespace prj202405
 
         private static void mergeTransWdlib()
         {
-            SortedList<string, string> hs1 = LdHstbEsFrmIni($"{prjdir}/cfgNlp/word5000.ini");
-            SortedList<string, string> hs2 = LdHstbEsFrmJsonFile($"{prjdir}/cfgNlp/wd.engCns5k.json");
+            string inif = $"{prjdir}/cfgNlp/word5000.ini";
+          
+            string jsonf = $"{prjdir}/cfgNlp/wd.engCns5k.json";
+
+            inif = $"{prjdir}/cfgNlp/wdlib.enNcn5k.delKenLenLess3Fnl.ini";
+            jsonf = "C:\\Users\\Administrator\\GolandProjects\\awesomeProject\\wd.tmp3k.json";
+            SortedList<string, string> hs1 = LdHstbEsFrmIni(inif);
+            SortedList<string, string> hs2 = LdHstbEsFrmJsonFile(jsonf);
             SortedList<string, string> hs4 = MergeSortedLists(hs1, hs2);
-            CleanupSortedListKeysLenLessthan3(hs4);
+          //  CleanupSortedListKeysLenLessthan3(hs4);
             WriteAllText("wdlib.enNcn5k.delKenLenLess3.json", hs4);
             CleanupSortedListValuesStartWzAlphbt(hs4);
             WriteAllText("wdlib.enNcn5k.delKenLenLess3Fnl.json", hs4);
-            ormIni.saveIni(hs4, "wdlib.enNcn5k.delKenLenLess3Fnl.ini");
+            ormIni.saveIni(hs4, "wdlib.enNcn5k.v2.ini");
         }
 
         private static SortedList<string, string> LdHstbEsFrmJsonFile(string v)
