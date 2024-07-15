@@ -11,6 +11,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 using System.Collections;
 using Microsoft.Extensions.Primitives;
 using System.Reflection;
+using System.Text.Json;
 
 
 
@@ -19,6 +20,232 @@ namespace prj202405.lib
 {
     public class arrCls
     {
+        public static SortedList<string, string> MergeSortedLists(SortedList<string, string> list1, SortedList<string, string> list2)
+        {
+            // 创建一个新的 SortedList 来存储合并后的结果
+            SortedList<string, string> mergedList = new SortedList<string, string>();
+
+            // 添加第一个 SortedList 的所有元素
+            foreach (var kvp in list1)
+            {
+                mergedList[kvp.Key] = kvp.Value;
+            }
+
+            // 添加第二个 SortedList 的所有元素，如果键已存在，则覆盖其值
+            foreach (var kvp in list2)
+            {
+                mergedList[kvp.Key] = kvp.Value;
+            }
+
+            return mergedList;
+        }
+        public static void CleanupSortedListValuesStartWzAlphbt(SortedList<string, string> sortedList)
+        {
+            // 创建一个列表，存储需要移除的键
+            HashSet<string> keysToRemove = new HashSet<string>();
+
+            // 遍历 SortedList，找出以字母开头的值
+            foreach (var kvp in sortedList)
+            {
+                if (string.IsNullOrEmpty(kvp.Value))
+                {
+                    keysToRemove.Add(kvp.Key); return;
+
+                }
+
+                char c = kvp.Value[0];
+                if (!string.IsNullOrEmpty(kvp.Value) && IsEnglishLetter(c))
+                {
+                    keysToRemove.Add(kvp.Key);
+                }
+            }
+
+            // 移除找到的键
+            foreach (var key in keysToRemove)
+            {
+                sortedList.Remove(key);
+            }
+        }
+    public    static List<string> ReadJsonFileToList(string filePath)
+        {
+            List<string> jsonStringList = new List<string>();
+
+            try
+            {
+                // 读取 JSON 文件内容
+                string jsonString = System.IO.File.ReadAllText(filePath);
+
+                // 使用 Newtonsoft.Json 库将 JSON 字符串反序列化为 List<string>
+                jsonStringList = JsonConvert.DeserializeObject<List<string>>(jsonString);
+            }
+            catch (FileNotFoundException)
+            {
+                ConsoleWriteLine($"File not found: {filePath}");
+            }
+            catch (Newtonsoft.Json.JsonException)
+            {
+                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
+            }
+
+            return jsonStringList;
+        }
+        static List<string> getListFrmJsonFil(string filePath)
+        {
+            List<string> jsonStringList = new List<string>();
+
+            try
+            {
+                // 读取 JSON 文件内容
+                string jsonString = System.IO.File.ReadAllText(filePath);
+                // Configure JsonSerializerOptions to allow reflection-based serialization
+                var options = new JsonSerializerOptions
+                {
+                    // Enable reflection-based serialization
+                    //   TypeNameHandling = TypeNameHandling.All, // or TypeNameHandling.Auto
+                    PropertyNameCaseInsensitive = true,
+                    WriteIndented = true
+                };
+                // 将 JSON 字符串解析为 List<string>
+                jsonStringList = System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString, options);
+            }
+            catch (FileNotFoundException)
+            {
+                ConsoleWriteLine($"File not found: {filePath}");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
+            }
+
+            return jsonStringList;
+        }
+        public static bool EndsWith(string ext, string extss)
+        {
+            string[] a = extss.Split(" ");
+            foreach (string ex in a)
+            {
+                if (ext.EndsWith(ex))
+                    return true;
+            }
+            return false;
+        }
+
+
+       
+
+        public static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的内容
+            string jsonContent = System.IO.File.ReadAllText(filePath);
+
+            // 解析 JSON 数据为字典
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
+
+            // 将字典数据添加到 SortedList 中
+            foreach (var kvp in data)
+            {
+                sortedList[kvp.Key] = kvp.Value;
+            }
+
+            return sortedList;
+        }
+        public static SortedList<string, string> ReadIniFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            // 遍历每一行
+            foreach (var line in lines)
+            {
+                // 跳过空行和注释行
+                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";") || line.TrimStart().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                // 找到等号的位置
+                int equalsIndex = line.IndexOf('=');
+                if (equalsIndex > 0)
+                {
+                    // 提取键和值
+                    string key = line.Substring(0, equalsIndex).Trim();
+                    string value = line.Substring(equalsIndex + 1).Trim();
+
+                    // 将键值对添加到 SortedList 中
+                    sortedList[key] = value;
+                }
+            }
+
+            return sortedList;
+        }
+
+
+        public static HashSet<string> FilterUrlsEndwithHtm(HashSet<string> urls)
+        {
+            return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));
+        }
+        public static string GetExtension(string url)
+        {
+            try
+            {
+                var ext = Path.GetExtension(url);
+                ext = ext.ToLower().Trim();
+                return ext;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+        }
+
+        public static void CleanupSortedListKeysLenLessthan3(SortedList<string, string> sortedList)
+        {
+            // 创建一个列表，存储需要移除的键
+            List<string> keysToRemove = new List<string>();
+
+            // 遍历 SortedList，找出长度小于 4 的键
+            foreach (var key in sortedList.Keys)
+            {
+                if (key.Length < 3)
+                {
+                    keysToRemove.Add(key);
+                }
+            }
+
+            // 移除找到的键
+            foreach (var key in keysToRemove)
+            {
+                sortedList.Remove(key);
+            }
+        }
+
         public static SortedList arr_ReverseSortedList(SortedList originalList)
         {
             SortedList reversedList = new SortedList();
@@ -601,10 +828,7 @@ namespace prj202405.lib
                 obj.Add(fld, v);
         }
 
-        public static int count(object collection)
-        {
-            return 计算长度(collection);
-        }
+       
 
         /// <summary>
         /// 计算集合的长度。
@@ -689,23 +913,7 @@ namespace prj202405.lib
         }
 
 
-        public static string getFld(JObject? jo, string fld, string v2)
-        {
-            // 获取 chat.type 属性
-            JToken chatTypeToken = jo.SelectToken(fld);
-
-            if (chatTypeToken != null)
-            {
-                string chatType = chatTypeToken.ToString();
-                return chatType;
-                // print("chat.type: " + chatType);
-            }
-            else
-            {
-                return v2;
-            }
-        }
-
+       
         public static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
         {
             string[] a = v.Split(" ");

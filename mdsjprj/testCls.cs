@@ -109,7 +109,7 @@ namespace prj202405
         //    writer.Flush(triggerMerge: false, applyAllDeletes: false);
         //}
 
-        public static HashSet<string> ProcessFiles(string directoryPath)
+        public static HashSet<string> ProcessFilesDep(string directoryPath)
         {
             var resultSet = new HashSet<string>();
 
@@ -141,11 +141,11 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
-         //    mergeTransWdlib();
-        //    tmrTask1startNow();
-          //  ticyWdRoot();
-         //   ticyuWEdsTest();
-          //  spdrTest();
+            //    mergeTransWdlib();
+            //    tmrTask1startNow();
+            //  ticyWdRoot();
+            //   ticyuWEdsTest();
+           //  TaskRun(() => {spdr. spdrTest(); });
             //
            // getwdRoots();
             var root = GetRoot("running");
@@ -158,7 +158,7 @@ namespace prj202405
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
             WriteAllText("mdsj.xml.json", ConvertXmlToJson("mdsj.xml"));
 
-            var set = ProcessFiles("D:\\0prj\\mdsj");
+            var set = ProcessFilesDep("D:\\0prj\\mdsj");
             WriteAllText("wds.json", set);
             print("Column1\tColumn2\tColumn3");
             print("Data1\tData2\tData3");
@@ -390,174 +390,9 @@ namespace prj202405
 
         }
 
-        private static void mergeTransWdlib()
-        {
-            string inif = $"{prjdir}/cfgNlp/word5000.ini";
-          
-            string jsonf = $"{prjdir}/cfgNlp/wd.engCns5k.json";
 
-            inif = $"{prjdir}/cfgNlp/wdlib.enNcn5k.delKenLenLess3Fnl.ini";
-            jsonf = "C:\\Users\\Administrator\\GolandProjects\\awesomeProject\\wd.tmp3k.json";
-            SortedList<string, string> hs1 = LdHstbEsFrmIni(inif);
-            SortedList<string, string> hs2 = LdHstbEsFrmJsonFile(jsonf);
-            SortedList<string, string> hs4 = MergeSortedLists(hs1, hs2);
-          //  CleanupSortedListKeysLenLessthan3(hs4);
-            WriteAllText("wdlib.enNcn5k.delKenLenLess3.json", hs4);
-            CleanupSortedListValuesStartWzAlphbt(hs4);
-            WriteAllText("wdlib.enNcn5k.delKenLenLess3Fnl.json", hs4);
-            ormIni.saveIni(hs4, "wdlib.enNcn5k.v2.ini");
-        }
-
-        private static SortedList<string, string> LdHstbEsFrmJsonFile(string v)
-        {
-            return ReadJsonFileToSortedList(v);
-        }
-
-        static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
-        {
-            // 创建一个新的 SortedList 来存储结果
-            SortedList<string, string> sortedList = new SortedList<string, string>();
-
-            // 检查文件是否存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new FileNotFoundException("The specified file does not exist.", filePath);
-            }
-
-            // 读取文件的内容
-            string jsonContent = System.IO.File.ReadAllText(filePath);
-
-            // 解析 JSON 数据为字典
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
-
-            // 将字典数据添加到 SortedList 中
-            foreach (var kvp in data)
-            {
-                sortedList[kvp.Key] = kvp.Value;
-            }
-
-            return sortedList;
-        }
-        static SortedList<string, string> ReadIniFileToSortedList(string filePath)
-        {
-            // 创建一个新的 SortedList 来存储结果
-            SortedList<string, string> sortedList = new SortedList<string, string>();
-
-            // 检查文件是否存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new FileNotFoundException("The specified file does not exist.", filePath);
-            }
-
-            // 读取文件的所有行
-            string[] lines = System.IO.File.ReadAllLines(filePath);
-
-            // 遍历每一行
-            foreach (var line in lines)
-            {
-                // 跳过空行和注释行
-                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";") || line.TrimStart().StartsWith("#"))
-                {
-                    continue;
-                }
-
-                // 找到等号的位置
-                int equalsIndex = line.IndexOf('=');
-                if (equalsIndex > 0)
-                {
-                    // 提取键和值
-                    string key = line.Substring(0, equalsIndex).Trim();
-                    string value = line.Substring(equalsIndex + 1).Trim();
-
-                    // 将键值对添加到 SortedList 中
-                    sortedList[key] = value;
-                }
-            }
-
-            return sortedList;
-        }
-
-        private static SortedList<string, string> LdHstbEsFrmIni(string v)
-        {
-            return ReadIniFileToSortedList(v);
-        }
-
-        static SortedList<string, string> MergeSortedLists(SortedList<string, string> list1, SortedList<string, string> list2)
-        {
-            // 创建一个新的 SortedList 来存储合并后的结果
-            SortedList<string, string> mergedList = new SortedList<string, string>();
-
-            // 添加第一个 SortedList 的所有元素
-            foreach (var kvp in list1)
-            {
-                mergedList[kvp.Key] = kvp.Value;
-            }
-
-            // 添加第二个 SortedList 的所有元素，如果键已存在，则覆盖其值
-            foreach (var kvp in list2)
-            {
-                mergedList[kvp.Key] = kvp.Value;
-            }
-
-            return mergedList;
-        }
-        static void CleanupSortedListValuesStartWzAlphbt(SortedList<string, string> sortedList)
-        {
-            // 创建一个列表，存储需要移除的键
-            HashSet<string> keysToRemove = new HashSet<string>();
-
-            // 遍历 SortedList，找出以字母开头的值
-            foreach (var kvp in sortedList)
-            {
-                if(string.IsNullOrEmpty(kvp.Value))
-                {
-                    keysToRemove.Add(kvp.Key);return;
-
-                }
-                  
-                char c = kvp.Value[0];
-                if (!string.IsNullOrEmpty(kvp.Value) && IsEnglishLetter(c))
-                {
-                    keysToRemove.Add(kvp.Key);
-                }
-            }
-
-            // 移除找到的键
-            foreach (var key in keysToRemove)
-            {
-                sortedList.Remove(key);
-            }
-        }
-        static bool IsLetter(char character)
-        {
-            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
-        }
-
-        static bool IsEnglishLetter(char character)
-        {
-            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
-        }
-        static void CleanupSortedListKeysLenLessthan3(SortedList<string, string> sortedList)
-        {
-            // 创建一个列表，存储需要移除的键
-            List<string> keysToRemove = new List<string>();
-
-            // 遍历 SortedList，找出长度小于 4 的键
-            foreach (var key in sortedList.Keys)
-            {
-                if (key.Length < 3)
-                {
-                    keysToRemove.Add(key);
-                }
-            }
-
-            // 移除找到的键
-            foreach (var key in keysToRemove)
-            {
-                sortedList.Remove(key);
-            }
-        }
-        private static void ticyWdRoot()
+      
+        public static void ticyWdRoot()
         {
             HashSet<string> hs = new HashSet<string>();
             var f = "word7000.json";
@@ -572,178 +407,11 @@ namespace prj202405
             WriteAllText("wordRoot.json", wds);
         }
 
-        static List<string> ReadJsonFileToList(string filePath)
-        {
-            List<string> jsonStringList = new List<string>();
-
-            try
-            {
-                // 读取 JSON 文件内容
-                string jsonString = System.IO.File.ReadAllText(filePath);
-
-                // 使用 Newtonsoft.Json 库将 JSON 字符串反序列化为 List<string>
-                jsonStringList = JsonConvert.DeserializeObject<List<string>>(jsonString);
-            }
-            catch (FileNotFoundException)
-            {
-                ConsoleWriteLine($"File not found: {filePath}");
-            }
-            catch (Newtonsoft.Json.JsonException)
-            {
-                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
-            }
-            catch (Exception ex)
-            {
-                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
-            }
-
-            return jsonStringList;
-        }
-        static List<string> getListFrmJsonFil(string filePath)
-        {
-            List<string> jsonStringList = new List<string>();
-
-            try
-            {
-                // 读取 JSON 文件内容
-                string jsonString = System.IO.File.ReadAllText(filePath);
-                // Configure JsonSerializerOptions to allow reflection-based serialization
-                var options = new JsonSerializerOptions
-                {
-                    // Enable reflection-based serialization
-                 //   TypeNameHandling = TypeNameHandling.All, // or TypeNameHandling.Auto
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
-                };
-                // 将 JSON 字符串解析为 List<string>
-                jsonStringList = System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString, options);
-            }
-            catch (FileNotFoundException)
-            {
-                ConsoleWriteLine($"File not found: {filePath}");
-            }
-            catch (System.Text.Json.JsonException)
-            {
-                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
-            }
-            catch (Exception ex)
-            {
-                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
-            }
-
-            return jsonStringList;
-        }
      
-
     
     
-        private static void spdrTest()
-        {
-            var url = "https://www.khmertimeskh.com/";
-            url = "https://www.khmertimeskh.com/category/national/#google_vignette";
-            url = "https://www.khmertimeskh.com/category/business/";
-            var html=GetHtmlContent(url);
-            WriteAllText("downHtmldir/main.htm", html);
-            HashSet<string> urls = ExtractHrefAttributes(html);
-            WriteAllText("url1119.json", urls);
-          //  urls = FilterHtmlUrls(urls);
-            foreach_HashSet(urls, (string urlMaybeRltv) =>
-            {
-                string ext = GetExtension(urlMaybeRltv);
-                if (EndsWith(ext, "js css jpg png gif"))
-                    return;
-               // if (ext.EndsWith("htm") || ext.EndsWith("html"))
-                {
-                    string url1 = url + urlMaybeRltv;
-                    if (urlMaybeRltv.StartsWith("http"))
-                        url1 = urlMaybeRltv;
-                    Download(url1, "downHtmldir");
-                }
-                
-            });
-
-        }
-
-        private static bool EndsWith(string ext, string extss)
-        {
-            string[] a = extss.Split(" ");
-           foreach(string ex in a)
-            {
-                if (ext.EndsWith(ex))
-                    return true;
-            }
-            return false;
-        }
-
-        static HashSet<string> FilterHtmlUrls(HashSet<string> urls)
-        {
-            return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));
-        }
-        private static string GetExtension(string url)
-        {
-            try
-            {
-                var ext = Path.GetExtension(url);
-                ext = ext.ToLower().Trim();
-                return ext;
-            }catch(Exception e)
-            {
-                return "";
-            }
-           
-        }
-
-        private static void Download(string url, string dataDir)
-        {// 生成一个新的 UUID
-            Guid newUuid = Guid.NewGuid();
-            var html = GetHtmlContent(url);
-            WriteAllText($"{dataDir}/{newUuid}.htm", html);
-        }
-        static HashSet<string> ExtractHrefAttributes(string html)
-        {
-            HashSet<string> hrefs = new HashSet<string>();
-
-            // 创建 HtmlDocument 对象并加载 HTML
-            HtmlDocument doc = new HtmlDocument();
-            doc.LoadHtml(html);
-
-            // 查找所有 a 标签
-            var nodes = doc.DocumentNode.SelectNodes("//a[@href]");
-
-            if (nodes != null)
-            {
-                foreach (var node in nodes)
-                {
-                    // 提取 href 属性值并添加到 HashSet 中
-                    string href = node.GetAttributeValue("href", string.Empty);
-                    if (!string.IsNullOrEmpty(href))
-                    {
-                        hrefs.Add(href);
-                    }
-                }
-            }
-
-            return hrefs;
-        }
-        static HashSet<string> ExtractUrls(string input)
-        {
-            HashSet<string> urls = new HashSet<string>();
-
-            // 定义匹配 URL 的正则表达式
-            string pattern = @"https?://[^\s/$.?#].[^\s]*";
-            Regex regex = new Regex(pattern);
-
-            // 使用正则表达式匹配所有 URL
-            MatchCollection matches = regex.Matches(input);
-
-            // 将匹配的 URL 添加到 HashSet 中
-            foreach (Match match in matches)
-            {
-                urls.Add(match.Value);
-            }
-
-            return urls;
-        }
+       
+      
 
         private static void getwdRoots()
         {
@@ -944,32 +612,7 @@ namespace prj202405
             //   throw new NotImplementedException();
         }
 
-        public static string GetHtmlContent(string url)
-        {
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
-
-            using (HttpClient client = new HttpClient())
-            {
-                try
-                {       // 设置用户代理
-                    client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-
-                    HttpResponseMessage response = client.GetAsync(url).Result;
-                    response.EnsureSuccessStatusCode();
-                    string htmlContent = response.Content.ReadAsStringAsync().Result;
-                    dbgCls.print_ret(__METHOD__, htmlContent.Substring(0, 300));
-                    return htmlContent;
-                }
-                catch (HttpRequestException e)
-                {
-                    print($"Request error: {e.Message}");
-                    dbgCls.print_ret(__METHOD__, 0);
-                    return null;
-                }
-            }
-        }
-        private static void wrtLgTypeDate(string logdir, object o)
+      public static void wrtLgTypeDate(string logdir, object o)
         {
             // 创建目录
             System.IO.Directory.CreateDirectory(logdir);

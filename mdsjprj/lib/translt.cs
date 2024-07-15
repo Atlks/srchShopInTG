@@ -11,25 +11,32 @@ namespace mdsj.lib
 {
     internal class translt
     {
+        static Hashtable dicWord5k = getHstbFromIniFl("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\wdlib.enNcn5k.v2.ini");
+
         public static void transltTest()
         {
             List<string> liRzt = new List<string>();
-           // List<string> li = ldLstFrmDataDirHtml();
-            List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
+         //   FolderPath = "downHtmldir";
+            List<string> li = ldLstFrmDataDirHtml("downHtmldir");
+          //  List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li = RemoveEmptyElements(li);
             foreach_listStr(li, (string line) =>
             {
                 string transed = transedE2Cn(line);
                 liRzt.Add(transed);
             });
+            //get misswdFmt.txt
             string rzt = JoinStringsWithNewlines(liRzt);
             WriteAllText("transed.txt", rzt);
             print(rzt);
         }
 
-        private static List<string> ldLstFrmDataDirHtml()
+      //  private const string
+
+        private static List<string> ldLstFrmDataDirHtml(string FolderPath)
         {
-            var weds = ExtractWordsFromFilesHtml("downHtmldir");
+          
+            var weds = ExtractWordsFromFilesHtml(FolderPath);
             weds = RemoveElementsContainingNumbers(weds);
             var wds = ConvertAndSortHashSet(weds);
             WriteAllText("word7000dep.json", wds);
@@ -259,7 +266,6 @@ namespace mdsj.lib
 
             return tokens;
         }
-        static Hashtable dicWord5k = getHstbFromIniFl("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\wdlib.enNcn5k.v2.ini");
         private static string transE2cWd(string wdOrwdRoot)
         {
 

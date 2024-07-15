@@ -1,0 +1,39 @@
+{
+  "update_id": 839633477,
+  "my_chat_member": {
+    "chat": {
+      "id": 5407018744,
+      "type": "private",
+      "username": "HuangHeL1916",
+      "first_name": "一蓑烟雨",
+      "last_name": "任平生"
+    },
+    "from": {
+      "id": 5407018744,
+      "is_bot": false,
+      "first_name": "一蓑烟雨",
+      "last_name": "任平生",
+      "username": "HuangHeL1916",
+      "language_code": "zh-hans"
+    },
+    "date": 1720989675,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

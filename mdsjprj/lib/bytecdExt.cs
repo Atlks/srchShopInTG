@@ -311,6 +311,44 @@ namespace mdsj.lib
             }
             return false;
         }
+        public static string getFld(JObject? jo, string fld, string v2)
+        {
+            // 获取 chat.type 属性
+            JToken chatTypeToken = jo.SelectToken(fld);
+
+            if (chatTypeToken != null)
+            {
+                string chatType = chatTypeToken.ToString();
+                return chatType;
+                // print("chat.type: " + chatType);
+            }
+            else
+            {
+                return v2;
+            }
+        }
+        public static SortedList<string, string> LdHstbEsFrmJsonFile(string v)
+        {
+            return ReadJsonFileToSortedList(v);
+        }
+        public static int count(object collection)
+        {
+            return 计算长度(collection);
+        }
+        public static SortedList<string, string> LdHstbEsFrmIni(string v)
+        {
+            return ReadIniFileToSortedList(v);
+        }
+
+        public static bool IsLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+
+        public static bool IsEnglishLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
 
         public static List<Hashtable> foreach_listHstb(List<Hashtable> list, Action<Hashtable> act)
         {
