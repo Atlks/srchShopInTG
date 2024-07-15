@@ -145,11 +145,12 @@ namespace prj202405
             //    tmrTask1startNow();
             //  ticyWdRoot();
             //   ticyuWEdsTest();
-           //  TaskRun(() => {spdr. spdrTest(); });
+         //   TaskRun(() => { new spdr(). spdrTest(); });
             //
            // getwdRoots();
             var root = GetRoot("running");
             transltTest();
+            arr_cut();
             var sss = string.Join("\n", hs_mswd);
             WriteAllText("misswdFmt.txt",sss);
           //  tmrTask1start();
@@ -390,8 +391,21 @@ namespace prj202405
 
         }
 
+        private static void arr_cut()
+        {
+            // 定义两个 HashSet
+            HashSet<string> set1 = new HashSet<string> { "apple", "banana", "cherry", "date" };
+            HashSet<string> set2 = new HashSet<string> { "banana" };
 
-      
+            
+
+            // 从 set1 中移除 set2 中的元素
+            set1.ExceptWith(set2);
+
+            // 打印减法操作后的集合
+            ConsoleWriteLine("Set 1 after subtraction:");
+        }
+
         public static void ticyWdRoot()
         {
             HashSet<string> hs = new HashSet<string>();

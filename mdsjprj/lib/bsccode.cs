@@ -169,7 +169,14 @@ namespace mdsj.lib
 
             foreach (string str in originalSet)
             {
-                fun(str);
+                try
+                {
+                    fun(str);
+                }catch(Exception e)
+                {
+                    print_catchEx("foreach_HashSet",e);
+                }
+              
             }
 
             
