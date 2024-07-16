@@ -182,13 +182,13 @@ namespace mdsj.lib
             结果task.Wait();
         }
         public static void SetRespContentTypeNencode
-            (HttpContext http上下文, string 内容类型和编码)
+            (HttpResponse http上下文, string 内容类型和编码)
         {
-            http上下文.Response.ContentType = 内容类型和编码;
+            http上下文.ContentType = 内容类型和编码;
         }
-        public static void SendResp(object 输出结果, HttpContext http上下文)
+        public static void SendResp(object 输出结果, HttpResponse http上下文)
         {
-            http上下文.Response.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
+            http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
         }
         public static bool isStrEndWz(string 路径, string 扩展名)

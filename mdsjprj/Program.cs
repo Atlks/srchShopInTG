@@ -240,20 +240,21 @@ namespace prj202405
             });
 
             RunTmrTasksCron();
-            startWebapi((context) =>
-            {
-                var request = context.Request;
-                string methd = request.Path;
-                ////  methd = methd.Substring(1);
-                if (methd == "/swag")
-                {
-                    context.Response.ContentType = "text/html; charset=utf-8";
-                    var rzt = docapi_httpHdlrApiSpelDocapi("mdsj.xml", context);
-                    context.Response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
-                    Jmp2end();
-                }
+            Action<HttpRequest, HttpResponse> value = (HttpRequest request, HttpResponse response) =>
+                        {
+                            
+                            string methd = request.Path;
+                            ////  methd = methd.Substring(1);
+                            if (methd == "/swag")
+                            {
+                                response.ContentType = "text/html; charset=utf-8";
+                                var rzt = docapi_httpHdlrApiSpelDocapi("mdsj.xml", response);
+                                response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
+                                Jmp2end();
+                            }
 
-            }, "Wbapi_");
+                        };
+            startWebapi(value, "Wbapi_");
             
 
             //  Console.ReadKey();
