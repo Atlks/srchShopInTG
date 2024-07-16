@@ -20,7 +20,9 @@ using System.Threading.Tasks;
 
 namespace mdsj.lib
 {
-    internal class webapi
+ // best api todo is v2 more smpl
+ // best api todo is v2 more smpl
+ internal class webapi
     {
 
         /*
@@ -386,6 +388,8 @@ namespace mdsj.lib
             return;
 
         }
+
+      
 
         /// <summary>
         /// httpHdlrApiSpelDocapi

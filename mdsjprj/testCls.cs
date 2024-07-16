@@ -148,7 +148,7 @@ namespace prj202405
             //    tmrTask1startNow();
             //  ticyWdRoot();
             //   ticyuWEdsTest();
-         //   TaskRun(() => { new spdr(). spdrTest(); });
+        //   TaskRun(() => { new spdr(). spdrTest(); });
             //
            // getwdRoots();
             var root = GetRoot("running");

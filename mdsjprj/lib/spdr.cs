@@ -14,18 +14,15 @@ namespace mdsj.lib
     {
 
 
-        HashSet<string> urlsDownWait =newSet($"urlsDownWait{DateTime.Now.ToString("dd_HHmmss")}.json");
-        HashSet<string> downedUrlss = newSet("downedUrlss.json");
-        private const string parserUrlQue = "downHtmtTaskQue";
+        HashSet<string> urlsDownWait_hashset =newSet($"spdr/urlsDownWait{DateTime.Now.ToString("dd_HHmmss")}.json");
+        HashSet<string> downedUrlssHashset = newSet("spdr/downedUrlss.json");
+        string parserUrlQue = "spdr/downHtmTaskQue";
         // downHtmldirLog
-        public void spdrTest()
+        public void SpdrTest()
         {
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             var starturl = "https://www.khmertimeskh.com/";
-            starturl = "https://www.khmertimeskh.com/category/national/#google_vignette";
-            starturl = "https://www.khmertimeskh.com/category/business/";
-
-
+  
 
             starturl = "https://laotiantimes.com/";
             starturl = "https://laotiantimes.com/category/economy/";
@@ -33,7 +30,8 @@ namespace mdsj.lib
             starturl = "https://www.bangkokpost.com/";
             starturl = "https://myanmar-now.org/en/";
             starturl = "https://e.vnexpress.net/";
-            urlsDownWait.Add(starturl);
+            starturl = "https://www.bangkokpost.com/";
+            urlsDownWait_hashset.Add(starturl);
             //  rmvs3 = newSet("rmvs3.json");
 
             TaskRun(() =>
@@ -71,24 +69,27 @@ namespace mdsj.lib
             try
             {
                 //排除已经下载的任务
-                urlsDownWait.ExceptWith(downedUrlss);
-                WriteAllText("urlsDownWait.json", urlsDownWait);
+                urlsDownWait_hashset.ExceptWith(downedUrlssHashset);
+              //  WriteAllText("urlsDownWait.json", urlsDownWait);
 
-                foreach (string urlMaybeRltv in urlsDownWait)
+                foreach (string urlMaybeRltv in urlsDownWait_hashset)
                 {
                     string url1 = starturl + urlMaybeRltv;
                     if (urlMaybeRltv.StartsWith("http"))
                         url1 = urlMaybeRltv;
-                    Download(url1, parserUrlQue);
-                    //     Download(url1, "downHtmldirLog");
+                    TaskRun(() =>
+                    {
+                        Download(url1, parserUrlQue);
+                    });
+                        
 
-                    downedUrlss.Add(urlMaybeRltv);
-                    downedUrlss.Add(url1);
+                    downedUrlssHashset.Add(urlMaybeRltv);
+                    downedUrlssHashset.Add(url1);
 
                 }
 
 
-                urlsDownWait.ExceptWith(downedUrlss);
+                urlsDownWait_hashset.ExceptWith(downedUrlssHashset);
             }
             catch (Exception e)
             {
@@ -123,11 +124,11 @@ namespace mdsj.lib
                             string url1 = starturl + urlMaybeRltv;
                             if (urlMaybeRltv.StartsWith("http"))
                                 url1 = urlMaybeRltv;
-                            urlsDownWait.Add(url1);
+                            urlsDownWait_hashset.Add(url1);
                         }
 
                     });
-                    MoveFileToDirectory(file, "downHtmldirLog");
+                    MoveFileToDirectory(file, "spdr/downHtmldirLog");
                     //  File.Delete(file);
                 }
                 catch (Exception e)

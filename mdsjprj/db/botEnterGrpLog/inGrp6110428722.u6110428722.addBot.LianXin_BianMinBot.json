@@ -1,0 +1,37 @@
+{
+  "update_id": 839633973,
+  "my_chat_member": {
+    "chat": {
+      "id": 6110428722,
+      "type": "private",
+      "username": "Anyu19970615",
+      "first_name": "Poems and dreams"
+    },
+    "from": {
+      "id": 6110428722,
+      "is_bot": false,
+      "first_name": "Poems and dreams",
+      "username": "Anyu19970615",
+      "language_code": "zh-hans"
+    },
+    "date": 1721127846,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

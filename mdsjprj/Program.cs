@@ -234,10 +234,9 @@ namespace prj202405
             Qunzhushou.main1();
             audioBot.main1();
 
-            TaskRun(() =>
-            {
-                webapi2.mainWbstartAsync();
-            });
+             
+                webapi2.startWbapiAsync();
+            
 
             RunTmrTasksCron();
             Action<HttpRequest, HttpResponse> value = (HttpRequest request, HttpResponse response) =>

@@ -18,8 +18,8 @@ namespace mdsj.lib
         {
             List<string> liRzt = new List<string>();
          //   FolderPath = "downHtmldir";
-            List<string> li = ldLstWdsFrmDataDirHtml("downHtmtTaskQue");
-            List<string> li2 = ldLstWdsFrmDataDirHtml("downHtmldirLog");
+            List<string> li = ldLstWdsFrmDataDirHtml("spdr/downHtmtTaskQue");
+            List<string> li2 = ldLstWdsFrmDataDirHtml("spdr/downHtmldirLog");
             li = array_merge(li, li2);
             //  List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li = RemoveEmptyElements(li);
