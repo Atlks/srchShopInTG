@@ -19,6 +19,153 @@ namespace mdsj.lib
 {
     internal class bytecdExt
     {
+        public static string[] ReadAllLines(string filePath)
+        {
+            return System.IO.File.ReadAllLines(filePath);
+        }
+
+        public static Hashtable getHstbFromIniFl(string v)
+        {
+            return ReadIniFile(v);
+        }
+
+        public static Hashtable ReadIniFile(string filePath)
+        {
+            Hashtable iniData = new Hashtable();
+
+            // 按行读取 INI 文件内容
+            string[] lines = ReadAllLines(filePath);
+
+            foreach (string line in lines)
+            {
+                string trimmedLine = line.Trim();
+
+                // 忽略空行和注释行
+                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#"))
+                    continue;
+
+                // 处理键值对行
+                int equalIndex = trimmedLine.IndexOf('=');
+                if (equalIndex > 0)
+                {
+                    string key = trimmedLine.Substring(0, equalIndex).Trim();
+                    string value = trimmedLine.Substring(equalIndex + 1).Trim();
+                    iniData[key] = value;
+                }
+            }
+
+            return iniData;
+        }
+
+
+        public static List<string> ldLstWdsFrmDataDirHtml(string FolderPath)
+        {
+
+            object v = callx(ExtractWordsFromFilesHtml, FolderPath);
+            HashSet<string> weds = (HashSet<string>)v;
+            weds = RemoveElementsContainingNumbers(weds);
+            var wds = ConvertAndSortHashSet(weds);
+            WriteAllText("word7000dep.json", wds);
+            return wds;
+
+        }
+
+
+        public static List<string> ConvertAndSortHashSet(HashSet<string> hashSet)
+        {
+            // 将 HashSet 转换为 List
+            List<string> list = new List<string>(hashSet);
+
+            // 对 List 进行排序
+            list.Sort();
+
+            return list;
+        }
+
+        public static HashSet<string> RemoveWordsStartingWithDigit(HashSet<string> words)
+        {
+            // 使用 LINQ 和正则表达式过滤掉数字开头的单词
+            return new HashSet<string>(words.Where(word => !Regex.IsMatch(word, @"^\d")));
+        }
+        public static HashSet<string> RemoveElementsWithShortLength(HashSet<string> hashSet)
+        {
+            // 使用 LINQ 过滤掉长度小于 3 的元素
+            return new HashSet<string>(hashSet.Where(word => word.Length >= 3));
+        }
+        public static Hashtable ToLower(Hashtable dic)
+        {
+            ConvertKeysToLowercase(dic);
+            return dic;
+        }
+        public static List<string> getListFrmFil(string v)
+        {
+            return ReadFileToLines(v);
+        }
+
+        public static List<string> ReadFileToLines(string filePath)
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException($"File not found: {filePath}");
+            }
+
+            List<string> lines = new List<string>();
+            using (StreamReader reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    lines.Add(line);
+                }
+            }
+
+            return lines;
+        }
+
+        public static string JoinStringsWithNewlines(List<string> stringList)
+        {
+          
+            if (stringList == null || stringList.Count == 0)
+            {
+                return string.Empty;
+            }
+
+            StringBuilder builder = new StringBuilder();
+            foreach (string item in stringList)
+            {
+                builder.Append(item);
+                builder.AppendLine();
+            }
+
+            // Remove the last newline character
+            builder.Remove(builder.Length - 1, 1);
+
+            return builder.ToString();
+        }
+
+        public static bool StartsWithUppercase(string input)
+        {
+            // 判断字符串是否为空或为null
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            // 检查第一个字符是否为大写字母
+            return char.IsUpper(input[0]);
+        }
+        public static bool IsWord(string input)
+        {
+            // 使用 Char 类的方法判断是否是字母或数字
+            return input.All(c => char.IsLetter(c));
+        }
+        public static void foreach_listStr(List<string> li, Action<string> value)
+        {
+            foreach (string line in li)
+            {
+                value(line);
+            }
+        }
         public static void ConsoleWriteLine(string v)
         {
             System.Console.WriteLine(v);

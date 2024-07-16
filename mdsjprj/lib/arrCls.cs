@@ -12,6 +12,7 @@ using System.Collections;
 using Microsoft.Extensions.Primitives;
 using System.Reflection;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 
 
@@ -20,6 +21,31 @@ namespace prj202405.lib
 {
     public class arrCls
     {
+        public static void ConvertKeysToLowercase(Hashtable hashtable)
+        {
+            Hashtable newHashtable = new Hashtable();
+
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                string lowercaseKey = entry.Key.ToString().ToLower(); // 将键转换为小写
+                newHashtable[lowercaseKey] = entry.Value; // 保持值不变，添加到新的 Hashtable 中
+            }
+
+            // 清空原始 Hashtable 并将新的键值对复制回去
+            hashtable.Clear();
+            foreach (DictionaryEntry entry in newHashtable)
+            {
+                hashtable[entry.Key] = entry.Value;
+            }
+        }
+
+
+        public static HashSet<string> RemoveElementsContainingNumbers(HashSet<string> hashSet)
+        {
+            // 使用 LINQ 和正则表达式过滤掉包含数字的元素
+            return new HashSet<string>(hashSet.Where(word => !Regex.IsMatch(word, @"\d")));
+        }
+
         public static SortedList<string, string> MergeSortedLists(SortedList<string, string> list1, SortedList<string, string> list2)
         {
             // 创建一个新的 SortedList 来存储合并后的结果

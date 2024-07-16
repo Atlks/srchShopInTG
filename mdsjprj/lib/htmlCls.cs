@@ -13,6 +13,58 @@ namespace mdsj.lib
 {
     internal class htmlCls
     {
+        public static void Download(string url, string dataDir)
+        {// 生成一个新的 UUID
+            Guid newUuid = Guid.NewGuid();
+            var html = GetHtmlContent(url);
+            WriteAllText($"{dataDir}/{newUuid}.htm", html);
+        }
+        public static HashSet<string> ExtractHrefAttributes(string html)
+        {
+            HashSet<string> hrefs = new HashSet<string>();
+
+            // 创建 HtmlDocument 对象并加载 HTML
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            // 查找所有 a 标签
+            var nodes = doc.DocumentNode.SelectNodes("//a[@href]");
+
+            if (nodes != null)
+            {
+                foreach (var node in nodes)
+                {
+                    // 提取 href 属性值并添加到 HashSet 中
+                    string href = node.GetAttributeValue("href", string.Empty);
+                    if (!string.IsNullOrEmpty(href))
+                    {
+                        hrefs.Add(href);
+                    }
+                }
+            }
+
+            return hrefs;
+        }
+        public static HashSet<string> ExtractUrls(string input)
+        {
+            HashSet<string> urls = new HashSet<string>();
+
+            // 定义匹配 URL 的正则表达式
+            string pattern = @"https?://[^\s/$.?#].[^\s]*";
+            Regex regex = new Regex(pattern);
+
+            // 使用正则表达式匹配所有 URL
+            MatchCollection matches = regex.Matches(input);
+
+            // 将匹配的 URL 添加到 HashSet 中
+            foreach (Match match in matches)
+            {
+                urls.Add(match.Value);
+            }
+
+            return urls;
+        }
+
         public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;

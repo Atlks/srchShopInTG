@@ -1,6 +1,7 @@
 ﻿global using static mdsj.lib.bsccode;
 using HtmlAgilityPack;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
+using Newtonsoft.Json;
 using prj202405.lib;
 using System;
 using System.Collections;
@@ -22,12 +23,21 @@ namespace mdsj.lib
     {
         public static void WriteObj(string f, object obj)
         {
-            System.IO.File.WriteAllText(f, json_encode(obj));
+
+             WriteAllText(f, json_encode(obj));
         }
         public static void WriteAllText(string f, string txt)
         {
+            print($" fun WriteAllText {f}");
             mkdir_forFile(f);
-            System.IO.File.WriteAllText(f, txt);
+            try
+            {
+                System.IO.File.WriteAllText(f, txt);
+            }catch(Exception e)
+            {
+                print_catchEx("WriteAllText", e);
+            }
+           
         }
 
       
@@ -509,6 +519,69 @@ namespace mdsj.lib
         public static object callx(Delegate callback, params object[] args)
         {
             return call_user_func(callback, args);
+        }
+        public static void setHsstToF(HashSet<string> downedUrl, string v)
+        {
+            WriteAllText(v, encodeJson( downedUrl));
+        }
+
+        public static HashSet<string> newSet(string f)
+        {
+            try
+            {
+                
+               
+
+                var hashSet = new HashSet<string>();
+                if (!isFileExist(f))
+                    hashSet= new HashSet<string>();
+                else
+                {
+                    string json = File.ReadAllText(f);
+                     hashSet = JsonConvert.DeserializeObject<HashSet<string>>(json);
+
+
+                }
+                //定时持久化downedUrl
+                // setHsstToF(rmvs3, "rmvs3.json");
+                // 创建一个定时器，每2秒触发一次
+                System.Timers.Timer timer = new System.Timers.Timer(2000);
+                timer.Elapsed += (sender, e) =>
+                {
+                    setHsstToF(hashSet, f);
+                };
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                timer.Start();
+
+
+                return hashSet;
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"An error occurred: {ex.Message}");
+                return new HashSet<string>();
+            }
+          
+        }
+
+        public static HashSet<string> LdHsstFrmFJsonDecd(string v)
+        {
+            return (ReadFileToHashSet(v));
+        }
+        public static HashSet<string> ReadFileToHashSet(string filePath)
+        {
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                HashSet<string> hashSet = JsonConvert.DeserializeObject<HashSet<string>>(json);
+                return hashSet;
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"An error occurred: {ex.Message}");
+                return new HashSet<string>();
+            }
         }
 
         public static HashSet<string> LdHsst(string input)

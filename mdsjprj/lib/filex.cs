@@ -15,6 +15,33 @@ namespace prj202405.lib
 {
     public class filex
     {
+
+        public static void MoveFileToDirectory(string sourceFilePath, string destinationDirectory)
+        {
+            try
+            {
+                // 检查目标文件夹是否存在，如果不存在则创建
+                if (!Directory.Exists(destinationDirectory))
+                {
+                    Directory.CreateDirectory(destinationDirectory);
+                }
+
+                // 获取源文件的文件名
+                string fileName = Path.GetFileName(sourceFilePath);
+
+                // 构造目标文件的完整路径
+                string destinationFilePath = Path.Combine(destinationDirectory, fileName);
+
+                // 移动文件
+                File.Move(sourceFilePath, destinationFilePath);
+
+                ConsoleWriteLine($"File moved to: {destinationFilePath}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"An error occurred: {ex.Message}");
+            }
+        }
         public static string fl_ReadAllText(string f)
         {
             return System.IO.File.ReadAllText(f);
@@ -353,7 +380,7 @@ namespace prj202405.lib
             }
             return wordList;
         }
-     public   static HashSet<string> ReadFileToHashSet(string filePath)
+     public   static HashSet<string> ReadFileToHashSet2024(string filePath)
         {
             HashSet<string> lines = new HashSet<string>();
 

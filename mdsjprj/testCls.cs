@@ -141,6 +141,9 @@ namespace prj202405
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
+            downedUrlss.Add("111");
+            downedUrlss.Add("222");
             //    mergeTransWdlib();
             //    tmrTask1startNow();
             //  ticyWdRoot();
