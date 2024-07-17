@@ -255,25 +255,25 @@ namespace prj202405
         //            }
         //}
 
-        public static void tmrEvtLLLzhuligrpSendmsg()
-        {
-            var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
-            foreach_hashtable(chtsSess, (de) =>
-           {
-               var chatid = de.Key;
-               print(" SendPhotoAsync " + de.Key);
-               var map = de.Value;
-               JObject jo = (JObject)map;
-               string chtType = getFld(jo, "chat.type", "");
-               string grpusername = getFld(jo, "chat.username", "");
-               ReplyKeyboardMarkup rplyKbdMkp;
-               //私聊不要助力本群
-               if (chtType.Contains("group"))
-               {
-                   sendZhuliGrp(chatid, zhuli_tips, zhuli_btn, grpusername);
-               }
-           });
-        }
+        //public static void tmrEvtLLLzhuligrpSendmsg()
+        //{
+        //    var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
+        //    foreach_hashtable(chtsSess, (de) =>
+        //   {
+        //       var chatid = de.Key;
+        //       print(" SendPhotoAsync " + de.Key);
+        //       var map = de.Value;
+        //       JObject jo = (JObject)map;
+        //       string chtType = getFld(jo, "chat.type", "");
+        //       string grpusername = getFld(jo, "chat.username", "");
+        //       ReplyKeyboardMarkup rplyKbdMkp;
+        //       //私聊不要助力本群
+        //       if (chtType.Contains("group"))
+        //       {
+        //           sendZhuliGrp(chatid, zhuli_tips, zhuli_btn, grpusername);
+        //       }
+        //   });
+        //}
 
 
         private static void chktrg_yule(DateTime now)
