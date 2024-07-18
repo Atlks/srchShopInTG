@@ -234,7 +234,7 @@ namespace mdsj.lib
         /// <returns>解析后的动态对象</returns>
         public static List<SortedList> json_decode(string jsonString)
         {
-            return JsonConvert.DeserializeObject< List<SortedList>>(jsonString );
+            return JsonConvert.DeserializeObject<List<SortedList>>(jsonString);
         }
         public static string encodeJson(object obj)
         {
@@ -260,7 +260,7 @@ namespace mdsj.lib
 
             var settings = new JsonSerializerSettings
             {
-               ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
                 Formatting = Formatting.Indented
             };
             //  string json = JsonConvert.SerializeObject(obj, settings);
@@ -273,15 +273,20 @@ namespace mdsj.lib
             try
             {
                 return json_encode_noFmt(results);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return "[]";
             }
-     
+
         }
 
         public static string json_encode_noFmt(object results)
         {
+
+            results = castToSerializableObjs(results);
+
+
             //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             try
             {
@@ -294,11 +299,12 @@ namespace mdsj.lib
                 string jsonString = JsonConvert.SerializeObject(results, settings);
                 //print(jsonString);
                 return jsonString;
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return "{}";
             }
-         
+
         }
 
     }

@@ -8,8 +8,10 @@ using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -192,25 +194,46 @@ namespace mdsj.lib
 
         }
 
-        public static object[] FilterNonSerializableObjects(object[] inputArray)
+        public static object castToSerializableObjs(object inputArray)
         {
-            List<object> filteredList = new List<object>();
-
-            foreach (var obj in inputArray)
+            if (inputArray is object[] argsArray)
             {
-                if (IsSerializable(obj))
-                {
-                    filteredList.Add(obj);
-                }
-            }
+                object[] prm = (object[])inputArray;
 
-            return filteredList.ToArray();
+                List<object> filteredList = new List<object>();
+
+                foreach (var obj in prm)
+                {
+
+                    filteredList.Add(castToSerializableObj(obj));
+
+                }
+
+                return filteredList.ToArray();
+            }
+            else
+                return castToSerializableObj(inputArray);
+
+
         }
 
-        private static bool IsSerializable(object obj)
+        private static object castToSerializableObj(object obj)
         {
+            if (obj is HttpRequest)
+            {
+           //     var req= 
+                var req = (HttpRequest)obj;
+                Hashtable hs = new Hashtable();
+                hs.Add("name",nameof(HttpRequest));
+                hs.Add("url",req.Path+req.QueryString);
+                return hs;
+            }
+            if (obj is HttpResponse)
+            {                
+                return nameof(HttpResponse);
+            }
             // 过滤掉各种会导致序列化 JSON 出错的对象类型
-            if (obj is HttpRequest || obj is HttpResponse)
+            if (obj is HttpRequest || obj is HttpResponse || obj is HttpContext)
                 return false;
             if (obj is DbConnection)
                 return false;
@@ -223,7 +246,7 @@ namespace mdsj.lib
             if (obj is IntPtr || obj is UIntPtr)
                 return false;
 
-            return true;
+            return obj;
         }
         public static bool isStrEndWz(string 路径, string 扩展名)
         {
