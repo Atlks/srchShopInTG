@@ -690,7 +690,7 @@ namespace mdsj.lib
         {
 
             var __METHOD__ = methodName;
-            print_call_FunArgs(methodName, dbgCls.func_get_args(args));
+            print_call_FunArgs(methodName, func_get_args(args));
 
             MethodInfo? methodInfo = getMethInfo(methodName);
 

@@ -140,10 +140,10 @@ namespace prj202405
    
 
         internal static async System.Threading.Tasks.Task testAsync()
-        {
-            HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
-            downedUrlss.Add("111");
-            downedUrlss.Add("222");
+        {       //     tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+            //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
+            //downedUrlss.Add("111");
+            //downedUrlss.Add("222");
             //    mergeTransWdlib();
             //    tmrTask1startNow();
             //  ticyWdRoot();
@@ -152,11 +152,12 @@ namespace prj202405
             //
            // getwdRoots();
             var root = GetRoot("running");
-            transltTest();
+        //    transltTest();
             arr_cut();
             var sss = string.Join("\n", hs_mswd);
             WriteAllText("misswdFmt.txt",sss);
-          //  tmrTask1start();
+            // tmrTask1start();
+            tmrTask1startNow();
           //  CallTmrTasks();
 
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
@@ -197,7 +198,7 @@ namespace prj202405
 
 
 
-            // tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+
 
             //var s222 = "C:\\Users\\Administrator\\OneDrive\\song cn\\龙梅子 - 离别的眼泪.mp3";
             //var rzt = await RecognizeMusic(s222);

@@ -532,7 +532,7 @@ namespace prj202405.lib
                 {
                     chtsSesss.Add(chtid, frm);
 
-                    System.IO.File.WriteAllText(timerCls.chatSessStrfile, JsonConvert.SerializeObject(chtsSesss, Newtonsoft.Json.Formatting.Indented));
+                   WriteAllText(timerCls.chatSessStrfile, JsonConvert.SerializeObject(chtsSesss, Newtonsoft.Json.Formatting.Indented));
 
                 }
             

@@ -616,6 +616,14 @@ namespace mdsj.libBiz
         }
             public static ReplyKeyboardMarkup tg_btmBtns()
         {
+//            mg MR.HAN, [18 / 7 / 2024 下午 12:00]
+//
+
+//mg MR.HAN, [18 / 7 / 2024 下午 12:00]
+//分别这三个图标
+            string line = "🌐%20代理加盟 🤝%20合伙联营 🏪%20分销连锁";
+            var kbdBtnArr = castString2kbdBtnArr(line);
+
             var Keyboard =
                 new KeyboardButton[][]
                 {
@@ -623,6 +631,7 @@ namespace mdsj.libBiz
                             {
                                 new KeyboardButton("💵💵💵 世博博彩 💵💵💵")
                             },
+                            kbdBtnArr,
                             new KeyboardButton[]
                             {
                                 new KeyboardButton("商家"),
@@ -703,7 +712,20 @@ namespace mdsj.libBiz
             return rkm;
         }
 
+        public static KeyboardButton[] castString2kbdBtnArr(string line)
+        {
+            // 将字符串按空格分割为数组
+            string[] buttonTexts = line.Split(' ');
 
+            // 将数组元素转换为 KeyboardButton 对象
+            KeyboardButton[] keyboardButtons = buttonTexts
+                .Select(text => {
+                    text = decodeUrl(text);
+                    return new KeyboardButton(text);
+                    })
+                .ToArray();
+            return keyboardButtons;
+        }
     }
 
     public class UpdateEventArgs

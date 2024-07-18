@@ -64,6 +64,7 @@ namespace mdsj.lib
                         {
                             try
                             {
+                                
                                 httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                             }
                             catch (jmp2endEx e)
@@ -112,13 +113,22 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            //----------------static res
-            // 静态资源处理器映射表
-            Hashtable extNhdlrChoosrMaplist = new Hashtable();
-            extNhdlrChoosrMaplist.Add("txt   css js", Html_httpHdlrfilTxtHtml);
-            extNhdlrChoosrMaplist.Add(" html htm", Html_httpHdlrfilTxtHtml);
+
+            if (request.Method == HttpMethods.Post)
+            {
+                var funname = "wbapi" + request.Method + Substring(path, 1);
+                //call  wbapi_post path
+                wbapi_upldPost( request,  response);
+                return;
+            }
+
+                //----------------static res
+                // 静态资源处理器映射表
+                Hashtable extNhdlrChoosrMaplist = new Hashtable();
+            extNhdlrChoosrMaplist.Add("txt   css js",nameof( Html_httpHdlrfilTxtHtml));
+            extNhdlrChoosrMaplist.Add(" html htm", nameof( Html_httpHdlrfilTxtHtml));
             extNhdlrChoosrMaplist.Add("json", jsonfl_httpHdlrFilJson);
-            extNhdlrChoosrMaplist.Add("jpg png", img_httpHdlrFilImg);
+            extNhdlrChoosrMaplist.Add("jpg png", nameof( img_httpHdlrFilImg));
             httpHdlrFil(request, response, extNhdlrChoosrMaplist);
             //-------------------swag doc api
             // 处理特定API
@@ -130,6 +140,37 @@ namespace mdsj.lib
             object rzt = callxTryx(api_prefix + fn, Substring(queryString, 1));
             // 发送响应
             SendResp(rzt, response);
+        }
+
+        private static void wbapi_upldPost(HttpRequest request,   HttpResponse response)
+        {
+            if (request.Method == HttpMethods.Post)
+            {
+                // Check if the request contains a file
+                if (request.Form.Files.Count > 0)
+                {
+                    foreach (var file in request.Form.Files)
+                    {
+                        // Get the file content and save it to a desired location
+                        var filePath = Path.Combine("uploads", file.FileName);
+                        mkdir_forFile(filePath);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                              file.CopyToAsync(stream).GetAwaiter().GetResult();
+                        }
+                    }
+                }
+
+                // Handle other form data
+                foreach (var key in request.Form.Keys)
+                {
+                    var value = request.Form[key];
+                    ConsoleWriteLine($"Key: {key}, Value: {value}");
+                }
+
+                // Call the specific API handler
+            //    httpHdlrApiSpecl(request, response);
+            }
         }
 
         private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
@@ -156,7 +197,6 @@ namespace mdsj.lib
         /// <param name="extnameNhdlrChooser"></param>
         public static void httpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
-
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
 
             // 获取查询字符串
@@ -180,9 +220,11 @@ namespace mdsj.lib
                     //   callx(value, context);
 
 
+                    
+                    
                     var func1 = de.Value.ToString();
 
-                    var task = 调用(func1, request, response);
+                    var task = callx(func1, request, response);
                     // var task = func1(context);
                     //  task.Wait();  
                     Jmp2end();
@@ -335,12 +377,12 @@ namespace mdsj.lib
         }
 
 
-        public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpContext context)
+        public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
-            HttpContext context2 = context;
-            HttpResponse response = context2.Response;
+          //  HttpContext context2 = context;
+        //    HttpResponse response = context2.Response;
             // 获取当前请求的 URL
-            var request = context.Request;
+        //    var request = context.Request;
             string path = request.Path;
             // 设置响应内容类型和编码
 

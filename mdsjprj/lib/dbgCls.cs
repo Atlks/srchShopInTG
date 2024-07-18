@@ -24,6 +24,7 @@ using static prj202405.lib.strCls;
 using static mdsj.lib.encdCls;
 using DocumentFormat.OpenXml.Drawing;
 using mdsj.libBiz;
+using Microsoft.AspNetCore.Http;
 namespace prj202405.lib
 {
     internal class dbgCls
@@ -284,7 +285,10 @@ namespace prj202405.lib
             }
         }
 
-
+        public static object[] newEmptyObjectArray()
+        {
+            return new object[0];
+        }
 
         public static int dbgpad = 0;
 
@@ -297,14 +301,29 @@ namespace prj202405.lib
          */
         public static void print_call_FunArgs(string METHOD__, object func_get_args)
         {
+            var dbgArgs = func_get_args;
+            // 判断 func_get_args 是否为 object[] 数组
+            if (func_get_args is object[] argsArray)
+            {
+                // 获取第一个元素
+                var firstArg = argsArray.Length > 0 ? argsArray[0] : null;
+
+                // 判断第一个元素是否为 HttpRequest 类型
+                if (firstArg is HttpRequest)
+                {
+                    dbgArgs = newEmptyObjectArray();
+                    // 打印 "ok"
+                    Console.WriteLine("ok");
+                }
+            }
             dbgpad = dbgpad + 4;
             var msglog = "";
             try
             {
-                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
+                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(dbgArgs) + "))";
                 // array_push($GLOBALS['dbg'],$logmsg   );
             }
-            catch (Exception e)
+            catch ( Exception e)
             {
                 msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "( )";
                 logErr2025(e, "print_ret", "errdirSysMeth");

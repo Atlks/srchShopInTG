@@ -1,4 +1,4 @@
-﻿global using static mdsj.libBiz.apiBiz;
+﻿global using static mdsj.libBiz.wbapiBiz;
 using libx;
 using Microsoft.Extensions.Primitives;
 using prj202405;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace mdsj.libBiz
 {
-    internal class apiBiz
+    internal class wbapiBiz
     {
         //todo  setcity  setpark
 
