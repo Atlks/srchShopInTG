@@ -291,7 +291,21 @@ namespace prj202405.lib
         }
 
         public static int dbgpad = 0;
+        public static object[] FilterNonSerializableObjects(object[] inputArray)
+        {
+            List<object> filteredList = new List<object>();
 
+            foreach (var obj in inputArray)
+            {
+                // 过滤掉 HttpRequest 和 HttpResponse 类型的对象
+                if (!(obj is HttpRequest) && !(obj is HttpResponse))
+                {
+                    filteredList.Add(obj);
+                }
+            }
+
+            return filteredList.ToArray();
+        }
 
         /* //if($GLOBALS['dbg_show']==false)
             //    return;

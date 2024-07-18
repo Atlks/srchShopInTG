@@ -191,6 +191,40 @@ namespace mdsj.lib
             http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
         }
+
+        public static object[] FilterNonSerializableObjects(object[] inputArray)
+        {
+            List<object> filteredList = new List<object>();
+
+            foreach (var obj in inputArray)
+            {
+                if (IsSerializable(obj))
+                {
+                    filteredList.Add(obj);
+                }
+            }
+
+            return filteredList.ToArray();
+        }
+
+        private static bool IsSerializable(object obj)
+        {
+            // 过滤掉各种会导致序列化 JSON 出错的对象类型
+            if (obj is HttpRequest || obj is HttpResponse)
+                return false;
+            if (obj is DbConnection)
+                return false;
+            if (obj is Stream || obj is StreamReader || obj is StreamWriter)
+                return false;
+            if (obj is NetworkStream || obj is TcpClient || obj is TcpListener)
+                return false;
+            if (obj is Delegate)
+                return false;
+            if (obj is IntPtr || obj is UIntPtr)
+                return false;
+
+            return true;
+        }
         public static bool isStrEndWz(string 路径, string 扩展名)
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
