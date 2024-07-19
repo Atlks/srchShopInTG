@@ -36,7 +36,7 @@ namespace mdsj.lib
                         }}
                     }}
                 }}";
-                    Console.print(query);
+                    ConsoleMy.print(query);
 
 
 

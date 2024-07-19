@@ -346,6 +346,19 @@ namespace mdsj.lib
         {
             return args.ToString();
         }
+
+        /// <summary>
+        ///     PrintColoredText("This is blue text.", ConsoleColor.Blue);
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="color"></param>
+        public static void PrintColoredText(string text, ConsoleColor color)
+        {
+            var originalColor = Console.ForegroundColor;
+            Console.ForegroundColor = color;
+            Console.WriteLine(text);
+            Console.ForegroundColor = originalColor;
+        }
         public static void TaskRunNewThrd(Action act1)
         {
             // 使用 Task.Run 启动一个新的任务
@@ -728,11 +741,34 @@ namespace mdsj.lib
             // 检查类型是否实现了 IEnumerable 接口
             return typeof(IEnumerable).IsAssignableFrom(type);
         }
+
+
+        public static string ConvertToMarkdownTable(object arr2)
+        {
+            object[] arr = (object[])arr2;
+            StringBuilder sb = new StringBuilder();
+
+            // 添加表头
+            sb.AppendLine("| prm\t|Value\t|");
+            sb.AppendLine("|-------|-------|");
+
+            // 添加表格行
+            for (int i = 0; i < arr.Length; i++)
+            {
+                object obj = arr[i];
+                sb.AppendLine($"| {i}\t|{encodeJson(obj)}\t|");
+            }
+
+            return sb.ToString();
+        }
+
         public static object callx(string methodName, params object[] args)
         {
 
             var __METHOD__ = methodName;
             print_call_FunArgs(methodName, func_get_args(args));
+            var argsMkdFmt = ConvertToMarkdownTable(args);
+            print(argsMkdFmt);
 
             MethodInfo? methodInfo = getMethInfo(methodName);
 
@@ -754,9 +790,18 @@ namespace mdsj.lib
             {
                 result = methodInfo.Invoke(null, args);
 
+            }catch(jmp2endEx e)
+            {
+                return e;
             }
             catch (Exception e)
             {
+                if (e.ToString().Contains("jmp2endEx"))
+                {
+                    print_ret_adv(__METHOD__, result);
+                    Jmp2end();
+                }
+                  
                 print_ex("call", e);
             }
 

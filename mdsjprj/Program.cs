@@ -135,7 +135,7 @@ namespace prj202405
         //}
         public static void Main(string[] args)
         {
-
+            callx("aaa", "prm1");
             prjdir = filex.GetAbsolutePath(prjdir);
 
             userDictFile = $"{prjdir}/cfg/user_dict.txt";

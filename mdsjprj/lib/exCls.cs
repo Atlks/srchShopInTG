@@ -84,7 +84,7 @@ namespace mdsj.lib
         {
             try
             {
-                print("FUN TaskScheduler_UnobservedTaskException()");
+                print("\n\nFUN TaskScheduler_UnobservedTaskException()");
                 print("捕获未处理的异步异常：");
                 print("sender=》 " + sender);
                 print("emsg=>" + e.Exception.Message);
@@ -116,7 +116,7 @@ namespace mdsj.lib
                 //    // Restart or recover logic here
                 //}).Start();
                 logCls.logErr2025((Exception)e.Exception, "TaskScheduler_UnobservedTaskException", "errlog");
-                Console.print("END FUN TaskScheduler_UnobservedTaskException()");
+                ConsoleMy.print("END FUN TaskScheduler_UnobservedTaskException()");
 
             }
             catch (jmp2endEx e1)
@@ -125,8 +125,8 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.print(ex.ToString());
-                Console.print("END FUN TaskScheduler_UnobservedTaskException()");
+                ConsoleMy.print(ex.ToString());
+                ConsoleMy.print("END FUN TaskScheduler_UnobservedTaskException()");
             }
         }
     }

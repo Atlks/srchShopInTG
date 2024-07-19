@@ -219,6 +219,8 @@ namespace mdsj.lib
         }
         public static object castToSerializableObjsOrSnglobj(object inputArray)
         {
+            if (IsStr(inputArray))
+                return inputArray;
             if (!isArrOrColl(inputArray))
                 return castToSerializableObj(inputArray);
             // 创建一个新的 List 用于存储元素
@@ -716,7 +718,7 @@ namespace mdsj.lib
         }
         public static void encodeurl()
         {
-
+        //    encodeJsonNofmt
         }
         public static void arr_join()
         {

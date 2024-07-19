@@ -342,7 +342,8 @@ namespace prj202405.lib
                 msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "( )";
                 logErr2025(e, "print_ret", "errdirSysMeth");
             }
-           print("\n\n\n" + msglog + "");
+         //  print("\n\n\n" + msglog + "");
+            PrintColoredText("\n\n\n" + msglog + "", ConsoleColor.Green);
         }
 
         public static void print_varDump(string METHOD__, string vname, object val)

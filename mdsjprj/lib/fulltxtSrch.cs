@@ -191,7 +191,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                Console.print($"An error occurred: {ex.Message}");
+                ConsoleMy.print($"An error occurred: {ex.Message}");
             }
         }
 

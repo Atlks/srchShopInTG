@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mdsj.lib
 {
-    internal class Console
+    internal class ConsoleMy
     {
         internal static void print(string v)
         {

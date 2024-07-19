@@ -62,11 +62,18 @@ namespace mdsj.lib
             //拦截请求：
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
-                            //here cant new thrd
-                            callxTryJmp(  () =>
-                           {
-                                 httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
-                           });
+                            try
+                            {
+                                //here cant new thrd..beir req close early
+                                callx(() =>
+                                {
+                                    httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                });
+                            }catch (jmp2endEx e)
+                            {
+
+                            }
+                          
                         };
             app.Run(RequestDelegate1);
             app.Run();
@@ -349,10 +356,12 @@ namespace mdsj.lib
         }
 
 
-
-
+      
         public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
+            var args = func_get_args(request, response);
+        
+
             string path = request.Path;
             string path1 = webrootDir + path;
             path1 = DecodeUrl(path1);
