@@ -637,6 +637,19 @@ namespace mdsj.lib
             // jmp2exitFlag = true;
             throw new jmp2endEx();
         }
+
+        public static bool IsArray(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Type type = obj.GetType();
+
+            // 检查类型是否为数组
+            return type.IsArray;
+        }
         public static object callxTryx(string methodName, params object[] args)
         {
 
@@ -685,7 +698,18 @@ namespace mdsj.lib
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
+        public static bool IsCollection(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
 
+            Type type = obj.GetType();
+
+            // 检查类型是否实现了 IEnumerable 接口
+            return typeof(IEnumerable).IsAssignableFrom(type);
+        }
         public static object callx(string methodName, params object[] args)
         {
 

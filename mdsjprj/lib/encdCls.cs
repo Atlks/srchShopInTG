@@ -236,9 +236,41 @@ namespace mdsj.lib
         {
             return JsonConvert.DeserializeObject<List<SortedList>>(jsonString);
         }
-        public static string encodeJson(object obj)
+        public static string encodeJson(object results)
         {
-            return json_encode(obj);
+            if (results == null)
+            {
+                print(" ***fun encodeJson() ,prm rslt is null..");
+                return "{}"; // 如果对象为空，返回空对象字符串
+            }
+            try
+            {
+                results = castToSerializableObjsOrSnglobj(results);
+                //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    //   Formatting = Formatting.Indented
+                };
+                string jsonString = JsonConvert.SerializeObject(results, settings);
+                return jsonString;
+            }
+            catch (Exception e)
+            {
+                //if (results is object[] argsArray)
+                //    return "[]"; 
+                // 检查对象是否为数组
+                if (IsArray(results))
+                {
+                    return "[]";
+                }
+                // 检查对象是否为集合
+                if (IsCollection(results))
+                {
+                    return "[]";
+                }
+                return "{}";
+            }
         }
         public static JsonObject json_decodeJonObj(string jsonString)
         {
@@ -283,8 +315,9 @@ namespace mdsj.lib
 
         public static string json_encode_noFmt(object results)
         {
-
-            results = castToSerializableObjs(results);
+            //   encodeJsonNofmt
+            //     encodeJson
+            results = castToSerializableObjsOrSnglobj(results);
 
 
             //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

@@ -150,7 +150,7 @@ namespace prj202405
             int btr = GetBatteryPercentage();
             if (btr < 90)
             {
-                playMp3(mp3FilePathEmgcy);
+               // playMp3(mp3FilePathEmgcy);
             }
 
             static void 早餐(DateTime now)

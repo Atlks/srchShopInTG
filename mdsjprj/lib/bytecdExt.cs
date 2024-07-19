@@ -1,6 +1,7 @@
 ﻿global using static mdsj.lib.bytecdExt;
 using libx;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -126,7 +127,7 @@ namespace mdsj.lib
 
         public static string JoinStringsWithNewlines(List<string> stringList)
         {
-          
+
             if (stringList == null || stringList.Count == 0)
             {
                 return string.Empty;
@@ -172,8 +173,8 @@ namespace mdsj.lib
         {
             System.Console.WriteLine(v);
         }
-      
-      
+
+
         public static string decodeUrl(string path)
         {
             string decodedUrl = WebUtility.UrlDecode(path);
@@ -194,46 +195,117 @@ namespace mdsj.lib
 
         }
 
-        public static object castToSerializableObjs(object inputArray)
+        public static object castToSerializableObjsOrSnglobj(object inputArray)
         {
-            if (inputArray is object[] argsArray)
-            {
-                object[] prm = (object[])inputArray;
-
-                List<object> filteredList = new List<object>();
-
-                foreach (var obj in prm)
-                {
-
-                    filteredList.Add(castToSerializableObj(obj));
-
-                }
-
-                return filteredList.ToArray();
-            }
-            else
+            if (!isArrOrColl(inputArray))
                 return castToSerializableObj(inputArray);
+            // 创建一个新的 List 用于存储元素
+            List<object> list = new List<object>();
+            if (isArrOrColl(inputArray))
+            {
+                list= castArrCollToList(inputArray);
+            }         
+            List<object> listRzt = castToSerializableObjs(list);
+            return listRzt;
+        }
 
+        private static List<object> castArrCollToList(object inputArray )
+        {
+            List<object> list = new List<object>();
+            // 检查对象是否为数组
+            if (IsArray(inputArray))
+            {
+                List<object> li1 = ConvertArrayToList(inputArray);
+             //   list.AddRange(li1);
+                return li1;
+            }
+            // 检查对象是否为集合
+            if (IsCollection(inputArray))
+            {
+                List<object> li1 = ConvertCollectionToList(inputArray);
+             //   list.AddRange(li1);
+                return li1;
+            }
+            return list;
+        }
 
+        private static bool isArrOrColl(object inputArray)
+        {
+            if  ( IsArray(inputArray))
+                   return true;
+            if(IsCollection(inputArray))
+                return true;
+
+            return false;
+        }
+
+        private static List<object> castToSerializableObjs(List<object> list)
+        {
+            List<object> listRzt = new List<object>();
+
+            foreach (var obj in list)
+            {
+
+                listRzt.Add(castToSerializableObj(obj));
+
+            }
+            return listRzt;
+        }
+
+        public static List<object> ConvertArrayToList(object obj)
+        {
+            // 创建一个新的 List 用于存储元素
+            List<object> list = new List<object>();
+
+            // 检查对象是否为数组
+            if (obj is Array array)
+            {
+                // 循环遍历数组的每个元素并添加到 List 中
+                foreach (var element in array)
+                {
+                    list.Add(element);
+                }
+            }
+
+            return list;
+        }
+        public static List<object> ConvertCollectionToList(object obj)
+        {
+            // 创建一个新的 List 用于存储元素
+            List<object> list = new List<object>();
+
+            // 检查对象是否为集合 (实现了 IEnumerable 接口)
+            if (obj is IEnumerable collection)
+            {
+                // 循环遍历集合的每个元素并添加到 List 中
+                foreach (var element in collection)
+                {
+                    list.Add(element);
+                }
+            }
+
+            return list;
         }
 
         private static object castToSerializableObj(object obj)
         {
             if (obj is HttpRequest)
             {
-           //     var req= 
+                //     var req= 
                 var req = (HttpRequest)obj;
-                Hashtable hs = new Hashtable();
-                hs.Add("name",nameof(HttpRequest));
-                hs.Add("url",req.Path+req.QueryString);
-                return hs;
+                //Hashtable hs = new Hashtable();
+                //hs.Add("name",nameof(HttpRequest));
+                //hs.Add("url",req.Path+req.QueryString);
+                //   maybe qrystr
+              
+                return $"@HttpRequest:  {req.Scheme}://{req.Host}" +decodeUrl( req.Path) + req.QueryString;
             }
             if (obj is HttpResponse)
-            {                
+            {
                 return nameof(HttpResponse);
             }
             // 过滤掉各种会导致序列化 JSON 出错的对象类型
-            if (obj is HttpRequest || obj is HttpResponse || obj is HttpContext)
+            if (obj is HttpContext)
                 return false;
             if (obj is DbConnection)
                 return false;
@@ -319,118 +391,119 @@ namespace mdsj.lib
             {
                 var obj = gtfld(dafenObj, fld, df);
                 return toInt(obj);
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 print_catchEx(nameof(gtfldInt), e);
                 return df;
             }
-           
+
         }
         //todo
-//        十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
-//"ToLower",
-//  "Replace",
-//  "Trim",
+        //        十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
+        //"ToLower",
+        //  "Replace",
+        //  "Trim",
 
-//十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
-//        ToUpper
+        //十 Adam 大鱼 刘洋 汤姆, [9/7/2024 下午 11:28]
+        //        ToUpper
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:28]
-//ToSimple
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:28]
+        //ToSimple
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
-//Join
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
+        //Join
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
-//Remove
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:29]
+        //Remove
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
-//TryGetValue
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+        //TryGetValue
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
-//ToList
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+        //ToList
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
-//SerializeObject
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:30]
+        //SerializeObject
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
-//"Sort",
-//  "CompareTo",
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
+        //"Sort",
+        //  "CompareTo",
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
-//Exists
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:31]
+        //Exists
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
-//Run
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+        //Run
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
-//log
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+        //log
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
-//StartsWith
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+        //StartsWith
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
-//endwith
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:32]
+        //endwith
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
-//Match
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
+        //Match
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
-//Parse
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:33]
+        //Parse
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
-//Insert
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+        //Insert
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
-//"AddDocument",
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+        //"AddDocument",
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
-//GetFiles
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+        //GetFiles
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
-//Execute
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:34]
+        //Execute
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
-//ToTraditional
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+        //ToTraditional
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
-//ReadAsStringAsync
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+        //ReadAsStringAsync
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
-//"Value<JArray>",
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:35]
+        //"Value<JArray>",
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
-//GetStringAsync
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+        //GetStringAsync
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
-//Count
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+        //Count
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
-//AddDays
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+        //AddDays
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
-//Find
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:36]
+        //Find
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
-//ElementAt
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
+        //ElementAt
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
-//IsWindowVisible
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:37]
+        //IsWindowVisible
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
-//NewPageAsync
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+        //NewPageAsync
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
-//newx
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+        //newx
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
-//Exit
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:38]
+        //Exit
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
-//LoadHtml
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
+        //LoadHtml
 
-//十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
-//SetValue
+        //十 Adam 大鱼 刘洋 汤姆, [9 / 7 / 2024 下午 11:39]
+        //SetValue
         public static List<SortedList> foreach_Sqlt(string sqltFl, Func<SortedList, SortedList> fun)
         {
             List<SortedList> li = new List<SortedList>();
@@ -487,14 +560,14 @@ namespace mdsj.lib
 
             return list;
         }
-        public static List<object> foreach_hstbEs(List<SortedList> list2, Func<SortedList,object> act)
+        public static List<object> foreach_hstbEs(List<SortedList> list2, Func<SortedList, object> act)
         {
             List<object> listRzt = new List<object>();
             foreach (SortedList rw in list2)
             {
                 try
                 {
-                    listRzt.Add( act(rw));
+                    listRzt.Add(act(rw));
                 }
                 catch (Exception e)
                 {
@@ -591,7 +664,7 @@ namespace mdsj.lib
 
                     // 转换为 Hashtable
                     Hashtable hashtable = ToHashtable(jsonObject);
-                    hashtable.Add("fname", Path.GetFileName( filePath));
+                    hashtable.Add("fname", Path.GetFileName(filePath));
                     hashtable.Add("fpath", filePath);
                     // 获取文件名（不包括扩展名）
                     string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
@@ -652,11 +725,12 @@ namespace mdsj.lib
                 try
                 {
                     act(rw);
-                }catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     print_catchEx(nameof(foreach_hstbEs), e);
                 }
-             
+
             }
         }
         public static string ldfldDfempty(Dictionary<string, StringValues> whereexprsobj, string v)
@@ -783,7 +857,7 @@ namespace mdsj.lib
         {
             return Convert.ToInt32(obj);
         }
-        public static  int len(object obj)
+        public static int len(object obj)
         {
             if (IsString(obj))
                 return obj.ToString().Length;
@@ -800,6 +874,6 @@ namespace mdsj.lib
 
         }
 
-      
+
     }
 }

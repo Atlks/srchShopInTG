@@ -20,9 +20,9 @@ using System.Threading.Tasks;
 
 namespace mdsj.lib
 {
- // best api todo is v2 more smpl
- // best api todo is v2 more smpl
- internal class webapi
+    // best api todo is v2 more smpl
+    // best api todo is v2 more smpl
+    internal class webapi
     {
 
         /*
@@ -64,7 +64,7 @@ namespace mdsj.lib
                         {
                             try
                             {
-                                
+
                                 httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                             }
                             catch (jmp2endEx e)
@@ -118,17 +118,17 @@ namespace mdsj.lib
             {
                 var funname = "wbapi" + request.Method + Substring(path, 1);
                 //call  wbapi_post path
-                wbapi_upldPost( request,  response);
+                wbapi_upldPost(request, response);
                 return;
             }
 
-                //----------------static res
-                // 静态资源处理器映射表
-                Hashtable extNhdlrChoosrMaplist = new Hashtable();
-            extNhdlrChoosrMaplist.Add("txt   css js",nameof( Html_httpHdlrfilTxtHtml));
-            extNhdlrChoosrMaplist.Add(" html htm", nameof( Html_httpHdlrfilTxtHtml));
+            //----------------static res
+            // 静态资源处理器映射表
+            Hashtable extNhdlrChoosrMaplist = new Hashtable();
+            extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
+            extNhdlrChoosrMaplist.Add(" html htm", nameof(Html_httpHdlrfilTxtHtml));
             extNhdlrChoosrMaplist.Add("json", jsonfl_httpHdlrFilJson);
-            extNhdlrChoosrMaplist.Add("jpg png", nameof( img_httpHdlrFilImg));
+            extNhdlrChoosrMaplist.Add("jpg png", nameof(img_httpHdlrFilImg));
             httpHdlrFil(request, response, extNhdlrChoosrMaplist);
             //-------------------swag doc api
             // 处理特定API
@@ -142,7 +142,7 @@ namespace mdsj.lib
             SendResp(rzt, response);
         }
 
-        private static void wbapi_upldPost(HttpRequest request,   HttpResponse response)
+        private static void wbapi_upldPost(HttpRequest request, HttpResponse response)
         {
             if (request.Method == HttpMethods.Post)
             {
@@ -156,7 +156,7 @@ namespace mdsj.lib
                         mkdir_forFile(filePath);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
-                              file.CopyToAsync(stream).GetAwaiter().GetResult();
+                            file.CopyToAsync(stream).GetAwaiter().GetResult();
                         }
                     }
                 }
@@ -169,7 +169,7 @@ namespace mdsj.lib
                 }
 
                 // Call the specific API handler
-            //    httpHdlrApiSpecl(request, response);
+                //    httpHdlrApiSpecl(request, response);
             }
         }
 
@@ -220,8 +220,8 @@ namespace mdsj.lib
                     //   callx(value, context);
 
 
-                    
-                    
+
+
                     var func1 = de.Value.ToString();
 
                     var task = callx(func1, request, response);
@@ -312,6 +312,22 @@ namespace mdsj.lib
                 Jmp2end(); return;
             }
         }
+        public static async System.Threading.Tasks.Task TxtHttpHdlr
+            (HttpRequest request, HttpResponse response)
+        {
+            // 获取当前请求的 URL
+
+            string path = request.Path;
+            // if (path.EndsWith(".htm"))
+            {
+                // 设置响应内容类型和编码
+                response.ContentType = "text/plain; charset=utf-8";
+                string f = webrootDir + decodeUrl(path);
+                object rzt2 = ReadAllText(f);
+                await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+                Jmp2end(); return;
+            }
+        }
 
         public static async System.Threading.Tasks.Task fildown_httpHdlrFilDown(HttpRequest request, HttpResponse response)
         {
@@ -379,14 +395,12 @@ namespace mdsj.lib
 
         public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
-          //  HttpContext context2 = context;
-        //    HttpResponse response = context2.Response;
+            //  HttpContext context2 = context;
+            //    HttpResponse response = context2.Response;
             // 获取当前请求的 URL
-        //    var request = context.Request;
+            //    var request = context.Request;
             string path = request.Path;
             // 设置响应内容类型和编码
-
-
             //    HttpListenerResponse response = (HttpListenerResponse)response2;
             string path1 = webrootDir + path;
             path1 = decodeUrl(path1);
@@ -431,7 +445,7 @@ namespace mdsj.lib
 
         }
 
-      
+
 
         /// <summary>
         /// httpHdlrApiSpelDocapi
