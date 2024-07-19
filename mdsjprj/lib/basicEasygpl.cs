@@ -78,6 +78,13 @@ namespace mdsj.lib
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
         }
+        public static void 发送响应_资源不存在2(HttpResponse HTTP响应对象)
+        {
+            const string 提示 = "file not find文件没有找到";
+            HTTP响应对象.StatusCode = (int)HttpStatusCode.NotFound;
+            StreamWriter writer = new StreamWriter(HTTP响应对象.Body);
+            writer.Write(提示);
+        }
         public static void 发送响应_资源不存在(HttpResponse HTTP响应对象)
         {
             const string 提示 = "file not find文件没有找到";
@@ -102,11 +109,11 @@ namespace mdsj.lib
         }
         public static bool 文件存在(string 文件路径)
         {
-            return existFil(文件路径);
+            return ExistFil(文件路径);
         }
         public static bool 文件不存在(string 文件路径)
         {
-            return !existFil(文件路径);
+            return !ExistFil(文件路径);
         }
         public static string[] 拆分(object key)
         {

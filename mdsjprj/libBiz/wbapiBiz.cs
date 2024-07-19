@@ -1,11 +1,13 @@
 ﻿global using static mdsj.libBiz.wbapiBiz;
 using libx;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
 using prj202405;
 using prj202405.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -27,6 +29,41 @@ namespace mdsj.libBiz
             ormJSonFL.save(qrystrMap, dbfile);
             return "ok";
         }
+
+        /// <summary>
+        /// wbapi_upldPOST
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void wbapi_upldPOST(HttpRequest request, HttpResponse response)
+        {
+            // Check if the request contains a file
+            if (request.Form.Files.Count > 0)
+            {
+                foreach (var file in request.Form.Files)
+                {
+                    // Get the file content and save it to a desired location
+                    var filePath = Path.Combine("uploads", file.FileName);
+                    mkdir_forFile(filePath);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream).GetAwaiter().GetResult();
+                    }
+                }
+            }
+
+            // Handle other form data
+            //foreach (var key in request.Form.Keys)
+            //{
+            //    var value = request.Form[key];
+            //    ConsoleWriteLine($"Key: {key}, Value: {value}");
+            //}
+            SortedList dafenObj = ConvertFormToSortedList(request.Form);
+            ormJSonFL.save(dafenObj, "uplodData/" + Guid.NewGuid().ToString() + ".json");
+            SendResp("ok", response);
+            //    return "ok";
+        }
+
         /// <summary>
         /// 打分
         ///  
@@ -35,8 +72,6 @@ namespace mdsj.libBiz
         /// <param name="shangjiaID">商家id</param>
         /// <param name="dafen">分数</param>
         ///     <param name="uid">用户id</param>
-     
-  
         public static string Wbapi_dafen(string qrystr)
         {
             //shangjiaID,uid,dafen

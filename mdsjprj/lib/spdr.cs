@@ -77,7 +77,7 @@ namespace mdsj.lib
                     string url1 = starturl + urlMaybeRltv;
                     if (urlMaybeRltv.StartsWith("http"))
                         url1 = urlMaybeRltv;
-                    TaskRun(() =>
+                    TaskRunNewThrd(() =>
                     {
                         Download(url1, parserUrlQue);
                     });

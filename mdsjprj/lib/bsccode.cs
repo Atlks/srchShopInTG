@@ -346,9 +346,26 @@ namespace mdsj.lib
         {
             return args.ToString();
         }
-        public static void TaskRun(Action value)
+        public static void TaskRunNewThrd(Action act1)
         {
-            callAsync(value);
+            // 使用 Task.Run 启动一个新的任务
+            System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
+            {
+                // callxTryJmp(task1);
+                try
+                {
+                    act1();
+                }
+                catch (Exception e)
+                {
+                    print_catchEx("TaskRunNewThrd", e);
+                    logErr2025(e, nameof(TaskRunNewThrd), "errlog");
+                }
+
+
+                //  callxTryJmp(OnMsg, update, reqThreadId);
+
+            });
         }
         public static void TaskRun(Func<System.Threading.Tasks.Task> value)
         {
@@ -367,6 +384,7 @@ namespace mdsj.lib
                 catch (Exception e)
                 {
                     print_catchEx("callAsync", e);
+                    logErr2025(e, nameof(callAsync), "errlog");
                 }
 
 
@@ -414,7 +432,7 @@ namespace mdsj.lib
         {
             print($"------{v}() catch ex----------_");
             print(e);
-            print($"------{v}() catch ex finish----------_");
+            print($"------end {v}() catch ex finish----------_");
         }
         public static object call(string authExprs, Delegate callback, params object[] args)
         {

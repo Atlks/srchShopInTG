@@ -62,20 +62,11 @@ namespace mdsj.lib
             //拦截请求：
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
-                            try
-                            {
-
-                                httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
-                            }
-                            catch (jmp2endEx e)
-                            {
-                            }
-                            catch (Exception e)
-                            {
-                                print_catchEx(nameof(startWebapi), e);
-                                logErr2025(e, nameof(startWebapi), "errlog");
-                            }
-
+                            //here cant new thrd
+                            callxTryJmp(  () =>
+                           {
+                                 httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                           });
                         };
             app.Run(RequestDelegate1);
             app.Run();
@@ -116,9 +107,11 @@ namespace mdsj.lib
 
             if (request.Method == HttpMethods.Post)
             {
-                var funname = "wbapi" + request.Method + Substring(path, 1);
-                //call  wbapi_post path
-                wbapi_upldPost(request, response);
+                var funname = "wbapi" + Substring(path, 1) + request.Method;
+                //call  wbapi_upldPOST path
+                //  wbapi_upldPost(request, response);
+                // 
+                callx(funname, request, response);
                 return;
             }
 
@@ -129,6 +122,7 @@ namespace mdsj.lib
             extNhdlrChoosrMaplist.Add(" html htm", nameof(Html_httpHdlrfilTxtHtml));
             extNhdlrChoosrMaplist.Add("json", jsonfl_httpHdlrFilJson);
             extNhdlrChoosrMaplist.Add("jpg png", nameof(img_httpHdlrFilImg));
+            string path2 = request.Path;
             httpHdlrFil(request, response, extNhdlrChoosrMaplist);
             //-------------------swag doc api
             // 处理特定API
@@ -173,22 +167,22 @@ namespace mdsj.lib
             }
         }
 
-        private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
-        {
+        //private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
+        //{
 
-        }
+        //}
 
-        static void test(HttpContext context)
-        {
-            Hashtable ht = new Hashtable();
+        //static void test(HttpContext context)
+        //{
+        //    Hashtable ht = new Hashtable();
 
-            ht.Add("jpg png", imageRespAsync2);
-            //   httpHdlrFil(context, ht);
-        }
-        public static async System.Threading.Tasks.Task imageRespAsync2(HttpContext context)
-        {
+        //    ht.Add("jpg png", imageRespAsync2);
+        //    //   httpHdlrFil(context, ht);
+        //}
+        //public static async System.Threading.Tasks.Task imageRespAsync2(HttpContext context)
+        //{
 
-        }
+        //}
 
         /// <summary>
         /// httpHdlrFil
@@ -202,7 +196,7 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            path = decodeUrl(path);
+            path = DecodeUrl(path);
 
             if (path.Contains("analytics"))
                 print("Dbg");
@@ -305,14 +299,14 @@ namespace mdsj.lib
             // if (path.EndsWith(".htm"))
             {
                 // 设置响应内容类型和编码
-                response.ContentType = "text/html; charset=utf-8";
-                string f = webrootDir + decodeUrl(path);
+
+                string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
-                await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+                SendResp(rzt2, "text/html; charset=utf-8", response);
                 Jmp2end(); return;
             }
         }
-        public static async System.Threading.Tasks.Task TxtHttpHdlr
+        public static void TxtHttpHdlr
             (HttpRequest request, HttpResponse response)
         {
             // 获取当前请求的 URL
@@ -320,11 +314,12 @@ namespace mdsj.lib
             string path = request.Path;
             // if (path.EndsWith(".htm"))
             {
-                // 设置响应内容类型和编码
-                response.ContentType = "text/plain; charset=utf-8";
-                string f = webrootDir + decodeUrl(path);
+                // 设置响应内容类型和编码            
+
+                string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
-                await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+                SendResp(rzt2, "text/plain; charset=utf-8", response);
+                print(" send finish....");
                 Jmp2end(); return;
             }
         }
@@ -339,20 +334,14 @@ namespace mdsj.lib
 
             //    HttpListenerResponse response = (HttpListenerResponse)response2;
             string path1 = webrootDir + path;
-            path1 = decodeUrl(path1);
-            if (!existFil(path1))
+            path1 = DecodeUrl(path1);
+            if (!ExistFil(path1))
             {
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                StreamWriter writer = new StreamWriter(response.Body);
-                writer.Write("res not found");
+                SendRespsJJJresNotExist404(response);
                 return;
             }
-            byte[] buffer = File.ReadAllBytes(path1);
-            response.ContentType = "application/octet-stream";
-            response.ContentLength = buffer.Length;
-            //   await response.WriteAsync(buffer, 0, buffer.Length);
-            await response.Body.WriteAsync(buffer, 0, buffer.Length);
-            response.Body.Close();
+
+            SendResps4file(path1, "application/octet-stream", response);
             Jmp2end();
             return;
 
@@ -360,68 +349,34 @@ namespace mdsj.lib
         }
 
 
-        public static async System.Threading.Tasks.Task fildown_httpHdlrFilDown(HttpContext context)
-        {
-            HttpContext context2 = context;
-            HttpResponse response = context2.Response;
-            // 获取当前请求的 URL
-            var request = context.Request;
-            string path = request.Path;
-            // 设置响应内容类型和编码
-
-
-            //    HttpListenerResponse response = (HttpListenerResponse)response2;
-            string path1 = webrootDir + path;
-            path1 = decodeUrl(path1);
-            if (!existFil(path1))
-            {
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                StreamWriter writer = new StreamWriter(response.Body);
-                writer.Write("res not found");
-                return;
-            }
-            byte[] buffer = File.ReadAllBytes(path1);
-            response.ContentType = "application/octet-stream";
-            response.ContentLength = buffer.Length;
-            //   await response.WriteAsync(buffer, 0, buffer.Length);
-            await response.Body.WriteAsync(buffer, 0, buffer.Length);
-            response.Body.Close();
-            Jmp2end();
-            return;
-
-
-        }
 
 
         public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
-            //  HttpContext context2 = context;
-            //    HttpResponse response = context2.Response;
-            // 获取当前请求的 URL
-            //    var request = context.Request;
             string path = request.Path;
-            // 设置响应内容类型和编码
-            //    HttpListenerResponse response = (HttpListenerResponse)response2;
             string path1 = webrootDir + path;
-            path1 = decodeUrl(path1);
-            if (!existFil(path1))
+            path1 = DecodeUrl(path1);
+            if (!ExistFil(path1))
             {
-                response.StatusCode = (int)HttpStatusCode.NotFound;
-                StreamWriter writer = new StreamWriter(response.Body);
-                writer.Write("Image not found");
+                SendRespsJJJresNotExist404(response);
+                //    发送响应_资源不存在(HTTP响应对象);
                 Jmp2end();
                 return;
             }
+
+            await SendResps4file(path1, "image/jpeg", response);
+            Jmp2end();
+            return;
+        }
+
+        private static async System.Threading.Tasks.Task SendResps4file(string path1, string contType, HttpResponse response)
+        {
             byte[] buffer = File.ReadAllBytes(path1);
-            response.ContentType = "image/jpeg";
+            response.ContentType = contType;
             response.ContentLength = buffer.Length;
             //   await response.WriteAsync(buffer, 0, buffer.Length);
             await response.Body.WriteAsync(buffer, 0, buffer.Length);
             response.Body.Close();
-            Jmp2end();
-            return;
-
-
         }
 
         /// <summary>
@@ -436,7 +391,7 @@ namespace mdsj.lib
             string path = request.Path;
             // 设置响应内容类型和编码
             context.Response.ContentType = "application/json; charset=utf-8";
-            path = decodeUrl(path);
+            path = DecodeUrl(path);
 
             object rzt2 = ReadAllText(webrootDir + path);
             await context.Response.WriteAsync(rzt2.ToString(), Encoding.UTF8);

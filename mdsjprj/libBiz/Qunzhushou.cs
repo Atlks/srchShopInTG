@@ -436,7 +436,7 @@ namespace mdsj.libBiz
            
 
             // 这是一个示例的异步任务
-              TaskRun(() =>
+              TaskRunNewThrd(() =>
             {
                 string DataDir = "fullTxtSrchIdxdataDir";
                 Thread.Sleep(7000);

@@ -175,7 +175,7 @@ namespace mdsj.lib
         }
 
 
-        public static string decodeUrl(string path)
+        public static string DecodeUrl(string path)
         {
             string decodedUrl = WebUtility.UrlDecode(path);
             return decodedUrl;
@@ -184,6 +184,22 @@ namespace mdsj.lib
         {
             结果task.Wait();
         }
+
+        public static SortedList ConvertFormToSortedList(IFormCollection formCollection)
+        {
+            SortedList sortedList = new SortedList();
+
+            foreach (string key in formCollection.Keys)
+            {
+                if (key != null)
+                {
+                    sortedList.Add(key, formCollection[key]);
+                }
+            }
+
+            return sortedList;
+        }
+
         public static void SetRespContentTypeNencode
             (HttpResponse http上下文, string 内容类型和编码)
         {
@@ -194,7 +210,13 @@ namespace mdsj.lib
             http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
         }
+        public static void SendResp(object 输出结果, string 内容类型和编码,HttpResponse http上下文)
+        {
+            http上下文.ContentType = 内容类型和编码;
+           
+            http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
+        }
         public static object castToSerializableObjsOrSnglobj(object inputArray)
         {
             if (!isArrOrColl(inputArray))
@@ -298,7 +320,7 @@ namespace mdsj.lib
                 //hs.Add("url",req.Path+req.QueryString);
                 //   maybe qrystr
               
-                return $"@HttpRequest:  {req.Scheme}://{req.Host}" +decodeUrl( req.Path) + req.QueryString;
+                return $"@HttpRequest:  {req.Scheme}://{req.Host}" +DecodeUrl( req.Path) + req.QueryString;
             }
             if (obj is HttpResponse)
             {
@@ -328,7 +350,7 @@ namespace mdsj.lib
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
         }
-        public static void sendResp_resNotExist404(HttpResponse HTTP响应对象)
+        public static void SendRespsJJJresNotExist404(HttpResponse HTTP响应对象)
         {
             const string 提示 = "file not find文件没有找到";
             HTTP响应对象.StatusCode = (int)HttpStatusCode.NotFound;
@@ -352,11 +374,11 @@ namespace mdsj.lib
         }
         public static bool isFileExist(string 文件路径)
         {
-            return existFil(文件路径);
+            return ExistFil(文件路径);
         }
         public static bool isFileNotExist(string 文件路径)
         {
-            return !existFil(文件路径);
+            return !ExistFil(文件路径);
         }
         public static string castNormalizePath(string path)
         {
@@ -773,7 +795,7 @@ namespace mdsj.lib
 
             return list.GetRange(start, length);
         }
-        public static bool existFil(string path1)
+        public static bool ExistFil(string path1)
         {
             return File.Exists(path1);
         }
