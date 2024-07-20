@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.ormJSonFL;
+﻿global using static prjx.lib.ormJSonFL;
 using ClosedXML.Excel;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -17,10 +17,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
-using static prj202405.lib.ormJSonFL;
-namespace prj202405.lib
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
+using static prjx.lib.ormJSonFL;
+namespace prjx.lib
 {
     internal class ormJSonFL
     {
@@ -53,7 +53,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
                 File.WriteAllText(dbFileName, "[]");
@@ -65,7 +65,7 @@ namespace prj202405.lib
             var list = JsonConvert.DeserializeObject<List<SortedList>>(txt);
             ArrayList list2 = new ArrayList(list);
 
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list2, 0, 3));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(list2, 0, 3));
 
 
             return list2;
@@ -78,7 +78,7 @@ namespace prj202405.lib
         public static List<SortedList> qry(string dbfS)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfS));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbfS));
             string[] dbArr = dbfS.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
             List<SortedList> arr = new List<SortedList>();
@@ -95,14 +95,14 @@ namespace prj202405.lib
 
                 if (!File.Exists(dbf))
                 {
-                   print("not exist file dbf=>" + dbf);
+                   Print("not exist file dbf=>" + dbf);
                     continue;
                 }
                 List<SortedList> sortedLists = qrySglFL(dbf);
                 arr = array_merge(arr, sortedLists);
             }
 
-            print_ret(MethodBase.GetCurrentMethod().Name, array_slice(arr, 0, 1));
+            PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(arr, 0, 1));
 
 
             return arr;
@@ -114,11 +114,11 @@ namespace prj202405.lib
 
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
             {
-                print_ret(__METHOD__, 0);
+                PrintRet(__METHOD__, 0);
                 return [];
             }
             //    File.WriteAllText(dbFileName, "[]");
@@ -136,7 +136,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(list, 0, 1));
 
             return list;
         }
@@ -147,7 +147,7 @@ namespace prj202405.lib
 
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
                 File.WriteAllText(dbFileName, "[]");
@@ -165,7 +165,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(list, 0, 1));
 
             return list;
         }
@@ -262,12 +262,12 @@ namespace prj202405.lib
         public static void save(SortedList SortedList1, string dbfile)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
 
             try
             {
 
-                mkdir_forFile(dbfile);
+                Mkdir4File(dbfile);
                 // 创建目录
                 // 使用 Path.GetDirectoryName 方法获取目录路径
                 string directoryPath = System.IO.Path.GetDirectoryName(dbfile);
@@ -280,7 +280,7 @@ namespace prj202405.lib
                         {
                             // 创建目录及所有上级目录
                             Directory.CreateDirectory(directoryPath);
-                           print($"Created directory: {directoryPath}");
+                           Print($"Created directory: {directoryPath}");
                         }
 
                     }
@@ -290,9 +290,9 @@ namespace prj202405.lib
                 SortedList iotTable = db.lst2IOT(list);
 
                 if (ldfld(SortedList1, "id", "") == "")
-                    stfld4447(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
+                    SetField938(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
                 string key = SortedList1["id"].ToString();
-                stfld4447(iotTable, key, SortedList1);
+                SetField938(iotTable, key, SortedList1);
 
 
                 ArrayList saveList_hpmod = db.lstFrmIot(iotTable);
@@ -302,10 +302,10 @@ namespace prj202405.lib
             catch (Exception e)
             {
 
-                print_ex(__METHOD__, e);
+                PrintExcept(__METHOD__, e);
             }
 
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
 
@@ -330,21 +330,21 @@ namespace prj202405.lib
         internal static void saveMltV2(List<SortedList> rows, string Strfile)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), Strfile));
             ArrayList list = qryDep(Strfile);
             SortedList listIot = db.lst2IOT(list);
 
             foreach (SortedList objSave in rows)
             {
 
-                arrCls.stfld_replaceKeyV(listIot, ldfld_TryGetValueAsStrDefNull(objSave, "id"), objSave);
+                arrCls.SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
 
             }
 
 
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, 0);
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, 0);
         }
         internal static void saveMlt(List<SortedList> rows, string Strfile)
         {
@@ -360,7 +360,7 @@ namespace prj202405.lib
                 }
                 catch (Exception ex)
                 {
-                   print(ex.Message);
+                   Print(ex.Message);
                 }
                 listIot[objSave["id"]] = objSave;
             }

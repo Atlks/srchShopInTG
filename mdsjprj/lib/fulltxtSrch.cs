@@ -9,28 +9,28 @@ using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 
 
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.dsl;
 using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
 using JiebaNet.Segmenter;
-using prj202405.lib;
+using prjx.lib;
 using System.Reflection;
 using Newtonsoft.Json.Linq;
-using prj202405;
+using prjx;
 namespace mdsj.lib
 {
     internal class fulltxtSrch
@@ -172,7 +172,7 @@ namespace mdsj.lib
         public static void wrtRowss_ReadAndCreateIndex4tgmsg(string directoryPath_msg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), directoryPath_msg));
 
             try
             {
@@ -211,7 +211,7 @@ namespace mdsj.lib
                             if (messageElement.TryGetProperty("text", out JsonElement textElement))
                             {
                                 // 输出 text 属性的值
-                               print(textElement.GetString());
+                               Print(textElement.GetString());
                                 //    string DataDir = "fullTxtSrchIdxdataDir";
                                 SortedList o = tgMsg2row(messageElement, textElement);
                                 var msgx = ChineseCharacterConvert.Convert.ToSimple(o["txt"].ToString());
@@ -222,7 +222,7 @@ namespace mdsj.lib
                         }
                         else
                         {
-                           print($"The 'message' property in the file {jsonContent} is not an object.");
+                           Print($"The 'message' property in the file {jsonContent} is not an object.");
                         }
                     }
 
@@ -231,7 +231,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
        }
 
@@ -242,7 +242,7 @@ namespace mdsj.lib
 
                 wrt_row4tgmsg(tgmsg, DataDir);
             }
-            catch (Exception ex) {print(ex.ToString()); }
+            catch (Exception ex) {Print(ex.ToString()); }
 
         }
 
@@ -288,11 +288,11 @@ namespace mdsj.lib
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string msgidx = o["chatid"] + "." + o["timeStamp"] + "." + o["msgid"];
                 //  o.Add("", msgidx);
-                stfld_replaceKeyV(o, "id", msgidx);
-                stfld_replaceKeyV(o, "msgid", msgidx);
+                SetFieldReplaceKeyV(o, "id", msgidx);
+                SetFieldReplaceKeyV(o, "msgid", msgidx);
                 //  o.Add("msgid", msgidx);
                 //  o.Add("kwd", wd);
-                stfld_replaceKeyV(o, "kwd", msgidx);
+                SetFieldReplaceKeyV(o, "kwd", msgidx);
                 //        doc.Add("txt", o["txt"]);
                 //       doc.Add("grpinfo", o);
                 //       o["txt"] = "";

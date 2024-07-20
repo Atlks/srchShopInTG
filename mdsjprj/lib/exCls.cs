@@ -1,4 +1,4 @@
-﻿using prj202405;
+﻿using prjx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -36,9 +36,9 @@ namespace mdsj.lib
         public static void HandleException(Exception ex)
         {
             // 在这里处理异常，例如记录日志或显示错误信息
-            print("捕获到未处理的异常:");
-            print($"消息: {ex.Message}");
-            print($"堆栈跟踪: {ex.StackTrace}");
+            Print("捕获到未处理的异常:");
+            Print($"消息: {ex.Message}");
+            Print($"堆栈跟踪: {ex.StackTrace}");
         }
 
         public static void set_error_handler()
@@ -52,12 +52,12 @@ namespace mdsj.lib
         {
             try
             {
-                print("FUN CurrentDomain_UnhandledException()");
-                print("捕获未处理的同步异常：");
-                print(((Exception)e.ExceptionObject).Message);
+                Print("FUN CurrentDomain_UnhandledException()");
+                Print("捕获未处理的同步异常：");
+                Print(((Exception)e.ExceptionObject).Message);
                 // 这里可以记录日志或执行其他处理
                 logCls.logErr2025((Exception)e.ExceptionObject, "CurrentDomain_UnhandledException", "errlog");
-                print("END FUN CurrentDomain_UnhandledException()");
+                Print("END FUN CurrentDomain_UnhandledException()");
 
                 // 延迟启动一个新的线程
                 new System.Threading.Thread(() =>
@@ -74,8 +74,8 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                print(ex.ToString());
-                print("END FUN CurrentDomain_UnhandledException()");
+                Print(ex.ToString());
+                Print("END FUN CurrentDomain_UnhandledException()");
             }
 
         }
@@ -84,19 +84,19 @@ namespace mdsj.lib
         {
             try
             {
-                print("\n\nFUN TaskScheduler_UnobservedTaskException()");
-                print("捕获未处理的异步异常：");
-                print("sender=》 " + sender);
-                print("emsg=>" + e.Exception.Message);
+                Print("\n\nFUN TaskScheduler_UnobservedTaskException()");
+                Print("捕获未处理的异步异常：");
+                Print("sender=》 " + sender);
+                Print("emsg=>" + e.Exception.Message);
 
                 // 解析堆栈跟踪，获取出错的异步函数名称
                 if (e.Exception.StackTrace != null)
                     foreach (var stackFrame in e.Exception.StackTrace.Split(new[] { Environment.NewLine }, StringSplitOptions.None))
                     {
-                        print(stackFrame);
+                        Print(stackFrame);
                         if (stackFrame.Contains("ThrowExceptionAsync"))
                         {
-                            print($"出错的异步函数: {stackFrame.Trim()}");
+                            Print($"出错的异步函数: {stackFrame.Trim()}");
                             break;
                         }
                     }

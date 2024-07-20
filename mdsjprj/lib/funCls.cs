@@ -8,19 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 using static libx.storeEngr4Nodesqlt;
-using prj202405.lib;
+using prjx.lib;
 using System.Reflection;
 namespace libx
 {
@@ -32,14 +32,14 @@ namespace libx
             Type type = Type.GetType(typeName);
             if (type == null)
             {
-               print($"Type '{typeName}' not found.");
+               Print($"Type '{typeName}' not found.");
                 return false;
             }
 
             MethodInfo methodInfo = type.GetMethod(methodName);
             if (methodInfo == null)
             {
-               print($"Method '{methodName}' not found in type '{typeName}'.");
+               Print($"Method '{methodName}' not found in type '{typeName}'.");
                 return false;
             }
 

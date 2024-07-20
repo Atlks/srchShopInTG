@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.dbgCls;
+﻿global using static prjx.lib.dbgCls;
 using Newtonsoft.Json;
 using System;
 
@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using DocumentFormat.OpenXml.Drawing;
 using mdsj.libBiz;
 using Microsoft.AspNetCore.Http;
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class dbgCls
     {
@@ -54,12 +54,12 @@ namespace prj202405.lib
 
             if (obj == null)
             {
-               print($"{indent}null");
+               Print($"{indent}null");
             }
             else
             {
                 Type type = obj.GetType();
-               print($"{indent}{type}({GetObjectSize(obj)}) {obj}");
+               Print($"{indent}{type}({GetObjectSize(obj)}) {obj}");
                 indentLevel++;
 
                 if (obj is IDictionary dictionary)
@@ -84,14 +84,14 @@ namespace prj202405.lib
                         foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
                         {
                             object value = property.GetValue(obj, null);
-                           print($"{indent}{property.Name}:");
+                           Print($"{indent}{property.Name}:");
                             var_dump(value, indentLevel + 1);
                         }
 
                         foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Instance))
                         {
                             object value = field.GetValue(obj);
-                           print($"{indent}{field.Name}:");
+                           Print($"{indent}{field.Name}:");
                             var_dump(value, indentLevel + 1);
                         }
                     }
@@ -223,11 +223,11 @@ namespace prj202405.lib
 
                 if (obj == null)
                 {
-                   print($"{indent}null");
+                   Print($"{indent}null");
                 }
                 else if (obj is IDictionary dictionary)
                 {
-                   print($"{indent}Dictionary:");
+                   Print($"{indent}Dictionary:");
                     foreach (DictionaryEntry entry in dictionary)
                     {
                         Console.Write($"{indent}  [{entry.Key}] => ");
@@ -236,7 +236,7 @@ namespace prj202405.lib
                 }
                 else if (obj is IEnumerable enumerable && !(obj is string))
                 {
-                   print($"{indent}List:");
+                   Print($"{indent}List:");
                     foreach (var item in enumerable)
                     {
                         print_r(item, indentLevel + 1);
@@ -244,12 +244,12 @@ namespace prj202405.lib
                 }
                 else
                 {
-                   print($"{indent}{obj}");
+                   Print($"{indent}{obj}");
                 }
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
         }
@@ -280,7 +280,7 @@ namespace prj202405.lib
                 AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
                 {
                     Exception e = (Exception)args.ExceptionObject;
-                   print($"An error occurred: {e.Message}");
+                   Print($"An error occurred: {e.Message}");
                 };
             }
         }
@@ -313,7 +313,7 @@ namespace prj202405.lib
          * @param string $METHOD__
          * @return void
          */
-        public static void print_call_FunArgs(string METHOD__, object func_get_args)
+        public static void PrintCallFunArgs(string METHOD__, object func_get_args)
         {
          
             // 判断 func_get_args 是否为 object[] 数组
@@ -352,7 +352,7 @@ namespace prj202405.lib
             //    return;
             var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{json_encode_noFmt( val)}";
             // array_push($GLOBALS['dbg'],        $msg);
-           print(msglog + "");
+           Print(msglog + "");
 
         }
         public static void print_varDump(string METHOD__, string vname, string val)
@@ -361,21 +361,22 @@ namespace prj202405.lib
             //    return;
             var msglog = str_repeat(" ", dbgpad + 3) + "" + METHOD__ + $"():: {vname}=>{val}";
             // array_push($GLOBALS['dbg'],        $msg);
-           print(msglog + "");
+           Print(msglog + "");
 
         }
 
-        public static void print_ret(object mETHOD__, object results)
+        public static void PrintRet(object mETHOD__, object results)
         {
             try
             {
                 var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
-               print(msglog + "");
+              // print(msglog + "");
+                PrintColoredText(msglog, ConsoleColor.DarkGreen);
             }
             catch (Exception e)
             {
                 var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>";
-               print(msglog + "");
+               Print(msglog + "");
                 logErr2025(e, "print_ret", "errdirSysMeth");
             }
 

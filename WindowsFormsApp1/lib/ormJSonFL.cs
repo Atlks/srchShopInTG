@@ -1,5 +1,5 @@
 ﻿
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -12,10 +12,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
-using static prj202405.lib.ormJSonFL;
-namespace prj202405.lib
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
+using static prjx.lib.ormJSonFL;
+namespace prjx.lib
 {
     internal class ormJSonFL
     {

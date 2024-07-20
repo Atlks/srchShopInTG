@@ -1,6 +1,6 @@
 ﻿global using static mdsj.libBiz.tgBiz;
-using prj202405.lib;
-using prj202405;
+using prjx.lib;
+using prjx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,18 +11,18 @@ using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using static mdsj.libBiz.tgBiz;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -31,22 +31,22 @@ using Telegram.Bot;
 using System.Reflection;
 using Newtonsoft.Json;
 using static mdsj.libBiz.strBiz;
-using City = prj202405.City;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using City = prjx.City;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
 
-using static prj202405.lib.strCls;
+using static prjx.lib.strCls;
 using static mdsj.lib.adChkr;
 namespace mdsj.libBiz
 {
@@ -76,7 +76,7 @@ namespace mdsj.libBiz
                         obj.Add("id", uid);
                         obj.Add("user", update.Message.From);
                         ormJSonFL.save(obj, "aduser.json");
-                       print("可能广告");
+                       Print("可能广告");
                         //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
 
                     };
@@ -98,7 +98,7 @@ namespace mdsj.libBiz
             }
             catch (Exception ex)
             {
-               print(ex);
+               Print(ex);
             }
 
 
@@ -114,7 +114,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception ex)
                 {
-                   print("告知新增联系方式时获取到时出错:" + ex.Message);
+                   Print("告知新增联系方式时获取到时出错:" + ex.Message);
                 }
             };
             var merchant = new Merchant();
@@ -252,7 +252,7 @@ namespace mdsj.libBiz
             }
             catch (Exception ex)
             {
-               print("告知商家添加成功时出错:" + ex.Message);
+               Print("告知商家添加成功时出错:" + ex.Message);
             }
         }
 
@@ -262,13 +262,13 @@ namespace mdsj.libBiz
             {
                 // 获取机器人的信息
                 Telegram.Bot.Types.User me = await botClient.GetMeAsync();
-               print($"Bot ID: {me.Id}");
-               print($"Bot Name: {me.FirstName}");
-               print($"Bot Username: {me.Username}");
+               Print($"Bot ID: {me.Id}");
+               Print($"Bot Name: {me.FirstName}");
+               Print($"Bot Username: {me.Username}");
             }
             catch (Exception ex)
             {
-               print($"An error occurred: {ex.Message}");
+               Print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -279,19 +279,19 @@ namespace mdsj.libBiz
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
               //  const string dir = "msgRcvDir";
                 Directory.CreateDirectory(dir);
-               print("fun bot_logRcvMsgV2（）");
-               print(updateString);
+               Print("fun bot_logRcvMsgV2（）");
+               Print(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir}/{timestamp}.json";
-               print(fileName);
-                filex.mkdir_forFile(fileName);
+               Print(fileName);
+                filex.Mkdir4File(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
-               print("end fun bot_logRcvMsgV2（）");
+               Print("end fun bot_logRcvMsgV2（）");
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
         }
@@ -303,17 +303,17 @@ namespace mdsj.libBiz
                 var updateString = JsonConvert.SerializeObject(update, Formatting.Indented);
           //      const string dir1 = "msgRcvDir1115";
                 Directory.CreateDirectory(dir1);
-               print(updateString);
+               Print(updateString);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir1}/{timestamp}.json";
-               print(fileName);
-                filex.mkdir_forFile(fileName);
+               Print(fileName);
+                filex.Mkdir4File(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
         }
@@ -329,13 +329,13 @@ namespace mdsj.libBiz
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{dir1}/{timestamp}.json";
-               print(fileName);
-                filex.mkdir_forFile(fileName);
+               Print(fileName);
+                filex.Mkdir4File(fileName);
                 System.IO.File.WriteAllText("" + fileName, updateString);
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
         }
@@ -344,7 +344,7 @@ namespace mdsj.libBiz
         public static async Task evt_newUserjoinSngle(long? chatId, long? userId, Telegram.Bot.Types.User user, Update? update)
         {
             var __METHOD__ = "evt_newUserjoinSngle";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chatId, userId, user));
 
 
             //记录拉如机器人记录，谁拉到哪个群了。。未来权限判断
@@ -357,7 +357,7 @@ namespace mdsj.libBiz
                 WriteAllText( f, update);
             }catch(Exception e)
             {
-                print_catchEx(__METHOD__,e);
+                PrintCatchEx(__METHOD__,e);
             }
            
 
@@ -367,7 +367,7 @@ namespace mdsj.libBiz
                     return;
                 if (user.Username.ToLower().StartsWith("lianxin_"))
                 {
-                    dbgCls.print_ret(__METHOD__, 0); return;
+                    dbgCls.PrintRet(__METHOD__, 0); return;
                 }
 
 
@@ -389,7 +389,7 @@ namespace mdsj.libBiz
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
 
@@ -409,20 +409,20 @@ namespace mdsj.libBiz
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
 
         }
 
         public static void WriteAllText(string f, object update)
         {
             var __METHOD__ = nameof(WriteAllText);
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(update,f));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(update,f));
  
             try
             {
-                mkdir_forFile(f);
+                Mkdir4File(f);
                 if(IsStr(update))
                 {
                     System.IO.File.WriteAllText(f,  (update.ToString()));
@@ -432,9 +432,9 @@ namespace mdsj.libBiz
                 System.IO.File.WriteAllText( f, json_encode(update));
             }catch(Exception e)
             {
-                print_ex("WriteAllText", e);
+                PrintExcept("WriteAllText", e);
             }
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
           
         }
         public static bool tg_isBtm_btnClink_in_prvt(Update update)
@@ -538,7 +538,7 @@ namespace mdsj.libBiz
                     return false;
 
                 // 
-               print("搜索触发词 in isNumlMsgInGrp()");
+               Print("搜索触发词 in isNumlMsgInGrp()");
                 var trgSearchKwds = " ";
                 var trgWd = biz_other.getTrgwdHash($"{prjdir}/cfg/搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
@@ -560,7 +560,7 @@ namespace mdsj.libBiz
                     return false;
                 }
 
-               print("nml msg");
+               Print("nml msg");
                 return true;
             }
             else  //prvt mode  ,,,not nml msg
@@ -575,6 +575,11 @@ namespace mdsj.libBiz
             return isGrpChat(update?.Message?.Chat?.Type);
 
         }
+        public static bool isGrpChat(Update update)
+        {
+            return isGrpChat(update?.Message?.Chat?.Type)
+        }
+       
       //  isGrpChat(update?.Message?.Chat?.Type)
         public static bool isGrpChat(ChatType? type)
         {
@@ -621,7 +626,7 @@ namespace mdsj.libBiz
 
 //mg MR.HAN, [18 / 7 / 2024 下午 12:00]
 //分别这三个图标
-            string line = "🌐%20代理加盟 🤝%20合伙联营 🏪%20分销连锁";
+            string line = "🌐%20代理加盟 \U0001f91d%20合伙联营 🏪%20分销连锁";
             var kbdBtnArr = castString2kbdBtnArr(line);
 
             var Keyboard =
@@ -694,7 +699,7 @@ namespace mdsj.libBiz
                                  new KeyboardButton(juliBencyon),
 
                                   new KeyboardButton("🫂 加入联信"),
-                                   new KeyboardButton("🤝 合作洽谈")  
+                                   new KeyboardButton("📝 合作洽谈")  
 
 
                             }
@@ -720,7 +725,7 @@ namespace mdsj.libBiz
             // 将数组元素转换为 KeyboardButton 对象
             KeyboardButton[] keyboardButtons = buttonTexts
                 .Select(text => {
-                    text = decodeUrl(text);
+                    text = DecodeUrl(text);
                     return new KeyboardButton(text);
                     })
                 .ToArray();

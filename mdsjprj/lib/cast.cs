@@ -57,7 +57,7 @@ namespace mdsj.lib
 
             if (string.IsNullOrWhiteSpace(str))
             {
-               print("Input string cannot be null or whitespace.");
+               Print("Input string cannot be null or whitespace.");
                 return 0;
                 //    throw new ArgumentNullException(nameof(str), "Input string cannot be null or whitespace.");
             }
@@ -68,7 +68,7 @@ namespace mdsj.lib
             }
             else
             {
-               print("Input string is not in the correct format for a double.");
+               Print("Input string is not in the correct format for a double.");
                 //  throw new FormatException("Input string is not in the correct format for a double.");
                 return 0;
             }
@@ -79,7 +79,7 @@ namespace mdsj.lib
         public static SortedList ConvertToSortedList(object obj)
         {
             if (obj == null)
-                throw new ArgumentNullException(nameof(obj));
+                return new SortedList();
 
             SortedList sortedList = new SortedList();
 

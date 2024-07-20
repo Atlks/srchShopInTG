@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 namespace mdsj.lib
 {
     public class exCls

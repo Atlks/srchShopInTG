@@ -1,27 +1,27 @@
 ﻿global using static libx.qryEngrParser;
 global using static libx.Filtr;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 
 using static libx.storeEngr4Nodesqlt;
 using Microsoft.Extensions.Primitives;
-using prj202405;
+using prjx;
 using DocumentFormat.OpenXml.Wordprocessing;
 using mdsj;
 namespace libx
@@ -110,7 +110,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
 
 
             //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
@@ -141,7 +141,7 @@ namespace libx
                 List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, rndFun.ToString(), dbg);
                 rztLi = array_merge(rztLi, li);
             }
-            print_ret(__METHOD__, "rztLi.size:" + rztLi.Count);
+            PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
             return rztLi;
         }
 
@@ -158,7 +158,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
 
 
             //   SortedList shareCfgList = getShareCfgLst(fromDdataDir);
@@ -189,7 +189,7 @@ namespace libx
                 List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, rndFun.ToString(), dbg);
                 rztLi = array_merge(rztLi, li);
             }
-            print_ret(__METHOD__, "rztLi.size:" + rztLi.Count);
+            PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
             return rztLi;
         }
         public static Func<SortedList, bool> castQrystr2FltrCdtFun(string qrystr)
@@ -197,7 +197,7 @@ namespace libx
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
-                    print("dbg");
+                    Print("dbg");
 
                 List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
 
@@ -250,7 +250,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             //  List<t> rsRztInlnKbdBtn = new List<t>();
@@ -279,7 +279,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             //  List<t> rsRztInlnKbdBtn = new List<t>();
@@ -310,7 +310,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
             List<t> listFnl = new List<t>();
             try
             {
@@ -346,13 +346,13 @@ namespace libx
 
             catch (Exception e)
             {
-               print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-               print(e);
+               Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+               Print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
 
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
             return listFnl;
         }
 
@@ -378,7 +378,7 @@ namespace libx
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES));
 
 
             List<t> rsRztInlnKbdBtn = new List<t>();
@@ -429,12 +429,12 @@ namespace libx
             }
             catch (Exception e)
             {
-               print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-               print(e);
+               Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+               Print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
             return rsRztInlnKbdBtn;
         }
 
@@ -456,7 +456,7 @@ namespace libx
                     rztLi = arrCls.array_merge(rztLi, li);
                 }catch(Exception e)
                 {
-                    print_ex("Qe_qry",e);
+                    PrintExcept("Qe_qry",e);
                 }
               
             }
@@ -536,7 +536,7 @@ namespace libx
         public static SortedList Qe_find(string id, string dataDir, string partns, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), id, dataDir, partns));
 
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -552,14 +552,14 @@ namespace libx
 
 
             SortedList results = rztLi[0];
-            dbgCls.print_ret(__METHOD__, "results.Count=>" + results.Count);
+            dbgCls.PrintRet(__METHOD__, "results.Count=>" + results.Count);
             return results;
         }
 
         internal static string _calcPatnsV4(string FromdataDir, string shareFiles)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
 
             string result = shareFiles;
 
@@ -571,7 +571,7 @@ namespace libx
         
 
 
-            dbgCls.print_ret(__METHOD__, result);
+            dbgCls.PrintRet(__METHOD__, result);
 
             return result;
         }
@@ -580,7 +580,7 @@ namespace libx
         internal static string _calcPatnsV3(string dir, string shareFiles)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, shareFiles));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, shareFiles));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -588,7 +588,7 @@ namespace libx
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.print_ret(__METHOD__, rzt);
+                dbgCls.PrintRet(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -610,47 +610,47 @@ namespace libx
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.print_ret(__METHOD__, result);
+            dbgCls.PrintRet(__METHOD__, result);
 
             return result;
         }
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
+            PrintCallFunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
 
             List<SortedList> li = (List<SortedList>)callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
                 li = db.arr_fltr330(li, whereFun);
 
-            dbgCls.print_ret(__METHOD__, li.Count);
+            dbgCls.PrintRet(__METHOD__, li.Count);
             return li;
         }
 
         public static List<SortedList> _qryByShare(string shareName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(shareName, dbg));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(shareName, dbg));
 
             List<SortedList> li = rndFun(shareName);
 
             li = db.arr_fltr330(li, whereFun);
 
-            dbgCls.print_ret(__METHOD__, li.Count);
+            dbgCls.PrintRet(__METHOD__, li.Count);
             return li;
         }
         //单个分区ony need where ,,,bcs order only need in mergeed...and map_select maybe orderd,and top n ,,then last is need to selectMap op
         public static List<SortedList> _qryBySnglePart(string dbfName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(dbfName, "rndFun"));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(dbfName, "rndFun"));
 
             List<SortedList> li = rndFun(dbfName);
 
             li = db.arr_fltr330(li, whereFun);
 
-            dbgCls.print_ret(__METHOD__, li.Count);
+            dbgCls.PrintRet(__METHOD__, li.Count);
             return li;
         }
 

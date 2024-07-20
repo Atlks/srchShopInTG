@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.arrCls;
+﻿global using static prjx.lib.arrCls;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
@@ -14,10 +14,7 @@ using System.Reflection;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 
-
-
-
-namespace prj202405.lib
+namespace prjx.lib
 {
     public class arrCls
     {
@@ -92,7 +89,7 @@ namespace prj202405.lib
                 sortedList.Remove(key);
             }
         }
-    public    static List<string> ReadJsonFileToList(string filePath)
+        public static List<string> ReadJsonFileToList(string filePath)
         {
             List<string> jsonStringList = new List<string>();
 
@@ -165,7 +162,7 @@ namespace prj202405.lib
         }
 
 
-       
+
 
         public static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
         {
@@ -272,7 +269,7 @@ namespace prj202405.lib
             }
         }
 
-        public static SortedList arr_ReverseSortedList(SortedList originalList)
+        public static SortedList ArrReverseSortedList(SortedList originalList)
         {
             SortedList reversedList = new SortedList();
 
@@ -290,7 +287,7 @@ namespace prj202405.lib
             return reversedList;
         }
 
-        public static List<SortedList> arr_fltr(List<SortedList> list, Func<SortedList, bool> fn)
+        public static List<SortedList> ArrFltr(List<SortedList> list, Func<SortedList, bool> fn)
         {
             List<SortedList> list22 = new List<SortedList>();
             foreach (SortedList rw in list)
@@ -300,7 +297,7 @@ namespace prj202405.lib
             }
             return list22;
         }
-        public static void transfmVal(SortedList list,Func<string,object> fun            )
+        public static void transfmVal(SortedList list, Func<string, object> fun)
         {
             // 创建一个临时的 ArrayList 来存储键
             ArrayList keys = new ArrayList(list.Keys);
@@ -310,10 +307,10 @@ namespace prj202405.lib
             {
                 string value = (string)list[key];
                 list.Remove(key);
-                list.Add(key, fun(value)) ;
+                list.Add(key, fun(value));
             }
         }
-        public static void castVal2hashtable(SortedList list)
+        public static void CastVal2hashtable(SortedList list)
         {
             // 创建一个临时的 ArrayList 来存储键
             ArrayList keys = new ArrayList(list.Keys);
@@ -324,11 +321,11 @@ namespace prj202405.lib
                 string value = (string)list[key];
                 list.Remove(key);
                 list.Add(key, castUrlQueryString2hashtable(value));
-            //    list[key] = castUrlQueryString2hashtable(value); ;
+                //    list[key] = castUrlQueryString2hashtable(value); ;
             }
         }
 
-        public   static string GetKeysCommaSeparated(SortedList list)
+        public static string GetKeysCommaSeparated(SortedList list)
         {
             // 检查输入参数是否为 null
             if (list == null)
@@ -394,14 +391,14 @@ namespace prj202405.lib
                 return "";
         }
 
-        public static string ldfld2str(Dictionary<string, string> parse_str1, string fld)
+        public static string LoadFieldAsStr(Dictionary<string, string> parse_str1, string fld)
         {
             if (parse_str1.ContainsKey(fld))
                 return parse_str1[fld];
             else
                 return "";
         }
-        public static object array_slice<t>(List<t> inputList, int startIdx, int length)
+        public static object ArrSlice<t>(List<t> inputList, int startIdx, int length)
         {
             //  List<Dictionary
             // 确保 length 不超过列表的长度
@@ -415,7 +412,7 @@ namespace prj202405.lib
             return rtz;
         }
 
-        public static object array_slice(List<Dictionary<string, object>> inputList, int startIdx, int length)
+        public static object ArrSlice(List<Dictionary<string, object>> inputList, int startIdx, int length)
         {
             //  List<Dictionary
             // 确保 length 不超过列表的长度
@@ -428,7 +425,7 @@ namespace prj202405.lib
             var rtz = inputList.GetRange(startIdx, length);
             return rtz;
         }
-        public static object array_slice(ArrayList inputList, int startIdx, int length)
+        public static object ArrSlice(ArrayList inputList, int startIdx, int length)
         {
             //  List<Dictionary
             // 确保 length 不超过列表的长度
@@ -442,7 +439,7 @@ namespace prj202405.lib
             return rtz;
         }
 
-        public static List<SortedList> array_slice(List<SortedList> inputList, int startIdx, int length)
+        public static List<SortedList> ArrSlice(List<SortedList> inputList, int startIdx, int length)
         {
             // 确保 length 不超过列表的长度
             if (length > inputList.Count)
@@ -479,7 +476,7 @@ namespace prj202405.lib
             // 使用 LINQ 的 Select 方法对每个元素应用 mapFunction
             return source.Select(mapFunction);
         }
-        public static object ldfld(SortedList hashobj, string fld, object dfval)
+        public static object LoadField(SortedList hashobj, string fld, object dfval)
         {
             try
             {
@@ -522,7 +519,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-               print(e.Message);
+                Print(e.Message);
 
             }
         }
@@ -580,7 +577,7 @@ namespace prj202405.lib
         //    ArrayList saveList_hpmod = db.lstFrmIot(listIot);
         //    return saveList_hpmod;
         //}
-        public static HashSet<string> array_merge (HashSet<string> list1, HashSet<string>  list2)
+        public static HashSet<string> ArrMerge(HashSet<string> list1, HashSet<string> list2)
         {
             return MergeHashSets(list1, list2);
         }
@@ -593,7 +590,7 @@ namespace prj202405.lib
             {
                 if (postnKywd位置词set.Contains(wd))
                 {
-                   print("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
+                    Print("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
                     return true;
                 }
 
@@ -678,12 +675,12 @@ namespace prj202405.lib
 
         //    return result;
         //}
-        public static List<T> rdmList<T>(List<T> results)
+        public static List<T> RdmList<T>(List<T> results)
         {
             List<T> results22;
-            Random rng = new Random();
+            Random rng = new();
 
-            results22 = results.OrderBy(x => rng.Next()).ToList();
+            results22 = [.. results.OrderBy(x => rng.Next())];
             return results22;
         }
 
@@ -737,11 +734,37 @@ namespace prj202405.lib
             }
         }
 
-        internal static string ldFldDefEmpty(SortedList row, string fld)
+        internal static string LoadFieldDefEmpty(SortedList<string, string> row, object fldx)
         {
-            if (row[fld] == null)
+            if (fldx == null)
                 return "";
-            return row[fld].ToString();
+            string fld = fldx.ToString();
+            if (row.ContainsKey(fld))
+            {
+                if (row[fld] == null)
+                    return "";
+                return row[fld].ToString();
+            }
+            else
+                return "";
+            //if (row[fld] == null)
+            //    return "";
+            //return row[fld].ToString();
+        }
+    
+        internal static string LoadFieldDefEmpty(SortedList row, string fld)
+        {
+            if (row.ContainsKey(fld))
+            {
+                if (row[fld] == null)
+                    return "";
+                return row[fld].ToString();
+            }
+            else
+                return "";
+            //if (row[fld] == null)
+            //    return "";
+            //return row[fld].ToString();
         }
 
 
@@ -778,7 +801,7 @@ namespace prj202405.lib
                 return "";
         }
 
-        internal static string ldfld_TryGetValueAsStrDefNull(SortedList whereExprsObj, string fld)
+        internal static string LoadFieldTryGetValueAsStrDefNull(SortedList whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
@@ -797,7 +820,7 @@ namespace prj202405.lib
 
         }
 
-        public static void copyPropSortedListToMerchant(SortedList sortedList, Merchant merchant)
+        public static void CopyPropSortedListToMerchant(SortedList sortedList, Merchant merchant)
         {
             Type merchantType = typeof(Merchant);
             foreach (DictionaryEntry entry in sortedList)
@@ -816,19 +839,19 @@ namespace prj202405.lib
                         }
                         catch (Exception e)
                         {
-                          print(e);
+                            PrintCatchEx(nameof(CopyPropSortedListToMerchant), e);
                         }
 
                     }
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                    PrintCatchEx(nameof(CopyPropSortedListToMerchant), e);
                 }
             }
         }
 
-        public static string ldfld_TryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
+        public static string LoadFieldTryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
         {
             // 使用 TryGetValue 方法获取值
             object value;
@@ -844,7 +867,7 @@ namespace prj202405.lib
 
         }
 
-        internal static void stfld_replaceKeyV(SortedList obj, string fld, object v)
+        internal static void SetFieldReplaceKeyV(SortedList obj, string fld, object v)
         {
             if (fld == null)
                 return;
@@ -854,14 +877,14 @@ namespace prj202405.lib
                 obj.Add(fld, v);
         }
 
-       
+
 
         /// <summary>
         /// 计算集合的长度。
         /// </summary>
         /// <param name="collection">集合对象。</param>
         /// <returns>集合的长度。</returns>
-        public static int 计算长度(object collection)
+        public static int CountLen(object collection)
         {
             if (collection == null)
             {
@@ -894,21 +917,21 @@ namespace prj202405.lib
             foreach (DictionaryEntry newx in newList)
             {
                 if (newx.Key != null)
-                    arrCls.stfld_addRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
+                    arrCls.SetFieldAddRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
                 //   newList.Add(entry.Key, entry.Value);
             }
 
             return newList;
         }
-        internal static void stfld_addRplsKeyV(SortedList SortedList1_iot, string key, SortedList objSave)
-        {
-            if (SortedList1_iot.ContainsKey(key))
-            {
-                SortedList1_iot.Remove(key.ToString());
-            }
-            SortedList1_iot.Add(key, objSave);
-        }
-        public static string getElmt(string[] array, int index)
+        //internal static void Stfld_addRplsKeyV(SortedList SortedList1_iot, string key, SortedList objSave)
+        //{
+        //    if (SortedList1_iot.ContainsKey(key))
+        //    {
+        //        SortedList1_iot.Remove(key.ToString());
+        //    }
+        //    SortedList1_iot.Add(key, objSave);
+        //}
+        public static string GetElmt(string[] array, int index)
         {
             if (index < 0 || index >= array.Length)
             {
@@ -939,8 +962,8 @@ namespace prj202405.lib
         }
 
 
-       
-        public static HashSet<string> arr_remove(HashSet<string> hashSet2, string v)
+
+        public static HashSet<string> ArrRemove(HashSet<string> hashSet2, string v)
         {
             string[] a = v.Split(" ");
             foreach (string wd in a)
@@ -950,7 +973,7 @@ namespace prj202405.lib
 
             return hashSet2;
         }
-        public static void stfld4447(SortedList SortedList1_iot, string key, object objSave)
+        public static void SetField938(SortedList SortedList1_iot, string key, object objSave)
         {
             if (SortedList1_iot.ContainsKey(key))
             {
@@ -960,7 +983,7 @@ namespace prj202405.lib
             SortedList1_iot.Add(key, objSave);
         }
 
-        internal static void stfld_addRplsKeyV(SortedList listIot, string? key, object objSave)
+        internal static void SetFieldAddRplsKeyV(SortedList listIot, string? key, object objSave)
         {
             if (listIot.ContainsKey(key))
                 listIot[key] = objSave;
@@ -976,14 +999,14 @@ namespace prj202405.lib
             return resultSet;
         }
 
-        internal static HashSet<string> add_elmts2hsst(HashSet<string> set, string txtWds)
+        internal static HashSet<string> AddElmts2hashset(HashSet<string> set, string txtWds)
         {
             string[] a = txtWds.Split(" ", StringSplitOptions.RemoveEmptyEntries);
             foreach (string wd1 in a)
             {
-              var  wd = wd1.Trim().ToUpper();
-                if(wd.Length >0)  
-                set.Add(wd);
+                var wd = wd1.Trim().ToUpper();
+                if (wd.Length > 0)
+                    set.Add(wd);
             }
             return set;
         }

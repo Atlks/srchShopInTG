@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
  
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class sqlCls
     {

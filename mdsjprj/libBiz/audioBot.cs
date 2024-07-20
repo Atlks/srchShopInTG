@@ -1,4 +1,4 @@
-﻿using prj202405.lib;
+﻿using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types.Enums;
 
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -30,19 +30,19 @@ using Telegram.Bot.Types.Enums;
 using static mdsj.lib.afrmwk;
 using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static libx.qryEngrParser;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -55,11 +55,11 @@ using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using libx;
-using prj202405;
+using prjx;
 using Telegram.Bot.Types.ReplyMarkups;
 using NReco.VideoConverter;
 using Org.BouncyCastle.Crypto.IO;
@@ -67,6 +67,7 @@ using mdsj.lib;
 using Concentus.Structs;
 using RG3.PF.Abstractions.Entity;
 using DocumentFormat.OpenXml.Office.Word;
+using DocumentFormat.OpenXml.Wordprocessing;
 namespace mdsj.libBiz
 {
     internal class audioBot
@@ -79,7 +80,7 @@ namespace mdsj.libBiz
         internal static void main1()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, func_get_args());
+            PrintCallFunArgs(__METHOD__, func_get_args());
 
             //  botClient_QunZzhushou.GetUpdatesAsync().Wait();
 
@@ -101,7 +102,7 @@ namespace mdsj.libBiz
                 });
 
             //  StartSaveFotoAsync();
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
 
@@ -109,7 +110,7 @@ namespace mdsj.libBiz
         {
             CallAsAsyncTaskRun(() =>
             {
-                callxTryJmp(updateHdlSync, update);
+                CallxTryJmp(updateHdlSync, update);
                 //   callxTryJmp(updateHdlSync, update);
 
             });
@@ -129,14 +130,14 @@ namespace mdsj.libBiz
             string downdir = prjdir + "/downmp3";
             string fname = filex.ConvertToValidFileName2024(songName);
             string mp3path = $"{downdir}/{fname}.mp3";
-           print(mp3path);
+           Print(mp3path);
             if (!System.IO.File.Exists(mp3path))
                 mp3path = DownloadSongAsMp3(songName, downdir);
             if (System.IO.File.Exists(mp3path))
                 SendMp3ToGroupAsync(botClient_Audio, mp3path, update.Message.Chat.Id, update.Message.MessageId);
             dbgpad = 0;
-            dbgCls.print_ret(__METHOD__, 0);
-            jmp2end();
+            dbgCls.PrintRet(__METHOD__, 0);
+            Jmp2end();
         }
         public static void msgHdlr嗨小爱童鞋(Update update)
         {
@@ -152,16 +153,16 @@ namespace mdsj.libBiz
         private static void msgHdlr嗨小爱童鞋所有命令(Update update)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, update);
+            PrintCallFunArgs(__METHOD__, update);
             prjdir = filex.GetAbsolutePath(prjdir); string path = $"{prjdir}/cfg/所有命令.txt";
             string text = System.IO.File.ReadAllText(path);
             text = text.Replace("%前导提示词%", serchTipsWd);
             botClient_Audio.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
            // dbgCls.print_ret(__METHOD__, 0);
-            jmp2end();
+            Jmp2end();
         }
         private const string serchTipsWd = "嗨小爱童鞋";
-        private static void updateHdlSync(Update update)
+        private static   void updateHdlSync(Update update)
         {
             string reqThreadId = geneReqid();
 
@@ -172,9 +173,14 @@ namespace mdsj.libBiz
             //------hi xiaongai txye xxx 
             callTryAll(() =>
             {
+                if (string.IsNullOrEmpty(update?.Message?.Text))
+                    return;
                 string[] a = splt(update?.Message?.Text);
                 a = trimUper(a);
-                var cmd = getElmt(a, 1);
+                var preTrigwd= GetElmt(a, 0);
+                if (preTrigwd != serchTipsWd)
+                    return;
+                var cmd = GetElmt(a, 1);
                 var hdlrname = "msgHdlr" + serchTipsWd + cmd;
                 //todo also should calltryx
                 callx(hdlrname, update);
@@ -202,7 +208,20 @@ namespace mdsj.libBiz
             //}
             if (update.Type == UpdateType.Message)
             {
-                OnMsg(update, reqThreadId); return;
+              //  OnMsg(update, reqThreadId); return;
+            }
+
+
+            if (update.Message?.Type == MessageType.Voice)
+            {
+                  Bot_OnVoiceAsync(update, reqThreadId).GetAwaiter().GetResult();
+                return;
+            }
+
+            if (update.Message?.Type == MessageType.VideoNote)
+            {
+                Bot_OnVideoNoteAsync(update, reqThreadId);
+                return;
             }
 
             //if (update.Type == UpdateType.CallbackQuery)
@@ -215,6 +234,9 @@ namespace mdsj.libBiz
             //    OnChatMembr(update, reqThreadId); return;
             //}
 
+
+
+
             if (isFileMesg(update))
             {
                 return;
@@ -223,9 +245,79 @@ namespace mdsj.libBiz
 
 
         }
-      
+        private static async System.Threading.Tasks.Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnVideoNoteAsync";
+            PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.VideoNote.FileId;
+            var file = await botClient_Audio.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = FilenameBydtme();
+            //  string songname = $"{update.Message.Audio.FileName}";
+            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+            string fileName1 = $"{basname}.mp4";
+            string saveDirectory = "filedt/VideoNoteDir";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            Mkdir4File(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApiV2(filePathInTg, fullfilepath, BotTokenAvBot);
+            Print($"{videoFilePath}");
+
+
+            saveDirectory = "metadt/VideoNoteDirMeta";
+            SortedList sortedList = ConvertToSortedList(update.Message.VideoNote);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+
+            InputFileStream inputOnlineFile = toFilStrm(videoFilePath);
+            await botClient_QunZzhushou.SendVideoAsync(caption: "转码结果", chatId: update.Message.Chat.Id, video: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+
+            PrintRet(__METHOD__, 0);
+        }
 
       
+
+        private static async System.Threading.Tasks.Task Bot_OnVoiceAsync(Update update, string reqThreadId)
+        {
+            var __METHOD__ = "Bot_OnVoiceAsync";
+            PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
+
+            var videoFileId = update.Message.Voice.FileId;
+            var file = await botClient_Audio.GetFileAsync(videoFileId);
+            var filePathInTg = file.FilePath;
+
+            // 下载视频
+            string basname = FilenameBydtme();
+            //  string songname = $"{update.Message.Audio.FileName}";
+            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
+            string fileName1 = $"{basname}.ogg";
+            string saveDirectory = "filedt/VoiceFile";
+            string fullfilepath = $"{saveDirectory}/{fileName1}";
+            Mkdir4File(fullfilepath);
+            var videoFilePath = await DownloadFile2localThruTgApiV2(filePathInTg, fullfilepath, BotTokenAvBot);
+            Print($"{videoFilePath}");
+
+            string outputFilePathMp3 = fullfilepath + ".mp3";
+            ConvertOggToMp3(fullfilepath, outputFilePathMp3);
+
+
+            saveDirectory = "metadt/VoiceMtdt";
+            SortedList sortedList = ConvertToSortedList(update.Message.Voice);
+            sortedList.Add("filenameLoc", fileName1);
+            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+
+            var mp3Stream = System.IO.File.Open(outputFilePathMp3, FileMode.Open);
+            var inputOnlineFile = InputFile.FromStream(mp3Stream);
+
+            await botClient_QunZzhushou.SendAudioAsync(caption: "转码结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
+
+
+            PrintRet(__METHOD__, 0);
+        }
+
+
 
         private static bool isFileMesg(Update update)
         {
@@ -237,7 +329,7 @@ namespace mdsj.libBiz
         private static void evt_嗨小爱同学Async(Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_嗨小爱同学Async";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), update, reqThreadId));
             string prjdir = @"../../../";
             if (update.Message.Text.Trim() == serchTipsWd)
             {
@@ -254,7 +346,7 @@ namespace mdsj.libBiz
                 string text = System.IO.File.ReadAllText(path);
                 text = text.Replace("%前导提示词%", serchTipsWd);
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
-                dbgCls.print_ret(__METHOD__, 0);
+                dbgCls.PrintRet(__METHOD__, 0);
                 return;
             }
 
@@ -280,7 +372,7 @@ namespace mdsj.libBiz
                                     .Where(txt => txt != null)
                                     .ToArray();
                 botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, json_encode(txtValues), replyToMessageId: update.Message.MessageId);
-                dbgCls.print_ret(__METHOD__, 0);
+                dbgCls.PrintRet(__METHOD__, 0);
                 return;
             }
 

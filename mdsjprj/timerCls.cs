@@ -1,5 +1,5 @@
 ﻿global using static mdsj.lib.logCls;
-global using static prj202405.timerCls;
+global using static prjx.timerCls;
 using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using System.Collections;
@@ -8,7 +8,7 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using prj202405.lib;
+using prjx.lib;
 using JiebaNet.Segmenter;
 using System.Reflection;
 using ChineseCharacterConvert;
@@ -16,30 +16,30 @@ using Convert = System.Convert;
 using System.Runtime.CompilerServices;
 using mdsj.libBiz;
 using static mdsj.biz_other;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using System.Collections.Generic;
 using DocumentFormat.OpenXml;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.web3;
 using static mdsj.libBiz.tgBiz;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 
 using static mdsj.lib.util;
 using NAudio.Wave;
 using Newtonsoft.Json.Linq;
-namespace prj202405
+namespace prjx
 {
     internal class timerCls
     {
@@ -131,7 +131,7 @@ namespace prj202405
         {
 
             System.IO.Directory.CreateDirectory("tmrlg");
-            print("定时任务。。");
+            Print("定时任务。。");
 
             DateTime now = DateTime.Now;
 
@@ -174,7 +174,7 @@ namespace prj202405
                 if (now.Hour == 11 && now.Minute == 1 && (!System.IO.File.Exists(lauch)))
 
                 {
-                    print("push luch time。");
+                    Print("push luch time。");
                     System.IO.File.WriteAllText($"tmrlg/lunchPushLog{Convert.ToString(now.Month) + now.Day}.json", "pushlog");
                     //  Program.botClient.SendTextMessageAsync(chatId: Program.groupId, text: "午餐时间到了");
                     z_wucan();
@@ -297,9 +297,9 @@ namespace prj202405
         public static async void z_actSj()
         {
             var __METHOD__ = "z_actSj";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
-            HashSet<prj202405.City> _citys = getCitysObj();
+            HashSet<prjx.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
             results = (from c in _citys
                        from ca in c.Address
@@ -309,7 +309,7 @@ namespace prj202405
             //count = results.Count;
 
 
-            results = arrCls.rdmList<InlineKeyboardButton[]>(results);
+            results = arrCls.RdmList<InlineKeyboardButton[]>(results);
 
             results = results.Skip(0 * 10).Take(5).ToList();
 
@@ -318,7 +318,7 @@ namespace prj202405
             string Path = "今日促销商家.gif";
             if (results.Count > 0)
                 bot_sendMsgToMlt(Path, plchdTxt, results);
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
         }
 
 
@@ -330,7 +330,7 @@ namespace prj202405
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
 
             //  Program.botClient.send
@@ -343,17 +343,17 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-                print(JsonConvert.SerializeObject(message2));
+                Print(JsonConvert.SerializeObject(message2));
 
 
 
             }
             catch (Exception ex)
             {
-                print(ex.ToString());
+                Print(ex.ToString());
             }
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
 
 
 
@@ -373,7 +373,7 @@ namespace prj202405
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true);
-                print(JsonConvert.SerializeObject(message2));
+                Print(JsonConvert.SerializeObject(message2));
 
                 //Program.botClient.SendTextMessageAsync(
                 //         Program.groupId,
@@ -384,7 +384,7 @@ namespace prj202405
                 //         disableWebPagePreview: true);
 
             }
-            catch (Exception ex) { print(ex.ToString()); }
+            catch (Exception ex) { Print(ex.ToString()); }
 
 
 
@@ -404,7 +404,7 @@ namespace prj202405
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
                 var chatid = de.Key;
-                print(" SendPhotoAsync " + de.Key);
+                Print(" SendPhotoAsync " + de.Key);
                 var map = de.Value;
                 JObject jo = (JObject)map;
                 string chtType = getFld(jo, "chat.type", "");
@@ -446,7 +446,7 @@ namespace prj202405
                     //         disableWebPagePreview: true);
 
                 }
-                catch (Exception ex) { print(ex.ToString()); }
+                catch (Exception ex) { Print(ex.ToString()); }
 
             }
 
@@ -472,7 +472,7 @@ namespace prj202405
 
             var s = "";
             List<InlineKeyboardButton[]> results = [];
-            HashSet<prj202405.City> _citys = getCitysObj();
+            HashSet<prjx.City> _citys = getCitysObj();
             results = (from c in _citys
                        from ca in c.Address
                        from am in ca.Merchant
@@ -635,7 +635,7 @@ namespace prj202405
         //dep
         public static List<InlineKeyboardButton[]> qryFrmShangjiaOrdbyViewDesc__DEP()
         {
-            HashSet<prj202405.City> _citys = getCitysObj();
+            HashSet<prjx.City> _citys = getCitysObj();
             List<InlineKeyboardButton[]> results = [];
             results = (from c in _citys
                        from ca in c.Address

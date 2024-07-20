@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     /// <summary>
     /// 字符串普通操作类

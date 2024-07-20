@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prj202405
+namespace prjx
 {
     internal class t
     {
 
         static async Task Main2(string[] args)
         {
-           print(11);
+           Print(11);
 
 
             try
@@ -21,7 +21,7 @@ namespace prj202405
             }
             catch (Exception ex)
             {
-               print("除法错误：" + ex.Message);
+               Print("除法错误：" + ex.Message);
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.filex;
+﻿global using static prjx.lib.filex;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
@@ -8,14 +8,20 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
 using static mdsj.lib.encdCls;
 // prj202405.lib.filex
-namespace prj202405.lib
+namespace prjx.lib
 {
     public class filex
     {
-
+        public static InputFileStream toFilStrm(string videoFilePath)
+        {
+            var mp3Stream = System.IO.File.Open(videoFilePath, FileMode.Open);
+            var inputOnlineFile = InputFile.FromStream(mp3Stream);
+            return inputOnlineFile;
+        }
         public static void MoveFileToDirectory(string sourceFilePath, string destinationDirectory)
         {
             try
@@ -34,7 +40,7 @@ namespace prj202405.lib
                 string destinationFilePath = Path.Combine(destinationDirectory, fileName);
 
                 // 移动文件
-                File.Move(sourceFilePath, destinationFilePath);
+                System.IO.File.Move(sourceFilePath, destinationFilePath);
 
                 ConsoleWriteLine($"File moved to: {destinationFilePath}");
             }
@@ -43,10 +49,10 @@ namespace prj202405.lib
                 ConsoleWriteLine($"An error occurred: {ex.Message}");
             }
         }
-        public static string fl_ReadAllText(string f)
-        {
-            return System.IO.File.ReadAllText(f);
-        }
+        //public static string fl_ReadAllText(string f)
+        //{
+        //    return System.IO.File.ReadAllText(f);
+        //}
 
         public static SortedList ReadJsonToSortedList(string filePath)
         {
@@ -55,7 +61,7 @@ namespace prj202405.lib
             try
             {
                 // 读取JSON文件内容
-                string jsonContent = File.ReadAllText(filePath);
+                string jsonContent = System.IO.File.ReadAllText(filePath);
 
                 // 解析JSON对象
                 JObject jsonObject = JObject.Parse(jsonContent);
@@ -68,7 +74,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"Error: {ex.Message}");
+               Print($"Error: {ex.Message}");
             }
 
             return sortedList;
@@ -76,7 +82,7 @@ namespace prj202405.lib
 
         public static void Copy2024(string sourceFilePath, string destination_newFileName)
         {
-            filex.mkdir_forFile(destination_newFileName);
+            filex.Mkdir4File(destination_newFileName);
 
             // 构造目标文件的完整路径
             // string destinationFilePath = System.IO.Path.Combine(destinationFolderPath, newFileName);
@@ -122,7 +128,7 @@ namespace prj202405.lib
             if (!Directory.Exists(targetFolderPath))
             {
                 Directory.CreateDirectory(targetFolderPath);
-               print($"Created directory: {targetFolderPath}");
+               Print($"Created directory: {targetFolderPath}");
             }
 
             // 获取源文件名
@@ -188,7 +194,7 @@ namespace prj202405.lib
         /// 创建一个新的目录，如果目录已存在，则不执行任何操作。
         /// </summary>
         /// <param name="directoryPath">要创建的目录的路径</param>
-        public static void mkdir(string directoryPath)
+        public static void Mkdir(string directoryPath)
         {
             try
             {
@@ -197,11 +203,11 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"An error occurred: {ex.Message}");
+               Print($"An error occurred: {ex.Message}");
             }
         }
 
-        public static void mkdir_forFile(string filePath )
+        public static void Mkdir4File(string filePath )
         {
             // 获取文件目录
             string dir = System.IO.Path.GetDirectoryName(filePath);
@@ -238,9 +244,9 @@ namespace prj202405.lib
         {
             try
             {
-                if (File.Exists(filePath))
+                if (System.IO.File.Exists(filePath))
                 {
-                    return File.ReadAllText(filePath);
+                    return System.IO.File.ReadAllText(filePath);
                 }
                 else
                 {
@@ -249,7 +255,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"An error occurred: {ex.Message}");
+               Print($"An error occurred: {ex.Message}");
                 return string.Empty;
             }
         }
@@ -280,7 +286,7 @@ namespace prj202405.lib
 
         }
 
-        public static string filenameBydtme( )
+        public static string FilenameBydtme( )
         {
             // 创建目录
           //  Directory.CreateDirectory(logdir);
@@ -318,7 +324,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"An error occurred: {ex.Message}");
+               Print($"An error occurred: {ex.Message}");
             }
         }
 
@@ -345,7 +351,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print("Error reading file: " + ex.Message);
+               Print("Error reading file: " + ex.Message);
             }
 
             return words;
@@ -577,12 +583,12 @@ namespace prj202405.lib
             catch (UnauthorizedAccessException)
             {
                 // 处理无权访问的文件夹
-               print($"Access to {currentDirectory} is denied.");
+               Print($"Access to {currentDirectory} is denied.");
             }
             catch (Exception ex)
             {
                 // 处理其他异常
-               print($"An error occurred: {ex.Message}");
+               Print($"An error occurred: {ex.Message}");
             }
         }
     }

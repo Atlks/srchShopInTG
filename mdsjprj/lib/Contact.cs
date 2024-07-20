@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace prj202405
+namespace prjx
 {
     /// <summary>
     /// 城市

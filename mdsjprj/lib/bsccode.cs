@@ -2,7 +2,7 @@
 using HtmlAgilityPack;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Newtonsoft.Json;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -28,14 +28,14 @@ namespace mdsj.lib
         }
         public static void WriteAllText(string f, string txt)
         {
-            print($" fun WriteAllText {f}");
-            mkdir_forFile(f);
+            Print($" fun WriteAllText {f}");
+            Mkdir4File(f);
             try
             {
                 System.IO.File.WriteAllText(f, txt);
             }catch(Exception e)
             {
-                print_catchEx("WriteAllText", e);
+                PrintCatchEx("WriteAllText", e);
             }
            
         }
@@ -73,7 +73,7 @@ namespace mdsj.lib
         }
         public static void echo(object v)
         {
-            print(v);
+            Print(v);
         }
         public static void foreach_objKey(object obj, Func<PropertyInfo, object> fun)
         {
@@ -92,7 +92,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
@@ -134,7 +134,7 @@ namespace mdsj.lib
 
             return dictionary;
         }
-        public static Hashtable ldHstbFromQrystr(string queryString)
+        public static Hashtable LoadHashtableFromQrystrDep(string queryString)
         {
             var hashtable = new Hashtable();
 
@@ -173,7 +173,7 @@ namespace mdsj.lib
 
             return updatedSet;
         }
-        public static void foreach_HashSet(HashSet<string> originalSet, Action<string> fun)
+        public static void ForeachHashSet(HashSet<string> originalSet, Action<string> fun)
         {
             HashSet<string> updatedSet = new HashSet<string>();
 
@@ -184,14 +184,14 @@ namespace mdsj.lib
                     fun(str);
                 }catch(Exception e)
                 {
-                    print_catchEx("foreach_HashSet",e);
+                    PrintCatchEx("foreach_HashSet",e);
                 }
               
             }
 
             
         }
-        static void foreachProcessFilesAsync(string folderPath, Func<string, Task> fileAction)
+        static void FforeachProcessFilesAsyncDp(string folderPath, Func<string, Task> fileAction)
         {
             if (System.IO.Directory.Exists(folderPath))
             {
@@ -204,10 +204,10 @@ namespace mdsj.lib
             }
             else
             {
-                print("The specified folder does not exist.");
+                Print("The specified folder does not exist.");
             }
         }
-        public static void foreach_hashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
+        public static void ForeachHashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
         {
             foreach (DictionaryEntry de in chtsSess)
             {
@@ -221,12 +221,12 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
         }
-        public static void foreach_hashtable(Hashtable chtsSess, Action<DictionaryEntry> fun)
+        public static void ForeachHashtable(Hashtable chtsSess, Action<DictionaryEntry> fun)
         {
             foreach (DictionaryEntry de in chtsSess)
             {
@@ -248,18 +248,18 @@ namespace mdsj.lib
                     {
                         Jmp2end();
                     }
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
         }
 
-        public static object gtfld(object Obj, string fld, object defVal)
+        public static object GetField(object Obj, string fld, object defVal)
         {
 
             if (Obj is SortedList)
             {
-                return arrCls.ldfld((SortedList)Obj, fld, defVal);
+                return arrCls.LoadField((SortedList)Obj, fld, defVal);
             }
             else
             {
@@ -271,7 +271,7 @@ namespace mdsj.lib
 
             if (Obj is SortedList)
             {
-                return arrCls.ldfld((SortedList)Obj, fld, defVal);
+                return arrCls.LoadField((SortedList)Obj, fld, defVal);
             }
             else
             {
@@ -283,7 +283,7 @@ namespace mdsj.lib
             return ldfld(obj, fld, "").ToString();
         }
 
-        public static object ldfld(Hashtable hstb, string fld, object defVal)
+        public static object LoadField(Hashtable hstb, string fld, object defVal)
         {
             if (hstb.ContainsKey(fld))
                 return hstb[fld];
@@ -313,7 +313,7 @@ namespace mdsj.lib
         {
             if (Obj is SortedList)
             {
-                stfld4447((SortedList)Obj, fld, v);
+                SetField938((SortedList)Obj, fld, v);
             }
             else
             {
@@ -334,7 +334,7 @@ namespace mdsj.lib
             }
             else
             {
-                print("The object does not have a writable 'Name' property.");
+                Print("The object does not have a writable 'Name' property.");
             }
         }
         public static object invoke(string methodName, params object[] args)
@@ -371,7 +371,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("TaskRunNewThrd", e);
+                    PrintCatchEx("TaskRunNewThrd", e);
                     logErr2025(e, nameof(TaskRunNewThrd), "errlog");
                 }
 
@@ -382,9 +382,9 @@ namespace mdsj.lib
         }
         public static void TaskRun(Func<System.Threading.Tasks.Task> value)
         {
-            callAsync(value);
+            callAsyncNewThrdx(value);
         }
-        public static void callAsync(Action task1)
+        public static void CallAsyncNewThrd(Action task1)
         {
             // 使用 Task.Run 启动一个新的任务
             System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
@@ -396,8 +396,8 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("callAsync", e);
-                    logErr2025(e, nameof(callAsync), "errlog");
+                    PrintCatchEx("callAsync", e);
+                    logErr2025(e, nameof(callAsyncNewThrdx), "errlog");
                 }
 
 
@@ -409,7 +409,7 @@ namespace mdsj.lib
             //   await Task.Run(action);
         }
 
-        public static void callAsync(Func<object> task1)
+        public static void callAsyncNewThrdx(Func<object> task1)
         {
             // 使用 Task.Run 启动一个新的任务
             System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
@@ -421,7 +421,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("callAsync", e);
+                    PrintCatchEx("callAsync", e);
                 }
 
 
@@ -433,21 +433,21 @@ namespace mdsj.lib
             //   await Task.Run(action);
         }
 
-        public static void print_ex(string mthdName, Exception e)
+        public static void PrintExcept(string mthdName, Exception e)
         {
 
-            print($"------{mthdName}() catch ex----------_");
-            print(e);
-            print($"------{mthdName}() catch ex finish----------_");
+            Print($"------{mthdName}() catch ex----------_");
+            Print(e);
+            Print($"------{mthdName}() catch ex finish----------_");
         }
 
-        public static void print_catchEx(string v, Exception e)
+        public static void PrintCatchEx(string v, Exception e)
         {
-            print($"------{v}() catch ex----------_");
-            print(e);
-            print($"------end {v}() catch ex finish----------_");
+            Print($"------{v}() catch ex----------_");
+            Print(e);
+            Print($"------end {v}() catch ex finish----------_");
         }
-        public static object call(string authExprs, Delegate callback, params object[] args)
+        public static object Call(string authExprs, Delegate callback, params object[] args)
         {
 
             var __METHOD__ = callback.Method.Name;
@@ -458,7 +458,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_catchEx(__METHOD__, e);
+                PrintCatchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
@@ -472,7 +472,7 @@ namespace mdsj.lib
 .参数 callback, 句柄型
 .参数 args, 数据组
          */
-        public static object call(Delegate callback, params object[] args)
+        public static object Call(Delegate callback, params object[] args)
         {
 
             var __METHOD__ = callback.Method.Name;
@@ -483,7 +483,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_catchEx(__METHOD__, e);
+                PrintCatchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
@@ -519,12 +519,12 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                print("Error reading file: " + ex.Message);
+                Print("Error reading file: " + ex.Message);
             }
 
             return words;
         }
-        public static object callxTryJmp(Delegate callback, params object[] objs)
+        public static object CallxTryJmp(Delegate callback, params object[] objs)
         {
             try
             {
@@ -533,8 +533,8 @@ namespace mdsj.lib
             }
             catch (jmp2endEx e)
             {
-                print_catchEx("callxTryJmp", e);
-                print("callxTryJmp  callmeth=>" + callback.Method.Name);
+                PrintCatchEx("callxTryJmp", e);
+                Print("callxTryJmp  callmeth=>" + callback.Method.Name);
             }
             //catch (Exception e)
             //{
@@ -556,7 +556,7 @@ namespace mdsj.lib
             WriteAllText(v, encodeJson( downedUrl));
         }
 
-        public static HashSet<string> newSet(string f)
+        public static HashSet<string> NewSet(string f)
         {
             try
             {
@@ -615,6 +615,29 @@ namespace mdsj.lib
             }
         }
 
+        public static HashSet<string> LoadHashsetReadFileLinesToHashSet(string filePath)
+        {
+            HashSet<string> lines = new HashSet<string>();
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(filePath))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        if(line.Trim().Length>0)
+                        lines.Add(line);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"The file could not be read: {e.Message}");
+            }
+
+            return lines;
+        }
         public static HashSet<string> LdHsst(string input)
         {
             // 分割字符串并转换为 HashSet
@@ -623,7 +646,7 @@ namespace mdsj.lib
 
             return stringSet;
         }
-        public static HashSet<string> LdHsstFrmF(string f)
+        public static HashSet<string> LoadHashsetFrmFL(string f)
         {
             return LdHsst(ReadAllText(f));
         }
@@ -638,7 +661,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_catchEx("callTryAll", e);
+                PrintCatchEx("callTryAll", e);
             }
 
         }
@@ -651,13 +674,21 @@ namespace mdsj.lib
         {
             return int.TryParse(str, out _);
         }
+        public static bool IsNumeric(object str)
+        {
+            var s = ToString(str);
+            // 匹配整数或带小数点的数字
+            return Regex.IsMatch(s, @"^[0-9]+(\.[0-9]+)?$");
+        }
         public static bool IsNumeric(string str)
         {
             // 匹配整数或带小数点的数字
             return Regex.IsMatch(str, @"^[0-9]+(\.[0-9]+)?$");
         }
-        public virtual string? ToString(object o)
+        public static string ToString(object o)
         {
+            if (o == null)
+                return "";
             // The default for an object is to return the fully qualified name of the class.
             return o.ToString();
         }
@@ -685,16 +716,16 @@ namespace mdsj.lib
         {
 
             var __METHOD__ = methodName;
-            print_call_FunArgs(methodName, dbgCls.func_get_args(args));
+            PrintCallFunArgs(methodName, dbgCls.func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            print("assemblies.Len=>" + assemblies.Length);
+            Print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-            print("typeList.Len=>" + typeList.Count());
+            Print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            print("methodss.Len=>" + methodss.Count());
+            Print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -702,8 +733,8 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                print("......$$waring  .methodinfo is null");
-                print_ret_adv(__METHOD__, "");
+                Print("......$$waring  .methodinfo is null");
+                PrintRetx(__METHOD__, "");
                 return null;
             }
 
@@ -721,11 +752,11 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_ex(nameof(callxTryx), e);
+                PrintExcept(nameof(callxTryx), e);
             }
 
 
-            print_ret_adv(__METHOD__, result);
+            PrintRetx(__METHOD__, result);
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
@@ -766,16 +797,16 @@ namespace mdsj.lib
         {
 
             var __METHOD__ = methodName;
-            print_call_FunArgs(methodName, func_get_args(args));
+            PrintCallFunArgs(methodName, func_get_args(args));
             var argsMkdFmt = ConvertToMarkdownTable(args);
-            print(argsMkdFmt);
+            Print(argsMkdFmt);
 
             MethodInfo? methodInfo = getMethInfo(methodName);
 
             if (methodInfo == null)
             {
-                print("......$$waring  .methodinfo is null");
-                print_ret_adv(__METHOD__, "");
+                Print("......$$waring  .methodinfo is null");
+                PrintRetx(__METHOD__, "");
                 return null;
             }
 
@@ -798,15 +829,15 @@ namespace mdsj.lib
             {
                 if (e.ToString().Contains("jmp2endEx"))
                 {
-                    print_ret_adv(__METHOD__, result);
+                    PrintRetx(__METHOD__, result);
                     Jmp2end();
                 }
                   
-                print_ex("call", e);
+                PrintExcept("call", e);
             }
 
 
-            print_ret_adv(__METHOD__, result);
+            PrintRetx(__METHOD__, result);
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
@@ -814,13 +845,13 @@ namespace mdsj.lib
         private static MethodInfo? getMethInfo(string methodName)
         {
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            print("assemblies.Len=>" + assemblies.Length);
+            Print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-            print("typeList.Len=>" + typeList.Count());
+            Print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            print("methodss.Len=>" + methodss.Count());
+            Print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -836,10 +867,10 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_catchEx(nameof(CallAsAsyncTaskRun), e);
+                PrintCatchEx(nameof(CallAsAsyncTaskRun), e);
             }
         }
-        public static void print_ret_adv(string mETHOD__, object? result)
+        public static void PrintRetx(string mETHOD__, object? result)
         {
             //try
             //{
@@ -851,21 +882,21 @@ namespace mdsj.lib
                 try
                 {
 
-                    print("lst.size=>" + lst.Count);
+                    Print("lst.size=>" + lst.Count);
                     if (lst.Count > 0)
-                        print_ret(mETHOD__, lst[0]);
+                        PrintRet(mETHOD__, lst[0]);
                     else
-                        print_ret(mETHOD__, "list.size=0");
+                        PrintRet(mETHOD__, "list.size=0");
                 }
                 catch (Exception e)
                 {
-                    print_ex("print_ret_ex", e);
-                    print_ret(mETHOD__, "lst.size=>" + lst.Count);
+                    PrintExcept("print_ret_ex", e);
+                    PrintRet(mETHOD__, "lst.size=>" + lst.Count);
                 }
 
             }
             else
-                print_ret(mETHOD__, result);
+                PrintRet(mETHOD__, result);
         }
     }
 }

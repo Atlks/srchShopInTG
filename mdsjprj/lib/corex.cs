@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.corex;
+﻿global using static prjx.lib.corex;
 using mdsj.lib;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
@@ -22,7 +22,7 @@ using System.Threading.Tasks;
 using System.Web;
 using static SqlParser.Ast.DataType;
 
-namespace prj202405.lib
+namespace prjx.lib
 {
 
 
@@ -109,7 +109,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
@@ -204,7 +204,7 @@ namespace prj202405.lib
         public static string call_exe_Pstr(String exec, string scriptPath, string arguments)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), exec, scriptPath, arguments));
 
             // Create a new process to run the Node.js script
             Process process = new Process();
@@ -250,7 +250,7 @@ namespace prj202405.lib
             {
                 output += Environment.NewLine + "Error output: " + errorOutput;
             }
-            dbgCls.print_ret(__METHOD__, output);
+            dbgCls.PrintRet(__METHOD__, output);
             return output;
         }
 

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using MusicApiCollection.Sites.GraceNote.Data;
 using Nethereum.KeyStore;
-using prj202405.lib;
+using prjx.lib;
 using RG3.PF.Abstractions.Entity;
 using System;
 using System.Collections;
@@ -69,11 +69,12 @@ namespace mdsj.lib
                                 {
                                     httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 });
-                            }catch (jmp2endEx e)
+                            }
+                            catch (jmp2endEx e)
                             {
 
                             }
-                          
+
                         };
             app.Run(RequestDelegate1);
             app.Run();
@@ -127,7 +128,7 @@ namespace mdsj.lib
             Hashtable extNhdlrChoosrMaplist = new Hashtable();
             extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
             extNhdlrChoosrMaplist.Add(" html htm", nameof(Html_httpHdlrfilTxtHtml));
-            extNhdlrChoosrMaplist.Add("json", jsonfl_httpHdlrFilJson);
+            extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
             extNhdlrChoosrMaplist.Add("jpg png", nameof(img_httpHdlrFilImg));
             string path2 = request.Path;
             httpHdlrFil(request, response, extNhdlrChoosrMaplist);
@@ -154,7 +155,7 @@ namespace mdsj.lib
                     {
                         // Get the file content and save it to a desired location
                         var filePath = Path.Combine("uploads", file.FileName);
-                        mkdir_forFile(filePath);
+                        Mkdir4File(filePath);
                         using (var stream = new FileStream(filePath, FileMode.Create))
                         {
                             file.CopyToAsync(stream).GetAwaiter().GetResult();
@@ -206,9 +207,9 @@ namespace mdsj.lib
             path = DecodeUrl(path);
 
             if (path.Contains("analytics"))
-                print("Dbg");
+                Print("Dbg");
 
-            foreach_hashtable(extnameNhdlrChooser, (DictionaryEntry de) =>
+            ForeachHashtable(extnameNhdlrChooser, (DictionaryEntry de) =>
         {
             string[] exts = de.Key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
             foreach (string ext in exts)
@@ -326,7 +327,7 @@ namespace mdsj.lib
                 string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
                 SendResp(rzt2, "text/plain; charset=utf-8", response);
-                print(" send finish....");
+                Print(" send finish....");
                 Jmp2end(); return;
             }
         }
@@ -356,11 +357,11 @@ namespace mdsj.lib
         }
 
 
-      
+
         public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
             var args = func_get_args(request, response);
-        
+
 
             string path = request.Path;
             string path1 = webrootDir + path;
@@ -393,17 +394,17 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static async System.Threading.Tasks.Task jsonfl_httpHdlrFilJson(HttpContext context)
+        public static async System.Threading.Tasks.Task JsonFLhttpHdlrFilJson(HttpRequest request, HttpResponse response)
         {
             // 获取当前请求的 URL
-            var request = context.Request;
+            //  var request = context.Request;
             string path = request.Path;
             // 设置响应内容类型和编码
-            context.Response.ContentType = "application/json; charset=utf-8";
+            response.ContentType = "application/json; charset=utf-8";
             path = DecodeUrl(path);
 
             object rzt2 = ReadAllText(webrootDir + path);
-            await context.Response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+            await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
             Jmp2end();
             return;
 

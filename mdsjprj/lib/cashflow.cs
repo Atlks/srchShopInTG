@@ -1,5 +1,5 @@
 ﻿global using static mdsj.lib.cashflow;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,9 +15,9 @@ namespace mdsj.lib
         public static Dictionary<string, decimal> cash_sumByMonth(long uid, string msg2)
         {
             string[] a = msg2.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = getElmt(a, 1);
+            var cmd = GetElmt(a, 1);
 
-            var month = getElmt(a, 2);
+            var month = GetElmt(a, 2);
 
 
             List<SortedList> li = Qe_qryV2<SortedList>("blshtDir", "blsht" + uid.ToString() + ".json",
@@ -71,9 +71,9 @@ namespace mdsj.lib
         public static List<string> cash_qry(string msg2, long uid)
         {
             string[] a = msg2.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = getElmt(a, 1);
+            var cmd = GetElmt(a, 1);
 
-            var month = getElmt(a, 2);
+            var month = GetElmt(a, 2);
 
 
             //   Func<SortedList, bool> whereFun = ;
@@ -103,9 +103,9 @@ namespace mdsj.lib
         public static void cash_del(string msg, long uid)
         {
             string[] a = msg.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = getElmt(a, 1);
+            var cmd = GetElmt(a, 1);
 
-            var id = getElmt(a, 2);
+            var id = GetElmt(a, 2);
 
 
 
@@ -114,11 +114,11 @@ namespace mdsj.lib
         public static string logic_addCashflow(long uid, string? text)
         {
             string[] a = text.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            var cmd = getElmt(a, 1);
+            var cmd = GetElmt(a, 1);
 
-            var date = getElmt(a, 2);
-            var amt = toNumber(getElmt(a, 3));
-            var cate = getElmt(a, 4);
+            var date = GetElmt(a, 2);
+            var amt = toNumber(GetElmt(a, 3));
+            var cate = GetElmt(a, 4);
             var demo = substr_AfterMarker(text.Trim(), cate);
             SortedList map = new SortedList();
             map.Add("date", date);

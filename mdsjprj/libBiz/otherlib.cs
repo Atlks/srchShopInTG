@@ -1,6 +1,6 @@
 ﻿global using static mdsj.libBiz.otherlib;
 using Newtonsoft.Json;
-using prj202405;
+using prjx;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -52,7 +52,7 @@ namespace mdsj.libBiz
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
                 //    continue;
                 var key = de.Key;
-               print(" SendPhotoAsync " + de.Key);
+               Print(" SendPhotoAsync " + de.Key);
 
                 //  Program.botClient.send
                 try
@@ -62,7 +62,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception ex)
                 {
-                   print(ex.ToString());
+                   Print(ex.ToString());
                     logErr2024(ex, "foreachChtSesses", "errlog", null);
 
                 }

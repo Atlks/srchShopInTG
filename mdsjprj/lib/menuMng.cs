@@ -1,8 +1,8 @@
 ﻿global using static mdsj.lib.menuMng;
 using HtmlAgilityPack;
 using Newtonsoft.Json;
-using prj202405;
-using prj202405.lib;
+using prjx;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace mdsj.lib
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
             //  Program.botClient.send
             try
@@ -44,14 +44,14 @@ namespace mdsj.lib
                    , replyToMessageId: update.Message.MessageId
                    ).Result;
                 //  Program.botClient.SendTextMessageAsync()
-               print(JsonConvert.SerializeObject(message2));
+               Print(JsonConvert.SerializeObject(message2));
 
 
 
             }
-            catch (Exception ex) {print(ex.ToString()); }
+            catch (Exception ex) {Print(ex.ToString()); }
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
 
 
 
@@ -63,7 +63,7 @@ namespace mdsj.lib
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             //  __METHOD__ = methodName;
             __METHOD__ = "evt_menuitem_click";  //bcs in task so cant get currentmethod
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), chat_id, rplyKbdMkp));
 
      //       rplyKbdMkp.ResizeKeyboard = true;
             //  Program.botClient.send
@@ -77,14 +77,14 @@ namespace mdsj.lib
                     parseMode: ParseMode.Html,
                    replyMarkup: rplyKbdMkp,
                    protectContent: false, disableWebPagePreview: true).Result;
-               print(JsonConvert.SerializeObject(message2));
+               Print(JsonConvert.SerializeObject(message2));
 
 
 
             }
-            catch (Exception ex) {print(ex.ToString()); }
+            catch (Exception ex) {Print(ex.ToString()); }
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
 
 
 

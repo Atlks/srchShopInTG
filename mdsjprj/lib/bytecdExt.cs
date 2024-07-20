@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -413,12 +413,12 @@ namespace mdsj.lib
         {
             try
             {
-                var obj = gtfld(dafenObj, fld, df);
+                var obj = GetField(dafenObj, fld, df);
                 return toInt(obj);
             }
             catch (Exception e)
             {
-                print_catchEx(nameof(gtfldInt), e);
+                PrintCatchEx(nameof(gtfldInt), e);
                 return df;
             }
 
@@ -562,7 +562,7 @@ namespace mdsj.lib
 
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
                 File.WriteAllText(dbFileName, "[]");
@@ -580,7 +580,7 @@ namespace mdsj.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(list, 0, 1));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(list, 0, 1));
 
             return list;
         }
@@ -595,7 +595,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(foreach_hstbEs), e);
+                    PrintCatchEx(nameof(foreach_hstbEs), e);
                 }
 
             }
@@ -634,7 +634,7 @@ namespace mdsj.lib
         }
         public static int count(object collection)
         {
-            return 计算长度(collection);
+            return CountLen(collection);
         }
         public static SortedList<string, string> LdHstbEsFrmIni(string v)
         {
@@ -662,7 +662,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(foreach_listHstb), e);
+                    PrintCatchEx(nameof(foreach_listHstb), e);
                 }
 
             }
@@ -752,7 +752,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(foreach_hstbEs), e);
+                    PrintCatchEx(nameof(foreach_hstbEs), e);
                 }
 
             }
@@ -820,7 +820,7 @@ namespace mdsj.lib
         {
             //  string Fld = "城市";
             if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.str_eq(row[Fld], arrCls.ldfld_TryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                if (!strCls.str_eq(row[Fld], arrCls.LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                     return false;
 
             return true;
@@ -868,7 +868,7 @@ namespace mdsj.lib
             return "";
         }
 
-        public static void print(object v)
+        public static void Print(object v)
         {
             System.Console.WriteLine(v);
         }

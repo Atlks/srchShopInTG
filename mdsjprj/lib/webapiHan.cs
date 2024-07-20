@@ -37,7 +37,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(startWebapi), e);
+                    PrintCatchEx(nameof(startWebapi), e);
                     logErr2025(e, nameof(startWebapi), "errlog");
                 }
 
@@ -65,7 +65,7 @@ namespace mdsj.lib
             Hashtable 扩展名与处理器对应表 = 新建哈希表hashtb();
             扩展名与处理器对应表.Add("txt   css js", nameof(html文件处理器));         
             扩展名与处理器对应表.Add(" html htm", nameof(html文件处理器));
-            扩展名与处理器对应表.Add("json", jsonfl_httpHdlrFilJson);
+        //    扩展名与处理器对应表.Add("json", jsonfl_httpHdlrFilJson);
             扩展名与处理器对应表.Add("jpg png", img_httpHdlrFilImg);  
             文件响应处理( 扩展名与处理器对应表, http请求对象,HTTP响应对象);
             //-------------------swag doc api

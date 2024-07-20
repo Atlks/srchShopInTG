@@ -1,5 +1,5 @@
-﻿global using static prj202405.lib.tglib;
-using prj202405;
+﻿global using static prjx.lib.tglib;
+using prjx;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +21,17 @@ using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.mrcht;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-using static prj202405.lib.db;
+using static prjx.lib.db;
 using static libx.qryEngrParser;
 using static mdsj.libBiz.tgBiz;
 
@@ -44,7 +44,7 @@ using mdsj;
 using Newtonsoft.Json.Linq;
 using mdsj.libBiz;
 using mdsj.lib;
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class tglib
     {
@@ -59,7 +59,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, results));
 
             try
             {
@@ -73,24 +73,24 @@ namespace prj202405.lib
                     //if (Convert.ToInt64(de.Key) == Program.groupId)
                     //    continue;
                     var chatid = Convert.ToInt64(de.Key);
-                   print(" SendPhotoAsync " + chatid);//  Program.botClient.send
+                   Print(" SendPhotoAsync " + chatid);//  Program.botClient.send
                     sendFoto(imgPath, msgtxt, results, chatid);
                 }
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
                 logErr2024(e, __METHOD__, "errlog", (meth: __METHOD__, prm: func_get_args4async(imgPath, msgtxt, results)));
 
             }
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
 
         }
 
         public static void  SendMp3ToGroupAsync(ITelegramBotClient botClient, string mp3FilePath, long ChatId, int messageId)
         {
             var __METHOD__ = "SendMp3ToGroupAsync";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, ChatId));
 
             try
             {
@@ -103,11 +103,11 @@ namespace prj202405.lib
                     object value =   botClient.SendAudioAsync(ChatId, replyToMessageId: messageId, audio: InputFile.FromStream(mp3Stream), caption: "搜索结果", title: GetBaseFileName(mp3FilePath)).Result;
                 }
 
-               print("MP3 文件已发送到群组！");
+               Print("MP3 文件已发送到群组！");
             }
             catch (Exception ex)
             {
-               print($"发送 MP3 文件时出错：{ex.Message}");
+               Print($"发送 MP3 文件时出错：{ex.Message}");
             }
         }
 
@@ -136,16 +136,39 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"Error sending message: {ex.Message}");
+               Print($"Error sending message: {ex.Message}");
             }
+        }
+
+        //$$$$$$$$$$$$$$$$ FUN DownloadFile2localThruTgApi((["voice/file_461.oga","filedt/VoiceFile/20240720_103643_782.ogg"]))
+        public static async Task<string> DownloadFile2localThruTgApiV2(string filePath, string fileFullPath, string BotToken)
+        {
+            var __METHOD__ = nameof(DownloadFile2localThruTgApiV2);
+            PrintCallFunArgs(__METHOD__, func_get_args(filePath, fileFullPath));
+
+            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
+            Print(fileUrl);
+            using (var httpClient = new HttpClient())
+            {
+                // 设置超时时间为30秒
+                httpClient.Timeout = TimeSpan.FromSeconds(300);
+                var response = await httpClient.GetAsync(fileUrl);
+                // 检查响应是否成功
+                response.EnsureSuccessStatusCode();
+                await using var fileStream = new FileStream(fileFullPath, FileMode.Create, FileAccess.Write, FileShare.None);
+                await response.Content.CopyToAsync(fileStream);
+            }
+
+            return fileFullPath;
         }
 
         public static async Task<string> DownloadFile2localThruTgApi(string filePath, string fileFullPath)
         {
             var __METHOD__ = "DownloadFile2localThruTgApi";
-            print_call_FunArgs(__METHOD__, func_get_args(filePath, fileFullPath));
+            PrintCallFunArgs(__METHOD__, func_get_args(filePath, fileFullPath));
 
-            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            var fileUrl = $"https://api.telegram.org/file/bot{BotTokenQunzhushou}/{filePath}";
             //     var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
 
             using (var httpClient = new HttpClient())
@@ -206,7 +229,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
 
 
             // var  = plchdTxt;
@@ -214,7 +237,7 @@ namespace prj202405.lib
             var Photo = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             var chtsSess = JsonConvert.DeserializeObject<Hashtable>(System.IO.File.ReadAllText(timerCls.chatSessStrfile))!;
             //遍历方法三：遍历哈希表中的键值
-            foreach_hashtable(chtsSess, (de) =>
+            ForeachHashtable(chtsSess, (de) =>
             {
                 var chatid = Convert.ToInt64(de.Key);
                 var map = de.Value;
@@ -243,7 +266,7 @@ namespace prj202405.lib
 
                     //qry from mrcht by  where exprs  strFmt
                     var whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                    var shareNamess = arrCls.ldfld_TryGetValue(whereExprsObj, "@share");
+                    var shareNamess = arrCls.LoadFieldTryGetValue(whereExprsObj, "@share");
                     srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObj, shareNamess);
                 }
                 return 0;
@@ -252,7 +275,7 @@ namespace prj202405.lib
 
 
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
         }
 
 
@@ -270,19 +293,19 @@ namespace prj202405.lib
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
 
-                if (ldFldDefEmpty(row, "TG有效") == "N")
+                if (LoadFieldDefEmpty(row, "TG有效") == "N")
                     return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                 if (hasCondt(whereExprsObjFltrs, "城市"))
-                    if (!strCls.str_eq(row["城市"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "园区"))
-                    if (!strCls.str_eq(row["园区"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "国家"))
-                    if (!strCls.str_eq(row["国家"], arrCls.ldfld_TryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
+                    if (!strCls.str_eq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
                         return false;
-                if (arrCls.ldFldDefEmpty(row, "cateEgls") == "Property")
+                if (arrCls.LoadFieldDefEmpty(row, "cateEgls") == "Property")
                     return false;
 
 
@@ -292,9 +315,9 @@ namespace prj202405.lib
                     return false;
 
                 HashSet<string> curRowKywdSset = new HashSet<string>();
-                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "商家"));
-                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "关键词"));
-                arrCls.add_elmts2hsst(curRowKywdSset, arrCls.ldFldDefEmpty(row, "分类关键词"));
+                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "商家"));
+                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "关键词"));
+                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "分类关键词"));
                 if (curRowKywdSset.Contains(keyword))
                     return true;
                 return false;
@@ -307,8 +330,8 @@ namespace prj202405.lib
             //map select 
             Func<SortedList, InlineKeyboardButton[]> mapFun = (SortedList row) =>
             {
-                string text = arrCls.ldFldDefEmpty(row, "城市") + " • " + arrCls.ldFldDefEmpty(row, "园区") + " • " + arrCls.ldFldDefEmpty(row, "商家");
-                string guid = arrCls.ldFldDefEmpty(row, "Guid编号");
+                string text = arrCls.LoadFieldDefEmpty(row, "城市") + " • " + arrCls.LoadFieldDefEmpty(row, "园区") + " • " + arrCls.LoadFieldDefEmpty(row, "商家");
+                string guid = arrCls.LoadFieldDefEmpty(row, "Guid编号");
                 InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&sdr=tmr&btn=dtl&ckuid=n" } };
                 return btnsInLine;
             };
@@ -321,7 +344,7 @@ namespace prj202405.lib
 
 
             var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
-           print(" SendPhotoAsync " + chatid);//  Program.botClient.send
+           Print(" SendPhotoAsync " + chatid);//  Program.botClient.send
             if (results3.Count > 0)
                 sendFoto(imgPath, msgtxt, results3, chatid);
         }
@@ -344,7 +367,7 @@ namespace prj202405.lib
 
             //qry from mrcht by  where exprs  strFmt
             whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-            partfile区块文件Exprs = arrCls.ldfld_TryGetValue(whereExprsObj, "@share");
+            partfile区块文件Exprs = arrCls.LoadFieldTryGetValue(whereExprsObj, "@share");
         }
 
 
@@ -368,9 +391,9 @@ namespace prj202405.lib
                     parseMode: ParseMode.Html,
                    replyMarkup: new InlineKeyboardMarkup(results),
                    protectContent: false).Result;
-               print(JsonConvert.SerializeObject(message2));
+               Print(JsonConvert.SerializeObject(message2));
             }
-            catch (Exception ex) {print(ex.ToString()); }
+            catch (Exception ex) {Print(ex.ToString()); }
         }
 
         public static InlineKeyboardButton[][] ConvertHtmlLinksToTelegramButtons(string filePath)
@@ -476,7 +499,7 @@ namespace prj202405.lib
         //出错后执行的方法
         public static System.Threading.Tasks.Task bot_pollingErrorHandler(ITelegramBotClient botClient, Exception exception, CancellationToken cancellationToken)
         {
-           print("FUN bot_pollingErrorHandler()");
+           Print("FUN bot_pollingErrorHandler()");
             try
             {
                 logErr2024(exception, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
@@ -485,7 +508,7 @@ namespace prj202405.lib
                     ApiRequestException apiRequestException => $"Telegram API 错误:\n[{apiRequestException.ErrorCode}]\n{apiRequestException.Message}",
                     _ => exception.ToString()
                 };
-               print(ErrorMessage);
+               Print(ErrorMessage);
 
             }
             catch (Exception e)
@@ -493,14 +516,14 @@ namespace prj202405.lib
                 logErr2024(e, "bot_pollingErrorHandler", "errlog", (bot: botClient, cancellationToken: cancellationToken));
 
             }
-           print("END FUN bot_pollingErrorHandler()");
+           Print("END FUN bot_pollingErrorHandler()");
             return System.Threading.Tasks.Task.CompletedTask;
         }
         //删除别人信息
         public static void bot_DeleteMessageV2(long chatId, int msgid, int second)
 
         {
-           callAsync(async () =>
+           CallAsyncNewThrd(async () =>
                 {
                     await System.Threading.Tasks.Task.Delay(second * 1000);
 
@@ -510,7 +533,7 @@ namespace prj202405.lib
                     }
                     catch (Exception e)
                     {
-                       print("删除他人商家搜索信息时出错:" + e.Message);
+                       Print("删除他人商家搜索信息时出错:" + e.Message);
                     }
                     
                 });
@@ -600,7 +623,7 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
         }
@@ -752,13 +775,13 @@ namespace prj202405.lib
             }
             catch (Exception e)
             {
-               print("他人发了不合规的商家搜索信息,告知对方时出错:" + e.Message);
+               Print("他人发了不合规的商家搜索信息,告知对方时出错:" + e.Message);
             }
 
             if (msg == null)
                 return;
 
-            callAsync(async () =>
+            CallAsyncNewThrd(async () =>
             {
                 await System.Threading.Tasks.Task.Delay(second * 1000);
 
@@ -768,7 +791,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print("删除他人商家搜索信息时出错:" + e.Message);
+                   Print("删除他人商家搜索信息时出错:" + e.Message);
                 }
 
                 try
@@ -777,7 +800,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print("他人发了不合规的商家搜索信息,删除信息时出错:" + e.Message);
+                   Print("他人发了不合规的商家搜索信息,删除信息时出错:" + e.Message);
                 }
             });
         }

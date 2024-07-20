@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-using static prj202405.lib.strCls;
+using static prjx.lib.strCls;
 namespace mdsj.libBiz
 {
     internal class strBiz
@@ -42,7 +42,7 @@ namespace mdsj.libBiz
                 if (segments.Contains(kwd2))
                 {
                     n++;
-                   print(" containChk2024. kwd=>" + kwd2);
+                   Print(" containChk2024. kwd=>" + kwd2);
                 }
 
 
@@ -77,7 +77,7 @@ namespace mdsj.libBiz
                     if (set.Contains(kwd2))
                     {
                         n++;
-                       print(" contain. kwd=>" + kwd2);
+                       Print(" contain. kwd=>" + kwd2);
                     }
 
                 }

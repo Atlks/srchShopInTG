@@ -1,4 +1,4 @@
-﻿using static prj202405.lib.corex;
+﻿using static prjx.lib.corex;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
@@ -11,7 +11,7 @@ using System.Collections;
  
  
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class arrCls
     {

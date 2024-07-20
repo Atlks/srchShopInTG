@@ -1,35 +1,35 @@
-﻿using prj202405.lib;
+﻿using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using City = prj202405.City;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using City = prjx.City;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
 using static mdsj.libBiz.tgBiz;
-using static prj202405.lib.strCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 
 using static mdsj.libBiz.tgBiz;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 using static mdsj.lib.adChkr;
 using System.Reflection;
 namespace mdsj.lib
@@ -40,7 +40,7 @@ namespace mdsj.lib
         public static void logic_chkad(string text, string uid, long grpid, Action act)
         {
             var __METHOD__ = "logic_chkad";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(  text, uid, grpid));
 
             try
             {
@@ -50,18 +50,18 @@ namespace mdsj.lib
                 HashSet<string> adwds = splitFileByChrs(adwdlib, ",\r \n");
                 int ctnScr = containCalcCntScoreSetfmt(text, adwds);
 
-               print("广告词包含分数=》" + ctnScr);
+               Print("广告词包含分数=》" + ctnScr);
 
 
                 if (text.Length < 10)
                     return;
                 string timestampMM = DateTime.Now.ToString("MM");
                 string fnameFrmTxt = ConvertToValidFileName(text);
-               print("fnameFrmTxt=>" + fnameFrmTxt);
+               Print("fnameFrmTxt=>" + fnameFrmTxt);
                 string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + str_sub (fnameFrmTxt,0, 50) + ".txt";
                 if (System.IO.File.Exists(fname))
                 {
-                   print("是重复消息了" + fname);
+                   Print("是重复消息了" + fname);
                     file_put_contents(fname, "\n\n" + text + "", true);
 
 
@@ -74,12 +74,12 @@ namespace mdsj.lib
             }
             catch(Exception e)
             {
-               print("catch in ()=>" + __METHOD__ + "()");
-               print(e);
+               Print("catch in ()=>" + __METHOD__ + "()");
+               Print(e);
             }
           
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
         }
     }
 }

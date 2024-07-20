@@ -1,4 +1,4 @@
-﻿global using static prj202405.lib.strCls;
+﻿global using static prjx.lib.strCls;
 using JiebaNet.Segmenter;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Primitives;
@@ -13,9 +13,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 //   prj202405.lib.strCls
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class strCls
     {
@@ -71,7 +71,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"Error reading file: {ex.Message}");
+               Print($"Error reading file: {ex.Message}");
             }
 
             return words;
@@ -103,7 +103,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"Error reading file: {ex.Message}");
+               Print($"Error reading file: {ex.Message}");
             }
 
             return words;
@@ -349,7 +349,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                   print(" str.containKwds() kwd=>" + kwd2);
+                   Print(" str.containKwds() kwd=>" + kwd2);
                     return kwd2;
                 }
 
@@ -409,7 +409,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                   print(" str.containKwds() kwd=>" + kwd2);
+                   Print(" str.containKwds() kwd=>" + kwd2);
                     return true;
                 }
 
@@ -439,7 +439,7 @@ namespace prj202405.lib
 
                 if (text.Contains(kwd2))
                 {
-                   print(" str.containKwds() kwd=>" + kwd2);
+                   Print(" str.containKwds() kwd=>" + kwd2);
                     return true;
                 }
 
@@ -461,7 +461,7 @@ namespace prj202405.lib
                 {
                     if (text.Contains(kwd2))
                     {
-                       print(" str.containKwds() kwd=>" + kwd2);
+                       Print(" str.containKwds() kwd=>" + kwd2);
                         return true;
                     }
 
@@ -591,7 +591,7 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print($"An error occurred while reading the file: {ex.Message}");
+               Print($"An error occurred while reading the file: {ex.Message}");
             }
 
             return linesHashSet;
@@ -607,7 +607,7 @@ namespace prj202405.lib
         internal static bool str_eqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
         {
 
-            string cityName4srch = arrCls.ldfld_TryGetValue(whereExprsObj, cityName4srchxx); ;
+            string cityName4srch = arrCls.LoadFieldTryGetValue(whereExprsObj, cityName4srchxx); ;
             if (cityName4srch == null)  //if not have this clm in where exprs
                 return false;
             else if (cityName4srch != null)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prj202405
+namespace prjx
 {
     internal class todo
     {

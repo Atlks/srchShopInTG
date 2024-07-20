@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Porter2Stemmer;
-using prj202405.lib;
+using prjx.lib;
 
 //using PorterStemmerAlgorithm;
 namespace mdsj.lib

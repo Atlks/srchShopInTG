@@ -1,4 +1,4 @@
-﻿using static prj202405.lib.corex;
+﻿using static prjx.lib.corex;
 using Microsoft.VisualBasic;
 using System;
 using System.Collections;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 //   prj202405.lib.strCls
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class strCls
     {

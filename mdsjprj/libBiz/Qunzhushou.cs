@@ -1,5 +1,5 @@
 ﻿global using static mdsj.libBiz.Qunzhushou;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,19 +20,19 @@ using Telegram.Bot.Types.Enums;
 using static mdsj.lib.afrmwk;
 using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static libx.qryEngrParser;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -45,11 +45,11 @@ using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Drawing.Charts;
 using libx;
-using prj202405;
+using prjx;
 using Telegram.Bot.Types.ReplyMarkups;
 using NReco.VideoConverter;
 using Org.BouncyCastle.Crypto.IO;
@@ -61,13 +61,13 @@ namespace mdsj.libBiz
 {
     internal class Qunzhushou
     {
-        public const string BotToken = "6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog";
-        public static TelegramBotClient botClient_QunZzhushou = new(token: BotToken);
+        public const string BotTokenQunzhushou = "6312276245:AAF35O3l6TxL0S3UixYuFAec-grd9j0kbog";
+        public static TelegramBotClient botClient_QunZzhushou = new(token: BotTokenQunzhushou);
 
         internal static void main1()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, func_get_args());
+            PrintCallFunArgs(__METHOD__, func_get_args());
 
             //  botClient_QunZzhushou.GetUpdatesAsync().Wait();
 
@@ -89,21 +89,21 @@ namespace mdsj.libBiz
                 });
 
             //  StartSaveFotoAsync();
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
 
         public static async System.Threading.Tasks.Task StartSaveFotoAsync()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, func_get_args());
+            PrintCallFunArgs(__METHOD__, func_get_args());
             var bot = botClient_QunZzhushou;
             string saveDirectory = "savePicDir";
-            mkdir(saveDirectory);
+            Mkdir(saveDirectory);
             var offset = 0;
             while (true)
             {
-               print(dtime.datetime());
+               Print(dtime.datetime());
                 Thread.Sleep(1000);
                 var updates = await bot.GetUpdatesAsync(offset);
 
@@ -128,11 +128,11 @@ namespace mdsj.libBiz
                                 using var fileStream = System.IO.File.OpenWrite(filePath);
                                 await bot.DownloadFileAsync(fileId, fileStream);
 
-                               print($"Saved image: {fileName}");
+                               Print($"Saved image: {fileName}");
                             }
                             catch (Exception e)
                             {
-                               print(e);
+                               Print(e);
                             }
 
                         }
@@ -142,7 +142,7 @@ namespace mdsj.libBiz
                 offset = updates.Last().Id + 1;
             }
 
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
         private static async System.Threading.Tasks.Task OnUpdateHdl(ITelegramBotClient client, Update update, CancellationToken token)
@@ -194,7 +194,7 @@ namespace mdsj.libBiz
             catch (
             Exception ex)
             {
-               print(ex);
+               Print(ex);
             }
 
 
@@ -230,17 +230,9 @@ namespace mdsj.libBiz
                 Bot_OnContactAsync(update, reqThreadId);
                 return;
             }
-            if (update.Message?.Type == MessageType.VideoNote)
-            {
-                Bot_OnVideoNoteAsync(update, reqThreadId);
-                return;
-            }
+           
 
-            if (update.Message?.Type == MessageType.Voice)
-            {
-                Bot_OnVoiceAsync(update, reqThreadId);
-                return;
-            }
+           
 
             if (update.Message?.Type == MessageType.Document)
             {
@@ -254,93 +246,28 @@ namespace mdsj.libBiz
             throw new NotImplementedException();
         }
 
-        private static async System.Threading.Tasks.Task Bot_OnVideoNoteAsync(Update update, string reqThreadId)
-        {
-            var __METHOD__ = "Bot_OnVideoNoteAsync";
-            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
+       
 
-            var videoFileId = update.Message.Voice.FileId;
-            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
-            var filePathInTg = file.FilePath;
-
-            // 下载视频
-            string basname = filenameBydtme();
-            //  string songname = $"{update.Message.Audio.FileName}";
-            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
-            string fileName1 = $"{basname}.mp4";
-            string saveDirectory = "saveVideoNoteDir";
-            string fullfilepath = $"{saveDirectory}/{fileName1}";
-            mkdir_forFile(fullfilepath);
-            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-           print($"{videoFilePath}");
-
-
-            saveDirectory = "saveVideoNoteDirMeta";
-            SortedList sortedList = ConvertToSortedList(update.Message.Audio);
-            sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
-
-            print_ret(__METHOD__, 0);
-        }
-
-
-        private static async System.Threading.Tasks.Task Bot_OnVoiceAsync(Update update, string reqThreadId)
-        {
-            var __METHOD__ = "Bot_OnVoiceAsync";
-            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
-
-            var videoFileId = update.Message.Voice.FileId;
-            var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
-            var filePathInTg = file.FilePath;
-
-            // 下载视频
-            string basname = filenameBydtme();
-            //  string songname = $"{update.Message.Audio.FileName}";
-            //  string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
-            string fileName1 = $"{basname}.ogg";
-            string saveDirectory = "saveVoiceDir";
-            string fullfilepath = $"{saveDirectory}/{fileName1}";
-            mkdir_forFile(fullfilepath);
-            var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-           print($"{videoFilePath}");
-
-            string outputFilePathMp3 = fullfilepath + ".mp3";
-            ConvertOggToMp3(fullfilepath, outputFilePathMp3);
-
-
-            saveDirectory = "saveVoiceDirMeta";
-            SortedList sortedList = ConvertToSortedList(update.Message.Voice);
-            sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
-
-            var mp3Stream = System.IO.File.Open(outputFilePathMp3, FileMode.Open);
-            var inputOnlineFile = InputFile.FromStream(mp3Stream);
-
-            await botClient_QunZzhushou.SendAudioAsync(caption: "转码结果", title: "录音", chatId: update.Message.Chat.Id, audio: inputOnlineFile, replyToMessageId: update.Message.MessageId);
-
-
-            print_ret(__METHOD__, 0);
-        }
-
+      
         private static async System.Threading.Tasks.Task Bot_OnDocAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnDoc";
-            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
+            PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
             var filePathInTg = file.FilePath;
 
             // 下载视频
-            string basname = filenameBydtme();
+            string basname = FilenameBydtme();
             string fnameOri = $"{update.Message.Audio.FileName}";
             string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
 
             string saveDirectory = "saveFileDir";
             string fullfilepath = $"{saveDirectory}/{fileName1}";
-            mkdir_forFile(fullfilepath);
+            Mkdir4File(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-           print($"{videoFilePath}");
+           Print($"{videoFilePath}");
 
 
             saveDirectory = "fileData";
@@ -348,28 +275,28 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.save(sortedList, $"{saveDirectory}/{fnameOri}.json");
 
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
         private static async System.Threading.Tasks.Task Bot_OnAudioAsync(Update update, string reqThreadId)
         {
             var __METHOD__ = "Bot_OnAudioAsync";
-            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
+            PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Audio.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
             var filePathInTg = file.FilePath;
 
             // 下载视频
-            string basname = filenameBydtme();
+            string basname = FilenameBydtme();
             string songname = $"{update.Message.Audio.FileName}";
             string fileName1 = InsertCurrentTimeToFileName($"{update.Message.Audio.FileName}");//file_name.mp3
 
             string saveDirectory = "saveAudioDir";
             string fullfilepath = $"{saveDirectory}/{fileName1}";
-            mkdir_forFile(fullfilepath);
+            Mkdir4File(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
-           print($"{videoFilePath}");
+           Print($"{videoFilePath}");
 
 
             saveDirectory = "saveAudioMetaDir";
@@ -377,7 +304,7 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.save(sortedList,$"musicData/{songname}.json");
 
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
         }
 
 
@@ -392,7 +319,7 @@ namespace mdsj.libBiz
             //if (update.Type == UpdateType.CallbackQuery)
             //{
                 Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
-                if (ldfld2str(parse_str1, "btn") == "解除禁言")
+                if (LoadFieldAsStr(parse_str1, "btn") == "解除禁言")
                     canSendBtn_click(update);
 
           //  }
@@ -400,7 +327,7 @@ namespace mdsj.libBiz
         public static void canSendBtn_click(Update e)
         {
             Dictionary<string, string> parse_str1 = parse_str(e.CallbackQuery.Data);
-            string uid = ldfld2str(parse_str1, "uid");
+            string uid = LoadFieldAsStr(parse_str1, "uid");
             if (uid != e.CallbackQuery.From.Id.ToString())
             {
                 botClient.AnswerCallbackQueryAsync(
@@ -440,9 +367,9 @@ namespace mdsj.libBiz
             {
                 string DataDir = "fullTxtSrchIdxdataDir";
                 Thread.Sleep(7000);
-               print("-----------------------------fulltxt index create thred----------");
+               Print("-----------------------------fulltxt index create thred----------");
                 wrt_rows4fulltxt(json_encode(update), DataDir);
-               print("----------------END fulltxt index create thred---- finish....");
+               Print("----------------END fulltxt index create thred---- finish....");
             });
    
 
@@ -475,11 +402,11 @@ namespace mdsj.libBiz
 
 
                 // 下载视频
-                string basname = filenameBydtme();
+                string basname = FilenameBydtme();
                 string fileName1 = $"savepic{basname}.jpg";
                 string saveDirectory = "saveFotoDir";
                 string fullfilepath = $"{saveDirectory}/{fileName1}";
-                mkdir_forFile(fullfilepath);
+                Mkdir4File(fullfilepath);
                  //   var fullfilepath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
 
                 //   var filePath = System.IO.Path.Combine(saveDirectory, fileName);
@@ -488,11 +415,11 @@ namespace mdsj.libBiz
 
 
 
-               print($"Saved image: {fullfilepath}");
+               Print($"Saved image: {fullfilepath}");
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
         }
 
@@ -503,18 +430,18 @@ namespace mdsj.libBiz
             return;
            // qry_share. getShareCfg();
             var __METHOD__ = "Bot_OnVideo";
-            print_call_FunArgs(__METHOD__, func_get_args(update, reqThreadId));
+            PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
 
             var videoFileId = update.Message.Video.FileId;
             var file = await botClient_QunZzhushou.GetFileAsync(videoFileId);
             var filePathInTg = file.FilePath;
 
             // 下载视频
-            string basname = filenameBydtme();
+            string basname = FilenameBydtme();
             string fileName1 = $"tg3055video{basname}.mp4";
             string saveDirectory = "saveVideoDir";
             string fullfilepath = $"{saveDirectory}/{fileName1}";
-            mkdir_forFile(fullfilepath);
+            Mkdir4File(fullfilepath);
             var videoFilePath = await DownloadFile2localThruTgApi(filePathInTg, fullfilepath);
 
             // 转换视频为 MP3
@@ -540,7 +467,7 @@ namespace mdsj.libBiz
             // 删除临时文件
             ////  System.IO.File.Delete(videoFilePath);
             //   System.IO.File.Delete(mp3FilePath);
-            print_ret(__METHOD__, 0);
+            PrintRet(__METHOD__, 0);
 
         }
      

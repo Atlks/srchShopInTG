@@ -1,5 +1,5 @@
 ﻿using libx;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,9 +13,9 @@ using static libx.storeEngr4Nodesqlt;
 using static mdsj.lib.encdCls;
 //using static mdsj.other;
 //using static mdsj.clrCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.strCls;
-using static prj202405.lib.arrCls;
+using static prjx.lib.corex;
+using static prjx.lib.strCls;
+using static prjx.lib.arrCls;
 
 using static WindowsFormsApp1.libbiz.strengFunRefCls;
 using WindowsFormsApp1.libbiz;

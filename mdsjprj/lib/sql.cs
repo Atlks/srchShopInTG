@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class sqlCls
     {

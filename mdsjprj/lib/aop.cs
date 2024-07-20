@@ -1,5 +1,5 @@
 ﻿global using static mdsj.lib.aop;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;

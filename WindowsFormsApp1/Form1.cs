@@ -1,5 +1,5 @@
-﻿using static prj202405.lib.corex;
-using prj202405.lib;
+﻿using static prjx.lib.corex;
+using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

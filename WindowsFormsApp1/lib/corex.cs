@@ -1,4 +1,4 @@
-﻿ using static prj202405.lib.corex;
+﻿ using static prjx.lib.corex;
 using mdsj.lib;
  
 using Microsoft.Win32;
@@ -14,8 +14,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
-using static prj202405.lib.corex;
-namespace prj202405.lib
+using static prjx.lib.corex;
+namespace prjx.lib
 {
     //prj202405.lib.corex
     internal class corex

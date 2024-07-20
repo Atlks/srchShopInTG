@@ -18,15 +18,15 @@ using System.Reflection;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
-namespace prj202405.lib
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
+namespace prjx.lib
 {
     internal class ormSqlt
     {
@@ -100,7 +100,7 @@ namespace prj202405.lib
         {
             //    setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.PrintCallFunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
             //--------------------- crt table
 
@@ -120,7 +120,7 @@ namespace prj202405.lib
 
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.print_ret(__METHOD__, ret);
+            dbgCls.PrintRet(__METHOD__, ret);
 
         }
 
@@ -186,7 +186,7 @@ namespace prj202405.lib
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             var results = new List<SortedList>();
             try
             {
@@ -203,7 +203,7 @@ namespace prj202405.lib
                             var row = new SortedList();
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                arrCls.stfld_addRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
+                                arrCls.SetFieldAddRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
                                 //  row[reader.GetName(i)] = reader.GetValue(i);
                             }
                             results.Add(row);
@@ -217,9 +217,9 @@ namespace prj202405.lib
             }
             catch (Exception ex)
             {
-               print(ex);
+               Print(ex);
             }
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 3));
             return results;
         }
 
@@ -232,7 +232,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -268,7 +268,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 3));
 
 
             return results;
@@ -278,7 +278,7 @@ namespace prj202405.lib
         {
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), querySql, dbFileName));
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();
@@ -318,7 +318,7 @@ namespace prj202405.lib
 
             //// 输出当前方法的名称
             //Console.WriteLine("Current Method Name: " + method.Name);
-            dbgCls.print_ret(MethodBase.GetCurrentMethod().Name, array_slice(results, 0, 3));
+            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 3));
 
 
             return results;
@@ -330,7 +330,7 @@ namespace prj202405.lib
 
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
+            PrintCallFunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, SortedList1, dbFileName));
 
             //--------------------- crt table
 
@@ -349,7 +349,7 @@ namespace prj202405.lib
             SqliteCommand1.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(SqliteCommand1);
-            print_ret(__METHOD__, ret);
+            PrintRet(__METHOD__, ret);
         }
 
 
@@ -359,7 +359,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
+            dbgCls.PrintCallFunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), tblx, mapx, dbFileName));
 
 
 
@@ -376,7 +376,7 @@ namespace prj202405.lib
             cmd.CommandText = sql;
 
             var ret = cmd_ExecuteNonQuery(cmd);
-            dbgCls.print_ret(__METHOD__, ret);
+            dbgCls.PrintRet(__METHOD__, ret);
         }
 
         internal static void saveMltHiPfm(List<SortedList> rows, string dbFileName)
@@ -385,7 +385,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
             int n = 0;
 
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
@@ -409,7 +409,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                   Print(e);
                 }
             }
 
@@ -419,7 +419,7 @@ namespace prj202405.lib
             cmd_cmt.CommandText = "commit;";
             ret = cmd_ExecuteNonQuery(cmd_cmt);
 
-            dbgCls.print_ret(__METHOD__, ret);
+            dbgCls.PrintRet(__METHOD__, ret);
         }
 
 
@@ -430,7 +430,7 @@ namespace prj202405.lib
             //    _save("tabx", chtsSesss, strFL);
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(MethodBase.GetCurrentMethod().Name, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             foreach (SortedList objSave in rows)
             {
@@ -441,7 +441,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                   Print(e);
                 }
 
 
@@ -450,7 +450,7 @@ namespace prj202405.lib
 
 
 
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
         }
 
 

@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class ormExcel
     {
@@ -81,7 +81,7 @@ namespace prj202405.lib
 
         private static void wriToDbf(object  List_mapx, string dbf)
         {
-           print(" wriToDbf（）：" + dbf);
+           Print(" wriToDbf（）：" + dbf);
             File.Delete(dbf);
 
             System.Collections. ArrayList List_map = (ArrayList)List_mapx;

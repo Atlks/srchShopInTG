@@ -2,8 +2,8 @@
 using libx;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
-using prj202405;
-using prj202405.lib;
+using prjx;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,7 +44,7 @@ namespace mdsj.libBiz
                 {
                     // Get the file content and save it to a desired location
                     var filePath = Path.Combine("uploads", file.FileName);
-                    mkdir_forFile(filePath);
+                    Mkdir4File(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         file.CopyToAsync(stream).GetAwaiter().GetResult();
@@ -155,7 +155,7 @@ namespace mdsj.libBiz
 
             Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
             var list = getListFltr("mercht商家数据", null, whereFun);
-            var list_aftFltr = arr_fltr(list, (SortedList row) =>
+            var list_aftFltr = ArrFltr(list, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
                 li.Add((isNotEmptyLianxi(row)));
@@ -167,11 +167,122 @@ namespace mdsj.libBiz
             //if (start < 0)
             //    start = 0;
 
-            var list_rzt = SliceX(list_aftFltr, start, pagesize);
-            return encodeJson(list_rzt);
+            List<SortedList> list_rzt = SliceX(list_aftFltr, start, pagesize);
+
+
+            SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
+            // 循环 List<SortedList<string, int>> 并设置每个 SortedList 的 "aaa" 键的值为 1
+            foreach (var sortedList in list_rzt)
+            {
+              //  if (sortedList.ContainsKey("aaa"))
+                {
+                    SetField938(sortedList, "Scores", 3);
+                    SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr.Count));
+                      //  sortedList["aaa"] = 1;
+                }
+            }
+
+            //trans key
+            List<SortedList> list_rzt_fmt = new List<SortedList>();
+            foreach (var sortedList in list_rzt)
+            {
+                SortedList map3 = new SortedList();
+                // 循环遍历每一个键
+                foreach (object key in sortedList.Keys)
+                {
+                    if (key.ToString() == "Searchs")
+                        Print("dbg");
+                    var Cnkey = key;
+                    var val = sortedList[key];
+                    SetField938(map3, Cnkey.ToString(), val);
+
+
+                    var keyEng = LoadFieldDefEmpty(transmap, Cnkey);
+                    if (keyEng == "")
+                        keyEng = Cnkey.ToString();
+
+
+                    SetField938(map3, keyEng, val);
+
+                    if (IsNumeric((val)))
+                    {
+                        double objSave = ConvertStringToNumber(val);
+                        SetField938(map3, keyEng, objSave);
+                    }
+                     
+                    //   Console.WriteLine($"Key: {key}, Value: {sortedList[key]}");
+                  
+                }
+                list_rzt_fmt.Add(map3);
+            }
+            return encodeJson(list_rzt_fmt);
+        }
+        static double ConvertStringToNumber(object str2)
+        {
+            try
+            {
+                string str = ToStr(str2);
+
+                return (double.Parse(str));
+            }catch(Exception e)
+            {
+                return 0;
+            }
+         
+           
+        }
+        private static string ToStr(object val)
+        {
+            if (val == null)
+                return "";
+            else
+                return val.ToString();
         }
 
-     
+        public static SortedList<string, string> LoadSortedListFromIni(string filePath)
+        {
+            var result = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+
+            // 读取文件所有行
+            string[] lines = File.ReadAllLines(filePath);
+
+            foreach (string line in lines)
+            {
+                string trimmedLine = line.Trim();
+
+                // 跳过空行和注释行
+                if (string.IsNullOrWhiteSpace(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#"))
+                {
+                    continue;
+                }
+
+                // 处理键值对
+                int equalsIndex = trimmedLine.IndexOf('=');
+                if (equalsIndex > 0)
+                {
+                    string key = trimmedLine.Substring(0, equalsIndex).Trim();
+                    string value = trimmedLine.Substring(equalsIndex + 1).Trim();
+                    result[key] = value;
+                }
+            }
+
+            return result;
+        }
+
+        public static int CalculateTotalPages(int pageSize, int totalRecords)
+        {
+            if (pageSize <= 0)
+            {
+                pageSize = 10;
+            }
+
+            if (totalRecords < 0)
+            {
+                totalRecords = 0;
+            }
+
+            return (int)Math.Ceiling((double)totalRecords / pageSize);
+        }
 
 
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
@@ -187,7 +298,7 @@ namespace mdsj.libBiz
 
             Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
             var list = getListFltr("mercht商家数据", null, whereFun);
-            var list3 = arr_fltr(list, (SortedList row) =>
+            var list3 = ArrFltr(list, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
 

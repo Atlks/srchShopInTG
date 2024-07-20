@@ -16,7 +16,7 @@ using Xabe.FFmpeg.Downloader;
 using static mdsj.lib.avClas;
 using YoutubeExplode.Common;
 using DocumentFormat.OpenXml.Wordprocessing;
-using prj202405.lib;
+using prjx.lib;
 using System.Reflection;
 using System.Collections;
 using EchoPrintSharp;
@@ -70,7 +70,7 @@ namespace mdsj.lib
             //}
 
 
-            var fileUrl = $"https://api.telegram.org/file/bot{BotToken}/{filePath}";
+            var fileUrl = $"https://api.telegram.org/file/bot{BotTokenQunzhushou}/{filePath}";
             var fileFullPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), fileName);
 
             using (var httpClient = new HttpClient())
@@ -131,19 +131,19 @@ namespace mdsj.lib
                 // Delete the intermediate WAV file
                 //   File.Delete(System.IO.Path.ChangeExtension(outputFilePath, ".wav"));
 
-               print($"Successfully converted {inputFilePath} to {outputFilePath}");
+               Print($"Successfully converted {inputFilePath} to {outputFilePath}");
             }
             catch (Exception ex)
             {
-               print($"Error during conversion: {ex.Message}");
-               print($"Stack Trace: {ex.StackTrace}");
+               Print($"Error during conversion: {ex.Message}");
+               Print($"Stack Trace: {ex.StackTrace}");
             }
         }
 
         public static void ConvertVideoToMp3(string videoFilePath, string mp3FilePath)
         {
             var __METHOD__ = "ConvertVideoToMp3";
-            print_call_FunArgs(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
+            PrintCallFunArgs(__METHOD__, func_get_args(videoFilePath, mp3FilePath));
 
             // var mp3FilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"{basename}.mp3");
             var ffMpeg = new FFMpegConverter();
@@ -152,7 +152,7 @@ namespace mdsj.lib
             // Convert video to MP3
             ffMpeg.ConvertMedia(videoFilePath, mp3FilePath, "mp3");
             //return mp3FilePath;
-           print($"Conversion completed: {mp3FilePath}");
+           Print($"Conversion completed: {mp3FilePath}");
         }
 
         public static string AcoustIDApiKey = "AMsnvQgE0s";
@@ -173,13 +173,13 @@ namespace mdsj.lib
 
             AcoustIDApiKey = "X7CFv1rFKI";
             var __METHOD__ = "RecognizeMusic";
-            print_call_FunArgs(__METHOD__, func_get_args(mp3FilePath));
+            PrintCallFunArgs(__METHOD__, func_get_args(mp3FilePath));
 
             // 读取音频文件的二进制数据
             byte[] audioData = File.ReadAllBytes(mp3FilePath);
             MusicMetadata musicMetadataFft = new MusicMetadata
             {
-                Title = "unk" + filenameBydtme(),
+                Title = "unk" + FilenameBydtme(),
                 Artist = "unkonwARtist"
             };
             try
@@ -203,7 +203,7 @@ namespace mdsj.lib
                     {
                         // 获取第一个匹配结果的元数据信息
                         var firstResult = result.Results[0];
-                        print_ret(__METHOD__, firstResult);
+                        PrintRet(__METHOD__, firstResult);
                         return new MusicMetadata
                         {
                             Title = firstResult.Recordings[0].Title,
@@ -212,7 +212,7 @@ namespace mdsj.lib
                     }
                     else
                     {
-                        print_ret(__METHOD__, musicMetadataFft);
+                        PrintRet(__METHOD__, musicMetadataFft);
                         return musicMetadataFft;
                     }
                 }
@@ -220,11 +220,11 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
              
             }
           
-            print_ret(__METHOD__, musicMetadataFft);
+            PrintRet(__METHOD__, musicMetadataFft);
             return musicMetadataFft;
 
 
@@ -260,7 +260,7 @@ namespace mdsj.lib
         public static string  DownloadSongAsMp3(string songName,string dir)
         {
             var __METHOD__ = "DownloadSongAsMp3";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(  songName, dir));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(  songName, dir));
 
             try
             {
@@ -277,7 +277,7 @@ namespace mdsj.lib
 
                 if (video == null)
                 {
-                   print("未找到歌曲！");
+                   Print("未找到歌曲！");
                     return "";
                 }
 
@@ -287,14 +287,14 @@ namespace mdsj.lib
 
                 if (streamInfo == null)
                 {
-                   print("未找到音频流！");
+                   Print("未找到音频流！");
                     return "";
                 }
                 Directory.CreateDirectory(dir);
                 // 下载音频流
                 var tempFile = Path.GetTempFileName();
               // string filePathTmp = dir + "/" + tempFile;
-               print($"down tmpfile=>{tempFile}");
+               Print($"down tmpfile=>{tempFile}");
                 youtube.Videos.Streams.DownloadAsync(streamInfo, tempFile).GetAwaiter().GetResult(); ;
 
                 // 转换为 MP3
@@ -302,20 +302,20 @@ namespace mdsj.lib
                 // 转换为 MP3
                 string fname = filex.ConvertToValidFileName2024(songName);
                 var outputFilePath = $"{dir}/{fname}.mp3";
-               print($"outputFilePath =>{outputFilePath}");
+               Print($"outputFilePath =>{outputFilePath}");
                   ConvertToMp3(tempFile, outputFilePath);
 
                 // 删除临时文件
               //  File.Delete(tempFile);
 
-               print($"歌曲已下载并转换为 MP3：{outputFilePath}");
+               Print($"歌曲已下载并转换为 MP3：{outputFilePath}");
                 return outputFilePath;
             }
             catch (Exception ex)
             {
-               print(ex.ToString());
+               Print(ex.ToString());
             }
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintRet(__METHOD__, 0);
             return "";
         }
 

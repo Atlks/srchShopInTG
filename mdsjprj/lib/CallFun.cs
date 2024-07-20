@@ -1,6 +1,6 @@
 ﻿global using static mdsj.lib.CallFun;
 
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,19 +12,19 @@ using System.Threading.Tasks;
 using static mdsj.lib.afrmwk;
 using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static libx.qryEngrParser;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -38,7 +38,7 @@ using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 
 namespace mdsj.lib
 {
@@ -47,21 +47,21 @@ namespace mdsj.lib
         public static string call_exe_retStr(string exePath, string scriptPath, SortedList prm)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
             File.WriteAllText($"prmDir/prm{timestamp2}.txt", json_encode(prm));
             string prm_fileAbs = GetAbsolutePath($"prmDir/prm{timestamp2}.txt");
 
-           print(prm_fileAbs);
+           Print(prm_fileAbs);
             string str = call_exe_Pstr(exePath, scriptPath, prm_fileAbs);
 
             print_varDump(__METHOD__, $"call_exe_Pstr.retRaw", str);
             string marker = "----------marker----------";
             str = substr_AfterMarker(str, marker);
             str = str.Trim();
-            dbgCls.print_ret(__METHOD__, str);
+            dbgCls.PrintRet(__METHOD__, str);
             return str;
         }
 
@@ -69,7 +69,7 @@ namespace mdsj.lib
         public static string call_exec_RetList(string execpath, string scriptPath, SortedList prm, string outputDir)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), scriptPath, prm));
 
             string timestamp2 = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
             Directory.CreateDirectory("prmDir");
@@ -84,7 +84,7 @@ namespace mdsj.lib
             strAft = strAft.Trim();
             string prjDir = @"../../";
             string txt = File.ReadAllText(outputDir + "/" + strAft);
-            dbgCls.print_ret(__METHOD__, txt);
+            dbgCls.PrintRet(__METHOD__, txt);
             return txt;
         }
 
@@ -119,7 +119,7 @@ namespace mdsj.lib
         public static object call_user_func(Delegate callback, params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(args));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
             {
@@ -137,21 +137,21 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        print_ret(__METHOD__, 0); jmp2end();
+                        PrintRet(__METHOD__, 0); Jmp2end();
                     }
 
                 }
-               print($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
-               print(e);
+               Print($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
+               Print(e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
             }
             //    call
             if (o != null)
-                print_ret(__METHOD__, o);
+                PrintRet(__METHOD__, o);
             else
-                print_ret(__METHOD__, 0);
+                PrintRet(__METHOD__, 0);
             return o;
 
         }
@@ -163,7 +163,7 @@ namespace mdsj.lib
                 var type = Assembly.GetExecutingAssembly().GetType(className);
                 if (type == null)
                 {
-                   print($"找不到类 '{className}'。");
+                   Print($"找不到类 '{className}'。");
                     return;
                 }
 
@@ -181,7 +181,7 @@ namespace mdsj.lib
 
                 if (method == null)
                 {
-                   print($"找不到方法 '{methodName}' 或参数不匹配。");
+                   Print($"找不到方法 '{methodName}' 或参数不匹配。");
                     return;
                 }
 
@@ -199,7 +199,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print($"调用方法时发生错误：{ex.Message}");
+               Print($"调用方法时发生错误：{ex.Message}");
             }
         }
 
@@ -209,7 +209,7 @@ namespace mdsj.lib
             var parts = classAndMethod.Split('.');
             if (parts.Length != 2)
             {
-               print("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
+               Print("参数格式不正确，请使用 'ClassName.MethodName' 格式。");
                 return;
             }
 
@@ -222,7 +222,7 @@ namespace mdsj.lib
                 var type = Assembly.GetExecutingAssembly().GetType(className);
                 if (type == null)
                 {
-                   print($"找不到类 '{className}'。");
+                   Print($"找不到类 '{className}'。");
                     return;
                 }
 
@@ -233,7 +233,7 @@ namespace mdsj.lib
                 var method = type.GetMethod(methodName, BindingFlags.Static | BindingFlags.Public, null, paramTypes, null);
                 if (method == null)
                 {
-                   print($"找不到方法 '{methodName}' 或参数不匹配。");
+                   Print($"找不到方法 '{methodName}' 或参数不匹配。");
                     return;
                 }
 
@@ -242,7 +242,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print($"调用方法时发生错误：{ex.Message}");
+               Print($"调用方法时发生错误：{ex.Message}");
             }
         }
         /// <summary>

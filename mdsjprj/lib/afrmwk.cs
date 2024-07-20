@@ -7,20 +7,20 @@ using System.Threading.Tasks;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.web3;
 using static mdsj.libBiz.tgBiz;
-using static prj202405.lib.tglib;
-using static prj202405.timerCls;
+using static prjx.lib.tglib;
+using static prjx.timerCls;
 using static mdsj.lib.util;
 
 using static mdsj.lib.afrmwk;
@@ -36,7 +36,7 @@ namespace mdsj.lib
             }
             catch(Exception e)
             {
-               print(e);
+               Print(e);
                 logErr2024(e, "", "errlog", "");
             }
            
@@ -54,17 +54,17 @@ namespace mdsj.lib
                 // 启动一个新线程，执行匿名函数
                 Thread newThread = new Thread(() =>
                 {
-                   print("新线程开始执行");
+                   Print("新线程开始执行");
                     playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\新疆美丽公主组合 - 欢乐地跳吧.mp3", 2);
 
-                   print("新线程完成工作");
+                   Print("新线程完成工作");
                 });
 
                 //动画金字塔logo
                 for (int i = 0; i < 40; i++)
                 {
                     Thread.Sleep(50);
-                   print(str_repeatV2("=", i) + "=>");
+                   Print(str_repeatV2("=", i) + "=>");
                 }
                 // 启动新线程
                 newThread.Start();
@@ -72,10 +72,10 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
-            call(actBiz, []);
+            Call(actBiz, []);
            // actBiz();
 
 
@@ -93,7 +93,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print(e);
+               Print(e);
             }
 
 
@@ -101,7 +101,7 @@ namespace mdsj.lib
         static void  PrintLogo()
         {
 
-           print(@"
+           Print(@"
         ,--./,-.
        / #      \
       |          |
@@ -112,7 +112,7 @@ namespace mdsj.lib
         |
         `.___.
         ");
-           print(System.IO.File.ReadAllText("logo.txt"));
+           Print(System.IO.File.ReadAllText("logo.txt"));
         }
 
 

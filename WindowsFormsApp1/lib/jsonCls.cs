@@ -1,4 +1,4 @@
-﻿using static prj202405.lib.corex;
+﻿using static prjx.lib.corex;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

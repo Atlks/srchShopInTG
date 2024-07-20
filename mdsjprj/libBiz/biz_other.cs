@@ -1,8 +1,8 @@
 ﻿using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Newtonsoft.Json;
-using prj202405;
-using prj202405.lib;
+using prjx;
+using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,14 +13,14 @@ using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using static SqlParser.Ast.CharacterLength;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 
@@ -38,7 +38,7 @@ namespace mdsj
             //有此用户
             if (member == null)
             {
-                Program._users.Add(userId, new prj202405.User { ViewTimes = [DateTime.Now] });
+                Program._users.Add(userId, new prjx.User { ViewTimes = [DateTime.Now] });
             }
             //无此用户
             else
@@ -60,8 +60,8 @@ namespace mdsj
         {
           
             var __METHOD__ = "_SaveConfig";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-            dbgCls.print_ret(__METHOD__, 0);
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.PrintRet(__METHOD__, 0);
             return;
         //writeUser:
         //    try
@@ -87,17 +87,17 @@ namespace mdsj
         //    dbgCls.setDbgValRtval(__METHOD__, 0);
         }
 
-        public static HashSet<prj202405.City>   getCitysObj()
+        public static HashSet<prjx.City>   getCitysObj()
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
 
             //联系商家城市
-            HashSet<prj202405.City> _citys = [];
+            HashSet<prjx.City> _citys = [];
          //   var merchants = System.IO.File.ReadAllText(_shangjiaFL( Program.groupId.ToString()));
           //  if (!string.IsNullOrEmpty(merchants))
           //      _citys = JsonConvert.DeserializeObject<HashSet<prj202405.City>>(merchants)!;
-            dbgCls.print_ret(__METHOD__," citys[]...");
+            dbgCls.PrintRet(__METHOD__," citys[]...");
             return _citys;
         }
 
@@ -158,7 +158,7 @@ namespace mdsj
             {
                 var users = await System.IO.File.ReadAllTextAsync("Users.json");
                 if (!string.IsNullOrEmpty(users))
-                    Program._users = JsonConvert.DeserializeObject<Dictionary<long, prj202405.User>>(users)!;
+                    Program._users = JsonConvert.DeserializeObject<Dictionary<long, prjx.User>>(users)!;
             }
 
         //    var merchants = await System.IO.File.ReadAllTextAsync(_shangjiaFL((string)Program.groupId.ToString()));

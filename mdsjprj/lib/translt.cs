@@ -31,7 +31,7 @@ namespace mdsj.lib
             //get misswdFmt.txt
             string rzt = JoinStringsWithNewlines(liRzt);
             WriteAllText("transed.txt", rzt);
-            print(rzt);
+            Print(rzt);
         }
 
       //  private const string
@@ -45,9 +45,9 @@ namespace mdsj.lib
             foreach (string wd in wds)
             {
                 if (wd.Contains("sibl"))
-                    print("dbg");
+                    Print("dbg");
                 if (wd.Contains("ontivero"))
-                    print("dbg");
+                    Print("dbg");
                 transE2cn4wd(liRzt, wd);
 
             }
@@ -142,7 +142,7 @@ namespace mdsj.lib
 
             //     WriteAllText("wd5000.json", encodeJson(dic));
             // dic = ToLower(dic);
-            return (string)ldfld(dicWord5k, wdOrwdRoot, "");
+            return (string)LoadField(dicWord5k, wdOrwdRoot, "");
         }
 
       

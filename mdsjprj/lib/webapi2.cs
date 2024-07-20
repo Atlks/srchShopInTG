@@ -37,7 +37,7 @@ namespace mdsj.lib
                     }
                     catch (Exception e)
                     {
-                        print_catchEx(nameof(startWbapiAsync), e);
+                        PrintCatchEx(nameof(startWbapiAsync), e);
                     }
 
                 }
@@ -109,7 +109,7 @@ namespace mdsj.lib
             {
                 // 设置响应内容类型和编码
                 response.ContentType = "text/html; charset=utf-8";
-                string f = webrootDir + decodeUrl(path);
+                string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
                 SendRespV2(rzt2.ToString(), response);
                 Jmp2end(); return;
@@ -122,7 +122,7 @@ namespace mdsj.lib
             string path = request.Url.AbsolutePath;
             // 设置响应内容类型和编码
             response.ContentType = "application/json; charset=utf-8";
-            path = decodeUrl(path);
+            path = DecodeUrl(path);
 
             object rzt2 = ReadAllText(webrootDir + path);
             SendRespV2(rzt2.ToString(), response);
@@ -151,12 +151,12 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Url.AbsolutePath;
-            path = decodeUrl(path);
+            path = DecodeUrl(path);
 
             if (path.Contains("analytics"))
-                print("Dbg");
+                Print("Dbg");
 
-            foreach_hashtable(extnameNhdlrChooser, (DictionaryEntry de) =>
+            ForeachHashtable(extnameNhdlrChooser, (DictionaryEntry de) =>
             {
                 string[] exts = de.Key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
                 foreach (string ext in exts)

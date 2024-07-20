@@ -7,11 +7,11 @@ using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.ReplyMarkups;
-using prj202405.lib;
+using prjx.lib;
 using static System.Net.Mime.MediaTypeNames;
-using prj202405.lib;
+using prjx.lib;
 using ClosedXML.Excel;
-using prj202405.lib;
+using prjx.lib;
 using System.Text.RegularExpressions;
 using mdsj;
 using DocumentFormat.OpenXml.Bibliography;
@@ -24,31 +24,31 @@ using static libx.qryEngrParser;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 
 using static mdsj.lib.CallFun;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 
 
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.dsl;
@@ -72,7 +72,7 @@ using Xabe.FFmpeg.Downloader;
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
-using static prj202405.lib.tglib;
+using static prjx.lib.tglib;
 using static mdsj.lib.web3;
 using mdsj.libBiz;
 using Microsoft.ClearScript.V8;
@@ -83,7 +83,7 @@ using System.Xml;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using HtmlAgilityPack;
-namespace prj202405
+namespace prjx
 {
     internal class testCls
     {
@@ -142,7 +142,7 @@ namespace prj202405
         internal static async System.Threading.Tasks.Task testAsync()
         {
           
-            //     tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+              //  tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");
@@ -167,15 +167,15 @@ namespace prj202405
 
             var set = ProcessFilesDep("D:\\0prj\\mdsj");
             WriteAllText("wds.json", set);
-            print("Column1\tColumn2\tColumn3");
-            print("Data1\tData2\tData3");
-            print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
+            Print("Column1\tColumn2\tColumn3");
+            Print("Data1\tData2\tData3");
+            Print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
 
             // 使用 Task.Run 启动一个新的任务
             //Task newTask = Task.Run(() =>{
             //    asyncF();
             //});
-            print("sync  log");
+            Print("sync  log");
             //  tts("此消息来了11");
             geenBtns();
             try
@@ -185,7 +185,7 @@ namespace prj202405
             }
             catch (Exception ex)
             {
-                print("除法错误：" + ex.Message);
+                Print("除法错误：" + ex.Message);
             }
             //for(int i=0;i<100;i++)
             //{
@@ -214,7 +214,7 @@ namespace prj202405
             {
                 engine.Execute("a= 555");
                 var result = engine.Script.a;
-                print(result); // 输出 8
+                Print(result); // 输出 8
             }
 
             var id = "0624按摩552110457";
@@ -240,7 +240,7 @@ namespace prj202405
             {
 
                 var prices = await GetCryptoPricesAsync(cryptoSymbols);
-                print(json_encode(prices));
+                Print(json_encode(prices));
             });
 
             //  
@@ -352,18 +352,18 @@ namespace prj202405
 
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
-                print("line1633");
+                Print("line1633");
 
-                print(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
-
-
-
-                print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+                Print(JsonConvert.SerializeObject(ormIni.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".ini")));
 
 
-                print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
 
-                print(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
+                Print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+
+
+                Print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
+
+                Print(JsonConvert.SerializeObject(ormSqlt.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩商家评论表.db")));
                 //    ormTest.   testorm();
 
                 var segmenter = new JiebaSegmenter();
@@ -445,7 +445,7 @@ namespace prj202405
                 liRzt.Add(wdOri);
             });
             string rzt = JoinStringsWithNewlines(liRzt);
-            print(rzt);
+            Print(rzt);
         }
     
 
@@ -500,12 +500,12 @@ namespace prj202405
             //    WriteObj("btns.json", keyboard);
 
             // Print the JSON string to the console
-            print(keyboardJson);
+            Print(keyboardJson);
         }
         private static async Task<object> asyncF()
         {
-            print("enter asyncfun ");
-            print("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
+            Print("enter asyncfun ");
+            Print("async thrdid:" + Thread.CurrentThread.ManagedThreadId);
             //弹框
             //await botClient.AnswerCallbackQueryAsync(
             //  callbackQueryId: update.CallbackQuery.Id,
@@ -513,7 +513,7 @@ namespace prj202405
             //  showAlert: true); // 这是显示对话框的关键);
             //return;
             await System.Threading.Tasks.Task.Delay(3000);
-            print("...exit from async ");
+            Print("...exit from async ");
             return 888;
 
         }
@@ -529,7 +529,7 @@ namespace prj202405
             foreach (var value in map.Values)
             {
                 String s = $" <option value=\"{value}\">";
-                print(s);
+                Print(s);
             }
         }
 
@@ -545,12 +545,12 @@ namespace prj202405
                     return false;
                 });
 
-                print(json_encode(rztLi));
+                Print(json_encode(rztLi));
 
             }
             catch (Exception e)
             {
-                print(e.Message);
+                Print(e.Message);
             }
         }
 
@@ -565,19 +565,19 @@ namespace prj202405
                 {
                     if (map["园区"] == "东风园区" && map["商家"] == "沙县 小吃")
                     {
-                        print("dbg");
+                        Print("dbg");
                     }
 
                     if (map["id"] == "vekzrqwxkeyuxpcxzkjdnfdsbt")
                     {
-                        print("dbg");
+                        Print("dbg");
                     }
                     string tg = trim_RemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
                     if (tg == "")
                     {
                         logCls.log(map, "TestTg有效性logDir");
                         //not exist 
-                        stfld_addRplsKeyV(map, "TG有效", "N");
+                        SetFieldAddRplsKeyV(map, "TG有效", "N");
 
                         ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
                         continue;
@@ -588,7 +588,7 @@ namespace prj202405
                     {
                         logCls.log(map, "TestTg有效性logDir");
                         //not exist 
-                        stfld_addRplsKeyV(map, "TG有效", "N");
+                        SetFieldAddRplsKeyV(map, "TG有效", "N");
                         ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
 
                     }
@@ -596,14 +596,14 @@ namespace prj202405
                     {//exist tg numb
                         if (ldfld(map, "TG有效", "") == "N")
                         {
-                            stfld_addRplsKeyV(map, "TG有效", "Y");
+                            SetFieldAddRplsKeyV(map, "TG有效", "Y");
                             ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
                         }
                     }
                 }
                 catch (Exception e)
                 {
-                    print(e);
+                    Print(e);
                 }
 
             }
@@ -623,7 +623,7 @@ namespace prj202405
                 string line = ChineseCharacterConvert.Convert.ToTraditional(wd) + "=" + wd;
                 li.Add(line);
                 n++;
-                print(n);
+                Print(n);
 
             }
             // file_put_contents("trd2smpLib.json",json_encode(li));
@@ -673,7 +673,7 @@ namespace prj202405
             foreach (SortedList rw in li)
             {
                 object? cateE = rw["cateEgls"];
-                arrCls.stfld_addRplsKeyV(rw, "分类", map[cateE.ToString()]);
+                arrCls.SetFieldAddRplsKeyV(rw, "分类", map[cateE.ToString()]);
             }
 
 
@@ -708,7 +708,7 @@ namespace prj202405
             List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
             foreach (SortedList obj in lst_hash)
             {
-                arrCls.stfld_replaceKeyV(obj, "ctry", "缅甸");
+                arrCls.SetFieldReplaceKeyV(obj, "ctry", "缅甸");
 
                 //obj[""ctry = ; // 设置 ctry 属性
                 //SortedList sortedList = new SortedList();
@@ -745,7 +745,7 @@ namespace prj202405
 
         private static void exptMrcht()
         {
-            HashSet<prj202405.City> _citys = getCitysObj();
+            HashSet<prjx.City> _citys = getCitysObj();
             var citys = (from c in _citys select c).ToList();
 
             foreach (var city in citys)
@@ -753,7 +753,7 @@ namespace prj202405
                 System.Collections.SortedList cityMap = corex.ObjectToSortedList(city);
                 cityMap.Remove("Address");
                 cityMap.Add("cityname", city.Name);
-                print(JsonConvert.SerializeObject(cityMap, Newtonsoft.Json.Formatting.Indented));
+                Print(JsonConvert.SerializeObject(cityMap, Newtonsoft.Json.Formatting.Indented));
                 var addrS = (from ca in city.Address
                              select ca
                          )
@@ -764,7 +764,7 @@ namespace prj202405
                     addMap.Remove("Merchant");
                     addMap.Add("parkname", addx.Name);
                     addMap.Add("parkkwd", addx.CityKeywords);
-                    print(JsonConvert.SerializeObject(addMap, Newtonsoft.Json.Formatting.Indented));
+                    Print(JsonConvert.SerializeObject(addMap, Newtonsoft.Json.Formatting.Indented));
                     var rws = (from m in addx.Merchant
                                select m
                               )
@@ -776,15 +776,15 @@ namespace prj202405
                         mcht.Add("cityname", city.Name);
                         mcht.Add("parkname", addx.Name);
                         mcht.Add("parkkwd", addx.CityKeywords);
-                        print(mcht["Category"]);
+                        Print(mcht["Category"]);
                         //    mcht.Add("CategoryStr", Program._categoryKeyValue[Convert.ToInt32(mcht["Category"].ToString())]);
                         mcht.Add("CategoryStrKwds", Program._categoryKeyValue[(int)m.Category]);
                         mcht.Add("cateInt", (int)m.Category);
                         mcht.Add("cateEgls", m.Category.ToString());
                         //   mcht
 
-                        print(JsonConvert.SerializeObject(mcht, Newtonsoft.Json.Formatting.Indented));
-                        print("..");
+                        Print(JsonConvert.SerializeObject(mcht, Newtonsoft.Json.Formatting.Indented));
+                        Print("..");
                     }
 
                 }
@@ -815,7 +815,7 @@ namespace prj202405
                            select jo).ToList();
 
 
-            print(JsonConvert.SerializeObject(results));
+            Print(JsonConvert.SerializeObject(results));
 
 
             string showtitle = "spatime(ms):";
@@ -828,7 +828,7 @@ namespace prj202405
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
 
-            print(showtitle + spantime);
+            Print(showtitle + spantime);
         }
 
         private static void addData()
@@ -850,7 +850,7 @@ namespace prj202405
 
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
-            print("spatime(ms):" + spantime);
+            Print("spatime(ms):" + spantime);
 
         }
     }

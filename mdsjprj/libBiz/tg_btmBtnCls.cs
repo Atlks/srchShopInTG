@@ -19,12 +19,12 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
 using Telegram.Bot.Types.ReplyMarkups;
-using prj202405.lib;
+using prjx.lib;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Net.WebRequestMethods;
-using prj202405.lib;
-using prj202405.lib;
-using prj202405.lib;
+using prjx.lib;
+using prjx.lib;
+using prjx.lib;
 using JiebaNet.Segmenter;
 using System.Xml;
 using HtmlAgilityPack;
@@ -43,19 +43,19 @@ using mdsj.lib;
 using static mdsj.lib.afrmwk;
 using static mdsj.lib.util;
 using static libx.storeEngr4Nodesqlt;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static libx.qryEngrParser;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -117,7 +117,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(evt_btm_btn_click), e); Jmp2end();
+                    PrintCatchEx(nameof(evt_btm_btn_click), e); Jmp2end();
                 }
 
                 return;
@@ -182,7 +182,7 @@ namespace mdsj.libBiz
             var keyboardJson = JsonConvert.SerializeObject(keyboard);
 
             // Print the JSON string to the console
-           print(keyboardJson);
+           Print(keyboardJson);
             return keyboard;
         }
 
@@ -231,7 +231,7 @@ namespace mdsj.libBiz
             //          parseMode: ParseMode.Html,
             //         //   replyMarkup: new InlineKeyboardMarkup(results),
             //         protectContent: false);
-           print(JsonConvert.SerializeObject(message));
+           Print(JsonConvert.SerializeObject(message));
         }
 
 
@@ -293,7 +293,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            print(encodeJson(inlineKeyboardRow1));
+            Print(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
                                   update.Message.Chat.Id, tips,
@@ -310,7 +310,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            print(encodeJson(inlineKeyboardRow1));
+            Print(encodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
                                    ChatId2, tips,
@@ -327,7 +327,7 @@ namespace mdsj.libBiz
         public static object convertExtWd2btnname(string extWd)
         {
             SortedList st = ldHstbFromIni($"{prjdir}/cfg/底部按钮扩展词.ini");
-            SortedList st2 = arr_ReverseSortedList(st);
+            SortedList st2 = ArrReverseSortedList(st);
             return ldfld(st2, extWd, "");
         }
 
@@ -416,7 +416,7 @@ namespace mdsj.libBiz
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(btm_btnClk_inCfgByMsg), e);
+                    PrintCatchEx(nameof(btm_btnClk_inCfgByMsg), e);
                     Jmp2end();
 
                     return;

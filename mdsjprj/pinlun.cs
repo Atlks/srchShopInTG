@@ -1,5 +1,5 @@
-﻿using prj202405.lib;
-using prj202405;
+﻿using prjx.lib;
+using prjx;
 using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -11,14 +11,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection;
 
-namespace prj202405
+namespace prjx
 {
     internal class pinlun
     {
         public static string pinlun_getpinlun(Merchant? contact_Merchant)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), contact_Merchant));
 
             string result = "";
             //  ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
@@ -40,7 +40,7 @@ namespace prj202405
                 SortedList rw = rows[i];
                 try
                 {
-                    if (arrCls.ldfld_TryGetValueAsStrDefNull(rw, "评论人id") == null)
+                    if (arrCls.LoadFieldTryGetValueAsStrDefNull(rw, "评论人id") == null)
                     {
                         continue;
                     }
@@ -79,12 +79,12 @@ namespace prj202405
                 }
                 catch (Exception e)
                 {
-                   print(e.Message);
+                   Print(e.Message);
                 }
             }
 
 
-            dbgCls.print_ret( __METHOD__, result);
+            dbgCls.PrintRet( __METHOD__, result);
             return result;
         }
 

@@ -7,24 +7,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 
 using static libx.funCls;
 using static libx.storeEngr4Nodesqlt;
 using static mdsj.lib.CallFun;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using prj202405.lib;
+using prjx.lib;
 using System.Reflection;
 
 namespace libx
@@ -103,7 +103,7 @@ namespace libx
             {
                 // Create a process to execute the sqlite3 command
                 string cmdprm = $"\"{dbFilePath}\" \"{sqlQuery}\"";
-               print(cmdprm);
+               Print(cmdprm);
                 var processStartInfo = new ProcessStartInfo
                 {
                     FileName = "d:\\sqlite3.exe",
@@ -207,7 +207,7 @@ namespace libx
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            print_call_FunArgs(__METHOD__, dbgCls.func_get_args(dbf));
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(dbf));
 
             if (!dbf.EndsWith(".db"))
             {
@@ -223,13 +223,13 @@ namespace libx
             //prm.Add("dbf", ($"{dbf}"));
             if (!File.Exists(dbf))
             {
-                print("wanring...dbf not exist dbf=>" + dbf);
-                print_ret(__METHOD__, 0);
+                Print("wanring...dbf not exist dbf=>" + dbf);
+                PrintRet(__METHOD__, 0);
                 return [];
             }
         
             List<SortedList> sortedLists = ormSqlt.qryV2(dbf);
-            print_ret(__METHOD__, "sortedLists.size("+ sortedLists.Count);
+            PrintRet(__METHOD__, "sortedLists.size("+ sortedLists.Count);
             return sortedLists;
         }
 

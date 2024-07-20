@@ -9,21 +9,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types.ReplyMarkups;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 
 using static libx.qryEngrParser;
 //  prj202405.lib.db
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class db
     {
@@ -38,7 +38,7 @@ namespace prj202405.lib
         {
 
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, func_get_args("someRows"));
+            dbgCls.PrintCallFunArgs(__METHOD__, func_get_args("someRows"));
             List<SortedList> rows_rzt4srch = new List<SortedList>();
             foreach (SortedList row in rows)
             {
@@ -53,7 +53,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print(e);
+                   Print(e);
 
                     logErr2024(e, "whereFun", "errlog", null);
                     //  return false;
@@ -81,7 +81,7 @@ namespace prj202405.lib
                 else
                     list_Seleced.Add(row);
             }
-            dbgCls.print_ret(__METHOD__, list_Seleced.Count);
+            dbgCls.PrintRet(__METHOD__, list_Seleced.Count);
             return list_Seleced;
 
         }
@@ -296,7 +296,7 @@ namespace prj202405.lib
                 }
                 catch (Exception e)
                 {
-                   print(e.Message);
+                   Print(e.Message);
 
                 }
 
@@ -407,7 +407,7 @@ namespace prj202405.lib
         internal static string calcPatnsV3(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             //if (string.IsNullOrEmpty(Extname))
             //    Extname = "txt";
@@ -415,7 +415,7 @@ namespace prj202405.lib
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.print_ret(__METHOD__, rzt);
+                dbgCls.PrintRet(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -437,7 +437,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.print_ret(__METHOD__, result);
+            dbgCls.PrintRet(__METHOD__, result);
 
             return result;
         }
@@ -446,13 +446,13 @@ namespace prj202405.lib
         internal static string calcPatns(string dir, string partfile区块文件)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dir, partfile区块文件));
 
             if (string.IsNullOrEmpty(partfile区块文件))
             {
 
                 string rzt = GetFilePathsCommaSeparated(dir);
-                dbgCls.print_ret(__METHOD__, rzt);
+                dbgCls.PrintRet(__METHOD__, rzt);
                 return rzt;
             }
             ArrayList arrayList = new ArrayList();
@@ -462,7 +462,7 @@ namespace prj202405.lib
                 string path = dir + "/" + dbf + ".db";
                 if (!File.Exists(path))
                 {
-                   print("not exist file dbf=>" + path);
+                   Print("not exist file dbf=>" + path);
                     continue;
                 }
                 arrayList.Add(path);
@@ -474,7 +474,7 @@ namespace prj202405.lib
             // 使用 String.Join 方法将数组转换为逗号分割的字符串
             string result = string.Join(",", objectArray);
 
-            dbgCls.print_ret(__METHOD__, result);
+            dbgCls.PrintRet(__METHOD__, result);
 
             return result;
         }

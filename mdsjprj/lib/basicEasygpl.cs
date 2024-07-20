@@ -41,7 +41,7 @@ namespace mdsj.lib
                 {
                     Jmp2end();
                 }
-                print_catchEx(__METHOD__, e);
+                PrintCatchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
                 dbgobj.Add("mtth", __METHOD__ + "(((" + encodeJsonNofmt(func_get_args(参数组)) + ")))");
                 logErr2024(e, __METHOD__, "errdir", dbgobj);
@@ -146,7 +146,7 @@ namespace mdsj.lib
                     {
                         Jmp2end();
                     }
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
@@ -174,7 +174,7 @@ namespace mdsj.lib
                     {
                         Jmp2end();
                     }
-                    print_catchEx("foreach_hashtable", e);
+                    PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
                 }
             }
@@ -197,16 +197,16 @@ namespace mdsj.lib
         {
 
             var __METHOD__ = methodName;
-            print_call_FunArgs(methodName, func_get_args(args));
+            PrintCallFunArgs(methodName, func_get_args(args));
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            print("assemblies.Len=>" + assemblies.Length);
+            Print("assemblies.Len=>" + assemblies.Length);
             IEnumerable<Type> typeList = assemblies
                             .SelectMany(assembly => assembly.GetTypes());
-            print("typeList.Len=>" + typeList.Count());
+            Print("typeList.Len=>" + typeList.Count());
             IEnumerable<MethodInfo> methodss = typeList
                             .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            print("methodss.Len=>" + methodss.Count());
+            Print("methodss.Len=>" + methodss.Count());
             var methodInfo = methodss
                 .FirstOrDefault(method =>
                     method.Name == methodName
@@ -214,8 +214,8 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                print("......$$waring  .methodinfo is null");
-                print_ret_adv(__METHOD__, "");
+                Print("......$$waring  .methodinfo is null");
+                PrintRetx(__METHOD__, "");
                 return null;
             }
 
@@ -233,11 +233,11 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_ex(nameof(callxTryx), e);
+                PrintExcept(nameof(callxTryx), e);
             }
 
 
-            print_ret_adv(__METHOD__, result);
+            PrintRetx(__METHOD__, result);
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
@@ -259,7 +259,7 @@ namespace mdsj.lib
 
         public static void  调试输出(object obj)
         {
-           print(json文本(obj));
+           Print(json文本(obj));
         }
         private static string 参数类型(object obj)
         {

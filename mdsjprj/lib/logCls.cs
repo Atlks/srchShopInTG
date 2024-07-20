@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using RG3.PF.Abstractions.Entity;
 namespace mdsj.lib
@@ -39,7 +39,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print(ex.ToString());
+               Print(ex.ToString());
             }
 
 
@@ -70,7 +70,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-               print($"Failed to log error: {ex.Message}");
+               Print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -97,7 +97,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 // 处理记录日志时可能出现的异常
-               print($"Failed to log error: {ex.Message}");
+               Print($"Failed to log error: {ex.Message}");
             }
         }
 
@@ -120,7 +120,7 @@ namespace mdsj.lib
             catch (Exception ex)
             {
                 //Newtonsoft.Json.JsonSerializationException:
-               print(ex.Message.ToString());
+               Print(ex.Message.ToString());
             }
 
 
@@ -129,11 +129,11 @@ namespace mdsj.lib
         {
             try
             {
-                mkdir_forFile(logf);
+                Mkdir4File(logf);
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
              
-                print(" fileName=>" + logf);
+                Print(" fileName=>" + logf);
                 if (IsString(m))
                 {
                     AppendTextToFile(logf, m.ToString());
@@ -143,7 +143,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-                print(ex.ToString());
+                Print(ex.ToString());
             }
         }
         static void AppendTextToFile(string filePath, string content)
@@ -159,8 +159,8 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                 string fileName = $"{logdir}/{timestamp}.json";
-               print(" logdir=>"+logdir);
-               print(" fileName=>" + fileName);
+               Print(" logdir=>"+logdir);
+               Print(" fileName=>" + fileName);
                 if (IsString(m))
                 {
                     System.IO.File.WriteAllText(  fileName, m.ToString());
@@ -169,7 +169,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print(ex.ToString());
+               Print(ex.ToString());
             }
         }
 
@@ -182,8 +182,8 @@ namespace mdsj.lib
                 // 获取当前时间并格式化为文件名
                 string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmm");
                 string fileName = $"{logdir}/{timestamp}.{reqThreadId}.txt";
-               print(" logdir=>" + logdir);
-               print(" fileName=>" + fileName);
+               Print(" logdir=>" + logdir);
+               Print(" fileName=>" + fileName);
                 string msg = $"{timestampPx} {mETHOD__}({json_encode_noFmt(prm)})::{json_encode_noFmt(val)} \n"; 
                 if (IsString(msg))
                 {
@@ -195,7 +195,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print(ex.ToString());
+               Print(ex.ToString());
             }
             
         }

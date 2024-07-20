@@ -1,6 +1,6 @@
 ﻿global using static mdsj.lib.htmlCls;
 using HtmlAgilityPack;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +21,7 @@ namespace mdsj.lib
 
             if (!Directory.Exists(folderPath))
             {
-                print(" ..warning.... fld not exist: fun ExtractWordsFromFilesHtml " + folderPath);
+                Print(" ..warning.... fld not exist: fun ExtractWordsFromFilesHtml " + folderPath);
 
                 return words;
             }
@@ -57,7 +57,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(ExtractWordsFromFilesHtml), e);
+                    PrintCatchEx(nameof(ExtractWordsFromFilesHtml), e);
                 }
 
             }
@@ -166,7 +166,7 @@ namespace mdsj.lib
         public static string GetHtmlContent(string url)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), url));
 
             using (HttpClient client = new HttpClient())
             {
@@ -177,13 +177,13 @@ namespace mdsj.lib
                     HttpResponseMessage response = client.GetAsync(url).Result;
                     response.EnsureSuccessStatusCode();
                     string htmlContent = response.Content.ReadAsStringAsync().Result;
-                    dbgCls.print_ret(__METHOD__, htmlContent.Substring(0, 300));
+                    dbgCls.PrintRet(__METHOD__, htmlContent.Substring(0, 300));
                     return htmlContent;
                 }
                 catch (HttpRequestException e)
                 {
-                    print($"Request error: {e.Message}");
-                    dbgCls.print_ret(__METHOD__, 0);
+                    Print($"Request error: {e.Message}");
+                    dbgCls.PrintRet(__METHOD__, 0);
                     return null;
                 }
             }

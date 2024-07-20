@@ -1,7 +1,7 @@
 ﻿global using static mdsj.lib.util;
 using NAudio.Wave;
 using Newtonsoft.Json;
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
-using static prj202405.lib.corex;
+using static prjx.lib.corex;
 namespace mdsj.lib
 {
     internal class util
@@ -41,7 +41,7 @@ namespace mdsj.lib
         {
             while (true)
             {
-               print(DateTime.Now);
+               Print(DateTime.Now);
                 Thread.Sleep(5000);
             }
         }
@@ -59,7 +59,7 @@ namespace mdsj.lib
             }
             catch (Exception ex)
             {
-               print(ex);
+               Print(ex);
                 logCls.error_logV2(ex, "err.log");
             }
             try
@@ -143,11 +143,11 @@ namespace mdsj.lib
         {
 
             // 使用 Task.Run 启动一个新的任务
-            callAsync(() => {
+            CallAsyncNewThrd(() => {
                 try
                 {
                     var __METHOD__ = "playMp3";
-                    dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
+                    dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath, sec));
 
                     using (var audioFile = new AudioFileReader(mp3FilePath))
                     using (var outputDevice = new WaveOutEvent())
@@ -155,7 +155,7 @@ namespace mdsj.lib
                         outputDevice.Init(audioFile);
                         outputDevice.Play();
 
-                       print("Playing... Press any key to stop.");
+                       Print("Playing... Press any key to stop.");
                         // Console.ReadKey(); // 按任意键停止播放
                         // 使当前线程休眠5秒钟
                         Thread.Sleep(sec * 1000);
@@ -170,12 +170,12 @@ namespace mdsj.lib
 
                     }
 
-                    dbgCls.print_ret(__METHOD__, 0);
+                    dbgCls.PrintRet(__METHOD__, 0);
 
                 }
                 catch (Exception ex)
                 {
-                   print(ex);
+                   Print(ex);
                 }
 
             });
@@ -189,7 +189,7 @@ namespace mdsj.lib
             try
             {
                 var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
+                dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
 
                 using (var audioFile = new AudioFileReader(mp3FilePath))
                 using (var outputDevice = new WaveOutEvent())
@@ -197,7 +197,7 @@ namespace mdsj.lib
                     outputDevice.Init(audioFile);
                     outputDevice.Play();
 
-                   print("Playing... Press any key to stop.");
+                   Print("Playing... Press any key to stop.");
                     // Console.ReadKey(); // 按任意键停止播放
                     // 使当前线程休眠30秒钟  使得启可以播放audio不会退出
                     Thread.Sleep(15*1000);
@@ -210,12 +210,12 @@ namespace mdsj.lib
 
                 }
 
-                dbgCls.print_ret(__METHOD__, 0);
+                dbgCls.PrintRet(__METHOD__, 0);
 
             }
             catch (Exception ex)
             {
-               print(ex);
+               Print(ex);
             }
 
 
@@ -235,7 +235,7 @@ namespace mdsj.lib
             try
             {
                 var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-                dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
+                dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), mp3FilePath));
 
                 using (var audioFile = new AudioFileReader(mp3FilePath))
                 using (var outputDevice = new WaveOutEvent())
@@ -243,7 +243,7 @@ namespace mdsj.lib
                     outputDevice.Init(audioFile);
                     outputDevice.Play();
 
-                   print("Playing... Press any key to stop.");
+                   Print("Playing... Press any key to stop.");
                     // Console.ReadKey(); // 按任意键停止播放
                     // 使当前线程休眠5秒钟
                     Thread.Sleep(60000);
@@ -256,12 +256,12 @@ namespace mdsj.lib
 
                 }
 
-                dbgCls.print_ret(__METHOD__, 0);
+                dbgCls.PrintRet(__METHOD__, 0);
 
             }
             catch (Exception ex)
             {
-               print(ex);
+               Print(ex);
             }
 
 

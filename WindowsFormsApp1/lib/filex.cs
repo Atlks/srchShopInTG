@@ -1,4 +1,4 @@
-﻿  using static prj202405.lib.corex;
+﻿  using static prjx.lib.corex;
 using Mono.Web;
 using System;
 using System.Collections;
@@ -13,7 +13,7 @@ using Telegram.Bot.Types.ReplyMarkups;
   
 
 // prj202405.lib.filex
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class filex
     {

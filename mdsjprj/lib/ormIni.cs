@@ -7,12 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
 using System.Reflection;
 
-namespace prj202405.lib
+namespace prjx.lib
 {
     internal class ormIni
     {
@@ -163,7 +163,7 @@ namespace prj202405.lib
             SortedList listIot = db.lst2IOT(list);
             foreach (SortedList objSave in lst_hash)
             {
-                arrCls.stfld_replaceKeyV(listIot, ldfld_TryGetValueAsStrDefNull(objSave, "id"), objSave);
+                arrCls.SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
             }
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);

@@ -14,8 +14,8 @@ namespace mdsj.lib
     {
 
 
-        HashSet<string> urlsDownWait_hashset =newSet($"spdr/urlsDownWait{DateTime.Now.ToString("dd_HHmmss")}.json");
-        HashSet<string> downedUrlssHashset = newSet("spdr/downedUrlss.json");
+        HashSet<string> urlsDownWait_hashset =NewSet($"spdr/urlsDownWait{DateTime.Now.ToString("dd_HHmmss")}.json");
+        HashSet<string> downedUrlssHashset = NewSet("spdr/downedUrlss.json");
         string parserUrlQue = "spdr/downHtmTaskQue";
         // downHtmldirLog
         public void SpdrTest()
@@ -93,7 +93,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                print_catchEx("down thrd", e);
+                PrintCatchEx("down thrd", e);
             }
 
         }
@@ -114,7 +114,7 @@ namespace mdsj.lib
                     HashSet<string> urls = ExtractHrefAttributes(html);
                     WriteAllText("url1119.json", urls);
                     //   urls = FilterUrlsEndwithHtm(urls);
-                    foreach_HashSet(urls, (string urlMaybeRltv) =>
+                    ForeachHashSet(urls, (string urlMaybeRltv) =>
                     {
                         string ext = GetExtension(urlMaybeRltv);
                         if (EndsWith(ext, "js css jpg png gif ico jpeg mp3 mp4"))
@@ -133,7 +133,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    print_catchEx(nameof(parseHtmlFileTask), e);
+                    PrintCatchEx(nameof(parseHtmlFileTask), e);
                 }
 
             }

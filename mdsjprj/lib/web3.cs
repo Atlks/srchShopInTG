@@ -12,8 +12,8 @@ using Nethereum.StandardTokenEIP20;
 using Nethereum.Web3;
 using Nethereum.Web3.Accounts;
 using Newtonsoft.Json.Linq;
-using prj202405;
-using prj202405.lib;
+using prjx;
+using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,18 +24,18 @@ using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.Enums;
 using static mdsj.lib.web3;
-using static prj202405.timerCls;
+using static prjx.timerCls;
 using static mdsj.biz_other;
 using static mdsj.clrCls;
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
@@ -65,9 +65,9 @@ namespace mdsj.lib
                     foreach (var symbol in symbols)
                     {
                         string url = $"https://api.coingecko.com/api/v3/simple/price?ids={symbol}&vs_currencies=usd";
-                       print(url);
+                       Print(url);
                         var response = await client.GetStringAsync(url);
-                       print(response);
+                       Print(response);
                         var json = JObject.Parse(response);
                         if (json[symbol] != null && json[symbol]["usd"] != null)
                         {
@@ -75,7 +75,7 @@ namespace mdsj.lib
                         }
                         else
                         {
-                           print($"未能获取 {symbol} 的价格。");
+                           Print($"未能获取 {symbol} 的价格。");
                         }
                     }
                 }
@@ -204,17 +204,17 @@ namespace mdsj.lib
         {
             return;
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
-           print(DateTime.Now);
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod()));
+           Print(DateTime.Now);
             string url = "https://coinmarketcap.com/";
             //string htm = GetHtmlContent(url);
             //file_put_contents("cn2004.htm", htm);
-           print("GetEthPrice()");
+           Print("GetEthPrice()");
             double prs = (double)GetEthPrice();
             double bijiaoPrc = 3400;
             double pre = bijiaoPrc * 0.85;
             double next = bijiaoPrc * 1.015;
-           print(json_encode((prs: prs, pre: pre, next: next)));
+           Print(json_encode((prs: prs, pre: pre, next: next)));
             if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
@@ -226,8 +226,8 @@ namespace mdsj.lib
             bijiaoPrc = 64255;
             pre = bijiaoPrc * 0.85;
             next = bijiaoPrc * 1.015;
-           print("GetBitcoinPrice()");
-           print(json_encode((prs: prs, pre: pre, next: next)));
+           Print("GetBitcoinPrice()");
+           Print(json_encode((prs: prs, pre: pre, next: next)));
             if (prs < pre || prs > next)
             {
                 sendNotyfy2me();
@@ -240,8 +240,8 @@ namespace mdsj.lib
             //    sendNotyfy2me();
 
             //}
-           print(prs);
-            dbgCls.print_ret(__METHOD__, prs);
+           Print(prs);
+            dbgCls.PrintRet(__METHOD__, prs);
         }
 
         private static void sendNotyfy2me()
@@ -252,7 +252,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+               Print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
             }
 
             try
@@ -261,7 +261,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
+               Print("告知@回复本信息,搜商家联系方式时出错:" + e.Message);
             }
         }
 
@@ -269,7 +269,7 @@ namespace mdsj.lib
         {
             try
             {
-               print("FUN GetBitcoinPrice()");
+               Print("FUN GetBitcoinPrice()");
                 using (HttpClient client = new HttpClient())
                 {
                     // 请求CoinGecko API获取比特币当前价格
@@ -283,14 +283,14 @@ namespace mdsj.lib
                     string jsonResponse = response.Content.ReadAsStringAsync().Result;
                     JObject json = JObject.Parse(jsonResponse);
                     decimal price = json["bitcoin"]["usd"].Value<decimal>();
-                   print(json_encode(json));
-                   print("end FUN GetBitcoinPrice");
+                   Print(json_encode(json));
+                   Print("end FUN GetBitcoinPrice");
                     return price;
                 }
             }
             catch (Exception e)
             {
-               print($"Error: {e.Message}"); return 0;
+               Print($"Error: {e.Message}"); return 0;
             }
 
         }
@@ -303,7 +303,7 @@ namespace mdsj.lib
         {
             try
             {
-               print("FUN GetEthPrice()");
+               Print("FUN GetEthPrice()");
                 string url = "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd";
 
                 using (HttpClient client = new HttpClient())
@@ -317,13 +317,13 @@ namespace mdsj.lib
                         JObject json = JObject.Parse(responseBody);
                         file_put_contents("cns.json", json_encode(json));
                         decimal ethPrice = json["ethereum"]["usd"].Value<decimal>();
-                       print(json_encode(json));
-                       print("end FUN GetEthPric");
+                       Print(json_encode(json));
+                       Print("end FUN GetEthPric");
                         return ethPrice;
                     }
                     catch (HttpRequestException e)
                     {
-                       print($"Request error: {e.Message}");
+                       Print($"Request error: {e.Message}");
                         return 0;
                     }
                 }
@@ -331,7 +331,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-               print($"Error: {e.Message}"); return 0;
+               Print($"Error: {e.Message}"); return 0;
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿
-using prj202405.lib;
+using prjx.lib;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +9,14 @@ using System.Threading.Tasks;
 
 
 using static mdsj.lib.exCls;
-using static prj202405.lib.arrCls;//  prj202405.lib
-using static prj202405.lib.dbgCls;
+using static prjx.lib.arrCls;//  prj202405.lib
+using static prjx.lib.dbgCls;
 using static mdsj.lib.logCls;
-using static prj202405.lib.corex;
-using static prj202405.lib.db;
-using static prj202405.lib.filex;
-using static prj202405.lib.ormJSonFL;
-using static prj202405.lib.strCls;
+using static prjx.lib.corex;
+using static prjx.lib.db;
+using static prjx.lib.filex;
+using static prjx.lib.ormJSonFL;
+using static prjx.lib.strCls;
 using static mdsj.lib.encdCls;
 using static mdsj.lib.net_http;
 
@@ -32,7 +32,7 @@ namespace mdsj.lib
         public static async Task<string> http_GetHttpResponseAsync(string url)
         {
             var __METHOD__ = "http_GetHttpResponseAsync";
-            dbgCls.print_call_FunArgs(__METHOD__, dbgCls.func_get_args( url));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args( url));
 
             // 创建 HttpClient 实例
             using (HttpClient client = new HttpClient())
@@ -51,14 +51,14 @@ namespace mdsj.lib
                     // 获取当前时间并格式化为文件名
                     string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                     file_put_contents("httplogDir/"+ timestamp+".log", responseBody);
-                    dbgCls.print_ret(__METHOD__, str_sub(responseBody,0,500));
+                    dbgCls.PrintRet(__METHOD__, str_sub(responseBody,0,500));
                     return responseBody;
                 }
                 catch (HttpRequestException e)
                 {
                     // 捕获并处理请求异常
-                   print($"Request exception: {e.Message}");
-                    dbgCls.print_ret(__METHOD__, -0);
+                   Print($"Request exception: {e.Message}");
+                    dbgCls.PrintRet(__METHOD__, -0);
                     return null;
                 }
             }
