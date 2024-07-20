@@ -393,7 +393,7 @@ namespace prjx
                 {
                     //auth chk
                 }
-                callx(   SetPark,txt307,update);
+                callx(SetParkFrmMsg, txt307,update);
                 Jmp2end();
             }
 

@@ -142,7 +142,7 @@ namespace prjx
         internal static async System.Threading.Tasks.Task testAsync()
         {
           
-              //  tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+                tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");

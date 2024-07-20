@@ -577,7 +577,7 @@ namespace mdsj.libBiz
         }
         public static bool isGrpChat(Update update)
         {
-            return isGrpChat(update?.Message?.Chat?.Type)
+            return isGrpChat(update?.Message?.Chat?.Type);
         }
        
       //  isGrpChat(update?.Message?.Chat?.Type)

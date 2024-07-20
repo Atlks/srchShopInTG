@@ -45,6 +45,98 @@ namespace mdsj.libBiz
                 replyToMessageId: update.Message.MessageId);
 
         }
+        public static void SetParkFrmMsg(string park, Update update)
+        {
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+            //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
+            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+            if (isGrpChat(update))
+                if (!System.IO.File.Exists(f))
+                {
+                    Print("no auth " + f);
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(
+             update.Message.Chat.Id,
+             "权限不足",
+             replyToMessageId: update.Message.MessageId);
+                    return;
+                }
+
+            //auth chk ok ,,or  privete 
+
+            //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
+            string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+            SortedList cfg = findOne(dbfile2);
+            string pk = park.Trim().ToUpper();
+
+            setFld(cfg, "园区", pk);
+            setFld(cfg, "id", grpid.ToString());
+            setFld(cfg, "grpid", grpid.ToString());
+            setFld(cfg, "whereExprs", $"园区={pk}");
+            setFld(cfg, "grpinfo", update.Message.Chat);
+            if (pk == "不限制")
+            {
+                setFld(cfg, "园区", "");
+                setFld(cfg, "whereExprs", $"");
+            }
+            ormJSonFL.save(cfg, dbfile2);
+
+
+            botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+              "设置ok",
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId);
+
+            //set menu
+
+            ReplyKeyboardMarkup rplyKbdMkp;
+            //  Program.botClient.send
+            try
+            {
+                string chtType = update.Message.Chat.Type.ToString();
+                //私聊不要助力本群
+                if (!chtType.Contains("group"))
+                {
+                    rplyKbdMkp = tgBiz.tg_btmBtns();
+                    KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
+                    RemoveButtonByName(kbtns, juliBencyon);
+                }
+                else
+                {
+                    rplyKbdMkp = tgBiz.tg_btmBtns();
+                }
+
+
+                //def is grp btns
+                //tgBiz.tg_btmBtns()
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead("今日促销商家.gif"));
+                //  Message message2dbg = await 
+                botClient.SendTextMessageAsync(
+             update.Message.Chat.Id, plchdTxt,
+                 parseMode: ParseMode.Html,
+                replyMarkup: rplyKbdMkp,
+                protectContent: false, disableWebPagePreview: true);
+                //  print(JsonConvert.SerializeObject(message2));
+
+                //Program.botClient.SendTextMessageAsync(
+                //         Program.groupId,
+                //         "活动商家",
+                //         parseMode: ParseMode.Html,
+                //         replyMarkup: new InlineKeyboardMarkup(results),
+                //         protectContent: false,
+                //         disableWebPagePreview: true);
+
+            }
+            catch (Exception ex) { Print(ex.ToString()); }
+
+        }
 
         public static void SetPark(string park, Update update)
         {
