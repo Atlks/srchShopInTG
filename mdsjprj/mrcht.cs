@@ -121,7 +121,7 @@ namespace mdsj
 
             //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain_msgx_remvTrigWd2)) { return []; }
-            string[] kwds = strCls.splt_by_fenci(ref msgCtain_msgx_remvTrigWd2);
+            string[] kwds = strCls.SpltByFenci(ref msgCtain_msgx_remvTrigWd2);
             kwds = RemoveShortWords(kwds);
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
@@ -257,7 +257,7 @@ namespace mdsj
 
             //  string msgx = whereExprsObj["msgCtain"];
             if (string.IsNullOrEmpty(msgCtain_msgx_remvTrigWd2)) { return []; }
-            string[] kwds = strCls.splt_by_fenci(ref msgCtain_msgx_remvTrigWd2);
+            string[] kwds = strCls.SpltByFenci(ref msgCtain_msgx_remvTrigWd2);
             kwds = RemoveShortWords(kwds);
             //todo 去除触发词，，只保留 服务次和位置词
             //园区
@@ -385,7 +385,7 @@ namespace mdsj
         public static string getFldLianxifs(SortedList row, string Fld)
         {
             // const string Fld = "Telegram";
-            return trim_RemoveUnnecessaryCharacters4tgWhtapExt(LoadFieldDefEmpty(row, Fld));
+            return TrimRemoveUnnecessaryCharacters4tgWhtapExt(LoadFieldDefEmpty(row, Fld));
         }
 
         private static bool isEmptyLianxi(SortedList row)
@@ -405,7 +405,7 @@ namespace mdsj
             fuwuWds_row.Remove("店");
             fuwuWds_row = ConvertToUpperCase(fuwuWds_row);
 
-            if (containKwds(msgCtain, fuwuWds_row))
+            if (ContainKwds(msgCtain, fuwuWds_row))
             {
                 SortedList dbg = new SortedList();
                 dbg.Add("row", row);
@@ -495,13 +495,13 @@ namespace mdsj
 
                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                     if (hasCondt(whereExprsObj, "城市"))
-                        if (!strCls.str_eq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "园区"))
-                        if (!strCls.str_eq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "国家"))
-                        if (!strCls.str_eq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                             return false;
                     return true;
                 }
@@ -563,7 +563,7 @@ namespace mdsj
 
              + LoadFieldDefEmpty(row, "微信") + LoadFieldDefEmpty(row, "Tel")
               + LoadFieldDefEmpty(row, "Line");
-            lianxifsh = trim_RemoveUnnecessaryCharacters4tgWhtapExt(lianxifsh);
+            lianxifsh = TrimRemoveUnnecessaryCharacters4tgWhtapExt(lianxifsh);
             lianxifsh = lianxifsh.Trim();
             return lianxifsh;
         }

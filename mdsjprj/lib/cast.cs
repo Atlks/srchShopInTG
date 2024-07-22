@@ -52,7 +52,11 @@ namespace mdsj.lib
 
             return list;
         }
-        public static double toNumber(string str)
+        public static double ToNumber(object str)
+        {
+            return toNumber(str.ToString());
+        }
+            public static double toNumber(string str)
         {
 
             if (string.IsNullOrWhiteSpace(str))

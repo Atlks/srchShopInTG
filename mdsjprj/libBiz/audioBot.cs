@@ -125,7 +125,7 @@ namespace mdsj.libBiz
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             prjdir = filex.GetAbsolutePath(prjdir);
             string cmd = null;
-            var songName = substr_GetTextAfterKeyword(update.Message.Text.Trim(), "搜索音乐").Trim();
+            var songName = SubstrGetTextAfterKeyword(update.Message.Text.Trim(), "搜索音乐").Trim();
             botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName + "因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
             string downdir = prjdir + "/downmp3";
             string fname = filex.ConvertToValidFileName2024(songName);
@@ -175,8 +175,8 @@ namespace mdsj.libBiz
             {
                 if (string.IsNullOrEmpty(update?.Message?.Text))
                     return;
-                string[] a = splt(update?.Message?.Text);
-                a = trimUper(a);
+                string[] a = Splt(update?.Message?.Text);
+                a = TrimUper(a);
                 var preTrigwd= GetElmt(a, 0);
                 if (preTrigwd != serchTipsWd)
                     return;
@@ -361,7 +361,7 @@ namespace mdsj.libBiz
             {
 
                 prjdir = filex.GetAbsolutePath(prjdir);
-                var kwds = substr_GetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
+                var kwds = SubstrGetTextAfterKeyword(update.Message.Text.Trim(), cmd).Trim();
 
                 List<SortedList> li = qry_ContainMatch("fullTxtSrchIdxdataDir", kwds);
                 // 使用 LINQ 查询语法提取 txt 属性值

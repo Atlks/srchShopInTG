@@ -193,7 +193,7 @@ namespace mdsj.lib
             {
                 if (key != null)
                 {
-                    sortedList.Add(key, formCollection[key]);
+                    sortedList.Add(key, formCollection[key][0]);
                 }
             }
 
@@ -219,6 +219,8 @@ namespace mdsj.lib
         }
         public static object castToSerializableObjsOrSnglobj(object inputArray)
         {
+            //todo 
+            // if sortedlist hashtable ne?? dic 
             if (IsStr(inputArray))
                 return inputArray;
             if (!isArrOrColl(inputArray))
@@ -632,7 +634,7 @@ namespace mdsj.lib
         {
             return ReadJsonFileToSortedList(v);
         }
-        public static int count(object collection)
+        public static int Count(object collection)
         {
             return CountLen(collection);
         }
@@ -820,7 +822,7 @@ namespace mdsj.lib
         {
             //  string Fld = "城市";
             if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.str_eq(row[Fld], arrCls.LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                if (!strCls.StrEq(row[Fld], arrCls.LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                     return false;
 
             return true;
@@ -830,7 +832,7 @@ namespace mdsj.lib
         {
             //  string Fld = "城市";
             if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.str_eq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                if (!strCls.StrEq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                     return false;
 
             return true;

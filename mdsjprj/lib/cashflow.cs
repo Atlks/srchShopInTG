@@ -119,11 +119,11 @@ namespace mdsj.lib
             var date = GetElmt(a, 2);
             var amt = toNumber(GetElmt(a, 3));
             var cate = GetElmt(a, 4);
-            var demo = substr_AfterMarker(text.Trim(), cate);
+            var demo = SubstrAfterMarker(text.Trim(), cate);
             SortedList map = new SortedList();
             map.Add("date", date);
             map.Add("amt", amt);
-            map.Add("month", DateTime.Now.Year + left(date, 2));
+            map.Add("month", DateTime.Now.Year + Left(date, 2));
             map.Add("cate", cate);
             map.Add("demo", demo);
             string recID = $"{date}{cate}{new Random().Next()}";

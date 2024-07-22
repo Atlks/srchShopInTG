@@ -209,7 +209,7 @@ namespace prjx
             //botClient.OnMessage += Bot_OnMessage;
             //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
             //分类枚举
-            botClient.StartReceiving(updateHandler: evt_aHandleUpdateAsyncSafe,
+            botClient.StartReceiving(updateHandler: EvtUpdateHdlrAsyncSafe,
                 pollingErrorHandler: tglib.bot_pollingErrorHandler,
                 receiverOptions: new ReceiverOptions()
                 {
@@ -235,7 +235,7 @@ namespace prjx
             audioBot.main1();
 
              
-                webapi2.startWbapiAsync();
+                webapi2.StartWbapiAsync();
             
 
             RunTmrTasksCron();
@@ -247,13 +247,13 @@ namespace prjx
                             if (methd == "/swag")
                             {
                                 response.ContentType = "text/html; charset=utf-8";
-                                var rzt = docapi_httpHdlrApiSpelDocapi("mdsj.xml", response);
+                                var rzt = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
                                 response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
                                 Jmp2end();
                             }
 
                         };
-            startWebapi(value, "Wbapi_");
+            StartWebapi(value, "Wbapi_");
             
 
             //  Console.ReadKey();
@@ -266,7 +266,7 @@ namespace prjx
 
 
 
-        static async System.Threading.Tasks.Task evt_aHandleUpdateAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
+        static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
             string reqThreadId = geneReqid();
@@ -278,7 +278,7 @@ namespace prjx
             {
                 try
                 {
-                    evt_aHandleUpdateAsync(botClient, update, cancellationToken, reqThreadId);
+                    EvtUpdateHdlrAsync(botClient, update, cancellationToken, reqThreadId);
                     //     throw new InvalidOperationException("An error occurred in the task.");
 
                 }
@@ -311,7 +311,7 @@ namespace prjx
 
 
         //收到消息时执行的方法
-        static void evt_aHandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
+        static void EvtUpdateHdlrAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
         {
             //  throw new Exception("myex");
 
@@ -464,7 +464,7 @@ namespace prjx
                 Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
                 if (LoadFieldAsStr(parse_str1, "ckuid") == "y") //def is not
                 {
-                    if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                    if (!StrEq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
                     {
                         botClient.AnswerCallbackQueryAsync(
                          callbackQueryId: update.CallbackQuery.Id,
@@ -715,7 +715,7 @@ namespace prjx
                 Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
                 if (LoadFieldAsStr(parse_str1, "btn") == "dtl")
                 {
-                    btnHdl_evt_View(botClient, update, reqThreadId);
+                    BtnHdlEvtView(botClient, update, reqThreadId);
                 }
                 // logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
 
@@ -754,7 +754,7 @@ namespace prjx
             if (update?.Message?.Chat?.Type == ChatType.Private && update?.Type == UpdateType.Message)
             {
                 HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
-                if (!strCls.containKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
+                if (!strCls.ContainKwds(update?.Message?.Text, string.Join(" ", 商品与服务词库)))
                 {
                     Print(" 不包含商品服务词，ret");
 
@@ -792,7 +792,7 @@ namespace prjx
                 HashSet<string> trgWdSt = ReadWordsFromFile($"{prjdir}/cfg/搜索触发词.txt");
                 var trgWd = string.Join(" ", trgWdSt);
                 Print(" 触发词 chk");
-                if (!strCls.containKwds(update?.Message?.Text, trgWd))
+                if (!strCls.ContainKwds(update?.Message?.Text, trgWd))
                 {
                     Print(" 不包含触发词，ret");
                     return;
@@ -803,12 +803,12 @@ namespace prjx
                 //去除搜索触发词，比如哪里有
                 msgx = msgx.Replace("联系方式", " ");
                 HashSet<string> hs = GetSrchTrgWds();
-                string msgx_remvTrigWd = replace_RemoveWords(msgx, hs);
+                string msgx_remvTrigWd = ReplaceRemoveWords(msgx, hs);
 
                 //是否包含搜索词 商品或服务关键词
                 Print(" 商品或服务关键词 srch");
                 HashSet<string> 商品与服务词库 = file_getWords商品与服务词库();
-                if (!strCls.containKwds(msgx_remvTrigWd, string.Join(" ", 商品与服务词库)))
+                if (!strCls.ContainKwds(msgx_remvTrigWd, string.Join(" ", 商品与服务词库)))
                 {
                     Print(" 不包含商品服务词，ret");
                     return;
@@ -877,14 +877,14 @@ namespace prjx
                 return;
             }
             if (update?.Message?.ReplyToMessage?.From?.Username == botname &&
-            strCls.contain(update?.Message?.Text, "世博博彩")
+            strCls.Contain(update?.Message?.Text, "世博博彩")
              )
             {
                 callx(evt_shiboBocai_click, update);
                 return;
             }
 
-            if (strCls.contain(update?.Message?.Text, "世博博彩")
+            if (strCls.Contain(update?.Message?.Text, "世博博彩")
               )
             {
                 callx(evt_shiboBocai_click, update);
@@ -978,7 +978,7 @@ namespace prjx
 
             Print("--------btm btn trig start...----------");
             HashSet<string> hs = GetSrchTrgWds();
-            if (!containKwdsV2(update?.Message?.Text, hs))
+            if (!ContainKwdsV2(update?.Message?.Text, hs))
             {
                 Print(" 不包含触发词，ret");
                 return;
@@ -1044,7 +1044,7 @@ namespace prjx
             //evet dafen 
             if (LoadFieldAsStr(parse_str1, "ckuid") == "y")
             {
-                if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                if (!StrEq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
                 {
                     botClient.AnswerCallbackQueryAsync(
                 callbackQueryId: update.CallbackQuery.Id,
@@ -1102,7 +1102,7 @@ namespace prjx
             msgx = msgx.Replace("联系方式", " ");
             //去除搜索触发词，比如哪里有
             HashSet<string> hs = GetSrchTrgWds();
-            msgx = replace_RemoveWords(msgx, hs);
+            msgx = ReplaceRemoveWords(msgx, hs);
             // 搜索触发词
             string msgx_remvTrigWd2 = msgx;
 
@@ -2417,7 +2417,7 @@ namespace prjx
         //}
 
         //获取商家结果 detail click
-        static void btnHdl_evt_View(ITelegramBotClient botClient, Update update, string reqThreadId)
+        static void BtnHdlEvtView(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             var __METHOD__ = "evt_View listitem_click()";
             dbgCls.PrintCallFunArgs(__METHOD__, func_get_args(update, reqThreadId));
@@ -2426,7 +2426,7 @@ namespace prjx
             Dictionary<string, string> parse_str1 = parse_str(update.CallbackQuery.Data);
             if (LoadFieldAsStr(parse_str1, "btn") == "dtl") //def is not  
                 if (LoadFieldAsStr(parse_str1, "ckuid") == "y")
-                    if (!str_eq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
+                    if (!StrEq(update.CallbackQuery?.From?.Username, update.CallbackQuery?.Message?.ReplyToMessage?.From?.Username))
                     {
 
 

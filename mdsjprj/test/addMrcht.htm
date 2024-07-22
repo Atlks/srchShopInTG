@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>添加商家</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input[type="text"],
+        .form-group input[type="time"],
+        .form-group input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        
+        .form-group button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <h2>添加商家</h2>
+        <form action="http://localhost:5000/AddMercht" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">商家名称</label>
+                <input type="text" id="name" name="商家" required>
+            </div>
+            <div class="form-group">
+                <label for="hours">营业时间</label>
+                <input type="text" id="hours" name="营业时间" required>
+            </div>
+            <div class="form-group">
+                <label for="location">位置</label>
+                <input type="text" id="location" name="位置" required>
+            </div>
+            <div class="form-group">
+                <label for="photo">照片</label>
+                <input type="file" id="photo" name="照片或视频" accept="image/*" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">提交</button>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

@@ -418,7 +418,7 @@ namespace mdsj.libBiz
         public static void WriteAllText(string f, object update)
         {
             var __METHOD__ = nameof(WriteAllText);
-            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(update,f));
+            PrintCallFunArgs(__METHOD__, func_get_args(update,f));
  
             try
             {
@@ -437,7 +437,7 @@ namespace mdsj.libBiz
             PrintRet(__METHOD__, 0);
           
         }
-        public static bool tg_isBtm_btnClink_in_prvt(Update update)
+        public static bool IsBtm_btnClink_in_prvt(Update update)
         {
             if (update.Type != UpdateType.Message)
             {
@@ -470,7 +470,7 @@ namespace mdsj.libBiz
 
         }
         //if  is nml msg ,not search
-        public static bool bot_isNnmlMsgInGrp(Update? update)
+        public static bool IsNnmlMsgInGrp(Update? update)
         {
             if (update?.Message == null)  //maybe cmd call
             {
@@ -502,7 +502,7 @@ namespace mdsj.libBiz
 
             //pingjia 内容，不要进行反馈搜索
             if (update?.Message?.ReplyToMessage != null &&
-                strCls.contain(update?.Message?.ReplyToMessage?.Caption, "---联系方式---"))
+                strCls.Contain(update?.Message?.ReplyToMessage?.Caption, "---联系方式---"))
             {
                 //is nml msg ,not need search kwd  ,,for 评价
                 return true;
@@ -542,7 +542,7 @@ namespace mdsj.libBiz
                 var trgSearchKwds = " ";
                 var trgWd = biz_other.getTrgwdHash($"{prjdir}/cfg/搜索触发词.txt");
                 trgSearchKwds = trgSearchKwds + trgWd;
-                if (strCls.containKwds(update?.Message?.Text, trgSearchKwds))
+                if (strCls.ContainKwds(update?.Message?.Text, trgSearchKwds))
                 {
                     //if  is nml msg ,not search
                     return false;   //not nml msg,need search

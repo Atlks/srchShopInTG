@@ -297,13 +297,13 @@ namespace prjx.lib
                     return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                 if (hasCondt(whereExprsObjFltrs, "城市"))
-                    if (!strCls.str_eq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "园区"))
-                    if (!strCls.str_eq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "国家"))
-                    if (!strCls.str_eq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
                         return false;
                 if (arrCls.LoadFieldDefEmpty(row, "cateEgls") == "Property")
                     return false;

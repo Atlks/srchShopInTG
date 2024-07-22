@@ -48,7 +48,7 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="httpHdlrSpel"></param>
         /// <param name="api_prefix"></param>
-        public static void startWebapi(Action<HttpRequest, HttpResponse> httpHdlrSpel, string api_prefix)
+        public static void StartWebapi(Action<HttpRequest, HttpResponse> httpHdlrSpel, string api_prefix)
         {
             var builder = WebApplication.CreateBuilder();
             // Configure Kestrel to listen on a specific port
@@ -105,7 +105,7 @@ namespace mdsj.lib
         /// <param name="httpHdlrApiSpecl"></param>
         /// <param name="context"></param>
         /// <param name="api_prefix"></param>
-        private static void httpHdlr(HttpRequest request, HttpResponse response, string api_prefix, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
+        public static void httpHdlr(HttpRequest request, HttpResponse response, string api_prefix, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
 
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
@@ -115,7 +115,7 @@ namespace mdsj.lib
 
             if (request.Method == HttpMethods.Post)
             {
-                var funname = "wbapi" + Substring(path, 1) + request.Method;
+                var funname = "" + Substring(path, 1) + request.Method+ "Wbapi";
                 //call  wbapi_upldPOST path
                 //  wbapi_upldPost(request, response);
                 // 
@@ -127,9 +127,9 @@ namespace mdsj.lib
             // 静态资源处理器映射表
             Hashtable extNhdlrChoosrMaplist = new Hashtable();
             extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
-            extNhdlrChoosrMaplist.Add(" html htm", nameof(Html_httpHdlrfilTxtHtml));
+            extNhdlrChoosrMaplist.Add(" html htm", nameof(HtmlHttpHdlrfilTxtHtml));
             extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
-            extNhdlrChoosrMaplist.Add("jpg png", nameof(img_httpHdlrFilImg));
+            extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
             string path2 = request.Path;
             httpHdlrFil(request, response, extNhdlrChoosrMaplist);
             //-------------------swag doc api
@@ -143,37 +143,37 @@ namespace mdsj.lib
             // 发送响应
             SendResp(rzt, response);
         }
+      
+        //private static void wbapi_upldPost(HttpRequest request, HttpResponse response)
+        //{
+        //    if (request.Method == HttpMethods.Post)
+        //    {
+        //        // Check if the request contains a file
+        //        if (request.Form.Files.Count > 0)
+        //        {
+        //            foreach (var file in request.Form.Files)
+        //            {
+        //                // Get the file content and save it to a desired location
+        //                var filePath = Path.Combine("uploads", file.FileName);
+        //                Mkdir4File(filePath);
+        //                using (var stream = new FileStream(filePath, FileMode.Create))
+        //                {
+        //                    file.CopyToAsync(stream).GetAwaiter().GetResult();
+        //                }
+        //            }
+        //        }
 
-        private static void wbapi_upldPost(HttpRequest request, HttpResponse response)
-        {
-            if (request.Method == HttpMethods.Post)
-            {
-                // Check if the request contains a file
-                if (request.Form.Files.Count > 0)
-                {
-                    foreach (var file in request.Form.Files)
-                    {
-                        // Get the file content and save it to a desired location
-                        var filePath = Path.Combine("uploads", file.FileName);
-                        Mkdir4File(filePath);
-                        using (var stream = new FileStream(filePath, FileMode.Create))
-                        {
-                            file.CopyToAsync(stream).GetAwaiter().GetResult();
-                        }
-                    }
-                }
+        //        // Handle other form data
+        //        foreach (var key in request.Form.Keys)
+        //        {
+        //            var value = request.Form[key];
+        //            ConsoleWriteLine($"Key: {key}, Value: {value}");
+        //        }
 
-                // Handle other form data
-                foreach (var key in request.Form.Keys)
-                {
-                    var value = request.Form[key];
-                    ConsoleWriteLine($"Key: {key}, Value: {value}");
-                }
-
-                // Call the specific API handler
-                //    httpHdlrApiSpecl(request, response);
-            }
-        }
+        //        // Call the specific API handler
+        //        //    httpHdlrApiSpecl(request, response);
+        //    }
+        //}
 
         //private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
         //{
@@ -249,12 +249,12 @@ namespace mdsj.lib
                 long fileSize = fileInfo.Length;
                 if (fileSize < 1000 * 1000)
                 {
-                    Html_httpHdlrfilTxtHtml(request, response); ; return;
+                    HtmlHttpHdlrfilTxtHtml(request, response); ; return;
                 }
 
                 else
                 {
-                    fildown_httpHdlrFilDown(request, response); return;
+                    FildownHttpHdlrFilDown(request, response); return;
 
                 }
 
@@ -272,7 +272,7 @@ namespace mdsj.lib
             //  var filepath = path.Substring(1);
             if (fileExtension == "" && File.Exists($"{prjdir}{path}"))
             {
-                Html_httpHdlrfilTxtHtml(request, response);
+                HtmlHttpHdlrfilTxtHtml(request, response);
                 Jmp2end();
             }
 
@@ -299,7 +299,7 @@ namespace mdsj.lib
         //}
         //--------------------end swag----
         //   public static string staticResDir = $"{prjdir}/webroot";
-        public static async System.Threading.Tasks.Task Html_httpHdlrfilTxtHtml(HttpRequest request, HttpResponse response)
+        public static async System.Threading.Tasks.Task HtmlHttpHdlrfilTxtHtml(HttpRequest request, HttpResponse response)
         {
             // 获取当前请求的 URL
 
@@ -332,7 +332,7 @@ namespace mdsj.lib
             }
         }
 
-        public static async System.Threading.Tasks.Task fildown_httpHdlrFilDown(HttpRequest request, HttpResponse response)
+        public static async System.Threading.Tasks.Task FildownHttpHdlrFilDown(HttpRequest request, HttpResponse response)
         {
 
 
@@ -358,7 +358,7 @@ namespace mdsj.lib
 
 
 
-        public static async System.Threading.Tasks.Task img_httpHdlrFilImg(HttpRequest request, HttpResponse response)
+        public static async System.Threading.Tasks.Task ImgHhttpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
             var args = func_get_args(request, response);
 
@@ -418,7 +418,7 @@ namespace mdsj.lib
         /// <param name="xmlpath"></param>
         /// <param name="context"></param>
         /// <returns>doc html</returns>
-        public static string docapi_httpHdlrApiSpelDocapi(string xmlpath, HttpResponse context)
+        public static string DocapiHttpHdlrApiSpelDocapi(string xmlpath, HttpResponse context)
         {
             context.ContentType = "text/html; charset=utf-8";
             //shangjiaID,uid,dafen

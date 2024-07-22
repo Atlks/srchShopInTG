@@ -20,7 +20,7 @@ namespace prjx.lib
     internal class strCls
     {
 
-        public static string left(string str, int len)
+        public static string Left(string str, int len)
         {
             if (str == null)
             {
@@ -46,7 +46,7 @@ namespace prjx.lib
             }
             return QueryHelpers.ParseQuery(qerystr); ;
         }
-        public static HashSet<string> splitTxtByChrs(string content, string spltChrs)
+        public static HashSet<string> SplitTxtByChrs(string content, string spltChrs)
         {
             char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };
 
@@ -78,7 +78,7 @@ namespace prjx.lib
         }
 
 
-        public static HashSet<string> splitFileByChrs(string filePath, string spltChrs)
+        public static HashSet<string> SplitFileByChrs(string filePath, string spltChrs)
         {
             char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };
 
@@ -110,7 +110,7 @@ namespace prjx.lib
         }
 
 
-        public static string substr_AfterMarker(string input, string marker)
+        public static string SubstrAfterMarker(string input, string marker)
         {
             if (string.IsNullOrEmpty(input) || string.IsNullOrEmpty(marker))
             {
@@ -142,14 +142,14 @@ namespace prjx.lib
         /// <param name="format">格式字符串</param>
         /// <param name="args">参数数组</param>
         /// <returns>格式化后的字符串</returns>
-        public static string sprintf(string format, params object[] args)
+        public static string Sprintf(string format, params object[] args)
         {
             return string.Format(format, args);
         }
 
 
 
-        public static string[] splt_by_fenci(ref string msgx)
+        public static string[] SpltByFenci(ref string msgx)
         {
             msgx = ChineseCharacterConvert.Convert.ToSimple(msgx);
             var segmenter = new JiebaSegmenter();
@@ -175,14 +175,14 @@ namespace prjx.lib
             IEnumerable<string> enumerable = segmenter.CutForSearch(msgx);
             // 使用 LINQ 的 ToArray 方法进行转换
             string[] kwds = enumerable.ToArray();
-            kwds = removeEmptyItem(kwds);
+            kwds = RemoveEmptyItem(kwds);
             //  string[] kwds = enumerable; // 搜索引擎模式
             string kdwsJoin = string.Join("/", kwds);
            print("【搜索引擎模式】：{0}", kdwsJoin);
             return kwds;
         }
 
-        public static string[] removeEmptyItem(string[] input)
+        public static string[] RemoveEmptyItem(string[] input)
         {
             if (input == null)
             {
@@ -245,7 +245,7 @@ namespace prjx.lib
         //    string simplifiedChinese = Strings.StrConv(traditionalChinese, VbStrConv.SimplifiedChinese);
         //    return simplifiedChinese;
         //}
-        internal static bool contain(string? caption, string v)
+        internal static bool Contain(string? caption, string v)
         {
             if (caption == null)
                 return false;
@@ -273,7 +273,7 @@ namespace prjx.lib
             return splitResult;
         }
 
-        public  static string str_sub(string input, int startIndex, int length)
+        public  static string Sub1109(string input, int startIndex, int length)
         {
             // 如果起始位置小于字符串长度，则截取指定长度
             if (startIndex < input.Length)
@@ -293,7 +293,7 @@ namespace prjx.lib
                 return string.Empty; // 或者可以抛出异常或者返回 null，视情况而定
             }
         }
-        public static string substr_GetTextAfterKeyword(string text, string keyword)
+        public static string SubstrGetTextAfterKeyword(string text, string keyword)
         {
             int index = text.IndexOf(keyword);
             if (index != -1)
@@ -303,7 +303,7 @@ namespace prjx.lib
             }
             return null;
         }
-        public static string trim_RemoveUnnecessaryCharacters4tgWhtapExt(string input)
+        public static string TrimRemoveUnnecessaryCharacters4tgWhtapExt(string input)
         {
             // Define the characters to be removed
             char[] charsToRemove = new char[] { '\"', '[', ']' };
@@ -335,7 +335,7 @@ namespace prjx.lib
             string v = new string(result, 0, resultIndex);
             return v.Trim();
         }
-        public static string containRetMatchWd(string? text, HashSet<string> trgSearchKwds)
+        public static string ContainRetMatchWd(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)
                 return "";
@@ -359,12 +359,12 @@ namespace prjx.lib
 
             return "";
         }
-        public static string containRetMatchWd(string? text,string wdsFromfilePath)
+        public static string ContainRetMatchWd(string? text,string wdsFromfilePath)
         {
             HashSet<string> st = LdHsstWordsFromFile(wdsFromfilePath);
-            return (containRetMatchWd(text, st));
+            return (ContainRetMatchWd(text, st));
         }
-        public static SortedList getHstbFromQrystr(string queryString)
+        public static SortedList GetHashtableFromQrystr(string queryString)
         {
             return ParseQueryStringToSortedList(queryString);
         }
@@ -384,7 +384,7 @@ namespace prjx.lib
 
             return sortedList;
         }
-        public static string[] trimUper(string[] inputArray)
+        public static string[] TrimUper(string[] inputArray)
         {
             if (inputArray == null) return [];
 
@@ -395,7 +395,7 @@ namespace prjx.lib
             //  return resultArray;
         }
 
-        public static bool containKwdsV2(string? text, HashSet<string> trgSearchKwds)
+        public static bool ContainKwdsV2(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)
                 return false;
@@ -419,14 +419,14 @@ namespace prjx.lib
 
             return false;
         }
-        public static string[] splt(object text)
+        public static string[] Splt(object text)
         {
             if (text == null)
                 return [];
             else
                 return text.ToString().Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries);
         }
-        public static bool containKwds(string? text, HashSet<string> trgSearchKwds)
+        public static bool ContainKwds(string? text, HashSet<string> trgSearchKwds)
         {
             if (text == null)
                 return false;
@@ -449,7 +449,7 @@ namespace prjx.lib
 
             return false;
         }
-        public static bool containKwds(string? text, string trgSearchKwds)
+        public static bool ContainKwds(string? text, string trgSearchKwds)
         {
             if (text == null)
                 return false;
@@ -497,7 +497,7 @@ namespace prjx.lib
         //}
 
 
-        public static string replace_RemoveWords(string inputText, HashSet<string> wordsToRemove)
+        public static string ReplaceRemoveWords(string inputText, HashSet<string> wordsToRemove)
         {
             // 使用正则表达式拆分文本为单词
            // string[] words = Regex.Split(inputText, @"\W+");
@@ -597,14 +597,14 @@ namespace prjx.lib
             return linesHashSet;
         }
 
-        internal static bool str_eq(object? v, string cityName4srch)
+        internal static bool StrEq(object? v, string cityName4srch)
         {
             if (v == null) return false; if (cityName4srch == null) return false;
             return v.ToString().Trim().ToUpper().Equals(cityName4srch.Trim().ToUpper());
         }
 
 
-        internal static bool str_eqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
+        internal static bool StrEqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
         {
 
             string cityName4srch = arrCls.LoadFieldTryGetValue(whereExprsObj, cityName4srchxx); ;
@@ -620,7 +620,7 @@ namespace prjx.lib
 
         }
 
-        internal static string str_join2024(string v, ICollection keys)
+        internal static string Join20241109(string v, ICollection keys)
         {
             // 获取Hashtable的所有键
             //     ICollection keys = hashtable.Keys;
@@ -648,7 +648,7 @@ namespace prjx.lib
 
 
         }
-        public static bool str_eq(string? username1, string? username2)
+        public static bool StrEq(string? username1, string? username2)
         {
             if (username1 == null || username2 == null)
                 return false;

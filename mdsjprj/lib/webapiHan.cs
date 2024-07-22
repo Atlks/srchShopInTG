@@ -37,8 +37,8 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    PrintCatchEx(nameof(startWebapi), e);
-                    logErr2025(e, nameof(startWebapi), "errlog");
+                    PrintCatchEx(nameof(StartWebapi), e);
+                    logErr2025(e, nameof(StartWebapi), "errlog");
                 }
 
             };
@@ -66,7 +66,7 @@ namespace mdsj.lib
             扩展名与处理器对应表.Add("txt   css js", nameof(html文件处理器));         
             扩展名与处理器对应表.Add(" html htm", nameof(html文件处理器));
         //    扩展名与处理器对应表.Add("json", jsonfl_httpHdlrFilJson);
-            扩展名与处理器对应表.Add("jpg png", img_httpHdlrFilImg);  
+          //  扩展名与处理器对应表.Add("jpg png", img_httpHdlrFilImg);  
             文件响应处理( 扩展名与处理器对应表, http请求对象,HTTP响应对象);
             //-------------------swag doc api
             调用(特定api, http请求对象, HTTP响应对象);
@@ -113,7 +113,7 @@ namespace mdsj.lib
                 }
                 else
                 {
-                    fildown_httpHdlrFilDown(http请求对象, HTTP响应对象); 跳转到结束(); ;
+                    FildownHttpHdlrFilDown(http请求对象, HTTP响应对象); 跳转到结束(); ;
                 }
             }
             if (文件有扩展名(文件路径) && 文件不存在(文件路径))

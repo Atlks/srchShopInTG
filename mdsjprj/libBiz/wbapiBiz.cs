@@ -2,8 +2,10 @@
 using libx;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json.Linq;
 using prjx;
 using prjx.lib;
+using RG3.PF.Abstractions.Entity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -23,7 +25,7 @@ namespace mdsj.libBiz
         public static string Wbapi_setpark(string qrystr)
         {
             //shangjiaID,uid,dafen
-            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             qrystrMap["id"] = qrystrMap["uid"];
             string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
             ormJSonFL.save(qrystrMap, dbfile);
@@ -75,30 +77,30 @@ namespace mdsj.libBiz
         public static string Wbapi_dafen(string qrystr)
         {
             //shangjiaID,uid,dafen
-            SortedList dafenObj = getHstbFromQrystr(qrystr);
-            ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
+            SortedList dafenObj = GetHashtableFromQrystr(qrystr);
+            ormJSonFL.save(dafenObj, "dafenDt打分数据/" + dafenObj["shangjiaID"] + ".json");
             return "ok";
         }
 
         //public static string Wbapi_swag()
         //{
-           
+
         //}
 
 
 
-            /// <summary>
-            /// 评论商家
-            /// 
-            /// <example><![CDATA[  http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646 ]]></example>
-            /// </summary>
-            /// <param name="shangjiaID">商家id</param>
-            ///     <param name="pinlun">评论内容</param>
-            public static string Wbapi_pinlun(string qrystr)
+        /// <summary>
+        /// 评论商家
+        /// 
+        /// <example><![CDATA[  http://localhost:5000/pinlun?shangjiaID=avymrhifuyzkfetlnifryraazk&pinlun=465464564646 ]]></example>
+        /// </summary>
+        /// <param name="shangjiaID">商家id</param>
+        ///     <param name="pinlun">评论内容</param>
+        public static string Wbapi_pinlun(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
-            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             SortedList obj1 = new SortedList();
             CopySortedList(qrystrMap, obj1);
             obj1.Add("id", DateTime.Now.ToString());
@@ -110,7 +112,7 @@ namespace mdsj.libBiz
             obj1.Add("评论人id", qrystrMap["uid"]);
             System.IO.Directory.CreateDirectory("pinlunDir");
             //    ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-            ormJSonFL.save(obj1, "pinlunDir/" + qrystrMap["shangjiaID"] + ".json");
+            ormJSonFL.save(obj1, "pinlunDir评论数据/" + qrystrMap["shangjiaID"] + ".json");
 
             //    ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
             return "ok";
@@ -125,7 +127,7 @@ namespace mdsj.libBiz
         ///  <returns>返回json数组.</returns>
         public static string Wbapi_getlistPinlun(string qrystr)
         {
-            SortedList qrystrHstb = getHstbFromQrystr(qrystr);
+            SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
             var li = ormJSonFL.qrySglFL("pinlunDir/" + qrystrHstb["shangjiaID"] + ".json");
             return encodeJson(li);
         }
@@ -147,7 +149,7 @@ namespace mdsj.libBiz
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
-            SortedList dafenObj = getHstbFromQrystr(qrystr);
+            SortedList dafenObj = GetHashtableFromQrystr(qrystr);
             int page = gtfldInt(dafenObj, "page", 0);
             int pagesize = gtfldInt(dafenObj, "pagesize", 10);
             SortedList map = new SortedList();
@@ -170,17 +172,26 @@ namespace mdsj.libBiz
             List<SortedList> list_rzt = SliceX(list_aftFltr, start, pagesize);
 
 
-            SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
-            // 循环 List<SortedList<string, int>> 并设置每个 SortedList 的 "aaa" 键的值为 1
+            //------------add col
+
             foreach (var sortedList in list_rzt)
             {
-              //  if (sortedList.ContainsKey("aaa"))
-                {
-                    SetField938(sortedList, "Scores", 3);
-                    SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr.Count));
-                      //  sortedList["aaa"] = 1;
-                }
+                var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
+                var list11 = GetListHashtableFromJsonFil(pinlunDtDir);
+                SetField938(sortedList, "NumberOfComments", list11.Count);
+
+                var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
+                var list12= GetListHashtableFromJsonFil(df);
+
+
+                SetField938(sortedList, "Scores", Avg(list12,"dafen"));
+                SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr.Count));
+
             }
+
+            //----------------trans form--------------
+            SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
+
 
             //trans key
             List<SortedList> list_rzt_fmt = new List<SortedList>();
@@ -203,20 +214,138 @@ namespace mdsj.libBiz
 
 
                     SetField938(map3, keyEng, val);
-
                     if (IsNumeric((val)))
                     {
                         double objSave = ConvertStringToNumber(val);
                         SetField938(map3, keyEng, objSave);
                     }
-                     
+
                     //   Console.WriteLine($"Key: {key}, Value: {sortedList[key]}");
-                  
+
                 }
                 list_rzt_fmt.Add(map3);
             }
             return encodeJson(list_rzt_fmt);
         }
+
+
+     public   static double Avg(List<SortedList> list, string fieldName)
+        {
+            try
+            {
+                if (list == null || list.Count == 0)
+                {
+                    return 0;
+                }
+
+                var values = new List<double>();
+
+                foreach (var sortedList in list)
+                {
+                    if (sortedList.ContainsKey(fieldName) && sortedList[fieldName] is double)
+                    {
+                        //toNumber( sortedList[fieldName]
+                        values.Add(GetFieldAsNumber(sortedList, fieldName));
+                    }
+                }
+
+                if (values.Count == 0)
+                {
+                    return 0;
+                }
+
+                return values.Average();
+            }catch(Exception e)
+            {
+                PrintCatchEx("Avg", e);
+                return 0;
+            }
+         
+        }
+
+        public static double GetFieldAsNumber(SortedList sortedList, string fieldName)
+        {
+            var obj = GetField(sortedList, fieldName, 0);
+            return ToNumber(obj);
+        }
+
+        private static List<SortedList> GetListHashtableFromJsonFil(string dbf)
+        {
+            var list = new List<SortedList>();
+
+            try
+            {
+                string json = File.ReadAllText(dbf);
+                JArray jsonArray = JArray.Parse(json);
+
+                foreach (JObject obj in jsonArray)
+                {
+                    var sortedList = new SortedList();
+
+                    foreach (var property in obj.Properties())
+                    {
+                        sortedList.Add(property.Name, property.Value.ToObject<object>());
+                    }
+
+                    list.Add(sortedList);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"The file could not be read: {e.Message}");
+            }
+
+            return list;
+        }
+
+        /// <summary>
+        ///  商家入住    （ post提交 ）
+        ///  提交路径 /AddMercht
+        /// </summary>
+        /// <param name="商家"></param>
+        /// <param name="营业时间">12:00-22:00</param>
+        /// <param name="位置"></param>
+        /// <param name="照片或视频">h5文件表单上传文件</param>
+        public static void AddMerchtPOSTWbapi(HttpRequest request, HttpResponse response)
+        {
+            //   if (request.Method == HttpMethods.Post)
+
+            // Check if the request contains a file
+            var fil = "";
+            if (request.Form.Files.Count > 0)
+            {
+                foreach (var file in request.Form.Files)
+                {
+                    // Get the file content and save it to a desired location
+                    var filePath = Path.Combine("uploads1016", file.FileName);
+                    fil = filePath;
+                    Mkdir4File(filePath);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream).GetAwaiter().GetResult();
+                    }
+                }
+            }
+
+            // Handle other form data
+            //foreach (var key in request.Form.Keys)
+            //{
+            //    var value = request.Form[key];
+            //    ConsoleWriteLine($"Key: {key}, Value: {value}");
+            //}
+
+            // Call the specific API handler
+            //    httpHdlrApiSpecl(request, response);
+
+            SortedList saveOBJ = ConvertFormToSortedList(request.Form);
+            saveOBJ.Add("照片或视频", fil);
+            ormJSonFL.save(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
+            SendResp("ok", response);
+
+            ormSqlt.save(saveOBJ, "mercht商家数据/缅甸.db");
+
+        }
+
         static double ConvertStringToNumber(object str2)
         {
             try
@@ -224,12 +353,13 @@ namespace mdsj.libBiz
                 string str = ToStr(str2);
 
                 return (double.Parse(str));
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 return 0;
             }
-         
-           
+
+
         }
         private static string ToStr(object val)
         {
@@ -290,7 +420,7 @@ namespace mdsj.libBiz
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
-            SortedList qrystrMap = getHstbFromQrystr(qrystr);
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             int page = gtfldInt(qrystrMap, "page", 0);
             int pagesize = gtfldInt(qrystrMap, "pagesize", 10);
             SortedList map = new SortedList();
@@ -324,6 +454,6 @@ namespace mdsj.libBiz
             return encodeJson(list2);
         }
 
-      
+
     }
 }

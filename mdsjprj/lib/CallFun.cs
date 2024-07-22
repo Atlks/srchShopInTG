@@ -59,7 +59,7 @@ namespace mdsj.lib
 
             print_varDump(__METHOD__, $"call_exe_Pstr.retRaw", str);
             string marker = "----------marker----------";
-            str = substr_AfterMarker(str, marker);
+            str = SubstrAfterMarker(str, marker);
             str = str.Trim();
             dbgCls.PrintRet(__METHOD__, str);
             return str;
@@ -80,7 +80,7 @@ namespace mdsj.lib
 
             string str = call_exe_Pstr(execpath, scriptPath, prm_fileAbs);
             string marker = "----------qryrzt----------";
-            string strAft = substr_AfterMarker(str, marker);
+            string strAft = SubstrAfterMarker(str, marker);
             strAft = strAft.Trim();
             string prjDir = @"../../";
             string txt = File.ReadAllText(outputDir + "/" + strAft);

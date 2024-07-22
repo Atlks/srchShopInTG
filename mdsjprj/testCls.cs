@@ -142,7 +142,7 @@ namespace prjx
         internal static async System.Threading.Tasks.Task testAsync()
         {
           
-                tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+            //    tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");
@@ -165,8 +165,8 @@ namespace prjx
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
             WriteAllText("mdsj.xml.json", ConvertXmlToJson("mdsj.xml"));
 
-            var set = ProcessFilesDep("D:\\0prj\\mdsj");
-            WriteAllText("wds.json", set);
+            //var set = ProcessFilesDep("D:\\0prj\\mdsj");
+            //WriteAllText("wds.json", set);
             Print("Column1\tColumn2\tColumn3");
             Print("Data1\tData2\tData3");
             Print("  thrdid:" + Thread.CurrentThread.ManagedThreadId);
@@ -572,7 +572,7 @@ namespace prjx
                     {
                         Print("dbg");
                     }
-                    string tg = trim_RemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
+                    string tg = TrimRemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
                     if (tg == "")
                     {
                         logCls.log(map, "TestTg有效性logDir");
@@ -583,7 +583,7 @@ namespace prjx
                         continue;
                     }
                     string t = await http_GetHttpResponseAsync($"https://t.me/{tg}");
-                    HashSet<string> lines = splitTxtByChrs(t, "\n\r");
+                    HashSet<string> lines = SplitTxtByChrs(t, "\n\r");
                     if (lines.Count == 4)
                     {
                         logCls.log(map, "TestTg有效性logDir");

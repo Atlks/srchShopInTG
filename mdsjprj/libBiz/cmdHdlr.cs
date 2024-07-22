@@ -29,7 +29,7 @@ namespace mdsj.libBiz
             ///设置园区 东风园区
             if (cmdFulltxt.StartsWith("/设置园区"))
             {
-                var park = substr_AfterMarker(cmdFulltxt, "/设置园区");
+                var park = SubstrAfterMarker(cmdFulltxt, "/设置园区");
 
                 SetPark(park, update);
 
@@ -52,37 +52,7 @@ namespace mdsj.libBiz
             var fromUid = update.Message.From.Id;
             var mybotid = botClient.BotId;
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
-            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
-            if (isGrpChat(update))
-                if (!System.IO.File.Exists(f))
-                {
-                    Print("no auth " + f);
-                    // print("no auth ");
-                    botClient.SendTextMessageAsync(
-             update.Message.Chat.Id,
-             "权限不足",
-             replyToMessageId: update.Message.MessageId);
-                    return;
-                }
-
-            //auth chk ok ,,or  privete 
-
-            //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
-            string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
-            SortedList cfg = findOne(dbfile2);
-            string pk = park.Trim().ToUpper();
-
-            setFld(cfg, "园区", pk);
-            setFld(cfg, "id", grpid.ToString());
-            setFld(cfg, "grpid", grpid.ToString());
-            setFld(cfg, "whereExprs", $"园区={pk}");
-            setFld(cfg, "grpinfo", update.Message.Chat);
-            if (pk == "不限制")
-            {
-                setFld(cfg, "园区", "");
-                setFld(cfg, "whereExprs", $"");
-            }
-            ormJSonFL.save(cfg, dbfile2);
+            SetPark(park, update);
 
 
             botClient.SendTextMessageAsync(
@@ -147,6 +117,7 @@ namespace mdsj.libBiz
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
             if (isGrpChat(update))
+            {
                 if (!System.IO.File.Exists(f))
                 {
                     Print("no auth " + f);
@@ -158,24 +129,50 @@ namespace mdsj.libBiz
                     return;
                 }
 
-            //auth chk ok ,,or  privete 
+                //auth chk ok ,,or  privete 
 
-            //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
-            string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
-            SortedList cfg = findOne(dbfile2);
+                //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+                string pk = park.Trim().ToUpper();
+
+                setFld(cfg, "园区", pk);
+                setFld(cfg, "id", grpid.ToString());
+                setFld(cfg, "grpid", grpid.ToString());
+                setFld(cfg, "whereExprs", $"园区={pk}");
+                setFld(cfg, "grpinfo", update.Message.Chat);
+                if (pk == "不限制")
+                {
+                    setFld(cfg, "园区", "");
+                    setFld(cfg, "whereExprs", $"");
+                }
+                ormJSonFL.save(cfg, dbfile2);
+            }
+
+            if (!isGrpChat(update))
+            {
+                SetParkPrvt(park, update);
+            }
+
+
+
+
+        }
+
+        private static void SetParkPrvt(string park, Update update)
+        {
+            string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+            SortedList cfg = findOne(dbfile);
             string pk = park.Trim().ToUpper();
-
             setFld(cfg, "园区", pk);
-            setFld(cfg, "id", grpid.ToString());
-            setFld(cfg, "grpid", grpid.ToString());
-            setFld(cfg, "whereExprs", $"园区={pk}");
-            setFld(cfg, "grpinfo", update.Message.Chat);
+            setFld(cfg, "id", update.Message.From.Id.ToString());
+            setFld(cfg, "from", update.Message.From);
             if (pk == "不限制")
             {
                 setFld(cfg, "园区", "");
                 setFld(cfg, "whereExprs", $"");
             }
-            ormJSonFL.save(cfg, dbfile2);
+            ormJSonFL.save(cfg, dbfile);
         }
 
         public static string GetStr(string? v)
@@ -284,7 +281,7 @@ namespace mdsj.libBiz
             ///设置园区 东风园区
             if (cmdFulltxt.StartsWith("/设置园区"))
             {
-                var park = substr_AfterMarker(cmdFulltxt, "/设置园区");
+                var park = SubstrAfterMarker(cmdFulltxt, "/设置园区");
 
                 SortedList cfg = findOne(dbfile);
                 string pk = park.Trim().ToUpper();
@@ -304,7 +301,7 @@ namespace mdsj.libBiz
             ///设置城市 妙瓦底
             if (cmdFulltxt == "/设置城市")
             {
-                var park = substr_AfterMarker(cmdFulltxt, "/设置城市");
+                var park = SubstrAfterMarker(cmdFulltxt, "/设置城市");
                 SortedList cfg = findOne(dbfile);
                 setFld(cfg, "城市", park.Trim().ToUpper());
                 setFld(cfg, "id", update.Message.From.Id.ToString());

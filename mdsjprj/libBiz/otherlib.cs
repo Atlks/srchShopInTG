@@ -17,7 +17,7 @@ namespace mdsj.libBiz
         {
             if (text == null)
                 return null;
-            string[] spltWds = splt_by_fenci(ref text);
+            string[] spltWds = SpltByFenci(ref text);
             foreach (string wd in spltWds)
             {
                 if (商品与服务词库.Contains(wd))
@@ -31,7 +31,7 @@ namespace mdsj.libBiz
             List<string> li = new List<string>();
             try
             {
-                li.Add(trim_RemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, fld, "").ToString()));
+                li.Add(TrimRemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, fld, "").ToString()));
 
             }
             catch (Exception e)
