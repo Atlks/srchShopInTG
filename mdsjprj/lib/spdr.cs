@@ -117,7 +117,7 @@ namespace mdsj.lib
                     ForeachHashSet(urls, (string urlMaybeRltv) =>
                     {
                         string ext = GetExtension(urlMaybeRltv);
-                        if (EndsWith(ext, "js css jpg png gif ico jpeg mp3 mp4"))
+                        if (ISEndsWith(ext, "js css jpg png gif ico jpeg mp3 mp4"))
                             return;
                         // if (ext.EndsWith("htm") || ext.EndsWith("html"))
                         {

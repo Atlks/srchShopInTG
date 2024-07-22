@@ -119,7 +119,7 @@ namespace mdsj.lib
                 //call  wbapi_upldPOST path
                 //  wbapi_upldPost(request, response);
                 // 
-                callx(funname, request, response);
+                Callx(funname, request, response);
                 return;
             }
 
@@ -139,11 +139,23 @@ namespace mdsj.lib
             // 设置响应内容类型和编码
             SetRespContentTypeNencode(response, "application/json; charset=utf-8");
             var fn = path.Substring(1);
-            object rzt = callxTryx(api_prefix + fn, Substring(queryString, 1));
+            object rzt = CallxTryx(api_prefix + fn, Substring(queryString, 1));
             // 发送响应
             SendResp(rzt, response);
         }
-      
+
+        /// <summary>
+        /// 统一查询接口
+        ///    使用  /qry?path=pinlunDir评论数据/avymrhifuyzkfetlnifryraazk
+        /// </summary>
+        /// <param name="path">数据文件路径</param>
+        /// <returns></returns>
+        public static string WbapiXqry(string qrystr)
+        {
+            SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
+            var li = ormJSonFL.QrySglFL("" + qrystrHstb["path"] + ".json");
+            return EncodeJson(li);
+        }
         //private static void wbapi_upldPost(HttpRequest request, HttpResponse response)
         //{
         //    if (request.Method == HttpMethods.Post)
@@ -226,7 +238,7 @@ namespace mdsj.lib
 
                     var func1 = de.Value.ToString();
 
-                    var task = callx(func1, request, response);
+                    var task = Callx(func1, request, response);
                     // var task = func1(context);
                     //  task.Wait();  
                     Jmp2end();
@@ -242,7 +254,7 @@ namespace mdsj.lib
             // 获取文件的实际扩展名
             string fileExtension = Path.GetExtension(path);
             string filePath = $"{webrootDir}{path}";
-            filePath = castNormalizePath(filePath);
+            filePath = CastNormalizePath(filePath);
             if (文件有扩展名(filePath) && 文件存在(filePath))
             {
                 FileInfo fileInfo = new FileInfo(filePath);

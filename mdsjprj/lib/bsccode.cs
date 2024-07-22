@@ -206,9 +206,9 @@ namespace mdsj.lib
         {
             return left && right;
         }
-       public static object invoke(string methodName, params object[] args)
+       public static object Invoke(string methodName, params object[] args)
         {
-            return callx(methodName, args);
+            return Callx(methodName, args);
         }
 
       
@@ -220,6 +220,8 @@ namespace mdsj.lib
         /// <param name="color"></param>
         public static void PrintColoredText(string text, ConsoleColor color)
         {
+            // 输出一个笑脸
+            Console.OutputEncoding = Encoding.UTF8;
             var originalColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
             Console.WriteLine(text);
@@ -357,9 +359,9 @@ namespace mdsj.lib
             return o;
         }
 
-        public static object callx(bool authExpRzt, Delegate callback, params object[] args)
+        public static object Callx(bool authExpRzt, Delegate callback, params object[] args)
         {
-            return call_user_func(callback, args);
+            return CallUserFunc409(callback, args);
         }
 
        public static object CallxTryJmp(Delegate callback, params object[] objs)
@@ -381,13 +383,13 @@ namespace mdsj.lib
             return 0;
         }
 
-        public static object callx(string authExp, Delegate callback, params object[] args)
+        public static object Callx(string authExp, Delegate callback, params object[] args)
         {
-            return call_user_func(callback, args);
+            return CallUserFunc409(callback, args);
         }
         public static object callx(Delegate callback, params object[] args)
         {
-            return call_user_func(callback, args);
+            return CallUserFunc409(callback, args);
         }
        
 
@@ -457,7 +459,7 @@ namespace mdsj.lib
         }
 
  
-        public static object callxTryx(string methodName, params object[] args)
+        public static object CallxTryx(string methodName, params object[] args)
         {
 
             var __METHOD__ = methodName;
@@ -497,7 +499,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                PrintExcept(nameof(callxTryx), e);
+                PrintExcept(nameof(CallxTryx), e);
             }
 
 
@@ -507,7 +509,7 @@ namespace mdsj.lib
         }
     
       
-        public static object callx(string methodName, params object[] args)
+        public static object Callx(string methodName, params object[] args)
         {
 
             var __METHOD__ = methodName;
@@ -515,7 +517,7 @@ namespace mdsj.lib
             var argsMkdFmt = ConvertToMarkdownTable(args);
             Print(argsMkdFmt);
 
-            MethodInfo? methodInfo = getMethInfo(methodName);
+            MethodInfo? methodInfo = GetMethInfo(methodName);
 
             if (methodInfo == null)
             {
@@ -556,22 +558,7 @@ namespace mdsj.lib
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
-        private static MethodInfo? getMethInfo(string methodName)
-        {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Print("assemblies.Len=>" + assemblies.Length);
-            IEnumerable<Type> typeList = assemblies
-                            .SelectMany(assembly => assembly.GetTypes());
-            Print("typeList.Len=>" + typeList.Count());
-            IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            Print("methodss.Len=>" + methodss.Count());
-            var methodInfo = methodss
-                .FirstOrDefault(method =>
-                    method.Name == methodName
-                  );
-            return methodInfo;
-        }
+   
 
         public static void CallAsAsyncTaskRun(Action act)
         {

@@ -116,7 +116,7 @@ namespace mdsj.lib
         {
             return callback.DynamicInvoke(args);
         }
-        public static object call_user_func(Delegate callback, params object[] args)
+        public static object CallUserFunc409(Delegate callback, params object[] args)
         {
             var __METHOD__ = callback.Method.Name;
             PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));

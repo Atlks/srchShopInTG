@@ -130,7 +130,7 @@ namespace mdsj.lib
             map.Add("id", recID);
 
 
-            ormJSonFL.save(map, $"blshtDir/blsht{uid}.json");
+            ormJSonFL.SaveJson(map, $"blshtDir/blsht{uid}.json");
             return recID;
         }
 

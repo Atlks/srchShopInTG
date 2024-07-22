@@ -183,7 +183,7 @@ namespace mdsj.libBiz
                 var cmd = GetElmt(a, 1);
                 var hdlrname = "msgHdlr" + serchTipsWd + cmd;
                 //todo also should calltryx
-                callx(hdlrname, update);
+                Callx(hdlrname, update);
             });
           
 
@@ -269,7 +269,7 @@ namespace mdsj.libBiz
             saveDirectory = "metadt/VideoNoteDirMeta";
             SortedList sortedList = ConvertToSortedList(update.Message.VideoNote);
             sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+            ormJSonFL.SaveJson(sortedList, $"{saveDirectory}/{basname}.json");
 
             InputFileStream inputOnlineFile = toFilStrm(videoFilePath);
             await botClient_QunZzhushou.SendVideoAsync(caption: "转码结果", chatId: update.Message.Chat.Id, video: inputOnlineFile, replyToMessageId: update.Message.MessageId);
@@ -306,7 +306,7 @@ namespace mdsj.libBiz
             saveDirectory = "metadt/VoiceMtdt";
             SortedList sortedList = ConvertToSortedList(update.Message.Voice);
             sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList, $"{saveDirectory}/{basname}.json");
+            ormJSonFL.SaveJson(sortedList, $"{saveDirectory}/{basname}.json");
 
             var mp3Stream = System.IO.File.Open(outputFilePathMp3, FileMode.Open);
             var inputOnlineFile = InputFile.FromStream(mp3Stream);

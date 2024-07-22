@@ -85,7 +85,7 @@ namespace libx
             List<bool> li = new List<bool>();
 
 
-            Dictionary<string, string> filters = ldDic4qryCdtn(qrystr);
+            Dictionary<string, string> filters = LoadDic4qryCdtn(qrystr);
             foreach_DictionaryKeys(filters, (string key) =>
             {
                 li.Add((isFldValEq111(row, key, filters)));
@@ -97,14 +97,14 @@ namespace libx
             List<Filtr> li = new List<Filtr>();
           
 
-            Dictionary<string, string> filters = ldDic4qryCdtn(qrystr);
+            Dictionary<string, string> filters = LoadDic4qryCdtn(qrystr);
             foreach_DictionaryKeys(filters, (string key) =>
             {
                 li.Add(new Filtr(isFldValEq111(row, key, filters)));
             });
             return li;
         }
-        public static List<SortedList> getListFltr(string fromDdataDir, string shanrES,
+        public static List<SortedList> GetListFltr(string fromDdataDir, string shanrES,
          Func<SortedList, bool> whereFun
        )
         {
@@ -192,7 +192,7 @@ namespace libx
             PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
             return rztLi;
         }
-        public static Func<SortedList, bool> castQrystr2FltrCdtFun(string qrystr)
+        public static Func<SortedList, bool> CastQrystr2FltrCdtFun(string qrystr)
         {
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
@@ -620,7 +620,7 @@ namespace libx
             PrintCallFunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
 
-            List<SortedList> li = (List<SortedList>)callx(rnd, shareName);
+            List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
                 li = db.arr_fltr330(li, whereFun);
 

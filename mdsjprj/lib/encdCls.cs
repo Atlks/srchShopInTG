@@ -236,16 +236,54 @@ namespace mdsj.lib
         {
             return JsonConvert.DeserializeObject<List<SortedList>>(jsonString);
         }
-        public static string encodeJson(object results)
+
+        public static string EncodeJsonFmt(object results)
         {
             if (results == null)
             {
-                print(" ***fun encodeJson() ,prm rslt is null..");
+                Print(" ***fun encodeJson() ,prm rslt is null..");
                 return "{}"; // 如果对象为空，返回空对象字符串
             }
             try
             {
-                results = castToSerializableObjsOrSnglobj(results);
+                results = CastToSerializableObjsOrSnglobj(results);
+                //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                       Formatting = Formatting.Indented
+                };
+                string jsonString = JsonConvert.SerializeObject(results, settings);
+                return jsonString;
+            }
+            catch (Exception e)
+            {
+                //if (results is object[] argsArray)
+                //    return "[]"; 
+                // 检查对象是否为数组
+                if (IsArray(results))
+                {
+                    return "[]";
+                }
+                // 检查对象是否为集合
+                if (IsCollection(results))
+                {
+                    return "[]";
+                }
+                return "{}";
+            }
+        }
+
+        public static string EncodeJson(object results)
+        {
+            if (results == null)
+            {
+                Print(" ***fun encodeJson() ,prm rslt is null..");
+                return "{}"; // 如果对象为空，返回空对象字符串
+            }
+            try
+            {
+                results = CastToSerializableObjsOrSnglobj(results);
                 //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 var settings = new JsonSerializerSettings
                 {
@@ -317,7 +355,7 @@ namespace mdsj.lib
         {
             //   encodeJsonNofmt
             //     encodeJson
-            results = castToSerializableObjsOrSnglobj(results);
+            results = CastToSerializableObjsOrSnglobj(results);
 
 
             //   options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;

@@ -23,6 +23,40 @@ namespace mdsj.lib
 {
     internal class bscConvert
     {
+
+        public static void CastVal2hashtable(SortedList list)
+        {
+            // 创建一个临时的 ArrayList 来存储键
+            ArrayList keys = new ArrayList(list.Keys);
+
+            // 遍历每个键并更新值
+            foreach (string key in keys)
+            {
+                string value = (string)list[key];
+                list.Remove(key);
+                list.Add(key, castUrlQueryString2hashtable(value));
+                //    list[key] = castUrlQueryString2hashtable(value); ;
+            }
+        }
+
+        public static void ConvertKeysToLowercase(Hashtable hashtable)
+        {
+            Hashtable newHashtable = new Hashtable();
+
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                string lowercaseKey = entry.Key.ToString().ToLower(); // 将键转换为小写
+                newHashtable[lowercaseKey] = entry.Value; // 保持值不变，添加到新的 Hashtable 中
+            }
+
+            // 清空原始 Hashtable 并将新的键值对复制回去
+            hashtable.Clear();
+            foreach (DictionaryEntry entry in newHashtable)
+            {
+                hashtable[entry.Key] = entry.Value;
+            }
+        }
+
         public static int ToInt146(object obj)
         {
             return Convert.ToInt32(obj);
@@ -298,7 +332,7 @@ namespace mdsj.lib
             for (int i = 0; i < arr.Length; i++)
             {
                 object obj = arr[i];
-                sb.AppendLine($"| {i}\t|{encodeJson(obj)}\t|");
+                sb.AppendLine($"| {i}\t|{EncodeJson(obj)}\t|");
             }
 
             return sb.ToString();

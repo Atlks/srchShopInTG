@@ -22,7 +22,7 @@ namespace mdsj.lib
 
             inif = $"{prjdir}/cfgNlp/wdlib.enNcn5k.delKenLenLess3Fnl.ini";
             jsonf = "C:\\Users\\Administrator\\GolandProjects\\awesomeProject\\wd.tmp3k.json";
-            SortedList<string, string> hs1 = LdHstbEsFrmIni(inif);
+            SortedList<string, string> hs1 = LoadHashtabEsFrmIni(inif);
             SortedList<string, string> hs2 = LdHstbEsFrmJsonFile(jsonf);
             SortedList<string, string> hs4 = MergeSortedLists(hs1, hs2);
             //  CleanupSortedListKeysLenLessthan3(hs4);

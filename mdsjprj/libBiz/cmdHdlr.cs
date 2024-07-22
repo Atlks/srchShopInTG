@@ -136,17 +136,17 @@ namespace mdsj.libBiz
                 SortedList cfg = findOne(dbfile2);
                 string pk = park.Trim().ToUpper();
 
-                setFld(cfg, "园区", pk);
-                setFld(cfg, "id", grpid.ToString());
-                setFld(cfg, "grpid", grpid.ToString());
-                setFld(cfg, "whereExprs", $"园区={pk}");
-                setFld(cfg, "grpinfo", update.Message.Chat);
+                SetFld(cfg, "园区", pk);
+                SetFld(cfg, "id", grpid.ToString());
+                SetFld(cfg, "grpid", grpid.ToString());
+                SetFld(cfg, "whereExprs", $"园区={pk}");
+                SetFld(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-                    setFld(cfg, "园区", "");
-                    setFld(cfg, "whereExprs", $"");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
                 }
-                ormJSonFL.save(cfg, dbfile2);
+                ormJSonFL.SaveJson(cfg, dbfile2);
             }
 
             if (!isGrpChat(update))
@@ -164,15 +164,15 @@ namespace mdsj.libBiz
             string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
             SortedList cfg = findOne(dbfile);
             string pk = park.Trim().ToUpper();
-            setFld(cfg, "园区", pk);
-            setFld(cfg, "id", update.Message.From.Id.ToString());
-            setFld(cfg, "from", update.Message.From);
+            SetFld(cfg, "园区", pk);
+            SetFld(cfg, "id", update.Message.From.Id.ToString());
+            SetFld(cfg, "from", update.Message.From);
             if (pk == "不限制")
             {
-                setFld(cfg, "园区", "");
-                setFld(cfg, "whereExprs", $"");
+                SetFld(cfg, "园区", "");
+                SetFld(cfg, "whereExprs", $"");
             }
-            ormJSonFL.save(cfg, dbfile);
+            ormJSonFL.SaveJson(cfg, dbfile);
         }
 
         public static string GetStr(string? v)
@@ -206,7 +206,7 @@ namespace mdsj.libBiz
             string cmd = getCmdFun(update?.Message?.Text);
             //  Print("oo617");
             KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{cmd}.txt");
-            Print(encodeJson(btns));
+            Print(EncodeJson(btns));
             var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
             string imgPath = "今日促销商家.gif";
             var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
@@ -274,7 +274,7 @@ namespace mdsj.libBiz
             //私聊消息  /start开始
             if (cmdFulltxt == "/start")
             {
-                call_user_func(evt_startMsgEvtInPrvtAddBot, update);
+                CallUserFunc409(evt_startMsgEvtInPrvtAddBot, update);
                 return;
             }
 
@@ -285,15 +285,15 @@ namespace mdsj.libBiz
 
                 SortedList cfg = findOne(dbfile);
                 string pk = park.Trim().ToUpper();
-                setFld(cfg, "园区", pk);
-                setFld(cfg, "id", update.Message.From.Id.ToString());
-                setFld(cfg, "from", update.Message.From);
+                SetFld(cfg, "园区", pk);
+                SetFld(cfg, "id", update.Message.From.Id.ToString());
+                SetFld(cfg, "from", update.Message.From);
                 if (pk == "不限制")
                 {
-                    setFld(cfg, "园区", "");
-                    setFld(cfg, "whereExprs", $"");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
                 }
-                ormJSonFL.save(cfg, dbfile);
+                ormJSonFL.SaveJson(cfg, dbfile);
 
 
 
@@ -303,11 +303,11 @@ namespace mdsj.libBiz
             {
                 var park = SubstrAfterMarker(cmdFulltxt, "/设置城市");
                 SortedList cfg = findOne(dbfile);
-                setFld(cfg, "城市", park.Trim().ToUpper());
-                setFld(cfg, "id", update.Message.From.Id.ToString());
-                setFld(cfg, "from", update.Message.From);
+                SetFld(cfg, "城市", park.Trim().ToUpper());
+                SetFld(cfg, "id", update.Message.From.Id.ToString());
+                SetFld(cfg, "from", update.Message.From);
 
-                ormJSonFL.save(cfg, dbfile);
+                ormJSonFL.SaveJson(cfg, dbfile);
 
             }
 

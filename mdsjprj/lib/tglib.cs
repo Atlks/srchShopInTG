@@ -242,7 +242,7 @@ namespace prjx.lib
                 var chatid = Convert.ToInt64(de.Key);
                 var map = de.Value;
                 JObject jo = (JObject)map;
-                string chtType = getFld(jo, "chat.type", "");
+                string chtType = GetFld(jo, "chat.type", "");
                 //私聊不要助力本群
                 if (!chtType.Contains("group"))
                 {
@@ -266,7 +266,7 @@ namespace prjx.lib
 
                     //qry from mrcht by  where exprs  strFmt
                     var whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-                    var shareNamess = arrCls.LoadFieldTryGetValue(whereExprsObj, "@share");
+                    var shareNamess = LoadFieldTryGetValue(whereExprsObj, "@share");
                     srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObj, shareNamess);
                 }
                 return 0;
@@ -297,15 +297,15 @@ namespace prjx.lib
                     return false;
                 //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                 if (hasCondt(whereExprsObjFltrs, "城市"))
-                    if (!strCls.StrEq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["城市"], LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "园区"))
-                    if (!strCls.StrEq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["园区"], LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
                         return false;
                 if (hasCondt(whereExprsObjFltrs, "国家"))
-                    if (!strCls.StrEq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
+                    if (!strCls.StrEq(row["国家"], LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
                         return false;
-                if (arrCls.LoadFieldDefEmpty(row, "cateEgls") == "Property")
+                if (LoadFieldDefEmpty(row, "cateEgls") == "Property")
                     return false;
 
 
@@ -315,9 +315,9 @@ namespace prjx.lib
                     return false;
 
                 HashSet<string> curRowKywdSset = new HashSet<string>();
-                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "商家"));
-                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "关键词"));
-                arrCls.AddElmts2hashset(curRowKywdSset, arrCls.LoadFieldDefEmpty(row, "分类关键词"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "商家"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "关键词"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "分类关键词"));
                 if (curRowKywdSset.Contains(keyword))
                     return true;
                 return false;
@@ -330,8 +330,8 @@ namespace prjx.lib
             //map select 
             Func<SortedList, InlineKeyboardButton[]> mapFun = (SortedList row) =>
             {
-                string text = arrCls.LoadFieldDefEmpty(row, "城市") + " • " + arrCls.LoadFieldDefEmpty(row, "园区") + " • " + arrCls.LoadFieldDefEmpty(row, "商家");
-                string guid = arrCls.LoadFieldDefEmpty(row, "Guid编号");
+                string text = LoadFieldDefEmpty(row, "城市") + " • " +LoadFieldDefEmpty(row, "园区") + " • " + LoadFieldDefEmpty(row, "商家");
+                string guid = LoadFieldDefEmpty(row, "Guid编号");
                 InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&sdr=tmr&btn=dtl&ckuid=n" } };
                 return btnsInLine;
             };
@@ -367,7 +367,7 @@ namespace prjx.lib
 
             //qry from mrcht by  where exprs  strFmt
             whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
-            partfile区块文件Exprs = arrCls.LoadFieldTryGetValue(whereExprsObj, "@share");
+            partfile区块文件Exprs = LoadFieldTryGetValue(whereExprsObj, "@share");
         }
 
 

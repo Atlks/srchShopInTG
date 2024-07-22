@@ -309,7 +309,7 @@ namespace prjx
             //count = results.Count;
 
 
-            results = arrCls.RdmList<InlineKeyboardButton[]>(results);
+            results = GetRdmList<InlineKeyboardButton[]>(results);
 
             results = results.Skip(0 * 10).Take(5).ToList();
 
@@ -407,7 +407,7 @@ namespace prjx
                 Print(" SendPhotoAsync " + de.Key);
                 var map = de.Value;
                 JObject jo = (JObject)map;
-                string chtType = getFld(jo, "chat.type", "");
+                string chtType = GetFld(jo, "chat.type", "");
 
                 ReplyKeyboardMarkup rplyKbdMkp;
                 //  Program.botClient.send

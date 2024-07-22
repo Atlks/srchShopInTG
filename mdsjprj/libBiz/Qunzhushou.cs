@@ -273,7 +273,7 @@ namespace mdsj.libBiz
             saveDirectory = "fileData";
             SortedList sortedList = ConvertToSortedList(update.Message.Audio);
             sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList, $"{saveDirectory}/{fnameOri}.json");
+            ormJSonFL.SaveJson(sortedList, $"{saveDirectory}/{fnameOri}.json");
 
             PrintRet(__METHOD__, 0);
         }
@@ -302,7 +302,7 @@ namespace mdsj.libBiz
             saveDirectory = "saveAudioMetaDir";
             SortedList sortedList = ConvertToSortedList(update.Message.Audio);
             sortedList.Add("filenameLoc", fileName1);
-            ormJSonFL.save(sortedList,$"musicData/{songname}.json");
+            ormJSonFL.SaveJson(sortedList,$"musicData/{songname}.json");
 
             PrintRet(__METHOD__, 0);
         }

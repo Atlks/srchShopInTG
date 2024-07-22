@@ -22,13 +22,20 @@ namespace mdsj.libBiz
         //todo  setcity  setpark
 
         //  http://localhost:5000/setpark?park=东风园区&uid=007
-        public static string Wbapi_setpark(string qrystr)
+
+
+        /// <summary>
+        /// 设置园区
+        /// </summary>
+        /// <param name="qrystr"></param>
+        /// <returns></returns>
+        public static string WbapiXsetpark(string qrystr)
         {
             //shangjiaID,uid,dafen
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             qrystrMap["id"] = qrystrMap["uid"];
             string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
-            ormJSonFL.save(qrystrMap, dbfile);
+            ormJSonFL.SaveJson(qrystrMap, dbfile);
             return "ok";
         }
 
@@ -74,11 +81,11 @@ namespace mdsj.libBiz
         /// <param name="shangjiaID">商家id</param>
         /// <param name="dafen">分数</param>
         ///     <param name="uid">用户id</param>
-        public static string Wbapi_dafen(string qrystr)
+        public static string WbapiXdafen(string qrystr)
         {
             //shangjiaID,uid,dafen
             SortedList dafenObj = GetHashtableFromQrystr(qrystr);
-            ormJSonFL.save(dafenObj, "dafenDt打分数据/" + dafenObj["shangjiaID"] + ".json");
+            ormJSonFL.SaveJson(dafenObj, "dafenDt打分数据/" + dafenObj["shangjiaID"] + ".json");
             return "ok";
         }
 
@@ -96,7 +103,7 @@ namespace mdsj.libBiz
         /// </summary>
         /// <param name="shangjiaID">商家id</param>
         ///     <param name="pinlun">评论内容</param>
-        public static string Wbapi_pinlun(string qrystr)
+        public static string WbapiXpinlun(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
@@ -112,7 +119,7 @@ namespace mdsj.libBiz
             obj1.Add("评论人id", qrystrMap["uid"]);
             System.IO.Directory.CreateDirectory("pinlunDir");
             //    ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-            ormJSonFL.save(obj1, "pinlunDir评论数据/" + qrystrMap["shangjiaID"] + ".json");
+            ormJSonFL.SaveJson(obj1, "pinlunDir评论数据/" + qrystrMap["shangjiaID"] + ".json");
 
             //    ormJSonFL.save(dafenObj, "dafenDatadir/" + dafenObj["shangjiaID"] + ".json");
             return "ok";
@@ -125,12 +132,15 @@ namespace mdsj.libBiz
         /// </summary>
         /// <param name="shangjiaID">商家id</param>
         ///  <returns>返回json数组.</returns>
-        public static string Wbapi_getlistPinlun(string qrystr)
+        public static string WbapiXgetlistPinlun(string qrystr)
         {
             SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
-            var li = ormJSonFL.qrySglFL("pinlunDir/" + qrystrHstb["shangjiaID"] + ".json");
-            return encodeJson(li);
+            var li = ormJSonFL.QrySglFL("pinlunDir评论数据/" + qrystrHstb["shangjiaID"] + ".json");
+            return EncodeJson(li);
         }
+
+
+
 
         /// <summary>
         /// 查询商家
@@ -145,24 +155,24 @@ namespace mdsj.libBiz
         ///        <param name="pagesize">每页数量</param>
         ///  <returns>返回json数组.</returns>
 
-        public static string Wbapi_getlist(string qrystr)
+        public static string WbapiXgetlist(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList dafenObj = GetHashtableFromQrystr(qrystr);
-            int page = gtfldInt(dafenObj, "page", 0);
-            int pagesize = gtfldInt(dafenObj, "pagesize", 10);
+            int page = GetFieldAsInt(dafenObj, "page", 0);
+            int pagesize = GetFieldAsInt(dafenObj, "pagesize", 10);
             SortedList map = new SortedList();
             map.Add("limit", 5);
 
-            Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
-            var list = getListFltr("mercht商家数据", null, whereFun);
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrystr);
+            var list = GetListFltr("mercht商家数据", null, whereFun);
             var list_aftFltr = ArrFltr(list, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
-                li.Add((isNotEmptyLianxi(row)));
+                li.Add((IsNotEmptyLianxi(row)));
                 //   li.Add((isLianxifshValid(row)));
-                return isChkfltrOk(li);
+                return IsChkfltrOk(li);
 
             });
             int start = (page - 1) * pagesize;
@@ -228,7 +238,7 @@ namespace mdsj.libBiz
 
             //--------trans fmt chg int fmt
             //chg int fmt
-            return encodeJson(list_rzt_fmt);
+            return EncodeJson(list_rzt_fmt);
         }
 
 
@@ -273,10 +283,10 @@ namespace mdsj.libBiz
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
-            ormJSonFL.save(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
+            ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
             SendResp("ok", response);
 
-            ormSqlt.save(saveOBJ, "mercht商家数据/缅甸.db");
+            ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
 
         }
 
@@ -290,13 +300,13 @@ namespace mdsj.libBiz
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
-            int page = gtfldInt(qrystrMap, "page", 0);
-            int pagesize = gtfldInt(qrystrMap, "pagesize", 10);
+            int page = GetFieldAsInt(qrystrMap, "page", 0);
+            int pagesize = GetFieldAsInt(qrystrMap, "pagesize", 10);
             SortedList map = new SortedList();
             map.Add("limit", 5);
 
-            Func<SortedList, bool> whereFun = castQrystr2FltrCdtFun(qrystr);
-            var list = getListFltr("mercht商家数据", null, whereFun);
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrystr);
+            var list = GetListFltr("mercht商家数据", null, whereFun);
             var list3 = ArrFltr(list, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
@@ -315,12 +325,12 @@ namespace mdsj.libBiz
             var list2 = SliceX(list, start, pagesize);
             //    foreach_hashtable
             //Func<DictionaryEntry, object> fun
-            foreach_hstbEs(list2, (SortedList rw) =>
+            ForeachHashtableEs(list2, (SortedList rw) =>
             {
-                rw.Add("pinlun", ormJSonFL.qrySglFL("pinlunDir/" + qrystrMap["id"] + ".json"));
+                rw.Add("pinlun", ormJSonFL.QrySglFL("pinlunDir/" + qrystrMap["id"] + ".json"));
                 rw.Add("dafen", "555");
             });
-            return encodeJson(list2);
+            return EncodeJson(list2);
         }
 
 

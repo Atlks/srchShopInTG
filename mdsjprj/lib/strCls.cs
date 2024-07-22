@@ -361,7 +361,7 @@ namespace prjx.lib
         }
         public static string ContainRetMatchWd(string? text,string wdsFromfilePath)
         {
-            HashSet<string> st = LdHsstWordsFromFile(wdsFromfilePath);
+            HashSet<string> st = LoadHashstWordsFromFile(wdsFromfilePath);
             return (ContainRetMatchWd(text, st));
         }
         public static SortedList GetHashtableFromQrystr(string queryString)
@@ -607,7 +607,7 @@ namespace prjx.lib
         internal static bool StrEqV2(object? rowVal, Dictionary<string, Microsoft.Extensions.Primitives.StringValues> whereExprsObj, string cityName4srchxx)
         {
 
-            string cityName4srch = arrCls.LoadFieldTryGetValue(whereExprsObj, cityName4srchxx); ;
+            string cityName4srch = LoadFieldTryGetValue(whereExprsObj, cityName4srchxx); ;
             if (cityName4srch == null)  //if not have this clm in where exprs
                 return false;
             else if (cityName4srch != null)

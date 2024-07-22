@@ -75,7 +75,7 @@ namespace mdsj.libBiz
                         SortedList obj = new SortedList();
                         obj.Add("id", uid);
                         obj.Add("user", update.Message.From);
-                        ormJSonFL.save(obj, "aduser.json");
+                        ormJSonFL.SaveJson(obj, "aduser.json");
                        Print("可能广告");
                         //  tglib.bot_dltMsgThenSendmsg(update.Message!.Chat.Id, update.Message.MessageId, "检测到此消息为重复性消息,本消息10秒后删除!", 10);
 
@@ -88,7 +88,7 @@ namespace mdsj.libBiz
                         SortedList obj = new SortedList();
                         obj.Add("id", uid);
                         obj.Add("user", update.Message.From);
-                        ormJSonFL.save(obj, "aduser.json");
+                        ormJSonFL.SaveJson(obj, "aduser.json");
                     }
 
                     //广告号检测

@@ -40,7 +40,7 @@ namespace prjx
                 SortedList rw = rows[i];
                 try
                 {
-                    if (arrCls.LoadFieldTryGetValueAsStrDefNull(rw, "评论人id") == null)
+                    if (LoadFieldTryGetValueAsStrDefNull(rw, "评论人id") == null)
                     {
                         continue;
                     }

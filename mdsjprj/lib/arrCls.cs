@@ -18,24 +18,48 @@ namespace prjx.lib
 {
     public class arrCls
     {
-        public static void ConvertKeysToLowercase(Hashtable hashtable)
+      
+        public static List<SortedList> TransltKey(ArrayList lst458, string filePath)
         {
-            Hashtable newHashtable = new Hashtable();
+            SortedList<string, string> transmap = LoadSortedListFromIni(filePath);
 
-            foreach (DictionaryEntry entry in hashtable)
+
+            //trans key
+            List<SortedList> list_rzt_fmt = new List<SortedList>();
+            foreach (SortedList sortedList in lst458)
             {
-                string lowercaseKey = entry.Key.ToString().ToLower(); // 将键转换为小写
-                newHashtable[lowercaseKey] = entry.Value; // 保持值不变，添加到新的 Hashtable 中
+                SortedList map3 = new SortedList();
+                // 循环遍历每一个键
+                foreach (DictionaryEntry kvp in sortedList)
+                {
+                    var key = kvp.Key;
+                    if (key.ToString() == "Searchs")
+                        Print("dbg");
+                    //add all cn key
+                    var Cnkey = key;
+                    var val = GetField(sortedList, key.ToString(), "");
+                    SetField938(map3, Cnkey.ToString(), val);
+
+                    //add all eng key
+                    var keyEng = LoadFieldDefEmpty(transmap, Cnkey);
+                    if (keyEng == "")
+                        keyEng = Cnkey.ToString();
+                    SetField938(map3, keyEng, val);
+                    //chg int fmt
+                    if (IsNumeric((val)))
+                    {
+                        double objSave = ConvertStringToNumber(val);
+                        SetField938(map3, keyEng, objSave);
+                    }
+
+                    //   Console.WriteLine($"Key: {key}, Value: {sortedList[key]}");
+
+                }
+                list_rzt_fmt.Add(map3);
             }
 
-            // 清空原始 Hashtable 并将新的键值对复制回去
-            hashtable.Clear();
-            foreach (DictionaryEntry entry in newHashtable)
-            {
-                hashtable[entry.Key] = entry.Value;
-            }
+            return list_rzt_fmt;
         }
-
 
         public static HashSet<string> RemoveElementsContainingNumbers(HashSet<string> hashSet)
         {
@@ -116,138 +140,16 @@ namespace prjx.lib
 
             return jsonStringList;
         }
-        static List<string> getListFrmJsonFil(string filePath)
-        {
-            List<string> jsonStringList = new List<string>();
+       
 
-            try
-            {
-                // 读取 JSON 文件内容
-                string jsonString = System.IO.File.ReadAllText(filePath);
-                // Configure JsonSerializerOptions to allow reflection-based serialization
-                var options = new JsonSerializerOptions
-                {
-                    // Enable reflection-based serialization
-                    //   TypeNameHandling = TypeNameHandling.All, // or TypeNameHandling.Auto
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
-                };
-                // 将 JSON 字符串解析为 List<string>
-                jsonStringList = System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString, options);
-            }
-            catch (FileNotFoundException)
-            {
-                ConsoleWriteLine($"File not found: {filePath}");
-            }
-            catch (System.Text.Json.JsonException)
-            {
-                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
-            }
-            catch (Exception ex)
-            {
-                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
-            }
-
-            return jsonStringList;
-        }
-        public static bool EndsWith(string ext, string extss)
-        {
-            string[] a = extss.Split(" ");
-            foreach (string ex in a)
-            {
-                if (ext.EndsWith(ex))
-                    return true;
-            }
-            return false;
-        }
-
-
-
-
-        public static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
-        {
-            // 创建一个新的 SortedList 来存储结果
-            SortedList<string, string> sortedList = new SortedList<string, string>();
-
-            // 检查文件是否存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new FileNotFoundException("The specified file does not exist.", filePath);
-            }
-
-            // 读取文件的内容
-            string jsonContent = System.IO.File.ReadAllText(filePath);
-
-            // 解析 JSON 数据为字典
-            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
-
-            // 将字典数据添加到 SortedList 中
-            foreach (var kvp in data)
-            {
-                sortedList[kvp.Key] = kvp.Value;
-            }
-
-            return sortedList;
-        }
-        public static SortedList<string, string> ReadIniFileToSortedList(string filePath)
-        {
-            // 创建一个新的 SortedList 来存储结果
-            SortedList<string, string> sortedList = new SortedList<string, string>();
-
-            // 检查文件是否存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new FileNotFoundException("The specified file does not exist.", filePath);
-            }
-
-            // 读取文件的所有行
-            string[] lines = System.IO.File.ReadAllLines(filePath);
-
-            // 遍历每一行
-            foreach (var line in lines)
-            {
-                // 跳过空行和注释行
-                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";") || line.TrimStart().StartsWith("#"))
-                {
-                    continue;
-                }
-
-                // 找到等号的位置
-                int equalsIndex = line.IndexOf('=');
-                if (equalsIndex > 0)
-                {
-                    // 提取键和值
-                    string key = line.Substring(0, equalsIndex).Trim();
-                    string value = line.Substring(equalsIndex + 1).Trim();
-
-                    // 将键值对添加到 SortedList 中
-                    sortedList[key] = value;
-                }
-            }
-
-            return sortedList;
-        }
-
+     
 
         public static HashSet<string> FilterUrlsEndwithHtm(HashSet<string> urls)
         {
             return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));
         }
-        public static string GetExtension(string url)
-        {
-            try
-            {
-                var ext = Path.GetExtension(url);
-                ext = ext.ToLower().Trim();
-                return ext;
-            }
-            catch (Exception e)
-            {
-                return "";
-            }
-
-        }
-
+      
+      
         public static void CleanupSortedListKeysLenLessthan3(SortedList<string, string> sortedList)
         {
             // 创建一个列表，存储需要移除的键
@@ -310,53 +212,9 @@ namespace prjx.lib
                 list.Add(key, fun(value));
             }
         }
-        public static void CastVal2hashtable(SortedList list)
-        {
-            // 创建一个临时的 ArrayList 来存储键
-            ArrayList keys = new ArrayList(list.Keys);
 
-            // 遍历每个键并更新值
-            foreach (string key in keys)
-            {
-                string value = (string)list[key];
-                list.Remove(key);
-                list.Add(key, castUrlQueryString2hashtable(value));
-                //    list[key] = castUrlQueryString2hashtable(value); ;
-            }
-        }
 
-        public static string GetKeysCommaSeparated(SortedList list)
-        {
-            // 检查输入参数是否为 null
-            if (list == null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-
-            // 创建一个 StringBuilder 来构建结果字符串
-            System.Text.StringBuilder sb = new System.Text.StringBuilder();
-
-            foreach (var key in list.Keys)
-            {
-                // 将每个键添加到 StringBuilder 中，并附加逗号
-                sb.Append(key).Append(",");
-            }
-
-            // 移除最后一个多余的逗号
-            if (sb.Length > 0)
-            {
-                sb.Length--; // 或者 sb.Remove(sb.Length - 1, 1);
-            }
-
-            return sb.ToString();
-        }
-        public static void setFld(SortedList cfg, string f, object v)
-        {
-            if (cfg.ContainsKey(f))
-                cfg.Remove(f);
-
-            cfg.Add(f, v);
-        }
+      
         public static void RemoveWordsFromHashSet(HashSet<string> words, string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return;
@@ -383,21 +241,8 @@ namespace prjx.lib
 
             return resultSet;
         }
-        private static string ldfld(Dictionary<string, string> parse_str1, string fld)
-        {
-            if (parse_str1.ContainsKey(fld))
-                return parse_str1[fld];
-            else
-                return "";
-        }
-
-        public static string LoadFieldAsStr(Dictionary<string, string> parse_str1, string fld)
-        {
-            if (parse_str1.ContainsKey(fld))
-                return parse_str1[fld];
-            else
-                return "";
-        }
+   
+        
         public static object ArrSlice<t>(List<t> inputList, int startIdx, int length)
         {
             //  List<Dictionary
@@ -476,38 +321,8 @@ namespace prjx.lib
             // 使用 LINQ 的 Select 方法对每个元素应用 mapFunction
             return source.Select(mapFunction);
         }
-        public static object LoadField(SortedList hashobj, string fld, object dfval)
-        {
-            try
-            {
-                if (hashobj.ContainsKey(fld))
-                    return hashobj[fld];
-                else
-                    return dfval;
-            }
-            catch (Exception e)
-            {
-                return dfval;
-            }
-
-
-        }
-
-        public static object ldfld(List<Dictionary<string, object>> lst, string fld, string v2)
-        {
-            if (lst.Count > 0)
-            {
-                Dictionary<string, object> d = lst[0];
-                if (d.ContainsKey(fld))
-                    return d[fld];
-
-                else
-                    return v2;
-
-
-            }
-            return v2;
-        }
+     
+        
         internal static void map_add(SortedList map, string idClmName, object item)
         {
 
@@ -581,23 +396,7 @@ namespace prjx.lib
         {
             return MergeHashSets(list1, list2);
         }
-        public static bool isMmsgHasMatchPostWd(HashSet<string> postnKywd位置词set, string[] kwds)
-        {
-            //if (text == null)
-            //    return null;
-            string[] spltWds = kwds;
-            foreach (string wd in spltWds)
-            {
-                if (postnKywd位置词set.Contains(wd))
-                {
-                    Print("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
-                    return true;
-                }
-
-            }
-            return false;
-        }
-
+    
         public static string[] RemoveShortWords(string[] words)
         {
             List<string> result = new List<string>();
@@ -611,23 +410,7 @@ namespace prjx.lib
             return result.ToArray();
         }
 
-        public static bool isCcontainKwds42(HashSet<string> curRowKywdSset, string[] kwds)
-        {
-            kwds = Array.ConvertAll(kwds, s => s.ToUpper());
-            curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
-
-            return isMmsgHasMatchPostWd(curRowKywdSset, kwds);
-        }
-        public static void SetIdProperties(ArrayList arrayList)
-        {
-            foreach (var item in arrayList)
-            {
-                SortedList sortedList1 = (SortedList)item;
-                sortedList1.Add("id", sortedList1["Guid"]);
-
-            }
-        }
-
+     
         public static List<t> array_merge<t>(List<t> list1, List<t> list2)
         {
             List<t> result = new List<t>();
@@ -675,16 +458,7 @@ namespace prjx.lib
 
         //    return result;
         //}
-        public static List<T> RdmList<T>(List<T> results)
-        {
-            List<T> results22;
-            Random rng = new();
-
-            results22 = [.. results.OrderBy(x => rng.Next())];
-            return results22;
-        }
-
-
+      
 
         //private static void findd()
         //{
@@ -734,92 +508,7 @@ namespace prjx.lib
             }
         }
 
-        internal static string LoadFieldDefEmpty(SortedList<string, string> row, object fldx)
-        {
-            if (fldx == null)
-                return "";
-            string fld = fldx.ToString();
-            if (row.ContainsKey(fld))
-            {
-                if (row[fld] == null)
-                    return "";
-                return row[fld].ToString();
-            }
-            else
-                return "";
-            //if (row[fld] == null)
-            //    return "";
-            //return row[fld].ToString();
-        }
-    
-        internal static string LoadFieldDefEmpty(SortedList row, string fld)
-        {
-            if (row.ContainsKey(fld))
-            {
-                if (row[fld] == null)
-                    return "";
-                return row[fld].ToString();
-            }
-            else
-                return "";
-            //if (row[fld] == null)
-            //    return "";
-            //return row[fld].ToString();
-        }
-
-
-        internal static string ldfld_TryGetValueDfEmpy(Dictionary<string, StringValues> whereExprsObj, string k)
-        {
-            // 使用 TryGetValue 方法获取值
-            object value;
-            try
-            {
-                return whereExprsObj[k];
-
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
-            //{
-            //    return (string)value;
-            //}
-
-        }
-
-        public static string ldfld_TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string fld)
-        {
-            // 使用 TryGetValue 方法获取值
-            object value;
-            if (whereExprsObj.ContainsKey(fld))
-                if (whereExprsObj[fld] == null)
-                    return "";
-                else
-                    return whereExprsObj[fld].ToString();
-            else
-                return "";
-        }
-
-        internal static string LoadFieldTryGetValueAsStrDefNull(SortedList whereExprsObj, string fld)
-        {
-            // 使用 TryGetValue 方法获取值
-            object value;
-            if (whereExprsObj.ContainsKey(fld))
-                if (whereExprsObj[fld] == null)
-                    return null;
-                else
-                    return whereExprsObj[fld].ToString();
-            else
-                return null;
-
-            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
-            //{
-            //    return (string)value;
-            //}
-
-        }
-
+     
         public static void CopyPropSortedListToMerchant(SortedList sortedList, Merchant merchant)
         {
             Type merchantType = typeof(Merchant);
@@ -851,33 +540,7 @@ namespace prjx.lib
             }
         }
 
-        public static string LoadFieldTryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
-        {
-            // 使用 TryGetValue 方法获取值
-            object value;
-            if (whereExprsObj.ContainsKey(fld))
-                return whereExprsObj[fld];
-            else
-                return null;
-
-            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
-            //{
-            //    return (string)value;
-            //}
-
-        }
-
-        internal static void SetFieldReplaceKeyV(SortedList obj, string fld, object v)
-        {
-            if (fld == null)
-                return;
-            if (obj.ContainsKey(fld))
-                obj[fld] = v;
-            else
-                obj.Add(fld, v);
-        }
-
-
+      
 
         /// <summary>
         /// 计算集合的长度。
@@ -917,7 +580,7 @@ namespace prjx.lib
             foreach (DictionaryEntry newx in newList)
             {
                 if (newx.Key != null)
-                    arrCls.SetFieldAddRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
+                    SetFieldAddRplsKeyV(oldList, newx.Key.ToString(), newx.Value);
                 //   newList.Add(entry.Key, entry.Value);
             }
 
@@ -931,18 +594,9 @@ namespace prjx.lib
         //    }
         //    SortedList1_iot.Add(key, objSave);
         //}
-        public static string GetElmt(string[] array, int index)
-        {
-            if (index < 0 || index >= array.Length)
-            {
-                return "";
-            }
+   
 
-            string element = array[index];
 
-            return element?.Trim().ToUpper();
-            //   return   array[index].Trim().ToUpper();
-        }
         public static Dictionary<string, StringValues> CopySortedListToDictionary(SortedList sortedList)
         {
             Dictionary<string, StringValues> dictionary = new Dictionary<string, StringValues>();
@@ -973,25 +627,7 @@ namespace prjx.lib
 
             return hashSet2;
         }
-        public static void SetField938(SortedList SortedList1_iot, string key, object objSave)
-        {
-            if (SortedList1_iot.ContainsKey(key))
-            {
-                //remove moshi 更好，因为可能不同的类型 原来的
-                SortedList1_iot.Remove(key.ToString());
-            }
-            SortedList1_iot.Add(key, objSave);
-        }
-
-        internal static void SetFieldAddRplsKeyV(SortedList listIot, string? key, object objSave)
-        {
-            if (listIot.ContainsKey(key))
-                listIot[key] = objSave;
-            else
-                listIot.Add(key, objSave);
-        }
-
-
+      
         public static HashSet<string> MergeHashSets(HashSet<string> set1, HashSet<string> set2)
         {
             HashSet<string> resultSet = new HashSet<string>(set1);

@@ -25,6 +25,7 @@ using static mdsj.lib.encdCls;
 using DocumentFormat.OpenXml.Drawing;
 using mdsj.libBiz;
 using Microsoft.AspNetCore.Http;
+using System.Diagnostics.Metrics;
 namespace prjx.lib
 {
     internal class dbgCls
@@ -315,7 +316,8 @@ namespace prjx.lib
          */
         public static void PrintCallFunArgs(string METHOD__, object func_get_args)
         {
-         
+            Console.OutputEncoding = Encoding.UTF8;
+
             // 判断 func_get_args 是否为 object[] 数组
             //if (func_get_args is object[] argsArray)
             //{
@@ -334,7 +336,7 @@ namespace prjx.lib
             var msglog = "";
             try
             {
-                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
+                msglog = RepeatMnyChr(  dbgpad) + "### FUN " + METHOD__ + "((" + json_encode_noFmt(func_get_args) + "))";
                 // array_push($GLOBALS['dbg'],$logmsg   );
             }
             catch ( Exception e)
@@ -369,7 +371,7 @@ namespace prjx.lib
         {
             try
             {
-                var msglog = str_repeat(" ", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
+                var msglog = str_repeat("💰", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
               // print(msglog + "");
                 PrintColoredText(msglog, ConsoleColor.DarkGreen);
             }
@@ -513,12 +515,36 @@ namespace prjx.lib
             char[] charArray = str.ToCharArray();
             return new string(charArray[0], count);
         }
-        public static string str_repeat(string v, int count)
+        public static string str_repeat(string emoji, int count)
         {
             //if (count < 0)
             //    count = 0;
             //return new string('*', count);
-            return repeat(count);
+            return GenerateEmojis(count, emoji);
+        }
+
+        public static string RepeatMnyChr(int count)
+        {
+            if (count < 0)
+                count = 0;
+            return GenerateEmojis(count, "💸");
+             //   new string('', count);
+        }
+
+        public static string GenerateEmojis(int count, string emoji)
+        {
+            if (count <= 0)
+            {
+                return string.Empty;
+            }
+
+            // 使用StringBuilder提高性能
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.Append(emoji);
+            }
+            return sb.ToString();
         }
 
         public static string repeat(int count)

@@ -163,7 +163,7 @@ namespace prjx.lib
             SortedList listIot = db.lst2IOT(list);
             foreach (SortedList objSave in lst_hash)
             {
-                arrCls.SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
+                SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
             }
             ArrayList saveList_hpmod = db.lstFrmIot(listIot);
             wriToDbf(saveList_hpmod, Strfile);

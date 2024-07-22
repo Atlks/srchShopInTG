@@ -15,6 +15,42 @@ namespace mdsj.lib
 {
     internal class bscIsCmp
     {
+        public static bool isMmsgHasMatchPostWd(HashSet<string> postnKywd位置词set, string[] kwds)
+        {
+            //if (text == null)
+            //    return null;
+            string[] spltWds = kwds;
+            foreach (string wd in spltWds)
+            {
+                if (postnKywd位置词set.Contains(wd))
+                {
+                    Print("msgHasMatchPostWd():: postnKywd位置词set.Contains wd=>" + wd);
+                    return true;
+                }
+
+            }
+            return false;
+        }
+
+        public static bool isCcontainKwds42(HashSet<string> curRowKywdSset, string[] kwds)
+        {
+            kwds = Array.ConvertAll(kwds, s => s.ToUpper());
+            curRowKywdSset = ConvertToUpperCase(curRowKywdSset);
+
+            return isMmsgHasMatchPostWd(curRowKywdSset, kwds);
+        }
+        public static bool ISEndsWith(string ext, string extss)
+        {
+            string[] a = extss.Split(" ");
+            foreach (string ex in a)
+            {
+                if (ext.EndsWith(ex))
+                    return true;
+            }
+            return false;
+        }
+
+
         public static bool fileHasExtname(string 路径)
         {
             string 文件扩展名 = Path.GetExtension(路径);
@@ -123,7 +159,7 @@ namespace mdsj.lib
         {
             //  string Fld = "城市";
             if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.StrEq(row[Fld], arrCls.LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                if (!StrEq(row[Fld], LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                     return false;
 
             return true;
@@ -133,7 +169,7 @@ namespace mdsj.lib
         {
             //  string Fld = "城市";
             if (hasCondt(whereExprsObj, Fld))
-                if (!strCls.StrEq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                if (!strCls.StrEq(row[Fld], LoadField232(whereExprsObj, Fld)))   //  cityname not in (citysss) 
                     return false;
 
             return true;
@@ -155,7 +191,7 @@ namespace mdsj.lib
         {
             return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
         }
-        public static bool isChkfltrOk(List<bool> li)
+        public static bool IsChkfltrOk(List<bool> li)
         {
             if (!ChkAllFltrTrue(li))
                 return false;

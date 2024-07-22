@@ -12,14 +12,14 @@ namespace mdsj.lib
 {
     internal class translt
     {
-        static Hashtable dicWord5k = getHstbFromIniFl("wdlib.enNcn5k.v2.ini");
+        static Hashtable dicWord5k = GetHashtabFromIniFl("wdlib.enNcn5k.v2.ini");
 
         public static void transltTest()
         {
             List<string> liRzt = new List<string>();
          //   FolderPath = "downHtmldir";
-            List<string> li = ldLstWdsFrmDataDirHtml("spdr/downHtmtTaskQue");
-            List<string> li2 = ldLstWdsFrmDataDirHtml("spdr/downHtmldirLog");
+            List<string> li = loadLstWdsFrmDataDirHtml("spdr/downHtmtTaskQue");
+            List<string> li2 = loadLstWdsFrmDataDirHtml("spdr/downHtmldirLog");
             li = array_merge(li, li2);
             //  List<string> li = getListFrmFil($"{prjdir}/cfg/testart/t3.txt");
             li = RemoveEmptyElements(li);

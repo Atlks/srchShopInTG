@@ -9,6 +9,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using System.Web;
@@ -17,12 +18,387 @@ namespace mdsj.lib
 {
     internal class bscGet
     {
+
+        public static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的内容
+            string jsonContent = System.IO.File.ReadAllText(filePath);
+
+            // 解析 JSON 数据为字典
+            Dictionary<string, string> data = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonContent);
+
+            // 将字典数据添加到 SortedList 中
+            foreach (var kvp in data)
+            {
+                sortedList[kvp.Key] = kvp.Value;
+            }
+
+            return sortedList;
+        }
+        public static string GetElmt(string[] array, int index)
+        {
+            if (index < 0 || index >= array.Length)
+            {
+                return "";
+            }
+
+            string element = array[index];
+
+            return element?.Trim().ToUpper();
+            //   return   array[index].Trim().ToUpper();
+        }
+        public static void SetField938(SortedList SortedList1_iot, string key, object objSave)
+        {
+            if (SortedList1_iot.ContainsKey(key))
+            {
+                //remove moshi 更好，因为可能不同的类型 原来的
+                SortedList1_iot.Remove(key.ToString());
+            }
+            SortedList1_iot.Add(key, objSave);
+        }
+        static List<string> getListFrmJsonFil(string filePath)
+        {
+            List<string> jsonStringList = new List<string>();
+
+            try
+            {
+                // 读取 JSON 文件内容
+                string jsonString = System.IO.File.ReadAllText(filePath);
+                // Configure JsonSerializerOptions to allow reflection-based serialization
+                var options = new JsonSerializerOptions
+                {
+                    // Enable reflection-based serialization
+                    //   TypeNameHandling = TypeNameHandling.All, // or TypeNameHandling.Auto
+                    PropertyNameCaseInsensitive = true,
+                    WriteIndented = true
+                };
+                // 将 JSON 字符串解析为 List<string>
+                jsonStringList = System.Text.Json.JsonSerializer.Deserialize<List<string>>(jsonString, options);
+            }
+            catch (FileNotFoundException)
+            {
+                ConsoleWriteLine($"File not found: {filePath}");
+            }
+            catch (System.Text.Json.JsonException)
+            {
+                ConsoleWriteLine($"Invalid JSON format in file: {filePath}");
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"Error reading JSON file: {ex.Message}");
+            }
+
+            return jsonStringList;
+        }
+
+        public static string ldfld544(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
+        public static string LoadFieldTryGetValue(Dictionary<string, StringValues> whereExprsObj, string fld)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            if (whereExprsObj.ContainsKey(fld))
+                return whereExprsObj[fld];
+            else
+                return null;
+
+            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
+            //{
+            //    return (string)value;
+            //}
+
+        }
+        internal static string ldfld_TryGetValueDfEmpy(Dictionary<string, StringValues> whereExprsObj, string k)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            try
+            {
+                return whereExprsObj[k];
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
+            //{
+            //    return (string)value;
+            //}
+
+        }
+        public static object LoadField(SortedList hashobj, string fld, object dfval)
+        {
+            try
+            {
+                if (hashobj.ContainsKey(fld))
+                    return hashobj[fld];
+                else
+                    return dfval;
+            }
+            catch (Exception e)
+            {
+                return dfval;
+            }
+
+
+        }
+        internal static string LoadFieldDefEmpty(SortedList<string, string> row, object fldx)
+        {
+            if (fldx == null)
+                return "";
+            string fld = fldx.ToString();
+            if (row.ContainsKey(fld))
+            {
+                if (row[fld] == null)
+                    return "";
+                return row[fld].ToString();
+            }
+            else
+                return "";
+            //if (row[fld] == null)
+            //    return "";
+            //return row[fld].ToString();
+        }
+
+        internal static string LoadFieldDefEmpty(SortedList row, string fld)
+        {
+            if (row.ContainsKey(fld))
+            {
+                if (row[fld] == null)
+                    return "";
+                return row[fld].ToString();
+            }
+            else
+                return "";
+            //if (row[fld] == null)
+            //    return "";
+            //return row[fld].ToString();
+        }
+
+        public static List<T> GetRdmList<T>(List<T> results)
+        {
+            List<T> results22;
+            Random rng = new();
+
+            results22 = [.. results.OrderBy(x => rng.Next())];
+            return results22;
+        }
+
+
+
+        internal static string LoadFieldTryGetValueAsStrDefNull(SortedList whereExprsObj, string fld)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            if (whereExprsObj.ContainsKey(fld))
+                if (whereExprsObj[fld] == null)
+                    return null;
+                else
+                    return whereExprsObj[fld].ToString();
+            else
+                return null;
+
+            //if (whereExprsObj.TryGetValue(k, out (StringValues)value))
+            //{
+            //    return (string)value;
+            //}
+
+        }
+
+        public static object ldfld(List<Dictionary<string, object>> lst, string fld, string v2)
+        {
+            if (lst.Count > 0)
+            {
+                Dictionary<string, object> d = lst[0];
+                if (d.ContainsKey(fld))
+                    return d[fld];
+
+                else
+                    return v2;
+
+
+            }
+            return v2;
+        }
+
+
+        public static void SetIdProperties(ArrayList arrayList)
+        {
+            foreach (var item in arrayList)
+            {
+                SortedList sortedList1 = (SortedList)item;
+                sortedList1.Add("id", sortedList1["Guid"]);
+
+            }
+        }
+
+        public static string ldfld_TryGetValueAsStrDfEmpty(SortedList whereExprsObj, string fld)
+        {
+            // 使用 TryGetValue 方法获取值
+            object value;
+            if (whereExprsObj.ContainsKey(fld))
+                if (whereExprsObj[fld] == null)
+                    return "";
+                else
+                    return whereExprsObj[fld].ToString();
+            else
+                return "";
+        }
+
+        internal static void SetFieldReplaceKeyV(SortedList obj, string fld, object v)
+        {
+            if (fld == null)
+                return;
+            if (obj.ContainsKey(fld))
+                obj[fld] = v;
+            else
+                obj.Add(fld, v);
+        }
+
+
+        public static string LoadFieldAsStr(Dictionary<string, string> parse_str1, string fld)
+        {
+            if (parse_str1.ContainsKey(fld))
+                return parse_str1[fld];
+            else
+                return "";
+        }
+
+
+        public static void SetFld(SortedList cfg, string f, object v)
+        {
+            if (cfg.ContainsKey(f))
+                cfg.Remove(f);
+
+            cfg.Add(f, v);
+        }
+
+        public static string GetKeysCommaSeparated(SortedList list)
+        {
+            // 检查输入参数是否为 null
+            if (list == null)
+            {
+                throw new ArgumentNullException(nameof(list));
+            }
+
+            // 创建一个 StringBuilder 来构建结果字符串
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+
+            foreach (var key in list.Keys)
+            {
+                // 将每个键添加到 StringBuilder 中，并附加逗号
+                sb.Append(key).Append(",");
+            }
+
+            // 移除最后一个多余的逗号
+            if (sb.Length > 0)
+            {
+                sb.Length--; // 或者 sb.Remove(sb.Length - 1, 1);
+            }
+
+            return sb.ToString();
+        }
+
+        public static string GetExtension(string url)
+        {
+            try
+            {
+                var ext = Path.GetExtension(url);
+                ext = ext.ToLower().Trim();
+                return ext;
+            }
+            catch (Exception e)
+            {
+                return "";
+            }
+
+        }
+
+        public static void SetFieldAddRplsKeyV(SortedList listIot, string? key, object objSave)
+        {
+            if (listIot.ContainsKey(key))
+                listIot[key] = objSave;
+            else
+                listIot.Add(key, objSave);
+        }
+
+
+        public static SortedList<string, string> ReadIniFileToSortedList(string filePath)
+        {
+            // 创建一个新的 SortedList 来存储结果
+            SortedList<string, string> sortedList = new SortedList<string, string>();
+
+            // 检查文件是否存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("The specified file does not exist.", filePath);
+            }
+
+            // 读取文件的所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            // 遍历每一行
+            foreach (var line in lines)
+            {
+                // 跳过空行和注释行
+                if (string.IsNullOrWhiteSpace(line) || line.TrimStart().StartsWith(";") || line.TrimStart().StartsWith("#"))
+                {
+                    continue;
+                }
+
+                // 找到等号的位置
+                int equalsIndex = line.IndexOf('=');
+                if (equalsIndex > 0)
+                {
+                    // 提取键和值
+                    string key = line.Substring(0, equalsIndex).Trim();
+                    string value = line.Substring(equalsIndex + 1).Trim();
+
+                    // 将键值对添加到 SortedList 中
+                    sortedList[key] = value;
+                }
+            }
+
+            return sortedList;
+        }
+
+        public static MethodInfo? GetMethInfo(string methodName)
+        {
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            Print("assemblies.Len=>" + assemblies.Length);
+            IEnumerable<Type> typeList = assemblies
+                            .SelectMany(assembly => assembly.GetTypes());
+            Print("typeList.Len=>" + typeList.Count());
+            IEnumerable<MethodInfo> methodss = typeList
+                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
+            Print("methodss.Len=>" + methodss.Count());
+            var methodInfo = methodss
+                .FirstOrDefault(method =>
+                    method.Name == methodName
+                  );
+            return methodInfo;
+        }
         public static string[] ReadAllLines(string filePath)
         {
             return System.IO.File.ReadAllLines(filePath);
         }
 
-        public static Hashtable getHstbFromIniFl(string v)
+        public static Hashtable GetHashtabFromIniFl(string v)
         {
             return ReadIniFile(v);
         }
@@ -97,7 +473,7 @@ namespace mdsj.lib
             //   File
             return json_decode(System.IO.File.ReadAllText(f));
         }
-        public static SortedList ldHstb
+        public static SortedList GetHashset
             (string f)
         {
             return json_decode<SortedList>(System.IO.File.ReadAllText(f));
@@ -119,7 +495,7 @@ namespace mdsj.lib
             return json_decodeJonObj(System.IO.File.ReadAllText(f));
         }
 
-        public static HashSet<string> LdHsstWordsFromFile(string filePath)
+        public static HashSet<string> LoadHashstWordsFromFile(string filePath)
         {
             var words = new HashSet<string>();
 
@@ -157,7 +533,7 @@ namespace mdsj.lib
             }
             else
             {
-                return ldfld(Obj, fld, defVal);
+                return LoadField233(Obj, fld, defVal);
             }
         }
         public static object getFld(object Obj, string fld, object defVal)
@@ -169,12 +545,12 @@ namespace mdsj.lib
             }
             else
             {
-                return ldfld(Obj, fld, defVal);
+                return LoadField233(Obj, fld, defVal);
             }
         }
-        public static string ldfldAsStr(object obj, string fld, object defVal)
+        public static string LoadFieldAsStr(object obj, string fld, object defVal)
         {
-            return ldfld(obj, fld, "").ToString();
+            return LoadField233(obj, fld, "").ToString();
         }
 
         public static object LoadField(Hashtable hstb, string fld, object defVal)
@@ -184,10 +560,10 @@ namespace mdsj.lib
             return defVal;
         }
 
-        public static HashSet<string> LdHsstFrmFJsonDecd(string v)
-        {
-            return (ReadFileToHashSet(v));
-        }
+        //public static HashSet<string> LoadHashsetFrmFJsonDecd(string v)
+        //{
+        //    return (ReadFileToHashSet(v));
+        //}
         public static HashSet<string> ReadFileToHashSet(string filePath)
         {
             try
@@ -313,7 +689,7 @@ namespace mdsj.lib
                     WriteAllText(f, txt.ToString());
                 }
                  else
-                    WriteAllText(f,  encodeJson(txt));
+                    WriteAllText(f,  EncodeJson(txt));
             }
             catch (Exception e)
             {
@@ -339,7 +715,7 @@ namespace mdsj.lib
 
         public static void setHsstToF(HashSet<string> downedUrl, string v)
         {
-            WriteAllText(v, encodeJson(downedUrl));
+            WriteAllText(v, EncodeJson(downedUrl));
         }
         public static void SetProperty(object obj, string prop, object v)
         {
@@ -356,7 +732,7 @@ namespace mdsj.lib
             }
         }
 
-        public static HashSet<string> LdHsst(string input)
+        public static HashSet<string> LoadHashset(string input)
         {
             // 分割字符串并转换为 HashSet
             string[] elements = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
@@ -366,10 +742,10 @@ namespace mdsj.lib
         }
         public static HashSet<string> LoadHashsetFrmFL(string f)
         {
-            return LdHsst(ReadAllText(f));
+            return LoadHashset(ReadAllText(f));
         }
 
-        public static object ldfld(object obj, string fld, object defVal)
+        public static object LoadField233(object obj, string fld, object defVal)
         {
             Type type = obj.GetType();
             PropertyInfo propertyInfo = type.GetProperty(fld);
@@ -416,7 +792,7 @@ namespace mdsj.lib
             return lines;
         }
 
-        public static List<string> ldLstWdsFrmDataDirHtml(string FolderPath)
+        public static List<string> loadLstWdsFrmDataDirHtml(string FolderPath)
         {
 
             object v = callx(ExtractWordsFromFilesHtml, FolderPath);
@@ -428,22 +804,22 @@ namespace mdsj.lib
 
         }
 
-        public static List<string> getListFrmFil(string v)
+        public static List<string> GetListFrmFil(string v)
         {
             return ReadFileToLines(v);
         }
-        public static string ldfldDfempty(Dictionary<string, StringValues> whereexprsobj, string v)
+        public static string LoadfieldDfempty(Dictionary<string, StringValues> whereexprsobj, string v)
         {
-            var x = ldfld(ConvertToStringDictionary(whereexprsobj), v);
+            var x = LoadField232(ConvertToStringDictionary(whereexprsobj), v);
             return x;
         }
-        public static string gettype(object obj)
+        public static string Gettype(object obj)
         {
             return obj.GetType().ToString();
         }
 
 
-        public static int gtfldInt(SortedList dafenObj, string fld, int df)
+        public static int GetFieldAsInt(SortedList dafenObj, string fld, int df)
         {
             try
             {
@@ -452,7 +828,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                PrintCatchEx(nameof(gtfldInt), e);
+                PrintCatchEx(nameof(GetFieldAsInt), e);
                 return df;
             }
 
@@ -508,18 +884,18 @@ namespace mdsj.lib
         {
             return ReadJsonFileToSortedList(v);
         }
-        public static Dictionary<string, string> ldDic4qryCdtn(string qrystr)
+        public static Dictionary<string, string> LoadDic4qryCdtn(string qrystr)
         {
             var filters2 = ldDicFromQrystr(qrystr);
             var filters = RemoveKeys(filters2, "page limit pagesize from");
             return filters;
         }
-        public static object ldfldDfemp(SortedList row, string v)
+        public static object LoadFieldDfemp(SortedList row, string v)
         {
             return LoadFieldFrmStlst(row, v, "");
         }
 
-        public static SortedList<string, string> LdHstbEsFrmIni(string v)
+        public static SortedList<string, string> LoadHashtabEsFrmIni(string v)
         {
             return ReadIniFileToSortedList(v);
         }
@@ -568,7 +944,7 @@ namespace mdsj.lib
 
 
 
-        public static string ldfld(Dictionary<string, string> whereExprsObj, string fld)
+        public static string LoadField232(Dictionary<string, string> whereExprsObj, string fld)
         {
             if (whereExprsObj.ContainsKey(fld))
                 return whereExprsObj[fld];

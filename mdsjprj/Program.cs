@@ -135,7 +135,7 @@ namespace prjx
         //}
         public static void Main(string[] args)
         {
-            callx("aaa", "prm1");
+            Callx("aaa", "prm1");
             prjdir = filex.GetAbsolutePath(prjdir);
 
             userDictFile = $"{prjdir}/cfg/user_dict.txt";
@@ -253,7 +253,7 @@ namespace prjx
                             }
 
                         };
-            StartWebapi(value, "Wbapi_");
+            StartWebapi(value, "WbapiX");
             
 
             //  Console.ReadKey();
@@ -346,7 +346,7 @@ namespace prjx
             if (isFileExist($"{prjdir}/cfg_cmd/{txt307}城市.txt"))
             {
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{txt307}城市.txt");
-                Print(encodeJson(btns));
+                Print(EncodeJson(btns));
                 var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
                 rplyKbdMkp.ResizeKeyboard = true;
 
@@ -368,7 +368,7 @@ namespace prjx
             if (isFileExist($"{prjdir}/cfg_cmd/{txt307}园区.txt"))
             {
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{txt307}园区.txt");
-                Print(encodeJson(btns));
+                Print(EncodeJson(btns));
                 var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
                 rplyKbdMkp.ResizeKeyboard = true;
 
@@ -404,7 +404,7 @@ namespace prjx
                 //+ update?.Message?.Chat?.Type ?? "" + ""
                 //CmdXXHdlr
                 string methodName = "CmdHdlr" + cmd ;
-                callx(methodName, update, reqThreadId);
+                Callx(methodName, update, reqThreadId);
             }
          
             if (update.Type == UpdateType.Message)
@@ -870,7 +870,7 @@ namespace prjx
 
         public static void OnMsg(Update update, string reqThreadId)
         {
-            int n = containCalcCntScoreSetfmt(update.Message.Text, LdHsst(" 盘口 博彩 菠菜 玩家 赔率 世博 杀大赔小 赔率"));
+            int n = containCalcCntScoreSetfmt(update.Message.Text, LoadHashset(" 盘口 博彩 菠菜 玩家 赔率 世博 杀大赔小 赔率"));
             if (n > 1)
             {
                 callx(evt_shiboBocai_click, update);
@@ -1347,8 +1347,8 @@ namespace prjx
                 obj1.Add("评论人", update.Message.From.Username);
                 obj1.Add("评论人id", update.Message.From.Id);
                 System.IO.Directory.CreateDirectory("pinlunDir");
-                ormSqlt.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
-                ormJSonFL.save(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+                ormSqlt.Save4Sqlt(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
+                ormJSonFL.SaveJson(obj1, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
                 user.Comments++;
                 biz_other._SaveConfig();

@@ -293,7 +293,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            Print(encodeJson(inlineKeyboardRow1));
+            Print(EncodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
                                   update.Message.Chat.Id, tips,
@@ -310,7 +310,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
-            Print(encodeJson(inlineKeyboardRow1));
+            Print(EncodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
                                    ChatId2, tips,
@@ -333,13 +333,13 @@ namespace mdsj.libBiz
 
         public static string getBtnExtWdFromTxt(string? text)
         {
-            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
+            HashSet<string> st = LoadHashstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
             return (ContainRetMatchWd(text, st));
         }
 
         public static object getBtnnameFromTxt(string? text)
         {
-            HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
+            HashSet<string> st = LoadHashstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
             return (ContainRetMatchWd(text, st));
 
         }

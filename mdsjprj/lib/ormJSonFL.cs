@@ -98,7 +98,7 @@ namespace prjx.lib
                    Print("not exist file dbf=>" + dbf);
                     continue;
                 }
-                List<SortedList> sortedLists = qrySglFL(dbf);
+                List<SortedList> sortedLists = QrySglFL(dbf);
                 arr = array_merge(arr, sortedLists);
             }
 
@@ -141,16 +141,22 @@ namespace prjx.lib
             return list;
         }
 
-        public static List<SortedList> qrySglFL(string dbFileName)
+        public static List<SortedList> QrySglFL(string dbFileName)
         {
 
 
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            dbgCls.PrintCallFunArgs(__METHOD__, func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
 
             if (!File.Exists(dbFileName))
+            {
+                Mkdir4File(dbFileName);
                 File.WriteAllText(dbFileName, "[]");
+                return new List<SortedList>();
+             //  
+            }
+             
 
             // 将JSON字符串转换为List<Dictionary<string, object>>
             string txt = File.ReadAllText(dbFileName);
@@ -202,7 +208,7 @@ namespace prjx.lib
         {
             List<SortedList> liDel = new List<SortedList>();
             liDel.Add(objSave);
-            List<SortedList> li = qrySglFL(Strfile);
+            List<SortedList> li = QrySglFL(Strfile);
 
             List<SortedList> diff = arr_Difference(li, liDel);
 
@@ -256,10 +262,10 @@ namespace prjx.lib
 
         public static void wrt_row(SortedList objSave, string Strfile)
         {
-            save(objSave, Strfile);
+            SaveJson(objSave, Strfile);
 
         }
-        public static void save(SortedList SortedList1, string dbfile)
+        public static void SaveJson(SortedList SortedList1, string dbfile)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
@@ -337,7 +343,7 @@ namespace prjx.lib
             foreach (SortedList objSave in rows)
             {
 
-                arrCls.SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
+                SetFieldReplaceKeyV(listIot, LoadFieldTryGetValueAsStrDefNull(objSave, "id"), objSave);
 
             }
 

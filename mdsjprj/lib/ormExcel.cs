@@ -18,7 +18,7 @@ namespace prjx.lib
             SortedList  SortedList1 = (SortedList )SortedListx;
           
 
-            ArrayList lst=qry(dbfl);
+            ArrayList lst=QryExcel(dbfl);
             lst.Add((SortedList)SortedList1);
 
             wriToDbf(lst,dbfl);
@@ -168,7 +168,7 @@ namespace prjx.lib
             return newRow;
         }
 
-       public static ArrayList qry(string dbf)
+       public static ArrayList QryExcel(string dbf)
         {
             if (!File.Exists(dbf))
             {

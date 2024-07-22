@@ -14,12 +14,12 @@ namespace prjx.lib
             const string DbFileName = "objs2005.db";
             System.Collections.SortedList chtsSesss = new System.Collections.SortedList();
             chtsSesss.Add("id", 1); chtsSesss.Add("nm", "....");
-            ormSqlt.save(  chtsSesss, DbFileName);
+            ormSqlt.Save4Sqlt(  chtsSesss, DbFileName);
 
             System.Collections.SortedList chtsSesss2 = new System.Collections.SortedList();
             chtsSesss2.Add("id", 2); chtsSesss2.Add("nm", "nm222");
 
-            ormSqlt.save(  chtsSesss2, DbFileName);
+            ormSqlt.Save4Sqlt(  chtsSesss2, DbFileName);
 
             var rs = ormSqlt.qryDep( DbFileName);
         }

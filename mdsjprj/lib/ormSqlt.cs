@@ -203,7 +203,7 @@ namespace prjx.lib
                             var row = new SortedList();
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                arrCls.SetFieldAddRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
+                                SetFieldAddRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
                                 //  row[reader.GetName(i)] = reader.GetValue(i);
                             }
                             results.Add(row);
@@ -324,7 +324,7 @@ namespace prjx.lib
             return results;
         }
 
-        public static void save(SortedList SortedList1, string dbFileName)
+        public static void Save4Sqlt(SortedList SortedList1, string dbFileName)
         {
             var tblx = "表格1";
 
@@ -437,7 +437,7 @@ namespace prjx.lib
 
                 try
                 {
-                    save(objSave, dbFileName);
+                    Save4Sqlt(objSave, dbFileName);
                 }
                 catch (Exception e)
                 {

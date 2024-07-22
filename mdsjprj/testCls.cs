@@ -141,7 +141,22 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
-          
+            try
+            {
+                var lst458 = ormExcel.QryExcel("C:\\Users\\Administrator\\Documents\\sumdoc 2405\\xx国家商家数据 v3.xlsx");
+                Print(EncodeJsonFmt(lst458));
+
+                //----------------trans cn2en form--------------
+                string filePath = $"{prjdir}/cfg字段翻译表/导入商家字段对应表.ini";
+                List<SortedList> list_rzt_fmt = TransltKey(lst458, filePath);
+
+                Print(EncodeJsonFmt(list_rzt_fmt));
+            }
+            catch (Exception e)
+            {
+                Print(e);
+            }
+     
             //    tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
@@ -345,10 +360,10 @@ namespace prjx
                 pinlunobj.Add("评论内容", text);
                 pinlunobj.Add("消息", "tttttt111111111111");
                 System.IO.Directory.CreateDirectory("pinlunDir");
-                ormJSonFL.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
+                ormJSonFL.SaveJson(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".json");
 
 
-                ormSqlt.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
+                ormSqlt.Save4Sqlt(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".db");
 
                 ormExcel.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx");
                 ormIni.save(pinlunobj, "pinlunDir/" + merchant.Guid + merchant.Name + ".ini");
@@ -358,7 +373,7 @@ namespace prjx
 
 
 
-                Print(JsonConvert.SerializeObject(ormExcel.qry("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
+                Print(JsonConvert.SerializeObject(ormExcel.QryExcel("pinlunDir/" + merchant.Guid + merchant.Name + ".xlsx")));
 
 
                 Print(JsonConvert.SerializeObject(ormJSonFL.qryDep("pinlunDir/ziluxwubxeaktvrvcmsrryfzrmH13 红楼 一楼 按摩.json")));
@@ -397,6 +412,7 @@ namespace prjx
 
         }
 
+      
         private static void arr_cut()
         {
             // 定义两个 HashSet
@@ -436,7 +452,7 @@ namespace prjx
         private static void getwdRoots()
         {
             List<string> liRzt = new List<string>();
-            List<string> li = getListFrmFil($"{prjdir}/cfg/wds.txt");
+            List<string> li = GetListFrmFil($"{prjdir}/cfg/wds.txt");
             li = RemoveEmptyElements(li);
             foreach_listStr(li, (string line) =>
             {
@@ -579,7 +595,7 @@ namespace prjx
                         //not exist 
                         SetFieldAddRplsKeyV(map, "TG有效", "N");
 
-                        ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+                        ormSqlt.Save4Sqlt(map, $"mercht商家数据/{map["国家"]}.db");
                         continue;
                     }
                     string t = await http_GetHttpResponseAsync($"https://t.me/{tg}");
@@ -589,7 +605,7 @@ namespace prjx
                         logCls.log(map, "TestTg有效性logDir");
                         //not exist 
                         SetFieldAddRplsKeyV(map, "TG有效", "N");
-                        ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+                        ormSqlt.Save4Sqlt(map, $"mercht商家数据/{map["国家"]}.db");
 
                     }
                     else
@@ -597,7 +613,7 @@ namespace prjx
                         if (LoadFieldFrmStlst(map, "TG有效", "") == "N")
                         {
                             SetFieldAddRplsKeyV(map, "TG有效", "Y");
-                            ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");
+                            ormSqlt.Save4Sqlt(map, $"mercht商家数据/{map["国家"]}.db");
                         }
                     }
                 }
@@ -673,7 +689,7 @@ namespace prjx
             foreach (SortedList rw in li)
             {
                 object? cateE = rw["cateEgls"];
-                arrCls.SetFieldAddRplsKeyV(rw, "分类", map[cateE.ToString()]);
+                SetFieldAddRplsKeyV(rw, "分类", map[cateE.ToString()]);
             }
 
 
@@ -698,17 +714,17 @@ namespace prjx
 
                 SortedList hash = DictionaryToSortedList(dic);
                 hash["id"] = groupId;
-                ormJSonFL.save(hash, $"grpCfgDir/grpcfg{groupId}.json");
+                ormJSonFL.SaveJson(hash, $"grpCfgDir/grpcfg{groupId}.json");
             }
         }
 
         private static string setCtry()
         {
             var sql_dbf = "mrcht.json";
-            List<SortedList> lst_hash = ormJSonFL.qrySglFL(sql_dbf);
+            List<SortedList> lst_hash = ormJSonFL.QrySglFL(sql_dbf);
             foreach (SortedList obj in lst_hash)
             {
-                arrCls.SetFieldReplaceKeyV(obj, "ctry", "缅甸");
+                SetFieldReplaceKeyV(obj, "ctry", "缅甸");
 
                 //obj[""ctry = ; // 设置 ctry 属性
                 //SortedList sortedList = new SortedList();

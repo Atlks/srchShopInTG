@@ -152,7 +152,7 @@ namespace mdsj
                 if (row["园区"].ToString().Contains("东风"))
                     Print("dbg");
                 List<Filtr> li = new List<Filtr>();
-                li.Add(new Filtr(isNotEmptyLianxi(row)));
+                li.Add(new Filtr(IsNotEmptyLianxi(row)));
                 li.Add(new Filtr(isLianxifshValid(row)));
                 li.Add(new Filtr(isFldValEq111(row, "城市", filters)));
                 li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
@@ -226,8 +226,8 @@ namespace mdsj
                     return 0 - (int)LoadField(sl, "_containCntScore", 0);
                 }, (SortedList row) =>
                 {
-                    string text = arrCls.LoadFieldDefEmpty(row, "城市") + " • " + arrCls.LoadFieldDefEmpty(row, "园区") + " • " + arrCls.LoadFieldDefEmpty(row, "商家");
-                    string guid = arrCls.LoadFieldDefEmpty(row, "Guid编号");
+                    string text = LoadFieldDefEmpty(row, "城市") + " • " + LoadFieldDefEmpty(row, "园区") + " • " + LoadFieldDefEmpty(row, "商家");
+                    string guid = LoadFieldDefEmpty(row, "Guid编号");
                     InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
                     return btnsInLine;
                 }, rnd_next4SqltRf());
@@ -277,18 +277,18 @@ namespace mdsj
                 if (row["园区"].ToString().Contains("东风"))
                     Print("dbg");
                 List<bool> li = new List<bool>();
-                li.Add((isNotEmptyLianxi(row)));
+                li.Add((IsNotEmptyLianxi(row)));
                 li.Add((isLianxifshValid(row)));
          
                 var fltrs = ConvertToStringDictionary(filters);
-                li.Add(isEq4qrycdt(ldfldDfemp(row, "园区"), ldfld(fltrs, "园区")));
-                li.Add(isEq4qrycdt(ldfldDfemp(row, "城市"), ldfld(fltrs, "城市")));
+                li.Add(isEq4qrycdt(LoadFieldDfemp(row, "园区"), LoadField232(fltrs, "园区")));
+                li.Add(isEq4qrycdt(LoadFieldDfemp(row, "城市"), LoadField232(fltrs, "城市")));
                 //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
                 li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));               
                 li.Add((isCotainPostnWd(row, kwds)));
-                return isChkfltrOk(li);
+                return IsChkfltrOk(li);
             };
-            var list = getListFltr("mercht商家数据", shareNames, whereFun);
+            var list = GetListFltr("mercht商家数据", shareNames, whereFun);
             if (list.Count == 0)
             {
                 whereFun = (SortedList row) =>
@@ -299,18 +299,18 @@ namespace mdsj
                       //    li.Add(new Filtr(isNotEmptyLianxi(row)));
                       //    li.Add(new Filtr(isLianxifshValid(row)));
                       var fltrs = ConvertToStringDictionary(filters);
-                      li.Add( isEq4qrycdt(ldfldDfemp( row, "园区"),ldfld(fltrs, "园区")));
-                      li.Add(isEq4qrycdt(ldfldDfemp(row, "城市"), ldfld(fltrs, "城市")));
+                      li.Add( isEq4qrycdt(LoadFieldDfemp( row, "园区"),LoadField232(fltrs, "园区")));
+                      li.Add(isEq4qrycdt(LoadFieldDfemp(row, "城市"), LoadField232(fltrs, "城市")));
                       //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
                       li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));
 
-                      return isChkfltrOk(li);
+                      return IsChkfltrOk(li);
                   };
-                list = getListFltr("mercht商家数据", shareNames, whereFun);
+                list = GetListFltr("mercht商家数据", shareNames, whereFun);
             }
 
             //----------paixu 
-            foreach_hstbEs(list, (SortedList row) =>
+            ForeachHashtableEs(list, (SortedList row) =>
            {
                var containScore = containCalcCntScoreSetfmt1(row, kwds);
                if (containScore > 0)
@@ -328,8 +328,8 @@ namespace mdsj
             //---------------
             var list_trans = foreach_hstbEs(rztLi_afterOrd, (SortedList row) =>
             {
-                string text = arrCls.LoadFieldDefEmpty(row, "城市") + " • " + arrCls.LoadFieldDefEmpty(row, "园区") + " • " + arrCls.LoadFieldDefEmpty(row, "商家");
-                string guid = arrCls.LoadFieldDefEmpty(row, "Guid编号");
+                string text = LoadFieldDefEmpty(row, "城市") + " • " + LoadFieldDefEmpty(row, "园区") + " • " + LoadFieldDefEmpty(row, "商家");
+                string guid = LoadFieldDefEmpty(row, "Guid编号");
                 InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&chkuid=y&btn=dtl" } };
                 return btnsInLine;
             });
@@ -361,7 +361,7 @@ namespace mdsj
         //    throw new NotImplementedException();
         //}
 
-        public static bool isNotEmptyLianxi(SortedList row)
+        public static bool IsNotEmptyLianxi(SortedList row)
         {
             return !isEmptyLianxi(row);
         }
@@ -399,9 +399,9 @@ namespace mdsj
         private static bool isCotainFuwuci(SortedList row, string msgCtain)
         {
             HashSet<string> fuwuWds_row = new HashSet<string>();
-            arrCls.AddElmts2hashset(fuwuWds_row, arrCls.LoadFieldDefEmpty(row, "商家"));
-            arrCls.AddElmts2hashset(fuwuWds_row, arrCls.LoadFieldDefEmpty(row, "关键词"));
-            arrCls.AddElmts2hashset(fuwuWds_row, arrCls.LoadFieldDefEmpty(row, "分类关键词"));
+            arrCls.AddElmts2hashset(fuwuWds_row, LoadFieldDefEmpty(row, "商家"));
+            arrCls.AddElmts2hashset(fuwuWds_row, LoadFieldDefEmpty(row, "关键词"));
+            arrCls.AddElmts2hashset(fuwuWds_row, LoadFieldDefEmpty(row, "分类关键词"));
             fuwuWds_row.Remove("店");
             fuwuWds_row = ConvertToUpperCase(fuwuWds_row);
 
@@ -495,13 +495,13 @@ namespace mdsj
 
                     //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
                     if (hasCondt(whereExprsObj, "城市"))
-                        if (!strCls.StrEq(row["城市"], arrCls.LoadFieldTryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["城市"], LoadFieldTryGetValue(whereExprsObj, "城市")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "园区"))
-                        if (!strCls.StrEq(row["园区"], arrCls.LoadFieldTryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["园区"], LoadFieldTryGetValue(whereExprsObj, "园区")))   //  cityname not in (citysss) 
                             return false;
                     if (hasCondt(whereExprsObj, "国家"))
-                        if (!strCls.StrEq(row["国家"], arrCls.LoadFieldTryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
+                        if (!strCls.StrEq(row["国家"], LoadFieldTryGetValue(whereExprsObj, "国家")))   //  cityname not in (citysss) 
                             return false;
                     return true;
                 }
