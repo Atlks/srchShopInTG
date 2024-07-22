@@ -328,19 +328,19 @@ namespace mdsj.libBiz
         {
             SortedList st = ldHstbFromIni($"{prjdir}/cfg/底部按钮扩展词.ini");
             SortedList st2 = ArrReverseSortedList(st);
-            return ldfld(st2, extWd, "");
+            return LoadFieldFrmStlst(st2, extWd, "");
         }
 
         public static string getBtnExtWdFromTxt(string? text)
         {
             HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/cfg/底部按钮扩展词.ini");
-            return (containRetMatchWd(text, st));
+            return (ContainRetMatchWd(text, st));
         }
 
         public static object getBtnnameFromTxt(string? text)
         {
             HashSet<string> st = LdHsstWordsFromFile($"{prjdir}/menu/底部公共菜单.txt");
-            return (containRetMatchWd(text, st));
+            return (ContainRetMatchWd(text, st));
 
         }
 

@@ -32,41 +32,41 @@ namespace mdsj.libBiz
             return "ok";
         }
 
-        /// <summary>
-        /// wbapi_upldPOST
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public static void wbapi_upldPOST(HttpRequest request, HttpResponse response)
-        {
-            // Check if the request contains a file
-            if (request.Form.Files.Count > 0)
-            {
-                foreach (var file in request.Form.Files)
-                {
-                    // Get the file content and save it to a desired location
-                    var filePath = Path.Combine("uploads", file.FileName);
-                    Mkdir4File(filePath);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        file.CopyToAsync(stream).GetAwaiter().GetResult();
-                    }
-                }
-            }
+        ///// <summary>
+        ///// wbapi_upldPOST
+        ///// </summary>
+        ///// <param name="request"></param>
+        ///// <param name="response"></param>
+        //public static void wbapi_upldPOST(HttpRequest request, HttpResponse response)
+        //{
+        //    // Check if the request contains a file
+        //    if (request.Form.Files.Count > 0)
+        //    {
+        //        foreach (var file in request.Form.Files)
+        //        {
+        //            // Get the file content and save it to a desired location
+        //            var filePath = Path.Combine("uploads", file.FileName);
+        //            Mkdir4File(filePath);
+        //            using (var stream = new FileStream(filePath, FileMode.Create))
+        //            {
+        //                file.CopyToAsync(stream).GetAwaiter().GetResult();
+        //            }
+        //        }
+        //    }
 
-            // Handle other form data
-            //foreach (var key in request.Form.Keys)
-            //{
-            //    var value = request.Form[key];
-            //    ConsoleWriteLine($"Key: {key}, Value: {value}");
-            //}
-            SortedList dafenObj = ConvertFormToSortedList(request.Form);
-            ormJSonFL.save(dafenObj, "uplodData/" + Guid.NewGuid().ToString() + ".json");
-            SendResp("ok", response);
-            //    return "ok";
-        }
+        //    // Handle other form data
+        //    //foreach (var key in request.Form.Keys)
+        //    //{
+        //    //    var value = request.Form[key];
+        //    //    ConsoleWriteLine($"Key: {key}, Value: {value}");
+        //    //}
+        //    SortedList dafenObj = ConvertFormToSortedList(request.Form);
+        //    ormJSonFL.save(dafenObj, "uplodData/" + Guid.NewGuid().ToString() + ".json");
+        //    SendResp("ok", response);
+        //    //    return "ok";
+        //}
 
-        /// <summary>
+        ///// <summary>
         /// 打分
         ///  
         /// <example><![CDATA[ http://localhost:5000/dafen?shangjiaID=yourValue11&dafen=3&uid=007]]></example>
@@ -189,7 +189,7 @@ namespace mdsj.libBiz
 
             }
 
-            //----------------trans form--------------
+            //----------------trans cn2en form--------------
             SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
 
 
@@ -203,17 +203,17 @@ namespace mdsj.libBiz
                 {
                     if (key.ToString() == "Searchs")
                         Print("dbg");
+                    //add all cn key
                     var Cnkey = key;
                     var val = sortedList[key];
                     SetField938(map3, Cnkey.ToString(), val);
 
-
+                    //add all eng key
                     var keyEng = LoadFieldDefEmpty(transmap, Cnkey);
                     if (keyEng == "")
                         keyEng = Cnkey.ToString();
-
-
                     SetField938(map3, keyEng, val);
+                    //chg int fmt
                     if (IsNumeric((val)))
                     {
                         double objSave = ConvertStringToNumber(val);
@@ -225,78 +225,12 @@ namespace mdsj.libBiz
                 }
                 list_rzt_fmt.Add(map3);
             }
+
+            //--------trans fmt chg int fmt
+            //chg int fmt
             return encodeJson(list_rzt_fmt);
         }
 
-
-     public   static double Avg(List<SortedList> list, string fieldName)
-        {
-            try
-            {
-                if (list == null || list.Count == 0)
-                {
-                    return 0;
-                }
-
-                var values = new List<double>();
-
-                foreach (var sortedList in list)
-                {
-                    if (sortedList.ContainsKey(fieldName) && sortedList[fieldName] is double)
-                    {
-                        //toNumber( sortedList[fieldName]
-                        values.Add(GetFieldAsNumber(sortedList, fieldName));
-                    }
-                }
-
-                if (values.Count == 0)
-                {
-                    return 0;
-                }
-
-                return values.Average();
-            }catch(Exception e)
-            {
-                PrintCatchEx("Avg", e);
-                return 0;
-            }
-         
-        }
-
-        public static double GetFieldAsNumber(SortedList sortedList, string fieldName)
-        {
-            var obj = GetField(sortedList, fieldName, 0);
-            return ToNumber(obj);
-        }
-
-        private static List<SortedList> GetListHashtableFromJsonFil(string dbf)
-        {
-            var list = new List<SortedList>();
-
-            try
-            {
-                string json = File.ReadAllText(dbf);
-                JArray jsonArray = JArray.Parse(json);
-
-                foreach (JObject obj in jsonArray)
-                {
-                    var sortedList = new SortedList();
-
-                    foreach (var property in obj.Properties())
-                    {
-                        sortedList.Add(property.Name, property.Value.ToObject<object>());
-                    }
-
-                    list.Add(sortedList);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"The file could not be read: {e.Message}");
-            }
-
-            return list;
-        }
 
         /// <summary>
         ///  商家入住    （ post提交 ）
@@ -346,73 +280,8 @@ namespace mdsj.libBiz
 
         }
 
-        static double ConvertStringToNumber(object str2)
-        {
-            try
-            {
-                string str = ToStr(str2);
-
-                return (double.Parse(str));
-            }
-            catch (Exception e)
-            {
-                return 0;
-            }
-
-
-        }
-        private static string ToStr(object val)
-        {
-            if (val == null)
-                return "";
-            else
-                return val.ToString();
-        }
-
-        public static SortedList<string, string> LoadSortedListFromIni(string filePath)
-        {
-            var result = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            // 读取文件所有行
-            string[] lines = File.ReadAllLines(filePath);
-
-            foreach (string line in lines)
-            {
-                string trimmedLine = line.Trim();
-
-                // 跳过空行和注释行
-                if (string.IsNullOrWhiteSpace(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#"))
-                {
-                    continue;
-                }
-
-                // 处理键值对
-                int equalsIndex = trimmedLine.IndexOf('=');
-                if (equalsIndex > 0)
-                {
-                    string key = trimmedLine.Substring(0, equalsIndex).Trim();
-                    string value = trimmedLine.Substring(equalsIndex + 1).Trim();
-                    result[key] = value;
-                }
-            }
-
-            return result;
-        }
-
-        public static int CalculateTotalPages(int pageSize, int totalRecords)
-        {
-            if (pageSize <= 0)
-            {
-                pageSize = 10;
-            }
-
-            if (totalRecords < 0)
-            {
-                totalRecords = 0;
-            }
-
-            return (int)Math.Ceiling((double)totalRecords / pageSize);
-        }
+  
+   
 
 
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk

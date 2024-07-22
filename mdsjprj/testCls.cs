@@ -594,7 +594,7 @@ namespace prjx
                     }
                     else
                     {//exist tg numb
-                        if (ldfld(map, "TG有效", "") == "N")
+                        if (LoadFieldFrmStlst(map, "TG有效", "") == "N")
                         {
                             SetFieldAddRplsKeyV(map, "TG有效", "Y");
                             ormSqlt.save(map, $"mercht商家数据/{map["国家"]}.db");

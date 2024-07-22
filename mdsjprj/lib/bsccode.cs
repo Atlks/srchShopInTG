@@ -2,6 +2,7 @@
 using HtmlAgilityPack;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using prjx.lib;
 using System;
 using System.Collections;
@@ -21,56 +22,45 @@ namespace mdsj.lib
 {
     internal class bsccode
     {
-        public static void WriteObj(string f, object obj)
-        {
 
-             WriteAllText(f, json_encode(obj));
-        }
-        public static void WriteAllText(string f, string txt)
+        public static double Avg(List<SortedList> list, string fieldName)
         {
-            Print($" fun WriteAllText {f}");
-            Mkdir4File(f);
             try
             {
-                System.IO.File.WriteAllText(f, txt);
-            }catch(Exception e)
-            {
-                PrintCatchEx("WriteAllText", e);
+                if (list == null || list.Count == 0)
+                {
+                    return 0;
+                }
+
+                var values = new List<double>();
+
+                foreach (var sortedList in list)
+                {
+                    if (sortedList.ContainsKey(fieldName) && sortedList[fieldName] is double)
+                    {
+                        //toNumber( sortedList[fieldName]
+                        values.Add(GetFieldAsNumber(sortedList, fieldName));
+                    }
+                }
+
+                if (values.Count == 0)
+                {
+                    return 0;
+                }
+
+                return values.Average();
             }
-           
+            catch (Exception e)
+            {
+                PrintCatchEx("Avg", e);
+                return 0;
+            }
+
         }
 
-      
-        public static string ReadAllText(string f)
-        {
-            return System.IO.File.ReadAllText(f);
-        }
-        public static List<SortedList> ReadAsListHashtable(string f)
-        {
-            //   File
-            return json_decode(System.IO.File.ReadAllText(f));
-        }
-        public static SortedList ldHstb
-            (string f)
-        {
-            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
-        }
-        public static SortedList LoadHashtable(string f)
-        {
-            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
-        }
-        public static SortedList ReadAsHashtable(string f)
-        {
-            return json_decode<SortedList>(System.IO.File.ReadAllText(f));
-        }
-        public static object ReadAsObj(string f)
-        {
-            return json_decodeObj(System.IO.File.ReadAllText(f));
-        }
-        public static JsonObject ReadAsJson(string f)
-        {
-            return json_decodeJonObj(System.IO.File.ReadAllText(f));
-        }
+    
+
+  
         public static void echo(object v)
         {
             Print(v);
@@ -116,53 +106,7 @@ namespace mdsj.lib
 
             return newDictionary;
         }
-        public static Dictionary<string, string> ldDicFromQrystr(string queryString)
-        {
-            return ConvertToDictionary(queryString);
-        }
-        public static Dictionary<string, string> ConvertToDictionary(string queryString)
-        {
-            var dictionary = new Dictionary<string, string>();
-
-            // Use HttpUtility to parse the query string
-            var queryParams = HttpUtility.ParseQueryString(queryString);
-
-            foreach (string key in queryParams)
-            {
-                dictionary[key] = queryParams[key];
-            }
-
-            return dictionary;
-        }
-        public static Hashtable LoadHashtableFromQrystrDep(string queryString)
-        {
-            var hashtable = new Hashtable();
-
-            // Use HttpUtility to parse the query string
-            NameValueCollection queryParams = HttpUtility.ParseQueryString(queryString);
-
-            foreach (string key in queryParams)
-            {
-                hashtable[key] = queryParams[key];
-            }
-
-            return hashtable;
-        }
-        public static Hashtable ConvertToHashtable(string queryString)
-        {
-            var hashtable = new Hashtable();
-
-            // Use HttpUtility to parse the query string
-            NameValueCollection queryParams = HttpUtility.ParseQueryString(queryString);
-
-            foreach (string key in queryParams)
-            {
-                hashtable[key] = queryParams[key];
-            }
-
-            return hashtable;
-        }
-        public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
+       public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
         {
             HashSet<string> updatedSet = new HashSet<string>();
 
@@ -254,53 +198,6 @@ namespace mdsj.lib
             }
         }
 
-        public static object GetField(object Obj, string fld, object defVal)
-        {
-
-            if (Obj is SortedList)
-            {
-                return arrCls.LoadField((SortedList)Obj, fld, defVal);
-            }
-            else
-            {
-                return ldfld(Obj, fld, defVal);
-            }
-        }
-        public static object getFld(object Obj, string fld, object defVal)
-        {
-
-            if (Obj is SortedList)
-            {
-                return arrCls.LoadField((SortedList)Obj, fld, defVal);
-            }
-            else
-            {
-                return ldfld(Obj, fld, defVal);
-            }
-        }
-        public static string ldfldAsStr(object obj, string fld, object defVal)
-        {
-            return ldfld(obj, fld, "").ToString();
-        }
-
-        public static object LoadField(Hashtable hstb, string fld, object defVal)
-        {
-            if (hstb.ContainsKey(fld))
-                return hstb[fld];
-            return defVal;
-        }
-        public static object ldfld(object obj, string fld, object defVal)
-        {
-            Type type = obj.GetType();
-            PropertyInfo propertyInfo = type.GetProperty(fld);
-
-            if (propertyInfo != null && propertyInfo.CanWrite)
-            {
-                return propertyInfo.GetValue(obj);
-            }
-            return defVal;
-        }
-
         public static bool And(bool left, bool right)
         {
             return left && right;
@@ -309,43 +206,12 @@ namespace mdsj.lib
         {
             return left && right;
         }
-        public static void setFld(object Obj, string fld, object v)
-        {
-            if (Obj is SortedList)
-            {
-                SetField938((SortedList)Obj, fld, v);
-            }
-            else
-            {
-                SetProperty(Obj, fld, v);
-            }
-
-        }
-
-
-        static void SetProperty(object obj, string prop, object v)
-        {
-            Type type = obj.GetType();
-            PropertyInfo propertyInfo = type.GetProperty(prop);
-
-            if (propertyInfo != null && propertyInfo.CanWrite)
-            {
-                propertyInfo.SetValue(obj, v);
-            }
-            else
-            {
-                Print("The object does not have a writable 'Name' property.");
-            }
-        }
-        public static object invoke(string methodName, params object[] args)
+       public static object invoke(string methodName, params object[] args)
         {
             return callx(methodName, args);
         }
 
-        public static string castToStr(object args)
-        {
-            return args.ToString();
-        }
+      
 
         /// <summary>
         ///     PrintColoredText("This is blue text.", ConsoleColor.Blue);
@@ -496,35 +362,7 @@ namespace mdsj.lib
             return call_user_func(callback, args);
         }
 
-        public static HashSet<string> LdHsstWordsFromFile(string filePath)
-        {
-            var words = new HashSet<string>();
-
-            try
-            {
-                using (StreamReader reader = new StreamReader(filePath))
-                {
-                    string line;
-                    while ((line = reader.ReadLine()) != null)
-                    {
-                        // 拆分行中的单词，按空格和回车拆分
-                        var splitWords = line.Split(new[] { ' ', '\t', '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-                        foreach (var word in splitWords)
-                        {
-                            var word1 = word.Trim();
-                            words.Add(word1);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Print("Error reading file: " + ex.Message);
-            }
-
-            return words;
-        }
-        public static object CallxTryJmp(Delegate callback, params object[] objs)
+       public static object CallxTryJmp(Delegate callback, params object[] objs)
         {
             try
             {
@@ -551,10 +389,7 @@ namespace mdsj.lib
         {
             return call_user_func(callback, args);
         }
-        public static void setHsstToF(HashSet<string> downedUrl, string v)
-        {
-            WriteAllText(v, encodeJson( downedUrl));
-        }
+       
 
         public static HashSet<string> NewSet(string f)
         {
@@ -596,61 +431,7 @@ namespace mdsj.lib
           
         }
 
-        public static HashSet<string> LdHsstFrmFJsonDecd(string v)
-        {
-            return (ReadFileToHashSet(v));
-        }
-        public static HashSet<string> ReadFileToHashSet(string filePath)
-        {
-            try
-            {
-                string json = File.ReadAllText(filePath);
-                HashSet<string> hashSet = JsonConvert.DeserializeObject<HashSet<string>>(json);
-                return hashSet;
-            }
-            catch (Exception ex)
-            {
-                ConsoleWriteLine($"An error occurred: {ex.Message}");
-                return new HashSet<string>();
-            }
-        }
-
-        public static HashSet<string> LoadHashsetReadFileLinesToHashSet(string filePath)
-        {
-            HashSet<string> lines = new HashSet<string>();
-
-            try
-            {
-                using (StreamReader sr = new StreamReader(filePath))
-                {
-                    string line;
-                    while ((line = sr.ReadLine()) != null)
-                    {
-                        if(line.Trim().Length>0)
-                        lines.Add(line);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"The file could not be read: {e.Message}");
-            }
-
-            return lines;
-        }
-        public static HashSet<string> LdHsst(string input)
-        {
-            // 分割字符串并转换为 HashSet
-            string[] elements = input.Split(" ", StringSplitOptions.RemoveEmptyEntries);
-            HashSet<string> stringSet = new HashSet<string>(elements);
-
-            return stringSet;
-        }
-        public static HashSet<string> LoadHashsetFrmFL(string f)
-        {
-            return LdHsst(ReadAllText(f));
-        }
-
+    
 
 
         public static void callTryAll(Action value)
@@ -665,33 +446,8 @@ namespace mdsj.lib
             }
 
         }
-        public static bool IsStr(object obj1)
-        {
-
-            return obj1 is string;
-        }
-        public static bool IsInt(string str)
-        {
-            return int.TryParse(str, out _);
-        }
-        public static bool IsNumeric(object str)
-        {
-            var s = ToString(str);
-            // 匹配整数或带小数点的数字
-            return Regex.IsMatch(s, @"^[0-9]+(\.[0-9]+)?$");
-        }
-        public static bool IsNumeric(string str)
-        {
-            // 匹配整数或带小数点的数字
-            return Regex.IsMatch(str, @"^[0-9]+(\.[0-9]+)?$");
-        }
-        public static string ToString(object o)
-        {
-            if (o == null)
-                return "";
-            // The default for an object is to return the fully qualified name of the class.
-            return o.ToString();
-        }
+    
+   
      
         
         public static void Jmp2end()
@@ -700,18 +456,7 @@ namespace mdsj.lib
             throw new jmp2endEx();
         }
 
-        public static bool IsArray(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            Type type = obj.GetType();
-
-            // 检查类型是否为数组
-            return type.IsArray;
-        }
+ 
         public static object callxTryx(string methodName, params object[] args)
         {
 
@@ -760,39 +505,8 @@ namespace mdsj.lib
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
-        public static bool IsCollection(object obj)
-        {
-            if (obj == null)
-            {
-                return false;
-            }
-
-            Type type = obj.GetType();
-
-            // 检查类型是否实现了 IEnumerable 接口
-            return typeof(IEnumerable).IsAssignableFrom(type);
-        }
-
-
-        public static string ConvertToMarkdownTable(object arr2)
-        {
-            object[] arr = (object[])arr2;
-            StringBuilder sb = new StringBuilder();
-
-            // 添加表头
-            sb.AppendLine("| prm\t|Value\t|");
-            sb.AppendLine("|-------|-------|");
-
-            // 添加表格行
-            for (int i = 0; i < arr.Length; i++)
-            {
-                object obj = arr[i];
-                sb.AppendLine($"| {i}\t|{encodeJson(obj)}\t|");
-            }
-
-            return sb.ToString();
-        }
-
+    
+      
         public static object callx(string methodName, params object[] args)
         {
 

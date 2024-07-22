@@ -1,0 +1,183 @@
+﻿global using static mdsj.lib.bscIsCmp;
+using libx;
+using Microsoft.Extensions.Primitives;
+using prjx.lib;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+
+namespace mdsj.lib
+{
+    internal class bscIsCmp
+    {
+        public static bool fileHasExtname(string 路径)
+        {
+            string 文件扩展名 = Path.GetExtension(路径);
+            //  string 文件路径 = $"{web根目录}{路径}";
+            //   文件路径 = 格式化路径(文件路径);
+            if (文件扩展名 == "")
+                return false;
+            else
+                return true;
+        }
+        public static bool ExistFil(string path1)
+        {
+            return File.Exists(path1);
+        }
+
+        public static bool IsArray(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Type type = obj.GetType();
+
+            // 检查类型是否为数组
+            return type.IsArray;
+        }
+        public static bool IsWord(string input)
+        {
+            // 使用 Char 类的方法判断是否是字母或数字
+            return input.All(c => char.IsLetter(c));
+        }
+        public static bool IsStr(object obj1)
+        {
+
+            return obj1 is string;
+        }
+        public static bool IsInt(string str)
+        {
+            return int.TryParse(str, out _);
+        }
+        public static bool IsNumeric(object str)
+        {
+            var s = ToStr(str);
+            // 匹配整数或带小数点的数字
+            return Regex.IsMatch(s, @"^[0-9]+(\.[0-9]+)?$");
+        }
+
+        //private static string ToString(object str)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
+        public static bool IsNumeric(string str)
+        {
+            // 匹配整数或带小数点的数字
+            return Regex.IsMatch(str, @"^[0-9]+(\.[0-9]+)?$");
+        }
+        public static bool IsCollection(object obj)
+        {
+            if (obj == null)
+            {
+                return false;
+            }
+
+            Type type = obj.GetType();
+
+            // 检查类型是否实现了 IEnumerable 接口
+            return typeof(IEnumerable).IsAssignableFrom(type);
+        }
+
+
+        public static bool IsStartsWithUppercase(string input)
+        {
+            // 判断字符串是否为空或为null
+            if (string.IsNullOrEmpty(input))
+            {
+                return false;
+            }
+
+            // 检查第一个字符是否为大写字母
+            return char.IsUpper(input[0]);
+        }
+        public static bool isIn(object hour, string[]? times)
+        {
+            foreach (string o in times)
+            {
+                if (hour.ToString().ToUpper().Equals(o.ToUpper()))
+                    return true;
+            }
+            return false;
+        }
+        public static bool isEq4qrycdt(object rowVal, object cdtVal)
+        {
+            if (cdtVal == null || cdtVal.ToString() == "")
+                return true;
+            return rowVal.ToString().ToUpper().Equals(cdtVal.ToString().ToUpper());
+        }
+        public static bool isChkOK(List<Filtr> li)
+        {
+            if (!ChkAllFltrTrueDep(li))
+                return false;
+            return true;
+        }
+        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, StringValues> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.StrEq(row[Fld], arrCls.LoadFieldTryGetValue(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+
+        public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+                if (!strCls.StrEq(row[Fld], ldfld(whereExprsObj, Fld)))   //  cityname not in (citysss) 
+                    return false;
+
+            return true;
+        }
+        public static bool isFileExist(string 文件路径)
+        {
+            return ExistFil(文件路径);
+        }
+        public static bool isFileNotExist(string 文件路径)
+        {
+            return !ExistFil(文件路径);
+        }
+        public static bool IsLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+
+        public static bool IsEnglishLetter(char character)
+        {
+            return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+        public static bool isChkfltrOk(List<bool> li)
+        {
+            if (!ChkAllFltrTrue(li))
+                return false;
+            return true;
+        }
+        public static bool isArrOrColl(object inputArray)
+        {
+            if (IsArray(inputArray))
+                return true;
+            if (IsCollection(inputArray))
+                return true;
+
+            return false;
+        }
+
+        public static bool isStrEndWz(string 路径, string 扩展名)
+        {
+            return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
+        }
+        public static bool isPathEndwithExt(string 路径, string 扩展名)
+        {
+            return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
+        }
+    }
+}

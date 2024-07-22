@@ -289,7 +289,7 @@ namespace prjx.lib
                 ArrayList list = qryDep(dbfile);
                 SortedList iotTable = db.lst2IOT(list);
 
-                if (ldfld(SortedList1, "id", "") == "")
+                if (LoadFieldFrmStlst(SortedList1, "id", "") == "")
                     SetField938(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
                 string key = SortedList1["id"].ToString();
                 SetField938(iotTable, key, SortedList1);

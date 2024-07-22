@@ -74,7 +74,7 @@ namespace mdsj.lib
                 liRzt.Add(wd);
             }
             //is word
-            if (StartsWithUppercase(wd))
+            if (IsStartsWithUppercase(wd))
             {
                 string wdRoot = GetRoot(wd);
                // string cnWd = transE2cWd(wdRoot);

@@ -18,6 +18,21 @@ namespace mdsj.lib
     internal class util
     {
         public const string botname = "LianXin_BianMinBot";
+
+        public static int CalculateTotalPages(int pageSize, int totalRecords)
+        {
+            if (pageSize <= 0)
+            {
+                pageSize = 10;
+            }
+
+            if (totalRecords < 0)
+            {
+                totalRecords = 0;
+            }
+
+            return (int)Math.Ceiling((double)totalRecords / pageSize);
+        }
         public static int GetBatteryPercentage()
         {
             try
@@ -37,14 +52,7 @@ namespace mdsj.lib
             }
         }
 
-        void loopForever()
-        {
-            while (true)
-            {
-               Print(DateTime.Now);
-                Thread.Sleep(5000);
-            }
-        }
+    
         public static string mp3FilePath_slowSkedu = "C:\\Users\\Administrator\\OneDrive\\mklv song lst\\Nana - Lonely HQ.mp3";
 
         public static string mp3FilePathEmgcy = "C:\\Users\\Administrator\\OneDrive\\90后非主流的歌曲 v2 w11\\Darin-Be What You Wanna Be HQ.mp3"; // 替换为你的 MP3 文件路径
@@ -72,72 +80,7 @@ namespace mdsj.lib
 
 
         }
-        public static void ConvertXmlToHtml(string xmlFilePath, string htmlFilePath)
-        {
-            var sb = new StringBuilder();
-
-            sb.AppendLine("<html>");
-            sb.AppendLine("<head><title>XML Documentation</title></head>");
-            sb.AppendLine("<body>");
-            sb.AppendLine("<h1>api文档</h1>");
-
-            using (var reader = XmlReader.Create(xmlFilePath))
-            {
-                while (reader.Read())
-                {
-                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "member")
-                    {
-                        string name = reader.GetAttribute("name");
-                        sb.AppendLine($"<h2>{name}</h2>");
-
-                        while (reader.Read() && !(reader.NodeType == XmlNodeType.EndElement && reader.Name == "member"))
-                        {
-                            if (reader.NodeType == XmlNodeType.Element)
-                            {
-                                string elementName = reader.Name;
-                                if (elementName == "example")
-                                {
-                                    reader.Read(); // Move to the text node or CDATA
-                                    if (reader.NodeType == XmlNodeType.CDATA || reader.NodeType == XmlNodeType.Text)
-                                    {
-                                        string exampleText = reader.Value;
-                                        sb.AppendLine($"<p><strong>范例:</strong> {exampleText}</p>");
-                                    }
-                                }
-                                else
-                                {//summar
-                                    string prmname = reader.GetAttribute("name");
-                                    SortedList stlst = new SortedList();
-                                    stlst.Add("summary", "功能");
-
-                                    stlst.Add("returns", "返回值");
-                                    stlst.Add("param", "----参数");
-                                    reader.Read(); // Move to the text node
-
-                                  //  if (reader.NodeType == XmlNodeType.Text)
-                                    {
-                                        string text = reader.Value;
-
-                                        sb.AppendLine($"<p><strong>{stlst[elementName]+"  " + prmname}:</strong> {text}</p>");
-                                    }
-                                }
-
-                            }
-                        }
-                    }
-                }
-            }
-
-            sb.AppendLine("</body>");
-            sb.AppendLine("</html>");
-
-            System.IO.File.WriteAllText(htmlFilePath, sb.ToString());
-        }
-        public static string ConvertXmlToJson(string xmlFilePath)
-        {
-            XDocument doc = XDocument.Load(xmlFilePath);
-            return JsonConvert.SerializeXNode(doc, Newtonsoft.Json.Formatting.Indented, true);
-        }
+     
         public static string userDictFile = $"{prjdir}/cfg/user_dict.txt";
         public static void playMp3(string mp3FilePath, int sec)
         {

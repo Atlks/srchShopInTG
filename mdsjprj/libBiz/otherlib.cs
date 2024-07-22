@@ -31,7 +31,7 @@ namespace mdsj.libBiz
             List<string> li = new List<string>();
             try
             {
-                li.Add(TrimRemoveUnnecessaryCharacters4tgWhtapExt(ldfld(merchant1, fld, "").ToString()));
+                li.Add(TrimRemoveUnnecessaryCharacters4tgWhtapExt(LoadFieldFrmStlst(merchant1, fld, "").ToString()));
 
             }
             catch (Exception e)

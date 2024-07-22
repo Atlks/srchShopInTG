@@ -367,7 +367,7 @@ namespace mdsj.libBiz
                 // 使用 LINQ 查询语法提取 txt 属性值
                 var txtValues = li.Select(dict =>
                 {
-                    return ldfld(dict, "txt", null);
+                    return LoadFieldFrmStlst(dict, "txt", null);
                 })
                                     .Where(txt => txt != null)
                                     .ToArray();

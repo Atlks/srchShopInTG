@@ -415,28 +415,6 @@ namespace mdsj.libBiz
 
         }
 
-        public static void WriteAllText(string f, object update)
-        {
-            var __METHOD__ = nameof(WriteAllText);
-            PrintCallFunArgs(__METHOD__, func_get_args(update,f));
- 
-            try
-            {
-                Mkdir4File(f);
-                if(IsStr(update))
-                {
-                    System.IO.File.WriteAllText(f,  (update.ToString()));
-                    return;
-                }
-                  
-                System.IO.File.WriteAllText( f, json_encode(update));
-            }catch(Exception e)
-            {
-                PrintExcept("WriteAllText", e);
-            }
-            PrintRet(__METHOD__, 0);
-          
-        }
         public static bool IsBtm_btnClink_in_prvt(Update update)
         {
             if (update.Type != UpdateType.Message)
