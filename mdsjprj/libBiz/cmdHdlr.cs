@@ -45,6 +45,196 @@ namespace mdsj.libBiz
                 replyToMessageId: update.Message.MessageId);
 
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="ctry">泰国</param>
+        /// <param name="update"></param>
+        /// <exception cref="NotImplementedException"></exception>
+        public static void ConfirmSetCountryBtnClick(string ctry, Update update)
+        {
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+            //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
+            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+            if (isGrpChat(update))
+            {
+                if (!System.IO.File.Exists(f))
+                {
+                    Print("no auth " + f);
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(
+             update.Message.Chat.Id,
+             "权限不足",
+             replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
+                    return;
+                }
+            }
+
+            if (isGrpChat(update))
+            {
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+                string pk = ctry.Trim().ToUpper();
+
+                string whereExprsFld = "whereExprs";
+                string coutryKey = "国家";
+                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld,  coutryKey, pk);
+
+                SetFld(cfg, "国家", pk);
+                SetFld(cfg, "城市", "");
+                SetFld(cfg, "园区", "");
+                SetFld(cfg, "id", grpid.ToString());
+                SetFld(cfg, "grpid", grpid.ToString());
+                SetFld(cfg, "whereExprs", $"国家={ctry}");
+                SetFld(cfg, "grpinfo", update.Message.Chat);
+                if (pk == "不限制")
+                {
+                    SetFld(cfg, "国家", "");
+                    SetFld(cfg, "城市", "");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
+                }
+                ormJSonFL.SaveJson(cfg, dbfile2);
+            }
+            //prive
+            if (!isGrpChat(update))
+            {
+                string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+                SortedList cfg = findOne(dbfile);
+                string whereExprsFld = "whereExprs";
+                string coutryKey = "国家";
+                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, ctry);
+
+                SetFld(cfg, "国家", ctry);
+                SetFld(cfg, "城市", "");
+                SetFld(cfg, "园区", "");
+                SetFld(cfg, "id", update.Message.From.Id.ToString());
+                SetFld(cfg, "from", update.Message.From);
+                SetFld(cfg, "whereExprs", $"国家={ctry}");
+                if (ctry == "不限制")
+                {
+                  
+                    SetFld(cfg, "国家", "");
+                    SetFld(cfg, "城市", "");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
+                }
+                ormJSonFL.SaveJson(cfg, dbfile);
+            }
+            botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+              "设置ok",
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId);
+
+            //------------set menu btm
+            SetBtmMenu(update);
+            Jmp2end();
+        }
+
+        public static void ConfirmSetCityBtnClick(string area, Update update)
+        {   //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+
+            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+            if (isGrpChat(update))
+            {
+                if (!System.IO.File.Exists(f))
+                {
+                    Print("no auth " + f);
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(
+             update.Message.Chat.Id,
+             "权限不足",
+             replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
+                    return;
+                }
+            }
+
+            if (isGrpChat(update))
+            {
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+                string pk = area.Trim().ToUpper();
+
+                string whereExprsFld = "whereExprs";
+                string areakey = "城市";
+                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
+
+               
+                SetFld(cfg, "城市", area);
+                SetFld(cfg, "园区", "");
+                SetFld(cfg, "id", grpid.ToString());
+                SetFld(cfg, "grpid", grpid.ToString());
+                SetFld(cfg, "whereExprs", whereExprsNew);
+                SetFld(cfg, "grpinfo", update.Message.Chat);
+                if (pk == "不限制")
+                {
+                   
+                    SetFld(cfg, "城市", "");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
+                }
+                ormJSonFL.SaveJson(cfg, dbfile2);
+            }
+            //prive
+            if (!isGrpChat(update))
+            {
+                string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+                SortedList cfg = findOne(dbfile);
+                string whereExprsFld = "whereExprs";
+                string coutryKey = "城市";
+                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, area);
+
+                SetFld(cfg, "城市", area);
+           
+                SetFld(cfg, "园区", "");
+                SetFld(cfg, "id", update.Message.From.Id.ToString());
+                SetFld(cfg, "from", update.Message.From);
+                SetFld(cfg, "whereExprs", whereExprsNew);
+                if (area == "不限制")
+                {                  
+                    SetFld(cfg, "城市", "");
+                    SetFld(cfg, "园区", "");
+                    SetFld(cfg, "whereExprs", $"");
+                }
+                ormJSonFL.SaveJson(cfg, dbfile);
+            }
+            botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+              "设置ok",
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId);
+
+            //------------set menu btm
+            SetBtmMenu(update); Jmp2end();
+        }
+
+        private static string SetMapWhereexprsFldOFkv(SortedList cfg, string whereExprsFld, string key2, string v2
+            )
+        {
+            string whereExprs = GetFieldAsStr(cfg, whereExprsFld);
+            SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
+            SetFld(whereExpmap, key2, v2);
+            string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
+            return whereExprsNew;
+        }
+
+     
         public static void SetParkFrmMsg(string park, Update update)
         {
             //public 判断权限先
@@ -64,8 +254,13 @@ namespace mdsj.libBiz
               disableWebPagePreview: true,
               replyToMessageId: update.Message.MessageId);
 
-            //set menu
+            //---------------set menu
+            SetBtmMenu(update);
 
+        }
+
+        private static void SetBtmMenu(Update update)
+        {
             ReplyKeyboardMarkup rplyKbdMkp;
             //  Program.botClient.send
             try
@@ -126,6 +321,7 @@ namespace mdsj.libBiz
              update.Message.Chat.Id,
              "权限不足",
              replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
                     return;
                 }
 
@@ -175,12 +371,7 @@ namespace mdsj.libBiz
             ormJSonFL.SaveJson(cfg, dbfile);
         }
 
-        public static string GetStr(string? v)
-        {
-            if (string.IsNullOrEmpty(v)) return "";
-
-            return v;
-        }
+        
         public static string getCmdFun(string? v)
         {
             if (string.IsNullOrEmpty(v)) return "";
@@ -252,16 +443,7 @@ namespace mdsj.libBiz
             return keyboardButtons;
 
         }
-        public static string[] ReadFileAndRemoveEmptyLines(string filePath)
-        {
-            // 读取文件所有行
-            string[] lines = System.IO.File.ReadAllLines(filePath);
-
-            // 使用 LINQ 过滤掉空行
-            string[] nonEmptyLines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
-
-            return nonEmptyLines;
-        }
+     
 
         public static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
         {

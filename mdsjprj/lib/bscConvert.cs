@@ -23,6 +23,56 @@ namespace mdsj.lib
 {
     internal class bscConvert
     {
+        public static string CastHashtableToQuerystringNoEncodeurl(SortedList sortedList)
+        {
+            if (sortedList == null)
+            {
+                return "";
+            }
+
+            var queryString = "";
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                if (queryString.Length > 0)
+                {
+                    queryString += "&";
+                }
+
+                // URL encode the key and value to handle special characters
+                //string key = Uri.EscapeDataString(entry.Key.ToString());
+                //string value = Uri.EscapeDataString(entry.Value.ToString());
+
+                queryString += $"{entry.Key.ToString()}={entry.Value.ToString()}";
+            }
+
+            return queryString;
+        }
+
+        public static string CastHashtableToQuerystring(SortedList sortedList)
+        {
+            if (sortedList == null)
+            {
+                throw new ArgumentNullException(nameof(sortedList));
+            }
+
+            var queryString = "";
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                if (queryString.Length > 0)
+                {
+                    queryString += "&";
+                }
+
+                // URL encode the key and value to handle special characters
+                string key = Uri.EscapeDataString(entry.Key.ToString());
+                string value = Uri.EscapeDataString(entry.Value.ToString());
+
+                queryString += $"{key}={value}";
+            }
+
+            return queryString;
+        }
+
 
         public static void CastVal2hashtable(SortedList list)
         {
@@ -353,7 +403,7 @@ namespace mdsj.lib
             return hashtable;
         }
 
-        public static string castToStr(object args)
+        public static string CastToStr(object args)
         {
             return args.ToString();
         }

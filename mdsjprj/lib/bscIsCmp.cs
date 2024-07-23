@@ -164,7 +164,17 @@ namespace mdsj.lib
 
             return true;
         }
+    
 
+        public static bool ISCtry(string areaname)
+        {
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/ctrys.txt");
+            return (hs.Contains(areaname));
+        }
+        public static bool IsNotExistFil(string v)
+        {
+            return !System.IO.File.Exists(v);
+        }
         public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
         {
             //  string Fld = "城市";

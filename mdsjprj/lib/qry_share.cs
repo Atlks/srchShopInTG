@@ -10,11 +10,12 @@ namespace mdsj.lib
 {
     internal class qry_share
     {
+        //share_add   add cfg in cfg file...
         //
-        public static SortedList shareDetail(string FromdataDir, string shareName)
+        public static SortedList ShareDetail(string FromdataDir, string shareName)
         {
             SortedList cfg4curDatatype = shareList(FromdataDir);
-           print(json_encode(cfg4curDatatype));
+           Print(json_encode(cfg4curDatatype));
 
           //  SortedList cfg4curDatatype= shareCfgList[]
             SortedList? sortedList = (SortedList)cfg4curDatatype[shareName];
@@ -47,7 +48,7 @@ namespace mdsj.lib
             //cfgFnal.Add(dataType, shareCfgList4dataDir);
             //return (SortedList)cfgFnal[dataType];
             SortedList shareCfgList4dataDir = ReadJsonToSortedList($"{prjdir}/cfgShare/{dataType}.json");
-            castVal2hashtable(shareCfgList4dataDir);
+            CastVal2hashtable(shareCfgList4dataDir);
             return shareCfgList4dataDir;
 
 

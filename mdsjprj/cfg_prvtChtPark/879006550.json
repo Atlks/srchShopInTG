@@ -7,14 +7,9 @@
       "username": "Xxx0079468",
       "language_code": "en"
     },
-    "grpid": "-1002248404945",
-    "grpinfo": {
-      "id": -1002248404945,
-      "type": "supergroup",
-      "title": "grd 做空"
-    },
     "id": "879006550",
-    "whereExprs": "",
-    "园区": "KK园区"
+    "whereExprs": "城市=妙瓦底",
+    "园区": "东风园区",
+    "城市": "妙瓦底"
   }
 ]

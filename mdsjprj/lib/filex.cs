@@ -16,6 +16,16 @@ namespace prjx.lib
 {
     public class filex
     {
+        public static string[] ReadFileAndRemoveEmptyLines(string filePath)
+        {
+            // 读取文件所有行
+            string[] lines = System.IO.File.ReadAllLines(filePath);
+
+            // 使用 LINQ 过滤掉空行
+            string[] nonEmptyLines = lines.Where(line => !string.IsNullOrWhiteSpace(line)).ToArray();
+
+            return nonEmptyLines;
+        }
         public static InputFileStream toFilStrm(string videoFilePath)
         {
             var mp3Stream = System.IO.File.Open(videoFilePath, FileMode.Open);

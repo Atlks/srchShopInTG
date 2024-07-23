@@ -473,6 +473,42 @@ namespace mdsj.lib
             //   File
             return json_decode(System.IO.File.ReadAllText(f));
         }
+
+        public static string GetStr(string? v)
+        {
+            if (string.IsNullOrEmpty(v)) return "";
+
+            return v;
+        }
+        public static HashSet<string> GetHashsetFromFilTxt(string v)
+        {
+            return ReadTextFileToHashSet(v);
+        }
+
+        public static HashSet<string> ReadTextFileToHashSet(string filePath)
+        {
+            if (!System.IO.File.Exists(filePath))
+            {
+                return new HashSet<string>();
+            }
+
+            var hashSet = new HashSet<string>();
+            using (var reader = new StreamReader(filePath))
+            {
+                string line;
+                while ((line = reader.ReadLine()) != null)
+                {
+                    // Trim whitespace and remove empty lines
+                    line = line.Trim();
+                    if (line.Length > 0)
+                    {
+                        hashSet.Add(line);
+                    }
+                }
+            }
+
+            return hashSet;
+        }
         public static SortedList GetHashset
             (string f)
         {
@@ -614,6 +650,12 @@ namespace mdsj.lib
                 SetProperty(Obj, fld, v);
             }
 
+        }
+
+        public static string GetFieldAsStr(SortedList sortedList, string key)
+        {
+            var obj = GetField(sortedList, key, "");
+            return ToStr(obj);
         }
         public static double GetFieldAsNumber(SortedList sortedList, string fieldName)
         {

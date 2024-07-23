@@ -86,9 +86,16 @@ namespace mdsj.lib
             结果task.Wait();
         }
 
-  
-        
-  
+
+        public static string SubStr(string queryString, int n)
+        {
+            // int n
+            int len = queryString.Length;
+            if (queryString == "")
+                return "";
+            return queryString.Substring(n);
+        }
+
         public static void SetRespContentTypeNencode
             (HttpResponse http上下文, string 内容类型和编码)
         {
@@ -96,7 +103,7 @@ namespace mdsj.lib
         }
         public static void SendResp(object 输出结果, HttpResponse http上下文)
         {
-            http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
+            http上下文.WriteAsync(ToStr(输出结果), Encoding.UTF8).GetAwaiter().GetResult(); ;
 
         }
         public static void SendResp(object 输出结果, string 内容类型和编码,HttpResponse http上下文)
@@ -340,7 +347,7 @@ namespace mdsj.lib
         }
 
 
-        public static void foreach_hstbEs(List<SortedList> list2, Action<SortedList> act)
+        public static void ForeachHashtableEs(List<SortedList> list2, Action<SortedList> act)
         {
             foreach (SortedList rw in list2)
             {

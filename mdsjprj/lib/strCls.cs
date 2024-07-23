@@ -379,7 +379,9 @@ namespace prjx.lib
             // 将解析后的查询字符串参数添加到 SortedList 中
             foreach (string key in queryParameters)
             {
-                sortedList.Add(key, queryParameters[key]);
+                string k = key.Trim();
+           //     key = key.Trim();
+                sortedList.Add(k, queryParameters[key]);
             }
 
             return sortedList;

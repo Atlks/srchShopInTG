@@ -558,7 +558,30 @@ namespace mdsj.lib
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
-   
+        public static List<t> Append<t>(List<t> list2, List<t>   list1)
+        {
+            //List<t> result = new List<t>();
+
+            //// 获取最长列表的长度
+            //int maxLength = Math.Max(list1.Count, list2.Count);
+
+            //// 遍历并合并列表
+            ////for (int i = 0; i < maxLength; i++)
+            ////{
+            //for (int i = 0; i < list1.Count; i++)
+            //{
+            //    result.Add(list1[i]);
+            //}
+
+            for (int i = 0; i < list2.Count; i++)
+            {
+                list1.Add(list2[i]);
+            }
+            //}
+
+            return list1;
+        }
+
 
         public static void CallAsAsyncTaskRun(Action act)
         {

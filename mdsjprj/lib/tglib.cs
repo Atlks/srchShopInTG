@@ -132,7 +132,7 @@ namespace prjx.lib
         {
             try
             {
-                  botClient_QunZzhushou.SendTextMessageAsync(chatId, "感谢投票");
+                //  botClient_QunZzhushou.SendTextMessageAsync(chatId, "感谢投票");
             }
             catch (Exception ex)
             {

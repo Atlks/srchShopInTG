@@ -67,7 +67,7 @@ namespace mdsj.lib
                                 //here cant new thrd..beir req close early
                                 callx(() =>
                                 {
-                                    httpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                    HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 });
                             }
                             catch (jmp2endEx e)
@@ -105,7 +105,7 @@ namespace mdsj.lib
         /// <param name="httpHdlrApiSpecl"></param>
         /// <param name="context"></param>
         /// <param name="api_prefix"></param>
-        public static void httpHdlr(HttpRequest request, HttpResponse response, string api_prefix, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
+        public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefix, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
 
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
@@ -131,7 +131,7 @@ namespace mdsj.lib
             extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
             extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
             string path2 = request.Path;
-            httpHdlrFil(request, response, extNhdlrChoosrMaplist);
+            HttpHdlrFil(request, response, extNhdlrChoosrMaplist);
             //-------------------swag doc api
             // 处理特定API
             callx(httpHdlrApiSpecl, request, response);
@@ -156,60 +156,14 @@ namespace mdsj.lib
             var li = ormJSonFL.QrySglFL("" + qrystrHstb["path"] + ".json");
             return EncodeJson(li);
         }
-        //private static void wbapi_upldPost(HttpRequest request, HttpResponse response)
-        //{
-        //    if (request.Method == HttpMethods.Post)
-        //    {
-        //        // Check if the request contains a file
-        //        if (request.Form.Files.Count > 0)
-        //        {
-        //            foreach (var file in request.Form.Files)
-        //            {
-        //                // Get the file content and save it to a desired location
-        //                var filePath = Path.Combine("uploads", file.FileName);
-        //                Mkdir4File(filePath);
-        //                using (var stream = new FileStream(filePath, FileMode.Create))
-        //                {
-        //                    file.CopyToAsync(stream).GetAwaiter().GetResult();
-        //                }
-        //            }
-        //        }
-
-        //        // Handle other form data
-        //        foreach (var key in request.Form.Keys)
-        //        {
-        //            var value = request.Form[key];
-        //            ConsoleWriteLine($"Key: {key}, Value: {value}");
-        //        }
-
-        //        // Call the specific API handler
-        //        //    httpHdlrApiSpecl(request, response);
-        //    }
-        //}
-
-        //private static void Invk(Func<HttpContext, System.Threading.Tasks.Task> imageRespAsync)
-        //{
-
-        //}
-
-        //static void test(HttpContext context)
-        //{
-        //    Hashtable ht = new Hashtable();
-
-        //    ht.Add("jpg png", imageRespAsync2);
-        //    //   httpHdlrFil(context, ht);
-        //}
-        //public static async System.Threading.Tasks.Task imageRespAsync2(HttpContext context)
-        //{
-
-        //}
+        
 
         /// <summary>
         /// httpHdlrFil
         /// </summary>
         /// <param name="context"></param>
         /// <param name="extnameNhdlrChooser"></param>
-        public static void httpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
+        public static void HttpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
 

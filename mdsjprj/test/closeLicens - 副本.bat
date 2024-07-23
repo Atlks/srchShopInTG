@@ -1,0 +1,2 @@
+ .\autohotkey closeLicens.ahk
+ pause

@@ -95,7 +95,7 @@ namespace libx
         public static List<Filtr> getLstFltrCdtnsFrmQrystr(string qrystr, SortedList row)
         {
             List<Filtr> li = new List<Filtr>();
-          
+
 
             Dictionary<string, string> filters = LoadDic4qryCdtn(qrystr);
             foreach_DictionaryKeys(filters, (string key) =>
@@ -104,6 +104,39 @@ namespace libx
             });
             return li;
         }
+
+        public static List<SortedList> GetListFltrV2(
+            string fromDdataDir, string shanrES,
+            Func<SortedList, bool> whereFun)
+        {
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+
+            string[] shareArr = shanrES.Split(',');
+            foreach (var shar in shareArr)
+            {
+
+                string rndFun;
+                SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
+                rndFun = (string)curShareCfg["rndFun"];
+                var CurSharFullpath = fromDdataDir + "/" + shar
+                    + "." + GetFieldAsStr(curShareCfg, "ext");
+
+                //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
+                var dbg = (shar: shar, storeEngr: rndFun, CurSharFullpath: CurSharFullpath);
+                List<SortedList> li = arr_fltr4ReadShare(CurSharFullpath, whereFun, rndFun.ToString(), dbg);
+                //append to rztLi
+                Append(li, rztLi);
+            }
+            PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
+            return rztLi;
+        }
+
+
+
         public static List<SortedList> GetListFltr(string fromDdataDir, string shanrES,
          Func<SortedList, bool> whereFun
        )
@@ -133,7 +166,7 @@ namespace libx
             {
                 var CurSharFullpath = fromDdataDir + "/" + shar;
                 string rndFun;
-                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
+                SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
 
                 //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
@@ -173,7 +206,7 @@ namespace libx
             List<SortedList> rztLi = new List<SortedList>();
             //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
 
-           // string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            // string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
             string shareStr = _calcPatnsV4(fromDdataDir, shanrES);
             string[] shareArr = shareStr.Split(',');
@@ -181,7 +214,7 @@ namespace libx
             {
                 var CurSharFullpath = fromDdataDir + "/" + shar;
                 string rndFun;
-                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
+                SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
 
                 //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
@@ -224,7 +257,7 @@ namespace libx
             string rndFun;
             if (string.IsNullOrEmpty(shanrES))
             {
-                if(shar.EndsWith(".db"))
+                if (shar.EndsWith(".db"))
                     return nameof(rnd_next4Sqlt);
                 if (shar.EndsWith(".json"))
                     return nameof(rnd4jsonFl);
@@ -236,7 +269,7 @@ namespace libx
             }
             else
             {
-                SortedList curShareCfg = shareDetail(fromDdataDir, shar);
+                SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
             }
 
@@ -346,8 +379,8 @@ namespace libx
 
             catch (Exception e)
             {
-               Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-               Print(e);
+                Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+                Print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
@@ -429,8 +462,8 @@ namespace libx
             }
             catch (Exception e)
             {
-               Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
-               Print(e);
+                Print($"--ex catch---- mtth:{__METHOD__}((( {json_encode_noFmt(func_get_args(fromDdataDir, shanrES))}");
+                Print(e);
                 logErr2025(e, __METHOD__, "errdir");
                 //  return rsRztInlnKbdBtn;
             }
@@ -454,11 +487,12 @@ namespace libx
                 {
                     List<SortedList> li = _qryBySnglePart(dbf, whereFun, rndFun);
                     rztLi = arrCls.array_merge(rztLi, li);
-                }catch(Exception e)
-                {
-                    PrintExcept("Qe_qry",e);
                 }
-              
+                catch (Exception e)
+                {
+                    PrintExcept("Qe_qry", e);
+                }
+
             }
 
             return rztLi;
@@ -563,12 +597,12 @@ namespace libx
 
             string result = shareFiles;
 
-            if( string.IsNullOrEmpty(shareFiles))
+            if (string.IsNullOrEmpty(shareFiles))
             {
                 SortedList sharecfg = shareList(FromdataDir);
                 result = GetKeysCommaSeparated(sharecfg);
             }
-        
+
 
 
             dbgCls.PrintRet(__METHOD__, result);
@@ -654,7 +688,7 @@ namespace libx
             return li;
         }
 
-      
+
         public static bool ChkAllFltrTrue(List<bool> li)
         {
             foreach (bool cdt in li)
