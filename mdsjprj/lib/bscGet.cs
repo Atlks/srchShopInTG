@@ -377,17 +377,24 @@ namespace mdsj.lib
             return sortedList;
         }
 
+        public static IEnumerable<MethodInfo> methodss546;
         public static MethodInfo? GetMethInfo(string methodName)
         {
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Print("assemblies.Len=>" + assemblies.Length);
-            IEnumerable<Type> typeList = assemblies
-                            .SelectMany(assembly => assembly.GetTypes());
-            Print("typeList.Len=>" + typeList.Count());
-            IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            Print("methodss.Len=>" + methodss.Count());
-            var methodInfo = methodss
+            Print(" fun GetMethInfo()" + methodName);
+            if (methodss546 == null)
+            {
+                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                Print("assemblies.Len=>" + assemblies.Length);
+                IEnumerable<Type> typeList = assemblies
+                                .SelectMany(assembly => assembly.GetTypes());
+                Print("typeList.Len=>" + typeList.Count());
+                IEnumerable<MethodInfo> methodss = typeList
+                                .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
+                Print("methodss.Len=>" + methodss.Count());
+                methodss546 = methodss;
+            }
+
+            var methodInfo = methodss546
                 .FirstOrDefault(method =>
                     method.Name == methodName
                   );
@@ -665,8 +672,11 @@ namespace mdsj.lib
 
         public static List<SortedList> GetListHashtableFromJsonFil(string dbf)
         {
-            var list = new List<SortedList>();
 
+
+            var list = new List<SortedList>();
+            if (IsNotExistFil(dbf))
+                return list;
             try
             {
                 string json = File.ReadAllText(dbf);
@@ -730,8 +740,8 @@ namespace mdsj.lib
                 {
                     WriteAllText(f, txt.ToString());
                 }
-                 else
-                    WriteAllText(f,  EncodeJson(txt));
+                else
+                    WriteAllText(f, EncodeJson(txt));
             }
             catch (Exception e)
             {

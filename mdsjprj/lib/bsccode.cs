@@ -461,22 +461,11 @@ namespace mdsj.lib
  
         public static object CallxTryx(string methodName, params object[] args)
         {
-
+          //  Print(" fun CallxTryx()" + methodName);
             var __METHOD__ = methodName;
             PrintCallFunArgs(methodName, dbgCls.func_get_args(args));
 
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            Print("assemblies.Len=>" + assemblies.Length);
-            IEnumerable<Type> typeList = assemblies
-                            .SelectMany(assembly => assembly.GetTypes());
-            Print("typeList.Len=>" + typeList.Count());
-            IEnumerable<MethodInfo> methodss = typeList
-                            .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
-            Print("methodss.Len=>" + methodss.Count());
-            var methodInfo = methodss
-                .FirstOrDefault(method =>
-                    method.Name == methodName
-                  );
+            var methodInfo = GetMethInfo(methodName);
 
             if (methodInfo == null)
             {

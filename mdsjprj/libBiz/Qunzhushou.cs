@@ -450,7 +450,7 @@ namespace mdsj.libBiz
 
             MusicMetadata MusicMetadata1 = await RecognizeMusic(YYMMmp3FilePath);
             string mp3title = MusicMetadata1.Title + "-" + MusicMetadata1.Artist;
-            string mp3titleFname = filex.ConvertToValidFileName2024(mp3title);
+            string mp3titleFname = ConvertToValidFileName2024(mp3title);
 
             string finaMp3Fullpath = "d:/newmp3copy/" + mp3titleFname + ".mp3";
             Copy2024(YYMMmp3FilePath, finaMp3Fullpath);

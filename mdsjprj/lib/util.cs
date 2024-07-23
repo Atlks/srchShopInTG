@@ -18,7 +18,17 @@ namespace mdsj.lib
     internal class util
     {
         public const string botname = "LianXin_BianMinBot";
+        public static void PrintTimestamp()
+        {
+            // 获取当前时间（本地时间）
+            DateTime now = DateTime.Now;
 
+            // 格式化为可读性较强的字符串，精确到毫秒
+            string formattedDate = now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+
+            // 打印结果
+            Console.WriteLine("⏱️⏱️Current time with milliseconds: " + formattedDate);
+        }
         public static int CalculateTotalPages(int pageSize, int totalRecords)
         {
             if (pageSize <= 0)

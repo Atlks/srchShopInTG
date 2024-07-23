@@ -128,7 +128,7 @@ namespace mdsj.libBiz
             var songName = SubstrGetTextAfterKeyword(update.Message.Text.Trim(), "搜索音乐").Trim();
             botClient_QunZzhushou.SendTextMessageAsync(update.Message.Chat.Id, "开始搜索音乐。。。" + songName + "因为要从互联网检索下载，可能需要长达好几分钟去处理，稍等。。", replyToMessageId: update.Message.MessageId);
             string downdir = prjdir + "/downmp3";
-            string fname = filex.ConvertToValidFileName2024(songName);
+            string fname = ConvertToValidFileName2024(songName);
             string mp3path = $"{downdir}/{fname}.mp3";
            Print(mp3path);
             if (!System.IO.File.Exists(mp3path))
@@ -271,7 +271,7 @@ namespace mdsj.libBiz
             sortedList.Add("filenameLoc", fileName1);
             ormJSonFL.SaveJson(sortedList, $"{saveDirectory}/{basname}.json");
 
-            InputFileStream inputOnlineFile = toFilStrm(videoFilePath);
+            InputFileStream inputOnlineFile = ToFilStrm(videoFilePath);
             await botClient_QunZzhushou.SendVideoAsync(caption: "转码结果", chatId: update.Message.Chat.Id, video: inputOnlineFile, replyToMessageId: update.Message.MessageId);
 
             PrintRet(__METHOD__, 0);

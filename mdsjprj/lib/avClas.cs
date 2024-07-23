@@ -300,7 +300,7 @@ namespace mdsj.lib
                 // 转换为 MP3
                 // 转换为 MP3
                 // 转换为 MP3
-                string fname = filex.ConvertToValidFileName2024(songName);
+                string fname = ConvertToValidFileName2024(songName);
                 var outputFilePath = $"{dir}/{fname}.mp3";
                Print($"outputFilePath =>{outputFilePath}");
                   ConvertToMp3(tempFile, outputFilePath);

@@ -8,6 +8,8 @@ namespace prjx.lib
 {
     internal class timeCls
     {
+
+
         //转换时间格式
         public static string FormatTimeSpan(TimeSpan? timeSpan)
         {
