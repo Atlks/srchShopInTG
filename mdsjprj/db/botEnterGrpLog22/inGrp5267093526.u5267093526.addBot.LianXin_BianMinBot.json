@@ -1,0 +1,37 @@
+{
+  "update_id": 839631499,
+  "my_chat_member": {
+    "chat": {
+      "id": 5267093526,
+      "type": "private",
+      "username": "pangdudude",
+      "first_name": "阿胖"
+    },
+    "from": {
+      "id": 5267093526,
+      "is_bot": false,
+      "first_name": "阿胖",
+      "username": "pangdudude",
+      "language_code": "zh-hans"
+    },
+    "date": 1720501508,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

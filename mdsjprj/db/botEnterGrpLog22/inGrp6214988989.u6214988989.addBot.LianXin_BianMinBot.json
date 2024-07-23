@@ -1,0 +1,39 @@
+{
+  "update_id": 839633468,
+  "my_chat_member": {
+    "chat": {
+      "id": 6214988989,
+      "type": "private",
+      "username": "dhenewiwj",
+      "first_name": "逼人",
+      "last_name": "帅气"
+    },
+    "from": {
+      "id": 6214988989,
+      "is_bot": false,
+      "first_name": "逼人",
+      "last_name": "帅气",
+      "username": "dhenewiwj",
+      "language_code": "zh-hans"
+    },
+    "date": 1720986586,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

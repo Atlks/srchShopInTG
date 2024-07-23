@@ -146,6 +146,12 @@ namespace mdsj.lib
 
         /// <summary>
         /// 统一查询接口
+        /// http://localhost:5000/qry?fromData=闲置
+        /// http://localhost:5000/qry?fromData=招聘
+        /// http://localhost:5000/qry?fromData=买号
+        /// http://localhost:5000/qry?fromData=猎艳
+        /// http://localhost:5000/qry?fromData=买号-购买记录
+        /// 买号-购买记录
         ///    使用  /qry?path=pinlunDir评论数据/avymrhifuyzkfetlnifryraazk
         /// </summary>
         /// <param name="path">数据文件路径</param>
@@ -153,10 +159,17 @@ namespace mdsj.lib
         public static string WbapiXqry(string qrystr)
         {
             SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
-            var li = ormJSonFL.QrySglFL("" + qrystrHstb["path"] + ".json");
+            var li = ormJSonFL.QrySglFL($"{prjdir}/db/" + qrystrHstb["fromData"] + ".json");
             return EncodeJson(li);
         }
-        
+
+        public static string WbapiXqryBinDb(string qrystr)
+        {
+            SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
+            var li = ormJSonFL.QrySglFL($"db555/" + qrystrHstb["fromData"] + ".json");
+            return EncodeJson(li);
+        }
+
 
         /// <summary>
         /// httpHdlrFil

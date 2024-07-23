@@ -1,0 +1,37 @@
+{
+  "update_id": 839633991,
+  "my_chat_member": {
+    "chat": {
+      "id": 1225233082,
+      "type": "private",
+      "username": "Ykyk409",
+      "first_name": "Yk😎"
+    },
+    "from": {
+      "id": 1225233082,
+      "is_bot": false,
+      "first_name": "Yk😎",
+      "username": "Ykyk409",
+      "language_code": "ms"
+    },
+    "date": 1721135429,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

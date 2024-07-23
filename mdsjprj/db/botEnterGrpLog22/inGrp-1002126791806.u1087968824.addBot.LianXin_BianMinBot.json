@@ -1,0 +1,35 @@
+{
+  "update_id": 839633149,
+  "my_chat_member": {
+    "chat": {
+      "id": -1002126791806,
+      "type": "supergroup",
+      "title": "KTV🇨🇳中国🇨🇳 🇻🇳越南美女🇻🇳聊天群，新来的越南妹子，给各位老板带来乐趣，越南妹乖巧，可爱，服务好，"
+    },
+    "from": {
+      "id": 1087968824,
+      "is_bot": true,
+      "first_name": "Group",
+      "username": "GroupAnonymousBot"
+    },
+    "date": 1720900244,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

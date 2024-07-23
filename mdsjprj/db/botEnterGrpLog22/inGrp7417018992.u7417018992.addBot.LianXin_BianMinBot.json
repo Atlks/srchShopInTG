@@ -1,0 +1,37 @@
+{
+  "update_id": 839631646,
+  "my_chat_member": {
+    "chat": {
+      "id": 7417018992,
+      "type": "private",
+      "username": "brendon1005",
+      "first_name": "Brendon"
+    },
+    "from": {
+      "id": 7417018992,
+      "is_bot": false,
+      "first_name": "Brendon",
+      "username": "brendon1005",
+      "language_code": "en"
+    },
+    "date": 1720536743,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

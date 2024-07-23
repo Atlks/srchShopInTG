@@ -48,6 +48,29 @@ namespace prjx.lib
 {
     internal class tglib
     {
+        public static bool isAdmin(Update update)
+        {
+            var uid = update.Message.From.Id;
+            //  
+            // 获取管理员列表
+            ChatMember[] administrators =
+            botClient.GetChatAdministratorsAsync(update.Message.Chat.Id).GetAwaiter().GetResult();
+
+            Console.WriteLine("Administrators:");
+            bool isInAdmin = false;
+            foreach (var admin in administrators)
+            {
+                string status = admin.Status.ToString();
+                string userName = admin.User.Username;
+                string userFullName = $"{admin.User.FirstName} {admin.User.LastName}";
+
+                Console.WriteLine($"{status}: {userName} ({userFullName})");
+                if (uid == admin.User.Id)
+                    return true;
+            }
+            return false;
+        }
+
         /*
          * 
          * 401错误检测，可能token错误，检测token是ok的。

@@ -1,0 +1,39 @@
+{
+  "update_id": 839632541,
+  "my_chat_member": {
+    "chat": {
+      "id": 1915143994,
+      "type": "private",
+      "username": "Ryb66",
+      "first_name": "如意宝",
+      "last_name": "99"
+    },
+    "from": {
+      "id": 1915143994,
+      "is_bot": false,
+      "first_name": "如意宝",
+      "last_name": "99",
+      "username": "Ryb66",
+      "language_code": "zh-hans"
+    },
+    "date": 1720754719,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

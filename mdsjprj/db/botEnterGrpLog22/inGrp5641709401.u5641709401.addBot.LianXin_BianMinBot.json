@@ -1,0 +1,38 @@
+{
+  "update_id": 839627573,
+  "my_chat_member": {
+    "chat": {
+      "id": 5641709401,
+      "type": "private",
+      "username": "super9555",
+      "first_name": "林超"
+    },
+    "from": {
+      "id": 5641709401,
+      "is_bot": false,
+      "first_name": "林超",
+      "username": "super9555",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1719955057,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

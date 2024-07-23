@@ -783,7 +783,7 @@ namespace prjx
             {
                 var ctry158 = SubstrAfterMarker(ctry, "确定设置国家为");
                 ctry158 = ctry158.Trim();
-                ConfirmSetCountryBtnClick(ctry,update);
+                ConfirmSetCountryBtnClick(ctry158, update);
                 Jmp2end();
             }
             if (isFileExist($"{prjdir}/cfg_cmd/{ctry}城市.txt"))

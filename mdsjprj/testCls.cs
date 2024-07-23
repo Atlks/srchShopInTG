@@ -148,8 +148,8 @@ namespace prjx
                 Print(EncodeJsonFmt(lst458));
 
                 //----------------trans cn2en form--------------
-                string filePath = $"{prjdir}/cfg字段翻译表/导入商家字段对应表.ini";
-                List<SortedList> list_rzt_fmt = TransltKey(lst458, filePath);
+                string TransFfilePath = $"{prjdir}/cfg字段翻译表/导入商家字段对应表.ini";
+                List<SortedList> list_rzt_fmt = TransltKey(lst458, TransFfilePath);
 
                 Print(EncodeJsonFmt(list_rzt_fmt));
             }

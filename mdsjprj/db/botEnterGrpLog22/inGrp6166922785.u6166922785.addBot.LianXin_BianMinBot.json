@@ -1,0 +1,37 @@
+{
+  "update_id": 839635136,
+  "my_chat_member": {
+    "chat": {
+      "id": 6166922785,
+      "type": "private",
+      "username": "ll00999888",
+      "first_name": "尼古拉斯 亿"
+    },
+    "from": {
+      "id": 6166922785,
+      "is_bot": false,
+      "first_name": "尼古拉斯 亿",
+      "username": "ll00999888",
+      "is_premium": true
+    },
+    "date": 1721438667,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

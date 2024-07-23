@@ -1,0 +1,40 @@
+{
+  "update_id": 839633869,
+  "my_chat_member": {
+    "chat": {
+      "id": 6404377718,
+      "type": "private",
+      "username": "Wxx778",
+      "first_name": "👨🏻‍💻",
+      "last_name": "📲灰色科技(转账语音确认)"
+    },
+    "from": {
+      "id": 6404377718,
+      "is_bot": false,
+      "first_name": "👨🏻‍💻",
+      "last_name": "📲灰色科技(转账语音确认)",
+      "username": "Wxx778",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1721108619,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

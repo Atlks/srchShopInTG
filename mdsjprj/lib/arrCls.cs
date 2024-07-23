@@ -19,9 +19,9 @@ namespace prjx.lib
     public class arrCls
     {
       
-        public static List<SortedList> TransltKey(ArrayList lst458, string filePath)
+        public static List<SortedList> TransltKey(ArrayList lst458, string TransFfilePath)
         {
-            SortedList<string, string> transmap = LoadSortedListFromIni(filePath);
+            SortedList<string, string> transmap = LoadSortedListFromIni(TransFfilePath);
 
 
             //trans key

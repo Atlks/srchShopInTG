@@ -1,0 +1,37 @@
+{
+  "update_id": 839633318,
+  "my_chat_member": {
+    "chat": {
+      "id": 6810264251,
+      "type": "private",
+      "username": "siuket",
+      "first_name": "阿成"
+    },
+    "from": {
+      "id": 6810264251,
+      "is_bot": false,
+      "first_name": "阿成",
+      "username": "siuket",
+      "language_code": "zh-hans"
+    },
+    "date": 1720955024,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

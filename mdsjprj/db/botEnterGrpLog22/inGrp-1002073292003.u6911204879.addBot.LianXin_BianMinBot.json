@@ -1,0 +1,35 @@
+{
+  "update_id": 839630236,
+  "my_chat_member": {
+    "chat": {
+      "id": -1002073292003,
+      "type": "supergroup",
+      "title": "果子铺（24小时接单…）"
+    },
+    "from": {
+      "id": 6911204879,
+      "is_bot": false,
+      "first_name": "小红薯🍠（24小时接单…）",
+      "username": "Xiaohs8889"
+    },
+    "date": 1720249780,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "left",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

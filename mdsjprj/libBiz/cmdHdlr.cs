@@ -60,21 +60,20 @@ namespace mdsj.libBiz
             var mybotid = botClient.BotId;
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+
             if (isGrpChat(update))
             {
-                if (!System.IO.File.Exists(f))
+
+                if (!isAdmin(update))
                 {
-                    Print("no auth " + f);
+                    //send
+                    Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(
-             update.Message.Chat.Id,
-             "权限不足",
-             replyToMessageId: update.Message.MessageId);
+                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                          "权限不足", replyToMessageId: update.Message.MessageId);
                     Jmp2end();
-                    return;
                 }
             }
-
             if (isGrpChat(update))
             {
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
@@ -83,7 +82,7 @@ namespace mdsj.libBiz
 
                 string whereExprsFld = "whereExprs";
                 string coutryKey = "国家";
-                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld,  coutryKey, pk);
+                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, pk);
 
                 SetFld(cfg, "国家", pk);
                 SetFld(cfg, "城市", "");
@@ -118,7 +117,7 @@ namespace mdsj.libBiz
                 SetFld(cfg, "whereExprs", $"国家={ctry}");
                 if (ctry == "不限制")
                 {
-                  
+
                     SetFld(cfg, "国家", "");
                     SetFld(cfg, "城市", "");
                     SetFld(cfg, "园区", "");
@@ -147,18 +146,18 @@ namespace mdsj.libBiz
             var mybotid = botClient.BotId;
 
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+
             if (isGrpChat(update))
             {
-                if (!System.IO.File.Exists(f))
+
+                if (!isAdmin(update))
                 {
-                    Print("no auth " + f);
+                    //send
+                    Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(
-             update.Message.Chat.Id,
-             "权限不足",
-             replyToMessageId: update.Message.MessageId);
+                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                          "权限不足", replyToMessageId: update.Message.MessageId);
                     Jmp2end();
-                    return;
                 }
             }
 
@@ -172,7 +171,7 @@ namespace mdsj.libBiz
                 string areakey = "城市";
                 string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
 
-               
+
                 SetFld(cfg, "城市", area);
                 SetFld(cfg, "园区", "");
                 SetFld(cfg, "id", grpid.ToString());
@@ -181,7 +180,7 @@ namespace mdsj.libBiz
                 SetFld(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-                   
+
                     SetFld(cfg, "城市", "");
                     SetFld(cfg, "园区", "");
                     SetFld(cfg, "whereExprs", $"");
@@ -198,13 +197,13 @@ namespace mdsj.libBiz
                 string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, area);
 
                 SetFld(cfg, "城市", area);
-           
+
                 SetFld(cfg, "园区", "");
                 SetFld(cfg, "id", update.Message.From.Id.ToString());
                 SetFld(cfg, "from", update.Message.From);
                 SetFld(cfg, "whereExprs", whereExprsNew);
                 if (area == "不限制")
-                {                  
+                {
                     SetFld(cfg, "城市", "");
                     SetFld(cfg, "园区", "");
                     SetFld(cfg, "whereExprs", $"");
@@ -234,13 +233,28 @@ namespace mdsj.libBiz
             return whereExprsNew;
         }
 
-     
+
         public static void SetParkFrmMsg(string park, Update update)
         {
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;
             var mybotid = botClient.BotId;
+
+
+            if (isGrpChat(update))
+            {
+
+                if (!isAdmin(update))
+                {
+                    //send
+                    Print("no auth ");
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                          "权限不足", replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
+                }
+            }
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
             SetPark(park, update);
 
@@ -371,7 +385,7 @@ namespace mdsj.libBiz
             ormJSonFL.SaveJson(cfg, dbfile);
         }
 
-        
+
         public static string getCmdFun(string? v)
         {
             if (string.IsNullOrEmpty(v)) return "";
@@ -394,6 +408,21 @@ namespace mdsj.libBiz
         }
         public static void CmdHdlrarea(Update update, string reqThreadId)
         {
+
+            if (isGrpChat(update))
+            {
+
+                if (!isAdmin(update))
+                {
+                    //send
+                    Print("no auth " );
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                          "权限不足", replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
+                }
+            }
+
             string cmd = getCmdFun(update?.Message?.Text);
             //  Print("oo617");
             KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{cmd}.txt");
@@ -413,6 +442,7 @@ namespace mdsj.libBiz
             Jmp2end();
         }
 
+      
         public static KeyboardButton[][] ConvertFileToKeyboardButtons(string filePath)
         {
             // 读取文件所有行
@@ -443,7 +473,7 @@ namespace mdsj.libBiz
             return keyboardButtons;
 
         }
-     
+
 
         public static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
         {

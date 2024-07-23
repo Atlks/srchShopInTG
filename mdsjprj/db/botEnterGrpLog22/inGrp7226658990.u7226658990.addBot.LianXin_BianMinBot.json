@@ -1,0 +1,38 @@
+{
+  "update_id": 839635603,
+  "my_chat_member": {
+    "chat": {
+      "id": 7226658990,
+      "type": "private",
+      "username": "A_Fei_haoshang",
+      "first_name": "阿飞-海外号商"
+    },
+    "from": {
+      "id": 7226658990,
+      "is_bot": false,
+      "first_name": "阿飞-海外号商",
+      "username": "A_Fei_haoshang",
+      "language_code": "zh-hans",
+      "is_premium": true
+    },
+    "date": 1721533888,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

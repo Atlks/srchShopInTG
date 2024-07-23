@@ -1,5 +1,5 @@
 {
-  "update_id": 839635579,
+  "update_id": 839636026,
   "my_chat_member": {
     "chat": {
       "id": 5746388324,
@@ -14,9 +14,9 @@
       "username": "aimuxixi",
       "language_code": "zh-hans"
     },
-    "date": 1721505260,
+    "date": 1721647312,
     "old_chat_member": {
-      "status": "kicked",
+      "status": "member",
       "user": {
         "id": 6999501721,
         "is_bot": true,
@@ -25,7 +25,7 @@
       }
     },
     "new_chat_member": {
-      "status": "member",
+      "status": "kicked",
       "user": {
         "id": 6999501721,
         "is_bot": true,

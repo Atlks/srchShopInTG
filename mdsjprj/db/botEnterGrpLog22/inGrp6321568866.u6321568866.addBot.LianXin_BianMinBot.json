@@ -1,0 +1,37 @@
+{
+  "update_id": 839633681,
+  "my_chat_member": {
+    "chat": {
+      "id": 6321568866,
+      "type": "private",
+      "username": "fala8868899",
+      "first_name": "法拉利-无名"
+    },
+    "from": {
+      "id": 6321568866,
+      "is_bot": false,
+      "first_name": "法拉利-无名",
+      "username": "fala8868899",
+      "language_code": "zh-hans"
+    },
+    "date": 1721054894,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}
