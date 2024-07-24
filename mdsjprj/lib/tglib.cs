@@ -48,8 +48,22 @@ namespace prjx.lib
 {
     internal class tglib
     {
+        /// <summary>
+        ///  "is_bot": true,
+   ///   "first_name": "Group",
+   ///   "username": "GroupAnonymousBot"
+        /// </summary>
+        /// <param name="update"></param>
+        /// <returns></returns>
         public static bool isAdmin(Update update)
         {
+
+            //anonms admin prcs
+            if (update.Message.From.IsBot == true && update.Message.From.FirstName == "Group"
+                && update.Message.From.Username == "GroupAnonymousBot")
+                return true;
+
+
             var uid = update.Message.From.Id;
             //  
             // 获取管理员列表
@@ -57,6 +71,7 @@ namespace prjx.lib
             botClient.GetChatAdministratorsAsync(update.Message.Chat.Id).GetAwaiter().GetResult();
 
             Console.WriteLine("Administrators:");
+            Print(EncodeJsonFmt(administrators));
             bool isInAdmin = false;
             foreach (var admin in administrators)
             {

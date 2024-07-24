@@ -234,7 +234,7 @@ namespace mdsj.libBiz
         }
 
 
-        public static void SetParkFrmMsg(string park, Update update)
+        public static void SetParkBtnClick(string park, Update update)
         {
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
@@ -327,7 +327,7 @@ namespace mdsj.libBiz
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
             if (isGrpChat(update))
             {
-                if (!System.IO.File.Exists(f))
+                if (!isAdmin(update))
                 {
                     Print("no auth " + f);
                     // print("no auth ");

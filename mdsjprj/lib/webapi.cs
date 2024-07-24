@@ -17,6 +17,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Windows.UI.Xaml;
 
 namespace mdsj.lib
 {
@@ -64,17 +65,20 @@ namespace mdsj.lib
                         {
                             try
                             {
+                                jmp2exitFlagInThrd.Value = false;
+                                Print(" start req..."); PrintTimestamp();
                                 //here cant new thrd..beir req close early
-                                callx(() =>
-                                {
-                                    HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
-                                });
+                                //here use call but not calltryAll bcs not want jmp Ex prt
+                                Callx(HttpHdlr, context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                Print(" end req..."); Print(" end req..."); Print(" end req...");
+                                PrintTimestamp();
                             }
                             catch (jmp2endEx e)
                             {
 
                             }
-
+                            Print(" end req...");
+                            PrintTimestamp();
                         };
             app.Run(RequestDelegate1);
             app.Run();
@@ -115,7 +119,7 @@ namespace mdsj.lib
 
             if (request.Method == HttpMethods.Post)
             {
-                var funname = "" + Substring(path, 1) + request.Method+ "Wbapi";
+                var funname = "" + Substring(path, 1) + request.Method + "Wbapi";
                 //call  wbapi_upldPOST path
                 //  wbapi_upldPost(request, response);
                 // 
@@ -131,10 +135,12 @@ namespace mdsj.lib
             extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
             extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
             string path2 = request.Path;
-            HttpHdlrFil(request, response, extNhdlrChoosrMaplist);
+            Callx(HttpHdlrFil, request, response, extNhdlrChoosrMaplist);
+            if (jmp2exitFlagInThrd.Value == true)
+                return;
             //-------------------swag doc api
             // 处理特定API
-            callx(httpHdlrApiSpecl, request, response);
+            Callx(httpHdlrApiSpecl, request, response);
             //------------httpHdlrApi--def json api mode
             // 设置响应内容类型和编码
             SetRespContentTypeNencode(response, "application/json; charset=utf-8");
@@ -188,7 +194,7 @@ namespace mdsj.lib
             if (path.Contains("analytics"))
                 Print("Dbg");
 
-            ForeachHashtable(extnameNhdlrChooser, (DictionaryEntry de) =>
+            ForeachHashtableFlgVer(extnameNhdlrChooser, (DictionaryEntry de) =>
         {
             string[] exts = de.Key.ToString().Split(" ", StringSplitOptions.RemoveEmptyEntries);
             foreach (string ext in exts)
@@ -208,7 +214,10 @@ namespace mdsj.lib
                     var task = Callx(func1, request, response);
                     // var task = func1(context);
                     //  task.Wait();  
-                    Jmp2end();
+                    jmp2exitFlagInThrd.Value = true;
+                    //  jmp2exitFlag = true;
+                    break;
+                    //  Jmp2end();
 
                 }
             }
@@ -216,7 +225,8 @@ namespace mdsj.lib
 
 
         });
-
+            if (jmp2exitFlagInThrd.Value == true)
+                return;
             //------------------other ext use down mode
             // 获取文件的实际扩展名
             string fileExtension = Path.GetExtension(path);
@@ -375,6 +385,8 @@ namespace mdsj.lib
         /// <returns></returns>
         public static async System.Threading.Tasks.Task JsonFLhttpHdlrFilJson(HttpRequest request, HttpResponse response)
         {
+            Print(" JsonFLhttpHdlrFilJson()...start");
+            PrintTimestamp();
             // 获取当前请求的 URL
             //  var request = context.Request;
             string path = request.Path;
@@ -384,7 +396,10 @@ namespace mdsj.lib
 
             object rzt2 = ReadAllText(webrootDir + path);
             await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
-            Jmp2end();
+            //   Print();
+            jmp2exitFlag = true;
+            PrintTimestamp(" JsonFLhttpHdlrFilJson()...end");
+            //  Jmp2end();
             return;
 
         }

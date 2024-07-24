@@ -317,7 +317,7 @@ namespace prjx.lib
         public static void PrintCallFunArgs(string METHOD__, object func_get_args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            PrintTimestamp();
+           PrintTimestamp();
 
             // 判断 func_get_args 是否为 object[] 数组
             //if (func_get_args is object[] argsArray)

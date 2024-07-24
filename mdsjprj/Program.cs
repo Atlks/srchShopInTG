@@ -115,7 +115,11 @@ namespace prjx
         //搜索用户
         public static Dictionary<long, User> _users = [];
         public static bool jmp2exitFlag;
-
+        public static ThreadLocal<bool> jmp2exitFlagInThrd = new ThreadLocal<bool>(() =>
+        {
+            // 初始化每个线程的值为 false
+            return false;
+        });
         //public void ConfigureServices(IServiceCollection services)
         //{
         //    services.AddControllers();
@@ -352,7 +356,7 @@ namespace prjx
             BtmEvtSetCityMsgHdlr(botClient, update, txt307);
 
             //------setpark   BtmEvtSetParkMsgHdlr
-            BtmEvtSetParkMsgHdlr(update, txt307);
+            BtmEvtSetParkMsgHdlrPre(update, txt307);
 
             //-----------/cmd process
             string cmd = getCmdFun(update?.Message?.Text?.Trim());
@@ -538,7 +542,7 @@ namespace prjx
             //add grp msgHDL
             if (update?.MyChatMember?.NewChatMember != null)
             {
-                callx(evt_BotEnterGrpEvtHdlr, update);
+                Callx(evt_BotEnterGrpEvtHdlr, update);
                 return;
             }
 
@@ -696,7 +700,7 @@ namespace prjx
 
         }
 
-        private static void BtmEvtSetParkMsgHdlr(Update update, string txt307)
+        private static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
         {
             if (!txt307.StartsWith("🔥"))
                 return;
@@ -708,7 +712,7 @@ namespace prjx
                 {
                     //auth chk
                 }
-                callx(SetParkFrmMsg, park149, update);
+                Callx(SetParkBtnClick, park149, update);
                 Jmp2end();
             }
         }
@@ -726,7 +730,7 @@ namespace prjx
                 ConfirmSetCityBtnClick(ctry158, update);
                 Jmp2end();
             }
-            if (isFileExist($"{prjdir}/cfg_cmd/{city}园区.txt"))
+            if (IsFileExist($"{prjdir}/cfg_cmd/{city}园区.txt"))
             {
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons(
                     $"{prjdir}/cfg_cmd/{city}园区.txt");
@@ -786,7 +790,7 @@ namespace prjx
                 ConfirmSetCountryBtnClick(ctry158, update);
                 Jmp2end();
             }
-            if (isFileExist($"{prjdir}/cfg_cmd/{ctry}城市.txt"))
+            if (IsFileExist($"{prjdir}/cfg_cmd/{ctry}城市.txt"))
             {
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{ctry}城市.txt");
                 Print(EncodeJson(btns));
@@ -961,26 +965,26 @@ namespace prjx
             int n = containCalcCntScoreSetfmt(update.Message.Text, LoadHashset(" 盘口 博彩 菠菜 玩家 赔率 世博 杀大赔小 赔率"));
             if (n > 1)
             {
-                callx(evt_shiboBocai_click, update);
+                Callx(evt_shiboBocai_click, update);
                 return;
             }
             if (update?.Message?.ReplyToMessage?.From?.Username == botname &&
             strCls.Contain(update?.Message?.Text, "世博博彩")
              )
             {
-                callx(evt_shiboBocai_click, update);
+                Callx(evt_shiboBocai_click, update);
                 return;
             }
 
             if (strCls.Contain(update?.Message?.Text, "世博博彩")
               )
             {
-                callx(evt_shiboBocai_click, update);
+                Callx(evt_shiboBocai_click, update);
                 return;
             }
             if (update?.Message?.NewChatMembers != null)
             {
-                callx(evt_BotEnterGrpEvtHdlr, update);
+                Callx(evt_BotEnterGrpEvtHdlr, update);
                 return;
             }
             //todo 
@@ -990,10 +994,10 @@ namespace prjx
 
             callTryAll(() =>
             {
-                callx(msgTrgBtmbtnEvtHdlr11, update);
-                callx(msgxTrigBtmbtnEvtHdlr, update);
+                Callx(msgTrgBtmbtnEvtHdlr11, update);
+                Callx(msgxTrigBtmbtnEvtHdlr, update);
 
-                callx(msgHdlr4searchPrejude, botClient, update, "111");
+                Callx(msgHdlr4searchPrejude, botClient, update, "111");
             });
 
 
@@ -1037,7 +1041,7 @@ namespace prjx
             // if (tg_isBtm_btnClink_in_prvt(update))
             // {
             //加入联系和   btnCfgForeach
-            callx(evt_btm_btn_click, update);
+            Callx(evt_btm_btn_click, update);
             //   return;
             //  }
             //menu proces   evt_btmBtnclick
@@ -1051,7 +1055,7 @@ namespace prjx
             {
                 if (update.Message.Chat.Type != ChatType.Private)
                 {
-                    callx(evt_btm_btn_zhuliBenqunAsync, update);
+                    Callx(evt_btm_btn_zhuliBenqunAsync, update);
                     return;
                 }
             }
@@ -1081,7 +1085,7 @@ namespace prjx
             }
             else
             {
-                callx(btm_btnClk_inCfgByMsg, update, btnName);
+                Callx(btm_btnClk_inCfgByMsg, update, btnName);
                 return;
             }
 
@@ -1098,7 +1102,7 @@ namespace prjx
             // if (tg_isBtm_btnClink_in_pubGrp(update))
             {
 
-                callx(btm_btnClk_inCfgByMsg, update, btnName);
+                Callx(btm_btnClk_inCfgByMsg, update, btnName);
                 //  await callxAsync(btm_btnClk, update);
 
 
@@ -1590,8 +1594,8 @@ namespace prjx
                       replyMarkup: rkm,
                      protectContent: false,
                      disableWebPagePreview: true);
-            callx(bot_saveGrpInf2db, update.MyChatMember);
-            callx(bot_saveChtSesion, chatid, update.MyChatMember);
+            Callx(bot_saveGrpInf2db, update.MyChatMember);
+            Callx(bot_saveChtSesion, chatid, update.MyChatMember);
 
 
         }

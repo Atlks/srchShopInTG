@@ -137,6 +137,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
+                        PrintTimestamp($" CallUserFunc409() ctch ex ,mtth:{__METHOD__}");
                         PrintRet(__METHOD__, 0); Jmp2end();
                     }
 

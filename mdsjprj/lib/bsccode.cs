@@ -170,6 +170,37 @@ namespace mdsj.lib
                 }
             }
         }
+        public static void ForeachHashtableFlgVer(Hashtable chtsSess, Action<DictionaryEntry> fun)
+        {
+            foreach (DictionaryEntry de in chtsSess)
+            {
+                //if (Convert.ToInt64(de.Key) == Program.groupId)
+                //    continue;
+                //  var chatid = Convert.ToInt64(de.Key);
+                try
+                {
+                    //  if(chatid== -1002206103554)
+                    fun(de);
+                    if (jmp2exitFlagInThrd.Value == true)
+                        break;
+                }
+                catch (jmp2endEx e2)
+                {
+                    throw e2;
+                }               
+                catch (Exception e)
+                {
+                    if(e.ToString().Contains("jmp2endEx"))
+                    {
+                        Jmp2end();
+                    }
+                    PrintCatchEx("foreach_hashtable", e);
+                    //  print(e);
+                }
+            }
+        }
+
+
         public static void ForeachHashtable(Hashtable chtsSess, Action<DictionaryEntry> fun)
         {
             foreach (DictionaryEntry de in chtsSess)
@@ -185,10 +216,10 @@ namespace mdsj.lib
                 catch (jmp2endEx e2)
                 {
                     throw e2;
-                }               
+                }
                 catch (Exception e)
                 {
-                    if(e.ToString().Contains("jmp2endEx"))
+                    if (e.ToString().Contains("jmp2endEx"))
                     {
                         Jmp2end();
                     }
@@ -368,7 +399,7 @@ namespace mdsj.lib
         {
             try
             {
-                return callx(callback, objs);
+                return Callx(callback, objs);
 
             }
             catch (jmp2endEx e)
@@ -387,9 +418,45 @@ namespace mdsj.lib
         {
             return CallUserFunc409(callback, args);
         }
-        public static object callx(Delegate callback, params object[] args)
+        public static object Callx(Delegate callback, params object[] args)
         {
-            return CallUserFunc409(callback, args);
+            //  return CallUserFunc409(callback, args);
+            var __METHOD__ = callback.Method.Name;
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));
+            object o = null;
+            try
+            {
+
+                //   else
+                o = callback.DynamicInvoke(args);
+            }
+            catch (jmp2endEx e1)
+            {
+                throw e1;
+            }
+            catch (Exception e)
+            {
+                if (e is System.Reflection.TargetInvocationException)
+                {
+                    if (e.ToString().Contains("jmp2endEx"))
+                    {
+                        PrintTimestamp($" Callx(Delegate) ctch ex ,mtth:{__METHOD__}");
+                        PrintRet(__METHOD__, 0); Jmp2end();
+                    }
+
+                }
+                Print($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
+                Print(e);
+                SortedList dbgobj = new SortedList();
+                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
+                logErr2024(e, __METHOD__, "errdir", dbgobj);
+            }
+            //    call
+            if (o != null)
+                PrintRet(__METHOD__, o);
+            else
+                PrintRet(__METHOD__, 0);
+            return o;
         }
        
 
@@ -401,7 +468,7 @@ namespace mdsj.lib
                
 
                 var hashSet = new HashSet<string>();
-                if (!isFileExist(f))
+                if (!IsFileExist(f))
                     hashSet= new HashSet<string>();
                 else
                 {
@@ -535,6 +602,7 @@ namespace mdsj.lib
                 if (e.ToString().Contains("jmp2endEx"))
                 {
                     PrintRetx(__METHOD__, result);
+                    PrintTimestamp($"  Callx(str) catch jmp2endEx mthd:{methodName}");
                     Jmp2end();
                 }
                   

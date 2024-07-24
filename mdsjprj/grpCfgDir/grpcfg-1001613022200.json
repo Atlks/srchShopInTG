@@ -2,9 +2,16 @@
   {
     "grp": "左道",
     "grpid": "-1001613022200",
+    "grpinfo": {
+      "id": -1001613022200,
+      "type": "supergroup",
+      "title": "联信 - 四大园区(KK、世纪、金州、东风)",
+      "username": "LianXin_SiDaYuanQu"
+    },
     "id": "-1001613022200",
     "loc": "缅甸-1001613022200",
     "shangjiaFL": "Merchant.json",
-    "whereExprs": ""
+    "whereExprs": "园区=KK园区",
+    "园区": "KK园区"
   }
 ]
