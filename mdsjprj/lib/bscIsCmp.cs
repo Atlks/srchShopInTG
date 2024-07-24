@@ -177,6 +177,25 @@ namespace mdsj.lib
             }
             return false;
         }
+        public static bool IsContains(HashSet<string> curRowKywdSset, string keywords)
+        {
+            string[] a = keywords.Split(",");
+            foreach (string rowVal in curRowKywdSset)
+            {
+                foreach (string kwd in a)
+                {
+                    if (isEq(rowVal, kwd))
+                        return true;
+                }
+            }
+            return false;
+
+        }
+
+        public static bool isEq(string rowVal, string kwd)
+        {
+            return rowVal.Equals(kwd);
+        }
         public static bool isEq4qrycdt(object rowVal, object cdtVal)
         {
             if (cdtVal == null || cdtVal.ToString() == "")

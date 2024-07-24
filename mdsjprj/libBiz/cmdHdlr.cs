@@ -1,6 +1,7 @@
 ﻿global using static mdsj.libBiz.cmdHdlr;
 using DocumentFormat.OpenXml;
 using mdsj.lib;
+using MusicApiCollection.Sites.MusicBrainz.Data;
 using prjx.lib;
 using System;
 using System.Collections;
@@ -17,6 +18,9 @@ namespace mdsj.libBiz
 {
     internal class cmdHdlr
     {
+        public const string tipsSelectArea = "请选择服务区域";
+        public const string tipsAppendArea = "继续新增区域国家/城市/园区";
+        public const string cancelAddArea = "取消新增区域";
         public static void CmdHdlr设置园区(string cmdFulltxt, Update update, string reqThreadId)
         {
             ///设置园区 东风园区
@@ -134,7 +138,7 @@ namespace mdsj.libBiz
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              "设置ok",
+              "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -176,18 +180,19 @@ namespace mdsj.libBiz
 
                 string whereExprsFld = "whereExprs";
                 string areakey = "城市";
-                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
+                string parks = GetParksByCity(area);
+             string newParks=   AppendParks(cfg,  parks);
 
-
-                SetFld(cfg, "城市", area);
-                SetFld(cfg, "园区", "");
+                SetFld(cfg, "国家", "");
+                SetFld(cfg, "城市", "");
+                SetFld(cfg, "园区", newParks);
                 SetFld(cfg, "id", grpid.ToString());
                 SetFld(cfg, "grpid", grpid.ToString());
-                SetFld(cfg, "whereExprs", whereExprsNew);
+            
                 SetFld(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-
+                    SetFld(cfg, "国家", "");
                     SetFld(cfg, "城市", "");
                     SetFld(cfg, "园区", "");
                     SetFld(cfg, "whereExprs", $"");
@@ -200,12 +205,11 @@ namespace mdsj.libBiz
                 string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
                 SortedList cfg = findOne(dbfile);
                 string whereExprsFld = "whereExprs";
-                string coutryKey = "城市";
-                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, area);
-
-                SetFld(cfg, "城市", area);
-
-                SetFld(cfg, "园区", "");
+                string parks = GetParksByCity(area);
+                string whereExprsNew = AppendParks(cfg, parks);
+                SetFld(cfg, "城市", "");
+                SetFld(cfg, "国家", "");
+                SetFld(cfg, "园区", whereExprsNew);
                 SetFld(cfg, "id", update.Message.From.Id.ToString());
                 SetFld(cfg, "from", update.Message.From);
                 SetFld(cfg, "whereExprs", whereExprsNew);
@@ -219,7 +223,7 @@ namespace mdsj.libBiz
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              "设置ok",
+              "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -230,12 +234,68 @@ namespace mdsj.libBiz
             SetBtmMenu(update); Jmp2end();
         }
 
+        public static string GetParksByCity(string city)
+        {
+            //妙瓦底园区4data.txt
+        
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{city}园区4data.txt");
+
+            return JoinWzComma(hs);
+        }
+
+        public static string JoinWzComma(HashSet<string> hashSet)
+        {
+            if (hashSet == null)
+            {
+                return "";
+            }
+
+            // 使用 string.Join 方法将 HashSet 元素连接成逗号分割的字符串
+            return string.Join(",", hashSet);
+        }
+
+
+        private static string AppendParks(SortedList cfg,   string parks
+        )
+        {
+            string whereExprs = GetFieldAsStr(cfg, "whereExprs");
+            SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
+
+            string ormParks = GetFieldAsStr(whereExpmap, "园区");
+            string newParks = ormParks + "," + parks;
+            newParks = removeDulip(newParks);
+
+            SetFld(whereExpmap, "园区", newParks);
+        //    SetFld(whereExpmap, "国家", "");
+         //   SetFld(whereExpmap, "城市", "");
+
+            string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
+            SetFld(cfg, "whereExprs", whereExprsNew);
+               return newParks;
+        }
+
+        public static string removeDulip(string newParks)
+        {
+            HashSet<string> hs = new HashSet<string>();
+            string[] a = newParks.Split(",");
+            foreach(string pk in a)
+            {
+                if (pk.Trim().Length > 0)
+                    hs.Add(pk.Trim().ToUpper());
+            }
+            return JoinWzComma(hs);
+        }
+
         private static string SetMapWhereexprsFldOFkv(SortedList cfg, string whereExprsFld, string key2, string v2
             )
         {
             string whereExprs = GetFieldAsStr(cfg, whereExprsFld);
             SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
-            SetFld(whereExpmap, key2, v2);
+            SetFld(whereExpmap, "园区", v2);
+
+            SetFld(whereExpmap, "国家", "");
+            SetFld(whereExpmap, "城市", "");
+           
             string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
             return whereExprsNew;
         }
@@ -268,7 +328,7 @@ namespace mdsj.libBiz
 
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              "设置ok",
+               "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -352,12 +412,16 @@ namespace mdsj.libBiz
                 //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                 SortedList cfg = findOne(dbfile2);
+
+              //  string wehreExprs = GetFieldAsStr(cfg, "whereExprs");
+              //  SortedList whereMap = GetHashtableFromQrystr(wehreExprs);
+            //    string oriparks = GetFieldAsStr(whereMap, "园区");
+                string newParks = AppendParks(cfg, park);
                 string pk = park.Trim().ToUpper();
 
-                SetFld(cfg, "园区", pk);
+                SetFld(cfg, "园区", newParks);
                 SetFld(cfg, "id", grpid.ToString());
                 SetFld(cfg, "grpid", grpid.ToString());
-                SetFld(cfg, "whereExprs", $"园区={pk}");
                 SetFld(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
@@ -427,7 +491,7 @@ namespace mdsj.libBiz
         {
             Print("oo617");
         }
-        public static void CmdHdlrarea(Update update, string reqThreadId)
+        public static void CmdHdlrarea(string fullcmd,Update update, string reqThreadId)
         {
 
             if (isGrpChat(update))
@@ -444,16 +508,27 @@ namespace mdsj.libBiz
                 }
             }
 
+            var tipsd = tipsSelectArea;
+
+            if (IsSetArea(update))
+                tipsd = tipsAppendArea;
+
             string cmd = GetCmdFun(update?.Message?.Text);
             //  Print("oo617");
-            KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{cmd}.txt");
+            string filePath = $"{prjdir}/cfg_cmd/{cmd}.txt";
+            string[] lines = ReadFileAndRemoveEmptyLines(filePath);
+            lines = Replace(lines, "{tipsd}", tipsd);
+ 
+
+            KeyboardButton[][] btns = ConvertFileToKeyboardButtons(lines);
             Print(EncodeJson(btns));
             var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
             string imgPath = "今日促销商家.gif";
             var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //  Message message2dbg = await 
+         
             var m = botClient.SendTextMessageAsync(
-                            update.Message.Chat.Id, "请选择本群所在区域",
+                            update.Message.Chat.Id, tipsd,
                             parseMode: ParseMode.Html,
                             replyMarkup: rplyKbdMkp,
                             protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
@@ -463,7 +538,98 @@ namespace mdsj.libBiz
             Jmp2end();
         }
 
-      
+        /// <summary>
+        /// 替换字符串
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="placeHold"></param>
+        /// <param name="replaceStr"></param>
+        /// <returns></returns>
+        public static string[] Replace(string[] lines, string placeHold, string replaceStr)
+        {
+            if (lines == null)
+            {
+                return new string[0];
+            }
+
+            if (placeHold == null)
+            {
+               // throw new ArgumentNullException(nameof(placeHold));
+            }
+
+            if (replaceStr == null)
+            {
+              //  throw new ArgumentNullException(nameof(replaceStr));
+            }
+
+            // 创建一个新数组来存储替换后的结果
+            string[] result = new string[lines.Length];
+
+            // 遍历每一行进行替换
+            for (int i = 0; i < lines.Length; i++)
+            {
+                result[i] = lines[i].Replace(placeHold, replaceStr);
+            }
+
+            return result;
+        }
+
+        public static bool IsSetArea(Update? update)
+        {
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+            string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+            SortedList cfg = findOne(dbfile2);
+           
+
+            string whereExprsFld = "whereExprs";
+            string areakey = "城市";
+            if(IsEmpty(GetFieldAsStr(cfg, whereExprsFld)))
+                return false;
+            return true;
+                    
+        //    string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
+
+        }
+
+        public static bool IsEmpty(string v)
+        {
+            return string.IsNullOrEmpty(v);
+        }
+
+
+        public static KeyboardButton[][] ConvertFileToKeyboardButtons(string[] lines)
+        {
+            // 读取文件所有行
+         //   string[] lines = ReadFileAndRemoveEmptyLines(filePath);
+
+            // 初始化 KeyboardButton[][] 数组
+            KeyboardButton[][] keyboardButtons = new KeyboardButton[lines.Length][];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                // 按空格分割每行
+                string lin = lines[i];
+                if (lin.Trim().Length == 0)
+                    continue;
+                string[] words = lin.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                // 将每个单词转换为 KeyboardButton
+                KeyboardButton[] buttonsRow = new KeyboardButton[words.Length];
+                for (int j = 0; j < words.Length; j++)
+                {
+                    buttonsRow[j] = new KeyboardButton(words[j]);
+                }
+
+                // 将 KeyboardButton[] 添加到 KeyboardButton[][]
+                keyboardButtons[i] = buttonsRow;
+            }
+
+            return keyboardButtons;
+
+        }
+
         public static KeyboardButton[][] ConvertFileToKeyboardButtons(string filePath)
         {
             // 读取文件所有行

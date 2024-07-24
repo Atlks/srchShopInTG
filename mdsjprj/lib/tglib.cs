@@ -55,7 +55,7 @@ namespace prjx.lib
         /// </summary>
         /// <param name="update"></param>
         /// <returns></returns>
-        public static bool isAdmin(Update update)
+        public static bool IsAdmin(Update update)
         {
 
             //anonms admin prcs
@@ -262,12 +262,17 @@ namespace prjx.lib
             //dbgCls.print_ret(__METHOD__, 0);
         }
 
-
-        public static void bot_sendMsgToMltV3(string imgPath, string msgtxt, string wdss4srch)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imgPath"></param>
+        /// <param name="msgtxtAdmsg">plchdTxt ad msg</param>
+        /// <param name="wdss4srch"> "奶茶 水果茶 水果";</param>
+        public static void bot_sendMsgToMltV3(string imgPath, string msgtxtAdmsg, string wdss4srch)
         {
 
             var __METHOD__ = "sendMsg";
-            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxt, wdss4srch));
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args4async(imgPath, msgtxtAdmsg, wdss4srch));
 
 
             // var  = plchdTxt;
@@ -292,7 +297,7 @@ namespace prjx.lib
                     Dictionary<string, StringValues> whereExprsObjFltrs = CopySortedListToDictionary(cfg);
                     //todo set    limit  cdt into 
                     //   results = mrcht.qryFromMrcht("mercht商家数据", null, whereExprsObj, msgx);
-                    srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObjFltrs, null);
+                    srchNsendFotoToChatSess(imgPath, msgtxtAdmsg, wdss4srch, chatid, whereExprsObjFltrs, null);
                 }
                 else
                 {
@@ -305,7 +310,7 @@ namespace prjx.lib
                     //qry from mrcht by  where exprs  strFmt
                     var whereExprsObj = QueryHelpers.ParseQuery(whereExprs);
                     var shareNamess = LoadFieldTryGetValue(whereExprsObj, "@share");
-                    srchNsendFotoToChatSess(imgPath, msgtxt, wdss4srch, chatid, whereExprsObj, shareNamess);
+                    srchNsendFotoToChatSess(imgPath, msgtxtAdmsg, wdss4srch, chatid, whereExprsObj, shareNamess);
                 }
                 return 0;
             });
@@ -316,76 +321,8 @@ namespace prjx.lib
             dbgCls.PrintRet(__METHOD__, 0);
         }
 
-
-
-        private static void srchNsendFotoToChatSess(string imgPath, string msgtxt, string wdss, long chatid, Dictionary<string, StringValues> whereExprsObjFltrs, string partfile区块文件Exprs)
-        {
-            //   Dictionary<string, StringValues> whereExprsObj;
-            //  string partfile区块文件Exprs;
-            // calcPrtExprsNdefWhrCondt4grp(chatid, out whereExprsObj, out partfile区块文件Exprs);
-            //  var patns_dbfs = db.calcPatns("mercht商家数据", partfile区块文件Exprs);
-
-            string keyword = getRdmKwd(wdss);
-
-            //----where
-            Func<SortedList, bool> whereFun = (SortedList row) =>
-            {
-
-                if (LoadFieldDefEmpty(row, "TG有效") == "N")
-                    return false;
-                //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
-                if (hasCondt(whereExprsObjFltrs, "城市"))
-                    if (!strCls.StrEq(row["城市"], LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
-                        return false;
-                if (hasCondt(whereExprsObjFltrs, "园区"))
-                    if (!strCls.StrEq(row["园区"], LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
-                        return false;
-                if (hasCondt(whereExprsObjFltrs, "国家"))
-                    if (!strCls.StrEq(row["国家"], LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
-                        return false;
-                if (LoadFieldDefEmpty(row, "cateEgls") == "Property")
-                    return false;
-
-
-                //--------------is lianixfsh empty
-                string lianxifsh = mrcht.getLianxifsh(row);
-                if (lianxifsh == "")
-                    return false;
-
-                HashSet<string> curRowKywdSset = new HashSet<string>();
-                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "商家"));
-                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "关键词"));
-                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "分类关键词"));
-                if (curRowKywdSset.Contains(keyword))
-                    return true;
-                return false;
-            };
-
-
-            //order
-            //  List<SortedList> results22 = rdmList<SortedList>(rztLi);
-            Func<SortedList, int> ordFun = (SortedList) => { return 1; };
-            //map select 
-            Func<SortedList, InlineKeyboardButton[]> mapFun = (SortedList row) =>
-            {
-                string text = LoadFieldDefEmpty(row, "城市") + " • " +LoadFieldDefEmpty(row, "园区") + " • " + LoadFieldDefEmpty(row, "商家");
-                string guid = LoadFieldDefEmpty(row, "Guid编号");
-                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&sdr=tmr&btn=dtl&ckuid=n" } };
-                return btnsInLine;
-            };
-
-            List<InlineKeyboardButton[]> rztLi = Qe_qryV2<InlineKeyboardButton[]>("mercht商家数据", partfile区块文件Exprs, whereFun, ordFun, mapFun, (dbf) =>
-            {
-                return rnd_next4Sqlt(dbf);
-            });
-
-
-
-            var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
-           Print(" SendPhotoAsync " + chatid);//  Program.botClient.send
-            if (results3.Count > 0)
-                sendFoto(imgPath, msgtxt, results3, chatid);
-        }
+    
+   
 
         private static string getRdmKwd(string wdss)
         {
@@ -417,7 +354,7 @@ namespace prjx.lib
         //         protectContent: false,
         //         disableWebPagePreview: true);
 
-        private static void sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
+        public static void sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
         {
             try
             {

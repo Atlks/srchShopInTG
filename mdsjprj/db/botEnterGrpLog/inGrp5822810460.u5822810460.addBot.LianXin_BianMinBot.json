@@ -1,0 +1,39 @@
+{
+  "update_id": 839636917,
+  "my_chat_member": {
+    "chat": {
+      "id": 5822810460,
+      "type": "private",
+      "username": "q990088",
+      "first_name": "诚信合作",
+      "last_name": "Mis陈"
+    },
+    "from": {
+      "id": 5822810460,
+      "is_bot": false,
+      "first_name": "诚信合作",
+      "last_name": "Mis陈",
+      "username": "q990088",
+      "language_code": "zh-hans"
+    },
+    "date": 1721801730,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

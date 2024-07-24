@@ -350,6 +350,15 @@ namespace prjx
             string txt307 = GetStr(update?.Message?.Text);
             if (txt307.StartsWith("请选择本群所在区域"))
                 return;
+            if (txt307.StartsWith(tipsSelectArea))
+                return;
+            if (txt307.StartsWith(tipsAppendArea))
+                return;
+            if (txt307.StartsWith("取消新增区域"))
+                return;
+            
+
+
             BtmEvtSetCountry(botClient, update, txt307);
             //-------shezhi 城市指令
             //  string txt307 = GetStr(update?.Message?.Text);

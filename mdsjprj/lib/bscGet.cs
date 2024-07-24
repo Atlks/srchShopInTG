@@ -473,6 +473,8 @@ namespace mdsj.lib
 
         public static string ReadAllText(string f)
         {
+            if (IsNotExistFil(f))
+                return "";
             return System.IO.File.ReadAllText(f);
         }
         public static List<SortedList> ReadAsListHashtable(string f)
@@ -847,7 +849,7 @@ namespace mdsj.lib
         public static List<string> loadLstWdsFrmDataDirHtml(string FolderPath)
         {
 
-            object v = callx(ExtractWordsFromFilesHtml, FolderPath);
+            object v = Callx(ExtractWordsFromFilesHtml, FolderPath);
             HashSet<string> weds = (HashSet<string>)v;
             weds = RemoveElementsContainingNumbers(weds);
             var wds = ConvertAndSortHashSet(weds);

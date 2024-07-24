@@ -235,6 +235,92 @@ namespace mdsj
             PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice<InlineKeyboardButton[]>(rsRztInlnKbdBtn, 0, 3));
             return rsRztInlnKbdBtn;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imgPath"></param>
+        /// <param name="msgtxtAdmsg"></param>
+        /// <param name="wdss">xxx,xxx xxx</param>
+        /// <param name="chatid"></param>
+        /// <param name="whereExprsObjFltrs"></param>
+        /// <param name="partfile区块文件Exprs"></param>
+
+        public static void srchNsendFotoToChatSess(string imgPath, string msgtxtAdmsg, string wdss, long chatid, Dictionary<string, StringValues> whereExprsObjFltrs, string partfile区块文件Exprs)
+        {
+            //   Dictionary<string, StringValues> whereExprsObj;
+            //  string partfile区块文件Exprs;
+            // calcPrtExprsNdefWhrCondt4grp(chatid, out whereExprsObj, out partfile区块文件Exprs);
+            //  var patns_dbfs = db.calcPatns("mercht商家数据", partfile区块文件Exprs);
+
+            //     string keyword = getRdmKwd(wdss);
+
+            List<InlineKeyboardButton[]> results3 = QryFromMrchtByKwds(  wdss, whereExprsObjFltrs, partfile区块文件Exprs);
+            Print(" SendPhotoAsync " + chatid);//  Program.botClient.send
+            if (results3.Count > 0)
+                sendFoto(imgPath, msgtxtAdmsg, results3, chatid);
+        }
+
+        private static List<InlineKeyboardButton[]> QryFromMrchtByKwds(  string wdss, Dictionary<string, StringValues> whereExprsObjFltrs, string partfile区块文件Exprs)
+        {
+              wdss = wdss.Replace(" ", ",");
+
+            //----where
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
+
+                if (LoadFieldDefEmpty(row, "TG有效") == "N")
+                    return false;
+                //if have condit n fuhe condit next...beir skip ( dont have cdi or not eq )
+                if (hasCondt(whereExprsObjFltrs, "城市"))
+                    if (!strCls.StrEq(row["城市"], LoadFieldTryGetValue(whereExprsObjFltrs, "城市")))   //  cityname not in (citysss) 
+                        return false;
+                if (hasCondt(whereExprsObjFltrs, "园区"))
+                    if (!IsIn4qrycdt(row["园区"], LoadFieldTryGetValue(whereExprsObjFltrs, "园区")))   //  cityname not in (citysss) 
+                        return false;
+                if (hasCondt(whereExprsObjFltrs, "国家"))
+                    if (!strCls.StrEq(row["国家"], LoadFieldTryGetValue(whereExprsObjFltrs, "国家")))   //  cityname not in (citysss) 
+                        return false;
+                if (LoadFieldDefEmpty(row, "cateEgls") == "Property")
+                    return false;
+
+
+                //--------------is lianixfsh empty
+                string lianxifsh = mrcht.getLianxifsh(row);
+                if (lianxifsh == "")
+                    return false;
+
+                HashSet<string> curRowKywdSset = new HashSet<string>();
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "商家"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "关键词"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "分类关键词"));
+                if (IsContains(curRowKywdSset, wdss))
+                    return true;
+                return false;
+            };
+
+
+            //order
+            //  List<SortedList> results22 = rdmList<SortedList>(rztLi);
+            Func<SortedList, int> ordFun = (SortedList) => { return 1; };
+            //map select 
+            Func<SortedList, InlineKeyboardButton[]> mapFun = (SortedList row) =>
+            {
+                string text = LoadFieldDefEmpty(row, "城市") + " • " + LoadFieldDefEmpty(row, "园区") + " • " + LoadFieldDefEmpty(row, "商家");
+                string guid = LoadFieldDefEmpty(row, "Guid编号");
+                InlineKeyboardButton[] btnsInLine = new[] { new InlineKeyboardButton(text) { CallbackData = $"id={guid}&sdr=tmr&btn=dtl&ckuid=n" } };
+                return btnsInLine;
+            };
+
+            List<InlineKeyboardButton[]> rztLi = Qe_qryV2<InlineKeyboardButton[]>("mercht商家数据", partfile区块文件Exprs, whereFun, ordFun, mapFun, (dbf) =>
+            {
+                return rnd_next4Sqlt(dbf);
+            });
+
+
+
+            var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
+            return results3;
+        }
 
 
         /// <summary>
