@@ -91,7 +91,7 @@ namespace prjx
     internal class Program
     {
         //prech 4 set msg
-        public const string PreCh            = "📌";
+        public const string PreCh            = "📍";
 
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         // public const string botname = "LianXin_BianMinBot";
@@ -114,12 +114,7 @@ namespace prjx
 
         //搜索用户
         public static Dictionary<long, User> _users = [];
-        public static bool jmp2exitFlag;
-        public static ThreadLocal<bool> jmp2exitFlagInThrd = new ThreadLocal<bool>(() =>
-        {
-            // 初始化每个线程的值为 false
-            return false;
-        });
+ 
         //public void ConfigureServices(IServiceCollection services)
         //{
         //    services.AddControllers();
@@ -276,7 +271,7 @@ namespace prjx
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
-            string reqThreadId = geneReqid();
+           
             //  throw new Exception("myex");
             //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
 
@@ -285,6 +280,7 @@ namespace prjx
             {
                 try
                 {
+                    string reqThreadId = geneReqid();
                     EvtUpdateHdlrAsync(botClient, update, cancellationToken, reqThreadId);
                     //     throw new InvalidOperationException("An error occurred in the task.");
 
@@ -348,8 +344,12 @@ namespace prjx
                 return;
             }
 
-            //-------shezhi 国家指令
+
+            //======================设置地区==============
+            //--------------------shezhi 国家指令
             string txt307 = GetStr(update?.Message?.Text);
+            if (txt307.StartsWith("请选择本群所在区域"))
+                return;
             BtmEvtSetCountry(botClient, update, txt307);
             //-------shezhi 城市指令
             //  string txt307 = GetStr(update?.Message?.Text);
@@ -357,35 +357,12 @@ namespace prjx
 
             //------setpark   BtmEvtSetParkMsgHdlr
             BtmEvtSetParkMsgHdlrPre(update, txt307);
+            //======================END 设置地区==============
 
             //-----------/cmd process
-            string cmd = getCmdFun(update?.Message?.Text?.Trim());
-            if (!string.IsNullOrEmpty(cmd) && cmd.Length < 100)
-            {
-                //+ update?.Message?.Chat?.Type ?? "" + ""
-                //CmdXXHdlr
-                string methodName = "CmdHdlr" + cmd;
-                Callx(methodName, update, reqThreadId);
-            }
-
-            if (update.Type == UpdateType.Message)
-            {
-                if (update.Message.Type == MessageType.Text)
-                {
-                    if (update.Message.Text.Trim().StartsWith("/"))
-                        if (update.Message.Chat.Type == ChatType.Private)
-                        {
-                            OnCmdPrvt(update.Message.Text.Trim(), update, reqThreadId);
-                            return;
-                        }
-                        else
-                        {
-                            OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
-                            return;
-                        }
-                }
-            }
-
+            CmdHdlrChk(update);
+           
+            //------------end cmd prcs--------
 
             if (update.Type == UpdateType.Message)
             {
@@ -700,18 +677,61 @@ namespace prjx
 
         }
 
+        public static void CmdHdlrChk(Update update)
+        {
+            if (!IsStartsWith(update?.Message?.Text, "/"))
+                return;
+            string reqThreadId = geneReqid();
+            string cmd = GetCmdV2(update?.Message?.Text?.Trim());
+            if (!string.IsNullOrEmpty(cmd) && cmd.Length < 100)
+            {
+                //+ update?.Message?.Chat?.Type ?? "" + ""
+                //CmdXXHdlr
+                string methodName = "CmdHdlr" + cmd;
+                Callx(methodName, update?.Message?.Text, update, reqThreadId);
+            }
+
+            if (update.Type == UpdateType.Message)
+            {
+                if (update.Message.Type == MessageType.Text)
+                {
+                    if (update.Message.Text.Trim().StartsWith("/"))
+                        if (update.Message.Chat.Type == ChatType.Private)
+                        {
+                            OnCmdPrvt(update.Message.Text.Trim(), update, reqThreadId);
+                            Jmp2end();
+                            return;
+                        }
+                        else
+                        {
+                            OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
+                            Jmp2end(); return;
+                        }
+                }
+            }
+        }
+
+     
+
         private static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
         {
-            if (!txt307.StartsWith("🔥"))
+
+            if (!txt307.StartsWith(PreCh))
                 return;
+
+
+            var area = SubStr(txt307, 2);
+            if (!IsPark(area))
+                return;
+         
             var park149 = SubStr(txt307, 2);
             var pks = LoadHashsetReadFileLinesToHashSet($"{prjdir}/cfg_cmd/园区列表.txt");
-            if (txt307.StartsWith("🔥") && pks.Contains(park149))
+            if (txt307.StartsWith(PreCh) && pks.Contains(park149))
             {
-                if (isGrpChat(update))
-                {
-                    //auth chk
-                }
+                //if (isGrpChat(update))
+                //{
+                //    //auth chk
+                //}
                 Callx(SetParkBtnClick, park149, update);
                 Jmp2end();
             }
@@ -769,14 +789,6 @@ namespace prjx
 
         }
 
-     
-
-        private static bool ISCity(string areaname)
-        {
-
-            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/citys.txt");
-            return (hs.Contains(areaname));
-        }
 
         private static void BtmEvtSetCountry(ITelegramBotClient botClient, Update update, string txt307)
         {
@@ -1834,13 +1846,14 @@ namespace prjx
                 string whereExprs = (string)db.getRowVal(lst, "whereExprs", "");
                 //    city = "
 
-                //qry from mrcht by  where exprs  strFmt
-                Dictionary<string, StringValues> whereExprsObjFiltrs = QueryHelpers.ParseQuery(whereExprs);
+
                 // whereExprsObj.Add("fuwuci", ldfld_TryGetValueAsStrDefNull(whereMap, "fuwuci"));
                 //here only one db so no mlt ,todo need updt
                 // results = mrcht.qryByMsgKwdsV3(patns_dbfs, whereExprsObj);
+                //qry from mrcht by  where exprs  strFmt
+                Dictionary<string, StringValues> whereExprsObjFiltrs = QueryHelpers.ParseQuery(whereExprs);
                 string sharNames = LoadFieldTryGetValue(whereExprsObjFiltrs, "@share");
-                results = mrcht.qryFromMrcht("mercht商家数据", sharNames, whereExprsObjFiltrs, msgx_remvTrigWd2);
+                results = mrcht.qryFromMrchtV2("mercht商家数据", sharNames, whereExprs, msgx_remvTrigWd2);
 
             }
             else
@@ -1853,8 +1866,9 @@ namespace prjx
                 SortedList cfg = findOne(dbfile);
 
                 Dictionary<string, StringValues> whereExprsObj = CopySortedListToDictionary(cfg);
+                var whereExprsObjExprs = CastHashtableToQuerystringNoEncodeurl(whereExprsObj);
                 //todo set    limit  cdt into 
-                results = mrcht.qryFromMrchtV2("mercht商家数据", null, whereExprsObj, msgx_remvTrigWd2);
+                results = mrcht.qryFromMrchtV2("mercht商家数据", null, whereExprsObjExprs, msgx_remvTrigWd2);
 
             }
 

@@ -246,10 +246,11 @@ namespace mdsj
         /// <param name="filters"></param>
         /// <param name="msgCtain_msgx_remvTrigWd2">消息内容</param>
         /// <returns>tg按钮数组</returns>
-        public static List<InlineKeyboardButton[]> qryFromMrchtV2(string dbFrom, string shareNames, Dictionary<string, StringValues> filters, string msgCtain_msgx_remvTrigWd2)
+        public static List<InlineKeyboardButton[]> qryFromMrchtV2(string dbFrom, string shareNames, string filtersExprs, string msgCtain_msgx_remvTrigWd2)
         {
 
-
+            //qry from mrcht by  where exprs  strFmt
+            Dictionary<string, StringValues> filters = QueryHelpers.ParseQuery(filtersExprs);
             msgCtain_msgx_remvTrigWd2 = msgCtain_msgx_remvTrigWd2.ToUpper();
             msgCtain_msgx_remvTrigWd2 = ChineseCharacterConvert.Convert.ToSimple(msgCtain_msgx_remvTrigWd2);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -281,7 +282,7 @@ namespace mdsj
                 li.Add((isLianxifshValid(row)));
          
                 var fltrs = ConvertToStringDictionary(filters);
-                li.Add(isEq4qrycdt(LoadFieldDfemp(row, "园区"), LoadField232(fltrs, "园区")));
+                li.Add(IsIn4qrycdt(LoadFieldDfemp(row, "园区"), LoadField232(fltrs, "园区")));
                 li.Add(isEq4qrycdt(LoadFieldDfemp(row, "城市"), LoadField232(fltrs, "城市")));
                 //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
                 li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));               
@@ -291,6 +292,7 @@ namespace mdsj
             var list = GetListFltr("mercht商家数据", shareNames, whereFun);
             if (list.Count == 0)
             {
+                //qry rmv poston where 
                 whereFun = (SortedList row) =>
                   {
                       if (row["园区"].ToString().Contains("东风"))
@@ -299,7 +301,7 @@ namespace mdsj
                       //    li.Add(new Filtr(isNotEmptyLianxi(row)));
                       //    li.Add(new Filtr(isLianxifshValid(row)));
                       var fltrs = ConvertToStringDictionary(filters);
-                      li.Add( isEq4qrycdt(LoadFieldDfemp( row, "园区"),LoadField232(fltrs, "园区")));
+                      li.Add(IsIn4qrycdt(LoadFieldDfemp( row, "园区"),LoadField232(fltrs, "园区")));
                       li.Add(isEq4qrycdt(LoadFieldDfemp(row, "城市"), LoadField232(fltrs, "城市")));
                       //   li.Add(isEq4qrycdt(ldfldDfemp(row, "国家"), ldfld(fltrs, "国家")));
                       li.Add((isCotainFuwuci(row, msgCtain_msgx_remvTrigWd2)));

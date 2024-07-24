@@ -15,6 +15,21 @@ namespace mdsj.lib
 {
     internal class bscIsCmp
     {
+        public static bool IsPark(string areaname)
+        {
+            if (string.IsNullOrEmpty(areaname))
+                return false;
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/园区列表.txt");
+            return (hs.Contains(areaname));
+        }
+
+        public static bool ISCity(string areaname)
+        {
+            if (string.IsNullOrEmpty(areaname))
+                return false;
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/citys.txt");
+            return (hs.Contains(areaname));
+        }
         public static bool isMmsgHasMatchPostWd(HashSet<string> postnKywd位置词set, string[] kwds)
         {
             //if (text == null)
@@ -51,7 +66,7 @@ namespace mdsj.lib
         }
 
 
-        public static bool fileHasExtname(string 路径)
+        public static bool FileHasExtname(string 路径)
         {
             string 文件扩展名 = Path.GetExtension(路径);
             //  string 文件路径 = $"{web根目录}{路径}";
@@ -134,11 +149,30 @@ namespace mdsj.lib
             // 检查第一个字符是否为大写字母
             return char.IsUpper(input[0]);
         }
-        public static bool isIn(object hour, string[]? times)
+        public static bool IsIn(object hour, string[]? times)
         {
             foreach (string o in times)
             {
                 if (hour.ToString().ToUpper().Equals(o.ToUpper()))
+                    return true;
+            }
+            return false;
+        }
+        public static bool IsStartsWith(string? text, string v)
+        {
+            if (string.IsNullOrEmpty(text))
+                return false;
+            return text.Trim().StartsWith(v);
+        }
+        public static bool IsIn4qrycdt(object rowVal, object cdtVals)
+        {
+            if (cdtVals == null || cdtVals.ToString() == "")
+                return true;
+            string[] a = cdtVals.ToString().Split(",");
+
+            foreach (string cdt in a)
+            {
+                if (rowVal.ToString().ToUpper().Equals(cdt.ToUpper()))
                     return true;
             }
             return false;
@@ -149,7 +183,7 @@ namespace mdsj.lib
                 return true;
             return rowVal.ToString().ToUpper().Equals(cdtVal.ToString().ToUpper());
         }
-        public static bool isChkOK(List<Filtr> li)
+        public static bool IsChkOK(List<Filtr> li)
         {
             if (!ChkAllFltrTrueDep(li))
                 return false;
@@ -168,6 +202,8 @@ namespace mdsj.lib
 
         public static bool ISCtry(string areaname)
         {
+            if (string.IsNullOrEmpty(areaname))
+                return false;
             HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/ctrys.txt");
             return (hs.Contains(areaname));
         }
@@ -184,11 +220,11 @@ namespace mdsj.lib
 
             return true;
         }
-        public static bool isFileExist(string 文件路径)
+        public static bool IsFileExist(string 文件路径)
         {
             return ExistFil(文件路径);
         }
-        public static bool isFileNotExist(string 文件路径)
+        public static bool IsFileNotExist(string 文件路径)
         {
             return !ExistFil(文件路径);
         }
@@ -207,7 +243,7 @@ namespace mdsj.lib
                 return false;
             return true;
         }
-        public static bool isArrOrColl(object inputArray)
+        public static bool IsArrOrColl(object inputArray)
         {
             if (IsArray(inputArray))
                 return true;
@@ -217,11 +253,11 @@ namespace mdsj.lib
             return false;
         }
 
-        public static bool isStrEndWz(string 路径, string 扩展名)
+        public static bool IsStrEndWz(string 路径, string 扩展名)
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
         }
-        public static bool isPathEndwithExt(string 路径, string 扩展名)
+        public static bool IsPathEndwithExt(string 路径, string 扩展名)
         {
             return 路径.ToUpper().Trim().EndsWith("." + 扩展名.Trim().ToUpper());
         }

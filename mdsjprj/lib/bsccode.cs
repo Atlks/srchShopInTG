@@ -58,9 +58,9 @@ namespace mdsj.lib
 
         }
 
-    
 
-  
+
+
         public static void echo(object v)
         {
             Print(v);
@@ -106,7 +106,7 @@ namespace mdsj.lib
 
             return newDictionary;
         }
-       public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
+        public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
         {
             HashSet<string> updatedSet = new HashSet<string>();
 
@@ -126,14 +126,15 @@ namespace mdsj.lib
                 try
                 {
                     fun(str);
-                }catch(Exception e)
-                {
-                    PrintCatchEx("foreach_HashSet",e);
                 }
-              
+                catch (Exception e)
+                {
+                    PrintCatchEx("foreach_HashSet", e);
+                }
+
             }
 
-            
+
         }
         static void FforeachProcessFilesAsyncDp(string folderPath, Func<string, Task> fileAction)
         {
@@ -187,10 +188,10 @@ namespace mdsj.lib
                 catch (jmp2endEx e2)
                 {
                     throw e2;
-                }               
+                }
                 catch (Exception e)
                 {
-                    if(e.ToString().Contains("jmp2endEx"))
+                    if (e.ToString().Contains("jmp2endEx"))
                     {
                         Jmp2end();
                     }
@@ -237,12 +238,12 @@ namespace mdsj.lib
         {
             return left && right;
         }
-       public static object Invoke(string methodName, params object[] args)
+        public static object Invoke(string methodName, params object[] args)
         {
             return Callx(methodName, args);
         }
 
-      
+
 
         /// <summary>
         ///     PrintColoredText("This is blue text.", ConsoleColor.Blue);
@@ -395,7 +396,7 @@ namespace mdsj.lib
             return CallUserFunc409(callback, args);
         }
 
-       public static object CallxTryJmp(Delegate callback, params object[] objs)
+        public static object CallxTryJmp(Delegate callback, params object[] objs)
         {
             try
             {
@@ -413,7 +414,26 @@ namespace mdsj.lib
             //}
             return 0;
         }
+      public  static string GetMethodFullName(MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+            {
+                throw new ArgumentNullException(nameof(methodInfo));
+            }
 
+            // 获取声明类的全名（包含命名空间）
+            string declaringTypeFullName = methodInfo.DeclaringType.FullName;
+
+            // 获取方法名
+            string methodName = methodInfo.Name;
+
+            // 获取参数信息并构建参数列表
+            var parameters = methodInfo.GetParameters();
+            string parameterList = string.Join(", ", System.Array.ConvertAll(parameters, p => p.ParameterType.Name + " " + p.Name));
+
+            // 拼接完整的方法名
+            return $"{declaringTypeFullName}.{methodName}({parameterList})";
+        }
         public static object Callx(string authExp, Delegate callback, params object[] args)
         {
             return CallUserFunc409(callback, args);
@@ -421,7 +441,8 @@ namespace mdsj.lib
         public static object Callx(Delegate callback, params object[] args)
         {
             //  return CallUserFunc409(callback, args);
-            var __METHOD__ = callback.Method.Name;
+            MethodInfo method = callback.Method;
+            var __METHOD__ = method.Name;
             PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
@@ -440,6 +461,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
+                        jmp2exitFlagInThrd.Value = true;
                         PrintTimestamp($" Callx(Delegate) ctch ex ,mtth:{__METHOD__}");
                         PrintRet(__METHOD__, 0); Jmp2end();
                     }
@@ -458,22 +480,22 @@ namespace mdsj.lib
                 PrintRet(__METHOD__, 0);
             return o;
         }
-       
+
 
         public static HashSet<string> NewSet(string f)
         {
             try
             {
-                
-               
+
+
 
                 var hashSet = new HashSet<string>();
                 if (!IsFileExist(f))
-                    hashSet= new HashSet<string>();
+                    hashSet = new HashSet<string>();
                 else
                 {
                     string json = File.ReadAllText(f);
-                     hashSet = JsonConvert.DeserializeObject<HashSet<string>>(json);
+                    hashSet = JsonConvert.DeserializeObject<HashSet<string>>(json);
 
 
                 }
@@ -497,10 +519,10 @@ namespace mdsj.lib
                 ConsoleWriteLine($"An error occurred: {ex.Message}");
                 return new HashSet<string>();
             }
-          
+
         }
 
-    
+
 
 
         public static void callTryAll(Action value)
@@ -515,20 +537,20 @@ namespace mdsj.lib
             }
 
         }
-    
-   
-     
-        
+
+
+
+
         public static void Jmp2end()
         {
             // jmp2exitFlag = true;
             throw new jmp2endEx();
         }
 
- 
+
         public static object CallxTryx(string methodName, params object[] args)
         {
-          //  Print(" fun CallxTryx()" + methodName);
+            //  Print(" fun CallxTryx()" + methodName);
             var __METHOD__ = methodName;
             PrintCallFunArgs(methodName, dbgCls.func_get_args(args));
 
@@ -563,8 +585,8 @@ namespace mdsj.lib
             return result;
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
-    
-      
+
+
         public static object Callx(string methodName, params object[] args)
         {
 
@@ -583,7 +605,7 @@ namespace mdsj.lib
             }
 
 
-      //      var delegateType = typeof(Func<string, List<SortedList>>);
+            //      var delegateType = typeof(Func<string, List<SortedList>>);
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
 
             // 假设你想要执行 YourMethodName 方法
@@ -593,7 +615,8 @@ namespace mdsj.lib
             {
                 result = methodInfo.Invoke(null, args);
 
-            }catch(jmp2endEx e)
+            }
+            catch (jmp2endEx e)
             {
                 return e;
             }
@@ -605,7 +628,7 @@ namespace mdsj.lib
                     PrintTimestamp($"  Callx(str) catch jmp2endEx mthd:{methodName}");
                     Jmp2end();
                 }
-                  
+
                 PrintExcept("call", e);
             }
 
@@ -615,7 +638,7 @@ namespace mdsj.lib
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
-        public static List<t> Append<t>(List<t> list2, List<t>   list1)
+        public static List<t> Append<t>(List<t> list2, List<t> list1)
         {
             //List<t> result = new List<t>();
 

@@ -17,6 +17,12 @@ namespace mdsj.lib
 {
     internal class util
     {
+      //  public static bool jmp2exitFlag;
+        public static ThreadLocal<bool> jmp2exitFlagInThrd = new ThreadLocal<bool>(() =>
+        {
+            // 初始化每个线程的值为 false
+            return false;
+        });
         public const string botname = "LianXin_BianMinBot";
 
         public static void PrintTimestamp(string msg)

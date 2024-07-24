@@ -397,8 +397,9 @@ namespace mdsj.lib
             object rzt2 = ReadAllText(webrootDir + path);
             await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
             //   Print();
-            jmp2exitFlag = true;
+        
             PrintTimestamp(" JsonFLhttpHdlrFilJson()...end");
+            jmp2exitFlagInThrd.Value = true;
             //  Jmp2end();
             return;
 

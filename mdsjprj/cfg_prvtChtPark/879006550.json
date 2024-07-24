@@ -5,11 +5,12 @@
       "is_bot": false,
       "first_name": "十 Adam 大鱼 刘洋 汤姆",
       "username": "Xxx0079468",
-      "language_code": "en"
+      "language_code": "zh-hans"
     },
     "id": "879006550",
-    "whereExprs": "城市=妙瓦底",
+    "whereExprs": "国家=缅甸",
     "园区": "东风园区",
-    "城市": "妙瓦底"
+    "国家": "缅甸",
+    "城市": ""
   }
 ]

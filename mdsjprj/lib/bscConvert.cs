@@ -19,11 +19,57 @@ using System.Web;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
+using static SqlParser.Ast.Expression;
 
 namespace mdsj.lib
 {
-    internal class bscConvert
-    { //  WriteAllText
+    public class bscConvert
+    {
+        /// <summary>
+        /// rpls eng byaodian fuhaor
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+      public  static string CastToEnglishCharPunctuation(string input)
+        {
+            if (input == null)
+            {
+                throw new ArgumentNullException(nameof(input));
+            }
+
+            // 中文标点符号与英文标点符号的对应关系
+            var punctuationMap = new Dictionary<string, string>
+        {
+            { "，", "," },
+            { "。", "." },
+            { "！", "!" },
+            { "？", "?" },
+            { "；", ";" },
+            { "：", ":" },
+            { "（", "(" },
+            { "）", ")" },
+            { "【", "[" },
+            { "】", "]" },
+            { "‘", "'" },
+            { "’", "'" },
+            { "“", "\"" },
+            { "”", "\"" },
+            { "—", "-" }
+            // 可以继续添加更多的标点符号替换
+        };
+
+            // 替换中文标点符号为英文标点符号
+            foreach (var entry in punctuationMap)
+            {
+                input = input.Replace(entry.Key, entry.Value);
+            }
+
+            return input;
+        }
+
+
+        //  WriteAllText
         //我们首先使用 System.IO.Path.GetInvalidFileNameChars 方法获取操作系统支持的非法文件名字符数组
         /*
          
@@ -58,6 +104,32 @@ namespace mdsj.lib
             var inputOnlineFile = InputFile.FromStream(mp3Stream);
             return inputOnlineFile;
         }
+
+        public static string CastHashtableToQuerystringNoEncodeurl(Dictionary<string, StringValues> sortedList)
+        {
+            if (sortedList == null)
+            {
+                return "";
+            }
+
+            var queryString = "";
+            foreach (var entry in sortedList)
+            {
+                if (queryString.Length > 0)
+                {
+                    queryString += "&";
+                }
+
+                // URL encode the key and value to handle special characters
+                //string key = Uri.EscapeDataString(entry.Key.ToString());
+                //string value = Uri.EscapeDataString(entry.Value.ToString());
+
+                queryString += $"{entry.Key.ToString()}={entry.Value.ToString()}";
+            }
+
+            return queryString;
+        }
+
         public static string CastHashtableToQuerystringNoEncodeurl(SortedList sortedList)
         {
             if (sortedList == null)
@@ -144,7 +216,7 @@ namespace mdsj.lib
 
         public static int ToInt146(object obj)
         {
-            return Convert.ToInt32(obj);
+            return System.Convert.ToInt32(obj);
         }
         public static Dictionary<string, string> ConvertToStringDictionary(Dictionary<string, StringValues> input)
         {
@@ -191,7 +263,7 @@ namespace mdsj.lib
             List<object> list = new List<object>();
 
             // 检查对象是否为数组
-            if (obj is Array array)
+            if (obj is System.Array array)
             {
                 // 循环遍历数组的每个元素并添加到 List 中
                 foreach (var element in array)
@@ -274,19 +346,19 @@ namespace mdsj.lib
             }
             if (obj is float)
             {
-                return Convert.ToDouble((float)obj);
+                return System.Convert.ToDouble((float)obj);
             }
             if (obj is int)
             {
-                return Convert.ToDouble((int)obj);
+                return System.Convert.ToDouble((int)obj);
             }
             if (obj is long)
             {
-                return Convert.ToDouble((long)obj);
+                return System.Convert.ToDouble((long)obj);
             }
             if (obj is decimal)
             {
-                return Convert.ToDouble((decimal)obj);
+                return System.Convert.ToDouble((decimal)obj);
             }
             if (obj is string)
             {
@@ -314,11 +386,11 @@ namespace mdsj.lib
             // if sortedlist hashtable ne?? dic 
             if (IsStr(inputArray))
                 return inputArray;
-            if (!isArrOrColl(inputArray))
+            if (!IsArrOrColl(inputArray))
                 return CastToSerializableObj(inputArray);
             // 创建一个新的 List 用于存储元素
             List<object> list = new List<object>();
-            if (isArrOrColl(inputArray))
+            if (IsArrOrColl(inputArray))
             {
                 list = CastArrCollToList(inputArray);
             }
@@ -388,7 +460,7 @@ namespace mdsj.lib
         }
         public static int ToInt(object obj)
         {
-            return Convert.ToInt32(obj);
+            return System.Convert.ToInt32(obj);
         }
         public static Dictionary<string, string> ConvertToDictionary(string queryString)
         {

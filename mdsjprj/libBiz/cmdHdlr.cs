@@ -17,21 +17,14 @@ namespace mdsj.libBiz
 {
     internal class cmdHdlr
     {
-
-        public static void OnCmdPublic(string cmdFulltxt, Update update, string reqThreadId)
+        public static void CmdHdlr设置园区(string cmdFulltxt, Update update, string reqThreadId)
         {
-            string prjdir = @"../../../";
-            prjdir = filex.GetAbsolutePath(prjdir);
-
-
-
-
             ///设置园区 东风园区
-            if (cmdFulltxt.StartsWith("/设置园区"))
+          //  if (cmdFulltxt.StartsWith("/设置园区"))
             {
-                var park = SubstrAfterMarker(cmdFulltxt, "/设置园区");
+                var prm_park = SubstrAfterMarker(cmdFulltxt, "/设置园区");
 
-                SetPark(park, update);
+                SetPark(prm_park, update);
 
             }
 
@@ -43,6 +36,20 @@ namespace mdsj.libBiz
                 protectContent: false,
                 disableWebPagePreview: true,
                 replyToMessageId: update.Message.MessageId);
+            Jmp2end();
+
+        }
+
+
+        public static void OnCmdPublic(string cmdFulltxt, Update update, string reqThreadId)
+        {
+            string prjdir = @"../../../";
+            prjdir = filex.GetAbsolutePath(prjdir);
+
+
+
+
+          
 
         }
 
@@ -64,7 +71,7 @@ namespace mdsj.libBiz
             if (isGrpChat(update))
             {
 
-                if (!isAdmin(update))
+                if (!IsAdmin(update))
                 {
                     //send
                     Print("no auth ");
@@ -150,7 +157,7 @@ namespace mdsj.libBiz
             if (isGrpChat(update))
             {
 
-                if (!isAdmin(update))
+                if (!IsAdmin(update))
                 {
                     //send
                     Print("no auth ");
@@ -245,7 +252,7 @@ namespace mdsj.libBiz
             if (isGrpChat(update))
             {
 
-                if (!isAdmin(update))
+                if (!IsAdmin(update))
                 {
                     //send
                     Print("no auth ");
@@ -319,6 +326,7 @@ namespace mdsj.libBiz
 
         public static void SetPark(string park, Update update)
         {
+            park = CastToEnglishCharPunctuation(park);
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;
@@ -327,7 +335,7 @@ namespace mdsj.libBiz
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
             if (isGrpChat(update))
             {
-                if (!isAdmin(update))
+                if (!IsAdmin(update))
                 {
                     Print("no auth " + f);
                     // print("no auth ");
@@ -384,9 +392,22 @@ namespace mdsj.libBiz
             }
             ormJSonFL.SaveJson(cfg, dbfile);
         }
+        public static string GetCmdV2(string? v)
+        {
+            if (string.IsNullOrEmpty(v)) return "";
+            if (v.StartsWith("/"))
+            {
+                v = v.Replace("@" + botname, "");
+                string s = v.ToString().Substring(1);
+                string[] a = s.Split(" ");
+                return a[0];
+            }
 
+            else
+                return "";
+        }
 
-        public static string getCmdFun(string? v)
+        public static string GetCmdFun(string? v)
         {
             if (string.IsNullOrEmpty(v)) return "";
             if (v.StartsWith("/"))
@@ -412,7 +433,7 @@ namespace mdsj.libBiz
             if (isGrpChat(update))
             {
 
-                if (!isAdmin(update))
+                if (!IsAdmin(update))
                 {
                     //send
                     Print("no auth " );
@@ -423,7 +444,7 @@ namespace mdsj.libBiz
                 }
             }
 
-            string cmd = getCmdFun(update?.Message?.Text);
+            string cmd = GetCmdFun(update?.Message?.Text);
             //  Print("oo617");
             KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{cmd}.txt");
             Print(EncodeJson(btns));
