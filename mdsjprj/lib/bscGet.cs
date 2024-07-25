@@ -530,6 +530,78 @@ namespace mdsj.lib
             return ReadTextFileToHashSet(v);
         }
 
+
+        public static HashSet<string> GetHashsetEmojiCmn()
+        {
+            char[] a = ReadFileAsCharArray($"{prjdir}/db/commonEmoji.txt");
+
+            HashSet<string> hs = ConvertCharsToHashSet(a); hs.Remove("\n");
+            hs.Remove(" "); hs.Remove("\t"); hs.Remove("\r");
+            return hs;
+        }
+
+
+
+        private static HashSet<string> GetHashsetCharsFromFilTxt(string v)
+        {
+            throw new NotImplementedException();
+        }
+        public static string GetParksByCountry(string ctry)
+        {
+            Hashtable ctrys = GetHashtabFromIniFl($"{prjdir}/cfg_cmd/国家代码.ini");
+            //MMR_pks.txt
+            var ctryCode = ctrys[ctry];
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{ctryCode}_pks.txt");
+
+            return JoinWzComma(hs);
+        }
+
+        public static string GetMethodFullName(MethodInfo methodInfo)
+        {
+            if (methodInfo == null)
+            {
+                throw new ArgumentNullException(nameof(methodInfo));
+            }
+
+            // 获取声明类的全名（包含命名空间）
+            string declaringTypeFullName = methodInfo.DeclaringType.FullName;
+
+            // 获取方法名
+            string methodName = methodInfo.Name;
+
+            // 获取参数信息并构建参数列表
+            var parameters = methodInfo.GetParameters();
+            string parameterList = string.Join(", ", System.Array.ConvertAll(parameters, p => p.ParameterType.Name + " " + p.Name));
+
+            // 拼接完整的方法名
+            return $"{declaringTypeFullName}.{methodName}({parameterList})";
+        }
+        /// <summary>
+        /// 读取指定路径的文本文件，并返回字符数组
+        /// </summary>
+        /// <param name="filePath">文本文件的路径</param>
+        /// <returns>文件内容的字符数组</returns>
+        public static char[] ReadFileAsCharArray(string filePath)
+        {
+            if (string.IsNullOrEmpty(filePath))
+            {
+                throw new ArgumentException("文件路径不能为空", nameof(filePath));
+            }
+
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("指定的文件未找到", filePath);
+            }
+
+            // 读取文件内容
+            string fileContent = System.IO.File.ReadAllText(filePath);
+
+            // 将内容转换为字符数组并返回
+            return fileContent.ToCharArray();
+        }
+
+   
+
         public static HashSet<string> ReadTextFileToHashSet(string filePath)
         {
             if (!System.IO.File.Exists(filePath))
@@ -553,6 +625,57 @@ namespace mdsj.lib
             }
 
             return hashSet;
+        }
+        public static string SetField4qrystr(string qrystr1, string k, object v)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr1);
+            SetField(qryMap, k, v);
+            return CastHashtableToQuerystringNoEncodeurl(qryMap);
+        }
+
+        public static string GetField4qrystr(string qrystr1, string k, object v)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr1);
+            return GetFieldAsStr(qryMap, k);
+        }
+
+        public static string DelField4qrystr(string qrystr1, string k)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr1);
+            qryMap.Remove(k);
+            return CastHashtableToQuerystringNoEncodeurl(qryMap);
+        }
+
+        public static string SetKv(string qrystr1, string k, object v)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr1);
+            SetField(qryMap, k, v);
+            return CastHashtableToQuerystringNoEncodeurl(qryMap);
+        }
+        public static string DelKeys(string ks, string qrystr)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr);
+            HashSet<string> hs = GetHashsetFromStr(ks);
+            foreach (string k in hs)
+            {
+                qryMap.Remove(k);
+            }
+            qryMap.Remove("");
+            return CastHashtableToQuerystringNoEncodeurl(qryMap);
+        }
+
+        private static HashSet<string> GetHashsetFromStr(string ks)
+        {
+            string[] stringArray = ks.Split(" ");
+            // 使用 HashSet 的构造函数将数组转换为 HashSet
+            HashSet<string> resultSet = new HashSet<string>(stringArray);
+            return resultSet;
+        }
+        public static object GetListFltrByQrystr(string fromDdataDir, object shares, string qrtStr4Srch)
+        {
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
+            var list = GetListFltr(fromDdataDir, ToStr(shares), whereFun);
+            return list;
         }
         public static SortedList GetHashset
             (string f)
@@ -697,6 +820,13 @@ namespace mdsj.lib
 
         }
 
+       
+
+               public static string GetFieldAsStr(Dictionary<string, string> sortedList, string key)
+        {
+            var obj = GetField(sortedList, key, "");
+            return ToStr(obj);
+        }
         public static string GetFieldAsStr(SortedList sortedList, string key)
         {
             var obj = GetField(sortedList, key, "");
@@ -803,7 +933,7 @@ namespace mdsj.lib
 
         }
 
-        public static void setHsstToF(HashSet<string> downedUrl, string v)
+        public static void SetHashstToFil(HashSet<string> downedUrl, string v)
         {
             WriteAllText(v, EncodeJson(downedUrl));
         }

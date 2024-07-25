@@ -88,7 +88,34 @@ namespace mdsj.lib
             }
 
         }
+       
 
+        public static List<SortedList> SliceByPagemodeByQrystr(List<SortedList> list_aftFltr2, string qrystr)
+        {
+            SortedList qryMap = GetHashtableFromQrystr(qrystr);
+            int page = GetFieldAsInt(qryMap, "page", 0);
+            int pagesize = GetFieldAsInt(qryMap, "pagesize", 10);
+            int start = (page - 1) * pagesize;
+            List<SortedList> list_rzt = SliceX(list_aftFltr2, start, pagesize);
+            return list_rzt;
+        }
+        public static SortedList  RemoveKeys(SortedList originalDictionary, string commaSeparatedKeys)
+        {
+            // 分割逗号分割的字符串并移除前后空白
+            var keysToRemove = new HashSet<string>(commaSeparatedKeys.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries), StringComparer.OrdinalIgnoreCase);
+
+            // 创建新的字典，只保留不在 keysToRemove 中的键值对
+            SortedList newDictionary = new SortedList( );
+            foreach (DictionaryEntry kvp in originalDictionary)
+            {
+                if (!keysToRemove.Contains(kvp.Key))
+                {
+                    newDictionary.Add(kvp.Key, kvp.Value);
+                }
+            }
+
+            return newDictionary;
+        }
         public static Dictionary<string, string> RemoveKeys(Dictionary<string, string> originalDictionary, string commaSeparatedKeys)
         {
             // 分割逗号分割的字符串并移除前后空白
@@ -414,26 +441,7 @@ namespace mdsj.lib
             //}
             return 0;
         }
-      public  static string GetMethodFullName(MethodInfo methodInfo)
-        {
-            if (methodInfo == null)
-            {
-                throw new ArgumentNullException(nameof(methodInfo));
-            }
-
-            // 获取声明类的全名（包含命名空间）
-            string declaringTypeFullName = methodInfo.DeclaringType.FullName;
-
-            // 获取方法名
-            string methodName = methodInfo.Name;
-
-            // 获取参数信息并构建参数列表
-            var parameters = methodInfo.GetParameters();
-            string parameterList = string.Join(", ", System.Array.ConvertAll(parameters, p => p.ParameterType.Name + " " + p.Name));
-
-            // 拼接完整的方法名
-            return $"{declaringTypeFullName}.{methodName}({parameterList})";
-        }   /// <summary>
+      /// <summary>
             /// 替换字符串
             /// </summary>
             /// <param name="lines"></param>
@@ -468,15 +476,29 @@ namespace mdsj.lib
 
             return result;
         }
-        public static string GetParksByCountry(string ctry)
+        public static void AddElemtStrcomma(string noTrigSrchMsgs, HashSet<string> hs11)
         {
-            Hashtable ctrys = GetHashtabFromIniFl($"{prjdir}/cfg_cmd/国家代码.ini");
-            //MMR_pks.txt
-            var ctryCode = ctrys[ctry];
-            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{ctryCode}_pks.txt");
-
-            return JoinWzComma(hs);
+            string[] a = noTrigSrchMsgs.Split(",");
+            foreach (string s in a)
+            {
+                if (s.Trim().Length > 0)
+                    hs11.Add(s);
+            }
         }
+        public static string AddElmts(string e, string strComma)
+        {
+            if (strComma == "")
+                return e;
+            return strComma + "," + e;
+        }
+        public static object DelElmts(string e, string strComma)
+        {
+            ArrayList li = ConvertToArrayList(strComma);
+            li.Remove(e);
+            return ConvertArrayListToCommaSeparatedString(li);
+        }
+
+   
         public static string removeDulip(string newParks)
         {
             HashSet<string> hs = new HashSet<string>();
@@ -579,7 +601,7 @@ namespace mdsj.lib
                 System.Timers.Timer timer = new System.Timers.Timer(2000);
                 timer.Elapsed += (sender, e) =>
                 {
-                    setHsstToF(hashSet, f);
+                    SetHashstToFil(hashSet, f);
                 };
                 timer.AutoReset = true;
                 timer.Enabled = true;

@@ -125,7 +125,7 @@ namespace mdsj.libBiz
              
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
-                SetField(cfg, "whereExprs", newParks);
+             //   SetField(cfg, "whereExprs", newParks);
                 if (ctry == "不限制")
                 {
 
@@ -190,8 +190,7 @@ namespace mdsj.libBiz
                 DelField(cfg, "城市");
                 SetField(cfg, "园区", newParks);
                 SetField(cfg, "id", grpid.ToString());
-                SetField(cfg, "grpid", grpid.ToString());
-            
+                SetField(cfg, "grpid", grpid.ToString());            
                 SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
@@ -209,13 +208,13 @@ namespace mdsj.libBiz
                 SortedList cfg = findOne(dbfile);
                 string whereExprsFld = "whereExprs";
                 string parks = GetParksByCity(area);
-                string whereExprsNew = AppendParks(cfg, parks);
+                string newParks = AppendParks(cfg, parks);
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
-                SetField(cfg, "园区", whereExprsNew);
+           //     SetField(cfg, "园区", whereExprsNew);
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
-                SetField(cfg, "whereExprs", whereExprsNew);
+            //    SetField(cfg, "whereExprs", $"园区={newParks}");
                 if (area == "不限制")
                 {
                     SetField(cfg, "城市", "");
@@ -431,6 +430,7 @@ namespace mdsj.libBiz
 
             SetField(cfg, "园区", newParks);
             DelField(cfg, "国家");
+       //     SetField(cfg, "whereExprs", $"园区={newParks}");
             DelField(cfg, "城市");
             SetField(cfg, "园区", pk);
             SetField(cfg, "id", update.Message.From.Id.ToString());

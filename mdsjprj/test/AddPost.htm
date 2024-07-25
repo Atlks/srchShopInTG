@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Form</title>
+</head>
+
+<body>
+    <h1>Upload Form</h1>
+    <form action="http://localhost:5000/AddPost" method="post" enctype="multipart/form-data">
+        <!-- Cate Field -->
+        <label for="cate">Category:</label>
+        <input type="text" id="cate" name="Cate" required>
+        <br><br>
+
+        <!-- Title Field -->
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="Title" required>
+        <br><br>
+
+        <!-- Txt Field -->
+        <label for="txt">Text:</label>
+        <textarea id="txt" name="Txt" rows="4" cols="50" required></textarea>
+        <br><br>
+
+        <!-- File Field (Multiple Upload) -->
+        <label for="file">Upload Images:</label>
+        <input type="file" id="file" name="File" accept="image/*" multiple>
+        <br><br>
+
+        <!-- Submit Button -->
+        <input type="submit" value="Submit">
+    </form>
+</body>
+
+</html>

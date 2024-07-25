@@ -85,10 +85,17 @@ namespace libx
             List<bool> li = new List<bool>();
 
 
-            Dictionary<string, string> filters = LoadDic4qryCdtn(qrystr);
-            foreach_DictionaryKeys(filters, (string key) =>
+            Dictionary<string, string> qrystrDic = LoadDic4qryCdtn(qrystr);
+            foreach_DictionaryKeys(qrystrDic, (string key) =>
             {
-                li.Add((isFldValEq111(row, key, filters)));
+                string v = GetFieldAsStr(qrystrDic, key);
+                if(v.StartsWith("%") && v.EndsWith("%"))
+                {
+                    li.Add((isFldValContain(row, key, qrystrDic)));
+                }
+                 
+                else
+                  li.Add((isFldValEq111(row, key, qrystrDic)));
             });
             return li;
         }

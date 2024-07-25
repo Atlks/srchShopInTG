@@ -154,32 +154,54 @@ namespace mdsj.libBiz
         ///  <param name="page">页数</param>
         ///        <param name="pagesize">每页数量</param>
         ///  <returns>返回json数组.</returns>
-
-        public static string WbapiXgetlist(string qrystr)
+        public static string WbapiXgetlistPost(string qrystr)
+        {
+            return "";
+           
+        }
+            public static string WbapiXgetlist(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
-            SortedList dafenObj = GetHashtableFromQrystr(qrystr);
-            int page = GetFieldAsInt(dafenObj, "page", 0);
-            int pagesize = GetFieldAsInt(dafenObj, "pagesize", 10);
-            SortedList map = new SortedList();
-            map.Add("limit", 5);
+            SortedList qryMap = GetHashtableFromQrystr(qrystr);
+          
+            //SortedList map = new SortedList();
+            //map.Add("limit", 5);
 
-            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrystr);
-            var list = GetListFltr("mercht商家数据", null, whereFun);
-            var list_aftFltr = ArrFltr(list, (SortedList row) =>
+            const string FromDdataDir = "mercht商家数据";
+
+
+         //   SetKv("a=1", "b", 253);
+           //todo v2
+             string qrtStr4Srch2 = DelKeys("商家 "+pageprm251, qrystr);
+             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+            //    GetQryStr4srch
+            SortedList qryClrMap = RemoveKeys(qryMap, "商家 page pages pagesize limit page limit pagesize from");
+            string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
+          
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);           
+            var list = GetListFltr(FromDdataDir, null, whereFun);
+            var list_aftFltr2 = ArrFltr(list, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
-                li.Add((IsNotEmptyLianxi(row)));
-                //   li.Add((isLianxifshValid(row)));
+
+                string mrtKwd = GetFieldAsStr(qryMap, "商家").ToUpper();
+                if (mrtKwd.Length > 0)
+                    li.Add(GetFieldAsStr(row, "商家").ToUpper().Contains(mrtKwd));
+             //   li.Add((IsNotEmptyLianxi(row)));
+             //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
 
             });
-            int start = (page - 1) * pagesize;
-            //if (start < 0)
-            //    start = 0;
 
-            List<SortedList> list_rzt = SliceX(list_aftFltr, start, pagesize);
+
+            int page = GetFieldAsInt(qryMap, "page", 0);
+            int pagesize = GetFieldAsInt(qryMap, "pagesize", 10);
+            int start = (page - 1) * pagesize;
+
+            //todo 
+          //  var list_rzt2 = SliceByPageByQrystr(list_aftFltr2, qrystr);
+            List<SortedList> list_rzt = SliceX(list_aftFltr2, start, pagesize);
 
 
             //------------add col
@@ -195,7 +217,7 @@ namespace mdsj.libBiz
 
 
                 SetField938(sortedList, "Scores", Avg(list12,"dafen"));
-                SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr.Count));
+                SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
 
             }
 
@@ -207,6 +229,7 @@ namespace mdsj.libBiz
             List<SortedList> list_rzt_fmt = new List<SortedList>();
             foreach (var sortedList in list_rzt)
             {
+                //todo fun  transkey
                 SortedList map3 = new SortedList();
                 // 循环遍历每一个键
                 foreach (object key in sortedList.Keys)
@@ -242,6 +265,73 @@ namespace mdsj.libBiz
         }
 
 
+
+      
+
+
+        /// <summary>
+        /// 添加文章 （ post提交 ）
+        ///  提交路径 /AddPost
+        /// </summary>
+        ///    <param name="Cate">分类 (资源 招聘等 ）</param>
+        /// <param name="Title">标题</param>
+        /// <param name="Txt">内容</param>
+       
+        /// <param name="Poster">发布人</param>
+        /// <param name="File">相关文件 图片 视频等 资源</param>
+        /// 
+        /// 
+        public static void AddPostPOSTWbapi(HttpRequest request, HttpResponse response)
+        {
+            //   if (request.Method == HttpMethods.Post)
+
+            // Check if the request contains a file
+            var fil = "";
+            List<string> filess = new List<string>();
+            if (request.Form.Files.Count > 0)
+            {
+                foreach (var file in request.Form.Files)
+                {
+                    // Get the file content and save it to a desired location
+                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
+                    fil = filePath;
+                    filess.Add("uploads1016/"+ file.FileName);
+                    Mkdir4File(filePath);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream).GetAwaiter().GetResult();
+                    }
+                }
+            }
+
+            // Handle other form data
+            //foreach (var key in request.Form.Keys)
+            //{
+            //    var value = request.Form[key];
+            //    ConsoleWriteLine($"Key: {key}, Value: {value}");
+            //}
+
+            // Call the specific API handler
+            //    httpHdlrApiSpecl(request, response);
+
+            SortedList saveOBJ = ConvertFormToSortedList(request.Form);
+           // saveOBJ.Add("照片或视频", fil);
+            saveOBJ.Add("Files", (filess));
+
+            // 获取当前时间（本地时间）
+            DateTime now = DateTime.Now;
+
+            // 格式化为可读性较强的字符串，精确到毫秒
+            string formattedDate = now.ToString("yyyy-MM-dd HH:mm:ss");
+            saveOBJ.Add("Time", formattedDate);
+            ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/{saveOBJ["Cate"]}.json");
+            SendResp("ok", response);
+
+         
+
+        }
+
+
         /// <summary>
         ///  商家入住    （ post提交 ）
         ///  提交路径 /AddMercht
@@ -261,7 +351,7 @@ namespace mdsj.libBiz
                 foreach (var file in request.Form.Files)
                 {
                     // Get the file content and save it to a desired location
-                    var filePath = Path.Combine("uploads1016", file.FileName);
+                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
                     fil = filePath;
                     Mkdir4File(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))

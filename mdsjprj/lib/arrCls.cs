@@ -18,7 +18,21 @@ namespace prjx.lib
 {
     public class arrCls
     {
-      
+        public static void arr_cut()
+        {
+            // 定义两个 HashSet
+            HashSet<string> set1 = new HashSet<string> { "apple", "banana", "cherry", "date" };
+            HashSet<string> set2 = new HashSet<string> { "banana" };
+
+
+
+            // 从 set1 中移除 set2 中的元素
+            set1.ExceptWith(set2);
+
+            // 打印减法操作后的集合
+            ConsoleWriteLine("Set 1 after subtraction:");
+        }
+
         public static List<SortedList> TransltKey(ArrayList lst458, string TransFfilePath)
         {
             SortedList<string, string> transmap = LoadSortedListFromIni(TransFfilePath);
@@ -143,7 +157,6 @@ namespace prjx.lib
        
 
      
-
         public static HashSet<string> FilterUrlsEndwithHtm(HashSet<string> urls)
         {
             return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));

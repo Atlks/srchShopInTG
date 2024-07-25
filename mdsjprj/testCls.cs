@@ -83,6 +83,7 @@ using System.Xml;
 using System.Xml.Linq;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using HtmlAgilityPack;
+using Windows.Storage.Search;
 namespace prjx
 {
     internal class testCls
@@ -141,6 +142,11 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+
+         //   add30xiezhi();
+            Print(AddElmts("aaa","a,b"));
+            Print(DelElmts("a", "a,b,c"));
+            HashSet<string>  hs11= GetHashsetEmojiCmn();
             //   💰💰💰();
             GetMethInfo("echo");
             try
@@ -159,7 +165,7 @@ namespace prjx
                 Print(e);
             }
      
-               tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+            //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");
@@ -414,20 +420,30 @@ namespace prjx
 
         }
 
-      
-        private static void arr_cut()
+        private static void add30xiezhi()
         {
-            // 定义两个 HashSet
-            HashSet<string> set1 = new HashSet<string> { "apple", "banana", "cherry", "date" };
-            HashSet<string> set2 = new HashSet<string> { "banana" };
+            for(int i = 0; i < 30; i++)
+            {
+                List<string> filess = new List<string>();
+                filess.Add("uploads1016/FB_IMG_16042416836456873.jpg");
+                //  SortedList o = new SortedList();
+                SortedList saveOBJ = new SortedList();
+                // saveOBJ.Add("照片或视频", fil);
+                saveOBJ.Add("Files", (filess));
+                saveOBJ.Add("Cate", "闲置");
+                saveOBJ.Add("Title", "标题111");
+                saveOBJ.Add("Txt", "内容222");
+                saveOBJ.Add("Poster", "fadfa");
 
-            
+                // 获取当前时间（本地时间）
+                DateTime now = DateTime.Now;
 
-            // 从 set1 中移除 set2 中的元素
-            set1.ExceptWith(set2);
-
-            // 打印减法操作后的集合
-            ConsoleWriteLine("Set 1 after subtraction:");
+                // 格式化为可读性较强的字符串，精确到毫秒
+                string formattedDate = now.ToString("yyyy-MM-dd HH:mm:ss");
+                saveOBJ.Add("Time", formattedDate);
+                ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/{saveOBJ["Cate"]}.json");
+            }
+           
         }
 
         public static void ticyWdRoot()

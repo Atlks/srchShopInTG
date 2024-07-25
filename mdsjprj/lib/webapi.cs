@@ -166,7 +166,9 @@ namespace mdsj.lib
         {
             SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
             var li = ormJSonFL.QrySglFL($"{prjdir}/db/" + qrystrHstb["fromData"] + ".json");
-            return EncodeJson(li);
+            var list_rzt2 = SliceByPagemodeByQrystr(li, qrystr);
+
+            return EncodeJson(list_rzt2);
         }
 
         public static string WbapiXqryBinDb(string qrystr)

@@ -247,6 +247,21 @@ namespace mdsj.lib
         {
             return !System.IO.File.Exists(v);
         }
+
+        public static bool isFldValContain(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
+        {
+            //  string Fld = "城市";
+            if (hasCondt(whereExprsObj, Fld))
+            {
+                string valueInQrystr = LoadFieldAsStr(whereExprsObj, Fld);
+                if (GetFieldAsStr(row, Fld).Contains(valueInQrystr))   //  cityname not in (citysss) 
+                    return true;
+                else
+                    return false;
+            }
+
+            return true;
+        }
         public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
         {
             //  string Fld = "城市";
@@ -272,6 +287,15 @@ namespace mdsj.lib
         public static bool IsEnglishLetter(char character)
         {
             return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
+        }
+        public static bool IsStartsWith(string msg2056, HashSet<string> hs11)
+        {
+            foreach (string ch in hs11)
+            {
+                if (msg2056.StartsWith(ch))
+                    return true;
+            }
+            return false;
         }
         public static bool IsChkfltrOk(List<bool> li)
         {

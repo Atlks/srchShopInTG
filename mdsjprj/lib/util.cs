@@ -17,7 +17,8 @@ namespace mdsj.lib
 {
     internal class util
     {
-      //  public static bool jmp2exitFlag;
+        public const string pageprm251 = " page pages pagesize limit page limit pagesize from ";
+        //  public static bool jmp2exitFlag;
         public static ThreadLocal<bool> jmp2exitFlagInThrd = new ThreadLocal<bool>(() =>
         {
             // 初始化每个线程的值为 false

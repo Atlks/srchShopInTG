@@ -339,7 +339,7 @@ namespace prjx
             if (update?.Type == UpdateType.MyChatMember)
             {
 
-                evt_newUserJoin2024(update?.Message?.Chat?.Id, update?.Message?.NewChatMembers, update);
+                EvtnewUserJoin2024(update?.Message?.Chat?.Id, update?.Message?.NewChatMembers, update);
 
                 return;
             }
@@ -528,7 +528,7 @@ namespace prjx
             //add grp msgHDL
             if (update?.MyChatMember?.NewChatMember != null)
             {
-                Callx(evt_BotEnterGrpEvtHdlr, update);
+                Callx(EvtBotEnterGrpEvtHdlr, update);
                 return;
             }
 
@@ -713,7 +713,7 @@ namespace prjx
                         }
                         else
                         {
-                            OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
+                        //    OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
                             Jmp2end(); return;
                         }
                 }
@@ -852,7 +852,7 @@ namespace prjx
    
 
 
-        public static void msgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)
+        public static void MsgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
             string __METHOD__ = MethodBase.GetCurrentMethod().Name;
             #region sezrch
@@ -862,10 +862,15 @@ namespace prjx
                 return;
             if (msg2056.StartsWith(PreCh))
                 return;
+            HashSet<string> hs11 = GetHashsetEmojiCmn();
+            hs11.Add("/");
+            AddElemtStrcomma(noTrigSrchMsgs, hs11);
+            if (IsStartsWith(msg2056, hs11))
+                return;
             if (IsStartsWithArrcomma(msg2056, noTrigSrchMsgs))
                 return;
-            HashSet<string> 商品与服务词库2 = GetHsst商品与服务词库();
-            string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
+            HashSet<string> 商品与服务词库2 = GetHashset商品与服务词库();
+            string fuwuci = GetFuwuci(update?.Message?.Text, 商品与服务词库2);
             //whereMap2 = new SortedList();
             //whereMap2.Add("fuwuci", fuwuci);
 
@@ -887,9 +892,9 @@ namespace prjx
                     return;
                     //  return;
                 }
-                string fuwuWd = getFuwuci(update?.Message?.Text, 商品与服务词库);
+                string fuwuWd = GetFuwuci(update?.Message?.Text, 商品与服务词库);
                 // logCls.log(__METHOD__, func_get_args(),null,"logDir", reqThreadId);
-                msgHdlr4srch(botClient, update, update?.Message?.Text, fuwuWd, reqThreadId);
+                MsgHdlr4srch(botClient, update, update?.Message?.Text, fuwuWd, reqThreadId);
                 return;
             }
 
@@ -908,6 +913,7 @@ namespace prjx
                     msgx = msgx.Substring(botname.Length + 1).Trim();
                 msgx = msgx.Trim();
 
+                //--------------chke trig wd----------
                 HashSet<string> trgWdSt = ReadWordsFromFile($"{prjdir}/cfg/搜索触发词.txt");
                 var trgWd = string.Join(" ", trgWdSt);
                 Print(" 触发词 chk");
@@ -918,6 +924,9 @@ namespace prjx
                 }
 
                 //bao含触发词，进一步判断
+
+
+                //---------------chk fuwuci -------------
 
                 //去除搜索触发词，比如哪里有
                 msgx = msgx.Replace("联系方式", " ");
@@ -932,8 +941,8 @@ namespace prjx
                     Print(" 不包含商品服务词，ret");
                     return;
                 }
-                string fuwuWd = getFuwuci(msgx_remvTrigWd, 商品与服务词库);
-                if (getFuwuci == null)
+                string fuwuWd = GetFuwuci(msgx_remvTrigWd, 商品与服务词库);
+                if (fuwuWd == null)
                 {
                     Print(" 不包含商品服务词，ret");
                     return;
@@ -941,7 +950,7 @@ namespace prjx
 
 
 
-                msgHdlr4srch(botClient, update, msgx_remvTrigWd, fuwuWd, reqThreadId);
+                MsgHdlr4srch(botClient, update, msgx_remvTrigWd, fuwuWd, reqThreadId);
                 dbgCls.PrintRet(__METHOD__, 0);
                 return;
             }
@@ -949,6 +958,10 @@ namespace prjx
 
             #endregion
         }
+
+       
+
+
 
 
 
@@ -1011,7 +1024,7 @@ namespace prjx
             }
             if (update?.Message?.NewChatMembers != null)
             {
-                Callx(evt_BotEnterGrpEvtHdlr, update);
+                Callx(EvtBotEnterGrpEvtHdlr, update);
                 return;
             }
             //todo 
@@ -1024,7 +1037,7 @@ namespace prjx
                 Callx(msgTrgBtmbtnEvtHdlr11, update);
                 Callx(msgxTrigBtmbtnEvtHdlr, update);
 
-                Callx(msgHdlr4searchPrejude, botClient, update, "111");
+                Callx(MsgHdlr4searchPrejude, botClient, update, "111");
             });
 
 
@@ -1182,7 +1195,7 @@ namespace prjx
         }
 
 
-        private static void evt_newUserJoin2024(long? chatId, Telegram.Bot.Types.User[]? newChatMembers, Update? update)
+        private static void EvtnewUserJoin2024(long? chatId, Telegram.Bot.Types.User[]? newChatMembers, Update? update)
         {
             if (newChatMembers != null)
             {
@@ -1204,7 +1217,7 @@ namespace prjx
 
 
 
-        private static void msgHdlr4srch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
+        private static void MsgHdlr4srch(ITelegramBotClient botClient, Update update, string msgx_remvTrigWd, string fuwuWd, string reqThreadId)
         {
             logCls.log("FUN evt_msgTrgSrch", func_get_args(fuwuWd, reqThreadId), null, "logDir", reqThreadId);
             SortedList whereMap = new SortedList();
@@ -1606,7 +1619,7 @@ namespace prjx
 
 
 
-        public static void evt_BotEnterGrpEvtHdlr(Update update)
+        public static void EvtBotEnterGrpEvtHdlr(Update update)
         {
             var chatid = update?.MyChatMember?.Chat?.Id;
             if (chatid == null)

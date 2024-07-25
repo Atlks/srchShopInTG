@@ -453,10 +453,80 @@ namespace mdsj.lib
 
             return hashtable;
         }
+     
+
+        /// <summary>
+        /// 将逗号分割的字符串转换为 ArrayList
+        /// </summary>
+        /// <param name="commaSeparatedString">逗号分割的字符串</param>
+        /// <returns>转换后的 ArrayList</returns>
+        public static ArrayList ConvertToArrayList(string commaSeparatedString)
+        {
+            if (string.IsNullOrEmpty(commaSeparatedString))
+            {
+                throw new ArgumentException("输入字符串不能为空", nameof(commaSeparatedString));
+            }
+
+            // 按逗号分割字符串
+            string[] stringArray = commaSeparatedString.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 创建 ArrayList 并将字符串数组添加到其中
+            ArrayList arrayList = new ArrayList(stringArray);
+
+            return arrayList;
+        }
+
+        /// <summary>
+        /// 将 ArrayList 转换为逗号分割的字符串
+        /// </summary>
+        /// <param name="arrayList">待转换的 ArrayList</param>
+        /// <returns>逗号分割的字符串</returns>
+        public static string ConvertArrayListToCommaSeparatedString(ArrayList arrayList)
+        {
+            if (arrayList == null)
+            {
+                return "";
+            }
+
+            // 将 ArrayList 中的元素转换为字符串
+            var stringList = arrayList.Cast<object>()
+                                      .Select(obj => obj?.ToString())
+                                      .ToList();
+
+            // 使用逗号连接字符串
+            return string.Join(",", stringList);
+        }
+
+  
+
         public static Hashtable ToLower(Hashtable dic)
         {
             ConvertKeysToLowercase(dic);
             return dic;
+        }
+        /// <summary>
+        /// 将 char 数组中的每个字符转换为字符串并放入 HashSet<string>
+        /// </summary>
+        /// <param name="charArray">字符数组</param>
+        /// <returns>包含字符的 HashSet</returns>
+        public static HashSet<string> ConvertCharsToHashSet(char[] charArray)
+        {
+            if (charArray == null)
+            {
+                throw new ArgumentNullException(nameof(charArray));
+            }
+
+            // 创建一个 HashSet<string> 用于存储字符的字符串表示
+            HashSet<string> resultSet = new HashSet<string>();
+
+            // 遍历字符数组并将每个字符转换为字符串
+            foreach (char ch in charArray)
+            {
+                // 将字符转换为字符串并添加到 HashSet
+                resultSet.Add(ch.ToString());
+            }
+
+            return resultSet;
         }
         public static int ToInt(object obj)
         {
