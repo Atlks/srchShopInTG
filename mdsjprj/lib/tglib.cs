@@ -261,6 +261,67 @@ namespace prjx.lib
             //}
             //dbgCls.print_ret(__METHOD__, 0);
         }
+        public static KeyboardButton[][] ConvertFileToKeyboardButtons(string filePath)
+        {
+            // 读取文件所有行
+            string[] lines = ReadFileAndRemoveEmptyLines(filePath);
+
+            // 初始化 KeyboardButton[][] 数组
+            KeyboardButton[][] keyboardButtons = new KeyboardButton[lines.Length][];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                // 按空格分割每行
+                string lin = lines[i];
+                if (lin.Trim().Length == 0)
+                    continue;
+                string[] words = lin.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                // 将每个单词转换为 KeyboardButton
+                KeyboardButton[] buttonsRow = new KeyboardButton[words.Length];
+                for (int j = 0; j < words.Length; j++)
+                {
+                    buttonsRow[j] = new KeyboardButton(words[j]);
+                }
+
+                // 将 KeyboardButton[] 添加到 KeyboardButton[][]
+                keyboardButtons[i] = buttonsRow;
+            }
+
+            return keyboardButtons;
+
+        }
+        public static KeyboardButton[][] ConvertFileToKeyboardButtons(string[] lines)
+        {
+            // 读取文件所有行
+            //   string[] lines = ReadFileAndRemoveEmptyLines(filePath);
+
+            // 初始化 KeyboardButton[][] 数组
+            KeyboardButton[][] keyboardButtons = new KeyboardButton[lines.Length][];
+
+            for (int i = 0; i < lines.Length; i++)
+            {
+                // 按空格分割每行
+                string lin = lines[i];
+                if (lin.Trim().Length == 0)
+                    continue;
+                string[] words = lin.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+                // 将每个单词转换为 KeyboardButton
+                KeyboardButton[] buttonsRow = new KeyboardButton[words.Length];
+                for (int j = 0; j < words.Length; j++)
+                {
+                    buttonsRow[j] = new KeyboardButton(words[j]);
+                }
+
+                // 将 KeyboardButton[] 添加到 KeyboardButton[][]
+                keyboardButtons[i] = buttonsRow;
+            }
+
+            return keyboardButtons;
+
+        }
+
 
         /// <summary>
         /// 

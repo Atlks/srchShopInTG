@@ -433,6 +433,80 @@ namespace mdsj.lib
 
             // 拼接完整的方法名
             return $"{declaringTypeFullName}.{methodName}({parameterList})";
+        }   /// <summary>
+            /// 替换字符串
+            /// </summary>
+            /// <param name="lines"></param>
+            /// <param name="placeHold"></param>
+            /// <param name="replaceStr"></param>
+            /// <returns></returns>
+        public static string[] Replace(string[] lines, string placeHold, string replaceStr)
+        {
+            if (lines == null)
+            {
+                return new string[0];
+            }
+
+            if (placeHold == null)
+            {
+                // throw new ArgumentNullException(nameof(placeHold));
+            }
+
+            if (replaceStr == null)
+            {
+                //  throw new ArgumentNullException(nameof(replaceStr));
+            }
+
+            // 创建一个新数组来存储替换后的结果
+            string[] result = new string[lines.Length];
+
+            // 遍历每一行进行替换
+            for (int i = 0; i < lines.Length; i++)
+            {
+                result[i] = lines[i].Replace(placeHold, replaceStr);
+            }
+
+            return result;
+        }
+        public static string GetParksByCountry(string ctry)
+        {
+            Hashtable ctrys = GetHashtabFromIniFl($"{prjdir}/cfg_cmd/国家代码.ini");
+            //MMR_pks.txt
+            var ctryCode = ctrys[ctry];
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{ctryCode}_pks.txt");
+
+            return JoinWzComma(hs);
+        }
+        public static string removeDulip(string newParks)
+        {
+            HashSet<string> hs = new HashSet<string>();
+            string[] a = newParks.Split(",");
+            foreach (string pk in a)
+            {
+                if (pk.Trim().Length > 0)
+                    hs.Add(pk.Trim().ToUpper());
+            }
+            return JoinWzComma(hs);
+        }
+        public static string JoinWzComma(HashSet<string> hashSet)
+        {
+            if (hashSet == null)
+            {
+                return "";
+            }
+
+            // 使用 string.Join 方法将 HashSet 元素连接成逗号分割的字符串
+            return string.Join(",", hashSet);
+        }
+        public static void DelField(SortedList cfg, string key, string ddd)
+        {
+            if (cfg.ContainsKey(key))
+                cfg.Remove(key);
+        }
+        public static void DelField(SortedList cfg, string key)
+        {
+            if (cfg.ContainsKey(key))
+                cfg.Remove(key);
         }
         public static object Callx(string authExp, Delegate callback, params object[] args)
         {

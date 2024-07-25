@@ -858,6 +858,12 @@ namespace prjx
             #region sezrch
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
             string msg2056 = str_trim_tolower(msgx2024);
+            if (msg2056.StartsWith("/"))
+                return;
+            if (msg2056.StartsWith(PreCh))
+                return;
+            if (IsStartsWithArrcomma(msg2056, noTrigSrchMsgs))
+                return;
             HashSet<string> 商品与服务词库2 = GetHsst商品与服务词库();
             string fuwuci = getFuwuci(update?.Message?.Text, 商品与服务词库2);
             //whereMap2 = new SortedList();

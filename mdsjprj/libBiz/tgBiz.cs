@@ -604,8 +604,9 @@ namespace mdsj.libBiz
 
 //mg MR.HAN, [18 / 7 / 2024 下午 12:00]
 //分别这三个图标
-            string line = "🌐%20代理加盟 \U0001f91d%20合伙联营 🏪%20分销连锁";
+            string line = "🌐%20代理    🏢%20加盟   🏪%20分销";
             var kbdBtnArr = castString2kbdBtnArr(line);
+            var kbdBtnArr2 = castString2kbdBtnArr("🤝%20合营    📄%20租盘    👨‍👩‍👧‍👦%20众营");
 
             var Keyboard =
                 new KeyboardButton[][]
@@ -614,7 +615,7 @@ namespace mdsj.libBiz
                             {
                                 new KeyboardButton("💵💵💵 世博博彩 💵💵💵")
                             },
-                            kbdBtnArr,
+                            kbdBtnArr,kbdBtnArr2,
                             new KeyboardButton[]
                             {
                                 new KeyboardButton("商家"),

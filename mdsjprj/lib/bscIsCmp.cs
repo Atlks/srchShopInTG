@@ -158,6 +158,23 @@ namespace mdsj.lib
             }
             return false;
         }
+
+        public static bool IsEmpty(string v)
+        {
+            return string.IsNullOrEmpty(v);
+        }
+        public static bool IsStartsWithArrcomma(string? text, string arrcomma)
+        {
+            string[] a = arrcomma.Split(",");
+            foreach(string msg in a)
+            {
+                string msg1 = msg.Trim();
+                if (IsStartsWith(text, msg1))
+                    return true;
+            }
+            return false;
+
+        }
         public static bool IsStartsWith(string? text, string v)
         {
             if (string.IsNullOrEmpty(text))

@@ -18,9 +18,11 @@ namespace mdsj.libBiz
 {
     internal class cmdHdlr
     {
-        public const string tipsSelectArea = "请选择服务区域";
-        public const string tipsAppendArea = "继续新增区域国家/城市/园区";
-        public const string cancelAddArea = "取消新增区域";
+        private const string tipsSetOK = "设置ok,你已经设置服务区域，如需重新设置区域请点击 /clearArea";
+        public static string tipsSelectArea = "请选择服务区域";
+        public static string tipsAppendArea = "继续新增区域国家/城市/园区";
+        public static string cancelAddArea = "取消新增区域";
+        public static string noTrigSrchMsgs = $"{tipsSelectArea},{tipsAppendArea},{cancelAddArea}";
         public static void CmdHdlr设置园区(string cmdFulltxt, Update update, string reqThreadId)
         {
             ///设置园区 东风园区
@@ -45,17 +47,17 @@ namespace mdsj.libBiz
         }
 
 
-        public static void OnCmdPublic(string cmdFulltxt, Update update, string reqThreadId)
-        {
-            string prjdir = @"../../../";
-            prjdir = filex.GetAbsolutePath(prjdir);
+        //public static void OnCmdPublic(string cmdFulltxt, Update update, string reqThreadId)
+        //{
+        //    string prjdir = @"../../../";
+        //    prjdir = filex.GetAbsolutePath(prjdir);
 
 
 
 
           
 
-        }
+        //}
 
         /// <summary>
         /// 
@@ -91,23 +93,22 @@ namespace mdsj.libBiz
                 SortedList cfg = findOne(dbfile2);
                 string pk = ctry.Trim().ToUpper();
 
-                string whereExprsFld = "whereExprs";
-                string coutryKey = "国家";
-                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, pk);
+                string parks = GetParksByCountry(ctry);
+                string newParks = AppendParks(cfg, parks);
+              
 
-                SetFld(cfg, "国家", pk);
-                SetFld(cfg, "城市", "");
-                SetFld(cfg, "园区", "");
-                SetFld(cfg, "id", grpid.ToString());
-                SetFld(cfg, "grpid", grpid.ToString());
-                SetFld(cfg, "whereExprs", $"国家={ctry}");
-                SetFld(cfg, "grpinfo", update.Message.Chat);
+                SetField(cfg, "园区", newParks);
+          
+                SetField(cfg, "id", grpid.ToString());
+                SetField(cfg, "grpid", grpid.ToString());
+               
+                SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-                    SetFld(cfg, "国家", "");
-                    SetFld(cfg, "城市", "");
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    DelField(cfg, "国家", "");
+                    DelField(cfg, "城市", "");
+                    DelField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile2);
             }
@@ -116,29 +117,28 @@ namespace mdsj.libBiz
             {
                 string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
                 SortedList cfg = findOne(dbfile);
-                string whereExprsFld = "whereExprs";
-                string coutryKey = "国家";
-                string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, coutryKey, ctry);
+                string parks = GetParksByCountry(ctry);
+                string newParks = AppendParks(cfg, parks);
 
-                SetFld(cfg, "国家", ctry);
-                SetFld(cfg, "城市", "");
-                SetFld(cfg, "园区", "");
-                SetFld(cfg, "id", update.Message.From.Id.ToString());
-                SetFld(cfg, "from", update.Message.From);
-                SetFld(cfg, "whereExprs", $"国家={ctry}");
+
+                SetField(cfg, "园区", newParks);
+             
+                SetField(cfg, "id", update.Message.From.Id.ToString());
+                SetField(cfg, "from", update.Message.From);
+                SetField(cfg, "whereExprs", newParks);
                 if (ctry == "不限制")
                 {
 
-                    SetFld(cfg, "国家", "");
-                    SetFld(cfg, "城市", "");
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    DelField(cfg, "国家", "");
+                    DelField(cfg, "城市", "");
+                    DelField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile);
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
+              tipsSetOK,
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -149,6 +149,8 @@ namespace mdsj.libBiz
             SetBtmMenu(update);
             Jmp2end();
         }
+
+  
 
         public static void ConfirmSetCityBtnClick(string area, Update update)
         {   //public 判断权限先
@@ -183,19 +185,20 @@ namespace mdsj.libBiz
                 string parks = GetParksByCity(area);
              string newParks=   AppendParks(cfg,  parks);
 
-                SetFld(cfg, "国家", "");
-                SetFld(cfg, "城市", "");
-                SetFld(cfg, "园区", newParks);
-                SetFld(cfg, "id", grpid.ToString());
-                SetFld(cfg, "grpid", grpid.ToString());
+                
+                DelField(cfg, "国家");
+                DelField(cfg, "城市");
+                SetField(cfg, "园区", newParks);
+                SetField(cfg, "id", grpid.ToString());
+                SetField(cfg, "grpid", grpid.ToString());
             
-                SetFld(cfg, "grpinfo", update.Message.Chat);
+                SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-                    SetFld(cfg, "国家", "");
-                    SetFld(cfg, "城市", "");
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    SetField(cfg, "国家", "");
+                    SetField(cfg, "城市", "");
+                    SetField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile2);
             }
@@ -207,23 +210,23 @@ namespace mdsj.libBiz
                 string whereExprsFld = "whereExprs";
                 string parks = GetParksByCity(area);
                 string whereExprsNew = AppendParks(cfg, parks);
-                SetFld(cfg, "城市", "");
-                SetFld(cfg, "国家", "");
-                SetFld(cfg, "园区", whereExprsNew);
-                SetFld(cfg, "id", update.Message.From.Id.ToString());
-                SetFld(cfg, "from", update.Message.From);
-                SetFld(cfg, "whereExprs", whereExprsNew);
+                DelField(cfg, "国家");
+                DelField(cfg, "城市");
+                SetField(cfg, "园区", whereExprsNew);
+                SetField(cfg, "id", update.Message.From.Id.ToString());
+                SetField(cfg, "from", update.Message.From);
+                SetField(cfg, "whereExprs", whereExprsNew);
                 if (area == "不限制")
                 {
-                    SetFld(cfg, "城市", "");
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    SetField(cfg, "城市", "");
+                    SetField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile);
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
+              tipsSetOK,
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -233,26 +236,11 @@ namespace mdsj.libBiz
             //------------set menu btm
             SetBtmMenu(update); Jmp2end();
         }
+   
 
-        public static string GetParksByCity(string city)
-        {
-            //妙瓦底园区4data.txt
-        
-            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{city}园区4data.txt");
+  
 
-            return JoinWzComma(hs);
-        }
-
-        public static string JoinWzComma(HashSet<string> hashSet)
-        {
-            if (hashSet == null)
-            {
-                return "";
-            }
-
-            // 使用 string.Join 方法将 HashSet 元素连接成逗号分割的字符串
-            return string.Join(",", hashSet);
-        }
+  
 
 
         private static string AppendParks(SortedList cfg,   string parks
@@ -260,45 +248,37 @@ namespace mdsj.libBiz
         {
             string whereExprs = GetFieldAsStr(cfg, "whereExprs");
             SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
+            DelField(whereExpmap, "国家");
+            DelField(whereExpmap, "城市");
 
             string ormParks = GetFieldAsStr(whereExpmap, "园区");
             string newParks = ormParks + "," + parks;
             newParks = removeDulip(newParks);
 
-            SetFld(whereExpmap, "园区", newParks);
-        //    SetFld(whereExpmap, "国家", "");
-         //   SetFld(whereExpmap, "城市", "");
+            SetField(whereExpmap, "园区", newParks);
+            DelField(cfg, "国家");
+            DelField(cfg, "城市");
 
             string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
-            SetFld(cfg, "whereExprs", whereExprsNew);
+            SetField(cfg, "whereExprs", whereExprsNew);
                return newParks;
         }
 
-        public static string removeDulip(string newParks)
-        {
-            HashSet<string> hs = new HashSet<string>();
-            string[] a = newParks.Split(",");
-            foreach(string pk in a)
-            {
-                if (pk.Trim().Length > 0)
-                    hs.Add(pk.Trim().ToUpper());
-            }
-            return JoinWzComma(hs);
-        }
+  
 
-        private static string SetMapWhereexprsFldOFkv(SortedList cfg, string whereExprsFld, string key2, string v2
-            )
-        {
-            string whereExprs = GetFieldAsStr(cfg, whereExprsFld);
-            SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
-            SetFld(whereExpmap, "园区", v2);
+        //private static string SetMapWhereexprsFldOFkv(SortedList cfg, string whereExprsFld, string key2, string v2
+        //    )
+        //{
+        //    string whereExprs = GetFieldAsStr(cfg, whereExprsFld);
+        //    SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
+        //    SetField(whereExpmap, "园区", v2);
 
-            SetFld(whereExpmap, "国家", "");
-            SetFld(whereExpmap, "城市", "");
+        //    SetField(whereExpmap, "国家", "");
+        //    SetField(whereExpmap, "城市", "");
            
-            string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
-            return whereExprsNew;
-        }
+        //    string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
+        //    return whereExprsNew;
+        //}
 
 
         public static void SetParkBtnClick(string park, Update update)
@@ -328,7 +308,7 @@ namespace mdsj.libBiz
 
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-               "设置ok,你已经设置服务区域，如需重新设置区域请先发送 /clearArea",
+               tipsSetOK,
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -418,15 +398,15 @@ namespace mdsj.libBiz
             //    string oriparks = GetFieldAsStr(whereMap, "园区");
                 string newParks = AppendParks(cfg, park);
                 string pk = park.Trim().ToUpper();
-
-                SetFld(cfg, "园区", newParks);
-                SetFld(cfg, "id", grpid.ToString());
-                SetFld(cfg, "grpid", grpid.ToString());
-                SetFld(cfg, "grpinfo", update.Message.Chat);
+                
+                SetField(cfg, "园区", newParks);
+                SetField(cfg, "id", grpid.ToString());
+                SetField(cfg, "grpid", grpid.ToString());
+                SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    SetField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile2);
             }
@@ -446,52 +426,104 @@ namespace mdsj.libBiz
             string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
             SortedList cfg = findOne(dbfile);
             string pk = park.Trim().ToUpper();
-            SetFld(cfg, "园区", pk);
-            SetFld(cfg, "id", update.Message.From.Id.ToString());
-            SetFld(cfg, "from", update.Message.From);
+            string newParks = AppendParks(cfg, park);
+        
+
+            SetField(cfg, "园区", newParks);
+            DelField(cfg, "国家");
+            DelField(cfg, "城市");
+            SetField(cfg, "园区", pk);
+            SetField(cfg, "id", update.Message.From.Id.ToString());
+            SetField(cfg, "from", update.Message.From);
             if (pk == "不限制")
             {
-                SetFld(cfg, "园区", "");
-                SetFld(cfg, "whereExprs", $"");
+                SetField(cfg, "园区", "");
+                SetField(cfg, "whereExprs", $"");
             }
             ormJSonFL.SaveJson(cfg, dbfile);
         }
-        public static string GetCmdV2(string? v)
+
+        
+        
+        //public static void On我是谁Supergroup(Update update, string reqThreadId)
+        //{
+        //    Print("我是打游戏");
+        //}
+        //public static void On设置城市supergroup(Update update, string reqThreadId)
+        //{
+        //    Print("oo617");
+        //}
+
+        public static void CmdHdlrclearArea(string fullcmd, Update update, string reqThreadId)
         {
-            if (string.IsNullOrEmpty(v)) return "";
-            if (v.StartsWith("/"))
+
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+
+            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+
+            if (isGrpChat(update))
             {
-                v = v.Replace("@" + botname, "");
-                string s = v.ToString().Substring(1);
-                string[] a = s.Split(" ");
-                return a[0];
+
+                if (!IsAdmin(update))
+                {
+                    //send
+                    Print("no auth ");
+                    // print("no auth ");
+                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                          "权限不足", replyToMessageId: update.Message.MessageId);
+                    Jmp2end();
+                }
             }
 
-            else
-                return "";
-        }
-
-        public static string GetCmdFun(string? v)
-        {
-            if (string.IsNullOrEmpty(v)) return "";
-            if (v.StartsWith("/"))
+            if (isGrpChat(update))
             {
-                v = v.Replace("@" + botname, "");
-                return v.ToString().Substring(1);
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2); 
+                string whereExprsFld = "whereExprs";
+                string areakey = "城市";
+                SetField(cfg, "园区", "");
+                SetField(cfg, "国家", "");
+                SetField(cfg, "城市", "");
+                SetField(cfg, "whereExprs", "");
+                SetField(cfg, "id", grpid.ToString());
+                SetField(cfg, "grpid", grpid.ToString());
+                SetField(cfg, "grpinfo", update.Message.Chat);  
+                ormJSonFL.SaveJson(cfg, dbfile2);
             }
 
-            else
-                return "";
+
+            //prive
+            if (!isGrpChat(update))
+            {
+                string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+                SortedList cfg = findOne(dbfile);
+                string whereExprsFld = "whereExprs";
+               
+                DelField(cfg, "国家");
+                DelField(cfg, "城市");
+                DelField(cfg, "园区");
+                SetField(cfg, "id", update.Message.From.Id.ToString());
+                SetField(cfg, "from", update.Message.From);
+                SetField(cfg, "whereExprs", "");
+               
+                ormJSonFL.SaveJson(cfg, dbfile);
+            }
+
+
+            botClient.SendTextMessageAsync(
+           update.Message.Chat.Id,
+           "清理成功",
+           parseMode: ParseMode.Html,
+
+           protectContent: false,
+           disableWebPagePreview: true,
+           replyToMessageId: update.Message.MessageId);
+            Jmp2end();
         }
-        public static void On我是谁Supergroup(Update update, string reqThreadId)
-        {
-            Print("我是打游戏");
-        }
-        public static void On设置城市supergroup(Update update, string reqThreadId)
-        {
-            Print("oo617");
-        }
-        public static void CmdHdlrarea(string fullcmd,Update update, string reqThreadId)
+            public static void CmdHdlrarea(string fullcmd,Update update, string reqThreadId)
         {
 
             if (isGrpChat(update))
@@ -538,42 +570,7 @@ namespace mdsj.libBiz
             Jmp2end();
         }
 
-        /// <summary>
-        /// 替换字符串
-        /// </summary>
-        /// <param name="lines"></param>
-        /// <param name="placeHold"></param>
-        /// <param name="replaceStr"></param>
-        /// <returns></returns>
-        public static string[] Replace(string[] lines, string placeHold, string replaceStr)
-        {
-            if (lines == null)
-            {
-                return new string[0];
-            }
-
-            if (placeHold == null)
-            {
-               // throw new ArgumentNullException(nameof(placeHold));
-            }
-
-            if (replaceStr == null)
-            {
-              //  throw new ArgumentNullException(nameof(replaceStr));
-            }
-
-            // 创建一个新数组来存储替换后的结果
-            string[] result = new string[lines.Length];
-
-            // 遍历每一行进行替换
-            for (int i = 0; i < lines.Length; i++)
-            {
-                result[i] = lines[i].Replace(placeHold, replaceStr);
-            }
-
-            return result;
-        }
-
+     
         public static bool IsSetArea(Update? update)
         {
             var grpid = update.Message.Chat.Id;
@@ -593,74 +590,10 @@ namespace mdsj.libBiz
 
         }
 
-        public static bool IsEmpty(string v)
-        {
-            return string.IsNullOrEmpty(v);
-        }
+      
 
 
-        public static KeyboardButton[][] ConvertFileToKeyboardButtons(string[] lines)
-        {
-            // 读取文件所有行
-         //   string[] lines = ReadFileAndRemoveEmptyLines(filePath);
-
-            // 初始化 KeyboardButton[][] 数组
-            KeyboardButton[][] keyboardButtons = new KeyboardButton[lines.Length][];
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                // 按空格分割每行
-                string lin = lines[i];
-                if (lin.Trim().Length == 0)
-                    continue;
-                string[] words = lin.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                // 将每个单词转换为 KeyboardButton
-                KeyboardButton[] buttonsRow = new KeyboardButton[words.Length];
-                for (int j = 0; j < words.Length; j++)
-                {
-                    buttonsRow[j] = new KeyboardButton(words[j]);
-                }
-
-                // 将 KeyboardButton[] 添加到 KeyboardButton[][]
-                keyboardButtons[i] = buttonsRow;
-            }
-
-            return keyboardButtons;
-
-        }
-
-        public static KeyboardButton[][] ConvertFileToKeyboardButtons(string filePath)
-        {
-            // 读取文件所有行
-            string[] lines = ReadFileAndRemoveEmptyLines(filePath);
-
-            // 初始化 KeyboardButton[][] 数组
-            KeyboardButton[][] keyboardButtons = new KeyboardButton[lines.Length][];
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                // 按空格分割每行
-                string lin = lines[i];
-                if (lin.Trim().Length == 0)
-                    continue;
-                string[] words = lin.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-
-                // 将每个单词转换为 KeyboardButton
-                KeyboardButton[] buttonsRow = new KeyboardButton[words.Length];
-                for (int j = 0; j < words.Length; j++)
-                {
-                    buttonsRow[j] = new KeyboardButton(words[j]);
-                }
-
-                // 将 KeyboardButton[] 添加到 KeyboardButton[][]
-                keyboardButtons[i] = buttonsRow;
-            }
-
-            return keyboardButtons;
-
-        }
-
+     
 
         public static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
         {
@@ -684,31 +617,31 @@ namespace mdsj.libBiz
 
                 SortedList cfg = findOne(dbfile);
                 string pk = park.Trim().ToUpper();
-                SetFld(cfg, "园区", pk);
-                SetFld(cfg, "id", update.Message.From.Id.ToString());
-                SetFld(cfg, "from", update.Message.From);
+                SetField(cfg, "园区", pk);
+                SetField(cfg, "id", update.Message.From.Id.ToString());
+                SetField(cfg, "from", update.Message.From);
                 if (pk == "不限制")
                 {
-                    SetFld(cfg, "园区", "");
-                    SetFld(cfg, "whereExprs", $"");
+                    SetField(cfg, "园区", "");
+                    SetField(cfg, "whereExprs", $"");
                 }
                 ormJSonFL.SaveJson(cfg, dbfile);
 
 
 
             }
-            ///设置城市 妙瓦底
-            if (cmdFulltxt == "/设置城市")
-            {
-                var park = SubstrAfterMarker(cmdFulltxt, "/设置城市");
-                SortedList cfg = findOne(dbfile);
-                SetFld(cfg, "城市", park.Trim().ToUpper());
-                SetFld(cfg, "id", update.Message.From.Id.ToString());
-                SetFld(cfg, "from", update.Message.From);
+            /////设置城市 妙瓦底
+            //if (cmdFulltxt == "/设置城市")
+            //{
+            //    var park = SubstrAfterMarker(cmdFulltxt, "/设置城市");
+            //    SortedList cfg = findOne(dbfile);
+            //    SetField(cfg, "城市", park.Trim().ToUpper());
+            //    SetField(cfg, "id", update.Message.From.Id.ToString());
+            //    SetField(cfg, "from", update.Message.From);
 
-                ormJSonFL.SaveJson(cfg, dbfile);
+            //    ormJSonFL.SaveJson(cfg, dbfile);
 
-            }
+            //}
 
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,

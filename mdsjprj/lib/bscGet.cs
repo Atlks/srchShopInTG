@@ -280,7 +280,7 @@ namespace mdsj.lib
         }
 
 
-        public static void SetFld(SortedList cfg, string f, object v)
+        public static void SetField(SortedList cfg, string f, object v)
         {
             if (cfg.ContainsKey(f))
                 cfg.Remove(f);
@@ -405,6 +405,42 @@ namespace mdsj.lib
             return System.IO.File.ReadAllLines(filePath);
         }
 
+        public static string GetCmdV2(string? v)
+        {
+            if (string.IsNullOrEmpty(v)) return "";
+            if (v.StartsWith("/"))
+            {
+                v = v.Replace("@" + botname, "");
+                string s = v.ToString().Substring(1);
+                string[] a = s.Split(" ");
+                return a[0];
+            }
+
+            else
+                return "";
+        }
+
+        public static string GetCmdFun(string? v)
+        {
+            if (string.IsNullOrEmpty(v)) return "";
+            if (v.StartsWith("/"))
+            {
+                v = v.Replace("@" + botname, "");
+                return v.ToString().Substring(1);
+            }
+
+            else
+                return "";
+        }
+
+        public static string GetParksByCity(string city)
+        {
+            //妙园区4data.txt
+
+            HashSet<string> hs = GetHashsetFromFilTxt($"{prjdir}/cfg_cmd/{city}园区4data.txt");
+
+            return JoinWzComma(hs);
+        }
         public static Hashtable GetHashtabFromIniFl(string v)
         {
             return ReadIniFile(v);
