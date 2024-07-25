@@ -142,7 +142,7 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
-
+            Print("\a\a\a\a");
          //   add30xiezhi();
             Print(AddElmts("aaa","a,b"));
             Print(DelElmts("a", "a,b,c"));

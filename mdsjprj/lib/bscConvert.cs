@@ -130,6 +130,36 @@ namespace mdsj.lib
             return queryString;
         }
 
+        /// <summary>
+        /// no encode url part
+        /// </summary>
+        /// <param name="sortedList"></param>
+        /// <returns></returns>
+        public static string ToQrystr(SortedList sortedList)
+        {
+            if (sortedList == null)
+            {
+                return "";
+            }
+
+            var queryString = "";
+            foreach (DictionaryEntry entry in sortedList)
+            {
+                if (queryString.Length > 0)
+                {
+                    queryString += "&";
+                }
+
+                // URL encode the key and value to handle special characters
+                //string key = Uri.EscapeDataString(entry.Key.ToString());
+                //string value = Uri.EscapeDataString(entry.Value.ToString());
+
+                queryString += $"{entry.Key.ToString()}={entry.Value.ToString()}";
+            }
+
+            return queryString;
+        }
+
         public static string CastHashtableToQuerystringNoEncodeurl(SortedList sortedList)
         {
             if (sortedList == null)

@@ -67,6 +67,7 @@ namespace mdsj.lib
         }
         public static void foreach_objKey(object obj, Func<PropertyInfo, object> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             Type type = obj.GetType();
             PropertyInfo[] properties = type.GetProperties();
 
@@ -89,7 +90,14 @@ namespace mdsj.lib
 
         }
        
-
+        /// <summary>
+        /// 循环的 Emoji
+  //🔄🔁♻️ 
+//✅  ☑️
+        /// </summary>
+        /// <param name="list_aftFltr2"></param>
+        /// <param name="qrystr"></param>
+        /// <returns></returns>
         public static List<SortedList> SliceByPagemodeByQrystr(List<SortedList> list_aftFltr2, string qrystr)
         {
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
@@ -97,6 +105,15 @@ namespace mdsj.lib
             int pagesize = GetFieldAsInt(qryMap, "pagesize", 10);
             int start = (page - 1) * pagesize;
             List<SortedList> list_rzt = SliceX(list_aftFltr2, start, pagesize);
+
+            //------------add col
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
+            foreach (var sortedList in list_rzt)
+            {
+               
+                SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
+
+            }
             return list_rzt;
         }
         public static SortedList  RemoveKeys(SortedList originalDictionary, string commaSeparatedKeys)
@@ -135,6 +152,7 @@ namespace mdsj.lib
         }
         public static HashSet<string> foreach_HashSet(HashSet<string> originalSet, Func<string, string> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             HashSet<string> updatedSet = new HashSet<string>();
 
             foreach (string str in originalSet)
@@ -146,6 +164,7 @@ namespace mdsj.lib
         }
         public static void ForeachHashSet(HashSet<string> originalSet, Action<string> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             HashSet<string> updatedSet = new HashSet<string>();
 
             foreach (string str in originalSet)
@@ -181,6 +200,7 @@ namespace mdsj.lib
         }
         public static void ForeachHashtable(Hashtable chtsSess, Func<DictionaryEntry, object> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             foreach (DictionaryEntry de in chtsSess)
             {
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
@@ -200,6 +220,7 @@ namespace mdsj.lib
         }
         public static void ForeachHashtableFlgVer(Hashtable chtsSess, Action<DictionaryEntry> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             foreach (DictionaryEntry de in chtsSess)
             {
                 //if (Convert.ToInt64(de.Key) == Program.groupId)
@@ -231,6 +252,7 @@ namespace mdsj.lib
 
         public static void ForeachHashtable(Hashtable chtsSess, Action<DictionaryEntry> fun)
         {
+            Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             foreach (DictionaryEntry de in chtsSess)
             {
                 //if (Convert.ToInt64(de.Key) == Program.groupId)

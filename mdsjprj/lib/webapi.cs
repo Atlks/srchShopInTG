@@ -171,6 +171,20 @@ namespace mdsj.lib
             return EncodeJson(list_rzt2);
         }
 
+        /// <summary>
+        /// 通用查询接口
+        /// </summary>
+        /// <param name="qrystr"></param>
+        /// <returns></returns>
+        public static string WbapiXgetlistData(string qrystr)
+        {
+            SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);
+            var li = ormJSonFL.QrySglFL($"{prjdir}/db/" + qrystrHstb["fromData"] + ".json");
+            var list_rzt2 = SliceByPagemodeByQrystr(li, qrystr);
+
+            return EncodeJson(list_rzt2);
+        }
+
         public static string WbapiXqryBinDb(string qrystr)
         {
             SortedList qrystrHstb = GetHashtableFromQrystr(qrystr);

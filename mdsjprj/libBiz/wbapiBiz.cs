@@ -290,6 +290,7 @@ namespace mdsj.libBiz
             List<string> filess = new List<string>();
             if (request.Form.Files.Count > 0)
             {
+                Print("🔄♻️✅");
                 foreach (var file in request.Form.Files)
                 {
                     // Get the file content and save it to a desired location
