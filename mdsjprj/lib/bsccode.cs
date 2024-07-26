@@ -514,6 +514,7 @@ namespace mdsj.lib
 
         public static object CallxTryJmp(Delegate callback, params object[] objs)
         {
+          
             try
             {
                 return Callx(callback, objs);
@@ -625,9 +626,11 @@ namespace mdsj.lib
         }
         public static object Callx(Delegate callback, params object[] args)
         {
+     
             //  return CallUserFunc409(callback, args);
             MethodInfo method = callback.Method;
             var __METHOD__ = method.Name;
+            jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));
             object o = null;
             try
@@ -743,7 +746,7 @@ namespace mdsj.lib
             //  Print(" fun CallxTryx()" + methodName);
             var __METHOD__ = methodName;
             PrintCallFunArgs(methodName, dbgCls.func_get_args(args));
-
+            jmp2endCurFunInThrd.Value = __METHOD__;
             var methodInfo = GetMethInfo(methodName);
 
             if (methodInfo == null)
@@ -780,7 +783,7 @@ namespace mdsj.lib
         public static object Callx(string methodName, params object[] args)
         {
 
-            var __METHOD__ = methodName;
+            var __METHOD__ = methodName; jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(methodName, func_get_args(args));
             var argsMkdFmt = ConvertToMarkdownTable(args);
             Print(argsMkdFmt);

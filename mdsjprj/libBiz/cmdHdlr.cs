@@ -500,9 +500,13 @@ namespace mdsj.libBiz
                 SortedList cfg = findOne(dbfile2); 
                 string whereExprsFld = "whereExprs";
                 string areakey = "城市";
+
+                DelField(cfg, "国家", "");
+                DelField(cfg, "城市", "");
+
+
                 SetField(cfg, "园区", "");
-                SetField(cfg, "国家", "");
-                SetField(cfg, "城市", "");
+           
                 SetField(cfg, "whereExprs", "");
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());

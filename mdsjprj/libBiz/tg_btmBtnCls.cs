@@ -96,6 +96,7 @@ namespace mdsj.libBiz
             var msg = bot_getTxt(update);
             //if (msg.Trim() == "🫂 加入联信")
             //{
+            //todo zhege should del
             string f = $"{prjdir}/cfg_btnResp/{msg}.txt";
             if (System.IO.File.Exists(f))
             {
@@ -113,12 +114,23 @@ namespace mdsj.libBiz
                             disableWebPagePreview: true
 
                     ).Result;
-                    Jmp2end();
+                    Jmp2end925(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp");
+                }
+                catch(jmp2endEx ee)
+                {
+                    throw ee;
                 }
                 catch (Exception e)
                 {
-                    PrintCatchEx(nameof(evt_btm_btn_click), e); Jmp2end();
+                    //other ext
+                    PrintCatchEx(nameof(evt_btm_btn_click), e);
+                    Jmp2end925(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp.BLKcatchOthEx");
                 }
+
+
+
+                
+               
 
                 return;
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
@@ -234,7 +246,7 @@ namespace mdsj.libBiz
            Print(JsonConvert.SerializeObject(message));
         }
 
-
+        //dep todo 
         public static void evt_btm_btn_click_inPubgrp(Update update)
         {  //  ,
            //try

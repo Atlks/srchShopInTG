@@ -1090,6 +1090,14 @@ namespace prjx
 
             callTryAll(() =>
             {
+                //排除指令  设置地区
+                HashSet<string> hs11 = new HashSet<string>();
+                hs11.Add("/");   //排除im指令
+                hs11.Add(PreCh);   //排除底部命令 设置地区
+                //  //排除指令提示   请选择xxx
+                AddElemtStrcomma(noTrigSrchMsgs, hs11);
+                if (IsStartsWith(update?.Message?.Text, hs11))
+                    return;
                 Callx(msgTrgBtmbtnEvtHdlr11, update);
                 Callx(msgxTrigBtmbtnEvtHdlr, update);
 

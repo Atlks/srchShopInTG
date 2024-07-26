@@ -290,6 +290,7 @@ namespace mdsj.lib
         }
         public static bool IsStartsWith(string msg2056, HashSet<string> hs11)
         {
+            msg2056 = ToStr(msg2056);
             foreach (string ch in hs11)
             {
                 if (msg2056.StartsWith(ch))

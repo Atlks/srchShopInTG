@@ -174,6 +174,11 @@ namespace libx
                 var CurSharFullpath = fromDdataDir + "/" + shar;
                 string rndFun;
                 SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
+                if(curShareCfg==null)
+                {
+                    Print("⚠️⚠️wanging... cangt find shareCfg:" + shar);
+                    continue;
+                }
                 rndFun = (string)curShareCfg["rndFun"];
 
                 //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
