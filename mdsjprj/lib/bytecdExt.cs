@@ -93,6 +93,7 @@ namespace mdsj.lib
             int len = queryString.Length;
             if (queryString == "")
                 return "";
+        //    queryString.Substring(2);
             return queryString.Substring(n);
         }
 
@@ -393,8 +394,11 @@ namespace mdsj.lib
         }
 
 
-     
 
+        public static void PrintStr(object v)
+        {
+            System.Console.Write(v);
+        }
 
         public static void Print(object v)
         {

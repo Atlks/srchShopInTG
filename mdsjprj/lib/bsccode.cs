@@ -59,7 +59,73 @@ namespace mdsj.lib
         }
 
 
+        public static bool IsExistFil(string arg)
+        {
+            return System.IO.File.Exists(arg);
+        }
 
+        public static bool Condt(Func<string, bool> fn, string ctry)
+        {
+            PrintStr(GetMethodName(fn) + $"({ctry})");
+            PrintStr(" => ");
+            bool r = fn(ctry);
+            if (r)
+                PrintStr("TRUE✅");
+            else
+                PrintStr("FALSE❌");
+            PrintStr(" ,  ");
+            return r;
+        }
+        public static void iff(bool cdt, Action act1)
+        {
+            // cd1 cd2 
+            PrintStr("\nIF❓❓ is ");
+            if (cdt)
+            {
+                Print("TRUE✅");
+
+            }
+
+            else
+                Print("FALSE❌");
+
+            if (cdt)
+            {
+                Print("THEN➡️➡️");
+                act1();
+
+            }
+
+            Print("\nENDIF🔚");
+        }
+        public static void iff(bool cdt, Action act1, Action elseAct)
+        {
+            // cd1 cd2 
+            PrintStr("\nIF❓❓ is ");
+            if (cdt)
+                Print("TRUE✅");
+            else
+                Print("FALSE❌");
+
+            if (cdt)
+            {
+                Print("THEN➡️➡️");
+                act1();
+
+            }
+            else
+            {
+                Print("ELSE☑️");
+                elseAct();
+            }
+            Print("\nENDIF🔚");
+        }
+        private static string GetMethodName(Delegate del)
+        {
+            // 使用反射获取方法信息
+            var methodInfo = del.Method;
+            return methodInfo.Name;
+        }
 
         public static void echo(object v)
         {
@@ -89,17 +155,18 @@ namespace mdsj.lib
             }
 
         }
-       
+
         /// <summary>
         /// 循环的 Emoji
-  //🔄🔁♻️ 
-//✅  ☑️
+        //🔄🔁♻️ 
+        //✅  ☑️
         /// </summary>
         /// <param name="list_aftFltr2"></param>
         /// <param name="qrystr"></param>
         /// <returns></returns>
         public static List<SortedList> SliceByPagemodeByQrystr(List<SortedList> list_aftFltr2, string qrystr)
         {
+            //  Jmp2end
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
             int page = GetFieldAsInt(qryMap, "page", 0);
             int pagesize = GetFieldAsInt(qryMap, "pagesize", 10);
@@ -110,19 +177,19 @@ namespace mdsj.lib
             Print("🔄🔁♻️🔄🔁♻️🔄🔁♻️");
             foreach (var sortedList in list_rzt)
             {
-               
+
                 SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
 
             }
             return list_rzt;
         }
-        public static SortedList  RemoveKeys(SortedList originalDictionary, string commaSeparatedKeys)
+        public static SortedList RemoveKeys(SortedList originalDictionary, string commaSeparatedKeys)
         {
             // 分割逗号分割的字符串并移除前后空白
             var keysToRemove = new HashSet<string>(commaSeparatedKeys.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries), StringComparer.OrdinalIgnoreCase);
 
             // 创建新的字典，只保留不在 keysToRemove 中的键值对
-            SortedList newDictionary = new SortedList( );
+            SortedList newDictionary = new SortedList();
             foreach (DictionaryEntry kvp in originalDictionary)
             {
                 if (!keysToRemove.Contains(kvp.Key))
@@ -306,7 +373,7 @@ namespace mdsj.lib
             var originalColor = Console.ForegroundColor;
             Console.ForegroundColor = color;
             Console.WriteLine(text);
-            Console.ForegroundColor = originalColor;
+            Console.ForegroundColor = ConsoleColor.White;
         }
         public static void TaskRunNewThrd(Action act1)
         {
@@ -463,13 +530,13 @@ namespace mdsj.lib
             //}
             return 0;
         }
-      /// <summary>
-            /// 替换字符串
-            /// </summary>
-            /// <param name="lines"></param>
-            /// <param name="placeHold"></param>
-            /// <param name="replaceStr"></param>
-            /// <returns></returns>
+        /// <summary>
+        /// 替换字符串
+        /// </summary>
+        /// <param name="lines"></param>
+        /// <param name="placeHold"></param>
+        /// <param name="replaceStr"></param>
+        /// <returns></returns>
         public static string[] Replace(string[] lines, string placeHold, string replaceStr)
         {
             if (lines == null)
@@ -520,7 +587,7 @@ namespace mdsj.lib
             return ConvertArrayListToCommaSeparatedString(li);
         }
 
-   
+
         public static string removeDulip(string newParks)
         {
             HashSet<string> hs = new HashSet<string>();
@@ -581,7 +648,9 @@ namespace mdsj.lib
                     {
                         jmp2exitFlagInThrd.Value = true;
                         PrintTimestamp($" Callx(Delegate) ctch ex ,mtth:{__METHOD__}");
-                        PrintRet(__METHOD__, 0); Jmp2end();
+                      
+                        dbgpad = dbgpad - 4;
+                        Jmp2end925(jmp2endCurFunInThrd.Value);
                     }
 
                 }
@@ -657,7 +726,10 @@ namespace mdsj.lib
         }
 
 
-
+        public static void Jmp2end925(string levFn)
+        {
+            throw new jmp2endEx("🛑JMP2END from " + levFn + " ,GOTO END🛑🛑🛑.. ");
+        }
 
         public static void Jmp2end()
         {

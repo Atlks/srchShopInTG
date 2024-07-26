@@ -414,7 +414,26 @@ namespace prjx.lib
         //         replyMarkup: new InlineKeyboardMarkup(results),
         //         protectContent: false,
         //         disableWebPagePreview: true);
-
+        public static Message SendPhotoV(string imgPath, string msgtxt, IReplyMarkup results, long chatid,int replyToMessageId)
+        {
+//public interface IReplyMarkup
+            //
+            try
+            {
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                Message message2 = Program.botClient.SendPhotoAsync(
+               chatid
+                  , Photo2, null,
+                  msgtxt,
+                    parseMode: ParseMode.Html,
+                   replyMarkup:  results,
+                   replyToMessageId: replyToMessageId,
+                   protectContent: false).Result;
+                Print(JsonConvert.SerializeObject(message2));
+                return message2;
+            }
+            catch (Exception ex) { Print(ex.ToString());return null; }
+        }
         public static void sendFoto(string imgPath, string msgtxt, List<InlineKeyboardButton[]> results, long chatid)
         {
             try

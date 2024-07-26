@@ -291,6 +291,7 @@ namespace prjx.lib
             return new object[0];
         }
 
+        //todo should thrd rlt thrdlocal
         public static int dbgpad = 0;
         public static object[] FilterNonSerializableObjects(object[] inputArray)
         {

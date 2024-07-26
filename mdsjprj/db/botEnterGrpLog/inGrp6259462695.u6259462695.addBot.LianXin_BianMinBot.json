@@ -1,0 +1,39 @@
+{
+  "update_id": 839637381,
+  "my_chat_member": {
+    "chat": {
+      "id": 6259462695,
+      "type": "private",
+      "username": "mantuoluo",
+      "first_name": "man",
+      "last_name": "tuoluo"
+    },
+    "from": {
+      "id": 6259462695,
+      "is_bot": false,
+      "first_name": "man",
+      "last_name": "tuoluo",
+      "username": "mantuoluo",
+      "language_code": "zh-hans"
+    },
+    "date": 1721898386,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

@@ -95,13 +95,13 @@ namespace mdsj.libBiz
 
                 string parks = GetParksByCountry(ctry);
                 string newParks = AppendParks(cfg, parks);
-              
 
+                AppendArea(ctry, cfg);
                 SetField(cfg, "园区", newParks);
-          
+
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
-               
+
                 SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
@@ -150,7 +150,23 @@ namespace mdsj.libBiz
             Jmp2end();
         }
 
-  
+        private static void AppendArea(string ctry, SortedList cfg)
+        {
+            string areaArr = GetFieldAsStr(cfg, "area地区");
+       string     areaArr22 = AppendStrcomma(ctry, areaArr);
+            SetField(cfg, "area地区", areaArr22);
+        }
+
+        public static string AppendStrcomma(string ctry, string areas)
+        {
+            if (areas == "")
+                areas = ctry;
+            else
+                areas = areas + "," + ctry;
+
+
+            return removeDulip(areas);
+        }
 
         public static void ConfirmSetCityBtnClick(string area, Update update)
         {   //public 判断权限先
@@ -184,8 +200,8 @@ namespace mdsj.libBiz
                 string areakey = "城市";
                 string parks = GetParksByCity(area);
              string newParks=   AppendParks(cfg,  parks);
+                AppendArea(area, cfg);
 
-                
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 SetField(cfg, "园区", newParks);
@@ -397,7 +413,7 @@ namespace mdsj.libBiz
             //    string oriparks = GetFieldAsStr(whereMap, "园区");
                 string newParks = AppendParks(cfg, park);
                 string pk = park.Trim().ToUpper();
-                
+                AppendArea(pk, cfg);
                 SetField(cfg, "园区", newParks);
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
@@ -543,13 +559,31 @@ namespace mdsj.libBiz
             var tipsd = tipsSelectArea;
 
             if (IsSetArea(update))
+            {
+                if(isGrpChat(update))
+                {
+                    var grpid = update.Message.Chat.Id;
+                    var fromUid = update.Message.From.Id;
+                    var mybotid = botClient.BotId;
+                    string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                    SortedList cfg = findOne(dbfile2);
+                 
+
+                    string area = GetFieldAsStr(cfg, "area地区");
+                    tipsd = $"你已经选择了地区：{area} 。";
+                    tipsd += tipsAppendArea;
+                }else
+
                 tipsd = tipsAppendArea;
+            } 
+
+             
 
             string cmd = GetCmdFun(update?.Message?.Text);
             //  Print("oo617");
             string filePath = $"{prjdir}/cfg_cmd/{cmd}.txt";
             string[] lines = ReadFileAndRemoveEmptyLines(filePath);
-            lines = Replace(lines, "{tipsd}", tipsd);
+            lines = Replace(lines, "{tipsd}", tipsAppendArea);
  
 
             KeyboardButton[][] btns = ConvertFileToKeyboardButtons(lines);

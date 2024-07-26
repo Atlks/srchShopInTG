@@ -362,11 +362,11 @@ namespace mdsj.libBiz
         {
            
 
-            // 这是一个示例的异步任务
+            // 这是一个示例的异步任务  消息搜索
               TaskRunNewThrd(() =>
             {
                 string DataDir = "fullTxtSrchIdxdataDir";
-                Thread.Sleep(7000);
+                Thread.Sleep(3600*1000);
                Print("-----------------------------fulltxt index create thred----------");
                 wrt_rows4fulltxt(json_encode(update), DataDir);
                Print("----------------END fulltxt index create thred---- finish....");

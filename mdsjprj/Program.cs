@@ -91,7 +91,7 @@ namespace prjx
     internal class Program
     {
         //prech 4 set msg
-        public const string PreCh            = "📍";
+        public const string PreCh = "📍";
 
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         // public const string botname = "LianXin_BianMinBot";
@@ -114,7 +114,7 @@ namespace prjx
 
         //搜索用户
         public static Dictionary<long, User> _users = [];
- 
+
         //public void ConfigureServices(IServiceCollection services)
         //{
         //    services.AddControllers();
@@ -233,17 +233,17 @@ namespace prjx
 #warning 循环账号是否过期了
 
 
-            Qunzhushou.main1();
-            audioBot.main1();
+       //     Qunzhushou.main1();
+        //    audioBot.main1();
 
-             
-                webapi2.StartWbapiAsync();
-            
+
+            webapi2.StartWbapiAsync();
+
 
             RunTmrTasksCron();
             Action<HttpRequest, HttpResponse> value = (HttpRequest request, HttpResponse response) =>
                         {
-                            
+
                             string methd = request.Path;
                             ////  methd = methd.Substring(1);
                             if (methd == "/swag")
@@ -256,7 +256,7 @@ namespace prjx
 
                         };
             StartWebapi(value, "WbapiX");
-            
+
 
             //  Console.ReadKey();
             //loopForever();
@@ -271,7 +271,7 @@ namespace prjx
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 
-           
+
             //  throw new Exception("myex");
             //   call_user_func(evt_aHandleUpdateAsync, botClient, update, cancellationToken, reqThreadId)
 
@@ -281,13 +281,13 @@ namespace prjx
                 try
                 {
                     string reqThreadId = geneReqid();
-                    EvtUpdateHdlrAsync(botClient, update, cancellationToken, reqThreadId);
+                    EvtUpdateHdlr(botClient, update, cancellationToken, reqThreadId);
                     //     throw new InvalidOperationException("An error occurred in the task.");
 
                 }
                 catch (jmp2endEx e22)
                 {
-                    Print("jmp2exitEx");
+                    Print("jmp2exitEx"); Print(e22.Message); ;
                 }
                 catch (Exception e)
                 {
@@ -314,22 +314,24 @@ namespace prjx
 
 
         //收到消息时执行的方法
-        static void EvtUpdateHdlrAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
+        static void EvtUpdateHdlr(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken, string reqThreadId)
         {
             //  throw new Exception("myex");
 
-            var __METHOD__ = "evt_aHandleUpdateAsync";
-            dbgCls.PrintCallFunArgs(__METHOD__, func_get_args(update));
+            var __METHOD__ = nameof(EvtUpdateHdlr);
+            PrintCallFunArgs(__METHOD__, func_get_args(update));
             logCls.log("fun " + __METHOD__, func_get_args(update), null, "logDir", reqThreadId);
             Print(update?.Message?.Text);
             //    tts(update?.Message?.Text);
             // print(json_encode(update));
             Print("tag4520");
-            bot_logRcvMsg(update);
+          
 
 
             CallAsyncNewThrd(() =>
             {
+                Thread.Sleep(1500);
+                bot_logRcvMsg(update);
                 Thread.Sleep(6000);
                 dbgpad = 0;
             });
@@ -346,8 +348,30 @@ namespace prjx
 
 
             //======================设置地区==============
+
             //--------------------shezhi 国家指令
             string txt307 = GetStr(update?.Message?.Text);
+            if (update.CallbackQuery?.Data != null)
+            {
+                string cmd = update.CallbackQuery?.Data;
+                if (cmd == "testpopbx")
+                {
+                    botClient.AnswerCallbackQueryAsync(
+                 callbackQueryId: update.CallbackQuery.Id,
+                 text: ReadAllText("testpopbx.txt"),
+                 showAlert: true); // 这是显示对话框的关键);
+                    return;
+                }
+
+            }
+            if (txt307 == "testpopbx")
+            {
+                botClient.AnswerCallbackQueryAsync(
+                callbackQueryId: update.CallbackQuery.Id,
+                text: "",
+                showAlert: true); // 这是显示对话框的关键);
+                return;
+            }
             if (txt307.StartsWith("请选择本群所在区域"))
                 return;
             if (txt307.StartsWith(tipsSelectArea))
@@ -356,10 +380,10 @@ namespace prjx
                 return;
             if (txt307.StartsWith("取消新增区域"))
                 return;
-            
 
 
-            BtmEvtSetCountry(botClient, update, txt307);
+
+            Callx(  BtmEvtSetCountry,botClient, update, txt307);
             //-------shezhi 城市指令
             //  string txt307 = GetStr(update?.Message?.Text);
             BtmEvtSetCityMsgHdlr(botClient, update, txt307);
@@ -370,7 +394,7 @@ namespace prjx
 
             //-----------/cmd process
             CmdHdlrChk(update);
-           
+
             //------------end cmd prcs--------
 
             if (update.Type == UpdateType.Message)
@@ -713,14 +737,14 @@ namespace prjx
                         }
                         else
                         {
-                        //    OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
+                            //    OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
                             Jmp2end(); return;
                         }
                 }
             }
         }
 
-     
+
 
         private static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
         {
@@ -732,7 +756,7 @@ namespace prjx
             var area = SubStr(txt307, 2);
             if (!IsPark(area))
                 return;
-         
+
             var park149 = SubStr(txt307, 2);
             var pks = LoadHashsetReadFileLinesToHashSet($"{prjdir}/cfg_cmd/园区列表.txt");
             if (txt307.StartsWith(PreCh) && pks.Contains(park149))
@@ -771,7 +795,7 @@ namespace prjx
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //  Message message2dbg = await 
                 var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "选择区域",
+                                update.Message.Chat.Id, "选择园区",
                                 parseMode: ParseMode.Html,
                                 replyMarkup: rplyKbdMkp,
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
@@ -801,18 +825,35 @@ namespace prjx
 
         private static void BtmEvtSetCountry(ITelegramBotClient botClient, Update update, string txt307)
         {
+            jmp2endCurFunInThrd.Value = nameof(BtmEvtSetCountry);
             if (!IsSetAreaBtnname(txt307))
                 return;
             var ctry = SubStr(txt307, 2);
-            if(ctry.StartsWith("确定设置国家为"))
+            if (ctry.StartsWith("确定设置国家为"))
             {
                 var ctry158 = SubstrAfterMarker(ctry, "确定设置国家为");
                 ctry158 = ctry158.Trim();
                 ConfirmSetCountryBtnClick(ctry158, update);
                 Jmp2end();
             }
-            if (IsFileExist($"{prjdir}/cfg_cmd/{ctry}城市.txt"))
+
+            //----------------
+            //iff(Condt(ISCtry, ctry)
+            //       && Condt(IsExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"),
+            //    () => {
+            //        Print("THEN➡️➡️");
+                     
+            //    },
+            //     () => {
+            //         Print("ELSE☑️");
+
+            //     }
+            //);
+
+
+            iff(Condt(IsFileExist, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
             {
+
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{ctry}城市.txt");
                 Print(EncodeJson(btns));
                 var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
@@ -822,18 +863,33 @@ namespace prjx
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //  Message message2dbg = await 
                 var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "选择区域",
+                                update.Message.Chat.Id, "选择城市",
                                 parseMode: ParseMode.Html,
                                 replyMarkup: rplyKbdMkp,
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
                 Print(m);
-                Jmp2end();
-            }
+                Jmp2end925(nameof(BtmEvtSetCountry));
+            });
+
+            //iff(Condt(IsSetAreaBtnname, txt307)
+            //    && Condt(ISCtry, ctry)
+            //       && Condt(IsExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"),
+            //    () => {
+            //        Print("THEN➡️➡️");
 
 
-            if (IsSetAreaBtnname(txt307) && ISCtry(ctry) &&
-                IsNotExistFil($"{prjdir}/cfg_cmd/{ctry}城市.txt"))
+            //    },
+            //     () => {
+            //         Print("ELSE☑️");
+            //         Print("暂无配置");
+
+            //     }
+            //);
+
+            iff(Condt(IsSetAreaBtnname, txt307)
+               && Condt(ISCtry, ctry)
+                   && Condt(IsNotExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
             {
                 //  Message message2dbg = await 
                 var m = botClient.SendTextMessageAsync(
@@ -843,14 +899,14 @@ namespace prjx
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
                 Print(m);
+
                 Jmp2end();
 
 
-            }
+            });
         }
 
-   
-
+     
 
         public static void MsgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)
         {
@@ -959,7 +1015,7 @@ namespace prjx
             #endregion
         }
 
-       
+
 
 
 
@@ -1065,7 +1121,7 @@ namespace prjx
                 PrintRetx(nameof(msgTrgBtmbtnEvtHdlr11), "txt is empty");
                 return;
             }
-               
+
             // ----------btm btn hdlr 
             //if (update?.Message?.Text == "\U0001fac2 加入联信")
             //{
@@ -1125,7 +1181,7 @@ namespace prjx
             }
             else
             {
-                Callx(btm_btnClk_inCfgByMsg, update, btnName);
+                Callx(BtmBtnClkinCfgByMsg, update, btnName);
                 return;
             }
 
@@ -1142,7 +1198,7 @@ namespace prjx
             // if (tg_isBtm_btnClink_in_pubGrp(update))
             {
 
-                Callx(btm_btnClk_inCfgByMsg, update, btnName);
+                Callx(BtmBtnClkinCfgByMsg, update, btnName);
                 //  await callxAsync(btm_btnClk, update);
 
 
@@ -1964,7 +2020,7 @@ namespace prjx
 
 
             // pagebtns
-            evt_search_pt3_btns翻页(page, count, pagesize, results);
+            EvtsearchPt3btnsPagging(page, count, pagesize, results);
 
             try
             {
@@ -2282,7 +2338,7 @@ namespace prjx
         //}
 
 
-        private static void evt_search_pt3_btns翻页(int page, int count, int pagesize, List<InlineKeyboardButton[]> results)
+        private static void EvtsearchPt3btnsPagging(int page, int count, int pagesize, List<InlineKeyboardButton[]> results)
         {
             var pageBtn = new List<InlineKeyboardButton>();
             if (page > 0)

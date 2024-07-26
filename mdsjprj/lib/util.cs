@@ -24,6 +24,12 @@ namespace mdsj.lib
             // 初始化每个线程的值为 false
             return false;
         });
+
+        public static ThreadLocal<string> jmp2endCurFunInThrd = new ThreadLocal<string>(() =>
+        {
+            // 初始化每个线程的值为 false
+            return "";
+        });
         public const string botname = "LianXin_BianMinBot";
 
         public static void PrintTimestamp(string msg)

@@ -126,7 +126,7 @@ namespace mdsj.libBiz
 
             }
 
-            callx(btm_btnClk_inCfg, update);
+            Callx(btm_btnClk_inCfg, update);
             return;
             //  jmp2end();
 
@@ -240,7 +240,7 @@ namespace mdsj.libBiz
            //try
            //{
            //  await btm_btnClk_inCfg(update);
-            callx(btm_btnClk_inCfg, update);
+            Callx(btm_btnClk_inCfg, update);
             //  await callxAsync(btm_btnClk, update);
             //}
             //catch (jmp2endEx e)
@@ -292,6 +292,7 @@ namespace mdsj.libBiz
             var url = $"https://t.me/boost/{grpUsername}";
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
+            InlineKeyboardButton btn2 = InlineKeyboardButton.WithCallbackData(text: btn, "testpopbx");
             IEnumerable<InlineKeyboardButton> inlineKeyboardRow1 = [InlineKeyboardButton.WithUrl(text: btn, url)];
             Print(EncodeJson(inlineKeyboardRow1));
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
@@ -373,13 +374,17 @@ namespace mdsj.libBiz
 
             var msg = bot_getTxt(update);
             //  btm_btnClk_inCfgV2(msg);
-            callx(btm_btnClk_inCfgByMsg, update, msg);
+            Callx(BtmBtnClkinCfgByMsg, update, msg);
         }
 
 
 
-
-        public static void btm_btnClk_inCfgByMsg
+        /// <summary>
+        /// 底部按钮处理事件
+        /// </summary>
+        /// <param name="update"></param>
+        /// <param name="msg"></param>
+        public static void BtmBtnClkinCfgByMsg
             (Update update, string msg)
         {
             Telegram.Bot.Types.Message msgNew = null;
@@ -387,11 +392,16 @@ namespace mdsj.libBiz
             //  print_varDump(, " Exists(f1)"+f1)
             if (System.IO.File.Exists(f1))
             {
-                print_varDump(nameof(btm_btnClk_inCfgByMsg), " Exists f", f1);
+                print_varDump(nameof(BtmBtnClkinCfgByMsg), " Exists f", f1);
                 SortedList table = ReadAsHashtable(f1);
+                var tips = table["tips"].ToString();
+                if(tips.StartsWith("$"))
+                {
+                    string fl = $"{prjdir}/cfg_btmbtn/"+SubStr(tips, 1);
+                    tips = ReadAllText(fl);
+                }
 
-
-                var tips = table["tips"].ToString() + $"\n\n{plchdTxt}";
+               tips = tips + $"\n\n{plchdTxt}";
                 InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
                 //  ReplyKeyboardMarkup
                 if (table.ContainsKey("url"))
@@ -407,16 +417,17 @@ namespace mdsj.libBiz
 
                 try
                 {
-                    msgNew = botClient.SendTextMessageAsync(
-                                              update.Message.Chat.Id, tips,
-                                              replyMarkup: InlineKeyboardMarkup1,
-                                              replyToMessageId: update.Message.MessageId,
-                                               parseMode: ParseMode.Html
-                                      ).Result;
+                    msgNew = SendPhotoV("推荐横幅.jpg", tips, InlineKeyboardMarkup1, update.Message.Chat.Id, replyToMessageId: update.Message.MessageId);
+                    //msgNew = botClient.SendTextMessageAsync(
+                    //                          update.Message.Chat.Id, tips,
+                    //                          replyMarkup: InlineKeyboardMarkup1,
+                    //                          replyToMessageId: update.Message.MessageId,
+                    //                           parseMode: ParseMode.Html
+                    //                  ).Result;
                 }
                 catch (Exception e)
                 {
-                    PrintCatchEx(nameof(btm_btnClk_inCfgByMsg), e);
+                    PrintCatchEx(nameof(BtmBtnClkinCfgByMsg), e);
                     Jmp2end();
 
                     return;

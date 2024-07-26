@@ -1,0 +1,13 @@
+[
+  {
+    "grpid": "-1002201130270",
+    "grpinfo": {
+      "id": -1002201130270,
+      "type": "supergroup",
+      "title": "fns grd crpt"
+    },
+    "id": "-1002201130270",
+    "whereExprs": "园区=KK园区",
+    "园区": "KK园区"
+  }
+]

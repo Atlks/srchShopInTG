@@ -597,16 +597,23 @@ namespace mdsj.libBiz
             }
             return rplyKbdMkp;
         }
-            public static ReplyKeyboardMarkup tg_btmBtns()
-        {
-//            mg MR.HAN, [18 / 7 / 2024 下午 12:00]
-//
 
-//mg MR.HAN, [18 / 7 / 2024 下午 12:00]
-//分别这三个图标
-            string line = "🌐%20代理    🏢%20加盟   🏪%20分销";
+
+        /// <summary>
+        ///      //            mg MR.HAN, [18 / 7 / 2024 下午 12:00]
+        //
+        //   招募代理             授权加盟  分销连锁
+        //合伙合营 盘口租赁 众筹众营
+        //mg MR.HAN, [18 / 7 / 2024 下午 12:00]
+        //分别这三个图标
+        /// </summary>
+        /// <returns></returns>
+        public static ReplyKeyboardMarkup tg_btmBtns()
+        {
+       
+            string line = "🌐%20招募代理    🏢%20授权加盟   🏪%20分销连锁";
             var kbdBtnArr = castString2kbdBtnArr(line);
-            var kbdBtnArr2 = castString2kbdBtnArr("🤝%20合营    📄%20租盘    👨‍👩‍👧‍👦%20众营");
+            var kbdBtnArr2 = castString2kbdBtnArr("🤝%20合伙合营    📄%20盘口租赁    👨‍👩‍👧‍👦%20众筹众营");
 
             var Keyboard =
                 new KeyboardButton[][]

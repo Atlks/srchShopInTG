@@ -1,0 +1,15 @@
+[
+  {
+    "from": {
+      "id": 5420273831,
+      "is_bot": false,
+      "first_name": "宝",
+      "last_name": "宝",
+      "username": "Mex23200",
+      "language_code": "zh-hans"
+    },
+    "id": "5420273831",
+    "whereExprs": "园区=KK园区,东风园区,金州园区,世纪新城园区,御龙湾",
+    "园区": "KK园区,东风园区,金州园区,世纪新城园区,御龙湾"
+  }
+]
