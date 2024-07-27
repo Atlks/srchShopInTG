@@ -142,6 +142,11 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            string htmlf = $"{prjdir}/cfg_btmbtn/好奇.htm";
+            string html = ReadAllText(htmlf);
+            string v = ConvertHtmlToJson4tg(html);
+            WriteAllText("haocy.json", v);
+            Print(v);
             Print("\a\a\a\a");
          //   add30xiezhi();
             Print(AddElmts("aaa","a,b"));

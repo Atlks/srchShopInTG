@@ -198,7 +198,29 @@ namespace mdsj.libBiz
             return keyboard;
         }
 
+        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtonsV2(JArray ja)
+        {
 
+            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
+            foreach (JArray btnsRow1 in ja)
+            {
+                List<InlineKeyboardButton> btnRow = new List<InlineKeyboardButton>();
+                foreach (JObject jo1 in btnsRow1)
+                {
+                    //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
+                    InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["text"].ToString(), jo1["url"].ToString().Trim());
+
+                    btnRow.Add(btn);
+                }
+                   
+                lst.Add(btnRow);
+
+
+            }
+
+
+            return new InlineKeyboardMarkup(lst);
+        }
         public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtons(JArray ja)
         {
 
@@ -454,6 +476,80 @@ namespace mdsj.libBiz
 
             }
 
+
+            string htmlf = $"{prjdir}/cfg_btmbtn/{msg}.htm";
+            if (System.IO.File.Exists(htmlf))
+            {
+                print_varDump(nameof(BtmBtnClkinCfgByMsg), " Exists f", htmlf);
+                string html = ReadAllText(htmlf);
+                string jsonstr = ConvertHtmlToJson4tg(html);
+                SortedList table = GetDicFromJson(jsonstr);
+                var Img = table["Img"].ToString();
+                var tips = table["Text"].ToString();
+                if (tips.StartsWith("$"))
+                {
+                    string fl = $"{prjdir}/cfg_btmbtn/" + SubStr(tips, 1);
+                    tips = ReadAllText(fl);
+                }
+
+                tips = tips + $"\n\n{plchdTxt}";
+                InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
+                
+                {
+                    JArray btns = (JArray)table["btns"];
+                    InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtonsV2(btns);
+                }
+
+                try
+                {
+                    msgNew = SendPhotoV("推荐横幅.jpg", tips, InlineKeyboardMarkup1, update.Message.Chat.Id, replyToMessageId: update.Message.MessageId);
+                    //msgNew = botClient.SendTextMessageAsync(
+                    //                          update.Message.Chat.Id, tips,
+                    //                          replyMarkup: InlineKeyboardMarkup1,
+                    //                          replyToMessageId: update.Message.MessageId,
+                    //                           parseMode: ParseMode.Html
+                    //                  ).Result;
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx(nameof(BtmBtnClkinCfgByMsg), e);
+                    Jmp2end();
+
+                    return;
+                }
+
+                //aop  auth where exprs
+                if (update?.Message?.Chat?.Type != ChatType.Private)
+                    dltMsgDelay(update, msgNew);
+                Jmp2end925(nameof(BtmBtnClkinCfgByMsg));
+
+                return;
+
+            }
+        }
+
+        public static SortedList GetDicFromJson(string jsonstr)
+        {
+            return JsonToSortedList(jsonstr);
+        }
+
+        public static SortedList  JsonToSortedList(string json)
+        {
+            // 解析 JSON 字符串为 JObject
+            JObject jObject = JObject.Parse(json);
+
+            // 创建一个新的 SortedList
+            SortedList  sortedList = new SortedList ();
+
+            // 将 JObject 中的所有键值对添加到 SortedList
+            foreach (JProperty property in jObject.Properties())
+            {
+                // 将 JToken 转换为 .NET 类型
+                object value = property.Value;//.ToObject<object>();
+                sortedList.Add(property.Name, value);
+            }
+
+            return sortedList;
         }
     }
 }

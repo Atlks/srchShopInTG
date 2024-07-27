@@ -766,11 +766,74 @@ namespace prjx.lib
 
         public static InlineKeyboardMarkup ConvertHtmlToinlineKeyboard(string html)
         {
-            string json = ConvertHtmlToJson(html);
+            string json = ConvertHtmlToJson4tg(html);
             return ConvertJsonToInlineKeyboardMarkup(json);
         }
 
-        public static string ConvertHtmlToJson(string html)
+        public static string ConvertHtmlToJson4tg(string html)
+        {
+            var doc = new HtmlDocument();
+            doc.LoadHtml(html);
+
+            //----img
+            var img1 = doc.GetElementbyId("img1");
+         
+
+            //--------txt
+            string content = "";
+            // 查找具有特定 id 的 div 元素
+            var div = doc.GetElementbyId("Text");
+
+            // 检查 div 元素是否存在，并获取其内容
+            if (div != null)
+            {
+                  content = div.InnerHtml;
+        //        Console.WriteLine("Content of div with id 'Text': " + content);
+            }
+
+            //-------------for btns
+            var rows = doc.DocumentNode.SelectNodes("//tr");
+            var inlineKeyboardBtns = new List<List<Dictionary<string, string>>>();
+            foreach (var row in rows)
+            {
+                var buttons = row.SelectNodes(".//button");
+                var buttonList = new List<Dictionary<string, string>>();
+
+                foreach (var button in buttons)
+                {
+                    var buttonData = new Dictionary<string, string>();
+                    var textNode = button.InnerText.Trim();
+
+                    buttonData["text"] = textNode;
+
+                    if (button.Attributes["data-callback_data"] != null)
+                    {
+                        buttonData["callback_data"] = button.Attributes["data-callback_data"].Value;
+                    }
+
+                    if (button.Attributes["data-url"] != null)
+                    {
+                        buttonData["url"] = button.Attributes["data-url"].Value;
+                    }
+
+                    buttonList.Add(buttonData);
+                }
+
+                inlineKeyboardBtns.Add(buttonList);
+            }
+
+            var result = new
+            {
+                Img = img1.GetAttributeValue("src", ""),
+                Text = content,
+                btns = inlineKeyboardBtns,
+             
+          
+            };
+
+            return JsonConvert.SerializeObject(result, Formatting.Indented);
+        }
+        public static string ConvertHtmlToJson4tgBtns(string html)
         {
             var doc = new HtmlDocument();
             doc.LoadHtml(html);

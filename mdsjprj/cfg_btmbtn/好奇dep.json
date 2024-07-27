@@ -1,0 +1,14 @@
+{
+    "btn": "",
+    "tips": "你真是一个好奇的宝宝,为你提供看片和灰产头条吃吃瓜",
+    "btns": [{
+            "btnname": "打开看黄片",
+            "url": "https://t.me/LianXin_BianMinBot/KanPian"
+        },
+
+        {
+            "btnname": "打开看灰产头条和吃瓜",
+            "url": "https://t.me/LianXin_BianMinBot/TouTiao"
+        }
+    ]
+}

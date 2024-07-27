@@ -1,8 +1,19 @@
-[{
+[
+  {
+    "area地区": "缅甸",
     "grp": "tasks",
     "grpid": "-1002206103554",
+    "grpinfo": {
+      "id": -1002206103554,
+      "type": "supergroup",
+      "title": "Task grp"
+    },
     "id": "-1002206103554",
     "loc": "",
     "shangjiaFL": "Merchant.json",
-    "whereExprs": "城市=妙瓦底&国家=缅甸&@share=缅甸,泰国"
-}]
+    "whereExprs": "",
+    "园区": "",
+    "国家": "",
+    "城市": ""
+  }
+]
