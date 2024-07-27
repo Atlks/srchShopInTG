@@ -14,7 +14,32 @@ using System.Threading.Tasks;
 namespace mdsj.lib
 {
     internal class bscIsCmp
-    {
+    {    /// <summary>
+         /// token的设计  uname exprt...  MRG机器读取区域
+         /// </summary>
+         /// <param name="token"></param>
+         /// <returns></returns>
+        public static bool IsValidToken(string token)
+        {
+            string[] tka = token.Split("_");
+            string uid = GetElmt(tka, 0);
+            string exprt = GetElmt(tka, 1);
+            string mrgDecd = DecryptAes(exprt);
+            string[] a = mrgDecd.Split(".");
+            var uidInMrg = a[0];
+            var exprtTime = a[1];
+            var isstime = a[2];
+            if (uid != uidInMrg)
+                return false;
+            if (IsExprt(exprtTime))
+            {
+                return false;
+            }
+            return true;
+        }
+
+
+
         public static bool IsPark(string areaname)
         {
             if (string.IsNullOrEmpty(areaname))

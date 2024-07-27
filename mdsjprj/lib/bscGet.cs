@@ -917,10 +917,13 @@ namespace mdsj.lib
             }
 
         }
-
+        public static Dictionary<string, string> GetDicFromQrtstr(string qrystr)
+        {
+            return QueryStringToDictionary(qrystr);
+        }
         public static void WriteAllText(string f, string txt)
         {
-            Print($" fun WriteAllText {f}");
+         //   Print($" fun WriteAllText {f}");
             Mkdir4File(f);
             try
             {

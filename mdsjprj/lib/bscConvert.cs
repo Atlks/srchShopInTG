@@ -243,6 +243,35 @@ namespace mdsj.lib
                 hashtable[entry.Key] = entry.Value;
             }
         }
+       
+        /// <summary>
+        /// Converts a URL query string into a Dictionary<string, string>.
+        /// </summary>
+        /// <param name="queryString">The query string to convert.</param>
+        /// <returns>A dictionary containing the key-value pairs from the query string.</returns>
+        public static Dictionary<string, string> QueryStringToDictionary(string queryString)
+        {
+            var result = new Dictionary<string, string>();
+
+            // Ensure the query string is in a valid format
+            if (string.IsNullOrEmpty(queryString))
+            {
+                return result;
+            }
+
+            // Use HttpUtility to parse the query string
+            var nameValueCollection = HttpUtility.ParseQueryString(queryString);
+
+            foreach (string key in nameValueCollection.AllKeys)
+            {
+                if (key != null)
+                {
+                    result[key] = nameValueCollection[key];
+                }
+            }
+
+            return result;
+        }
 
         public static int ToInt146(object obj)
         {
@@ -358,10 +387,14 @@ namespace mdsj.lib
 
         public static string ToStr(object val)
         {
+
             if (val == null)
                 return "";
-            else
-                return val.ToString();
+            if (val is bool boolVal)
+            {
+                return boolVal ? "TRUE" : "FALSE";
+            }
+            return val.ToString();
         }
         public static double ToDouble(object obj, double def)
         {

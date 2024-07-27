@@ -39,6 +39,8 @@ using static libx.storeEngr4Nodesqlt;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using libx;
 using System.Drawing.Printing;
+using DocumentFormat.OpenXml.Spreadsheet;
+using System.Web;
 namespace mdsj
 {
     internal class mrcht
@@ -260,6 +262,52 @@ namespace mdsj
                 sendFoto(imgPath, msgtxtAdmsg, results3, chatid);
         }
 
+        private static List<SortedList> QryFromMrchtByKwdsV2(string wdss, string qrystr, string partfile区块文件Exprs)
+        {
+            wdss = wdss.Replace(" ", ",");
+
+            //----where
+            Func<SortedList, bool> whereFun = (SortedList row) =>
+            {
+
+                List<bool> li = new List<bool>();
+                li.Add((IsNotEmptyLianxi(row)));
+                li.Add((isLianxifshValid(row)));
+
+                var fltrs = GetDicFromQrtstr(qrystr);
+                //ConvertToStringDictionary(filters);
+                li.Add(IsIn4qrycdt(LoadFieldDfemp(row, "园区"), LoadField232(fltrs, "园区")));
+            
+                return IsChkfltrOk(li);
+                    //   if (LoadFieldDefEmpty(row, "cateEgls") == "Property")
+                    //return false;
+
+ 
+
+                HashSet<string> curRowKywdSset = new HashSet<string>();
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "商家"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "关键词"));
+                AddElmts2hashset(curRowKywdSset, LoadFieldDefEmpty(row, "分类关键词"));
+                if (IsContains(curRowKywdSset, wdss))
+                    return true;
+                return false;
+            };
+
+
+            //order
+            //  List<SortedList> results22 = rdmList<SortedList>(rztLi);
+            //  Func<SortedList, int> ordFun = (SortedList) => { return 1; };
+            //map select 
+
+
+          var rztLi = GetListFltrV2("mercht商家数据", partfile区块文件Exprs, whereFun);
+
+
+          //  var results3 = rztLi.Skip(0 * 10).Take(5).ToList();
+            return rztLi;
+        }
+
+  
         private static List<InlineKeyboardButton[]> QryFromMrchtByKwds(  string wdss, Dictionary<string, StringValues> whereExprsObjFltrs, string partfile区块文件Exprs)
         {
               wdss = wdss.Replace(" ", ",");

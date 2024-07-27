@@ -246,12 +246,12 @@ namespace prjx
 
                             string methd = request.Path;
                             ////  methd = methd.Substring(1);
-                            if (methd == "/swag")
+                            if (methd == "/swag33")
                             {
                                 response.ContentType = "text/html; charset=utf-8";
                                 var rzt = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
                                 response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
-                                Jmp2end();
+                                Jmp2endDep();
                             }
 
                         };
@@ -349,47 +349,8 @@ namespace prjx
 
             //======================设置地区==============
 
-            //--------------------shezhi 国家指令
-            string txt307 = GetStr(update?.Message?.Text);
-            if (update.CallbackQuery?.Data != null)
-            {
-                string cmd = update.CallbackQuery?.Data;
-                if (cmd == "testpopbx")
-                {
-                    botClient.AnswerCallbackQueryAsync(
-                 callbackQueryId: update.CallbackQuery.Id,
-                 text: ReadAllText("testpopbx.txt"),
-                 showAlert: true); // 这是显示对话框的关键);
-                    return;
-                }
-
-            }
-            if (txt307 == "testpopbx")
-            {
-                botClient.AnswerCallbackQueryAsync(
-                callbackQueryId: update.CallbackQuery.Id,
-                text: "",
-                showAlert: true); // 这是显示对话框的关键);
-                return;
-            }
-            if (txt307.StartsWith("请选择本群所在区域"))
-                return;
-            if (txt307.StartsWith(tipsSelectArea))
-                return;
-            if (txt307.StartsWith(tipsAppendArea))
-                return;
-            if (txt307.StartsWith("取消新增区域"))
-                return;
-
-
-
-            Callx(  BtmEvtSetCountry,botClient, update, txt307);
-            //-------shezhi 城市指令
-            //  string txt307 = GetStr(update?.Message?.Text);
-            BtmEvtSetCityMsgHdlr(botClient, update, txt307);
-
-            //------setpark   BtmEvtSetParkMsgHdlr
-            BtmEvtSetParkMsgHdlrPre(update, txt307);
+            BtmEvtSetAreaHdlrChk(update);
+          
             //======================END 设置地区==============
 
             //-----------/cmd process
@@ -710,6 +671,7 @@ namespace prjx
 
         }
 
+      
         public static void CmdHdlrChk(Update update)
         {
             if (!IsStartsWith(update?.Message?.Text, "/"))
@@ -729,183 +691,27 @@ namespace prjx
                 if (update.Message.Type == MessageType.Text)
                 {
                     if (update.Message.Text.Trim().StartsWith("/"))
+                    {
                         if (update.Message.Chat.Type == ChatType.Private)
                         {
                             OnCmdPrvt(update.Message.Text.Trim(), update, reqThreadId);
-                            Jmp2end();
+                            Jmp2endDep();
                             return;
                         }
                         else
                         {
                             //    OnCmdPublic(update.Message.Text.Trim(), update, reqThreadId);
-                            Jmp2end(); return;
+                            Jmp2endDep(); return;
                         }
+                    }
+                        
                 }
             }
         }
 
 
 
-        private static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
-        {
-
-            if (!txt307.StartsWith(PreCh))
-                return;
-
-
-            var area = SubStr(txt307, 2);
-            if (!IsPark(area))
-                return;
-
-            var park149 = SubStr(txt307, 2);
-            var pks = LoadHashsetReadFileLinesToHashSet($"{prjdir}/cfg_cmd/园区列表.txt");
-            if (txt307.StartsWith(PreCh) && pks.Contains(park149))
-            {
-                //if (isGrpChat(update))
-                //{
-                //    //auth chk
-                //}
-                Callx(SetParkBtnClick, park149, update);
-                Jmp2end();
-            }
-        }
-
-        private static void BtmEvtSetCityMsgHdlr(ITelegramBotClient botClient, Update update, string txt307)
-        {
-            if (!IsSetAreaBtnname(txt307))
-                return;
-            var city = SubStr(txt307, 2);
-            var ctry = SubStr(txt307, 2);
-            if (ctry.StartsWith("确定设置城市为"))
-            {
-                var ctry158 = SubstrAfterMarker(ctry, "确定设置城市为");
-                ctry158 = ctry158.Trim();
-                ConfirmSetCityBtnClick(ctry158, update);
-                Jmp2end();
-            }
-            if (IsFileExist($"{prjdir}/cfg_cmd/{city}园区.txt"))
-            {
-                KeyboardButton[][] btns = ConvertFileToKeyboardButtons(
-                    $"{prjdir}/cfg_cmd/{city}园区.txt");
-                Print(EncodeJson(btns));
-                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
-                rplyKbdMkp.ResizeKeyboard = true;
-
-                string imgPath = "今日促销商家.gif";
-                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                //  Message message2dbg = await 
-                var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "选择园区",
-                                parseMode: ParseMode.Html,
-                                replyMarkup: rplyKbdMkp,
-                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-
-                Print(m);
-                Jmp2end();
-            }
-
-            if (IsSetAreaBtnname(txt307) && ISCity(city) &&
-          IsNotExistFil($"{prjdir}/cfg_cmd/{city}园区.txt"))
-            {
-                //  Message message2dbg = await 
-                var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "暂无配置",
-                                parseMode: ParseMode.Html,
-                                //  replyMarkup: rplyKbdMkp,
-                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-
-                Print(m);
-                Jmp2end();
-
-
-            }
-
-        }
-
-
-        private static void BtmEvtSetCountry(ITelegramBotClient botClient, Update update, string txt307)
-        {
-            jmp2endCurFunInThrd.Value = nameof(BtmEvtSetCountry);
-            if (!IsSetAreaBtnname(txt307))
-                return;
-            var ctry = SubStr(txt307, 2);
-            if (ctry.StartsWith("确定设置国家为"))
-            {
-                var ctry158 = SubstrAfterMarker(ctry, "确定设置国家为");
-                ctry158 = ctry158.Trim();
-                ConfirmSetCountryBtnClick(ctry158, update);
-                Jmp2end();
-            }
-
-            //----------------
-            //iff(Condt(ISCtry, ctry)
-            //       && Condt(IsExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"),
-            //    () => {
-            //        Print("THEN➡️➡️");
-                     
-            //    },
-            //     () => {
-            //         Print("ELSE☑️");
-
-            //     }
-            //);
-
-
-            iff(Condt(IsFileExist, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
-            {
-
-                KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{ctry}城市.txt");
-                Print(EncodeJson(btns));
-                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
-                rplyKbdMkp.ResizeKeyboard = true;
-
-                string imgPath = "今日促销商家.gif";
-                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                //  Message message2dbg = await 
-                var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "选择城市",
-                                parseMode: ParseMode.Html,
-                                replyMarkup: rplyKbdMkp,
-                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-
-                Print(m);
-                Jmp2end925(nameof(BtmEvtSetCountry));
-            });
-
-            //iff(Condt(IsSetAreaBtnname, txt307)
-            //    && Condt(ISCtry, ctry)
-            //       && Condt(IsExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"),
-            //    () => {
-            //        Print("THEN➡️➡️");
-
-
-            //    },
-            //     () => {
-            //         Print("ELSE☑️");
-            //         Print("暂无配置");
-
-            //     }
-            //);
-
-            iff(Condt(IsSetAreaBtnname, txt307)
-               && Condt(ISCtry, ctry)
-                   && Condt(IsNotExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
-            {
-                //  Message message2dbg = await 
-                var m = botClient.SendTextMessageAsync(
-                                update.Message.Chat.Id, "暂无配置",
-                                parseMode: ParseMode.Html,
-                                //  replyMarkup: rplyKbdMkp,
-                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-
-                Print(m);
-
-                Jmp2end();
-
-
-            });
-        }
-
+  
      
 
         public static void MsgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)

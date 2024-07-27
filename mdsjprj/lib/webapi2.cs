@@ -11,7 +11,7 @@ namespace mdsj.lib
 {
     internal class webapi2
     {
-        internal static async System.Threading.Tasks.Task startWbapiAsync()
+        internal static async System.Threading.Tasks.Task StartWbapiAsync()
         {
             TaskRun(async () =>
             {
@@ -37,7 +37,7 @@ namespace mdsj.lib
                     }
                     catch (Exception e)
                     {
-                        PrintCatchEx(nameof(startWbapiAsync), e);
+                        PrintCatchEx(nameof(StartWbapiAsync), e);
                     }
 
                 }
@@ -96,7 +96,7 @@ namespace mdsj.lib
             SetRespContentTypeNencodeV2(response, "application/json; charset=utf-8");
             var fn = path.Substring(1);
             var api_prefix = "webapi";
-            object rzt = callxTryx(api_prefix + fn, Substring(queryString, 1));
+            object rzt = CallxTryx(api_prefix + fn, Substring(queryString, 1));
             // 发送响应
             SendRespV2(rzt, response);
         }
@@ -112,7 +112,7 @@ namespace mdsj.lib
                 string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
                 SendRespV2(rzt2.ToString(), response);
-                Jmp2end(); return;
+                Jmp2endDep(); return;
             }
         }
         public static async System.Threading.Tasks.Task jsonfl_httpHdlrFilJsonV2(HttpListenerRequest request, HttpListenerResponse response)
@@ -126,7 +126,7 @@ namespace mdsj.lib
 
             object rzt2 = ReadAllText(webrootDir + path);
             SendRespV2(rzt2.ToString(), response);
-            Jmp2end();
+            Jmp2endDep();
             return;
 
         }
@@ -174,7 +174,7 @@ namespace mdsj.lib
                         var task = 调用(func1, request, response);
                         // var task = func1(context);
                         //  task.Wait();  
-                        Jmp2end();
+                        Jmp2endDep();
 
                     }
                 }

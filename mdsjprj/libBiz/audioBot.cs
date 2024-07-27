@@ -137,7 +137,7 @@ namespace mdsj.libBiz
                 SendMp3ToGroupAsync(botClient_Audio, mp3path, update.Message.Chat.Id, update.Message.MessageId);
             dbgpad = 0;
             dbgCls.PrintRet(__METHOD__, 0);
-            Jmp2end();
+            Jmp2endDep();
         }
         public static void msgHdlr嗨小爱童鞋(Update update)
         {
@@ -159,7 +159,7 @@ namespace mdsj.libBiz
             text = text.Replace("%前导提示词%", serchTipsWd);
             botClient_Audio.SendTextMessageAsync(update.Message.Chat.Id, text, replyToMessageId: update.Message.MessageId);
            // dbgCls.print_ret(__METHOD__, 0);
-            Jmp2end();
+            Jmp2endDep();
         }
         private const string serchTipsWd = "嗨小爱童鞋";
         private static   void updateHdlSync(Update update)

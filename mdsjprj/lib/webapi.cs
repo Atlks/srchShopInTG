@@ -108,8 +108,8 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="httpHdlrApiSpecl"></param>
         /// <param name="context"></param>
-        /// <param name="api_prefix"></param>
-        public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefix, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
+        /// <param name="api_prefixDep"></param>
+        public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
 
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
@@ -117,15 +117,7 @@ namespace mdsj.lib
             var queryString = request.QueryString.ToString();
             string path = request.Path;
 
-            if (request.Method == HttpMethods.Post)
-            {
-                var funname = "" + Substring(path, 1) + request.Method + "Wbapi";
-                //call  wbapi_upldPOST path
-                //  wbapi_upldPost(request, response);
-                // 
-                Callx(funname, request, response);
-                return;
-            }
+
 
             //----------------static res
             // 静态资源处理器映射表
@@ -138,16 +130,37 @@ namespace mdsj.lib
             Callx(HttpHdlrFil, request, response, extNhdlrChoosrMaplist);
             if (jmp2exitFlagInThrd.Value == true)
                 return;
-            //-------------------swag doc api
+            //-------------------if spec  api
             // 处理特定API
             Callx(httpHdlrApiSpecl, request, response);
+
+
+            //----------doc
+            string methd = request.Path;
+            if (methd == "/swag")
+            {
+                var rzt146 = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
+                SendResp(rzt146, "text/html; charset=utf-8", response);
+                Jmp2end(nameof(HttpHdlr));
+            }
+
+
+
+
             //------------httpHdlrApi--def json api mode
-            // 设置响应内容类型和编码
-            SetRespContentTypeNencode(response, "application/json; charset=utf-8");
+            //----------/XXX GET/POST WBAPI----
+            //if (request.Method == HttpMethods.Post)
+        
             var fn = path.Substring(1);
-            object rzt = CallxTryx(api_prefix + fn, Substring(queryString, 1));
+            var funname = "" + fn + request.Method + "Wbapi";
+          
+            Callx(funname, request, response);
+
+
+            //TODO DEP SHOULD AUTO get post call
+            object rzt = CallxTryx(api_prefixDep + fn, Substring(queryString, 1));
             // 发送响应
-            SendResp(rzt, response);
+            SendResp(rzt, "application/json; charset=utf-8", response);
         }
 
         /// <summary>
@@ -268,7 +281,7 @@ namespace mdsj.lib
             if (文件有扩展名(filePath) && 文件不存在(filePath))
             {
                 发送响应_资源不存在(response);
-                跳转到结束();
+                Jmp2end(nameof(HttpHdlrFil));
             }
 
 
@@ -278,7 +291,7 @@ namespace mdsj.lib
             if (fileExtension == "" && File.Exists($"{prjdir}{path}"))
             {
                 HtmlHttpHdlrfilTxtHtml(request, response);
-                Jmp2end();
+                Jmp2end(nameof(HttpHdlrFil));
             }
 
 
@@ -316,7 +329,7 @@ namespace mdsj.lib
                 string f = webrootDir + DecodeUrl(path);
                 object rzt2 = ReadAllText(f);
                 SendResp(rzt2, "text/html; charset=utf-8", response);
-                Jmp2end(); return;
+                Jmp2endDep(); return;
             }
         }
         public static void TxtHttpHdlr
@@ -333,7 +346,7 @@ namespace mdsj.lib
                 object rzt2 = ReadAllText(f);
                 SendResp(rzt2, "text/plain; charset=utf-8", response);
                 Print(" send finish....");
-                Jmp2end(); return;
+                Jmp2endDep(); return;
             }
         }
 
@@ -355,7 +368,7 @@ namespace mdsj.lib
             }
 
             SendResps4file(path1, "application/octet-stream", response);
-            Jmp2end();
+            Jmp2endDep();
             return;
 
 
@@ -375,12 +388,12 @@ namespace mdsj.lib
             {
                 SendRespsJJJresNotExist404(response);
                 //    发送响应_资源不存在(HTTP响应对象);
-                Jmp2end();
+                Jmp2endDep();
                 return;
             }
 
             await SendResps4file(path1, "image/jpeg", response);
-            Jmp2end();
+            Jmp2endDep();
             return;
         }
 
@@ -413,7 +426,7 @@ namespace mdsj.lib
             object rzt2 = ReadAllText(webrootDir + path);
             await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
             //   Print();
-        
+
             PrintTimestamp(" JsonFLhttpHdlrFilJson()...end");
             jmp2exitFlagInThrd.Value = true;
             //  Jmp2end();

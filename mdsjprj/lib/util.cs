@@ -24,6 +24,12 @@ namespace mdsj.lib
             // 初始化每个线程的值为 false
             return false;
         });
+        public static ThreadLocal<bool> Jmp2endCurFunFlag = new ThreadLocal<bool>(() =>
+        {
+            // 初始化每个线程的值为 false
+            return false;
+        });
+        
 
         public static ThreadLocal<string> jmp2endCurFunInThrd = new ThreadLocal<string>(() =>
         {

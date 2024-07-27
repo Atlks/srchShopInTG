@@ -42,7 +42,7 @@ namespace mdsj.libBiz
                 protectContent: false,
                 disableWebPagePreview: true,
                 replyToMessageId: update.Message.MessageId);
-            Jmp2end();
+            Jmp2endDep();
 
         }
 
@@ -55,7 +55,7 @@ namespace mdsj.libBiz
 
 
 
-          
+
 
         //}
 
@@ -84,7 +84,7 @@ namespace mdsj.libBiz
                     // print("no auth ");
                     botClient.SendTextMessageAsync(update.Message.Chat.Id,
                           "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2endDep();
                 }
             }
             if (isGrpChat(update))
@@ -122,10 +122,10 @@ namespace mdsj.libBiz
 
 
                 SetField(cfg, "园区", newParks);
-             
+
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
-             //   SetField(cfg, "whereExprs", newParks);
+                //   SetField(cfg, "whereExprs", newParks);
                 if (ctry == "不限制")
                 {
 
@@ -147,13 +147,237 @@ namespace mdsj.libBiz
 
             //------------set menu btm
             SetBtmMenu(update);
-            Jmp2end();
+            Jmp2endDep();
+        }
+        public static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
+        {
+
+            if (!txt307.StartsWith(PreCh))
+                return;
+
+
+            var area = SubStr(txt307, 2);
+            if (!IsPark(area))
+                return;
+
+            var park149 = SubStr(txt307, 2);
+            var pks = LoadHashsetReadFileLinesToHashSet($"{prjdir}/cfg_cmd/园区列表.txt");
+            if (txt307.StartsWith(PreCh) && pks.Contains(park149))
+            {
+                //if (isGrpChat(update))
+                //{
+                //    //auth chk
+                //}
+                Callx(SetParkBtnClick, park149, update);
+                Jmp2endDep();
+            }
+        }
+
+        public static void BtmEvtSetCityMsgHdlr(ITelegramBotClient botClient, Update update, string txt307)
+        {
+            if (!IsSetAreaBtnname(txt307))
+                return;
+            var city = SubStr(txt307, 2);
+            var ctry = SubStr(txt307, 2);
+            if (ctry.StartsWith("确定设置城市为"))
+            {
+                var ctry158 = SubstrAfterMarker(ctry, "确定设置城市为");
+                ctry158 = ctry158.Trim();
+                ConfirmSetCityBtnClick(ctry158, update);
+                Jmp2endDep();
+            }
+            if (IsFileExist($"{prjdir}/cfg_cmd/{city}园区.txt"))
+            {
+                KeyboardButton[][] btns = ConvertFileToKeyboardButtons(
+                    $"{prjdir}/cfg_cmd/{city}园区.txt");
+                Print(EncodeJson(btns));
+                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
+                rplyKbdMkp.ResizeKeyboard = true;
+
+                string imgPath = "今日促销商家.gif";
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //  Message message2dbg = await 
+                var m = botClient.SendTextMessageAsync(
+                                update.Message.Chat.Id, "选择园区",
+                                parseMode: ParseMode.Html,
+                                replyMarkup: rplyKbdMkp,
+                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+
+                Print(m);
+                Jmp2end(nameof(BtmEvtSetCityMsgHdlr));
+            }
+
+            if (IsSetAreaBtnname(txt307) && ISCity(city) &&
+          IsNotExistFil($"{prjdir}/cfg_cmd/{city}园区.txt"))
+            {
+                Print("暂无配置");
+                //  Message message2dbg = await 
+                var m = botClient.SendTextMessageAsync(
+                                update.Message.Chat.Id, "暂无配置",
+                                parseMode: ParseMode.Html,
+                                //  replyMarkup: rplyKbdMkp,
+                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+
+                Print(m);
+                Jmp2end(nameof(BtmEvtSetCityMsgHdlr));
+
+
+            }
+
+        }
+
+
+        public static void BtmEvtSetCountry(ITelegramBotClient botClient, Update update, string txt307)
+        {
+            jmp2endCurFunInThrd.Value = nameof(BtmEvtSetCountry);
+            if (!IsSetAreaBtnname(txt307))
+                return;
+          
+
+           var ctry = SubStr(txt307, 2);
+
+          
+            if (ctry.StartsWith("确定设置国家为"))
+            {
+                var ctry158 = SubstrAfterMarker(ctry, "确定设置国家为");
+                ctry158 = ctry158.Trim();
+                ConfirmSetCountryBtnClick(ctry158, update);
+                Jmp2endDep();
+            }
+
+            try
+            {
+                iff(Condt(ISCtry, ctry), null, () =>
+                {
+                    Jmp2endCurFunFlag.Value = true;
+                   // Jmp2endCurFun();
+                });
+                if (Jmp2endCurFunFlag.Value)
+                {
+                  //  PrintRet(nameof(BtmEvtSetCountry), "");
+                    return;
+                }
+                //todo      jmp2endCurFunEx also shold uper to catch ,not here..
+            }
+            catch (Exception jmp2endCurFunEx)
+            {
+                PrintRet(nameof(BtmEvtSetCountry), "");
+                return;
+            }
+       
+
+
+            iff(Condt(IsFileExist, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
+            {
+
+                KeyboardButton[][] btns = ConvertFileToKeyboardButtons($"{prjdir}/cfg_cmd/{ctry}城市.txt");
+                Print(EncodeJson(btns));
+                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
+                rplyKbdMkp.ResizeKeyboard = true;
+
+                string imgPath = "今日促销商家.gif";
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //  Message message2dbg = await 
+                var m = botClient.SendTextMessageAsync(
+                                update.Message.Chat.Id, "选择城市",
+                                parseMode: ParseMode.Html,
+                                replyMarkup: rplyKbdMkp,
+                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+
+                Print(m);
+                Jmp2end(nameof(BtmEvtSetCountry));
+            });
+
+            //iff(Condt(IsSetAreaBtnname, txt307)
+            //    && Condt(ISCtry, ctry)
+            //       && Condt(IsExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"),
+            //    () => {
+            //        Print("THEN➡️➡️");
+
+
+            //    },
+            //     () => {
+            //         Print("ELSE☑️");
+            //         Print("暂无配置");
+
+            //     }
+            //);
+
+            iff(Condt(IsSetAreaBtnname, txt307)
+               && Condt(ISCtry, ctry)
+                   && Condt(IsNotExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
+                   {
+                       //  Message message2dbg = await 
+                       var m = botClient.SendTextMessageAsync(
+                                       update.Message.Chat.Id, "暂无配置",
+                                       parseMode: ParseMode.Html,
+                                       //  replyMarkup: rplyKbdMkp,
+                                       protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+
+                       Print(m);
+
+                       Jmp2endDep();
+
+
+                   });
+        }
+
+        public static void Jmp2endCurFun()
+        {
+            throw new jmp2endCurFunEx();
+        }
+
+        public static void BtmEvtSetAreaHdlrChk(Update? update)
+        {
+            //--------------------shezhi 国家指令
+            string txt307 = GetStr(update?.Message?.Text);
+            if (update.CallbackQuery?.Data != null)
+            {
+                string cmd = update.CallbackQuery?.Data;
+                if (cmd == "testpopbx")
+                {
+                    botClient.AnswerCallbackQueryAsync(
+                 callbackQueryId: update.CallbackQuery.Id,
+                 text: ReadAllText("testpopbx.txt"),
+                 showAlert: true); // 这是显示对话框的关键);
+                    return;
+                }
+
+            }
+            if (txt307 == "testpopbx")
+            {
+                botClient.AnswerCallbackQueryAsync(
+                callbackQueryId: update.CallbackQuery.Id,
+                text: "",
+                showAlert: true); // 这是显示对话框的关键);
+                return;
+            }
+            if (txt307.StartsWith("请选择本群所在区域"))
+                return;
+            if (txt307.StartsWith(tipsSelectArea))
+                return;
+            if (txt307.StartsWith(tipsAppendArea))
+                return;
+            if (txt307.StartsWith("取消新增区域"))
+                return;
+            if (txt307.StartsWith("/"))
+                return;
+            if (!IsSetAreaBtnname(txt307))
+                return;
+
+            Callx(BtmEvtSetCountry, botClient, update, txt307);
+            //-------shezhi 城市指令
+            //  string txt307 = GetStr(update?.Message?.Text);
+            Callx( BtmEvtSetCityMsgHdlr,botClient, update, txt307);
+
+            //------setpark   BtmEvtSetParkMsgHdlr
+            BtmEvtSetParkMsgHdlrPre(update, txt307);
         }
 
         private static void AppendArea(string ctry, SortedList cfg)
         {
             string areaArr = GetFieldAsStr(cfg, "area地区");
-       string     areaArr22 = AppendStrcomma(ctry, areaArr);
+            string areaArr22 = AppendStrcomma(ctry, areaArr);
             SetField(cfg, "area地区", areaArr22);
         }
 
@@ -186,7 +410,7 @@ namespace mdsj.libBiz
                     // print("no auth ");
                     botClient.SendTextMessageAsync(update.Message.Chat.Id,
                           "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2endDep();
                 }
             }
 
@@ -199,14 +423,14 @@ namespace mdsj.libBiz
                 string whereExprsFld = "whereExprs";
                 string areakey = "城市";
                 string parks = GetParksByCity(area);
-             string newParks=   AppendParks(cfg,  parks);
+                string newParks = AppendParks(cfg, parks);
                 AppendArea(area, cfg);
 
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 SetField(cfg, "园区", newParks);
                 SetField(cfg, "id", grpid.ToString());
-                SetField(cfg, "grpid", grpid.ToString());            
+                SetField(cfg, "grpid", grpid.ToString());
                 SetField(cfg, "grpinfo", update.Message.Chat);
                 if (pk == "不限制")
                 {
@@ -227,10 +451,10 @@ namespace mdsj.libBiz
                 string newParks = AppendParks(cfg, parks);
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
-           //     SetField(cfg, "园区", whereExprsNew);
+                //     SetField(cfg, "园区", whereExprsNew);
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
-            //    SetField(cfg, "whereExprs", $"园区={newParks}");
+                //    SetField(cfg, "whereExprs", $"园区={newParks}");
                 if (area == "不限制")
                 {
                     SetField(cfg, "城市", "");
@@ -249,16 +473,16 @@ namespace mdsj.libBiz
               replyToMessageId: update.Message.MessageId);
 
             //------------set menu btm
-            SetBtmMenu(update); Jmp2end();
+            SetBtmMenu(update); Jmp2endDep();
         }
-   
-
-  
-
-  
 
 
-        private static string AppendParks(SortedList cfg,   string parks
+
+
+
+
+
+        private static string AppendParks(SortedList cfg, string parks
         )
         {
             string whereExprs = GetFieldAsStr(cfg, "whereExprs");
@@ -276,10 +500,10 @@ namespace mdsj.libBiz
 
             string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
             SetField(cfg, "whereExprs", whereExprsNew);
-               return newParks;
+            return newParks;
         }
 
-  
+
 
         //private static string SetMapWhereexprsFldOFkv(SortedList cfg, string whereExprsFld, string key2, string v2
         //    )
@@ -290,7 +514,7 @@ namespace mdsj.libBiz
 
         //    SetField(whereExpmap, "国家", "");
         //    SetField(whereExpmap, "城市", "");
-           
+
         //    string whereExprsNew = CastHashtableToQuerystringNoEncodeurl(whereExpmap);
         //    return whereExprsNew;
         //}
@@ -314,7 +538,7 @@ namespace mdsj.libBiz
                     // print("no auth ");
                     botClient.SendTextMessageAsync(update.Message.Chat.Id,
                           "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2endDep();
                 }
             }
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
@@ -398,7 +622,7 @@ namespace mdsj.libBiz
              update.Message.Chat.Id,
              "权限不足",
              replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2endDep();
                     return;
                 }
 
@@ -408,9 +632,9 @@ namespace mdsj.libBiz
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                 SortedList cfg = findOne(dbfile2);
 
-              //  string wehreExprs = GetFieldAsStr(cfg, "whereExprs");
-              //  SortedList whereMap = GetHashtableFromQrystr(wehreExprs);
-            //    string oriparks = GetFieldAsStr(whereMap, "园区");
+                //  string wehreExprs = GetFieldAsStr(cfg, "whereExprs");
+                //  SortedList whereMap = GetHashtableFromQrystr(wehreExprs);
+                //    string oriparks = GetFieldAsStr(whereMap, "园区");
                 string newParks = AppendParks(cfg, park);
                 string pk = park.Trim().ToUpper();
                 AppendArea(pk, cfg);
@@ -442,11 +666,11 @@ namespace mdsj.libBiz
             SortedList cfg = findOne(dbfile);
             string pk = park.Trim().ToUpper();
             string newParks = AppendParks(cfg, park);
-        
+
 
             SetField(cfg, "园区", newParks);
             DelField(cfg, "国家");
-       //     SetField(cfg, "whereExprs", $"园区={newParks}");
+            //     SetField(cfg, "whereExprs", $"园区={newParks}");
             DelField(cfg, "城市");
             SetField(cfg, "园区", pk);
             SetField(cfg, "id", update.Message.From.Id.ToString());
@@ -459,8 +683,8 @@ namespace mdsj.libBiz
             ormJSonFL.SaveJson(cfg, dbfile);
         }
 
-        
-        
+
+
         //public static void On我是谁Supergroup(Update update, string reqThreadId)
         //{
         //    Print("我是打游戏");
@@ -490,14 +714,14 @@ namespace mdsj.libBiz
                     // print("no auth ");
                     botClient.SendTextMessageAsync(update.Message.Chat.Id,
                           "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2end(nameof(CmdHdlrclearArea));
                 }
             }
 
             if (isGrpChat(update))
             {
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
-                SortedList cfg = findOne(dbfile2); 
+                SortedList cfg = findOne(dbfile2);
                 string whereExprsFld = "whereExprs";
                 string areakey = "城市";
 
@@ -506,11 +730,11 @@ namespace mdsj.libBiz
 
 
                 SetField(cfg, "园区", "");
-           
+
                 SetField(cfg, "whereExprs", "");
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
-                SetField(cfg, "grpinfo", update.Message.Chat);  
+                SetField(cfg, "grpinfo", update.Message.Chat);
                 ormJSonFL.SaveJson(cfg, dbfile2);
             }
 
@@ -521,14 +745,14 @@ namespace mdsj.libBiz
                 string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
                 SortedList cfg = findOne(dbfile);
                 string whereExprsFld = "whereExprs";
-               
+
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 DelField(cfg, "园区");
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
                 SetField(cfg, "whereExprs", "");
-               
+
                 ormJSonFL.SaveJson(cfg, dbfile);
             }
 
@@ -541,9 +765,9 @@ namespace mdsj.libBiz
            protectContent: false,
            disableWebPagePreview: true,
            replyToMessageId: update.Message.MessageId);
-            Jmp2end();
+            Jmp2end(nameof(CmdHdlrclearArea));
         }
-            public static void CmdHdlrarea(string fullcmd,Update update, string reqThreadId)
+        public static void CmdHdlrarea(string fullcmd, Update update, string reqThreadId)
         {
 
             if (isGrpChat(update))
@@ -552,11 +776,11 @@ namespace mdsj.libBiz
                 if (!IsAdmin(update))
                 {
                     //send
-                    Print("no auth " );
+                    Print("no auth ");
                     // print("no auth ");
                     botClient.SendTextMessageAsync(update.Message.Chat.Id,
                           "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2end();
+                    Jmp2end(nameof(CmdHdlrarea));
                 }
             }
 
@@ -564,31 +788,32 @@ namespace mdsj.libBiz
 
             if (IsSetArea(update))
             {
-                if(isGrpChat(update))
+                if (isGrpChat(update))
                 {
                     var grpid = update.Message.Chat.Id;
                     var fromUid = update.Message.From.Id;
                     var mybotid = botClient.BotId;
                     string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                     SortedList cfg = findOne(dbfile2);
-                 
+
 
                     string area = GetFieldAsStr(cfg, "area地区");
                     tipsd = $"你已经选择了地区：{area} 。";
                     tipsd += tipsAppendArea;
-                }else
+                }
+                else
 
-                tipsd = tipsAppendArea;
-            } 
+                    tipsd = tipsAppendArea;
+            }
 
-             
+
 
             string cmd = GetCmdFun(update?.Message?.Text);
             //  Print("oo617");
             string filePath = $"{prjdir}/cfg_cmd/{cmd}.txt";
             string[] lines = ReadFileAndRemoveEmptyLines(filePath);
             lines = Replace(lines, "{tipsd}", tipsAppendArea);
- 
+
 
             KeyboardButton[][] btns = ConvertFileToKeyboardButtons(lines);
             Print(EncodeJson(btns));
@@ -596,7 +821,7 @@ namespace mdsj.libBiz
             string imgPath = "今日促销商家.gif";
             var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //  Message message2dbg = await 
-         
+
             var m = botClient.SendTextMessageAsync(
                             update.Message.Chat.Id, tipsd,
                             parseMode: ParseMode.Html,
@@ -605,10 +830,11 @@ namespace mdsj.libBiz
 
             Print(m);
             // PrintRet(nameof(CmdHdlrarea), "");
-            Jmp2end();
+            jmp2endCurFunInThrd.Value = nameof(CmdHdlrarea);
+            Jmp2end(nameof(CmdHdlrarea));
         }
 
-     
+
         public static bool IsSetArea(Update? update)
         {
             var grpid = update.Message.Chat.Id;
@@ -616,22 +842,22 @@ namespace mdsj.libBiz
             var mybotid = botClient.BotId;
             string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
             SortedList cfg = findOne(dbfile2);
-           
+
 
             string whereExprsFld = "whereExprs";
             string areakey = "城市";
-            if(IsEmpty(GetFieldAsStr(cfg, whereExprsFld)))
+            if (IsEmpty(GetFieldAsStr(cfg, whereExprsFld)))
                 return false;
             return true;
-                    
-        //    string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
+
+            //    string whereExprsNew = SetMapWhereexprsFldOFkv(cfg, whereExprsFld, areakey, area);
 
         }
 
-      
 
 
-     
+
+
 
         public static void OnCmdPrvt(string cmdFulltxt, Update update, string reqThreadId)
         {

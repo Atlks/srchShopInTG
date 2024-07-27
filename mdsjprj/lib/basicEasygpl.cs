@@ -39,7 +39,7 @@ namespace mdsj.lib
             {
                 if (e.ToString().Contains("jmp2endEx"))
                 {
-                    Jmp2end();
+                    Jmp2endDep();
                 }
                 PrintCatchEx(__METHOD__, e);
                 SortedList dbgobj = new SortedList();
@@ -94,7 +94,7 @@ namespace mdsj.lib
         }
         public static string 格式化路径(string 路径)
         {
-            return castNormalizePath(路径);
+            return CastNormalizePath(路径);
 
         }
         public static bool 文件有扩展名(string 路径)
@@ -144,7 +144,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        Jmp2end();
+                        Jmp2endDep();
                     }
                     PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
@@ -172,7 +172,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        Jmp2end();
+                        Jmp2endDep();
                     }
                     PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
@@ -233,7 +233,7 @@ namespace mdsj.lib
             }
             catch (Exception e)
             {
-                PrintExcept(nameof(callxTryx), e);
+                PrintExcept(nameof(CallxTryx), e);
             }
 
 

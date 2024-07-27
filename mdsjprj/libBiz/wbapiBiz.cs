@@ -335,7 +335,7 @@ namespace mdsj.libBiz
             ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/{saveOBJ["Cate"]}.json");
             SendResp("ok", response);
 
-
+            Jmp2end(nameof(AddPostPOSTWbapi));
 
         }
 
@@ -348,6 +348,32 @@ namespace mdsj.libBiz
         /// <param name="营业时间">12:00-22:00</param>
         /// <param name="位置"></param>
         /// <param name="照片或视频">h5文件表单上传文件</param>
+        public static void DelMerchtGETWbapi(HttpRequest request, HttpResponse response)
+        {
+          
+
+            SortedList saveOBJ = ConvertFormToSortedList(request.Form);
+
+            string token = GetFieldAsStr(saveOBJ, "token");
+            //string[] tka = token.Split("_");
+            //string uid = GetElmt(tka, 0);
+            //string exprt = GetElmt(tka, 1);
+            //string token_uidDotExprtMode = DecryptAes(exprt);
+
+            if (IsValidToken(token))
+            {
+                SendResp("token无效", response);
+                Jmp2end(nameof(AddMerchtPOSTWbapi));
+            }
+
+
+            ormSqlt.delByID(saveOBJ["id"].ToString(), "mercht商家数据", "mercht商家数据/缅甸.db");
+            SendResp("ok", response);
+
+            Jmp2end(nameof(DelMerchtGETWbapi));
+        }
+
+
         public static void AddMerchtPOSTWbapi(HttpRequest request, HttpResponse response)
         {
             //   if (request.Method == HttpMethods.Post)
@@ -382,24 +408,25 @@ namespace mdsj.libBiz
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
             string token = GetFieldAsStr(saveOBJ, "token");
-            string[] tka = token.Split("_");
-            string uid = GetElmt(tka, 0);
-            string exprt = GetElmt(tka,1);
-            string ori_exprtDecd = DecryptAes(exprt);
-            if (IsNotExprt(ori_exprtDecd))
+            //string[] tka = token.Split("_");
+            //string uid = GetElmt(tka, 0);
+            //string exprt = GetElmt(tka, 1);
+            //string ori_exprtDecd = DecryptAes(exprt);
+
+            if (IsValidToken(token))
             {
-                ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
-                ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
-                SendResp("ok", response);
+                SendResp("token无效", response);
+                Jmp2end(nameof(AddMerchtPOSTWbapi));
             }
-            if (IsExprt(ori_exprtDecd))
-            {
-                SendResp("token过期", response);
-            }
+
+            ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
+            ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
+            SendResp("ok", response);
+
+            Jmp2end(nameof(AddMerchtPOSTWbapi));
         }
 
-      
-
+    
 
 
 

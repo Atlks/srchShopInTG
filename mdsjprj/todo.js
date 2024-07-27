@@ -1,6 +1,12 @@
 console.log(33)
 
 
+srch rzt shld use html layout
+srch sql rzt is transfam to h5
+
+then tg lib send trans h5 dsl to botObj
+
+
 //todo 
 这些词, 应该也要有个触发词可以搜索
 哪里可以买号

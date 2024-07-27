@@ -1,5 +1,6 @@
 ﻿global using static mdsj.lib.bsccode;
 using HtmlAgilityPack;
+using mdsj.libBiz;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -66,7 +67,7 @@ namespace mdsj.lib
 
         public static bool Condt(Func<string, bool> fn, string ctry)
         {
-            PrintStr(GetMethodName(fn) + $"({ctry})");
+            PrintStr("❓" + GetMethodName(fn) + $"({ctry})");
             PrintStr(" => ");
             bool r = fn(ctry);
             if (r)
@@ -79,7 +80,7 @@ namespace mdsj.lib
         public static void iff(bool cdt, Action act1)
         {
             // cd1 cd2 
-            PrintStr("\nIF❓❓ is ");
+            PrintStr("\n❓❓IF rztIS ");
             if (cdt)
             {
                 Print("TRUE✅");
@@ -91,17 +92,17 @@ namespace mdsj.lib
 
             if (cdt)
             {
-                Print("THEN➡️➡️");
+                Print("➡️➡️THEN");
                 act1();
 
             }
 
-            Print("\nENDIF🔚");
+            Print("\n🔚❓❓ENDIF");
         }
         public static void iff(bool cdt, Action act1, Action elseAct)
         {
             // cd1 cd2 
-            PrintStr("\nIF❓❓ is ");
+            PrintStr("\n❓❓IF is ");
             if (cdt)
                 Print("TRUE✅");
             else
@@ -109,16 +110,16 @@ namespace mdsj.lib
 
             if (cdt)
             {
-                Print("THEN➡️➡️");
+                Print("➡️➡️THEN");
                 act1();
 
             }
             else
             {
-                Print("ELSE☑️");
+                Print("☑️☑️ELSE");
                 elseAct();
             }
-            Print("\nENDIF🔚");
+            Print("\n🔚❓❓ENDIF");
         }
         private static string GetMethodName(Delegate del)
         {
@@ -308,7 +309,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        Jmp2end();
+                        Jmp2endDep();
                     }
                     PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
@@ -338,7 +339,7 @@ namespace mdsj.lib
                 {
                     if (e.ToString().Contains("jmp2endEx"))
                     {
-                        Jmp2end();
+                        Jmp2endDep();
                     }
                     PrintCatchEx("foreach_hashtable", e);
                     //  print(e);
@@ -437,7 +438,7 @@ namespace mdsj.lib
                 }
                 catch (Exception e)
                 {
-                    PrintCatchEx("callAsync", e);
+                    PrintCatchEx(nameof(callAsyncNewThrdx), e);
                 }
 
 
@@ -514,7 +515,7 @@ namespace mdsj.lib
 
         public static object CallxTryJmp(Delegate callback, params object[] objs)
         {
-          
+
             try
             {
                 return Callx(callback, objs);
@@ -626,7 +627,7 @@ namespace mdsj.lib
         }
         public static object Callx(Delegate callback, params object[] args)
         {
-     
+
             //  return CallUserFunc409(callback, args);
             MethodInfo method = callback.Method;
             var __METHOD__ = method.Name;
@@ -638,6 +639,11 @@ namespace mdsj.lib
 
                 //   else
                 o = callback.DynamicInvoke(args);
+            }
+            catch (jmp2endCurFunEx ee)
+            {
+                PrintRet(__METHOD__, "");
+                return o;
             }
             catch (jmp2endEx e1)
             {
@@ -651,9 +657,9 @@ namespace mdsj.lib
                     {
                         jmp2exitFlagInThrd.Value = true;
                         PrintTimestamp($" Callx(Delegate) ctch ex ,mtth:{__METHOD__}");
-                      
+
                         dbgpad = dbgpad - 4;
-                        Jmp2end925(jmp2endCurFunInThrd.Value);
+                        Jmp2end(jmp2endCurFunInThrd.Value);
                     }
 
                 }
@@ -742,7 +748,7 @@ namespace mdsj.lib
             return futureTime.ToString(format);
         }
 
-        public static void IfNotExist(bool bl,Action act)
+        public static void IfNotExist(bool bl, Action act)
         {
             iff(bl, act);
         }
@@ -752,20 +758,28 @@ namespace mdsj.lib
             iff(bl, act);
         }
 
+        /// <summary>
+        /// sanyaosu  name,birday ,pic
+        ///   Print(newToken("00799988", 3600 * 24 * 7));
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="exprtTimeSecsAftr"></param>
+        /// <returns></returns>
         public static object newToken(string uid, int exprtTimeSecsAftr)
         {
             string tkExprt = AddTimet(exprtTimeSecsAftr);
-            string tkExpEnc = EncryptAes(tkExprt);
-            string tkOri = uid + "_" + tkExpEnc;
+            string issTime = DateTime.Now.ToString();
+            string MRG = EncryptAes(uid + "." + tkExprt + "." + issTime);
+            string tkOri = uid + "_" + MRG;
             return tkOri;
         }
 
-        public static void Jmp2end925(string levFn)
+        public static void Jmp2end(string levFn)
         {
             throw new jmp2endEx("🛑JMP2END from " + levFn + " ,GOTO END🛑🛑🛑.. ");
         }
 
-        public static void Jmp2end()
+        public static void Jmp2endDep()
         {
             // jmp2exitFlag = true;
             throw new jmp2endEx();
@@ -848,9 +862,10 @@ namespace mdsj.lib
             {
                 if (e.ToString().Contains("jmp2endEx"))
                 {
-                    PrintRetx(__METHOD__, result);
+                    dbgpad = dbgpad - 4;
                     PrintTimestamp($"  Callx(str) catch jmp2endEx mthd:{methodName}");
-                    Jmp2end();
+                    throw e.InnerException;
+                    //   Jmp2end();
                 }
 
                 PrintExcept("call", e);
