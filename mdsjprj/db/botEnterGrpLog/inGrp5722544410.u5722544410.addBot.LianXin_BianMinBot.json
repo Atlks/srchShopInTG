@@ -1,0 +1,37 @@
+{
+  "update_id": 839638310,
+  "my_chat_member": {
+    "chat": {
+      "id": 5722544410,
+      "type": "private",
+      "username": "Jiangshan999666",
+      "first_name": "ISANDISOFX Customer Service"
+    },
+    "from": {
+      "id": 5722544410,
+      "is_bot": false,
+      "first_name": "ISANDISOFX Customer Service",
+      "username": "Jiangshan999666",
+      "language_code": "zh-hans"
+    },
+    "date": 1722031541,
+    "old_chat_member": {
+      "status": "member",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    },
+    "new_chat_member": {
+      "status": "kicked",
+      "user": {
+        "id": 6999501721,
+        "is_bot": true,
+        "first_name": "联信便民助手",
+        "username": "LianXin_BianMinBot"
+      }
+    }
+  }
+}

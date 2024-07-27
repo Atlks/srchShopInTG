@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Web;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 // prj202405.lib.filex
 namespace prjx.lib
 {

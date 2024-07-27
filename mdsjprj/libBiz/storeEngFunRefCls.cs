@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 using static libx.qryEngrParser;
 using static libx.storeEngr4Nodesqlt;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 //using static mdsj.other;
 //using static mdsj.clrCls;
 using static prjx.lib.corex;

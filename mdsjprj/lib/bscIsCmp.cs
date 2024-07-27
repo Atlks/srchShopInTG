@@ -283,6 +283,57 @@ namespace mdsj.lib
         {
             return (character >= 'A' && character <= 'Z') || (character >= 'a' && character <= 'z');
         }
+        public static bool IsNotExprt(string timeString)
+        {
+            return !IsExprt(timeString);
+        }
+        public static bool IsExprt(string timeString)
+        {
+            // 定义时间格式
+            string format = "yyyy-MM-dd HH:mm:ss";
+            DateTime parsedTime;
+
+            // 尝试解析时间字符串
+            bool isValid = DateTime.TryParseExact(timeString, format,
+                              System.Globalization.CultureInfo.InvariantCulture,
+                              System.Globalization.DateTimeStyles.None, out parsedTime);
+
+            if (!isValid)
+            {
+                throw new ArgumentException("Invalid time format.");
+            }
+
+            // 获取当前时间
+            DateTime currentTime = DateTime.Now;
+
+            // 比较时间
+            return parsedTime < currentTime;
+        }
+
+
+        public static bool IsTimeExprt(string timeString)
+        {
+            // 定义时间格式
+            string format = "yyyy-MM-dd HH:mm:ss";
+            DateTime parsedTime;
+
+            // 尝试解析时间字符串
+            bool isValid = DateTime.TryParseExact(timeString, format,
+                              System.Globalization.CultureInfo.InvariantCulture,
+                              System.Globalization.DateTimeStyles.None, out parsedTime);
+
+            if (!isValid)
+            {
+                throw new ArgumentException("Invalid time format.");
+            }
+
+            // 获取当前时间
+            DateTime currentTime = DateTime.Now;
+
+            // 比较时间
+            return parsedTime < currentTime;
+        }
+
 
         public static bool IsEnglishLetter(char character)
         {

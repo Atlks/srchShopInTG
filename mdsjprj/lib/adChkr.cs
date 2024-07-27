@@ -15,7 +15,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
 using static mdsj.libBiz.tgBiz;
@@ -25,7 +25,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 
 using static mdsj.libBiz.tgBiz;
@@ -47,7 +47,7 @@ namespace mdsj.lib
                 string prjdir = @"../../../";
                 prjdir = filex.GetAbsolutePath(prjdir);
                 string adwdlib = $"{prjdir}/gbwd垃圾关键词词库/ads_word.txt";
-                HashSet<string> adwds = splitFileByChrs(adwdlib, ",\r \n");
+                HashSet<string> adwds = SplitFileByChrs(adwdlib, ",\r \n");
                 int ctnScr = containCalcCntScoreSetfmt(text, adwds);
 
                Print("广告词包含分数=》" + ctnScr);
@@ -58,7 +58,7 @@ namespace mdsj.lib
                 string timestampMM = DateTime.Now.ToString("MM");
                 string fnameFrmTxt = ConvertToValidFileName(text);
                Print("fnameFrmTxt=>" + fnameFrmTxt);
-                string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + str_sub (fnameFrmTxt,0, 50) + ".txt";
+                string fname = $"adchkDir/uid{uid}_grp{grpid}_Dt{timestampMM}___" + Sub1109 (fnameFrmTxt,0, 50) + ".txt";
                 if (System.IO.File.Exists(fname))
                 {
                    Print("是重复消息了" + fname);

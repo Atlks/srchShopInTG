@@ -32,7 +32,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 
 using static mdsj.lib.CallFun;
 using static mdsj.biz_other;
@@ -49,7 +49,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.dsl;
 using static mdsj.lib.util;
@@ -142,6 +142,11 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            Print(newToken("00799988", 3600 * 24 * 7));
+            var encStr = EncryptAes("202411");
+            Print(DecryptAes(encStr));
+
+            Print(newToken("0079999", 3600 * 240));
             string htmlf = $"{prjdir}/cfg_btmbtn/好奇.htm";
             string html = ReadAllText(htmlf);
             string v = ConvertHtmlToJson4tg(html);
@@ -425,6 +430,9 @@ namespace prjx
 
         }
 
+     
+
+    
         private static void add30xiezhi()
         {
             for(int i = 0; i < 30; i++)

@@ -17,7 +17,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 
 namespace mdsj.lib
@@ -51,7 +51,7 @@ namespace mdsj.lib
                     // 获取当前时间并格式化为文件名
                     string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
                     file_put_contents("httplogDir/"+ timestamp+".log", responseBody);
-                    dbgCls.PrintRet(__METHOD__, str_sub(responseBody,0,500));
+                    dbgCls.PrintRet(__METHOD__, Sub1109(responseBody,0,500));
                     return responseBody;
                 }
                 catch (HttpRequestException e)

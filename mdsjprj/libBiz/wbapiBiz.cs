@@ -1,4 +1,7 @@
-﻿global using static mdsj.libBiz.wbapiBiz;
+﻿
+global using static mdsj.libBiz.wbapiBiz;
+using System.Security.Cryptography;
+using System.Text;
 using libx;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Primitives;
@@ -12,6 +15,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,6 +23,8 @@ namespace mdsj.libBiz
 {
     internal class wbapiBiz
     {
+
+
         //todo  setcity  setpark
 
         //  http://localhost:5000/setpark?park=东风园区&uid=007
@@ -157,29 +163,30 @@ namespace mdsj.libBiz
         public static string WbapiXgetlistPost(string qrystr)
         {
             return "";
-           
+
         }
-            public static string WbapiXgetlist(string qrystr)
+        public static string WbapiXgetlist(string qrystr)
         {
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
-          
+
             //SortedList map = new SortedList();
             //map.Add("limit", 5);
 
             const string FromDdataDir = "mercht商家数据";
 
 
-         //   SetKv("a=1", "b", 253);
-           //todo v2
-             string qrtStr4Srch2 = DelKeys("商家 "+pageprm251, qrystr);
-             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+            //   SetKv("a=1", "b", 253);
+            //todo v2
+            string qrtStr4Srch2 = DelKeys("商家 " + pageprm251, qrystr);
+            var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
             //    GetQryStr4srch
-            SortedList qryClrMap = RemoveKeys(qryMap, "商家 page pages pagesize limit page limit pagesize from");
+            //rmv pagePrm token
+            SortedList qryClrMap = RemoveKeys(qryMap, "商家 token page pages pagesize limit page limit pagesize from");
             string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
-          
-            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);           
+
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
             var list = GetListFltr(FromDdataDir, null, whereFun);
             var list_aftFltr2 = ArrFltr(list, (SortedList row) =>
             {
@@ -188,8 +195,8 @@ namespace mdsj.libBiz
                 string mrtKwd = GetFieldAsStr(qryMap, "商家").ToUpper();
                 if (mrtKwd.Length > 0)
                     li.Add(GetFieldAsStr(row, "商家").ToUpper().Contains(mrtKwd));
-             //   li.Add((IsNotEmptyLianxi(row)));
-             //   li.Add((isLianxifshValid(row)));
+                //   li.Add((IsNotEmptyLianxi(row)));
+                //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
 
             });
@@ -200,7 +207,7 @@ namespace mdsj.libBiz
             int start = (page - 1) * pagesize;
 
             //todo 
-          //  var list_rzt2 = SliceByPageByQrystr(list_aftFltr2, qrystr);
+            //  var list_rzt2 = SliceByPageByQrystr(list_aftFltr2, qrystr);
             List<SortedList> list_rzt = SliceX(list_aftFltr2, start, pagesize);
 
 
@@ -213,10 +220,10 @@ namespace mdsj.libBiz
                 SetField938(sortedList, "NumberOfComments", list11.Count);
 
                 var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
-                var list12= GetListHashtableFromJsonFil(df);
+                var list12 = GetListHashtableFromJsonFil(df);
 
 
-                SetField938(sortedList, "Scores", Avg(list12,"dafen"));
+                SetField938(sortedList, "Scores", Avg(list12, "dafen"));
                 SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
 
             }
@@ -266,7 +273,7 @@ namespace mdsj.libBiz
 
 
 
-      
+
 
 
         /// <summary>
@@ -276,7 +283,7 @@ namespace mdsj.libBiz
         ///    <param name="Cate">分类 (资源 招聘等 ）</param>
         /// <param name="Title">标题</param>
         /// <param name="Txt">内容</param>
-       
+
         /// <param name="Poster">发布人</param>
         /// <param name="File">相关文件 图片 视频等 资源</param>
         /// 
@@ -296,7 +303,7 @@ namespace mdsj.libBiz
                     // Get the file content and save it to a desired location
                     var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
                     fil = filePath;
-                    filess.Add("uploads1016/"+ file.FileName);
+                    filess.Add("uploads1016/" + file.FileName);
                     Mkdir4File(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
@@ -316,7 +323,7 @@ namespace mdsj.libBiz
             //    httpHdlrApiSpecl(request, response);
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
-           // saveOBJ.Add("照片或视频", fil);
+            // saveOBJ.Add("照片或视频", fil);
             saveOBJ.Add("Files", (filess));
 
             // 获取当前时间（本地时间）
@@ -328,7 +335,7 @@ namespace mdsj.libBiz
             ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/{saveOBJ["Cate"]}.json");
             SendResp("ok", response);
 
-         
+
 
         }
 
@@ -374,15 +381,26 @@ namespace mdsj.libBiz
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
-            ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
-            SendResp("ok", response);
-
-            ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
-
+            string token = GetFieldAsStr(saveOBJ, "token");
+            string[] tka = token.Split("_");
+            string uid = GetElmt(tka, 0);
+            string exprt = GetElmt(tka,1);
+            string ori_exprtDecd = DecryptAes(exprt);
+            if (IsNotExprt(ori_exprtDecd))
+            {
+                ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
+                ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
+                SendResp("ok", response);
+            }
+            if (IsExprt(ori_exprtDecd))
+            {
+                SendResp("token过期", response);
+            }
         }
 
-  
-   
+      
+
+
 
 
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk

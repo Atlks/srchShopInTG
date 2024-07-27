@@ -727,7 +727,38 @@ namespace mdsj.lib
             }
 
         }
+        public static string AddTimet(int secondsToAdd)
+        {
+            // 获取当前时间
+            DateTime currentTime = DateTime.Now;
 
+            // 计算未来时间
+            DateTime futureTime = currentTime.AddSeconds(secondsToAdd);
+
+            // 定义时间格式
+            string format = "yyyy-MM-dd HH:mm:ss"; // 根据需要调整格式
+
+            // 返回格式化后的时间字符串
+            return futureTime.ToString(format);
+        }
+
+        public static void IfNotExist(bool bl,Action act)
+        {
+            iff(bl, act);
+        }
+
+        public static void IfExist(bool bl, Action act)
+        {
+            iff(bl, act);
+        }
+
+        public static object newToken(string uid, int exprtTimeSecsAftr)
+        {
+            string tkExprt = AddTimet(exprtTimeSecsAftr);
+            string tkExpEnc = EncryptAes(tkExprt);
+            string tkOri = uid + "_" + tkExpEnc;
+            return tkOri;
+        }
 
         public static void Jmp2end925(string levFn)
         {

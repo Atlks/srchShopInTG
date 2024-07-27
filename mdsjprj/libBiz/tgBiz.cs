@@ -23,7 +23,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
@@ -42,7 +42,7 @@ using static prjx.lib.db;
 using static prjx.lib.filex;
 using static prjx.lib.ormJSonFL;
 using static prjx.lib.strCls;
-using static mdsj.lib.encdCls;
+using static mdsj.lib.bscEncdCls;
 using static mdsj.lib.net_http;
 using static mdsj.libBiz.strBiz;
 
