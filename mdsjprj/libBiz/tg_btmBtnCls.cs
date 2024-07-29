@@ -114,7 +114,7 @@ namespace mdsj.libBiz
                             disableWebPagePreview: true
 
                     ).Result;
-                    Jmp2end925(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp");
+                    Jmp2end(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp");
                 }
                 catch(jmp2endEx ee)
                 {
@@ -124,7 +124,7 @@ namespace mdsj.libBiz
                 {
                     //other ext
                     PrintCatchEx(nameof(evt_btm_btn_click), e);
-                    Jmp2end925(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp.BLKcatchOthEx");
+                    Jmp2end(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp.BLKcatchOthEx");
                 }
 
 
@@ -462,7 +462,7 @@ namespace mdsj.libBiz
                 catch (Exception e)
                 {
                     PrintCatchEx(nameof(BtmBtnClkinCfgByMsg), e);
-                    Jmp2end();
+                    Jmp2endDep();
 
                     return;
                 }
@@ -470,7 +470,7 @@ namespace mdsj.libBiz
                 //aop  auth where exprs
                 if(update?.Message?.Chat?.Type!=ChatType.Private)
                      dltMsgDelay(update, msgNew);
-                Jmp2end();
+                Jmp2endDep();
 
                 return;
 
@@ -513,7 +513,7 @@ namespace mdsj.libBiz
                 catch (Exception e)
                 {
                     PrintCatchEx(nameof(BtmBtnClkinCfgByMsg), e);
-                    Jmp2end();
+                    Jmp2endDep();
 
                     return;
                 }
@@ -521,7 +521,7 @@ namespace mdsj.libBiz
                 //aop  auth where exprs
                 if (update?.Message?.Chat?.Type != ChatType.Private)
                     dltMsgDelay(update, msgNew);
-                Jmp2end925(nameof(BtmBtnClkinCfgByMsg));
+                Jmp2end(nameof(BtmBtnClkinCfgByMsg));
 
                 return;
 

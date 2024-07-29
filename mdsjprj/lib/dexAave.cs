@@ -81,22 +81,22 @@ namespace mdsj.lib
                                 var collateralAssetSymbol = deposit["reserve"]["symbol"].Value<string>();
                                 var reserveFactor = deposit["reserve"]["reserveFactor"].Value<decimal>();
 
-                                print($"Collateral Asset: {collateralAssetSymbol}");
-                                print($"Collateral Amount: {collateralAmount}");
-                                print($"Collateral Reserve Factor: {reserveFactor}");
+                                Print($"Collateral Asset: {collateralAssetSymbol}");
+                                Print($"Collateral Amount: {collateralAmount}");
+                                Print($"Collateral Reserve Factor: {reserveFactor}");
                              //   WriteLine();
                             }
                         }
                         else
                         {
-                           print("No data found for the user.");
+                           Print("No data found for the user.");
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-               print($"Error retrieving data: {ex.Message}");
+               Print($"Error retrieving data: {ex.Message}");
             }
         }
     }

@@ -176,7 +176,7 @@ namespace libx
                 SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
                 if(curShareCfg==null)
                 {
-                    Print("⚠️⚠️wanging... cangt find shareCfg:" + shar);
+                    Print("!!!⚠️⚠️wanging... cangt find shareCfg:" + shar);
                     continue;
                 }
                 rndFun = (string)curShareCfg["rndFun"];

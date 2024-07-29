@@ -13,7 +13,7 @@ namespace mdsj.libBiz
 {
     internal class otherlib
     {
-        public static string getFuwuci(string? text, HashSet<string> 商品与服务词库)
+        public static string GetFuwuci(string? text, HashSet<string> 商品与服务词库)
         {
             if (text == null)
                 return null;

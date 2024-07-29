@@ -60,50 +60,57 @@ namespace mdsj.lib
         }
 
 
-    
+     //  public static 
 
         public static bool Condt(Func<string, bool> fn, string ctry)
         {
-            Hashtable tb = new Hashtable();
-            tb.Add("cdt", GetMethodName(fn) + $"({ctry})");
+            SortedList cdt1 = new SortedList();
+            cdt1.Add("cdt", GetMethodName(fn) + $"({ctry})");
             PrintStr("❓?" + GetMethodName(fn) + $"({ctry})");
             PrintStr(" => ");
             bool r = fn(ctry);
-            tb.Add("rzt", r);
+            cdt1.Add("rzt", r);
             if (r)
                 PrintStr("✅:)TRUE");
             else
                 PrintStr("❌:(FALSE");
             PrintStr(" ,  ");
-            PrintFmtAstCdt(tb);
+            PrintFmtAstCdt(cdt1);
+            ArrayList li = (ArrayList)ifStrutsThrdloc.Value["cdts"];
+            li.Add(cdt1);
             return r;
         }
 
-        public static void PrintFmtAstCdt(Hashtable tb)
+        public static void PrintFmtAstCdt(SortedList tb)
         {
-            Print(EncodeJson(tb));
+            Print("    " + tb["cdt"].ToString() + "=>" + tb["rzt"].ToString());
+           // Print(EncodeJson(tb));
         }
 
-        public static void iff(bool cdt, Action act1)
+        public static void iff(bool cdtRzt, Action act1)
         {
-            Hashtable tb = new Hashtable();
-            tb.Add("cdtRzt", cdt);
+            SortedList ifAst = ifStrutsThrdloc.Value;
+            SortedList tb = new SortedList();
+            tb.Add("cdtRzt", cdtRzt);
+            ifAst["cdtsRzt"] = cdtRzt;
             // cd1 cd2 
             PrintStr("\n❓❓❓?? IF rztIS ");
-            if (cdt)
+            if (cdtRzt)
             {
                 Print("✅:))TRUE");
                 tb.Add("CHOOSE", "THEN");
+                ifAst["choose"] = "THEN";
             }
               
             else
             {
                 Print("❌:((FALSE");
                 tb.Add("CHOOSE", "ELSE");
+                ifAst["choose"] = "ELSE";
             }
                
 
-            if (cdt)
+            if (cdtRzt)
             {
                 Print("➡️➡️>THEN");
                 if (act1 != null)
@@ -115,7 +122,7 @@ namespace mdsj.lib
             PrintAstIfStmt(tb);
         }
 
-        public static void PrintAstIfStmt(Hashtable tb)
+        public static void PrintAstIfStmt(SortedList tb)
         {
             Print(EncodeJson(tb));
         }
@@ -663,7 +670,7 @@ namespace mdsj.lib
             object o = null;
             try
             {
-
+                //here dync invk slow ,need 40 ms
                 //   else
                 o = callback.DynamicInvoke(args);
             }
@@ -704,6 +711,57 @@ namespace mdsj.lib
             return o;
         }
 
+        public static object CallRetmod(Delegate callback, params object[] args)
+        {
+
+            //  return CallUserFunc409(callback, args);
+            MethodInfo method = callback.Method;
+            var __METHOD__ = method.Name;
+            jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(args));
+            object o = null;
+            try
+            {
+
+                //   else
+                o = callback.DynamicInvoke(args);
+            }
+            catch (jmp2endCurFunEx ee)
+            {
+                PrintRet(__METHOD__, "");
+                return o;
+            }
+            catch (jmp2endEx e1)
+            {
+                throw e1;
+            }
+            catch (Exception e)
+            {
+                if (e is System.Reflection.TargetInvocationException)
+                {
+                    if (e.ToString().Contains("jmp2endEx"))
+                    {
+                        jmp2exitFlagInThrd.Value = true;
+                        PrintTimestamp($" Callx(Delegate) ctch ex ,mtth:{__METHOD__}");
+
+                        dbgpad = dbgpad - 4;
+                        Jmp2end(jmp2endCurFunInThrd.Value);
+                    }
+
+                }
+                Print($"---catch ex----call mtdh:{__METHOD__}  prm:{json_encode_noFmt(func_get_args(args))}");
+                Print(e);
+                SortedList dbgobj = new SortedList();
+                dbgobj.Add("mtth", __METHOD__ + "(((" + json_encode_noFmt(func_get_args(args)) + ")))");
+                logErr2024(e, __METHOD__, "errdir", dbgobj);
+            }
+            //    call
+            if (o != null)
+                PrintRet(__METHOD__, o);
+            else
+                PrintRet(__METHOD__, 0);
+            return o;
+        }
 
         public static HashSet<string> NewSet(string f)
         {
@@ -823,7 +881,7 @@ namespace mdsj.lib
 
             if (methodInfo == null)
             {
-                Print("......$$waring  .methodinfo is null");
+                Print("!!!$$waring  .methodinfo is null");
                 PrintRetx(__METHOD__, "");
                 return null;
             }
@@ -851,10 +909,9 @@ namespace mdsj.lib
             //Delegate.CreateDelegate(delegateType, methodInfo);
         }
 
-
-        public static object Callx(string methodName, params object[] args)
+        public static object CallRetvMode(string methodName, params object[] args)
         {
-
+            PrintTimestamp(" enter fun Callx()" + methodName);
             var __METHOD__ = methodName; jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(methodName, func_get_args(args));
             var argsMkdFmt = ConvertToMarkdownTable(args);
@@ -889,6 +946,63 @@ namespace mdsj.lib
             {
                 if (e.ToString().Contains("jmp2endEx"))
                 {
+                    jmp2exitFlagInThrd.Value = true;
+                    dbgpad = dbgpad - 4;
+                    PrintTimestamp($"  Callx(str) catch jmp2endEx mthd:{methodName}");
+                    return 0;
+                    //   throw e.InnerException;
+                    //   Jmp2end();
+                }
+
+                PrintExcept("call", e);
+            }
+
+
+            PrintRetx(__METHOD__, result);
+            return result;
+            //Delegate.CreateDelegate(delegateType, methodInfo);
+        }
+
+        public static object Callx(string methodName, params object[] args)
+        {
+            PrintTimestamp(" enter fun Callx()" + methodName);
+            var __METHOD__ = methodName; jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(methodName, func_get_args(args));
+            var argsMkdFmt = ConvertToMarkdownTable(args);
+            Print(argsMkdFmt);
+
+            PrintTimestamp("  before  GetMethInfo()" + methodName);
+            MethodInfo? methodInfo = GetMethInfo(methodName);
+            PrintTimestamp("  end  GetMethInfo()" + methodName);
+            if (methodInfo == null)
+            {
+                Print("!!!$$waring  .methodinfo is null");
+                PrintRetx(__METHOD__, "");
+                PrintTimestamp(" end fun Callx()" + methodName);
+                return null;
+            }
+
+
+            //      var delegateType = typeof(Func<string, List<SortedList>>);
+            //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
+
+            // 假设你想要执行 YourMethodName 方法
+            //   object[] args = { };
+            object result = null;
+            try
+            {
+                result = methodInfo.Invoke(null, args);
+
+            }
+            catch (jmp2endEx e)
+            {
+                return e;
+            }
+            catch (Exception e)
+            {
+                if (e.ToString().Contains("jmp2endEx"))
+                {
+                    jmp2exitFlagInThrd.Value = true;
                     dbgpad = dbgpad - 4;
                     PrintTimestamp($"  Callx(str) catch jmp2endEx mthd:{methodName}");
                     throw e.InnerException;
@@ -940,13 +1054,40 @@ namespace mdsj.lib
                 PrintCatchEx(nameof(CallAsAsyncTaskRun), e);
             }
         }
+
+        /// <summary>
+        /// 截取字符串的前100个字符。
+        /// </summary>
+        /// <param name="input">输入字符串</param>
+        /// <returns>截取后的字符串</returns>
+        public static string Left(object input2,int len)
+        {
+            string input = ToStr(input2);
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty; // 如果输入为空或 null，则返回空字符串
+            }
+
+            // 截取前100个字符，如果输入长度不足100个字符，则返回整个字符串
+            return input.Length <= len ? input : input.Substring(0, len);
+        }
         public static void PrintRetx(string mETHOD__, object? result)
         {
-            //try
-            //{
+            if("WbapiXgetlist".Equals(mETHOD__))
+            {
+                Print(".dbg.");
+            }
 
-            //}cat
-            if (result is System.Collections.IList)
+            if(IsStr(result))
+            {
+                PrintRet(mETHOD__, Left( result,200));
+                return;
+            }
+                //try
+                //{
+
+                //}cat
+                if (result is System.Collections.IList)
             {
                 IList lst = (IList)result;
                 try

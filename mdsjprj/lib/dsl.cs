@@ -176,7 +176,7 @@ namespace mdsj.lib
 
         public static void echo(string line)
         {
-            print(line);
+            Print(line);
         }
         public static void JumpLoop指令()
         {

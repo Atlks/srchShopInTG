@@ -29,7 +29,7 @@ namespace mdsj.lib
             }
             catch (HttpRequestException e)
             {
-               print($"Request error: {e.Message}");
+               Print($"Request error: {e.Message}");
                 return "Lyrics not found.";
             }
         }

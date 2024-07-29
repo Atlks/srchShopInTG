@@ -28,7 +28,7 @@ namespace mdsj.lib
             long timestamp_end = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
             long spantime = (timestamp_end - timestamp);
 
-           print(showtitle + spantime);
+           Print(showtitle + spantime);
         }
 
         /// <summary>

@@ -21,22 +21,22 @@ namespace mdsj.lib
             {
                 DateTime now = DateTime.Now;
 
-                string[] times = splt(hs["time"]);
+                string[] times = Splt(hs["time"]);
                 var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day + Convert.ToString(now.Hour)}.json";
-                if (isIn(now.Hour, times) && now.Minute == 1 && (!System.IO.File.Exists(zhuliLog)))
+                if (IsIn(now.Hour, times) && now.Minute == 1 && (!System.IO.File.Exists(zhuliLog)))
                 {
                     System.IO.File.WriteAllText(zhuliLog, "pushlog");
                     var txtkeepBtnMenu = "";// "美好的心情从现在开始\n";
 
-                    callx(hs["fun"].ToString());
+                    Callx(hs["fun"].ToString());
                 }
             });
         }
         public static void task222()
         {
-            print("\n\n\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
-            print("$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
+            Print("\n\n\n\n$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
+            Print("$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
+            Print("$$$$$$$$$$$$$$$$$$$$$$$$$$4task2222");
         }
         public static void RunTmrTasksCron()
         {
@@ -45,7 +45,7 @@ namespace mdsj.lib
             var timer = new System.Threading.Timer(
                 callback: _ =>
                 {
-                    callxTryJmp(tmrTask1start);
+                    CallxTryJmp(tmrTask1start);
                 },
                 state: null,
                 dueTime: TimeSpan.Zero,
@@ -75,7 +75,7 @@ namespace mdsj.lib
                         System.IO.File.WriteAllText(zhuliLog, "pushlog");
                         // 调用需要执行的函数
                         //     fun1();
-                        callx(hs["fun"].ToString());
+                        Callx(hs["fun"].ToString());
                     }
                 }
             });
@@ -90,13 +90,13 @@ namespace mdsj.lib
             {// 获取当前时间
                 DateTime now = DateTime.Now;
                 var zhuliLog = $"tmrlg/{hs["basename"]}{Convert.ToString(now.Month) + now.Day }_19.json";
-                print(zhuliLog);
+                Print(zhuliLog);
                 if (!System.IO.File.Exists(zhuliLog))
                 {
                     System.IO.File.WriteAllText(zhuliLog, "pushlog");
                     // 调用需要执行的函数
                     //     fun1();
-                    callx(hs["fun"].ToString());
+                    Callx(hs["fun"].ToString());
                 }
 
             });

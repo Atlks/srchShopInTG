@@ -103,6 +103,13 @@ namespace mdsj.lib
         
          
          */
+
+        /*
+                   //  response.AddHeader("Access-Control-Allow-Origin", "*");
+            //response.ContentType = 内容类型和编码;
+            //res.header('Access-Control-Allow-Origin', '*'); 
+         */
+        //  HttpResponse设置'Access-Control-Allow-Origin', '*
         /// <summary>
         /// httpHdlr
         /// </summary>
@@ -116,7 +123,8 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-
+            // 允许所有域名
+            response.Headers.Add("Access-Control-Allow-Origin", "*");
 
 
             //----------------static res
@@ -127,13 +135,16 @@ namespace mdsj.lib
             extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
             extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
             string path2 = request.Path;
+            PrintTimestamp("bef call HttpHdlrFil");
             Callx(HttpHdlrFil, request, response, extNhdlrChoosrMaplist);
+            PrintTimestamp("end call HttpHdlrFil");
             if (jmp2exitFlagInThrd.Value == true)
                 return;
             //-------------------if spec  api
             // 处理特定API
             Callx(httpHdlrApiSpecl, request, response);
-
+            if (jmp2exitFlagInThrd.Value == true)
+                return;
 
             //----------doc
             string methd = request.Path;
@@ -157,6 +168,7 @@ namespace mdsj.lib
             Callx(funname, request, response);
 
 
+            //----dep
             //TODO DEP SHOULD AUTO get post call
             object rzt = CallxTryx(api_prefixDep + fn, Substring(queryString, 1));
             // 发送响应
@@ -213,6 +225,7 @@ namespace mdsj.lib
         /// <param name="extnameNhdlrChooser"></param>
         public static void HttpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
+            PrintTimestamp("enter HttpHdlrFil() ");
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
 
             // 获取查询字符串
@@ -293,7 +306,7 @@ namespace mdsj.lib
                 HtmlHttpHdlrfilTxtHtml(request, response);
                 Jmp2end(nameof(HttpHdlrFil));
             }
-
+            PrintTimestamp(" end HttpHdlrFil() ");
 
         }
 

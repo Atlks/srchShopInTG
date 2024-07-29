@@ -46,7 +46,7 @@ namespace mdsj.lib
         private static void 写入数据库文件(ArrayList 列表, string 数据库文件)
         {
             // 这里省略具体的数据库写入过程，输出到控制台展示结果
-           print("将以下数据写入数据库文件：" + 数据库文件);
+           Print("将以下数据写入数据库文件：" + 数据库文件);
             foreach (Hashtable 数据行 in 列表)
             {
                 foreach (字典项 数据项 in 数据行)
@@ -63,14 +63,14 @@ namespace mdsj.lib
     {
         public static void setDbgFunEnter(string 方法名, 数组 参数)
         {
-           print("进入方法：" + 方法名);
-           print("参数：" + string.Join(", ", 参数));
+           Print("进入方法：" + 方法名);
+           Print("参数：" + string.Join(", ", 参数));
         }
 
         public static void setDbgValRtval(string 方法名, int 返回值)
         {
-           print("退出方法：" + 方法名);
-           print("返回值：" + 返回值);
+           Print("退出方法：" + 方法名);
+           Print("返回值：" + 返回值);
         }
 
         //public static 数组 func_get_args(方法 方法, string 参数)

@@ -73,7 +73,7 @@ namespace mdsj.libBiz
             var mybotid = botClient.BotId;
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
-
+            int svrPrks = 0;
             if (isGrpChat(update))
             {
 
@@ -98,7 +98,7 @@ namespace mdsj.libBiz
 
                 AppendArea(ctry, cfg);
                 SetField(cfg, "园区", newParks);
-
+                svrPrks = newParks.Split(",").Length;
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
 
@@ -122,7 +122,7 @@ namespace mdsj.libBiz
 
 
                 SetField(cfg, "园区", newParks);
-
+                svrPrks = newParks.Split(",").Length;
                 SetField(cfg, "id", update.Message.From.Id.ToString());
                 SetField(cfg, "from", update.Message.From);
                 //   SetField(cfg, "whereExprs", newParks);
@@ -138,7 +138,7 @@ namespace mdsj.libBiz
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              tipsSetOK,
+              tipsSetOK+"\n 已经设置园区数量："+svrPrks,
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -249,6 +249,7 @@ namespace mdsj.libBiz
 
             try
             {
+                ifStrutsThrdloc.Value = NewIFAst();
                 iff(Condt(ISCtry, ctry), null, () =>
                 {
                     Jmp2endCurFunFlag.Value = true;
@@ -397,7 +398,7 @@ namespace mdsj.libBiz
             var grpid = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;
             var mybotid = botClient.BotId;
-
+            int svrPrks = 0;
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
 
             if (isGrpChat(update))
@@ -425,7 +426,7 @@ namespace mdsj.libBiz
                 string parks = GetParksByCity(area);
                 string newParks = AppendParks(cfg, parks);
                 AppendArea(area, cfg);
-
+                svrPrks = newParks.Split(",").Length;
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 SetField(cfg, "园区", newParks);
@@ -449,6 +450,7 @@ namespace mdsj.libBiz
                 string whereExprsFld = "whereExprs";
                 string parks = GetParksByCity(area);
                 string newParks = AppendParks(cfg, parks);
+                svrPrks = newParks.Split(",").Length;
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 //     SetField(cfg, "园区", whereExprsNew);
@@ -465,7 +467,7 @@ namespace mdsj.libBiz
             }
             botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              tipsSetOK,
+                 tipsSetOK + "\n 已经设置园区数量：" + svrPrks,
               parseMode: ParseMode.Html,
 
               protectContent: false,
@@ -778,8 +780,9 @@ namespace mdsj.libBiz
                     //send
                     Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
-                          "权限不足", replyToMessageId: update.Message.MessageId);
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
                     Jmp2end(nameof(CmdHdlrarea));
                 }
             }

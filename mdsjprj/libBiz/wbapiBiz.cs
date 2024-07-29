@@ -183,12 +183,12 @@ namespace mdsj.libBiz
             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
             //    GetQryStr4srch
             //rmv pagePrm token
-            SortedList qryClrMap = RemoveKeys(qryMap, "商家 token page pages pagesize limit page limit pagesize from");
-            string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
+            //SortedList qryClrMap = RemoveKeys(qryMap, "商家 token page pages pagesize limit page limit pagesize from");
+            //string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
 
-            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
-            var list = GetListFltr(FromDdataDir, null, whereFun);
-            var list_aftFltr2 = ArrFltr(list, (SortedList row) =>
+            //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
+            //var list = GetListFltr(FromDdataDir, null, whereFun);
+            var list_aftFltr2 = ArrFltr(listFlrted, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
 

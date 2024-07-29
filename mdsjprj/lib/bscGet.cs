@@ -278,7 +278,13 @@ namespace mdsj.lib
             else
                 return "";
         }
+        public static void SetField<t>(SortedList<string,t> cfg, string f, object v)
+        {
+            if (cfg.ContainsKey(f))
+                cfg.Remove(f);
 
+            cfg.Add(f, (t)v);
+        }
 
         public static void SetField(SortedList cfg, string f, object v)
         {
@@ -376,7 +382,7 @@ namespace mdsj.lib
 
             return sortedList;
         }
-
+        public static SortedList<string, MethodInfo> methodss445;
         public static IEnumerable<MethodInfo> methodss546;
         public static MethodInfo? GetMethInfo(string methodName)
         {
@@ -392,14 +398,33 @@ namespace mdsj.lib
                                 .SelectMany(type => type.GetMethods());  //BindingFlags.Static| BindingFlags.Public
                 Print("methodss.Len=>" + methodss.Count());
                 methodss546 = methodss;
-            }
+                methodss445 = new ();
+                foreach (MethodInfo method in methodss)
+                {
+                    SetField(methodss445, method.Name, method);
+               //     File.AppendAllTextAsync("ms510.txt", method.Name + "\n");
+                }
 
-            var methodInfo = methodss546
-                .FirstOrDefault(method =>
-                    method.Name == methodName
-                  );
-            return methodInfo;
+                // WriteAllText("meth504.json", methodss445);WbapiXgetlist
+            }
+            if ("WbapiXgetlist" == methodName)
+                Print("dbg");
+            var methodInfo = GetField(methodss445, methodName,null);
+            //pef  FirstOrDefault perf not god
+            //var methodInfo2 = methodss546
+            //    .FirstOrDefault(method =>
+            //        method.Name == methodName
+            //      );
+            return (MethodInfo?)methodInfo;
         }
+
+        public static MethodInfo GetField(SortedList<string, MethodInfo> methodss445, string key_methodName,object def)
+        {
+            if(methodss445.ContainsKey(key_methodName))
+            return methodss445[key_methodName];
+            return (MethodInfo)def;
+        }
+
         public static string[] ReadAllLines(string filePath)
         {
             return System.IO.File.ReadAllLines(filePath);
@@ -671,10 +696,10 @@ namespace mdsj.lib
             HashSet<string> resultSet = new HashSet<string>(stringArray);
             return resultSet;
         }
-        public static object GetListFltrByQrystr(string fromDdataDir, object shares, string qrtStr4Srch)
+        public static List<SortedList> GetListFltrByQrystr(string fromDdataDir, object shares, string qrtStr4Srch)
         {
             Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
-            var list = GetListFltr(fromDdataDir, ToStr(shares), whereFun);
+            List< SortedList> list = GetListFltr(fromDdataDir, ToStr(shares), whereFun);
             return list;
         }
         public static SortedList GetHashset
@@ -730,7 +755,7 @@ namespace mdsj.lib
 
         public static object GetField(object Obj, string fld, object defVal)
         {
-
+            var objtype = Gettype(Obj);
             if (Obj is SortedList)
             {
                 return LoadFieldFrmStlst((SortedList)Obj, fld, defVal.ToString());
@@ -1040,7 +1065,21 @@ namespace mdsj.lib
         {
             return obj.GetType().ToString();
         }
-        public static int GetFieldAsInt(Hashtable dafenObj, string fld, int df)
+
+        public static int GetFieldAsInt147(Hashtable dafenObj, string fld, int df)
+        {
+            try
+            {
+                if (dafenObj.ContainsKey(fld))
+                    return ToInt(dafenObj[fld].ToString());
+                return df;
+            }catch(Exception e)
+            {
+                return df;
+            }
+          
+        }
+            public static int GetFieldAsInt(Hashtable dafenObj, string fld, int df)
         {
             try
             {

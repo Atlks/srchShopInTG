@@ -82,11 +82,11 @@ class Program2024
         try
         {
 
-           print($"ChatGPT的回答: {answer}");
+           Print($"ChatGPT的回答: {answer}");
         }
         catch (Exception ex)
         {
-           print($"请求出错: {ex.Message}");
+           Print($"请求出错: {ex.Message}");
         }
     }
 
@@ -96,13 +96,13 @@ class Program2024
         {
             var chatGptClient = new ChatGPTClient(apiKey);
 
-           print("请输入你的问题:" + question);
+           Print("请输入你的问题:" + question);
 
             string answer = await chatGptClient.GetChatGPTResponse(question);
             return answer;
         }catch (Exception ex)
         {
-           print(ex.Message);
+           Print(ex.Message);
             return "";
         }
        

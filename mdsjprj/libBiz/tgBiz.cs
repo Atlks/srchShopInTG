@@ -613,7 +613,7 @@ namespace mdsj.libBiz
        
             string line = "🌐%20招募代理    🏢%20授权加盟   🏪%20分销连锁";
             var kbdBtnArr = castString2kbdBtnArr(line);
-            var kbdBtnArr2 = castString2kbdBtnArr("🤝%20合伙合营    📄%20盘口租赁    👨‍👩‍👧‍👦%20众筹众营");
+            var kbdBtnArr2 = castString2kbdBtnArr("🤝%20合伙合营    📄%20盘口租赁    👨‍👩‍👧‍👦%20全民众营");
 
             var Keyboard =
                 new KeyboardButton[][]

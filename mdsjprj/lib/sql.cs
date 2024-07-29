@@ -21,7 +21,7 @@ namespace prjx.lib
 
             //var columns = implode(", ", arr.Keys);
 
-            var columns = strCls.str_join2024(",", SortedList1.Keys);          
+            var columns = strCls.Join20241109(",", SortedList1.Keys);          
 
             string values2024 = valueSqlFmt(SortedList1);
             return "(" + columns + ")values(" + values2024 + ")";

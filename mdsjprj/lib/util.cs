@@ -29,14 +29,28 @@ namespace mdsj.lib
             // 初始化每个线程的值为 false
             return false;
         });
-        
+
+        public static ThreadLocal<SortedList> ifStrutsThrdloc = new ThreadLocal<SortedList>(() =>
+        {
+            return NewIFAst();
+        });
+
+        public static SortedList NewIFAst()
+        {
+            SortedList ifx = new SortedList();
+            ArrayList cdts = new ArrayList();
+            ifx.Add("cdts", ifx);
+            ifx.Add("cdtsRzt", false);
+            ifx.Add("choose", "Then");
+            return ifx;
+        }
 
         public static ThreadLocal<string> jmp2endCurFunInThrd = new ThreadLocal<string>(() =>
         {
             // 初始化每个线程的值为 false
             return "";
         });
-        public const string botname = "LianXin_BianMinBot";
+        public static string botname = "LianXin_BianMinBot";
 
         public static void PrintTimestamp(string msg)
         {

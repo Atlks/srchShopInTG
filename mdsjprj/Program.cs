@@ -96,7 +96,7 @@ namespace prjx
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         // public const string botname = "LianXin_BianMinBot";
 
-        public static TelegramBotClient botClient = new("6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA");
+        public static TelegramBotClient botClient;
         //  @LianXin_QunBot
 
         // task grp
@@ -137,7 +137,7 @@ namespace prjx
         //}
         public static void Main(string[] args)
         {
-
+            
             // 设置控制台编码为 UTF-8
             Console.OutputEncoding = Encoding.UTF8;
             Callx("aaa", "prm1");
@@ -147,7 +147,10 @@ namespace prjx
 
             var cfgf= $"{prjdir}/cfg/cfg.ini";
             Hashtable cfgDic = GetHashtabFromIniFl(cfgf);
-            if ( GetFieldAsInt( cfgDic,"bot",1)==1)
+           botClient   = new(cfgDic["bottoken"].ToString());
+            util.botname = cfgDic["botname"].ToString();
+            int botEnable = GetFieldAsInt147(cfgDic, "bot", 1);
+            if (botEnable == 1)
             {
 
 

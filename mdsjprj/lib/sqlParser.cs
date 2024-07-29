@@ -14,16 +14,16 @@ namespace mdsj.lib
             string whereClause = ExtractWhereClause(sql);
             if (!string.IsNullOrEmpty(whereClause))
             {
-               print("WHERE Clause: " + whereClause);
+               Print("WHERE Clause: " + whereClause);
                 List<Tuple<string, string, string>> conditions = ParseWhereClause(whereClause);
                 foreach (var condition in conditions)
                 {
-                   print($"Field: {condition.Item1}, Operator: {condition.Item2}, Value: {condition.Item3}");
+                   Print($"Field: {condition.Item1}, Operator: {condition.Item2}, Value: {condition.Item3}");
                 }
             }
             else
             {
-               print("No WHERE clause found.");
+               Print("No WHERE clause found.");
             }
         }
 

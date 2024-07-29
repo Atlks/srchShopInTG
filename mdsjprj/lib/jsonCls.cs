@@ -69,7 +69,7 @@ namespace mdsj.lib
             catch (Exception)
             {
                 // 查询条件格式不正确
-               print("Invalid query format.");
+               Print("Invalid query format.");
                 return false;
             }
         }

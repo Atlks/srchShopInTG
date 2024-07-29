@@ -109,6 +109,8 @@ namespace mdsj.lib
         }
         public static void SendResp(object 输出结果, string 内容类型和编码,HttpResponse http上下文)
         {
+            if (输出结果 == null)
+                输出结果 = "";
             http上下文.ContentType = 内容类型和编码;
            
             http上下文.WriteAsync(输出结果.ToString(), Encoding.UTF8).GetAwaiter().GetResult(); ;
