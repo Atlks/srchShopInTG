@@ -137,136 +137,136 @@ namespace prjx
         //}
         public static void Main(string[] args)
         {
+
+            // 设置控制台编码为 UTF-8
+            Console.OutputEncoding = Encoding.UTF8;
             Callx("aaa", "prm1");
             prjdir = filex.GetAbsolutePath(prjdir);
 
             userDictFile = $"{prjdir}/cfg/user_dict.txt";
 
-            evt_boot(() =>
+            var cfgf= $"{prjdir}/cfg/cfg.ini";
+            Hashtable cfgDic = GetHashtabFromIniFl(cfgf);
+            if ( GetFieldAsInt( cfgDic,"bot",1)==1)
             {
-                //   botClient = botClient;
-                获取机器人的信息();
-            });
-
-            //aop_lgtry(() =>
-            //{
-            //    tgBiz.botClient = botClient;
-            //    获取机器人的信息();
-            //});
-
-            // throw new Exception("000");
-            //boot evt
-
-            //   print("botClient uname=>"+ botClient.)
 
 
-            //            C# 中捕获全局异常和全局异步异常，可以通过以下方式实现：
-
-
-
-            System.IO.Directory.CreateDirectory("pinlunDir");
-            #region 构造函数
-
-
-            // set test grp bot
-            if (System.IO.File.Exists("c:/teststart.txt"))
-            {
-                //                mg MR.HAN, [20 / 5 / 2024 下午 1:25]
-                //6999501721:AAFLEI1J7YzEPJq - DfmJ04xFI8Tp - O6_5bE
-
-                //mg MR.HAN, [20 / 5 / 2024 下午 1:25]
-                //便民助手的APITOKEN
-
-                //mg MR.HAN, [20 / 5 / 2024 下午 1:25]
-                //@LianXin_BianMinBot
-                // botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0"); ///lianxin_2025bot.
-                //  botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");   //@LianXin_BianMinBot
-
-                //groupId = -1002206103554; //taskgrp
-
-            }
-            ////ini()   
-            var vls = System.Enum.GetValues(typeof(Category));//  food drink ....
-            foreach (var category in System.Enum.GetValues(typeof(Category)))
-            {
-                Category enumValue = (Category)category;
-                string description = biz_other._GetEnumDescription(enumValue);
-                _categoryKeyValue.Add((int)enumValue, description);
-            }
-
-
-            #region 读取商家信息
-            //  读取加入的群Ids           
-            biz_other._readMerInfo();
-            #endregion
-            #endregion
-
-
-
-            tglib.bot_iniChtStrfile();
-
-            testCls.testAsync();
-
-            //   botClient.OnApiResponseReceived
-            //botClient.OnMessage += Bot_OnMessage;
-            //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
-            //分类枚举
-            botClient.StartReceiving(updateHandler: EvtUpdateHdlrAsyncSafe,
-                pollingErrorHandler: tglib.bot_pollingErrorHandler,
-                receiverOptions: new ReceiverOptions()
+                evt_boot(() =>
                 {
-                    AllowedUpdates = System.Array.Empty<UpdateType>(),
-                    // 接收所有类型的更新
-                    //AllowedUpdates = [UpdateType.Message,
-                    //    UpdateType.CallbackQuery,
-                    //    UpdateType.ChannelPost,
-                    //    UpdateType.MyChatMember,
-                    //    UpdateType.ChatMember,
-                    //    UpdateType.ChatJoinRequest],
-                    ThrowPendingUpdates = true,
+                    //   botClient = botClient;
+                    获取机器人的信息();
                 });
-            //在 Telegram.Bot 库中，ThrowPendingUpdates 是一个参数，用于指定在机器人启动时是否丢弃所有挂起的更新。换句话说，如果在启动机器人之前已经有一些未处理的更新（消息、命令等），设置 ThrowPendingUpdates 可以决定是否忽略这些未处理的更新。
-            //   if (System.IO.File.Exists("c:/tmrclose.txt"))
-            timerCls.setTimerTask();
-            setTimerTask4prs();
-            setTimerTask4tmr();
-#warning 循环账号是否过期了
+
+                System.IO.Directory.CreateDirectory("pinlunDir");
+                #region 构造函数
 
 
-       //     Qunzhushou.main1();
-        //    audioBot.main1();
+                // set test grp bot
+                if (System.IO.File.Exists("c:/teststart.txt"))
+                {
+                    //                mg MR.HAN, [20 / 5 / 2024 下午 1:25]
+                    //6999501721:AAFLEI1J7YzEPJq - DfmJ04xFI8Tp - O6_5bE
+
+                    //mg MR.HAN, [20 / 5 / 2024 下午 1:25]
+                    //便民助手的APITOKEN
+
+                    //mg MR.HAN, [20 / 5 / 2024 下午 1:25]
+                    //@LianXin_BianMinBot
+                    // botClient = new("7069818994:AAH3irkK1WpfBNxaNsU3rIGAIDyCunYGsy0"); ///lianxin_2025bot.
+                    //  botClient = new("6999501721:AAFLEI1J7YzEPJq-DfmJ04xFI8Tp-O6_5bE");   //@LianXin_BianMinBot
+
+                    //groupId = -1002206103554; //taskgrp
+
+                }
+                ////ini()   
+                var vls = System.Enum.GetValues(typeof(Category));//  food drink ....
+                foreach (var category in System.Enum.GetValues(typeof(Category)))
+                {
+                    Category enumValue = (Category)category;
+                    string description = biz_other._GetEnumDescription(enumValue);
+                    _categoryKeyValue.Add((int)enumValue, description);
+                }
 
 
-            webapi2.StartWbapiAsync();
+                #region 读取商家信息
+                //  读取加入的群Ids           
+                biz_other._readMerInfo();
+                #endregion
+                #endregion
 
 
-            RunTmrTasksCron();
-            Action<HttpRequest, HttpResponse> value = (HttpRequest request, HttpResponse response) =>
-                        {
 
-                            string methd = request.Path;
-                            ////  methd = methd.Substring(1);
-                            if (methd == "/swag33")
-                            {
-                                response.ContentType = "text/html; charset=utf-8";
-                                var rzt = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
-                                response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
-                                Jmp2endDep();
-                            }
+                tglib.bot_iniChtStrfile();
 
-                        };
-            StartWebapi(value, "WbapiX");
+                testCls.testAsync();
+
+                //   botClient.OnApiResponseReceived
+                //botClient.OnMessage += Bot_OnMessage;
+                //   botClient. += Bot_OnCallbackQuery;  jeig api outtime
+                //分类枚举
+                botClient.StartReceiving(updateHandler: EvtUpdateHdlrAsyncSafe,
+                    pollingErrorHandler: tglib.bot_pollingErrorHandler,
+                    receiverOptions: new ReceiverOptions()
+                    {
+                        AllowedUpdates = System.Array.Empty<UpdateType>(),
+                        // 接收所有类型的更新
+                        //AllowedUpdates = [UpdateType.Message,
+                        //    UpdateType.CallbackQuery,
+                        //    UpdateType.ChannelPost,
+                        //    UpdateType.MyChatMember,
+                        //    UpdateType.ChatMember,
+                        //    UpdateType.ChatJoinRequest],
+                        ThrowPendingUpdates = true,
+                    });
+                //在 Telegram.Bot 库中，ThrowPendingUpdates 是一个参数，用于指定在机器人启动时是否丢弃所有挂起的更新。换句话说，如果在启动机器人之前已经有一些未处理的更新（消息、命令等），设置 ThrowPendingUpdates 可以决定是否忽略这些未处理的更新。
+                //   if (System.IO.File.Exists("c:/tmrclose.txt"))
+                timerCls.setTimerTask();
+                setTimerTask4prs();
+                setTimerTask4tmr();
+//#warning 循环账号是否过期了
+                RunTmrTasksCron();
+
+            }
+
+ 
+
+            //     Qunzhushou.main1();
+            //    audioBot.main1();
+
+            if (GetFieldAsInt(cfgDic, "wbsvs", 1) == 1)
+            {
+                webapi2.StartWbapiAsync();
+                Action<HttpRequest, HttpResponse> value = (HttpRequest request, HttpResponse response) =>
+                {
+
+                    string methd = request.Path;
+                    ////  methd = methd.Substring(1);
+                    if (methd == "/swag33")
+                    {
+                        response.ContentType = "text/html; charset=utf-8";
+                        var rzt = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
+                        response.WriteAsync(rzt.ToString(), Encoding.UTF8).GetAwaiter().GetResult();
+                        Jmp2endDep();
+                    }
+
+                };
+                StartWebapi(value, "WbapiX");
+            }
+             
 
 
             //  Console.ReadKey();
-            //loopForever();
-            while (true)
-            {
-                Thread.Sleep(100);
-            }
+            LoopForever();
+          
         }
 
-
+        private static void LoopForever()
+        {
+            while (true)
+            {
+                Thread.Sleep(500);
+            }
+        }
 
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {

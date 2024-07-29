@@ -142,6 +142,24 @@ namespace prjx
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
+            try
+            {
+                Print("----test add sqlt");
+                SortedList a = new SortedList();
+                a.Add("kk", 11);
+                ormSqlt.Save4Sqlt(a, "test_sqlt.db");
+                Print("---- end test add sqlt");
+                await main1148();
+            }catch(Exception e)
+            {
+                PrintCatchEx("test main()", e);
+            }
+          
+
+        }
+
+        private static async System.Threading.Tasks.Task main1148()
+        {
             Print(newToken("00799988", 3600 * 24 * 7));
             var encStr = EncryptAes("202411");
             Print(DecryptAes(encStr));
@@ -153,10 +171,10 @@ namespace prjx
             WriteAllText("haocy.json", v);
             Print(v);
             Print("\a\a\a\a");
-         //   add30xiezhi();
-            Print(AddElmts("aaa","a,b"));
+            //   add30xiezhi();
+            Print(AddElmts("aaa", "a,b"));
             Print(DelElmts("a", "a,b,c"));
-            HashSet<string>  hs11= GetHashsetEmojiCmn();
+            HashSet<string> hs11 = GetHashsetEmojiCmn();
             //   💰💰💰();
             GetMethInfo("echo");
             try
@@ -174,8 +192,8 @@ namespace prjx
             {
                 Print(e);
             }
-     
-           //   tmrEvt_sendMsg4keepmenu("今日促销商家.gif",  plchdTxt);
+
+            tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");
@@ -183,17 +201,17 @@ namespace prjx
             //    tmrTask1startNow();
             //  ticyWdRoot();
             //   ticyuWEdsTest();
-        //   TaskRun(() => { new spdr(). spdrTest(); });
+            //   TaskRun(() => { new spdr(). spdrTest(); });
             //
-           // getwdRoots();
+            // getwdRoots();
             var root = GetRoot("running");
-        //    transltTest();
+            //    transltTest();
             arr_cut();
             var sss = string.Join("\n", hs_mswd);
-            WriteAllText("misswdFmt.txt",sss);
+            WriteAllText("misswdFmt.txt", sss);
             // tmrTask1start();
             tmrTask1startNow();
-          //  CallTmrTasks();
+            //  CallTmrTasks();
 
             ConvertXmlToHtml("mdsj.xml", "mdsj.htm");
             WriteAllText("mdsj.xml.json", ConvertXmlToJson("mdsj.xml"));
@@ -427,12 +445,10 @@ namespace prjx
             }
 
             // 
-
         }
 
-     
 
-    
+
         private static void add30xiezhi()
         {
             for(int i = 0; i < 30; i++)

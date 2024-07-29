@@ -259,7 +259,10 @@ namespace mdsj.lib
 
             return true;
         }
-    
+        public static bool IsExistFil(string arg)
+        {
+            return System.IO.File.Exists(arg);
+        }
 
         public static bool ISCtry(string areaname)
         {

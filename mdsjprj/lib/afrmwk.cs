@@ -55,7 +55,7 @@ namespace mdsj.lib
                 Thread newThread = new Thread(() =>
                 {
                    Print("新线程开始执行");
-                    playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\新疆美丽公主组合 - 欢乐地跳吧.mp3", 2);
+                    playMp3($"{prjdir}/libres/start.mp3", 2);
 
                    Print("新线程完成工作");
                 });

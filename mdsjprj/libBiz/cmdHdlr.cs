@@ -229,20 +229,22 @@ namespace mdsj.libBiz
 
         public static void BtmEvtSetCountry(ITelegramBotClient botClient, Update update, string txt307)
         {
+            var __Mthd = nameof(BtmEvtSetCountry);
+          //  Jmp2end(nameof(BtmEvtSetCountry));
             jmp2endCurFunInThrd.Value = nameof(BtmEvtSetCountry);
             if (!IsSetAreaBtnname(txt307))
                 return;
-          
 
-           var ctry = SubStr(txt307, 2);
 
-          
+            var ctry = SubStr(txt307, 2);
+
+
             if (ctry.StartsWith("确定设置国家为"))
             {
                 var ctry158 = SubstrAfterMarker(ctry, "确定设置国家为");
                 ctry158 = ctry158.Trim();
                 ConfirmSetCountryBtnClick(ctry158, update);
-                Jmp2endDep();
+                Jmp2end(__Mthd);
             }
 
             try
@@ -250,11 +252,11 @@ namespace mdsj.libBiz
                 iff(Condt(ISCtry, ctry), null, () =>
                 {
                     Jmp2endCurFunFlag.Value = true;
-                   // Jmp2endCurFun();
+                    // Jmp2endCurFun();
                 });
                 if (Jmp2endCurFunFlag.Value)
                 {
-                  //  PrintRet(nameof(BtmEvtSetCountry), "");
+                    //  PrintRet(nameof(BtmEvtSetCountry), "");
                     return;
                 }
                 //todo      jmp2endCurFunEx also shold uper to catch ,not here..
@@ -264,7 +266,7 @@ namespace mdsj.libBiz
                 PrintRet(nameof(BtmEvtSetCountry), "");
                 return;
             }
-       
+
 
 
             iff(Condt(IsFileExist, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
@@ -307,6 +309,7 @@ namespace mdsj.libBiz
                && Condt(ISCtry, ctry)
                    && Condt(IsNotExistFil, $"{prjdir}/cfg_cmd/{ctry}城市.txt"), () =>
                    {
+                       Print("暂无配置");
                        //  Message message2dbg = await 
                        var m = botClient.SendTextMessageAsync(
                                        update.Message.Chat.Id, "暂无配置",
@@ -322,10 +325,7 @@ namespace mdsj.libBiz
                    });
         }
 
-        public static void Jmp2endCurFun()
-        {
-            throw new jmp2endCurFunEx();
-        }
+       
 
         public static void BtmEvtSetAreaHdlrChk(Update? update)
         {
@@ -368,7 +368,7 @@ namespace mdsj.libBiz
             Callx(BtmEvtSetCountry, botClient, update, txt307);
             //-------shezhi 城市指令
             //  string txt307 = GetStr(update?.Message?.Text);
-            Callx( BtmEvtSetCityMsgHdlr,botClient, update, txt307);
+            Callx(BtmEvtSetCityMsgHdlr, botClient, update, txt307);
 
             //------setpark   BtmEvtSetParkMsgHdlr
             BtmEvtSetParkMsgHdlrPre(update, txt307);

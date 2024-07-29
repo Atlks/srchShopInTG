@@ -1040,7 +1040,20 @@ namespace mdsj.lib
         {
             return obj.GetType().ToString();
         }
+        public static int GetFieldAsInt(Hashtable dafenObj, string fld, int df)
+        {
+            try
+            {
+                var obj = GetField(dafenObj, fld, df);
+                return ToInt(obj);
+            }
+            catch (Exception e)
+            {
+                PrintCatchEx(nameof(GetFieldAsInt), e);
+                return df;
+            }
 
+        }
 
         public static int GetFieldAsInt(SortedList dafenObj, string fld, int df)
         {

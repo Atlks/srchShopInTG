@@ -60,64 +60,87 @@ namespace mdsj.lib
         }
 
 
-        public static bool IsExistFil(string arg)
-        {
-            return System.IO.File.Exists(arg);
-        }
+    
 
         public static bool Condt(Func<string, bool> fn, string ctry)
         {
-            PrintStr("❓" + GetMethodName(fn) + $"({ctry})");
+            Hashtable tb = new Hashtable();
+            tb.Add("cdt", GetMethodName(fn) + $"({ctry})");
+            PrintStr("❓?" + GetMethodName(fn) + $"({ctry})");
             PrintStr(" => ");
             bool r = fn(ctry);
+            tb.Add("rzt", r);
             if (r)
-                PrintStr("TRUE✅");
+                PrintStr("✅:)TRUE");
             else
-                PrintStr("FALSE❌");
+                PrintStr("❌:(FALSE");
             PrintStr(" ,  ");
+            PrintFmtAstCdt(tb);
             return r;
         }
+
+        public static void PrintFmtAstCdt(Hashtable tb)
+        {
+            Print(EncodeJson(tb));
+        }
+
         public static void iff(bool cdt, Action act1)
         {
+            Hashtable tb = new Hashtable();
+            tb.Add("cdtRzt", cdt);
             // cd1 cd2 
-            PrintStr("\n❓❓IF rztIS ");
+            PrintStr("\n❓❓❓?? IF rztIS ");
             if (cdt)
             {
-                Print("TRUE✅");
-
+                Print("✅:))TRUE");
+                tb.Add("CHOOSE", "THEN");
             }
-
+              
             else
-                Print("FALSE❌");
+            {
+                Print("❌:((FALSE");
+                tb.Add("CHOOSE", "ELSE");
+            }
+               
 
             if (cdt)
             {
-                Print("➡️➡️THEN");
-                act1();
+                Print("➡️➡️>THEN");
+                if (act1 != null)
+                    act1();
 
             }
 
             Print("\n🔚❓❓ENDIF");
+            PrintAstIfStmt(tb);
         }
+
+        public static void PrintAstIfStmt(Hashtable tb)
+        {
+            Print(EncodeJson(tb));
+        }
+
         public static void iff(bool cdt, Action act1, Action elseAct)
         {
             // cd1 cd2 
-            PrintStr("\n❓❓IF is ");
+            PrintStr("\n❓❓❓??IF is ");
             if (cdt)
-                Print("TRUE✅");
+                Print("✅:))TRUE");
             else
-                Print("FALSE❌");
+                Print("❌:((FALSE");
 
             if (cdt)
             {
-                Print("➡️➡️THEN");
-                act1();
+                Print("➡️➡️>THEN");
+                if(act1!=null)
+                   act1();
 
             }
             else
             {
-                Print("☑️☑️ELSE");
-                elseAct();
+                Print("☑️☑️:::ELSE"); 
+                if (elseAct != null)
+                    elseAct();
             }
             Print("\n🔚❓❓ENDIF");
         }
@@ -131,6 +154,10 @@ namespace mdsj.lib
         public static void echo(object v)
         {
             Print(v);
+        }
+        public static void Jmp2endCurFun()
+        {
+            throw new jmp2endCurFunEx();
         }
         public static void foreach_objKey(object obj, Func<PropertyInfo, object> fun)
         {
