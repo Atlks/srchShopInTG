@@ -1,5 +1,7 @@
-﻿global using static mdsj.libBiz.cmdHdlr;
+﻿
+global using static mdsj.libBiz.cmdHdlr;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.ExtendedProperties;
 using mdsj.lib;
 using MusicApiCollection.Sites.MusicBrainz.Data;
 using prjx.lib;
@@ -60,7 +62,7 @@ namespace mdsj.libBiz
         //}
 
         /// <summary>
-        /// 
+        ///    string svrPksHtml = "";
         /// </summary>
         /// <param name="ctry">泰国</param>
         /// <param name="update"></param>
@@ -74,6 +76,7 @@ namespace mdsj.libBiz
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
             string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
             int svrPrks = 0;
+            string svrPksHtml = "";
             if (isGrpChat(update))
             {
 
@@ -100,7 +103,10 @@ namespace mdsj.libBiz
 
                 AppendArea(ctry, cfg);
                 SetField(cfg, "园区", newParks);
-                svrPrks = newParks.Split(",").Length;
+                string allParks = GetFieldAsStr(cfg, "园区");
+                svrPrks = allParks.Split(",").Length;
+                svrPksHtml = Join(allParks.Split(","), "\n");
+                 //   "\n"+newParks.Split(",").Join("\n");
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
 
@@ -138,19 +144,23 @@ namespace mdsj.libBiz
                 }
                 ormJSonFL.SaveJson(cfg, dbfile);
             }
-            botClient.SendTextMessageAsync(
+          Message m=  botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-              tipsSetOK+"\n 已经设置园区数量："+svrPrks,
+              tipsSetOK+"\n 已经设置园区数量："+svrPrks +"\n"+ svrPksHtml,
               parseMode: ParseMode.Html,
 
               protectContent: false,
               disableWebPagePreview: true,
-              replyToMessageId: update.Message.MessageId);
-
+              replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 3);
             //------------set menu btm
             SetBtmMenu(update);
             Jmp2endDep();
         }
+
+      
+
         public static void BtmEvtSetParkMsgHdlrPre(Update update, string txt307)
         {
 
@@ -205,6 +215,8 @@ namespace mdsj.libBiz
                                 replyMarkup: rplyKbdMkp,
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
                 Print(m);
                 Jmp2end(nameof(BtmEvtSetCityMsgHdlr));
             }
@@ -220,6 +232,9 @@ namespace mdsj.libBiz
                                 //  replyMarkup: rplyKbdMkp,
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
+
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
                 Print(m);
                 Jmp2end(nameof(BtmEvtSetCityMsgHdlr));
 
@@ -292,6 +307,8 @@ namespace mdsj.libBiz
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
                 Print(m);
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
                 Jmp2end(nameof(BtmEvtSetCountry));
             });
 
@@ -323,7 +340,8 @@ namespace mdsj.libBiz
                                        protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
                        Print(m);
-
+                       bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                       bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
                        Jmp2endDep();
 
 
@@ -334,8 +352,16 @@ namespace mdsj.libBiz
 
         public static void BtmEvtSetAreaHdlrChk(Update? update)
         {
+
+
             //--------------------shezhi 国家指令
             string txt307 = GetStr(update?.Message?.Text);
+            if(txt307.StartsWith("❌"))
+            {
+                string park = Substring(txt307, 1);
+                DelParkBtmbtnEvt(park,update);
+                Jmp2end(nameof(BtmEvtSetAreaHdlrChk));
+            }
             if (update.CallbackQuery?.Data != null)
             {
                 string cmd = update.CallbackQuery?.Data;
@@ -357,6 +383,7 @@ namespace mdsj.libBiz
                 showAlert: true); // 这是显示对话框的关键);
                 return;
             }
+
             if (txt307.StartsWith("请选择本群所在区域"))
                 return;
             if (txt307.StartsWith(tipsSelectArea))
@@ -365,6 +392,22 @@ namespace mdsj.libBiz
                 return;
             if (txt307.StartsWith("取消新增区域"))
                 return;
+            if (txt307.StartsWith(PreCh+"取消"))
+            {
+                if(IsSetArea(update))
+                {
+                    SetBtmBtnMenu("今日促销商家.gif", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
+
+                }
+                else
+                {
+                    SetBtmBtnMenuClr("",plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
+                }
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
+                Jmp2end(nameof(BtmEvtSetAreaHdlrChk));
+            }
+               
             if (txt307.StartsWith("/"))
                 return;
             if (!IsSetAreaBtnname(txt307))
@@ -377,6 +420,99 @@ namespace mdsj.libBiz
 
             //------setpark   BtmEvtSetParkMsgHdlr
             BtmEvtSetParkMsgHdlrPre(update, txt307);
+        }
+
+        private static void DelParkBtmbtnEvt(string park, Update? update)
+        {
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+            int svrPrks = 0;
+            string f = $"{prjdir}/db/botEnterGrpLog/inGrp{grpid}.u{fromUid}.addBot.{util.botname}.json";
+
+            if (isGrpChat(update))
+            {
+
+                if (!IsAdmin(update))
+                {
+                    //send
+                    Print("no auth ");
+                    // print("no auth ");
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
+                    Jmp2end(nameof(ConfirmSetCityBtnClick));
+                }
+            }
+            string svrPksHtml = "";
+            if (isGrpChat(update))
+            {
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+               
+
+                string whereExprsFld = "whereExprs";
+                string areakey = "城市";
+                string parks = GetFieldAsStr(cfg, "园区");
+
+                string newParks = DelElmt(park, parks);
+                    
+                svrPrks = newParks.Split(",").Length;
+                DelField(cfg, "国家");
+                DelField(cfg, "城市");
+                SetField(cfg, "园区", newParks);
+                SetField(cfg, "id", grpid.ToString());
+                SetField(cfg, "grpid", grpid.ToString());
+                SetField(cfg, "grpinfo", update.Message.Chat);
+                //if (pk == "不限制")
+                //{
+                //    SetField(cfg, "国家", "");
+                //    SetField(cfg, "城市", "");
+                //    SetField(cfg, "园区", "");
+                //    SetField(cfg, "whereExprs", $"");
+                //}
+                ormJSonFL.SaveJson(cfg, dbfile2);
+                svrPksHtml = GetFieldAsStr(cfg, "园区");
+
+            }
+            //prive
+            if (!isGrpChat(update))
+            {
+                return;
+                //string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+                //SortedList cfg = findOne(dbfile);
+                //string whereExprsFld = "whereExprs";
+                //string parks = GetParksByCity(area);
+                //string newParks = AppendParks(cfg, parks);
+                //svrPrks = newParks.Split(",").Length;
+                //DelField(cfg, "国家");
+                //DelField(cfg, "城市");
+                ////     SetField(cfg, "园区", whereExprsNew);
+                //SetField(cfg, "id", update.Message.From.Id.ToString());
+                //SetField(cfg, "from", update.Message.From);
+                ////    SetField(cfg, "whereExprs", $"园区={newParks}");
+                //if (area == "不限制")
+                //{
+                //    SetField(cfg, "城市", "");
+                //    SetField(cfg, "园区", "");
+                //    SetField(cfg, "whereExprs", $"");
+                //}
+                //ormJSonFL.SaveJson(cfg, dbfile);
+            }
+         Message m=   botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+                 tipsSetOK + "\n 删除成功,目前园区为\n" + svrPksHtml,
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId,20);
+            //------------set menu btm
+            SetBtmMenu(update);  
+            Jmp2end(nameof(DelParkBtmbtnEvt));
         }
 
         private static void AppendArea(string ctry, SortedList cfg)
@@ -471,15 +607,16 @@ namespace mdsj.libBiz
                 }
                 ormJSonFL.SaveJson(cfg, dbfile);
             }
-            botClient.SendTextMessageAsync(
+           Message m= botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
                  tipsSetOK + "\n 已经设置园区数量：" + svrPrks,
               parseMode: ParseMode.Html,
 
               protectContent: false,
               disableWebPagePreview: true,
-              replyToMessageId: update.Message.MessageId);
-
+              replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 3);
             //------------set menu btm
             SetBtmMenu(update); Jmp2endDep();
         }
@@ -552,18 +689,19 @@ namespace mdsj.libBiz
                 }
             }
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
-            SetPark(park, update);
+        string allParks =    SetPark(park, update);
+            string svrPksHtml = Join(allParks.Split(","), "\n");
 
-
-            botClient.SendTextMessageAsync(
+            Message m=   botClient.SendTextMessageAsync(
               update.Message.Chat.Id,
-               tipsSetOK,
+                tipsSetOK + "\n 已经设置园区："  + "\n" + svrPksHtml,
               parseMode: ParseMode.Html,
 
               protectContent: false,
               disableWebPagePreview: true,
-              replyToMessageId: update.Message.MessageId);
-
+              replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
             //---------------set menu
             SetBtmMenu(update);
 
@@ -613,8 +751,9 @@ namespace mdsj.libBiz
 
         }
 
-        public static void SetPark(string park, Update update)
+        public static string  SetPark(string park, Update update)
         {
+            string allParks = "";
             park = CastToEnglishCharPunctuation(park);
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
@@ -628,16 +767,18 @@ namespace mdsj.libBiz
                 {
                     Print("no auth " + f);
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(
-             update.Message.Chat.Id,
-             "权限不足",
-             replyToMessageId: update.Message.MessageId);
+                    //       botClient.SendTextMessageAsync(
+                    //update.Message.Chat.Id,
+                    //"权限不足",
+                    //replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
                     Jmp2endDep();
-                    return;
+                    return "";
                 }
-
+              
                 //auth chk ok ,,or  privete 
-
+                string svrPksHtml = "";
                 //   string dbfile2 = $"{prjdir}/cfg_grp/{grpid}.json";
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                 SortedList cfg = findOne(dbfile2);
@@ -652,6 +793,10 @@ namespace mdsj.libBiz
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
                 SetField(cfg, "grpinfo", update.Message.Chat);
+
+                  allParks = GetFieldAsStr(cfg, "园区");
+             //   svrPrks = allParks.Split(",").Length;
+                svrPksHtml = Join(allParks.Split(","), "\n");
                 if (pk == "不限制")
                 {
                     SetField(cfg, "园区", "");
@@ -665,7 +810,7 @@ namespace mdsj.libBiz
                 SetParkPrvt(park, update);
             }
 
-
+            return allParks;
 
 
         }
@@ -722,8 +867,10 @@ namespace mdsj.libBiz
                     //send
                     Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
-                          "权限不足", replyToMessageId: update.Message.MessageId);
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
                     Jmp2end(nameof(CmdHdlrclearArea));
                 }
             }
@@ -767,16 +914,129 @@ namespace mdsj.libBiz
             }
 
 
-            botClient.SendTextMessageAsync(
+           Message m= botClient.SendTextMessageAsync(
            update.Message.Chat.Id,
            "清理成功",
            parseMode: ParseMode.Html,
 
            protectContent: false,
            disableWebPagePreview: true,
-           replyToMessageId: update.Message.MessageId);
+           replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
             Jmp2end(nameof(CmdHdlrclearArea));
         }
+
+        /// <summary>
+        ///   string svrPksHtml = "";   svrPksHtml = GetFieldAsStr(cfg, "园区");
+        ///     bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId,20);
+        /// </summary>
+        /// <param name="fullcmd"></param>
+        /// <param name="update"></param>
+        /// <param name="reqThreadId"></param>
+        public static void CmdHdlrshowArea(string fullcmd, Update update, string reqThreadId)
+        {
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+            string svrPksHtml = "";
+            if (isGrpChat(update))
+            {
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+
+
+
+                  svrPksHtml = GetFieldAsStr(cfg, "园区");
+                  
+ 
+            }
+            //prive
+            if (!isGrpChat(update))
+            {
+                return;
+                string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+                SortedList cfg = findOne(dbfile);
+            //    string parks = GetParksByCountry(ctry);
+            //    string newParks = AppendParks(cfg, parks);
+
+
+              
+            }
+         Message m=   botClient.SendTextMessageAsync(
+              update.Message.Chat.Id,
+              tipsSetOK + "\n 已经设置园区"+ "\n" + svrPksHtml,
+              parseMode: ParseMode.Html,
+
+              protectContent: false,
+              disableWebPagePreview: true,
+              replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
+
+            //------------set menu btm
+            //   SetBtmMenu(update);
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId,20);
+            Jmp2endDep();
+
+        }
+        public static void CmdHdlrdelArea(string fullcmd, Update update, string reqThreadId)
+        {
+
+            //public 判断权限先
+            var grpid = update.Message.Chat.Id;
+            var fromUid = update.Message.From.Id;
+            var mybotid = botClient.BotId;
+
+
+            if (isGrpChat(update))
+            {
+
+                if (!IsAdmin(update))
+                {
+                    //send
+                    Print("no auth ");
+                    // print("no auth ");
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+                    Jmp2end(nameof(CmdHdlrdelArea));
+                }
+            }
+            string svrPksHtml = "";
+            if (isGrpChat(update))
+            {
+                string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                SortedList cfg = findOne(dbfile2);
+
+
+
+                string nowPks = GetFieldAsStr(cfg, "园区");
+                nowPks = AddCharFrontToElmt("❌", nowPks);
+
+
+                KeyboardButton[][] btns = ConvertFileToKeyboardButtons(nowPks.Split(","));
+                Print(EncodeJson(btns));
+                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
+                string imgPath = "今日促销商家.gif";
+                var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+                //  Message message2dbg = await 
+
+                var m = botClient.SendTextMessageAsync(
+                                update.Message.Chat.Id, "选择要删除的园区",
+                                parseMode: ParseMode.Html,
+                                replyMarkup: rplyKbdMkp,
+                                protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
+                Print(m);
+                Jmp2end(nameof(CmdHdlrdelArea));
+            }
+        }
+       
+
         public static void CmdHdlrarea(string fullcmd, Update update, string reqThreadId)
         {
 
@@ -839,8 +1099,16 @@ namespace mdsj.libBiz
                             replyMarkup: rplyKbdMkp,
                             protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
 
+            bot_DeleteMessageV2(update.Message.Chat.Id,update.Message.MessageId,120);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
             Print(m);
             // PrintRet(nameof(CmdHdlrarea), "");
+            //---settimeout 
+            NewThrd(() =>
+            {
+                Thread.Sleep(300 * 1000);
+                SetBtmBtnMenu("今日促销商家.gif", plchdTxt,update.Message.Chat.Id, update.Message.Chat.Type.ToString());
+            });
             jmp2endCurFunInThrd.Value = nameof(CmdHdlrarea);
             Jmp2end(nameof(CmdHdlrarea));
         }

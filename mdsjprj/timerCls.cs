@@ -150,7 +150,7 @@ namespace prjx
             int btr = GetBatteryPercentage();
             if (btr < 90)
             {
-               // playMp3(mp3FilePathEmgcy);
+                // playMp3(mp3FilePathEmgcy);
             }
 
             static void 早餐(DateTime now)
@@ -413,28 +413,7 @@ namespace prjx
                 //  Program.botClient.send
                 try
                 {
-                    //私聊不要助力本群
-                    if (!chtType.Contains("group"))
-                    {
-                        rplyKbdMkp = tgBiz.tg_btmBtns();
-                        KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
-                        RemoveButtonByName(kbtns, juliBencyon);
-                    }
-                    else
-                    {
-                        rplyKbdMkp = tgBiz.tg_btmBtns();
-                    }
-
-
-                    //def is grp btns
-                    //tgBiz.tg_btmBtns()
-                    var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
-                    //  Message message2dbg = await 
-                    Program.botClient.SendTextMessageAsync(
-                 Convert.ToInt64(chatid), msgtxt,
-                     parseMode: ParseMode.Html,
-                    replyMarkup: rplyKbdMkp,
-                    protectContent: false, disableWebPagePreview: true);
+                    rplyKbdMkp = SetBtmBtnMenu(imgPath, msgtxt, chatid, chtType);
                     //  print(JsonConvert.SerializeObject(message2));
 
                     //Program.botClient.SendTextMessageAsync(
@@ -452,6 +431,58 @@ namespace prjx
 
 
 
+        }
+
+        public static ReplyKeyboardMarkup SetBtmBtnMenuClr(string imgPath, string msgtxt, object chatid, string chtType)
+        {
+            ReplyKeyboardMarkup rplyKbdMkp;
+
+
+            // 创建一个空的 KeyboardButton[][] 数组
+            KeyboardButton[][] kbtns = new KeyboardButton[0][];
+            rplyKbdMkp = new ReplyKeyboardMarkup(kbtns);
+
+
+
+            //def is grp btns
+            //tgBiz.tg_btmBtns()
+         //   var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            //  Message message2dbg = await 
+            Program.botClient.SendTextMessageAsync(
+         Convert.ToInt64(chatid), msgtxt,
+             parseMode: ParseMode.Html,
+            replyMarkup: rplyKbdMkp,
+            protectContent: false, disableWebPagePreview: true);
+            return rplyKbdMkp;
+        }
+
+
+        public static ReplyKeyboardMarkup SetBtmBtnMenu(string imgPath, string msgtxt, object chatid, string chtType)
+        {
+            ReplyKeyboardMarkup rplyKbdMkp;
+            //私聊不要助力本群
+            if (!chtType.Contains("group"))
+            {
+                rplyKbdMkp = tgBiz.tg_btmBtns();
+                KeyboardButton[][] kbtns = (KeyboardButton[][])rplyKbdMkp.Keyboard;
+                RemoveButtonByName(kbtns, juliBencyon);
+            }
+            else
+            {
+                rplyKbdMkp = tgBiz.tg_btmBtns();
+            }
+
+
+            //def is grp btns
+            //tgBiz.tg_btmBtns()
+            var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            //  Message message2dbg = await 
+            Program.botClient.SendTextMessageAsync(
+         Convert.ToInt64(chatid), msgtxt,
+             parseMode: ParseMode.Html,
+            replyMarkup: rplyKbdMkp,
+            protectContent: false, disableWebPagePreview: true);
+            return rplyKbdMkp;
         }
 
 

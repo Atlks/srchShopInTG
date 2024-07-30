@@ -1491,7 +1491,11 @@ namespace prjx
         }
 
 
-
+        /// <summary>
+        /// ，指令如下:\n"
+           //         + "/设置园区 东风园区\n",
+        /// </summary>
+        /// <param name="update"></param>
         public static void EvtBotEnterGrpEvtHdlr(Update update)
         {
             var chatid = update?.MyChatMember?.Chat?.Id;
@@ -1501,8 +1505,7 @@ namespace prjx
             botClient.SendTextMessageAsync(
                     chatid,
                      "我是联信便民助手,你们要问什么商家我都知道.联信是一个集纵网观察、信息搜集、资源整合，旨在为大家解决信息不透明和资源不可信的权威便民助手."
-                        + "\n可以设置园区方便搜索，指令如下:\n"
-                    + "/设置园区 东风园区\n",
+                        + "\n可以设置园区方便搜索",
                      parseMode: ParseMode.Html,
                       replyMarkup: rkm,
                      protectContent: false,
@@ -1510,6 +1513,7 @@ namespace prjx
             Callx(bot_saveGrpInf2db, update.MyChatMember);
             Callx(bot_saveChtSesion, chatid, update.MyChatMember);
 
+            SetBtmBtnMenuClr("", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
 
         }
 

@@ -154,9 +154,32 @@ namespace prjx.lib
 
             return jsonStringList;
         }
-       
 
-     
+        public static string Join(string[] words, string v)
+        {
+            return string.Join(v, words);
+        }
+
+        /// <summary>
+        /// 给每个逗号分隔的单词前面加上感叹号
+        /// </summary>
+        /// <param name="nowPks">逗号分隔的字符串</param>
+        /// <returns>处理后的字符串</returns>
+        public static string AddCharFrontToElmt(string e, string nowPks)
+        {
+            // 分割输入字符串
+            string[] words = nowPks.Split(',');
+
+            // 给每个单词前面加上感叹号
+            for (int i = 0; i < words.Length; i++)
+            {
+                words[i] = e + words[i];
+            }
+
+            // 使用逗号将单词连接起来
+            return string.Join(",", words);
+        }
+
         public static HashSet<string> FilterUrlsEndwithHtm(HashSet<string> urls)
         {
             return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));

@@ -410,6 +410,30 @@ namespace mdsj.lib
             Console.WriteLine(text);
             Console.ForegroundColor = ConsoleColor.White;
         }
+
+
+        public static void NewThrd(Action act1)
+        {
+            // 使用 Task.Run 启动一个新的任务
+            System.Threading.Tasks.Task newTask = System.Threading.Tasks.Task.Run(() =>
+            {
+                // callxTryJmp(task1);
+                try
+                {
+                    act1();
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx("TaskRunNewThrd", e);
+                    logErr2025(e, nameof(TaskRunNewThrd), "errlog");
+                }
+
+
+                //  callxTryJmp(OnMsg, update, reqThreadId);
+
+            });
+        }
+
         public static void TaskRunNewThrd(Action act1)
         {
             // 使用 Task.Run 启动一个新的任务
@@ -622,7 +646,12 @@ namespace mdsj.lib
             li.Remove(e);
             return ConvertArrayListToCommaSeparatedString(li);
         }
-
+        public static string DelElmt(string e, string strComma)
+        {
+            ArrayList li = ConvertToArrayList(strComma);
+            li.Remove(e);
+            return ConvertArrayListToCommaSeparatedString(li);
+        }
 
         public static string removeDulip(string newParks)
         {
