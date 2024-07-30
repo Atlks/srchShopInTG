@@ -83,6 +83,10 @@ namespace WindowsFormsApp1.libbiz
             return del_rowFun;
         }
 
+        /// <summary>
+        ///         Func<string, List<SortedList>>
+        /// </summary>
+        /// <returns></returns>
         public static Func<string, List<SortedList>> rnd_next4SqltRf()
         {
             Func<string, List<SortedList>> rndFun = (dbf) =>

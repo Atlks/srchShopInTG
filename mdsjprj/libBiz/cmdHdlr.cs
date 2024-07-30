@@ -82,9 +82,11 @@ namespace mdsj.libBiz
                     //send
                     Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
-                          "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2endDep();
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
+                    Jmp2end(nameof(ConfirmSetCountryBtnClick));
                 }
             }
             if (isGrpChat(update))
@@ -249,9 +251,11 @@ namespace mdsj.libBiz
 
             try
             {
+                //--is not country ,end fun
                 ifStrutsThrdloc.Value = NewIFAst();
                 iff(Condt(ISCtry, ctry), null, () =>
                 {
+                    //for prm use ret val mode
                     Jmp2endCurFunFlag.Value = true;
                     // Jmp2endCurFun();
                 });
@@ -377,7 +381,7 @@ namespace mdsj.libBiz
 
         private static void AppendArea(string ctry, SortedList cfg)
         {
-            string areaArr = GetFieldAsStr(cfg, "area地区");
+            string areaArr = GetFieldAsStrDep(cfg, "area地区");
             string areaArr22 = AppendStrcomma(ctry, areaArr);
             SetField(cfg, "area地区", areaArr22);
         }
@@ -409,9 +413,11 @@ namespace mdsj.libBiz
                     //send
                     Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
-                          "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2endDep();
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
+                    Jmp2end( nameof( ConfirmSetCityBtnClick));
                 }
             }
 
@@ -487,12 +493,12 @@ namespace mdsj.libBiz
         private static string AppendParks(SortedList cfg, string parks
         )
         {
-            string whereExprs = GetFieldAsStr(cfg, "whereExprs");
+            string whereExprs = GetFieldAsStrDep(cfg, "whereExprs");
             SortedList whereExpmap = GetHashtableFromQrystr(whereExprs);
             DelField(whereExpmap, "国家");
             DelField(whereExpmap, "城市");
 
-            string ormParks = GetFieldAsStr(whereExpmap, "园区");
+            string ormParks = GetFieldAsStrDep(whereExpmap, "园区");
             string newParks = ormParks + "," + parks;
             newParks = removeDulip(newParks);
 
@@ -538,9 +544,11 @@ namespace mdsj.libBiz
                     //send
                     Print("no auth ");
                     // print("no auth ");
-                    botClient.SendTextMessageAsync(update.Message.Chat.Id,
-                          "权限不足", replyToMessageId: update.Message.MessageId);
-                    Jmp2endDep();
+                    //botClient.SendTextMessageAsync(update.Message.Chat.Id,
+                    //      "权限不足", replyToMessageId: update.Message.MessageId);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
+
+                    Jmp2end(nameof(SetParkBtnClick));
                 }
             }
             //   string f = $"botEnterGrpLog/{grpid}.{fromUid}.{util.botname}.json";
@@ -800,7 +808,7 @@ namespace mdsj.libBiz
                     SortedList cfg = findOne(dbfile2);
 
 
-                    string area = GetFieldAsStr(cfg, "area地区");
+                    string area = GetFieldAsStrDep(cfg, "area地区");
                     tipsd = $"你已经选择了地区：{area} 。";
                     tipsd += tipsAppendArea;
                 }
@@ -849,7 +857,7 @@ namespace mdsj.libBiz
 
             string whereExprsFld = "whereExprs";
             string areakey = "城市";
-            if (IsEmpty(GetFieldAsStr(cfg, whereExprsFld)))
+            if (IsEmpty(GetFieldAsStrDep(cfg, whereExprsFld)))
                 return false;
             return true;
 

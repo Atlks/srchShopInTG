@@ -368,11 +368,52 @@ namespace prjx.lib
            Print(msglog + "");
 
         }
+        public static void PrintRetx(string mETHOD__, object? result)
+        {
+            if ("WbapiXgetlist".Equals(mETHOD__))
+            {
+                Print(".dbg.");
+            }
+
+            if (IsStr(result))
+            {
+                PrintRet(mETHOD__, Left(result, 200));
+                return;
+            }
+            //try
+            //{
+
+            //}cat
+            if (result is System.Collections.IList)
+            {
+                IList lst = (IList)result;
+                try
+                {
+
+                    Print("lst.size=>" + lst.Count);
+                    if (lst.Count > 0)
+                        PrintRet(mETHOD__, lst[0]);
+                    else
+                        PrintRet(mETHOD__, "list.size=0");
+                }
+                catch (Exception e)
+                {
+                    PrintExcept("print_ret_ex", e);
+                    PrintRet(mETHOD__, "lst.size=>" + lst.Count);
+                }
+
+            }
+            else
+                PrintRet(mETHOD__, result);
+        }
 
         public static void PrintRet(object mETHOD__, object results)
         {
+          //  PrintRetx
             try
             {
+                if (dbgpad == 0)
+                    dbgpad = 1;
                 var msglog = str_repeat("💰", dbgpad) + " ENDFUN " + mETHOD__ + "():: ret=>" + json_encode_noFmt(results);
               // print(msglog + "");
                 PrintColoredText(msglog, ConsoleColor.DarkGreen);
@@ -549,18 +590,7 @@ namespace prjx.lib
             return sb.ToString();
         }
 
-        public static string repeat(int count)
-        {
-            if (count < 0)
-                count = 0;
-            return new string('$', count);
-        }
-        public static string str_repeat(  int count)
-        {
-            if (count < 0)
-                count = 0;
-            return new string('$', count);
-        }
+      
     }
 }
 //$GLOBALS['dbg']=[];

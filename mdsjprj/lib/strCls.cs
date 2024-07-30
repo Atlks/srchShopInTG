@@ -18,8 +18,34 @@ using static prjx.lib.corex;
 namespace prjx.lib
 {
     internal class strCls
-    {
+    { /// <summary>
+      /// 截取字符串的前100个字符。
+      /// </summary>
+      /// <param name="input">输入字符串</param>
+      /// <returns>截取后的字符串</returns>
+        public static string Left(object input2, int len)
+        {
+            string input = ToStr(input2);
+            if (string.IsNullOrEmpty(input))
+            {
+                return string.Empty; // 如果输入为空或 null，则返回空字符串
+            }
 
+            // 截取前100个字符，如果输入长度不足100个字符，则返回整个字符串
+            return input.Length <= len ? input : input.Substring(0, len);
+        }
+        public static string repeat(int count)
+        {
+            if (count < 0)
+                count = 0;
+            return new string('$', count);
+        }
+        public static string str_repeat(int count)
+        {
+            if (count < 0)
+                count = 0;
+            return new string('$', count);
+        }
         public static string Left(string str, int len)
         {
             if (str == null)

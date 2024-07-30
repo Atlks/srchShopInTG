@@ -661,6 +661,7 @@ namespace mdsj.lib
         }
         public static object Callx(Delegate callback, params object[] args)
         {
+            Jmp2endCurFunFlag.Value = false;
 
             //  return CallUserFunc409(callback, args);
             MethodInfo method = callback.Method;
@@ -670,9 +671,15 @@ namespace mdsj.lib
             object o = null;
             try
             {
+                // Delegate.DynamicInvoke
                 //here dync invk slow ,need 40 ms
                 //   else
                 o = callback.DynamicInvoke(args);
+                if(jmp2exitFlagInThrd.Value)
+                {
+                    PrintRet(__METHOD__, "");
+                    return o;
+                }
             }
             catch (jmp2endCurFunEx ee)
             {
@@ -887,7 +894,7 @@ namespace mdsj.lib
             }
 
 
-            var delegateType = typeof(Func<string, List<SortedList>>);
+           // var delegateType = typeof(Func<string, List<SortedList>>);
             //  var delegateMethod = methodInfo.CreateDelegate(delegateType);
 
             // 假设你想要执行 YourMethodName 方法
@@ -1055,59 +1062,6 @@ namespace mdsj.lib
             }
         }
 
-        /// <summary>
-        /// 截取字符串的前100个字符。
-        /// </summary>
-        /// <param name="input">输入字符串</param>
-        /// <returns>截取后的字符串</returns>
-        public static string Left(object input2,int len)
-        {
-            string input = ToStr(input2);
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty; // 如果输入为空或 null，则返回空字符串
-            }
-
-            // 截取前100个字符，如果输入长度不足100个字符，则返回整个字符串
-            return input.Length <= len ? input : input.Substring(0, len);
-        }
-        public static void PrintRetx(string mETHOD__, object? result)
-        {
-            if("WbapiXgetlist".Equals(mETHOD__))
-            {
-                Print(".dbg.");
-            }
-
-            if(IsStr(result))
-            {
-                PrintRet(mETHOD__, Left( result,200));
-                return;
-            }
-                //try
-                //{
-
-                //}cat
-                if (result is System.Collections.IList)
-            {
-                IList lst = (IList)result;
-                try
-                {
-
-                    Print("lst.size=>" + lst.Count);
-                    if (lst.Count > 0)
-                        PrintRet(mETHOD__, lst[0]);
-                    else
-                        PrintRet(mETHOD__, "list.size=0");
-                }
-                catch (Exception e)
-                {
-                    PrintExcept("print_ret_ex", e);
-                    PrintRet(mETHOD__, "lst.size=>" + lst.Count);
-                }
-
-            }
-            else
-                PrintRet(mETHOD__, result);
-        }
-    }
+       
+   }
 }

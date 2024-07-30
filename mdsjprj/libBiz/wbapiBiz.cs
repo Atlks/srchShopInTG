@@ -167,6 +167,7 @@ namespace mdsj.libBiz
         }
         public static string WbapiXgetlist(string qrystr)
         {
+            PrintTimestamp(" start fun WbapiXgetlist()");
             //  print("Received getlist: " + callGetlistFromDb);
             //  return Results.Ok("OK");
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
@@ -178,7 +179,7 @@ namespace mdsj.libBiz
 
 
             //   SetKv("a=1", "b", 253);
-            //todo v2
+            //todo v2   here qry need abt 50ms
             string qrtStr4Srch2 = DelKeys("商家 " + pageprm251, qrystr);
             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
             //    GetQryStr4srch
@@ -188,13 +189,15 @@ namespace mdsj.libBiz
 
             //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
             //var list = GetListFltr(FromDdataDir, null, whereFun);
+
+            //   
             var list_aftFltr2 = ArrFltr(listFlrted, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
 
-                string mrtKwd = GetFieldAsStr(qryMap, "商家").ToUpper();
+                string mrtKwd = GetFieldAsStr1037(qryMap, "商家").ToUpper();
                 if (mrtKwd.Length > 0)
-                    li.Add(GetFieldAsStr(row, "商家").ToUpper().Contains(mrtKwd));
+                    li.Add(GetFieldAsStr1037(row, "商家").ToUpper().Contains(mrtKwd));
                 //   li.Add((IsNotEmptyLianxi(row)));
                 //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
@@ -268,7 +271,9 @@ namespace mdsj.libBiz
 
             //--------trans fmt chg int fmt
             //chg int fmt
-            return EncodeJson(list_rzt_fmt);
+            string rsstr = EncodeJson(list_rzt_fmt);
+            PrintTimestamp(" end fun WbapiXgetlist()");
+            return rsstr;
         }
 
 
@@ -354,7 +359,7 @@ namespace mdsj.libBiz
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
 
-            string token = GetFieldAsStr(saveOBJ, "token");
+            string token = GetFieldAsStrDep(saveOBJ, "token");
             //string[] tka = token.Split("_");
             //string uid = GetElmt(tka, 0);
             //string exprt = GetElmt(tka, 1);
@@ -407,7 +412,7 @@ namespace mdsj.libBiz
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
-            string token = GetFieldAsStr(saveOBJ, "token");
+            string token = GetFieldAsStrDep(saveOBJ, "token");
             //string[] tka = token.Split("_");
             //string uid = GetElmt(tka, 0);
             //string exprt = GetElmt(tka, 1);

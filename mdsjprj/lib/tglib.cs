@@ -44,6 +44,7 @@ using mdsj;
 using Newtonsoft.Json.Linq;
 using mdsj.libBiz;
 using mdsj.lib;
+using DocumentFormat.OpenXml.Drawing.Diagrams;
 namespace prjx.lib
 {
     internal class tglib
@@ -344,6 +345,10 @@ namespace prjx.lib
             ForeachHashtable(chtsSess, (de) =>
             {
                 var chatid = Convert.ToInt64(de.Key);
+                if(chatid!= -1001613022200)
+                {
+              //      return 0;
+                }
                 var map = de.Value;
                 JObject jo = (JObject)map;
                 string chtType = GetFld(jo, "chat.type", "");
@@ -362,7 +367,7 @@ namespace prjx.lib
                 }
                 else
                 {
-
+                    //whereExprs
                     var groupId = chatid;
                     List<SortedList> grpcfgObj = ormJSonFL.qry($"{prjdir}/grpCfgDir/grpcfg{groupId}.json");
                     string whereExprs = (string)db.getRowVal(grpcfgObj, "whereExprs", "");

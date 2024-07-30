@@ -130,7 +130,7 @@ namespace libx
                 SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
                 rndFun = (string)curShareCfg["rndFun"];
                 var CurSharFullpath = fromDdataDir + "/" + shar
-                    + "." + GetFieldAsStr(curShareCfg, "ext");
+                    + "." + GetFieldAsStrDep(curShareCfg, "ext");
 
                 //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
                 var dbg = (shar: shar, storeEngr: rndFun, CurSharFullpath: CurSharFullpath);
@@ -148,7 +148,7 @@ namespace libx
          Func<SortedList, bool> whereFun
        )
         {
-
+            PrintTimestamp(" start fun GetListFltr");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
 
@@ -660,19 +660,35 @@ namespace libx
 
             return result;
         }
+
+        //public static Func<string, List<SortedList>> rnd_next4SqltRfV2()
+
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             PrintCallFunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
 
-
-            List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
+            SortedList<string, Func<string, List<SortedList>>> map = new SortedList<string, Func<string, List<SortedList>>>();
+            map.Add("rnd_next4Sqlt", rnd_next4Sqlt);
+            map.Add("rnd4jsonFl", rnd4jsonFl);
+            //rnd=rnd_next4Sqlt
+            // 将静态方法的引用赋值给 Action 委托
+            //  Func<string, List<SortedList>> rnd_next4SqltRef = rnd_next4Sqlt;
+           // Func<string, List<SortedList>> fun_rnd1 = rnd_next4Sqlt;
+            Func<string, List<SortedList>> fun_rnd = (Func<string, List<SortedList>>)map[rnd];
+            List<SortedList> li = fun_rnd(shareName);
+        //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
-                li = db.arr_fltr330(li, whereFun);
+                li = arr_fltr330(li, whereFun);
 
-            dbgCls.PrintRet(__METHOD__, li.Count);
+            PrintRet(__METHOD__, li.Count);
             return li;
         }
+
+        //private static List<SortedList> rnd_next4SqltRfV2(string arg)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public static List<SortedList> _qryByShare(string shareName, Func<SortedList, bool> whereFun, Func<string, List<SortedList>> rndFun, object dbg)
         {

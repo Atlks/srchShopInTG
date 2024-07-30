@@ -535,7 +535,7 @@ namespace prjx
             //   List<InlineKeyboardButton[]> results = qry_ByKwds_OrderbyRdm_Timermode_lmt5(wdss);
             var msgtxt = "午餐时间到了！让我们一起享受美食和愉快的时光吧！希望你的午后充满欢乐和满满的正能量！";
             // if (results.Count > 0)
-            bot_sendMsgToMltV2("午餐商家推荐.gif", plchdTxt, wdss);
+            bot_sendMsgToMltV3("午餐商家推荐.gif", plchdTxt, wdss);
 
 
         }

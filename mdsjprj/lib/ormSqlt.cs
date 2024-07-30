@@ -183,6 +183,7 @@ namespace prjx.lib
         }
         public static List<SortedList> qryV2(string dbFileName)
         {
+            PrintTimestamp(" start qryV2() ");
             string querySql = "select * from 表格1";
             // setDbgFunEnter(__METHOD__, func_get_args());
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -219,7 +220,8 @@ namespace prjx.lib
             {
                Print(ex);
             }
-            dbgCls.PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 3));
+            PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 1));
+            PrintTimestamp(" end qryV2() ");
             return results;
         }
 

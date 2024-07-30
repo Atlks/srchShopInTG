@@ -282,7 +282,7 @@ namespace mdsj.lib
             if (hasCondt(whereExprsObj, Fld))
             {
                 string valueInQrystr = LoadFieldAsStr(whereExprsObj, Fld);
-                if (GetFieldAsStr(row, Fld).Contains(valueInQrystr))   //  cityname not in (citysss) 
+                if (GetFieldAsStrDep(row, Fld).Contains(valueInQrystr))   //  cityname not in (citysss) 
                     return true;
                 else
                     return false;

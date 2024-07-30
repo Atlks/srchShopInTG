@@ -1,6 +1,17 @@
 console.log(33)
 
 
+设置区域，取消 返回 。
+设置超时  如果已经设置了区域，
+一拉入群，提示设置区域，不要直接显示下边菜单
+设置完毕后，提示你已经设置了区域列表
+按钮 继续设置xx d
+提示信息 定时删除
+删除园区  红叉叉
+
+
+
+
 srch rzt shld use html layout
 srch sql rzt is transfam to h5
 

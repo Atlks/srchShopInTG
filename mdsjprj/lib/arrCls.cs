@@ -204,6 +204,7 @@ namespace prjx.lib
 
         public static List<SortedList> ArrFltr(List<SortedList> list, Func<SortedList, bool> fn)
         {
+            PrintTimestamp(" start fun ArrFltr");
             List<SortedList> list22 = new List<SortedList>();
             foreach (SortedList rw in list)
             {

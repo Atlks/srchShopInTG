@@ -38,8 +38,9 @@ namespace mdsj.lib
         public static SortedList NewIFAst()
         {
             SortedList ifx = new SortedList();
-            ArrayList cdts = new ArrayList();
-            ifx.Add("cdts", ifx);
+
+          
+            ifx.Add("cdts", new ArrayList());
             ifx.Add("cdtsRzt", false);
             ifx.Add("choose", "Then");
             return ifx;

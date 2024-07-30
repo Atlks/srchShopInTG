@@ -69,13 +69,16 @@ namespace mdsj.lib
                                 Print(" start req..."); PrintTimestamp();
                                 //here cant new thrd..beir req close early
                                 //here use call but not calltryAll bcs not want jmp Ex prt
-                                Callx(HttpHdlr, context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                HttpHdlr( context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 Print(" end req..."); Print(" end req..."); Print(" end req...");
                                 PrintTimestamp();
                             }
                             catch (jmp2endEx e)
                             {
 
+                            }catch(Exception e)
+                            {
+                                PrintCatchEx("RequestDelegate",e);
                             }
                             Print(" end req...");
                             PrintTimestamp();
@@ -118,7 +121,9 @@ namespace mdsj.lib
         /// <param name="api_prefixDep"></param>
         public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
-
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(__METHOD__, func_get_args("req,resp",api_prefixDep));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
@@ -136,13 +141,13 @@ namespace mdsj.lib
             extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
             string path2 = request.Path;
             PrintTimestamp("bef call HttpHdlrFil");
-            Callx(HttpHdlrFil, request, response, extNhdlrChoosrMaplist);
+            HttpHdlrFil( request, response, extNhdlrChoosrMaplist);
             PrintTimestamp("end call HttpHdlrFil");
             if (jmp2exitFlagInThrd.Value == true)
                 return;
             //-------------------if spec  api
             // 处理特定API
-            Callx(httpHdlrApiSpecl, request, response);
+            httpHdlrApiSpecl(request, response);
             if (jmp2exitFlagInThrd.Value == true)
                 return;
 
@@ -157,22 +162,30 @@ namespace mdsj.lib
 
 
 
-
+            //todo ref is too slow ,chg to delegate
             //------------httpHdlrApi--def json api mode
             //----------/XXX GET/POST WBAPI----
             //if (request.Method == HttpMethods.Post)
         
             var fn = path.Substring(1);
             var funname = "" + fn + request.Method + "Wbapi";
-          
+          //tod here maybe 50ms to dync invok ,can chg to delegate mode fast
+          //but if no match method ,just not invk ,also fast..
             Callx(funname, request, response);
 
 
             //----dep
             //TODO DEP SHOULD AUTO get post call
-            object rzt = CallxTryx(api_prefixDep + fn, Substring(queryString, 1));
+            string fnm = api_prefixDep + fn;
+            string args931 = Substring(queryString, 1);
+
+
+            object rzt = CallxTryx(fnm, args931);
+
             // 发送响应
             SendResp(rzt, "application/json; charset=utf-8", response);
+            PrintRetx(__METHOD__, "");
+            PrintTimestamp(" end fun HttpHdlr()");
         }
 
         /// <summary>
@@ -226,6 +239,9 @@ namespace mdsj.lib
         public static void HttpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
             PrintTimestamp("enter HttpHdlrFil() ");
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(__METHOD__, func_get_args("req,resp", extnameNhdlrChooser));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
 
             // 获取查询字符串
@@ -268,7 +284,11 @@ namespace mdsj.lib
 
         });
             if (jmp2exitFlagInThrd.Value == true)
+            {
+                PrintRetx(__METHOD__, "");
                 return;
+            }
+              
             //------------------other ext use down mode
             // 获取文件的实际扩展名
             string fileExtension = Path.GetExtension(path);

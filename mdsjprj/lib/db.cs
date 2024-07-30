@@ -28,7 +28,14 @@ namespace prjx.lib
     internal class db
     {
 
-
+        /// <summary>
+        ///  only row and where fun
+        /// </summary>
+        /// <param name="rows"></param>
+        /// <param name="whereFun"></param>
+        /// <param name="ordFun"></param>
+        /// <param name="selktFun"></param>
+        /// <returns></returns>
         public static List<SortedList> arr_fltr330(List<SortedList> rows,
     Func<SortedList, bool> whereFun,
     Func<SortedList, int> ordFun = null,
@@ -36,7 +43,7 @@ namespace prjx.lib
 
             )
         {
-
+            PrintTimestamp(" start fun arr_fltr330()");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.PrintCallFunArgs(__METHOD__, func_get_args("someRows"));
             List<SortedList> rows_rzt4srch = new List<SortedList>();
@@ -81,7 +88,8 @@ namespace prjx.lib
                 else
                     list_Seleced.Add(row);
             }
-            dbgCls.PrintRet(__METHOD__, list_Seleced.Count);
+            PrintRet(__METHOD__, list_Seleced.Count);
+            PrintTimestamp(" end fun arr_fltr330()");
             return list_Seleced;
 
         }
