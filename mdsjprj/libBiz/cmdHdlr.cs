@@ -2,6 +2,7 @@
 global using static mdsj.libBiz.cmdHdlr;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.ExtendedProperties;
+using DocumentFormat.OpenXml.Office.Word;
 using mdsj.lib;
 using MusicApiCollection.Sites.MusicBrainz.Data;
 using prjx.lib;
@@ -106,6 +107,7 @@ namespace mdsj.libBiz
                 string allParks = GetFieldAsStr(cfg, "园区");
                 svrPrks = allParks.Split(",").Length;
                 svrPksHtml = Join(allParks.Split(","), "\n");
+                svrPksHtml = AddIdxToElmt(svrPksHtml.Split("\n"), "\n");
                 //   "\n"+newParks.Split(",").Join("\n");
                 SetField(cfg, "id", grpid.ToString());
                 SetField(cfg, "grpid", grpid.ToString());
@@ -156,8 +158,8 @@ namespace mdsj.libBiz
                 protectContent: false,
                 disableWebPagePreview: true,
                 replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
-            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
-            bot_DeleteMessageV2(update.Message.Chat.Id, m?.MessageId, 3);
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 300);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m?.MessageId, 300);
             //------------set menu btm
             Message m2 = SetBtmMenu(update);
             bot_DeleteMessageV2(update.Message.Chat.Id, (m2?.MessageId), 3);
@@ -897,8 +899,11 @@ namespace mdsj.libBiz
         //{
         //    Print("oo617");
         //}
-
         public static void CmdHdlrclearArea(string fullcmd, Update update, string reqThreadId)
+        {
+            CmdHdlrclear(fullcmd, update, reqThreadId);
+        }
+            public static void CmdHdlrclear(string fullcmd, Update update, string reqThreadId)
         {
 
             //public 判断权限先
@@ -920,7 +925,7 @@ namespace mdsj.libBiz
                     //      "权限不足", replyToMessageId: update.Message.MessageId);
                     bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
 
-                    Jmp2end(nameof(CmdHdlrclearArea));
+                    Jmp2end(nameof(CmdHdlrclear));
                 }
             }
 
@@ -974,7 +979,7 @@ namespace mdsj.libBiz
 
             bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
             bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
-            Jmp2end(nameof(CmdHdlrclearArea));
+            Jmp2end(nameof(CmdHdlrclear));
         }
 
         /// <summary>
@@ -984,14 +989,14 @@ namespace mdsj.libBiz
         /// <param name="fullcmd"></param>
         /// <param name="update"></param>
         /// <param name="reqThreadId"></param>
-        public static void CmdHdlrshowArea(string fullcmd, Update update, string reqThreadId)
+        public static void CmdHdlrlist(string fullcmd, Update update, string reqThreadId)
         {
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;
             var mybotid = botClient.BotId;
             string svrPksHtml = "";
-            if (isGrpChat(update))
+          //  if (isGrpChat(update))
             {
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                 SortedList cfg = findOne(dbfile2);
@@ -999,21 +1004,21 @@ namespace mdsj.libBiz
 
 
                 svrPksHtml = GetFieldAsStr(cfg, "园区");
-
+                svrPksHtml = AddIdxToElmt(svrPksHtml.Split(","), "\n");
 
             }
             //prive
-            if (!isGrpChat(update))
-            {
-                return;
-                string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
-                SortedList cfg = findOne(dbfile);
-                //    string parks = GetParksByCountry(ctry);
-                //    string newParks = AppendParks(cfg, parks);
+            //if (!isGrpChat(update))
+            //{
+            //    return;
+            //    string dbfile = $"{prjdir}/cfg_prvtChtPark/{update.Message.From.Id}.json";
+            //    SortedList cfg = findOne(dbfile);
+            //    //    string parks = GetParksByCountry(ctry);
+            //    //    string newParks = AppendParks(cfg, parks);
 
 
 
-            }
+            //}
             Message m = botClient.SendTextMessageAsync(
                  update.Message.Chat.Id,
                  tipsSetOK + "\n 已经设置园区" + "\n" + svrPksHtml,
@@ -1030,7 +1035,7 @@ namespace mdsj.libBiz
             Jmp2endDep();
 
         }
-        public static void CmdHdlrdelArea(string fullcmd, Update update, string reqThreadId)
+        public static void CmdHdlrdelete(string fullcmd, Update update, string reqThreadId)
         {
 
             //public 判断权限先
@@ -1050,7 +1055,7 @@ namespace mdsj.libBiz
                     //botClient.SendTextMessageAsync(update.Message.Chat.Id,
                     //      "权限不足", replyToMessageId: update.Message.MessageId);
                     bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
-                    Jmp2end(nameof(CmdHdlrdelArea));
+                    Jmp2end(nameof(CmdHdlrdelete));
                 }
             }
             string svrPksHtml = "";
@@ -1081,12 +1086,22 @@ namespace mdsj.libBiz
                 bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
                 bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
                 Print(m);
-                Jmp2end(nameof(CmdHdlrdelArea));
+                Jmp2end(nameof(CmdHdlrdelete));
             }
         }
+        public static void CmdHdlrhlp(string fullcmd, Update update, string reqThreadId)
+        {
+            string cmd = GetCmdFun(update?.Message?.Text);
+            string filePath = $"{prjdir}/cfg_cmd/{cmd}.txt";
+            var m = botClient.SendTextMessageAsync(
+                          update.Message.Chat.Id, "/add \n /delete \n /list \n /clear",
+                          parseMode: ParseMode.Html,
+                         
+                          protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+            Jmp2end("CmdHdlrhlp");
+        }
 
-
-        public static void CmdHdlrarea(string fullcmd, Update update, string reqThreadId)
+        public static void CmdHdlradd(string fullcmd, Update update, string reqThreadId)
         {
 
             if (isGrpChat(update))
@@ -1100,7 +1115,7 @@ namespace mdsj.libBiz
                     //botClient.SendTextMessageAsync(update.Message.Chat.Id,
                     //      "权限不足", replyToMessageId: update.Message.MessageId);
                     bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3); ;
-                    Jmp2end(nameof(CmdHdlrarea));
+                    Jmp2end(nameof(CmdHdlradd));
                 }
             }
 
@@ -1158,8 +1173,8 @@ namespace mdsj.libBiz
                 Thread.Sleep(300 * 1000);
                 SetBtmBtnMenu("今日促销商家.gif", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
             });
-            jmp2endCurFunInThrd.Value = nameof(CmdHdlrarea);
-            Jmp2end(nameof(CmdHdlrarea));
+            jmp2endCurFunInThrd.Value = nameof(CmdHdlradd);
+            Jmp2end(jmp2endCurFunInThrd.Value);
         }
 
 
