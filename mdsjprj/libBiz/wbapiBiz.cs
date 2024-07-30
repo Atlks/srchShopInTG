@@ -423,7 +423,9 @@ namespace mdsj.libBiz
                 SendResp("token无效", response);
                 Jmp2end(nameof(AddMerchtPOSTWbapi));
             }
-
+            string[] tka = token.Split("_");
+            string uid = GetElmt(tka, 0);
+            SetField(saveOBJ, "uid", uid);
             ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
             ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
             SendResp("ok", response);

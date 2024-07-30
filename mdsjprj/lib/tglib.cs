@@ -580,7 +580,7 @@ namespace prjx.lib
             return System.Threading.Tasks.Task.CompletedTask;
         }
         //删除别人信息
-        public static void bot_DeleteMessageV2(long chatId, int msgid, int second)
+        public static void bot_DeleteMessageV2(long chatId, int? msgid, int second)
 
         {
            CallAsyncNewThrd(async () =>
@@ -589,7 +589,7 @@ namespace prjx.lib
 
                     try
                     {
-                        await Program.botClient.DeleteMessageAsync(chatId, msgid);
+                        await Program.botClient.DeleteMessageAsync(chatId, msgid.Value);
                     }
                     catch (Exception e)
                     {

@@ -1,0 +1,13 @@
+[
+  {
+    "from": {
+      "id": 7461627224,
+      "is_bot": false,
+      "first_name": "联信 - 阿利【运营】",
+      "language_code": "zh-hans"
+    },
+    "id": "7461627224",
+    "whereExprs": "园区=KK园区",
+    "园区": "KK园区"
+  }
+]
