@@ -57,7 +57,9 @@ namespace mdsj.lib
             ConfigureWebHostBuilder webHost = builder.WebHost;
             webHost.ConfigureKestrel(serverOptions =>
             {
-                serverOptions.ListenAnyIP(5000); // 自定义端口号，例如5001
+                Dictionary<string,string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
+                int port = GetFieldAsInt526(map, "wbsvs_port", 5000);
+                serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
             });
             var app = builder.Build();
             //http://localhost:5000/dafen?callGetlistFromDb=yourValue11
@@ -86,6 +88,37 @@ namespace mdsj.lib
                         };
             app.Run(RequestDelegate1);
             app.Run();
+        }
+
+        private static int GetFieldAsInt526(Dictionary<string, string> map, string v1, int v2)
+        {
+            if (map.ContainsKey(v1))
+                return ToInt(map[v1]);
+            return v2;
+        }
+
+        private static Dictionary<string, string> GetDicFromIni(string v)
+        {
+            Hashtable li = GetHashtabFromIniFl(v);
+            return ToDictionary(li);
+        }
+
+        public static Dictionary<string, string> ToDictionary( Hashtable hashtable)
+        {
+            var dictionary = new Dictionary<string, string>();
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                if (entry.Key is string key && entry.Value is string value)
+                {
+                    dictionary.Add(key, value);
+                }
+                else
+                {
+                    // 处理非字符串键值对的情况，例如抛出异常或进行类型转换
+                    throw new InvalidCastException("Hashtable中的键或值不是字符串类型");
+                }
+            }
+            return dictionary;
         }
         public static string webrootDir = $"{prjdir}/webroot";
 
@@ -122,6 +155,7 @@ namespace mdsj.lib
         /// <param name="api_prefixDep"></param>
         public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
+            PrintTimestamp(" start HttpHdlr()");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(__METHOD__, func_get_args("req,resp",api_prefixDep));
@@ -132,20 +166,27 @@ namespace mdsj.lib
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-
-            //----------------static res
-            // 静态资源处理器映射表
-            Hashtable extNhdlrChoosrMaplist = new Hashtable();
-            extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
-            extNhdlrChoosrMaplist.Add(" html htm", nameof(HtmlHttpHdlrfilTxtHtml));
-            extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
-            extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
-            string path2 = request.Path;
-            PrintTimestamp("bef call HttpHdlrFil");
-            HttpHdlrFil( request, response, extNhdlrChoosrMaplist);
-            PrintTimestamp("end call HttpHdlrFil");
-            if (jmp2exitFlagInThrd.Value == true)
-                return;
+            string skipFileRdUrlpath = "/getlist";
+            HashSet<string> hs = new HashSet<string>();
+            hs.Add(skipFileRdUrlpath);
+            if(!hs.Contains(path))
+            {
+                //这里为了pfm ,so need jude skip fl hdr
+                //----------------static res
+                // 静态资源处理器映射表
+                Hashtable extNhdlrChoosrMaplist = new Hashtable();
+                extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
+                extNhdlrChoosrMaplist.Add(" html htm", nameof(HtmlHttpHdlrfilTxtHtml));
+                extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
+                extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
+                string path2 = request.Path;
+                PrintTimestamp("bef call HttpHdlrFil");
+                HttpHdlrFil(request, response, extNhdlrChoosrMaplist);
+                PrintTimestamp("end call HttpHdlrFil");
+                if (jmp2exitFlagInThrd.Value == true)
+                    return;
+            }
+           
             //-------------------if spec  api
             // 处理特定API
             httpHdlrApiSpecl(request, response);
@@ -183,7 +224,7 @@ namespace mdsj.lib
           
          //   object rzt = CallxTryx(fnm, args931);
             // 使用表达式树创建委托
-             var f = CreateDelegate<Func<string, string>>(fnm);
+             var f = NewDelegate<Func<string, string>>(fnm);
             // 使用委托调用方法
              string result = f(args931);
 
@@ -193,45 +234,7 @@ namespace mdsj.lib
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
-        /// <summary>
-        ///  // 定义方法签名
-       
-
-        // 使用表达式树创建委托
-       // var f = CreateDelegate<Func<string, string>>(methodName);
-
-        // 使用委托调用方法
-     //   string result = f("example query");
-     //  这个 pfm is ver fast..not have pefm prblm
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="methodName"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
-        public static Func<string, string> CreateDelegate<T>(string methodName) where T : Delegate
-        {
-            PrintTimestamp("start CreateDelegate()"+methodName);
-            // 获取方法信息
-            MethodInfo methodInfo = GetMethInfo(methodName);
-            if (methodInfo == null)
-            {
-                throw new ArgumentException($"Method '{methodName}' not found.");
-            }
-
-            // 创建参数表达式
-            ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
-
-            // 创建方法调用表达式
-            MethodCallExpression methodCall = Expression.Call(methodInfo, param);
-
-            // 创建 Lambda 表达式
-            Expression<Func<string, string>> lambda = Expression.Lambda<Func<string, string>>(methodCall, param);
-
-            // 编译 Lambda 表达式
-            Func<string, string> func = lambda.Compile();
-            PrintTimestamp(" endfun CreateDelegate()" + methodName);
-            return func;
-        }
+      
         /// <summary>
         /// 统一查询接口
         /// http://localhost:5000/qry?fromData=闲置

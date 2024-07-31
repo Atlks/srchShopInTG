@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO.Compression;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -908,6 +909,46 @@ namespace mdsj.lib
             return tkOri;
         }
 
+
+        /// <summary>
+        ///  // 定义方法签名
+
+
+        // 使用表达式树创建委托
+        // var f = CreateDelegate<Func<string, string>>(methodName);
+
+        // 使用委托调用方法
+        //   string result = f("example query");
+        //  这个 pfm is ver fast..not have pefm prblm
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="methodName"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Func<string, string> NewDelegate<T>(string methodName) where T : Delegate
+        {
+            // PrintTimestamp("start CreateDelegate()"+methodName);
+            // 获取方法信息
+            MethodInfo methodInfo = GetMethInfo(methodName);
+            if (methodInfo == null)
+            {
+                throw new ArgumentException($"Method '{methodName}' not found.");
+            }
+
+            // 创建参数表达式
+            ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
+
+            // 创建方法调用表达式
+            MethodCallExpression methodCall = Expression.Call(methodInfo, param);
+
+            // 创建 Lambda 表达式
+            Expression<Func<string, string>> lambda = Expression.Lambda<Func<string, string>>(methodCall, param);
+
+            // 编译 Lambda 表达式
+            Func<string, string> func = lambda.Compile();
+            // PrintTimestamp(" endfun CreateDelegate()" + methodName);
+            return func;
+        }
         /// <summary>
         /// 压缩字符串
         /// </summary>

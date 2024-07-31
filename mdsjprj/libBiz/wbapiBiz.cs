@@ -190,7 +190,7 @@ namespace mdsj.libBiz
             //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
             //var list = GetListFltr(FromDdataDir, null, whereFun);
 
-            //   
+            // --------------------  
             var list_aftFltr2 = ArrFltr(listFlrted, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
@@ -221,6 +221,7 @@ namespace mdsj.libBiz
                 var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
                 var list11 = GetListHashtableFromJsonFil(pinlunDtDir);
                 SetField938(sortedList, "NumberOfComments", list11.Count);
+                SetField938(sortedList, "Comments", list11);
 
                 var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
                 var list12 = GetListHashtableFromJsonFil(df);
@@ -419,11 +420,11 @@ namespace mdsj.libBiz
             //string exprt = GetElmt(tka, 1);
             //string ori_exprtDecd = DecryptAes(exprt);
 
-            if (IsValidToken(token))
-            {
-                SendResp("token无效", response);
-                Jmp2end(nameof(AddMerchtPOSTWbapi));
-            }
+           //if (IsValidToken(token))
+           // {
+           //     SendResp("token无效", response);
+           //     Jmp2end(nameof(AddMerchtPOSTWbapi));
+           // }
             string[] tka = token.Split("_");
             string uid = GetElmt(tka, 0);
             SetField(saveOBJ, "uid", uid);
