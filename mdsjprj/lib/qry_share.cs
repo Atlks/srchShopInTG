@@ -25,7 +25,7 @@ namespace mdsj.lib
 
         public static SortedList shareList(string dataType)
         {
-
+            PrintTimestamp(" start shareList()" + dataType);
             //SortedList shareCfg1 = new SortedList();
             //shareCfg1.Add("name", "缅甸");
             //shareCfg1.Add("fmt", "sqlt");
@@ -49,6 +49,7 @@ namespace mdsj.lib
             //return (SortedList)cfgFnal[dataType];
             SortedList shareCfgList4dataDir = ReadJsonToSortedList($"{prjdir}/cfgShare/{dataType}.json");
             CastVal2hashtable(shareCfgList4dataDir);
+            PrintTimestamp(" endfun shareList()" + dataType);
             return shareCfgList4dataDir;
 
 

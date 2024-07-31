@@ -215,7 +215,7 @@ namespace mdsj.libBiz
 
 
             //------------add col
-
+            PrintTimestamp(" start add col");
             foreach (var sortedList in list_rzt)
             {
                 var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
@@ -230,8 +230,9 @@ namespace mdsj.libBiz
                 SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
 
             }
-
+            PrintTimestamp(" end add col");
             //----------------trans cn2en form--------------
+            PrintTimestamp(" start trans cn2en");
             SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
 
 
@@ -244,8 +245,8 @@ namespace mdsj.libBiz
                 // 循环遍历每一个键
                 foreach (object key in sortedList.Keys)
                 {
-                    if (key.ToString() == "Searchs")
-                        Print("dbg");
+                    //if (key.ToString() == "Searchs")
+                    //    Print("dbg433");
                     //add all cn key
                     var Cnkey = key;
                     var val = sortedList[key];
@@ -268,7 +269,7 @@ namespace mdsj.libBiz
                 }
                 list_rzt_fmt.Add(map3);
             }
-
+            PrintTimestamp(" endblock trans cn2en");
             //--------trans fmt chg int fmt
             //chg int fmt
             string rsstr = EncodeJson(list_rzt_fmt);

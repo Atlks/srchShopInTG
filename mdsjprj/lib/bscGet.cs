@@ -408,7 +408,7 @@ namespace mdsj.lib
                 // WriteAllText("meth504.json", methodss445);WbapiXgetlist
             }
             if ("WbapiXgetlist" == methodName)
-                Print("dbg");
+                Print("dbg244");
             var methodInfo = GetField(methodss445, methodName, null);
             //pef  FirstOrDefault perf not god
             //var methodInfo2 = methodss546
@@ -752,6 +752,12 @@ namespace mdsj.lib
             }
 
             return words;
+        }
+        public static object GetField(SortedList row, string fld, object dfv)
+        {
+            if (row.ContainsKey(fld))
+                return row[fld];
+            return dfv;
         }
 
         public static object GetField(object Obj, string fld, object defVal)

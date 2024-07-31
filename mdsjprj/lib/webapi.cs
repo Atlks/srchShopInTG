@@ -12,6 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Net;
 using System.Reflection;
 using System.Text;
@@ -173,21 +174,64 @@ namespace mdsj.lib
           //but if no match method ,just not invk ,also fast..
             Callx(funname, request, response);
 
-
+       //     arr_fltr330()
             //----dep
             //TODO DEP SHOULD AUTO get post call
             string fnm = api_prefixDep + fn;
             string args931 = Substring(queryString, 1);
 
-
-            object rzt = CallxTryx(fnm, args931);
+          
+         //   object rzt = CallxTryx(fnm, args931);
+            // 使用表达式树创建委托
+             var f = CreateDelegate<Func<string, string>>(fnm);
+            // 使用委托调用方法
+             string result = f(args931);
 
             // 发送响应
-            SendResp(rzt, "application/json; charset=utf-8", response);
+            SendResp(result, "application/json; charset=utf-8", response);
             PrintRetx(__METHOD__, "");
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
+        /// <summary>
+        ///  // 定义方法签名
+       
+
+        // 使用表达式树创建委托
+       // var f = CreateDelegate<Func<string, string>>(methodName);
+
+        // 使用委托调用方法
+     //   string result = f("example query");
+     //  这个 pfm is ver fast..not have pefm prblm
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="methodName"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static Func<string, string> CreateDelegate<T>(string methodName) where T : Delegate
+        {
+            PrintTimestamp("start CreateDelegate()"+methodName);
+            // 获取方法信息
+            MethodInfo methodInfo = GetMethInfo(methodName);
+            if (methodInfo == null)
+            {
+                throw new ArgumentException($"Method '{methodName}' not found.");
+            }
+
+            // 创建参数表达式
+            ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
+
+            // 创建方法调用表达式
+            MethodCallExpression methodCall = Expression.Call(methodInfo, param);
+
+            // 创建 Lambda 表达式
+            Expression<Func<string, string>> lambda = Expression.Lambda<Func<string, string>>(methodCall, param);
+
+            // 编译 Lambda 表达式
+            Func<string, string> func = lambda.Compile();
+            PrintTimestamp(" endfun CreateDelegate()" + methodName);
+            return func;
+        }
         /// <summary>
         /// 统一查询接口
         /// http://localhost:5000/qry?fromData=闲置
@@ -250,7 +294,7 @@ namespace mdsj.lib
             path = DecodeUrl(path);
 
             if (path.Contains("analytics"))
-                Print("Dbg");
+                Print("Dbg2432");
 
             ForeachHashtableFlgVer(extnameNhdlrChooser, (DictionaryEntry de) =>
         {
@@ -393,6 +437,7 @@ namespace mdsj.lib
                 {
                     // Get the file content and save it to a desired location
                     var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
+                    File.Delete(filePath);
                     fil = filePath;
                     Mkdir4File(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))

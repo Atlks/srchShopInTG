@@ -1,10 +1,17 @@
 [
   {
+    "area地区": "缅甸",
     "grp": "atigrp",
     "grpid": "-1001479969649",
+    "grpinfo": {
+      "id": -1001479969649,
+      "type": "supergroup",
+      "title": "atigrp"
+    },
     "id": "-1001479969649",
     "loc": "",
     "shangjiaFL": "Merchant.json",
-    "whereExprs": ""
+    "whereExprs": "园区=KK园区,东风园区,金州园区,世纪新城园区,御龙湾",
+    "园区": "KK园区,东风园区,金州园区,世纪新城园区,御龙湾"
   }
 ]

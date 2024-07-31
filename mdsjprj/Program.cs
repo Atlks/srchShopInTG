@@ -137,7 +137,7 @@ namespace prjx
         //}
         public static void Main(string[] args)
         {
-            
+            GetMethInfo("echo");
             // 设置控制台编码为 UTF-8
             Console.OutputEncoding = Encoding.UTF8;
             Callx("aaa", "prm1");

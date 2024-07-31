@@ -152,7 +152,7 @@ namespace mdsj
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
-                    Print("dbg");
+                    Print("dbg2445");
                 List<Filtr> li = new List<Filtr>();
                 li.Add(new Filtr(IsNotEmptyLianxi(row)));
                 li.Add(new Filtr(isLianxifshValid(row)));
@@ -316,7 +316,7 @@ namespace mdsj
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("龙湾"))
-                    Print("dbg");
+                    Print("dbg2442");
 
                 if (LoadFieldDefEmpty(row, "TG有效") == "N")
                     return false;
@@ -412,7 +412,7 @@ namespace mdsj
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
                 if (row["园区"].ToString().Contains("东风"))
-                    Print("dbg");
+                    Print("dbg2443");
                 List<bool> li = new List<bool>();
                 li.Add((IsNotEmptyLianxi(row)));
                 li.Add((isLianxifshValid(row)));
@@ -432,7 +432,7 @@ namespace mdsj
                 whereFun = (SortedList row) =>
                   {
                       if (row["园区"].ToString().Contains("东风"))
-                          Print("dbg");
+                          Print("dbg2444");
                       List<bool> li = new List<bool>();
                       //    li.Add(new Filtr(isNotEmptyLianxi(row)));
                       //    li.Add(new Filtr(isLianxifshValid(row)));

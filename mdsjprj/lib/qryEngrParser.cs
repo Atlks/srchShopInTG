@@ -2,6 +2,7 @@
 global using static libx.Filtr;
 using prjx.lib;
 using System;
+//using System.Runtime.Caching;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -24,6 +25,7 @@ using Microsoft.Extensions.Primitives;
 using prjx;
 using DocumentFormat.OpenXml.Wordprocessing;
 using mdsj;
+using Microsoft.Extensions.Caching.Memory;
 namespace libx
 {
     internal class qryEngrParser
@@ -144,6 +146,13 @@ namespace libx
 
 
 
+        /// <summary>
+        /// pfrm prblm  
+        /// </summary>
+        /// <param name="fromDdataDir"></param>
+        /// <param name="shanrES"></param>
+        /// <param name="whereFun"></param>
+        /// <returns></returns>
         public static List<SortedList> GetListFltr(string fromDdataDir, string shanrES,
          Func<SortedList, bool> whereFun
        )
@@ -241,8 +250,8 @@ namespace libx
         {
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
-                if (row["园区"].ToString().Contains("东风"))
-                    Print("dbg");
+                //if (row["园区"].ToString().Contains("东风"))
+                //    Print("dbg243");
 
                 List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
 
@@ -604,6 +613,7 @@ namespace libx
 
         internal static string _calcPatnsV4(string FromdataDir, string shareFiles)
         {
+            PrintTimestamp(" start _calcPatnsV4()");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), FromdataDir, shareFiles));
 
@@ -618,7 +628,7 @@ namespace libx
 
 
             dbgCls.PrintRet(__METHOD__, result);
-
+            PrintTimestamp(" end _calcPatnsV4()");
             return result;
         }
 
@@ -663,6 +673,14 @@ namespace libx
 
         //public static Func<string, List<SortedList>> rnd_next4SqltRfV2()
 
+        /// <summary>
+        /// pfm slow todo 
+        /// </summary>
+        /// <param name="shareName"></param>
+        /// <param name="whereFun"></param>
+        /// <param name="rnd"></param>
+        /// <param name="dbg"></param>
+        /// <returns></returns>
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
@@ -676,7 +694,38 @@ namespace libx
             //  Func<string, List<SortedList>> rnd_next4SqltRef = rnd_next4Sqlt;
            // Func<string, List<SortedList>> fun_rnd1 = rnd_next4Sqlt;
             Func<string, List<SortedList>> fun_rnd = (Func<string, List<SortedList>>)map[rnd];
-            List<SortedList> li = fun_rnd(shareName);
+        //    List<SortedList> li;
+
+            //-----------cache todo time out 
+            var cache = new MemoryCache(new MemoryCacheOptions());
+            string key = shareName;
+           
+
+            // 获取缓存项
+            if (cache.TryGetValue(key, out List<SortedList> li))
+            {
+                Console.WriteLine(" get key from cache ok: key=>"+ key);
+            }
+            else
+            {
+                li = fun_rnd(shareName);
+                // 设置一个缓存项，10分钟后过期
+                cache.Set(key, li, TimeSpan.FromMinutes(10));
+            }
+         
+
+            // 从缓存中获取数据，如果不存在则从数据库获取并添加到缓存          
+
+            //if ( GetField( cache311,shareName,null)==null)
+            //{
+            //    li = fun_rnd(shareName);
+            //    SetField(cache311, shareName, li);
+            //}
+            //else
+            //{
+            //    li = (List<SortedList>)GetField(cache311, shareName,null);
+            //}
+               
         //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
                 li = arr_fltr330(li, whereFun);
@@ -684,7 +733,7 @@ namespace libx
             PrintRet(__METHOD__, li.Count);
             return li;
         }
-
+        public static SortedList cache311 = new SortedList();
         //private static List<SortedList> rnd_next4SqltRfV2(string arg)
         //{
         //    throw new NotImplementedException();

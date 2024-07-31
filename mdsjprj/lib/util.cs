@@ -39,6 +39,12 @@ namespace mdsj.lib
             return NewIFAst();
         });
 
+        public static ThreadLocal<object> lastSendMsg = new ThreadLocal<object>(() =>
+        {
+            
+            return null;
+        });
+
         public static SortedList NewIFAst()
         {
             SortedList ifx = new SortedList();
@@ -66,6 +72,7 @@ namespace mdsj.lib
         /// <returns>异步任务</returns>
         public static void UploadFileAsync(string filePath, string url)
         {
+            Print("UploadFileAsync() " + filePath + " " + url);
             using (HttpClient client = new HttpClient())
             using (MultipartFormDataContent content = new MultipartFormDataContent())
             using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))

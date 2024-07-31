@@ -435,6 +435,7 @@ namespace prjx
 
         public static ReplyKeyboardMarkup SetBtmBtnMenuClr(string imgPath, string msgtxt, object chatid, string chtType)
         {
+            Print("SetBtmBtnMenuClr ()");
             ReplyKeyboardMarkup rplyKbdMkp;
 
 
@@ -442,17 +443,19 @@ namespace prjx
             KeyboardButton[][] kbtns = new KeyboardButton[0][];
             rplyKbdMkp = new ReplyKeyboardMarkup(kbtns);
 
-
+            // Create an empty ReplyKeyboardRemove to clear the keyboard
+            var rplyKbdMkp2 = new ReplyKeyboardRemove();
 
             //def is grp btns
             //tgBiz.tg_btmBtns()
-         //   var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
+            //   var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //  Message message2dbg = await 
-            Program.botClient.SendTextMessageAsync(
-         Convert.ToInt64(chatid), msgtxt,
-             parseMode: ParseMode.Html,
-            replyMarkup: rplyKbdMkp,
-            protectContent: false, disableWebPagePreview: true);
+            Message m = Program.botClient.SendTextMessageAsync(
+    Convert.ToInt64(chatid), msgtxt,
+        parseMode: ParseMode.Html,
+       replyMarkup: rplyKbdMkp2,
+       protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+            lastSendMsg.Value = m;
             return rplyKbdMkp;
         }
 
@@ -477,11 +480,12 @@ namespace prjx
             //tgBiz.tg_btmBtns()
             var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
             //  Message message2dbg = await 
-            Program.botClient.SendTextMessageAsync(
+        Message m=    Program.botClient.SendTextMessageAsync(
          Convert.ToInt64(chatid), msgtxt,
              parseMode: ParseMode.Html,
             replyMarkup: rplyKbdMkp,
-            protectContent: false, disableWebPagePreview: true);
+            protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+            lastSendMsg.Value = m;
             return rplyKbdMkp;
         }
 

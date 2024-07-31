@@ -1,4 +1,5 @@
 ﻿
+using System.Management;
 using JiebaNet.Segmenter;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -84,6 +85,7 @@ using System.Xml.Linq;
 using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using HtmlAgilityPack;
 using Windows.Storage.Search;
+using System.Runtime.InteropServices;
 namespace prjx
 {
     internal class testCls
@@ -138,7 +140,7 @@ namespace prjx
             return resultSet;
         }
 
-   
+
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
@@ -150,28 +152,88 @@ namespace prjx
                 ormSqlt.Save4Sqlt(a, "test_sqlt.db");
                 Print("---- end test add sqlt");
                 await main1148();
-            }catch(Exception e)
+            }
+            catch (Exception e)
             {
                 PrintCatchEx("test main()", e);
             }
-          
+
 
         }
 
+
+        public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
+        {
+            Print(" start TransferFileByRdpWmi()" + sourceFilePath + $"  {destinationFilePath} {targetHost} {username} {password} ");
+            ManagementScope scope=null;
+
+            //    在本地计算机上尝试连接到本地 WMI 服务，以确保 WMI 本身工作正常：
+            //   如果本地连接成功，但远程连接失败，问题可能与网络配置或远程设置有关。
+
+
+           
+            scope = new ManagementScope(@"\\.\root\cimv2");
+            scope.Connect();
+         
+            try
+            {
+                ConnectionOptions options = new ConnectionOptions
+                {
+                    Username = username,
+                    Password = password
+                };
+
+                  scope = new ManagementScope($@"\\{targetHost}\root\cimv2", options);
+                scope.Connect();
+            }
+            catch (COMException ex)
+            {
+                Console.WriteLine($"COMException: {ex.Message}");
+                Console.WriteLine($"Error Code: {ex.ErrorCode}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+            // Create the management object for file transfer
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, new ObjectQuery("SELECT * FROM Win32_Process"));
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                // Create process to copy the file
+                ManagementClass processClass = new ManagementClass(scope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
+                ManagementBaseObject inParams = processClass.GetMethodParameters("Create");
+                inParams["CommandLine"] = $"cmd.exe /c copy \"{sourceFilePath}\" \"{destinationFilePath}\"";
+                ManagementBaseObject outParams = processClass.InvokeMethod("Create", inParams, null);
+
+                Console.WriteLine($"Process created with ID {outParams["ProcessId"]}");
+            }
+        }
+
+
         private static async System.Threading.Tasks.Task main1148()
         {
+            //for cache
+            var listFlrted = GetListFltrByQrystr("mercht商家数据", null, "");
+            Print(listFlrted.Count);
+            //username:password@hostname/resource
+            string url136 = "administrator:gy5NLU0MJ4yv@206.119.166.120:3389";
+            Dictionary<string, string> dic = GetDicFromUrl(url136);
+          //  TransferFileByRdpWmi("mdsj.exe", "d:/upldir", dic["host"], dic["u"], dic["pwd"]);
             TaskRunNewThrd(() =>
             {
+
                 Thread.Sleep(10000);
-                UploadFileAsync("mdsj.exe", "http://localhost:5000/upld");
-                UploadFileAsync("mdsj.dll", "http://localhost:5000/upld");
+                UploadFileAsync("mdsj.exe", "http://206.119.166.120:5000/upld");
+                UploadFileAsync("mdsj.dll", "http://206.119.166.120:5000/upld");
+
 
             });
+            return;
             var orilen140 = "879006550_2d2481f9f76818ff6a54083de36ff7ed98593a9ef5871a5b98c676590fd8a345c084ed8554f4c52132ffe8b4de67c7fe9b6b3f360048011c1d70febb66e31608";
             var newlen = CompressString(orilen140);
-            Print("newlen.Length::"+newlen.Length);
+            Print("newlen.Length::" + newlen.Length);//newlen.Length::148
 
-         //   z_wucan();
+            //   z_wucan();
             Print(DecryptAes("fea6fe56297b3ff650d928182f8caad06beb07c587251cf5294d1ce6b0fcfc6b8e94b0735f18579f1d13e78de98f158e24a73a57dc27ee6bfe12a9d15b61dcce"));
             Print(newToken("00799988", 3600 * 24 * 7));
             var encStr = EncryptAes("202411");
@@ -189,7 +251,7 @@ namespace prjx
             Print(DelElmts("a", "a,b,c"));
             HashSet<string> hs11 = GetHashsetEmojiCmn();
             //   💰💰💰();
-            GetMethInfo("echo");
+
             try
             {
                 var lst458 = ormExcel.QryExcel("C:\\Users\\Administrator\\Documents\\sumdoc 2405\\xx国家商家数据 v3.xlsx");
@@ -206,7 +268,7 @@ namespace prjx
                 Print(e);
             }
 
-        //    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt);
+            //    tmrEvt_sendMsg4keepmenu("今日促销商家.gif", plchdTxt);
             //HashSet<string> downedUrlss = newSet("downedUrlss2024.json");
             //downedUrlss.Add("111");
             //downedUrlss.Add("222");
@@ -460,11 +522,52 @@ namespace prjx
             // 
         }
 
+        public static Dictionary<string, string> GetDicFromUrl(string url136)
+        {
+            // 找到 '@' 符号的位置
+            int atIndex = url136.IndexOf('@');
+            if (atIndex == -1)
+            {
+                Console.WriteLine("Invalid URL format.");
+                return new Dictionary<string, string>();
+            }
 
+            // 分割出用户名和密码部分
+            string userInfo = url136.Substring(0, atIndex);
+            string hostPort = url136.Substring(atIndex + 1);
+
+            // 找到 ':' 符号的位置
+            int colonIndex = userInfo.IndexOf(':');
+            if (colonIndex == -1)
+            {
+                Console.WriteLine("Invalid user info format.");
+                return new Dictionary<string, string>();
+            }
+
+            // 提取用户名和密码
+            string username = userInfo.Substring(0, colonIndex);
+            string password = userInfo.Substring(colonIndex + 1);
+
+            // 提取主机和端口
+            colonIndex = hostPort.IndexOf(':');
+            if (colonIndex == -1)
+            {
+                Console.WriteLine("Invalid host and port format.");
+                return new Dictionary<string, string>();
+            }
+
+            string host = hostPort.Substring(0, colonIndex);
+            string port = hostPort.Substring(colonIndex + 1);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("host", host);
+            dic.Add("u", username);
+            dic.Add("pwd", password);
+            return dic;
+        }
 
         private static void add30xiezhi()
         {
-            for(int i = 0; i < 30; i++)
+            for (int i = 0; i < 30; i++)
             {
                 List<string> filess = new List<string>();
                 filess.Add("uploads1016/FB_IMG_16042416836456873.jpg");
@@ -485,7 +588,7 @@ namespace prjx
                 saveOBJ.Add("Time", formattedDate);
                 ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/{saveOBJ["Cate"]}.json");
             }
-           
+
         }
 
         public static void ticyWdRoot()
@@ -493,7 +596,7 @@ namespace prjx
             HashSet<string> hs = new HashSet<string>();
             var f = "word7000.json";
             List<string> li = ReadJsonFileToList(f);
-            foreach( string wd in li)
+            foreach (string wd in li)
             {
                 var root = GetRoot(wd);
                 hs.Add(root);
@@ -503,11 +606,11 @@ namespace prjx
             WriteAllText("wordRoot.json", wds);
         }
 
-     
-    
-    
-       
-      
+
+
+
+
+
 
         private static void getwdRoots()
         {
@@ -523,7 +626,7 @@ namespace prjx
             string rzt = JoinStringsWithNewlines(liRzt);
             Print(rzt);
         }
-    
+
 
         private static void geenBtns()
         { // Create the keyboard object
@@ -641,12 +744,12 @@ namespace prjx
                 {
                     if (map["园区"] == "东风园区" && map["商家"] == "沙县 小吃")
                     {
-                        Print("dbg");
+                        Print("dbg1431");
                     }
 
                     if (map["id"] == "vekzrqwxkeyuxpcxzkjdnfdsbt")
                     {
-                        Print("dbg");
+                        Print("dbg2432");
                     }
                     string tg = TrimRemoveUnnecessaryCharacters4tgWhtapExt(map["Telegram"].ToString());
                     if (tg == "")
@@ -708,7 +811,7 @@ namespace prjx
             //   throw new NotImplementedException();
         }
 
-      public static void wrtLgTypeDate(string logdir, object o)
+        public static void wrtLgTypeDate(string logdir, object o)
         {
             // 创建目录
             System.IO.Directory.CreateDirectory(logdir);
@@ -718,7 +821,7 @@ namespace prjx
             file_put_contents(fileName, json_encode(o), false);
 
         }
- 
+
 
         private static void getProdSvrWdlib()
         {

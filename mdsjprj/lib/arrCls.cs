@@ -48,7 +48,7 @@ namespace prjx.lib
                 {
                     var key = kvp.Key;
                     if (key.ToString() == "Searchs")
-                        Print("dbg");
+                        Print("dbg2441");
                     //add all cn key
                     var Cnkey = key;
                     var val = GetField(sortedList, key.ToString(), "");
@@ -234,6 +234,7 @@ namespace prjx.lib
                 if (fn(rw))
                     list22.Add(rw);
             }
+            PrintTimestamp(" endfun ArrFltr");
             return list22;
         }
         public static void transfmVal(SortedList list, Func<string, object> fun)
