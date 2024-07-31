@@ -161,7 +161,7 @@ namespace mdsj.lib
             }
 
 
-
+            // upldPOSTWbapi
             //todo ref is too slow ,chg to delegate
             //------------httpHdlrApi--def json api mode
             //----------/XXX GET/POST WBAPI----
@@ -383,6 +383,26 @@ namespace mdsj.lib
             }
         }
 
+        public static void upldPOSTWbapi(HttpRequest request, HttpResponse response)
+        {
+            // Check if the request contains a file
+            var fil = "";
+            if (request.Form.Files.Count > 0)
+            {
+                foreach (var file in request.Form.Files)
+                {
+                    // Get the file content and save it to a desired location
+                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
+                    fil = filePath;
+                    Mkdir4File(filePath);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        file.CopyToAsync(stream).GetAwaiter().GetResult();
+                    }
+                }
+            }
+            Jmp2end("upldPOSTWbapi");
+        }
         public static async System.Threading.Tasks.Task FildownHttpHdlrFilDown(HttpRequest request, HttpResponse response)
         {
 

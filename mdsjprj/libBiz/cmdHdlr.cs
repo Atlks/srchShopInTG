@@ -152,7 +152,7 @@ namespace mdsj.libBiz
             }
             Message m = botClient.SendTextMessageAsync(
                 update.Message.Chat.Id,
-                tipsSetOK + "\n 已经设置园区数量：" + svrPrks + "\n" + svrPksHtml,
+                tipsSetOK + "\n 已经设置园区\n" + svrPksHtml,
                 parseMode: ParseMode.Html,
 
                 protectContent: false,
@@ -452,6 +452,13 @@ namespace mdsj.libBiz
 
                     Jmp2end(nameof(ConfirmSetCityBtnClick));
                 }
+            }
+
+            if(park=="取消")
+            {
+                Message m22 = SetBtmMenu(update);
+                bot_DeleteMessageV2(update.Message.Chat.Id, (m22?.MessageId), 3);
+                Jmp2end(nameof(ConfirmSetCityBtnClick));
             }
             string svrPksHtml = "";
            // if (isGrpChat(update))
@@ -996,7 +1003,7 @@ namespace mdsj.libBiz
             var fromUid = update.Message.From.Id;
             var mybotid = botClient.BotId;
             string svrPksHtml = "";
-          //  if (isGrpChat(update))
+            //  if (isGrpChat(update))
             {
                 string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
                 SortedList cfg = findOne(dbfile2);
@@ -1004,7 +1011,7 @@ namespace mdsj.libBiz
 
 
                 svrPksHtml = GetFieldAsStr(cfg, "园区");
-                svrPksHtml = AddIdxToElmt(svrPksHtml.Split(","), "\n");
+                svrPksHtml = FmtPrks(svrPksHtml);
 
             }
             //prive
@@ -1021,7 +1028,7 @@ namespace mdsj.libBiz
             //}
             Message m = botClient.SendTextMessageAsync(
                  update.Message.Chat.Id,
-                 tipsSetOK + "\n 已经设置园区" + "\n" + svrPksHtml,
+                 tipsSetOK +  svrPksHtml,
                  parseMode: ParseMode.Html,
 
                  protectContent: false,
@@ -1035,6 +1042,8 @@ namespace mdsj.libBiz
             Jmp2endDep();
 
         }
+
+
         public static void CmdHdlrdelete(string fullcmd, Update update, string reqThreadId)
         {
 

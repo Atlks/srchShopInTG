@@ -83,6 +83,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using Windows.UI.Xaml;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
 
 namespace mdsj.libBiz
 {
@@ -198,46 +200,7 @@ namespace mdsj.libBiz
             return keyboard;
         }
 
-        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtonsV2(JArray ja)
-        {
-
-            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
-            foreach (JArray btnsRow1 in ja)
-            {
-                List<InlineKeyboardButton> btnRow = new List<InlineKeyboardButton>();
-                foreach (JObject jo1 in btnsRow1)
-                {
-                    //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
-                    InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["text"].ToString(), jo1["url"].ToString().Trim());
-
-                    btnRow.Add(btn);
-                }
-                   
-                lst.Add(btnRow);
-
-
-            }
-
-
-            return new InlineKeyboardMarkup(lst);
-        }
-        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtons(JArray ja)
-        {
-
-            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
-            foreach (JObject jo1 in ja)
-            {
-                //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
-                InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["btnname"].ToString(), jo1["url"].ToString().Trim());
-                lst.Add(new List<InlineKeyboardButton> { btn });
-
-
-            }
-
-
-            return new InlineKeyboardMarkup(lst);
-        }
-
+     
         public static async void evt_shiboBocai_click(Update? update)
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
@@ -446,6 +409,29 @@ namespace mdsj.libBiz
                 else
                 {
                     JArray btns = (JArray)table["btns"];
+                    foreach(JObject jo in btns)
+                    {
+                        try
+                        {
+                            // 获取 URL 并转换为字符串
+                            string url = jo.GetValue("url")?.ToString();
+
+                            if (url != null)
+                            {
+                                string token = newToken(ToStr(update.Message.From.Id), 3600 * 24 * 7);
+                                // 替换占位符
+                                url = url.Replace("{token}", token);
+
+                                // 更新 JObject
+                                jo["url"] = url;
+                            }
+                        }catch(Exception e)
+                        {
+                            PrintCatchEx("BtmBtnClkinCfgByMsg",e);
+                        }
+                       
+                    }
+                    PrintObj(btns);
                     InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtons(btns);
                 }
 
@@ -528,28 +514,5 @@ namespace mdsj.libBiz
             }
         }
 
-        public static SortedList GetDicFromJson(string jsonstr)
-        {
-            return JsonToSortedList(jsonstr);
         }
-
-        public static SortedList  JsonToSortedList(string json)
-        {
-            // 解析 JSON 字符串为 JObject
-            JObject jObject = JObject.Parse(json);
-
-            // 创建一个新的 SortedList
-            SortedList  sortedList = new SortedList ();
-
-            // 将 JObject 中的所有键值对添加到 SortedList
-            foreach (JProperty property in jObject.Properties())
-            {
-                // 将 JToken 转换为 .NET 类型
-                object value = property.Value;//.ToObject<object>();
-                sortedList.Add(property.Name, value);
-            }
-
-            return sortedList;
-        }
-    }
 }

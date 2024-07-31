@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -24,6 +25,18 @@ namespace mdsj.lib
     internal class bsccode
     {
 
+        public static string FmtPrks(string svrPksHtml)
+        {
+            if (string.IsNullOrEmpty(svrPksHtml))
+                return "\n 目前园区设置为空";
+            var l = svrPksHtml.Length;
+            svrPksHtml = svrPksHtml.Replace("\n", ",");
+            string[] items = svrPksHtml.Split(",");
+            if (items.Length == 0)
+                return "";
+            svrPksHtml = AddIdxToElmt(items, "\n");
+            return "\n 已经设置园区:" + "\n"+svrPksHtml;
+        }
         public static double Avg(List<SortedList> list, string fieldName)
         {
             try
@@ -886,7 +899,7 @@ namespace mdsj.lib
         /// <param name="uid"></param>
         /// <param name="exprtTimeSecsAftr"></param>
         /// <returns></returns>
-        public static object newToken(string uid, int exprtTimeSecsAftr)
+        public static string newToken(string uid, int exprtTimeSecsAftr)
         {
             string tkExprt = AddTimet(exprtTimeSecsAftr);
             string issTime = DateTime.Now.ToString();
@@ -895,6 +908,35 @@ namespace mdsj.lib
             return tkOri;
         }
 
+        /// <summary>
+        /// 压缩字符串
+        /// </summary>
+        /// <param name="input">要压缩的字符串</param>
+        /// <returns>压缩后的 Base64 字符串</returns>
+        public static string CompressString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+                return string.Empty;
+
+            // 将字符串转换为字节数组
+            byte[] inputBytes = Encoding.UTF8.GetBytes(input);
+
+            // 使用 GZip 压缩字节数组
+            using (var outputStream = new MemoryStream())
+            {
+                using (var gzipStream = new GZipStream(outputStream, CompressionMode.Compress))
+                {
+                    gzipStream.Write(inputBytes, 0, inputBytes.Length);
+                }
+
+                // 将压缩后的字节数组转换为 Base64 字符串
+                return System.Convert.ToBase64String(outputStream.ToArray());
+            }
+        }
+        public static void PrintObj(JArray btns)
+        {
+            Print(EncodeJsonFmt(btns));
+        }
         public static void Jmp2end(string levFn)
         {
             throw new jmp2endEx("🛑JMP2END from " + levFn + " ,GOTO END🛑🛑🛑.. ");

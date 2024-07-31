@@ -394,6 +394,7 @@ namespace mdsj.lib
             {
                 return boolVal ? "TRUE" : "FALSE";
             }
+            //  // 对象是 long 类型，转换为字符串
             return val.ToString();
         }
         public static double ToDouble(object obj, double def)

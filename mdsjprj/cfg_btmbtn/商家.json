@@ -5,6 +5,6 @@
 
     "btns": [{
         "btnname": "打开商家目录",
-        "url": "https://t.me/LianXin_BianMinBot/ShangJia"
+        "url": "https://t.me/LianXin_BianMinBot/ShangJia?startapp={token}"
     }]
 }

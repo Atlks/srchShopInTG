@@ -1214,6 +1214,31 @@ namespace mdsj.lib
 
             return fileList;
         }
+     
+
+        public static SortedList GetDicFromJson(string jsonstr)
+        {
+            return JsonToSortedList(jsonstr);
+        }
+
+        public static SortedList JsonToSortedList(string json)
+        {
+            // 解析 JSON 字符串为 JObject
+            JObject jObject = JObject.Parse(json);
+
+            // 创建一个新的 SortedList
+            SortedList sortedList = new SortedList();
+
+            // 将 JObject 中的所有键值对添加到 SortedList
+            foreach (JProperty property in jObject.Properties())
+            {
+                // 将 JToken 转换为 .NET 类型
+                object value = property.Value;//.ToObject<object>();
+                sortedList.Add(property.Name, value);
+            }
+
+            return sortedList;
+        }
 
         public static string GetFieldAsStr(SortedList row, string fld, string dfv = "")
         {

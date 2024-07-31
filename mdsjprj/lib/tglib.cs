@@ -322,6 +322,45 @@ namespace prjx.lib
             return keyboardButtons;
 
         }
+        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtonsV2(JArray ja)
+        {
+
+            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
+            foreach (JArray btnsRow1 in ja)
+            {
+                List<InlineKeyboardButton> btnRow = new List<InlineKeyboardButton>();
+                foreach (JObject jo1 in btnsRow1)
+                {
+                    //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
+                    InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["text"].ToString(), jo1["url"].ToString().Trim());
+
+                    btnRow.Add(btn);
+                }
+
+                lst.Add(btnRow);
+
+
+            }
+
+
+            return new InlineKeyboardMarkup(lst);
+        }
+        public static InlineKeyboardMarkup castJsonAarrToInlineKeyboardButtons(JArray ja)
+        {
+
+            List<List<InlineKeyboardButton>> lst = new List<List<InlineKeyboardButton>>();
+            foreach (JObject jo1 in ja)
+            {
+                //  InlineKeyboardButton btn= InlineKeyboardButton.WithUrl(jo1..GetValue("btnname"), jo1.GetValue("url"));
+                InlineKeyboardButton btn = InlineKeyboardButton.WithUrl(jo1["btnname"].ToString(), jo1["url"].ToString().Trim());
+                lst.Add(new List<InlineKeyboardButton> { btn });
+
+
+            }
+
+
+            return new InlineKeyboardMarkup(lst);
+        }
 
 
         /// <summary>

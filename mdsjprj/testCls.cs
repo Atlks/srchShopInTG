@@ -160,6 +160,17 @@ namespace prjx
 
         private static async System.Threading.Tasks.Task main1148()
         {
+            TaskRunNewThrd(() =>
+            {
+                Thread.Sleep(10000);
+                UploadFileAsync("mdsj.exe", "http://localhost:5000/upld");
+                UploadFileAsync("mdsj.dll", "http://localhost:5000/upld");
+
+            });
+            var orilen140 = "879006550_2d2481f9f76818ff6a54083de36ff7ed98593a9ef5871a5b98c676590fd8a345c084ed8554f4c52132ffe8b4de67c7fe9b6b3f360048011c1d70febb66e31608";
+            var newlen = CompressString(orilen140);
+            Print("newlen.Length::"+newlen.Length);
+
          //   z_wucan();
             Print(DecryptAes("fea6fe56297b3ff650d928182f8caad06beb07c587251cf5294d1ce6b0fcfc6b8e94b0735f18579f1d13e78de98f158e24a73a57dc27ee6bfe12a9d15b61dcce"));
             Print(newToken("00799988", 3600 * 24 * 7));
