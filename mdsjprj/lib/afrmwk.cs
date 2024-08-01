@@ -24,6 +24,7 @@ using static prjx.timerCls;
 using static mdsj.lib.util;
 
 using static mdsj.lib.afrmwk;
+using System.Collections;
 namespace mdsj.lib
 {
     internal class afrmwk
@@ -34,12 +35,12 @@ namespace mdsj.lib
             {
                 act();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-               Print(e);
+                Print(e);
                 logErr2024(e, "", "errlog", "");
             }
-           
+
         }
         public static void evt_boot(Action actBiz)
         {
@@ -47,36 +48,61 @@ namespace mdsj.lib
             //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
             // 设置全局异常处理
             mdsj.lib.exCls.set_error_handler();
-            try
+            callTryAll(() =>
             {
+                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88897");
                 PrintLogo();
-                //start boot music
+                //-------------start boot music
                 // 启动一个新线程，执行匿名函数
                 Thread newThread = new Thread(() =>
                 {
-                   Print("新线程开始执行");
+                    Print("新线程开始执行");
                     playMp3($"{prjdir}/libres/start.mp3", 2);
 
-                   Print("新线程完成工作");
+                    Print("新线程完成工作");
                 });
+                // 启动新线程
+                newThread.Start();
 
-                //动画金字塔logo
+
+                //------------动画金字塔logo
                 for (int i = 0; i < 40; i++)
                 {
                     Thread.Sleep(50);
-                   Print(str_repeatV2("=", i) + "=>");
+                    Print(str_repeatV2("=", i) + "=>");
                 }
-                // 启动新线程
-                newThread.Start();
-                
-            }
-            catch (Exception e)
+
+
+            });
+
+
+            //-----------sync prgrm to svr
+            TaskRunNewThrd(() =>
             {
-               Print(e);
-            }
+                var cfgf = $"{prjdir}/cfg/cfg.ini";
+                Hashtable cfgDic = GetHashtabFromIniFl(cfgf);
+                //  var  localOsKwd = GetFieldAsStr10(cfgDic, "localOsKwd"); 
+                var   os = GetOSVersion();//os ver:OS: Win32NT, Version: 10.0.22631
+                var localOsKwd = GetFieldAsStr10(cfgDic, "localOsKwd");
+                if (os.Contains("Win32NT") && os.Contains("10.0.")) 
+                {
+                    Thread.Sleep(10000);
+                 
+                    string url = GetFieldAsStr10(cfgDic, "syncUpldUrl");
+
+                    for (int i = 1; i < 10; i++)
+                    {
+                        string fl = GetFieldAsStr10(cfgDic, "syncUpldFile" + i);
+                        if(fl.Length>0)
+                          UploadFileAsync(fl, url);
+                    }
+
+                }
+
+            });
 
             Call(actBiz, []);
-           // actBiz();
+            // actBiz();
 
 
 
@@ -87,21 +113,21 @@ namespace mdsj.lib
         {
             try
             {
-               // PrintPythonLogo();
+                // PrintPythonLogo();
                 playMp3("C:\\Users\\Administrator\\OneDrive\\song cn\\张震岳 - 再见.mp3", 10);
 
             }
             catch (Exception e)
             {
-               Print(e);
+                Print(e);
             }
 
 
         }
-        static void  PrintLogo()
+        static void PrintLogo()
         {
 
-           Print(@"
+            Print(@"
         ,--./,-.
        / #      \
       |          |
@@ -112,7 +138,7 @@ namespace mdsj.lib
         |
         `.___.
         ");
-           Print(System.IO.File.ReadAllText("logo.txt"));
+            Print(System.IO.File.ReadAllText("logo.txt"));
         }
 
 

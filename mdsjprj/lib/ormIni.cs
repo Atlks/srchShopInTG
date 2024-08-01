@@ -102,6 +102,7 @@ namespace prjx.lib
 
             return dataList;
         }
+
         public static List<SortedList> qryV2(string iniFilePath)
         {
 
@@ -130,6 +131,61 @@ namespace prjx.lib
                     {
                         dataList.Add(currentSection);
                         currentSection = new SortedList();
+                    }
+
+                    sectionName = trimmedLine.Substring(1, trimmedLine.Length - 2);
+                    currentSection["SectionName"] = sectionName;
+                }
+                else
+                {
+                    // 处理键值对
+                    var keyValue = trimmedLine.Split(new[] { '=' }, 2);
+                    if (keyValue.Length == 2)
+                    {
+                        var key = keyValue[0].Trim();
+                        var value = keyValue[1].Trim();
+                        currentSection[key] = value;
+                    }
+                }
+            }
+
+            // 添加最后一个节到列表中
+            if (currentSection.Count > 0)
+            {
+                dataList.Add(currentSection);
+            }
+
+            return dataList;
+        }
+
+        public static List<Dictionary<string, string>> qryToDic(string iniFilePath)
+        {
+
+
+            if (!File.Exists(iniFilePath))
+                File.WriteAllText(iniFilePath, "");
+            var dataList = new List<Dictionary<string, string>>();
+            var currentSection = new Dictionary<string, string>();
+            var sectionName = string.Empty;
+
+            foreach (var line in File.ReadLines(iniFilePath))
+            {
+                var trimmedLine = line.Trim();
+
+                // 忽略空行和注释行
+                if (string.IsNullOrEmpty(trimmedLine) || trimmedLine.StartsWith(";") || trimmedLine.StartsWith("#"))
+                {
+                    continue;
+                }
+
+                // 处理节（section）
+                if (trimmedLine.StartsWith("[") && trimmedLine.EndsWith("]"))
+                {
+                    // 如果当前节非空，添加到列表中
+                    if (currentSection.Count > 0)
+                    {
+                        dataList.Add(currentSection);
+                        currentSection = new Dictionary<string, string>();
                     }
 
                     sectionName = trimmedLine.Substring(1, trimmedLine.Length - 2);

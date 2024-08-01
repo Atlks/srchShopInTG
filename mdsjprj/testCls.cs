@@ -165,16 +165,16 @@ namespace prjx
         public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
         {
             Print(" start TransferFileByRdpWmi()" + sourceFilePath + $"  {destinationFilePath} {targetHost} {username} {password} ");
-            ManagementScope scope=null;
+            ManagementScope scope = null;
 
             //    在本地计算机上尝试连接到本地 WMI 服务，以确保 WMI 本身工作正常：
             //   如果本地连接成功，但远程连接失败，问题可能与网络配置或远程设置有关。
 
 
-           
+
             scope = new ManagementScope(@"\\.\root\cimv2");
             scope.Connect();
-         
+
             try
             {
                 ConnectionOptions options = new ConnectionOptions
@@ -183,7 +183,7 @@ namespace prjx
                     Password = password
                 };
 
-                  scope = new ManagementScope($@"\\{targetHost}\root\cimv2", options);
+                scope = new ManagementScope($@"\\{targetHost}\root\cimv2", options);
                 scope.Connect();
             }
             catch (COMException ex)
@@ -212,22 +212,35 @@ namespace prjx
 
         private static async System.Threading.Tasks.Task main1148()
         {
+
+            PrintTimestamp("bef rd ini");
+            Print(GetListFrmIniFL("mrcht.ini").Count);
+            PrintTimestamp("end rd ini");
+
+
+            PrintTimestamp("bef rd json");
+            Print(GetListHashtableFromJsonFil("mmr.json").Count);
+            PrintTimestamp("end rd json");
+
+            PrintTimestamp("bef to dic");
+            Print(ormSqlt.qryToDic("mercht商家数据/缅甸.db").Count);
+            PrintTimestamp("end rd dic");
+
+
+            PrintTimestamp("bef rd to sortedlist");
+            Print(ormSqlt.qryV2("mercht商家数据/缅甸.db").Count);
+            PrintTimestamp("end rd sortedlist");
+
+         //   qryToDic
+            Print("os ver:" + GetOSVersion());//os ver:OS: Win32NT, Version: 10.0.22631
             //for cache
             var listFlrted = GetListFltrByQrystr("mercht商家数据", null, "");
             Print(listFlrted.Count);
             //username:password@hostname/resource
             string url136 = "administrator:gy5NLU0MJ4yv@206.119.166.120:3389";
             Dictionary<string, string> dic = GetDicFromUrl(url136);
-          //  TransferFileByRdpWmi("mdsj.exe", "d:/upldir", dic["host"], dic["u"], dic["pwd"]);
-            TaskRunNewThrd(() =>
-            {
-
-                Thread.Sleep(10000);
-                UploadFileAsync("mdsj.exe", "http://206.119.166.120:21000/upld");
-                UploadFileAsync("mdsj.dll", "http://206.119.166.120:21000/upld");
-
-
-            });
+            //  TransferFileByRdpWmi("mdsj.exe", "d:/upldir", dic["host"], dic["u"], dic["pwd"]);
+          
             return;
             var orilen140 = "879006550_2d2481f9f76818ff6a54083de36ff7ed98593a9ef5871a5b98c676590fd8a345c084ed8554f4c52132ffe8b4de67c7fe9b6b3f360048011c1d70febb66e31608";
             var newlen = CompressString(orilen140);
@@ -520,6 +533,11 @@ namespace prjx
             }
 
             // 
+        }
+
+        public static List<Dictionary<string, string>> GetListFrmIniFL(string dbf)
+        {
+            return ormIni.qryToDic(dbf);
         }
 
         public static Dictionary<string, string> GetDicFromUrl(string url136)
@@ -848,15 +866,23 @@ namespace prjx
             SortedList map = rws[0];
 
 
-            List<SortedList> li = ormSqlt.qryV2("D:\\0prj\\mdsj\\mdsjprj\\bin\\Debug\\net8.0\\mercht商家数据\\缅甸.db");
+            const string DbFileName = "mercht商家数据/缅甸.db";
+            List<SortedList> li = ormSqlt.qryV2(DbFileName);
             foreach (SortedList rw in li)
             {
-                object? cateE = rw["cateEgls"];
-                SetFieldAddRplsKeyV(rw, "分类", map[cateE.ToString()]);
+                NewMethod(map, rw);
             }
 
+            ormSqlt.saveMltHiPfm(li, DbFileName);
+        }
 
-            ormSqlt.saveMltHiPfm(li, "mercht商家数据/缅甸.db");
+
+  
+
+        private static void NewMethod(SortedList map, SortedList rw)
+        {
+            object? cateE = rw["cateEgls"];
+            SetFieldAddRplsKeyV(rw, "分类", map[cateE.ToString()]);
         }
 
         private static void json2dbMrcht()

@@ -158,6 +158,8 @@ namespace prjx
                 {
                     //   botClient = botClient;
                     获取机器人的信息();
+
+                   
                 });
 
                 System.IO.Directory.CreateDirectory("pinlunDir");
@@ -261,6 +263,13 @@ namespace prjx
             //  Console.ReadKey();
             LoopForever();
           
+        }
+
+        public static string GetFieldAsStr10(Hashtable cfgDic, string v)
+        {
+            if (cfgDic.ContainsKey(v))
+                return ToStr(cfgDic[v]);
+            return "";
         }
 
         private static void LoopForever()

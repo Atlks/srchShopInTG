@@ -196,6 +196,7 @@ namespace libx
                 rztLi = array_merge(rztLi, li);
             }
             PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
+            PrintTimestamp(" start fun "+ __METHOD__);
             return rztLi;
         }
 
@@ -683,8 +684,9 @@ namespace libx
         /// <returns></returns>
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
+            PrintTimestamp($" start arr_fltr4ReadShare() {shareName} *whreFun {rnd} " );
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
-            PrintCallFunArgs(__METHOD__, func_get_args(shareName, "whreFun()", rnd, dbg));
+            PrintCallFunArgsFast(__METHOD__, func_get_args(shareName, "*whreFun", rnd, dbg));
 
             SortedList<string, Func<string, List<SortedList>>> map = new SortedList<string, Func<string, List<SortedList>>>();
             map.Add("rnd_next4Sqlt", rnd_next4Sqlt);
@@ -697,20 +699,21 @@ namespace libx
         //    List<SortedList> li;
 
             //-----------cache todo time out 
-            var cache = new MemoryCache(new MemoryCacheOptions());
+     
             string key = shareName;
-           
-
+            PrintTimestamp(" bef TryGetValue frm cache");
             // 获取缓存项
-            if (cache.TryGetValue(key, out List<SortedList> li))
+            if (cache2024.TryGetValue(key, out List<SortedList> li))
             {
                 Console.WriteLine(" get key from cache ok: key=>"+ key);
             }
             else
             {
+                PrintTimestamp(" bef fun_rnd(shareName)");
                 li = fun_rnd(shareName);
                 // 设置一个缓存项，10分钟后过期
-                cache.Set(key, li, TimeSpan.FromMinutes(10));
+                //note is add data need remove cache key
+                 cache2024.Set(key, li, TimeSpan.FromMinutes(10));
             }
          
 
@@ -728,9 +731,10 @@ namespace libx
                
         //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
-                li = arr_fltr330(li, whereFun);
+                li = ArrFltrV2(li, whereFun);
 
             PrintRet(__METHOD__, li.Count);
+            PrintTimestamp($" endfun arr_fltr4ReadShare()");
             return li;
         }
         public static SortedList cache311 = new SortedList();

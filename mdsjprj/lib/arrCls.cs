@@ -184,8 +184,8 @@ namespace prjx.lib
         {
             return new HashSet<string>(urls.Where(url => url.EndsWith(".html", StringComparison.OrdinalIgnoreCase) || url.EndsWith(".htm", StringComparison.OrdinalIgnoreCase)));
         }
-      
-      
+
+
         public static void CleanupSortedListKeysLenLessthan3(SortedList<string, string> sortedList)
         {
             // 创建一个列表，存储需要移除的键
@@ -224,17 +224,77 @@ namespace prjx.lib
 
             return reversedList;
         }
-
-        public static List<SortedList> ArrFltr(List<SortedList> list, Func<SortedList, bool> fn)
+        public static List<SortedList> ArrFltr(List<SortedList> rows, Func<SortedList, bool> whereFun)
         {
-            PrintTimestamp(" start fun ArrFltr");
-            List<SortedList> list22 = new List<SortedList>();
-            foreach (SortedList rw in list)
+
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            PrintTimestamp($" start fun  {__METHOD__}()");
+            dbgCls.PrintCallFunArgs(__METHOD__, func_get_args("someRows"));
+            List<SortedList> rows_rzt4srch = new List<SortedList>();
+            foreach (SortedList row in rows)
             {
-                if (fn(rw))
-                    list22.Add(rw);
+                try
+                {
+                    if (whereFun == null)
+                        rows_rzt4srch.Add(row);
+                    else if (whereFun(row))
+                    {
+                        rows_rzt4srch.Add(row);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Print(e);
+
+                    logErr2024(e, "whereFun", "errlog", null);
+                    //  return false;
+                }
+
+
             }
-            PrintTimestamp(" endfun ArrFltr");
+
+
+
+
+            PrintRet(__METHOD__, rows_rzt4srch.Count);
+
+            PrintTimestamp($" end fun  {__METHOD__}()");
+            return rows_rzt4srch;
+
+        }
+
+
+        public static List<SortedList> ArrFltrV2(List<SortedList> list, Func<SortedList, bool> fn)
+        {
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            PrintTimestamp($" start fun  {__METHOD__}()");
+            if (fn == null)
+                return list;
+            List<SortedList> list22 = new List<SortedList>();
+
+
+            // 使用 Parallel.ForEach 进行并行处理
+            Parallel.ForEach(list, rw =>
+            {
+                try
+                {
+                    if (fn(rw))
+                        list22.Add(rw);
+                }
+                catch (Exception e)
+                {
+                    Print(e);
+
+                    logErr2024(e, "whereFun", "errlog", null);
+                    //  return false;
+                }
+            });
+
+            //foreach (SortedList rw in list)
+            //{
+               
+            //}
+            PrintTimestamp($" endfun  {__METHOD__}()");
             return list22;
         }
         public static void transfmVal(SortedList list, Func<string, object> fun)
@@ -252,7 +312,7 @@ namespace prjx.lib
         }
 
 
-      
+
         public static void RemoveWordsFromHashSet(HashSet<string> words, string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return;
@@ -279,8 +339,8 @@ namespace prjx.lib
 
             return resultSet;
         }
-   
-        
+
+
         public static object ArrSlice<t>(List<t> inputList, int startIdx, int length)
         {
             //  List<Dictionary
@@ -359,8 +419,8 @@ namespace prjx.lib
             // 使用 LINQ 的 Select 方法对每个元素应用 mapFunction
             return source.Select(mapFunction);
         }
-     
-        
+
+
         internal static void map_add(SortedList map, string idClmName, object item)
         {
 
@@ -434,7 +494,7 @@ namespace prjx.lib
         {
             return MergeHashSets(list1, list2);
         }
-    
+
         public static string[] RemoveShortWords(string[] words)
         {
             List<string> result = new List<string>();
@@ -448,7 +508,7 @@ namespace prjx.lib
             return result.ToArray();
         }
 
-     
+
         public static List<t> array_merge<t>(List<t> list1, List<t> list2)
         {
             List<t> result = new List<t>();
@@ -496,7 +556,7 @@ namespace prjx.lib
 
         //    return result;
         //}
-      
+
 
         //private static void findd()
         //{
@@ -546,7 +606,7 @@ namespace prjx.lib
             }
         }
 
-     
+
         public static void CopyPropSortedListToMerchant(SortedList sortedList, Merchant merchant)
         {
             Type merchantType = typeof(Merchant);
@@ -578,7 +638,7 @@ namespace prjx.lib
             }
         }
 
-      
+
 
         /// <summary>
         /// 计算集合的长度。
@@ -632,7 +692,7 @@ namespace prjx.lib
         //    }
         //    SortedList1_iot.Add(key, objSave);
         //}
-   
+
 
 
         public static Dictionary<string, StringValues> CopySortedListToDictionary(SortedList sortedList)
@@ -665,7 +725,7 @@ namespace prjx.lib
 
             return hashSet2;
         }
-      
+
         public static HashSet<string> MergeHashSets(HashSet<string> set1, HashSet<string> set2)
         {
             HashSet<string> resultSet = new HashSet<string>(set1);

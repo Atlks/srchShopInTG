@@ -334,7 +334,13 @@ namespace mdsj.lib
             }
 
         }
-
+        public static void SetFieldAddRplsKeyV(Dictionary<string,object> listIot, string? key, object objSave)
+        {
+            if (listIot.ContainsKey(key))
+                listIot[key] = objSave;
+            else
+                listIot.Add(key, objSave);
+        }
         public static void SetFieldAddRplsKeyV(SortedList listIot, string? key, object objSave)
         {
             if (listIot.ContainsKey(key))
@@ -701,6 +707,7 @@ namespace mdsj.lib
             PrintTimestamp(" start fun GetListFltrByQrystr");
             Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
             List<SortedList> list = GetListFltr(fromDdataDir, ToStr(shares), whereFun);
+            PrintTimestamp(" end fun GetListFltrByQrystr");
             return list;
         }
         public static SortedList GetHashset
@@ -753,6 +760,20 @@ namespace mdsj.lib
 
             return words;
         }
+
+        public static int GetFieldAsInt526(Dictionary<string, string> map, string v1, int v2)
+        {
+            if (map.ContainsKey(v1))
+                return ToInt(map[v1]);
+            return v2;
+        }
+
+        public static Dictionary<string, string> GetDicFromIni(string v)
+        {
+            Hashtable li = GetHashtabFromIniFl(v);
+            return ToDictionary(li);
+        }
+
         public static object GetField(SortedList row, string fld, object dfv)
         {
             if (row.ContainsKey(fld))
@@ -1220,32 +1241,30 @@ namespace mdsj.lib
 
             return fileList;
         }
-     
+        //public static string GetOSVersion()
+        //{
+        //    OperatingSystem os = Environment.op;
+        //    return $"{os.Platform} {os.Version}";
+        //}
+
+        public static string GetOSVersion()
+        {
+            // 获取操作系统版本信息
+            Version version = Environment.OSVersion.Version;
+            string platform = Environment.OSVersion.Platform.ToString();
+
+            // 构建操作系统版本信息字符串
+            string osVersion = $"OS: {platform}, Version: {version.Major}.{version.Minor}.{version.Build}";
+
+            return osVersion;
+        }
 
         public static SortedList GetDicFromJson(string jsonstr)
         {
             return JsonToSortedList(jsonstr);
         }
 
-        public static SortedList JsonToSortedList(string json)
-        {
-            // 解析 JSON 字符串为 JObject
-            JObject jObject = JObject.Parse(json);
-
-            // 创建一个新的 SortedList
-            SortedList sortedList = new SortedList();
-
-            // 将 JObject 中的所有键值对添加到 SortedList
-            foreach (JProperty property in jObject.Properties())
-            {
-                // 将 JToken 转换为 .NET 类型
-                object value = property.Value;//.ToObject<object>();
-                sortedList.Add(property.Name, value);
-            }
-
-            return sortedList;
-        }
-
+     
         public static string GetFieldAsStr(SortedList row, string fld, string dfv = "")
         {
 

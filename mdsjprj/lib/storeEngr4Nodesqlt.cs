@@ -206,6 +206,7 @@ namespace libx
         }
         public static List<SortedList> rnd_next4Sqlt(string dbf)
         {
+            PrintTimestamp(" start rnd_next4Sqlt()"+dbf);
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(dbf));
 
@@ -230,6 +231,7 @@ namespace libx
         
             List<SortedList> sortedLists = ormSqlt.qryV2(dbf);
             PrintRet(__METHOD__, "sortedLists.size("+ sortedLists.Count);
+            PrintTimestamp(" endfun rnd_next4Sqlt()" + dbf);
             return sortedLists;
         }
 

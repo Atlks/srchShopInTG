@@ -26,17 +26,17 @@ namespace mdsj.lib
     internal class bsccode
     {
 
-        public static string FmtPrks(string svrPksHtml)
+        public static string FmtPrks(string svrPks)
         {
-            if (string.IsNullOrEmpty(svrPksHtml))
+            if (string.IsNullOrEmpty(svrPks))
                 return "\n 目前园区设置为空";
-            var l = svrPksHtml.Length;
-            svrPksHtml = svrPksHtml.Replace("\n", ",");
-            string[] items = svrPksHtml.Split(",");
+            var l = svrPks.Length;
+            svrPks = svrPks.Replace("\n", ",");
+            string[] items = svrPks.Split(",");
             if (items.Length == 0)
-                return "";
-            svrPksHtml = AddIdxToElmt(items, "\n");
-            return "\n 已经设置园区:" + "\n"+svrPksHtml;
+                return "\n 目前园区设置为空";
+            svrPks = AddIdxToElmt(items, "\n");
+            return "\n 已经设置园区:" + "\n"+svrPks;
         }
         public static double Avg(List<SortedList> list, string fieldName)
         {

@@ -181,6 +181,51 @@ namespace prjx.lib
         {
             return _qry("select * from 表格1", dbFileName);
         }
+
+        public static List<Dictionary<string,object>> qryToDic(string dbFileName)
+        {
+            PrintTimestamp(" start qryToDic() ");
+            string querySql = "select * from 表格1";
+            // setDbgFunEnter(__METHOD__, func_get_args());
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(MethodBase.GetCurrentMethod(), dbFileName));
+            var results = new List<Dictionary<string, object>>();
+            try
+            {
+                SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
+                cn.Open();
+                using (var cmd = new SqliteCommand(querySql, cn))
+                {
+                    using (var reader = cmd.ExecuteReader())
+                    {
+
+
+                        while (reader.Read())
+                        {
+                            var row = new Dictionary<string, object>();
+                            for (int i = 0; i < reader.FieldCount; i++)
+                            {
+                                SetFieldAddRplsKeyV(row, reader.GetName(i), reader.GetValue(i));
+                                //  row[reader.GetName(i)] = reader.GetValue(i);
+                            }
+                            results.Add(row);
+                        }
+
+
+                    }
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                Print(ex);
+            }
+            PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(results, 0, 1));
+            PrintTimestamp(" end qryToDic() ");
+            return results;
+        }
+
         public static List<SortedList> qryV2(string dbFileName)
         {
             PrintTimestamp(" start qryV2() ");
@@ -381,6 +426,27 @@ namespace prjx.lib
             dbgCls.PrintRet(__METHOD__, ret);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DbFileName"></param>
+        /// <param name="act"></param>
+        public static void updtMltV2(string DbFileName, Action<SortedList> act)
+        {
+            Action<SortedList> act1 = (SortedList rw) =>
+            {
+                SetField(rw, "k", 11);
+                rw.Add("newkey", 222);
+            };
+
+            List<SortedList> li = ormSqlt.qryV2(DbFileName);
+            foreach (SortedList rw in li)
+            {
+                act(rw);
+            }
+
+            ormSqlt.saveMltHiPfm(li, DbFileName);
+        }
         internal static void saveMltHiPfm(List<SortedList> rows, string dbFileName)
         {
             var tblx = "表格1";

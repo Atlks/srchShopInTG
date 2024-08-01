@@ -28,6 +28,7 @@ namespace prjx.lib
     internal class db
     {
 
+       
         /// <summary>
         ///  only row and where fun
         /// </summary>
@@ -93,6 +94,9 @@ namespace prjx.lib
             return list_Seleced;
 
         }
+      
+        
+        
         public static List<t> qryFrmSqlt2dep<t>(string dbfFrom,
   Func<SortedList, bool> whereFun,
   Func<SortedList, int> ordFun,

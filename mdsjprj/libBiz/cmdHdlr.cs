@@ -462,6 +462,8 @@ namespace mdsj.libBiz
             if (park == "取消")
             {
                 Message m22 = SetBtmMenu(update);
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 300); ;
+
                 bot_DeleteMessageV2(update.Message.Chat.Id, (m22?.MessageId), 3);
                 Jmp2end(nameof(ConfirmSetCityBtnClick));
             }
@@ -477,8 +479,8 @@ namespace mdsj.libBiz
                 string parks = GetFieldAsStr(cfg, "园区");
 
                 string newParks = DelElmt(park, parks);
-
-                svrPrks = newParks.Split(",").Length;
+                svrPksHtml = FmtPrks(newParks);
+            //    svrPrks = newParks.Split(",").Length;
                 DelField(cfg, "国家");
                 DelField(cfg, "城市");
                 SetField(cfg, "园区", newParks);
@@ -494,7 +496,7 @@ namespace mdsj.libBiz
                 //    SetField(cfg, "whereExprs", $"");
                 //}
                 ormJSonFL.SaveJson(cfg, dbfile2);
-                svrPksHtml = GetFieldAsStr(cfg, "园区");
+          //      svrPksHtml = GetFieldAsStr(cfg, "园区");
 
             }
             //prive
@@ -521,19 +523,35 @@ namespace mdsj.libBiz
                 //}
                 //ormJSonFL.SaveJson(cfg, dbfile);
             }
+         //   SendTextMessageWzGc(update.Message.Chat.Id, "msgt", Timeout: 300, replyToMessageId: update.Message.MessageId);
+         
             Message m = botClient.SendTextMessageAsync(
                  update.Message.Chat.Id,
-                    tipsSetOK + "\n 删除成功,目前园区为\n" + svrPksHtml,
+                    tipsSetOK + "\n 删除成功 " + svrPksHtml,
                  parseMode: ParseMode.Html,
 
                  protectContent: false,
                  disableWebPagePreview: true,
                  replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
-            bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 300);
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 15); ;
+            bot_DeleteMessageV2(update.Message.Chat.Id, (m?.MessageId), 300);
             //------------set menu btm
             Message m2 = SetBtmMenu(update);
             bot_DeleteMessageV2(update.Message.Chat.Id, (m2?.MessageId), 3);
             Jmp2end(nameof(DelParkBtmbtnEvt));
+        }
+
+        public static void SendTextMessageWzGc(long Chatid, string msg, int Timeout, int replyToMessageId)
+        {
+            Message m = botClient.SendTextMessageAsync(
+             Chatid,
+                  msg,
+                parseMode: ParseMode.Html,
+
+                protectContent: false,
+                disableWebPagePreview: true,
+                replyToMessageId: replyToMessageId).GetAwaiter().GetResult();
+            bot_DeleteMessageV2(Chatid, m?.MessageId, 300);
         }
 
         private static void AppendArea(string ctry, SortedList cfg)
@@ -1107,7 +1125,8 @@ namespace mdsj.libBiz
 
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons(nowPks.Split(","));
                 Print(EncodeJson(btns));
-                var rplyKbdMkp = new ReplyKeyboardMarkup(btns);
+                ReplyKeyboardMarkup rplyKbdMkp = new ReplyKeyboardMarkup(btns);
+                rplyKbdMkp.ResizeKeyboard = true;
                 string imgPath = "今日促销商家.gif";
                 var Photo2 = InputFile.FromStream(System.IO.File.OpenRead(imgPath));
                 //  Message message2dbg = await 

@@ -288,34 +288,7 @@ namespace mdsj.lib
 
             return result;
         }
-        //我们首先使用 System.IO.Path.GetInvalidFileNameChars 方法获取操作系统支持的非法文件名字符数组
-        /*
-         
-         我们遍历输入的文本，并检查每个字符是否是非法字符。如果字符是非法字符，则使用 HttpUtility.UrlEncode 方法对字符进行 URL 编码，然后将编码后的结果添加到结果字符串中。最后，返回处理后的结果字符串。
-         
-         */
-        public static string ConvertToValidFileName(string input)
-        {
-            // URL 编码非法字符
-            string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars());
-            StringBuilder encodedBuilder = new StringBuilder();
-            foreach (char c in input)
-            {
-                if (invalidChars.Contains(c))
-                {
-                    // 如果字符为非法字符，则使用 URL 编码替换
-                    string encoded = HttpUtility.UrlEncode(c.ToString());
-                    encodedBuilder.Append(encoded);
-                }
-                else
-                {
-                    // 如果字符为合法字符，则直接添加到结果中
-                    encodedBuilder.Append(c);
-                }
-            }
-            return encodedBuilder.ToString();
-        }
-
+    
         /// <summary>
         /// 将 JSON 格式的字符串反序列化为对象。
         /// </summary>

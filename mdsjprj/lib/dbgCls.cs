@@ -26,6 +26,9 @@ using DocumentFormat.OpenXml.Drawing;
 using mdsj.libBiz;
 using Microsoft.AspNetCore.Http;
 using System.Diagnostics.Metrics;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Telegram.Bot.Types.Enums;
+using System.Text.Json;
 namespace prjx.lib
 {
     internal class dbgCls
@@ -309,6 +312,65 @@ namespace prjx.lib
             return filteredList.ToArray();
         }
 
+        /// <summary>
+        /// 性能有限 only smple mode
+        /// </summary>
+        /// <param name="METHOD__"></param>
+        /// <param name="func_get_args"></param>
+        public static void PrintCallFunArgsFast(string METHOD__, object func_get_args)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+            PrintTimestamp("PrintCallFunArgsFast");
+
+           
+            dbgpad = dbgpad + 4;
+            var msglog = "";
+            try
+            {
+                msglog = RepeatMnyChr(dbgpad) + "### FUN " + METHOD__ + "((" + encodeJsonFast(func_get_args) + "))";
+                // array_push($GLOBALS['dbg'],$logmsg   );
+            }
+            catch (Exception e)
+            {
+                msglog = str_repeat(" ", dbgpad) + " FUN " + METHOD__ + "( )";
+                logErr2025(e, "print_ret", "errdirSysMeth");
+            }
+            //  print("\n\n\n" + msglog + "");
+            PrintColoredText("\n\n\n" + msglog + "", ConsoleColor.Green);
+            PrintTimestamp(" end PrintCallFunArgsFast");
+        }
+
+        /// <summary>
+        /// smpe le obj ..no trans to 
+        /// System.Text.Json：是 .NET Core 3.0 及以后的版本中引入的 JSON 序列化库，相比于 Newtonsoft.Json（Json.NET），它通常具有更高的性能。
+        /// </summary>
+        /// <param name="func_get_args"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public static string encodeJsonFast(object results)
+        {
+            PrintTimestamp("encodeJsonFast");
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                //   Formatting = Formatting.Indented
+            };
+            //  string json = JsonConvert.SerializeObject(obj, settings);
+            string jsonString = JsonConvert.SerializeObject(results, settings);
+            // 使用 System.Text.Json 进行序列化 更很快
+
+            
+            var options = new JsonSerializerOptions
+            {
+                //todo 还是报错
+                // 适用于 .NET 8 的新配置方式
+                TypeInfoResolver = new JsonSerializerOptions().TypeInfoResolver
+            };
+         //   string jsonString = System.Text.Json.JsonSerializer.Serialize(results, options);
+            PrintTimestamp(" end encodeJsonFast");
+            return jsonString;
+        }
+
         /* //if($GLOBALS['dbg_show']==false)
             //    return;
             //  $GLOBALS['dbgpad']=$GLOBALS['dbgpad']+4;
@@ -566,11 +628,30 @@ namespace prjx.lib
             return GenerateEmojis(count, emoji);
         }
 
+        //for afaast perf 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="count"></param>
+        /// <returns></returns>
         public static string RepeatMnyChr(int count)
         {
             if (count < 0)
                 count = 0;
-            return GenerateEmojis(count, "💸");
+
+            if (count <= 0)
+            {
+                return string.Empty;
+            }
+
+            // 使用StringBuilder提高性能
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < count; i++)
+            {
+                sb.Append("💸");
+            }
+            return sb.ToString();
+         //   return GenerateEmojis(count, "💸");
              //   new string('', count);
         }
 

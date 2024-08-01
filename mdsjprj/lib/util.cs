@@ -17,10 +17,12 @@ using static prjx.lib.corex;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 namespace mdsj.lib
 {
     internal class util
     {
+        public static MemoryCache cache2024 = new MemoryCache(new MemoryCacheOptions());
         public const string pageprm251 = "token page pages pagesize limit page limit pagesize from ";
         //  public static bool jmp2exitFlag;
         public static ThreadLocal<bool> jmp2exitFlagInThrd = new ThreadLocal<bool>(() =>
@@ -73,30 +75,37 @@ namespace mdsj.lib
         public static void UploadFileAsync(string filePath, string url)
         {
             Print("UploadFileAsync() " + filePath + " " + url);
-            using (HttpClient client = new HttpClient())
-            using (MultipartFormDataContent content = new MultipartFormDataContent())
-            using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            try
             {
-                // 创建文件内容
-                var fileContent = new StreamContent(fileStream);
-                fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
-
-                // 添加文件内容到请求
-                content.Add(fileContent, "file", Path.GetFileName(filePath));
-
-                // 发送 POST 请求
-                HttpResponseMessage response = client.PostAsync(url, content).GetAwaiter().GetResult(); ;
-
-                // 检查响应状态
-                if (response.IsSuccessStatusCode)
+                using (HttpClient client = new HttpClient())
+                using (MultipartFormDataContent content = new MultipartFormDataContent())
+                using (FileStream fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
                 {
-                    Console.WriteLine("File uploaded successfully.");
+                    // 创建文件内容
+                    var fileContent = new StreamContent(fileStream);
+                    fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/octet-stream");
+
+                    // 添加文件内容到请求
+                    content.Add(fileContent, "file", Path.GetFileName(filePath));
+
+                    // 发送 POST 请求
+                    HttpResponseMessage response = client.PostAsync(url, content).GetAwaiter().GetResult(); ;
+
+                    // 检查响应状态
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("File uploaded successfully.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to upload file. Status code: {response.StatusCode}");
+                    }
                 }
-                else
-                {
-                    Console.WriteLine($"Failed to upload file. Status code: {response.StatusCode}");
-                }
+            }catch(Exception e)
+            {
+                PrintExcept("UploadFileAsync", e);
             }
+            
           //  return 1;
         }
 

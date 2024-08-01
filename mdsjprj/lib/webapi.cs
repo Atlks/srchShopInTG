@@ -90,36 +90,8 @@ namespace mdsj.lib
             app.Run();
         }
 
-        private static int GetFieldAsInt526(Dictionary<string, string> map, string v1, int v2)
-        {
-            if (map.ContainsKey(v1))
-                return ToInt(map[v1]);
-            return v2;
-        }
-
-        private static Dictionary<string, string> GetDicFromIni(string v)
-        {
-            Hashtable li = GetHashtabFromIniFl(v);
-            return ToDictionary(li);
-        }
-
-        public static Dictionary<string, string> ToDictionary( Hashtable hashtable)
-        {
-            var dictionary = new Dictionary<string, string>();
-            foreach (DictionaryEntry entry in hashtable)
-            {
-                if (entry.Key is string key && entry.Value is string value)
-                {
-                    dictionary.Add(key, value);
-                }
-                else
-                {
-                    // 处理非字符串键值对的情况，例如抛出异常或进行类型转换
-                    throw new InvalidCastException("Hashtable中的键或值不是字符串类型");
-                }
-            }
-            return dictionary;
-        }
+    
+        
         public static string webrootDir = $"{prjdir}/webroot";
 
 
@@ -175,7 +147,9 @@ namespace mdsj.lib
                 //----------------static res
                 // 静态资源处理器映射表
                 Hashtable extNhdlrChoosrMaplist = new Hashtable();
-                extNhdlrChoosrMaplist.Add("txt   css js", nameof(TxtHttpHdlr));
+                extNhdlrChoosrMaplist.Add(" js", nameof(JsHttpHdlr));
+                extNhdlrChoosrMaplist.Add(" css", nameof(CssHttpHdlr));
+                extNhdlrChoosrMaplist.Add("txt   ", nameof(TxtHttpHdlr));
                 extNhdlrChoosrMaplist.Add(" html htm", nameof(HtmlHttpHdlrfilTxtHtml));
                 extNhdlrChoosrMaplist.Add("json", nameof(JsonFLhttpHdlrFilJson));
                 extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
@@ -412,6 +386,42 @@ namespace mdsj.lib
                 Jmp2endDep(); return;
             }
         }
+        public static void CssHttpHdlr
+     (HttpRequest request, HttpResponse response)
+        {
+            // 获取当前请求的 URL
+
+            string path = request.Path;
+            // if (path.EndsWith(".htm"))
+            {
+                // 设置响应内容类型和编码            
+
+                string f = webrootDir + DecodeUrl(path);
+                object rzt2 = ReadAllText(f);
+                SendResp(rzt2, "text/css; charset=utf-8", response);
+                Print(" send finish....");
+                Jmp2endDep(); return;
+            }
+        }
+
+        public static void JsHttpHdlr
+         (HttpRequest request, HttpResponse response)
+        {
+            // 获取当前请求的 URL
+
+            string path = request.Path;
+            // if (path.EndsWith(".htm"))
+            {
+                // 设置响应内容类型和编码            
+
+                string f = webrootDir + DecodeUrl(path);
+                object rzt2 = ReadAllText(f);
+                SendResp(rzt2, "text/javascript; charset=utf-8", response);
+                Print(" send finish....");
+                Jmp2endDep(); return;
+            }
+        }
+
         public static void TxtHttpHdlr
             (HttpRequest request, HttpResponse response)
         {
