@@ -131,7 +131,8 @@ namespace prjx.lib
             //  setdbgfunenter(__method__, func_get_args());
 
 
-            var sql = "delete from $tabl where id='" + id + "'";
+            var sql = "delete from 表格1 where id='" + id + "'";
+            Print(sql);
             //  setdbgval(__method__, "sql", $sql);
             SqliteConnection cn = new SqliteConnection("data source=" + dbFileName);
             cn.Open();

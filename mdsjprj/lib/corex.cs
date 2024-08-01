@@ -154,18 +154,7 @@ namespace prjx.lib
                 return ex.Message;
             }
         }
-        public static object Eval(string code)
-        {
-            try
-            {
-                var result = CSharpScript.EvaluateAsync(code, ScriptOptions.Default).Result;
-                return result;
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
+
         public static SortedList parse_str_qrystr(string urlqryStr)
         {
 

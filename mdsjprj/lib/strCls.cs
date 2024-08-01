@@ -18,11 +18,90 @@ using static prjx.lib.corex;
 namespace prjx.lib
 {
     internal class strCls
-    { /// <summary>
-      /// 截取字符串的前100个字符。
-      /// </summary>
-      /// <param name="input">输入字符串</param>
-      /// <returns>截取后的字符串</returns>
+    {
+
+        // 分割 HTML 文件中的字符串，依据 <%= 和 %> 标签
+        public static List<string> SplitByExpressions(string filePath)
+        {
+            var segments = new List<string>();
+
+            // 确保文件路径存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("指定的文件未找到", filePath);
+            }
+
+            // 读取文件内容
+            string fileContent = System.IO.File.ReadAllText(filePath);
+
+            // 解析内容
+            string[] parts = SplitContent(fileContent);
+
+            // 添加分割后的部分到列表
+            foreach (var part in parts)
+            {
+                if (!string.IsNullOrWhiteSpace(part))
+                {
+                    segments.Add(part.Trim());
+                }
+            }
+
+            return segments;
+        }
+
+        // 根据 <%= 和 %> 分割字符串
+        public static string[] SplitContent(string content)
+        {
+            // 使用分隔符进行分割
+            var startDelimiter = "<%=";
+            var endDelimiter = "%>";
+
+            var segments = new List<string>();
+            int currentIndex = 0;
+
+            while (currentIndex < content.Length)
+            {
+                // 查找开始分隔符
+                int startIndex = content.IndexOf(startDelimiter, currentIndex);
+                if (startIndex == -1)
+                {
+                    // 没有找到开始分隔符，剩余部分作为一个段
+                    segments.Add(content.Substring(currentIndex));
+                    break;
+                }
+
+                // 添加开始分隔符前的部分
+                if (startIndex > currentIndex)
+                {
+                    segments.Add(content.Substring(currentIndex, startIndex - currentIndex));
+                }
+
+                // 查找结束分隔符
+                int endIndex = content.IndexOf(endDelimiter, startIndex + startDelimiter.Length);
+                if (endIndex == -1)
+                {
+                    // 没有找到结束分隔符，添加剩余部分作为一个段
+                    segments.Add(content.Substring(startIndex));
+                    break;
+                }
+
+                // 添加分隔符之间的部分  - startDelimiter.Length
+                segments.Add(content.Substring(startIndex, endIndex - startIndex + endDelimiter.Length));
+
+                // 更新当前索引
+                currentIndex = endIndex + endDelimiter.Length;
+            }
+
+            return segments.ToArray();
+        }
+
+
+
+        /// <summary>
+        /// 截取字符串的前100个字符。
+        /// </summary>
+        /// <param name="input">输入字符串</param>
+        /// <returns>截取后的字符串</returns>
         public static string Left(object input2, int len)
         {
             string input = ToStr(input2);

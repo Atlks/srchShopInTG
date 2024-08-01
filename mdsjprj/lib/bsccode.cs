@@ -1,6 +1,8 @@
 ﻿global using static mdsj.lib.bsccode;
 using HtmlAgilityPack;
 using mdsj.libBiz;
+using Microsoft.CodeAnalysis.CSharp.Scripting;
+using Microsoft.CodeAnalysis.Scripting;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -26,6 +28,82 @@ namespace mdsj.lib
     internal class bsccode
     {
 
+
+        // 解析 <%=Print(888)%> 并提取函数和参数
+        public static string[] ParseExpression(string expression)
+        {
+            // 提取 <%= ... %> 之间的内容
+            string pattern = @"<%=([^%>]+)%>";
+            var regex = new Regex(pattern);
+            var match = regex.Match(expression);
+
+            if (match.Success)
+            {
+                // 提取函数和参数
+                string funcWithArgs = match.Groups[1].Value.Trim();
+
+                // 解析函数名和参数
+                string[] funcAndArgs = ParseFunctionAndArguments(funcWithArgs);
+                return funcAndArgs;
+            }
+
+            throw new ArgumentException("无效的表达式格式。");
+        }
+
+        // 解析函数名和参数
+        public static string[] ParseFunctionAndArguments(string funcWithArgs)
+        {
+            // 匹配函数名和参数
+            string pattern = @"(\w+)\(([^)]*)\)";
+            var regex = new Regex(pattern);
+            var match = regex.Match(funcWithArgs);
+
+            if (match.Success)
+            {
+                string functionName = match.Groups[1].Value;
+                string arguments = match.Groups[2].Value;
+
+                // 返回函数名和参数
+                return new string[] { functionName, arguments };
+            }
+
+            throw new ArgumentException("无效的函数格式。");
+        }
+        public static string RendHtm(string f)
+        {
+            List<string> rztlist511 = new List<string>();
+            List<string> segments222 = SplitByExpressions(f);
+            foreach (string token in segments222)
+            {
+                if (token.StartsWith("<%="))
+                {
+
+                    string[] Fun508 = ParseExpression(token);
+                    string fun = Fun508[0];
+                    string arg = Fun508[1];
+                    object[] objectArray = new object[] { arg };
+                    object rzt = CallxTryx(fun, objectArray);
+                    rztlist511.Add(ToStr(rzt));
+                }
+                else
+                    rztlist511.Add(token);
+            }
+            string rzt511 = Join(rztlist511);
+            return rzt511;
+        }
+
+        public static object Eval(string code)
+        {
+            try
+            {
+                var result = CSharpScript.EvaluateAsync(code, ScriptOptions.Default).Result;
+                return result;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message;
+            }
+        }
         public static string FmtPrks(string svrPks)
         {
             if (string.IsNullOrEmpty(svrPks))

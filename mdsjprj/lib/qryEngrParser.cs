@@ -713,7 +713,7 @@ namespace libx
                 li = fun_rnd(shareName);
                 // 设置一个缓存项，10分钟后过期
                 //note is add data need remove cache key
-                 cache2024.Set(key, li, TimeSpan.FromMinutes(10));
+              //   cache2024.Set(key, li, TimeSpan.FromMinutes(10));
             }
          
 

@@ -208,10 +208,48 @@ namespace prjx
                 Console.WriteLine($"Process created with ID {outParams["ProcessId"]}");
             }
         }
+        // 提取 <%= 和 %> 之间的表达式
+        public static List<string> ExtractExpressions(string filePath)
+        {
+            var expressions = new List<string>();
 
+            // 确保文件路径存在
+            if (!System.IO.File.Exists(filePath))
+            {
+                throw new FileNotFoundException("指定的文件未找到", filePath);
+            }
+
+            // 读取文件内容
+            string fileContent = System.IO. File.ReadAllText(filePath);
+
+            // 正则表达式匹配 <%= ... %>
+            string pattern = @"<%=([^%>]+)%>";
+            Regex regex = new Regex(pattern, RegexOptions.Singleline);
+
+            // 查找所有匹配的表达式
+            MatchCollection matches = regex.Matches(fileContent);
+
+            foreach (Match match in matches)
+            {
+                if (match.Groups.Count > 1)
+                {
+                    // 提取表达式并添加到列表
+                    string expression = match.Groups[1].Value.Trim();
+                    expressions.Add(expression);
+                }
+            }
+
+            return expressions;
+        }
+      
 
         private static async System.Threading.Tasks.Task main1148()
         {
+            var f = $"{prjdir}/webroot/tmplt.htm";
+            string rztlist511 = RendHtm(f);
+            Print(rztlist511);
+            //  List<string> exprss = ExtractExpressions(f);
+            //GetListExprsFromHtm(f);
 
             PrintTimestamp("bef rd ini");
             Print(GetListFrmIniFL("mrcht.ini").Count);
@@ -231,7 +269,7 @@ namespace prjx
             Print(ormSqlt.qryV2("mercht商家数据/缅甸.db").Count);
             PrintTimestamp("end rd sortedlist");
 
-         //   qryToDic
+            //   qryToDic
             Print("os ver:" + GetOSVersion());//os ver:OS: Win32NT, Version: 10.0.22631
             //for cache
             var listFlrted = GetListFltrByQrystr("mercht商家数据", null, "");
@@ -240,7 +278,7 @@ namespace prjx
             string url136 = "administrator:gy5NLU0MJ4yv@206.119.166.120:3389";
             Dictionary<string, string> dic = GetDicFromUrl(url136);
             //  TransferFileByRdpWmi("mdsj.exe", "d:/upldir", dic["host"], dic["u"], dic["pwd"]);
-          
+
             return;
             var orilen140 = "879006550_2d2481f9f76818ff6a54083de36ff7ed98593a9ef5871a5b98c676590fd8a345c084ed8554f4c52132ffe8b4de67c7fe9b6b3f360048011c1d70febb66e31608";
             var newlen = CompressString(orilen140);
@@ -534,6 +572,8 @@ namespace prjx
 
             // 
         }
+
+      
 
         public static List<Dictionary<string, string>> GetListFrmIniFL(string dbf)
         {

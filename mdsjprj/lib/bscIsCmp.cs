@@ -14,11 +14,17 @@ using System.Threading.Tasks;
 namespace mdsj.lib
 {
     internal class bscIsCmp
-    {    /// <summary>
-         /// token的设计  uname exprt...  MRG机器读取区域
-         /// </summary>
-         /// <param name="token"></param>
-         /// <returns></returns>
+    {
+        public static bool IsString(object input)
+        {
+            return input is string;
+        }
+
+        /// <summary>
+        /// token的设计  uname exprt...  MRG机器读取区域
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
         public static bool IsValidToken(string token)
         {
             string[] tka = token.Split("_");

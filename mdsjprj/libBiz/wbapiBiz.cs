@@ -367,8 +367,8 @@ namespace mdsj.libBiz
 
 
         /// <summary>
-        ///  商家入住    （ post提交 ）
-        ///  提交路径 /AddMercht
+        ///  商家删除        /DelMercht?id=111
+        ///  
         /// </summary>
         /// <param name="商家"></param>
         /// <param name="营业时间">12:00-22:00</param>
@@ -376,9 +376,9 @@ namespace mdsj.libBiz
         /// <param name="照片或视频">h5文件表单上传文件</param>
         public static void DelMerchtGETWbapi(HttpRequest request, HttpResponse response)
         {
-          
+            var queryString = request.QueryString.ToString();
 
-            SortedList saveOBJ = ConvertFormToSortedList(request.Form);
+            SortedList saveOBJ = GetHashtableFromQrystr(queryString);
 
             string token = GetFieldAsStrDep(saveOBJ, "token");
             //string[] tka = token.Split("_");
@@ -386,19 +386,31 @@ namespace mdsj.libBiz
             //string exprt = GetElmt(tka, 1);
             //string token_uidDotExprtMode = DecryptAes(exprt);
 
-            if (IsValidToken(token))
-            {
-                SendResp("token无效", response);
-                Jmp2end(nameof(AddMerchtPOSTWbapi));
-            }
+            //if (IsValidToken(token))
+            //{
+            //    SendResp("token无效", response);
+            //    Jmp2end(nameof(AddMerchtPOSTWbapi));
+            //}
 
 
             ormSqlt.delByID(saveOBJ["id"].ToString(), "mercht商家数据", "mercht商家数据/缅甸.db");
+            cache2024.Remove("mercht商家数据/缅甸");
+            cache2024.Remove("mercht商家数据/缅甸.db");
+
             SendResp("ok", response);
 
             Jmp2end(nameof(DelMerchtGETWbapi));
         }
 
+        // Handle other form data
+        //foreach (var key in request.Form.Keys)
+        //{
+        //    var value = request.Form[key];
+        //    ConsoleWriteLine($"Key: {key}, Value: {value}");
+        //}
+
+        // Call the specific API handler
+        //    httpHdlrApiSpecl(request, response);
 
         public static void AddMerchtPOSTWbapi(HttpRequest request, HttpResponse response)
         {
@@ -410,34 +422,30 @@ namespace mdsj.libBiz
             {
                 foreach (var file in request.Form.Files)
                 {
-                    // Get the file content and save it to a desired location
-                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
-                    fil = filePath;
-                    Mkdir4File(filePath);
-                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    try
                     {
-                        file.CopyToAsync(stream).GetAwaiter().GetResult();
+                        // Get the file content and save it to a desired location
+                        var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
+                        fil = filePath;
+                        fil = "uploads1016/" + file.FileName;
+                        Mkdir4File(filePath);
+                        using (var stream = new FileStream(filePath, FileMode.Create))
+                        {
+                            file.CopyToAsync(stream).GetAwaiter().GetResult();
+                        }
+                    }catch(Exception e)
+                    {
+                        PrintExcept("add mrcht", e);
                     }
+                    
                 }
             }
 
-            // Handle other form data
-            //foreach (var key in request.Form.Keys)
-            //{
-            //    var value = request.Form[key];
-            //    ConsoleWriteLine($"Key: {key}, Value: {value}");
-            //}
-
-            // Call the specific API handler
-            //    httpHdlrApiSpecl(request, response);
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
             string token = GetFieldAsStrDep(saveOBJ, "token");
-            //string[] tka = token.Split("_");
-            //string uid = GetElmt(tka, 0);
-            //string exprt = GetElmt(tka, 1);
-            //string ori_exprtDecd = DecryptAes(exprt);
+          
 
            //if (IsValidToken(token))
            // {

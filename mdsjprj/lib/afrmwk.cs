@@ -50,7 +50,7 @@ namespace mdsj.lib
             mdsj.lib.exCls.set_error_handler();
             callTryAll(() =>
             {
-                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88897");
+                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver8881");
                 PrintLogo();
                 //-------------start boot music
                 // 启动一个新线程，执行匿名函数

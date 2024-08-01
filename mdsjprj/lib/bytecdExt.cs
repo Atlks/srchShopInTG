@@ -328,9 +328,10 @@ namespace mdsj.lib
         {
         //    encodeJsonNofmt
         }
-        public static void Join136()
+        public static string Join(List<string> list)
         {
-
+            var separator = "";
+            return string.Join(separator, list);
         }
         public static void Run136()
         {
@@ -401,7 +402,10 @@ namespace mdsj.lib
         {
             System.Console.Write(v);
         }
-
+        public static string MMM(object v)
+        {
+            return "MMM"+v;
+        }
         public static void Print(object v)
         {
             System.Console.WriteLine(v);
