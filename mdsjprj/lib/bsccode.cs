@@ -891,6 +891,44 @@ namespace mdsj.lib
             return o;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dbf_share"></param>
+        /// <returns></returns>
+        public static List<SortedList> GetListFrmSqltWzPersst(string dbf_share)
+        {
+            try
+            {
+                var list8 = new List<SortedList>();
+                if (!IsFileExist(dbf_share))
+                    list8 = new List<SortedList>();
+                else
+                {
+                    list8 = ormSqlt.qryV2(dbf_share);
+                }
+                //--------------定时持久化downedUrl
+                // -------------创建一个定时器，每2秒触发一次
+                System.Timers.Timer timer = new System.Timers.Timer(2000);
+                timer.Elapsed += (sender, e) =>
+                {
+                    //del dbf file todo 
+                    ormSqlt.saveMltHiPfm(list8, dbf_share);                 
+                };
+                timer.AutoReset = true;
+                timer.Enabled = true;
+                timer.Start();
+                return list8;
+            }
+            catch (Exception ex)
+            {
+                ConsoleWriteLine($"An error occurred: {ex.Message}");
+                return new List<SortedList>();
+            }
+        }
+
+
+
         public static HashSet<string> NewSet(string f)
         {
             try
@@ -945,6 +983,16 @@ namespace mdsj.lib
                 PrintCatchEx("callTryAll", e);
             }
 
+        }
+
+      
+
+        public static void LoopForever()
+        {
+            while (true)
+            {
+                Thread.Sleep(500);
+            }
         }
         public static string AddTimet(int secondsToAdd)
         {

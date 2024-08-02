@@ -138,6 +138,7 @@ namespace mdsj.lib
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
+            //-------------whilte list url for pfm
             string skipFileRdUrlpath = "/getlist";
             HashSet<string> hs = new HashSet<string>();
             hs.Add(skipFileRdUrlpath);

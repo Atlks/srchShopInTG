@@ -315,8 +315,8 @@ namespace mdsj
             //----where
             Func<SortedList, bool> whereFun = (SortedList row) =>
             {
-                if (row["园区"].ToString().Contains("龙湾"))
-                    Print("dbg2442");
+                //if (row["园区"].ToString().Contains("龙湾"))
+                //    Print("dbg2442");
 
                 if (LoadFieldDefEmpty(row, "TG有效") == "N")
                     return false;

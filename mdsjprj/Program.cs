@@ -265,20 +265,7 @@ namespace prjx
           
         }
 
-        public static string GetFieldAsStr10(Hashtable cfgDic, string v)
-        {
-            if (cfgDic.ContainsKey(v))
-                return ToStr(cfgDic[v]);
-            return "";
-        }
-
-        private static void LoopForever()
-        {
-            while (true)
-            {
-                Thread.Sleep(500);
-            }
-        }
+  
 
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {

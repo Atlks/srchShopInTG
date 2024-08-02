@@ -44,13 +44,14 @@ namespace mdsj.lib
         }
         public static void evt_boot(Action actBiz)
         {
+            //add all cache db 
             //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
             //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
             // 设置全局异常处理
             mdsj.lib.exCls.set_error_handler();
             callTryAll(() =>
             {
-                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver8881");
+                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver8883");
                 PrintLogo();
                 //-------------start boot music
                 // 启动一个新线程，执行匿名函数

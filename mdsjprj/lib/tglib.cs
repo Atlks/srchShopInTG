@@ -618,6 +618,47 @@ namespace prjx.lib
            Print("END FUN bot_pollingErrorHandler()");
             return System.Threading.Tasks.Task.CompletedTask;
         }
+        public static void DelMsg(Update chatid_update, object? value, int v)
+        {
+            try
+            {
+                Message m = (Message)value;
+                bot_DeleteMessageV2(chatid_update.Message.Chat.Id, m?.MessageId, v);
+            }
+            catch (Exception e)
+            {
+                PrintExcept("DelMsg", e);
+            }
+
+        }
+        public static void DelMsg(Update update, int v)
+        {
+            try
+            {
+
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, v);
+            }
+            catch (Exception e)
+            {
+                PrintExcept("DelMsg", e);
+            }
+        }
+        public static void bot_DeleteMessageV3(Update? update, int second)
+
+        {
+            try
+            {
+             //   SendTextMessageWzGc
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, second); ;
+
+            }catch(Exception e)
+            {
+                PrintExcept("bot_DeleteMessageV3", e);
+            }
+
+
+        }
+
         //删除别人信息
         public static void bot_DeleteMessageV2(long chatId, int? msgid, int second)
 

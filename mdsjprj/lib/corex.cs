@@ -181,10 +181,7 @@ namespace prjx.lib
 
             return sortedList;
         }
-        public static bool IsString(object input)
-        {
-            return input is string;
-        }
+      
 
         public static string soluPath = "";
         public static string execpath = "";

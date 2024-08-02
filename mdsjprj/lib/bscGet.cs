@@ -334,6 +334,14 @@ namespace mdsj.lib
             }
 
         }
+
+
+        public static string GetFieldAsStr10(Hashtable cfgDic, string v)
+        {
+            if (cfgDic.ContainsKey(v))
+                return ToStr(cfgDic[v]);
+            return "";
+        }
         public static void SetFieldAddRplsKeyV(Dictionary<string,object> listIot, string? key, object objSave)
         {
             if (listIot.ContainsKey(key))

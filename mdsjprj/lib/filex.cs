@@ -16,6 +16,44 @@ namespace prjx.lib
 {
     public class filex
     {
+
+        public static void WriteFileWithTimestamp(string directoryPath, string content)
+        {
+            // 确保目录存在
+            Directory.CreateDirectory(directoryPath);
+
+            // 生成文件名，格式为 "yyyyMMddHHmmssfff.txt"
+            string fileName = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff") + ".txt";
+            string filePath = Path.Combine(directoryPath, fileName);
+
+            // 写入文件
+            System.IO.File.WriteAllText(filePath, content);
+
+            // 处理文件数量
+            ManageFileCount(directoryPath,50);
+        }
+
+        private static void ManageFileCount(string directoryPath,int MaxFiles)
+        {
+            // 获取所有文件路径
+            var files = Directory.GetFiles(directoryPath);
+
+            // 如果文件数量超过限制
+            if (files.Length > MaxFiles)
+            {
+                // 按创建时间排序文件，从最早的文件开始删除
+                var filesToDelete = files
+                    .Select(file => new FileInfo(file))
+                    .OrderBy(fileInfo => fileInfo.CreationTime)
+                    .Take(files.Length - MaxFiles);
+
+                foreach (var file in filesToDelete)
+                {
+                    file.Delete();
+                }
+            }
+        }
+
         public static string[] ReadFileAndRemoveEmptyLines(string filePath)
         {
             // 读取文件所有行

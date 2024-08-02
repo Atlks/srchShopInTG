@@ -462,7 +462,8 @@ namespace prjx
 
         public static ReplyKeyboardMarkup SetBtmBtnMenu(string imgPath, string msgtxt, object chatid, string chtType)
         {
-            ReplyKeyboardMarkup rplyKbdMkp;
+            lastSendMsg.Value=null;
+           ReplyKeyboardMarkup rplyKbdMkp;
             //私聊不要助力本群
             if (!chtType.Contains("group"))
             {

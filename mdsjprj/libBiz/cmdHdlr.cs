@@ -467,6 +467,24 @@ namespace mdsj.libBiz
                 bot_DeleteMessageV2(update.Message.Chat.Id, (m22?.MessageId), 3);
                 Jmp2end(nameof(ConfirmSetCityBtnClick));
             }
+            if (park == "取消删除")
+            {
+                if(IsSetArea(update))
+                {
+                    Message m22 = SetBtmMenu(update);
+                    bot_DeleteMessageV3(update, 5);
+                    bot_DeleteMessageV2(update.Message.Chat.Id, (m22?.MessageId), 3);
+                    Jmp2end(nameof(ConfirmSetCityBtnClick));
+                }else
+                {
+                    SetBtmBtnMenuClr("", plchdTxt, update.Message.Chat.Id, "");
+                    Message m22 =  (Message)lastSendMsg.Value;
+                    bot_DeleteMessageV3(update, 300); 
+                    bot_DeleteMessageV2(update.Message.Chat.Id, (m22?.MessageId), 3);
+                    Jmp2end(nameof(ConfirmSetCityBtnClick));
+                }
+               
+            }
             string svrPksHtml = "";
             // if (isGrpChat(update))
             {
@@ -541,17 +559,39 @@ namespace mdsj.libBiz
             Jmp2end(nameof(DelParkBtmbtnEvt));
         }
 
-        public static void SendTextMessageWzGc(long Chatid, string msg, int Timeout, int replyToMessageId)
+        public static void SendTextMessageWzGc( string msg, int Timeout, int replyToMessageId, Update ChatidUpdt)
         {
-            Message m = botClient.SendTextMessageAsync(
-             Chatid,
-                  msg,
-                parseMode: ParseMode.Html,
+            try
+            {
+                Message m;
+                if (replyToMessageId == 0)
+                {
+                    m = botClient.SendTextMessageAsync(
+                       ChatidUpdt.Message.Chat.Id,
+                               msg,
+                             parseMode: ParseMode.Html,
 
-                protectContent: false,
-                disableWebPagePreview: true,
-                replyToMessageId: replyToMessageId).GetAwaiter().GetResult();
-            bot_DeleteMessageV2(Chatid, m?.MessageId, 300);
+                             protectContent: false,
+                             disableWebPagePreview: true
+                              ).GetAwaiter().GetResult();
+                }
+                else
+                {
+                    m = botClient.SendTextMessageAsync(
+                        ChatidUpdt.Message.Chat.Id,
+                                msg,
+                              parseMode: ParseMode.Html,
+
+                              protectContent: false,
+                              disableWebPagePreview: true,
+                              replyToMessageId: replyToMessageId).GetAwaiter().GetResult();
+                }
+                bot_DeleteMessageV2(ChatidUpdt.Message.Chat.Id, m?.MessageId, 300);
+            }catch(Exception e)
+            {
+                PrintExcept("SendTextMessageWzGc", e);
+            }
+          
         }
 
         private static void AppendArea(string ctry, SortedList cfg)
@@ -1007,8 +1047,8 @@ namespace mdsj.libBiz
             disableWebPagePreview: true,
             replyToMessageId: update.Message.MessageId).GetAwaiter().GetResult();
 
-            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 20);
-            bot_DeleteMessageV2(update.Message.Chat.Id, m?.MessageId, 120);
+            bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 5);
+            bot_DeleteMessageV2(update.Message.Chat.Id, m?.MessageId, 7);
             Jmp2end(nameof(CmdHdlrclear));
         }
 
@@ -1069,7 +1109,7 @@ namespace mdsj.libBiz
 
         public static void CmdHdlrdelete(string fullcmd, Update update, string reqThreadId)
         {
-
+            DelMsg(update, 3);
             //public 判断权限先
             var grpid = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;
@@ -1101,13 +1141,14 @@ namespace mdsj.libBiz
                 string nowPks = GetFieldAsStr(cfg, "园区");
                 if(nowPks=="")
                 {
-                    var m110 = botClient.SendTextMessageAsync(
-                              update.Message.Chat.Id, "没有配置的园区",
-                              parseMode: ParseMode.Html,
-                    //          replyMarkup: rplyKbdMkp,
-                              protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-                    bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
-                    bot_DeleteMessageV2(update.Message.Chat.Id, m110.MessageId, 15);
+                    //var m110 = botClient.SendTextMessageAsync(
+                    //          update.Message.Chat.Id, "没有配置的园区",
+                    //          parseMode: ParseMode.Html,
+                    ////          replyMarkup: rplyKbdMkp,
+                    //          protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
+                     bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 5);
+                   // bot_DeleteMessageV2(update.Message.Chat.Id, m110.MessageId, 15);
+                    SendTextMessageWzGc("没有配置的园区", 15, 0, update);
 
 
                 //    SetBtmBtnMenuClr("", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
@@ -1124,6 +1165,14 @@ namespace mdsj.libBiz
 
 
                 KeyboardButton[][] btns = ConvertFileToKeyboardButtons(nowPks.Split(","));
+                KeyboardButton cancelBtn= new KeyboardButton("❌取消删除");
+                // 创建一个新的最后一行的按钮数组
+                KeyboardButton[] lastRow = new KeyboardButton[] { cancelBtn };
+                //将lastrow添加到btns
+                // 将 lastRow 添加到 btns 中
+                btns = AddLastRowToButtons(btns, lastRow);
+
+
                 Print(EncodeJson(btns));
                 ReplyKeyboardMarkup rplyKbdMkp = new ReplyKeyboardMarkup(btns);
                 rplyKbdMkp.ResizeKeyboard = true;
@@ -1136,12 +1185,38 @@ namespace mdsj.libBiz
                                 parseMode: ParseMode.Html,
                                 replyMarkup: rplyKbdMkp,
                                 protectContent: false, disableWebPagePreview: true).GetAwaiter().GetResult();
-                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 120);
-                bot_DeleteMessageV2(update.Message.Chat.Id, m.MessageId, 120);
-  
+                bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 3);
+                DelMsg(update, m, 10);
                 Print(m);
+
+                //---settimeout 
+                NewThrd(() =>
+                {
+                    Thread.Sleep(60 * 1000);
+                    SetBtmBtnMenu("今日促销商家.gif", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
+                    DelMsg(update, lastSendMsg.Value, 3);
+
+                });
                 Jmp2end(nameof(CmdHdlrdelete));
             }
+        }
+       
+
+        public static KeyboardButton[][] AddLastRowToButtons(KeyboardButton[][] btns, KeyboardButton[] lastRow)
+        {
+            // 创建一个新的数组，其大小比原始数组大 1
+            KeyboardButton[][] newBtns = new KeyboardButton[btns.Length + 1][];
+
+            // 复制原始按钮行到新数组中
+            for (int i = 0; i < btns.Length; i++)
+            {
+                newBtns[i] = btns[i];
+            }
+
+            // 将最后一行的按钮添加到新数组中
+            newBtns[btns.Length] = lastRow;
+
+            return newBtns;
         }
         public static void CmdHdlrhlp(string fullcmd, Update update, string reqThreadId)
         {
@@ -1225,12 +1300,15 @@ namespace mdsj.libBiz
             NewThrd(() =>
             {
                 Thread.Sleep(300 * 1000);
-                SetBtmBtnMenu("今日促销商家.gif", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());
+                SetBtmBtnMenu("今日促销商家.gif", plchdTxt, update.Message.Chat.Id, update.Message.Chat.Type.ToString());           
+                DelMsg(update, lastSendMsg.Value, 3);
+
             });
             jmp2endCurFunInThrd.Value = nameof(CmdHdlradd);
             Jmp2end(jmp2endCurFunInThrd.Value);
         }
 
+    
 
         public static bool IsSetArea(Update? update)
         {
