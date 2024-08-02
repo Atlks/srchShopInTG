@@ -60,6 +60,26 @@ namespace mdsj.lib
                 Dictionary<string,string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
                 int port = GetFieldAsInt526(map, "wbsvs_port", 5000);
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
+
+                //--------cfg https
+                int httpsPort = GetFieldAsInt526(map, "https_port", 443); // Define your HTTPS port
+              string https_cert_path=  GetField(map, "https_cert_path");                                                  // Configure HTTPS
+                var certPath = $"{prjdir}cfg\\"+ https_cert_path;
+                Print(certPath);
+                var certPassword = GetField(map, "https_cert_password");
+
+                if (File.Exists(certPath))
+                {
+                    serverOptions.ListenAnyIP(httpsPort, listenOptions =>
+                    {
+                        listenOptions.UseHttps(certPath, certPassword);
+                    });
+                }
+                else
+                {
+                    Console.WriteLine($"Certificate file not found at: {certPath}");
+                }
+                //-----end cfg https
             });
             var app = builder.Build();
             //http://localhost:5000/dafen?callGetlistFromDb=yourValue11
@@ -90,8 +110,16 @@ namespace mdsj.lib
             app.Run();
         }
 
-    
-        
+        private static string GetField(Dictionary<string, string> map, string v)
+        {
+            if (map == null)
+                return "";
+            if (map.ContainsKey(v))
+                return map[v];
+            return "";
+
+        }
+
         public static string webrootDir = $"{prjdir}/webroot";
 
 

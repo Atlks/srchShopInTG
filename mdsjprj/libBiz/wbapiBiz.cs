@@ -165,6 +165,23 @@ namespace mdsj.libBiz
             return "";
 
         }
+
+        /*
+         
+               //    GetQryStr4srch
+            //rmv pagePrm token
+            //SortedList qryClrMap = RemoveKeys(qryMap, "商家 token page pages pagesize limit page limit pagesize from");
+            //string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
+
+            //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
+            //var list = GetListFltr(FromDdataDir, null, whereFun);
+         
+         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="qrystr"></param>
+        /// <returns></returns>
         public static string WbapiXgetlist(string qrystr)
         {
             PrintTimestamp(" start fun WbapiXgetlist()");
@@ -182,13 +199,7 @@ namespace mdsj.libBiz
             //todo v2   here qry need abt 50ms
             string qrtStr4Srch2 = DelKeys("商家 " + pageprm251, qrystr);
             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
-            //    GetQryStr4srch
-            //rmv pagePrm token
-            //SortedList qryClrMap = RemoveKeys(qryMap, "商家 token page pages pagesize limit page limit pagesize from");
-            //string qrtStr4Srch = CastHashtableToQuerystringNoEncodeurl(qryClrMap);
 
-            //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
-            //var list = GetListFltr(FromDdataDir, null, whereFun);
 
             // --------------------  
             var list_aftFltr2 = ArrFltrV2(listFlrted, (SortedList row) =>
@@ -216,29 +227,22 @@ namespace mdsj.libBiz
 
             //------------add col
             PrintTimestamp(" start add col");
-            foreach (var sortedList in list_rzt)
+            ForList("BlkAddCol", list_rzt, (sortedList) =>
             {
-                try
-                {
-                    var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
-                    var list11 = GetListHashtableFromJsonFil(pinlunDtDir);
-                    SetField938(sortedList, "NumberOfComments", list11.Count);
-                    SetField938(sortedList, "Comments", list11);
+                var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
+                var list11 = GetListHashtableFromJsonFil(pinlunDtDir);
+                SetField938(sortedList, "NumberOfComments", list11.Count);
+                SetField938(sortedList, "Comments", list11);
 
-                    var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
-                    var list12 = GetListHashtableFromJsonFil(df);
+                var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
+                var list12 = GetListHashtableFromJsonFil(df);
 
 
-                    SetField938(sortedList, "Scores", Avg(list12, "dafen"));
-                    SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
+                SetField938(sortedList, "Scores", Avg(list12, "dafen"));
+                SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
 
-                }catch(Exception e)
-                {
-                    PrintCatchEx("WbapiXgetlist", e);
-                }
+            });
 
-
-            }
             PrintTimestamp(" end add col");
             //----------------trans cn2en form--------------
             PrintTimestamp(" start trans cn2en");
@@ -247,48 +251,18 @@ namespace mdsj.libBiz
 
             //trans key
             List<SortedList> list_rzt_fmt = new List<SortedList>();
-            foreach (var sortedList in list_rzt)
+            ForList("Blk.transKey", list_rzt, (sortedList) =>
             {
-                try
-                {
-                    //todo fun  transkey
-                    SortedList map3 = new SortedList();
-                    if (sortedList != null)
-                    {
-                        // 循环遍历每一个键
-                        foreach (object key in sortedList.Keys)
-                        {
-                            //if (key.ToString() == "Searchs")
-                            //    Print("dbg433");
-                            //add all cn key
-                            var Cnkey = key;
-                            var val = sortedList[key];
-                            SetField938(map3, Cnkey.ToString(), val);
+                //todo fun  transkey
 
-                            //add all eng key
-                            var keyEng = LoadFieldDefEmpty(transmap, Cnkey);
-                            if (keyEng == "")
-                                keyEng = Cnkey.ToString();
-                            SetField938(map3, keyEng, val);
-                            //chg int fmt
-                            if (IsNumeric((val)))
-                            {
-                                double objSave = ConvertStringToNumber(val);
-                                SetField938(map3, keyEng, objSave);
-                            }
+                if (sortedList == null)
+                    return;
 
-                            //   Console.WriteLine($"Key: {key}, Value: {sortedList[key]}");
+                SortedList map3 = castKeyToEnName(sortedList, transmap);
 
-                        }
-                    }
-                     
-                    list_rzt_fmt.Add(map3);
-                }catch(Exception e)
-                {
-                    PrintCatchEx("getlist",e);
-                }
-              
-            }
+                list_rzt_fmt.Add(map3);
+            });
+
             PrintTimestamp(" endblock trans cn2en");
             //--------trans fmt chg int fmt
             //chg int fmt
@@ -297,7 +271,7 @@ namespace mdsj.libBiz
             return rsstr;
         }
 
-
+     
 
 
 
@@ -433,11 +407,12 @@ namespace mdsj.libBiz
                         {
                             file.CopyToAsync(stream).GetAwaiter().GetResult();
                         }
-                    }catch(Exception e)
+                    }
+                    catch (Exception e)
                     {
                         PrintExcept("add mrcht", e);
                     }
-                    
+
                 }
             }
 
@@ -445,13 +420,13 @@ namespace mdsj.libBiz
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
             string token = GetFieldAsStrDep(saveOBJ, "token");
-          
 
-           //if (IsValidToken(token))
-           // {
-           //     SendResp("token无效", response);
-           //     Jmp2end(nameof(AddMerchtPOSTWbapi));
-           // }
+
+            //if (IsValidToken(token))
+            // {
+            //     SendResp("token无效", response);
+            //     Jmp2end(nameof(AddMerchtPOSTWbapi));
+            // }
             //string[] tka = token.Split("_");
             //string uid = GetElmt(tka, 0);
             //SetField(saveOBJ, "uid", uid);
@@ -464,7 +439,7 @@ namespace mdsj.libBiz
             Jmp2end(nameof(AddMerchtPOSTWbapi));
         }
 
-    
+
 
 
 

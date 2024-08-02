@@ -135,12 +135,25 @@ namespace prjx
         }
 
 
-   
 
-       
 
-      private static async System.Threading.Tasks.Task main1148()
+        public static void geneCert( )
         {
+            string domain = "lianxin.co";
+            string certificatePath = "lianxin.co.pfx";  // Path where the certificate will be saved
+            string certificatePassword = "";  // Password for the certificate
+
+            GenerateAndSaveCertificate(domain, certificatePath, certificatePassword);
+
+            Console.WriteLine($"Certificate generated and saved to {certificatePath}");
+        }
+
+        private static async System.Threading.Tasks.Task main1148()
+        {
+
+          //  geneCert();
+
+
             Print("\n----------------\n");
             // RenderTableToConsole
             string markdownTable = ConvertHtmlTableToMarkdown(ReadAllText($"{prjdir}/webroot/htm2csl.htm"));

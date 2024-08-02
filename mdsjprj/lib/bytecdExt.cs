@@ -304,6 +304,41 @@ namespace mdsj.lib
         {
             return CountLen(collection);
         }
+        public static List<SortedList> ForList(string Blkname, List<SortedList> list, Action<SortedList> act)
+        {
+            // List<Hashtable> listRzt = new List<object>();
+            foreach (SortedList rw in list)
+            {
+                try
+                {
+                    act(rw);
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx(Blkname, e);
+                }
+
+            }
+            return list;
+        }
+
+        public static List<Hashtable> ForList(List<Hashtable> list, Action<Hashtable> act)
+        {
+            // List<Hashtable> listRzt = new List<object>();
+            foreach (Hashtable rw in list)
+            {
+                try
+                {
+                    act(rw);
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx(nameof(foreach_listHstb), e);
+                }
+
+            }
+            return list;
+        }
 
         public static List<Hashtable> foreach_listHstb(List<Hashtable> list, Action<Hashtable> act)
         {

@@ -25,6 +25,38 @@ namespace mdsj.lib
 {
     public class bscConvert
     {
+        public static SortedList castKeyToEnName(SortedList sortedList, SortedList<string, string> transmap)
+        {
+            SortedList map3 = new SortedList();
+            // 循环遍历每一个键
+            foreach (object key in sortedList.Keys)
+            {
+                //if (key.ToString() == "Searchs")
+                //    Print("dbg433");
+                //add all cn key
+                var Cnkey = key;
+                var val = sortedList[key];
+                SetField938(map3, Cnkey.ToString(), val);
+
+                //add all eng key
+                var keyEng = LoadFieldDefEmpty(transmap, Cnkey);
+                if (keyEng == "")
+                    keyEng = Cnkey.ToString();
+                SetField938(map3, keyEng, val);
+                //chg int fmt
+                if (IsNumeric((val)))
+                {
+                    double objSave = ConvertStringToNumber(val);
+                    SetField938(map3, keyEng, objSave);
+                }
+
+                //   Console.WriteLine($"Key: {key}, Value: {sortedList[key]}");
+
+            }
+
+            return map3;
+        }
+
 
 
         public static Dictionary<string, string> ToDictionary(Hashtable hashtable)

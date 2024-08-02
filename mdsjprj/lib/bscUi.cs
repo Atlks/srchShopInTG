@@ -1,8 +1,11 @@
 ﻿global using static mdsj.lib.bscUi;
+using HtmlAgilityPack;
+using Nustache.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace mdsj.lib
@@ -61,7 +64,7 @@ namespace mdsj.lib
             // 确保文件路径存在
             if (!System.IO.File.Exists(filePath))
             {
-                throw new FileNotFoundException("指定的文件未找到", filePath);
+                return expressions;
             }
 
             // 读取文件内容

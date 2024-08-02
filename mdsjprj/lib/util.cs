@@ -1,4 +1,5 @@
-﻿global using static mdsj.lib.util;
+﻿
+global using static mdsj.lib.util;
 using NAudio.Wave;
 using Newtonsoft.Json;
 using prjx.lib;
@@ -7,6 +8,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management;
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.IO;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text;
@@ -19,6 +23,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 namespace mdsj.lib
 {
     internal class util
@@ -66,6 +71,34 @@ namespace mdsj.lib
         });
         public static string botname = "LianXin_BianMinBot";
 
+        /*
+         确保自签名证书中的 Common Name (CN) 或 Subject Alternative Name (SAN) 字段包含正确的域名。例如，证书的 CN 字段应设置为 lianxin.co，或者在 SAN 字段中列出 lianxin.co。
+         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="domain"></param>
+        /// <param name="certPath"></param>
+        /// <param name="certPassword"></param>
+        public static void GenerateAndSaveCertificate(string domain, string certPath, string certPassword)
+        {
+            using (var rsa =  RSA.Create(2048))
+            {
+                var request = new CertificateRequest($"CN={domain}", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+
+                // Set certificate validity period
+                var notBefore = DateTimeOffset.UtcNow;
+                var notAfter = notBefore.AddYears(1); // Valid for 1 year
+
+                // Create the self-signed certificate
+                var certificate = request.CreateSelfSigned(notBefore, notAfter);
+
+                // Export the certificate to a .pfx file
+                var pfxBytes = certificate.Export(X509ContentType.Pfx, certPassword);
+
+                File.WriteAllBytes(certPath, pfxBytes);
+            }
+        }
         public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
         {
             Print(" start TransferFileByRdpWmi()" + sourceFilePath + $"  {destinationFilePath} {targetHost} {username} {password} ");

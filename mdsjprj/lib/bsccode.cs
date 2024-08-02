@@ -970,7 +970,18 @@ namespace mdsj.lib
         }
 
 
-
+        public static void CallTryAllV2( string blockName,Action value)
+        {
+            try
+            {
+                value();
+            }
+            catch (Exception e)
+            {
+                PrintCatchEx($" blk:{blockName}.callTryAll", e);
+            //    PrintCatchEx("WbapiXgetlist", e);
+            }
+        }
 
         public static void callTryAll(Action value)
         {
@@ -982,7 +993,6 @@ namespace mdsj.lib
             {
                 PrintCatchEx("callTryAll", e);
             }
-
         }
 
       
