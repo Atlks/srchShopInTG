@@ -18,6 +18,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
+using System.Runtime.InteropServices;
 namespace mdsj.lib
 {
     internal class util
@@ -65,6 +66,52 @@ namespace mdsj.lib
         });
         public static string botname = "LianXin_BianMinBot";
 
+        public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
+        {
+            Print(" start TransferFileByRdpWmi()" + sourceFilePath + $"  {destinationFilePath} {targetHost} {username} {password} ");
+            ManagementScope scope = null;
+
+            //    在本地计算机上尝试连接到本地 WMI 服务，以确保 WMI 本身工作正常：
+            //   如果本地连接成功，但远程连接失败，问题可能与网络配置或远程设置有关。
+
+
+
+            scope = new ManagementScope(@"\\.\root\cimv2");
+            scope.Connect();
+
+            try
+            {
+                ConnectionOptions options = new ConnectionOptions
+                {
+                    Username = username,
+                    Password = password
+                };
+
+                scope = new ManagementScope($@"\\{targetHost}\root\cimv2", options);
+                scope.Connect();
+            }
+            catch (COMException ex)
+            {
+                Console.WriteLine($"COMException: {ex.Message}");
+                Console.WriteLine($"Error Code: {ex.ErrorCode}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+            }
+            // Create the management object for file transfer
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, new ObjectQuery("SELECT * FROM Win32_Process"));
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                // Create process to copy the file
+                ManagementClass processClass = new ManagementClass(scope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
+                ManagementBaseObject inParams = processClass.GetMethodParameters("Create");
+                inParams["CommandLine"] = $"cmd.exe /c copy \"{sourceFilePath}\" \"{destinationFilePath}\"";
+                ManagementBaseObject outParams = processClass.InvokeMethod("Create", inParams, null);
+
+                Console.WriteLine($"Process created with ID {outParams["ProcessId"]}");
+            }
+        }
 
         /// <summary>
         /// 通过 HTTP POST 请求将文件发送到指定的 URL

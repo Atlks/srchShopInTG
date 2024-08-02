@@ -805,19 +805,7 @@ namespace mdsj.libBiz
 
         }
 
-        public static string AddIdxToElmt(string[] items, string spltr)
-        {
-            int n = 1;
-            // 使用索引和元素创建新的字符串数组
-            string[] indexedItems = new string[items.Length];
-            for (int i = 0; i < items.Length; i++)
-            {
-                indexedItems[i] = $"{i + 1}.{items[i]}";
-            }
-
-            // 用回车符连接所有元素
-            return string.Join(spltr, indexedItems);
-        }
+  
 
         private static Message SetBtmMenu(Update update)
         {
@@ -1202,22 +1190,7 @@ namespace mdsj.libBiz
         }
        
 
-        public static KeyboardButton[][] AddLastRowToButtons(KeyboardButton[][] btns, KeyboardButton[] lastRow)
-        {
-            // 创建一个新的数组，其大小比原始数组大 1
-            KeyboardButton[][] newBtns = new KeyboardButton[btns.Length + 1][];
-
-            // 复制原始按钮行到新数组中
-            for (int i = 0; i < btns.Length; i++)
-            {
-                newBtns[i] = btns[i];
-            }
-
-            // 将最后一行的按钮添加到新数组中
-            newBtns[btns.Length] = lastRow;
-
-            return newBtns;
-        }
+      
         public static void CmdHdlrhlp(string fullcmd, Update update, string reqThreadId)
         {
             string cmd = GetCmdFun(update?.Message?.Text);

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Primitives;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using prjx.lib;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -18,7 +19,63 @@ namespace mdsj.lib
 {
     internal class bscGet
     {
+        public static List<Dictionary<string, string>> GetListFrmIniFL(string dbf)
+        {
+            return ormIni.qryToDic(dbf);
+        }
 
+        public static Dictionary<string, string> GetDicFromUrl(string url136)
+        {
+            // 找到 '@' 符号的位置
+            int atIndex = url136.IndexOf('@');
+            if (atIndex == -1)
+            {
+                Console.WriteLine("Invalid URL format.");
+                return new Dictionary<string, string>();
+            }
+
+            // 分割出用户名和密码部分
+            string userInfo = url136.Substring(0, atIndex);
+            string hostPort = url136.Substring(atIndex + 1);
+
+            // 找到 ':' 符号的位置
+            int colonIndex = userInfo.IndexOf(':');
+            if (colonIndex == -1)
+            {
+                Console.WriteLine("Invalid user info format.");
+                return new Dictionary<string, string>();
+            }
+
+            // 提取用户名和密码
+            string username = userInfo.Substring(0, colonIndex);
+            string password = userInfo.Substring(colonIndex + 1);
+
+            // 提取主机和端口
+            colonIndex = hostPort.IndexOf(':');
+            if (colonIndex == -1)
+            {
+                Console.WriteLine("Invalid host and port format.");
+                return new Dictionary<string, string>();
+            }
+
+            string host = hostPort.Substring(0, colonIndex);
+            string port = hostPort.Substring(colonIndex + 1);
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            dic.Add("host", host);
+            dic.Add("u", username);
+            dic.Add("pwd", password);
+            return dic;
+        }
+        public static void wrtLgTypeDate(string logdir, object o)
+        {
+            // 创建目录
+            System.IO.Directory.CreateDirectory(logdir);
+            // 获取当前时间并格式化为文件名
+            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
+            string fileName = $"{logdir}/{timestamp}.json";
+            file_put_contents(fileName, json_encode(o), false);
+
+        }
         public static SortedList<string, string> ReadJsonFileToSortedList(string filePath)
         {
             // 创建一个新的 SortedList 来存储结果

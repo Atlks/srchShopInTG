@@ -86,6 +86,7 @@ using DocumentFormat.OpenXml.Office2010.ExcelAc;
 using HtmlAgilityPack;
 using Windows.Storage.Search;
 using System.Runtime.InteropServices;
+using Nustache.Core;
 namespace prjx
 {
     internal class testCls
@@ -112,35 +113,7 @@ namespace prjx
         //    writer.Flush(triggerMerge: false, applyAllDeletes: false);
         //}
 
-        public static HashSet<string> ProcessFilesDep(string directoryPath)
-        {
-            var resultSet = new HashSet<string>();
-
-            // Get all .cs files in the directory and subdirectories
-            var csFiles = Directory.GetFiles(directoryPath, "*.cs", SearchOption.AllDirectories);
-
-            foreach (var file in csFiles)
-            {
-                // Read all lines from the current file
-                var lines = System.IO.File.ReadAllLines(file);
-                foreach (var line in lines)
-                {
-                    // Use regular expression to find characters between dot and left parenthesis
-                    var matches = Regex.Matches(line, @"\.(.*?)\(");
-                    foreach (Match match in matches)
-                    {
-                        if (match.Groups.Count > 1)
-                        {
-                            resultSet.Add(match.Groups[1].Value);
-                        }
-                    }
-                }
-            }
-
-            return resultSet;
-        }
-
-
+     
 
         internal static async System.Threading.Tasks.Task testAsync()
         {
@@ -162,89 +135,22 @@ namespace prjx
         }
 
 
-        public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
+   
+
+       
+
+      private static async System.Threading.Tasks.Task main1148()
         {
-            Print(" start TransferFileByRdpWmi()" + sourceFilePath + $"  {destinationFilePath} {targetHost} {username} {password} ");
-            ManagementScope scope = null;
+            Print("\n----------------\n");
+            // RenderTableToConsole
+            string markdownTable = ConvertHtmlTableToMarkdown(ReadAllText($"{prjdir}/webroot/htm2csl.htm"));
 
-            //    在本地计算机上尝试连接到本地 WMI 服务，以确保 WMI 本身工作正常：
-            //   如果本地连接成功，但远程连接失败，问题可能与网络配置或远程设置有关。
+            Print(markdownTable);
 
-
-
-            scope = new ManagementScope(@"\\.\root\cimv2");
-            scope.Connect();
-
-            try
-            {
-                ConnectionOptions options = new ConnectionOptions
-                {
-                    Username = username,
-                    Password = password
-                };
-
-                scope = new ManagementScope($@"\\{targetHost}\root\cimv2", options);
-                scope.Connect();
-            }
-            catch (COMException ex)
-            {
-                Console.WriteLine($"COMException: {ex.Message}");
-                Console.WriteLine($"Error Code: {ex.ErrorCode}");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Exception: {ex.Message}");
-            }
-            // Create the management object for file transfer
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, new ObjectQuery("SELECT * FROM Win32_Process"));
-            foreach (ManagementObject obj in searcher.Get())
-            {
-                // Create process to copy the file
-                ManagementClass processClass = new ManagementClass(scope, new ManagementPath("Win32_Process"), new ObjectGetOptions());
-                ManagementBaseObject inParams = processClass.GetMethodParameters("Create");
-                inParams["CommandLine"] = $"cmd.exe /c copy \"{sourceFilePath}\" \"{destinationFilePath}\"";
-                ManagementBaseObject outParams = processClass.InvokeMethod("Create", inParams, null);
-
-                Console.WriteLine($"Process created with ID {outParams["ProcessId"]}");
-            }
-        }
-        // 提取 <%= 和 %> 之间的表达式
-        public static List<string> ExtractExpressions(string filePath)
-        {
-            var expressions = new List<string>();
-
-            // 确保文件路径存在
-            if (!System.IO.File.Exists(filePath))
-            {
-                throw new FileNotFoundException("指定的文件未找到", filePath);
-            }
-
-            // 读取文件内容
-            string fileContent = System.IO. File.ReadAllText(filePath);
-
-            // 正则表达式匹配 <%= ... %>
-            string pattern = @"<%=([^%>]+)%>";
-            Regex regex = new Regex(pattern, RegexOptions.Singleline);
-
-            // 查找所有匹配的表达式
-            MatchCollection matches = regex.Matches(fileContent);
-
-            foreach (Match match in matches)
-            {
-                if (match.Groups.Count > 1)
-                {
-                    // 提取表达式并添加到列表
-                    string expression = match.Groups[1].Value.Trim();
-                    expressions.Add(expression);
-                }
-            }
-
-            return expressions;
-        }
-      
-
-        private static async System.Threading.Tasks.Task main1148()
-        {
+            Print("\n----------------\n");
+            RenderMarkdownTableToConsole(markdownTable);
+            Print("\n----------------\n");
+         //   RenderMstch(“);
 
             var f = $"{prjdir}/webroot/tmplt.htm";
             string rztlist511 = RendHtm(f);
@@ -576,54 +482,7 @@ namespace prjx
 
       
 
-        public static List<Dictionary<string, string>> GetListFrmIniFL(string dbf)
-        {
-            return ormIni.qryToDic(dbf);
-        }
-
-        public static Dictionary<string, string> GetDicFromUrl(string url136)
-        {
-            // 找到 '@' 符号的位置
-            int atIndex = url136.IndexOf('@');
-            if (atIndex == -1)
-            {
-                Console.WriteLine("Invalid URL format.");
-                return new Dictionary<string, string>();
-            }
-
-            // 分割出用户名和密码部分
-            string userInfo = url136.Substring(0, atIndex);
-            string hostPort = url136.Substring(atIndex + 1);
-
-            // 找到 ':' 符号的位置
-            int colonIndex = userInfo.IndexOf(':');
-            if (colonIndex == -1)
-            {
-                Console.WriteLine("Invalid user info format.");
-                return new Dictionary<string, string>();
-            }
-
-            // 提取用户名和密码
-            string username = userInfo.Substring(0, colonIndex);
-            string password = userInfo.Substring(colonIndex + 1);
-
-            // 提取主机和端口
-            colonIndex = hostPort.IndexOf(':');
-            if (colonIndex == -1)
-            {
-                Console.WriteLine("Invalid host and port format.");
-                return new Dictionary<string, string>();
-            }
-
-            string host = hostPort.Substring(0, colonIndex);
-            string port = hostPort.Substring(colonIndex + 1);
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            dic.Add("host", host);
-            dic.Add("u", username);
-            dic.Add("pwd", password);
-            return dic;
-        }
-
+ 
         private static void add30xiezhi()
         {
             for (int i = 0; i < 30; i++)
@@ -870,16 +729,7 @@ namespace prjx
             //   throw new NotImplementedException();
         }
 
-        public static void wrtLgTypeDate(string logdir, object o)
-        {
-            // 创建目录
-            System.IO.Directory.CreateDirectory(logdir);
-            // 获取当前时间并格式化为文件名
-            string timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss_fff");
-            string fileName = $"{logdir}/{timestamp}.json";
-            file_put_contents(fileName, json_encode(o), false);
-
-        }
+     
 
 
         private static void getProdSvrWdlib()

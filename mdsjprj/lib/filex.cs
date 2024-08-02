@@ -16,6 +16,34 @@ namespace prjx.lib
 {
     public class filex
     {
+        public static HashSet<string> ProcessFilesDep(string directoryPath)
+        {
+            var resultSet = new HashSet<string>();
+
+            // Get all .cs files in the directory and subdirectories
+            var csFiles = Directory.GetFiles(directoryPath, "*.cs", SearchOption.AllDirectories);
+
+            foreach (var file in csFiles)
+            {
+                // Read all lines from the current file
+                var lines = System.IO.File.ReadAllLines(file);
+                foreach (var line in lines)
+                {
+                    // Use regular expression to find characters between dot and left parenthesis
+                    var matches = Regex.Matches(line, @"\.(.*?)\(");
+                    foreach (Match match in matches)
+                    {
+                        if (match.Groups.Count > 1)
+                        {
+                            resultSet.Add(match.Groups[1].Value);
+                        }
+                    }
+                }
+            }
+
+            return resultSet;
+        }
+
 
         public static void WriteFileWithTimestamp(string directoryPath, string content)
         {

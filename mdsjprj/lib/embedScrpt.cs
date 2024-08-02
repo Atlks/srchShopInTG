@@ -1,4 +1,5 @@
 ﻿using Microsoft.ClearScript.V8;
+using NLua;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,21 @@ namespace mdsj.lib
 {
     internal class embedScrpt
     {
+        public static void ExecuteLuaScript(string script)
+        {
+            using (Lua lua = new Lua())
+            {
+                try
+                {
+                    // 执行 Lua 脚本
+                    lua.DoString(script);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Lua script execution failed: {ex.Message}");
+                }
+            }
+        }
 
         public void demo()
         {

@@ -57,13 +57,16 @@
     <PackageReference Include="Nethereum.StandardTokenEIP20" Version="4.21.0" />
     <PackageReference Include="Nethereum.Util" Version="4.21.0" />
     <PackageReference Include="Nethereum.Web3" Version="4.21.0" />
+    <PackageReference Include="NLua" Version="1.7.3" />
     <PackageReference Include="NReco" Version="2.0.3" />
     <PackageReference Include="NReco.ImageGenerator.LT" Version="1.1.3" />
     <PackageReference Include="NReco.VideoConverter" Version="1.2.1" />
+    <PackageReference Include="Nustache" Version="1.16.0.10" />
     <PackageReference Include="Porter2Stemmer" Version="1.0.0" />
     <PackageReference Include="Porter2StemmerStandard" Version="1.1.0" />
     <PackageReference Include="PorterStemmer" Version="1.0.0" />
     <PackageReference Include="RG3.PF.PinYinScriptEngineCliWrap" Version="7.2.10" />
+    <PackageReference Include="Scriban" Version="5.10.0" />
     <PackageReference Include="SQLite" Version="3.13.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.8" />
     <PackageReference Include="SQLitePCLRaw.core" Version="2.1.8" />

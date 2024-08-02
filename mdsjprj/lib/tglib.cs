@@ -643,6 +643,22 @@ namespace prjx.lib
                 PrintExcept("DelMsg", e);
             }
         }
+        public static KeyboardButton[][] AddLastRowToButtons(KeyboardButton[][] btns, KeyboardButton[] lastRow)
+        {
+            // 创建一个新的数组，其大小比原始数组大 1
+            KeyboardButton[][] newBtns = new KeyboardButton[btns.Length + 1][];
+
+            // 复制原始按钮行到新数组中
+            for (int i = 0; i < btns.Length; i++)
+            {
+                newBtns[i] = btns[i];
+            }
+
+            // 将最后一行的按钮添加到新数组中
+            newBtns[btns.Length] = lastRow;
+
+            return newBtns;
+        }
         public static void bot_DeleteMessageV3(Update? update, int second)
 
         {
