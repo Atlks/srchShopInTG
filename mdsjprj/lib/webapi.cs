@@ -3,6 +3,7 @@ using FFmpeg.AutoGen;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Hosting;
 using MusicApiCollection.Sites.GraceNote.Data;
 using Nethereum.KeyStore;
@@ -57,28 +58,12 @@ namespace mdsj.lib
             ConfigureWebHostBuilder webHost = builder.WebHost;
             webHost.ConfigureKestrel(serverOptions =>
             {
-                Dictionary<string,string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
+                Dictionary<string, string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
                 int port = GetFieldAsInt526(map, "wbsvs_port", 5000);
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
-                //--------cfg https
-                int httpsPort = GetFieldAsInt526(map, "https_port", 443); // Define your HTTPS port
-              string https_cert_path=  GetField(map, "https_cert_path");                                                  // Configure HTTPS
-                var certPath = $"{prjdir}cfg\\"+ https_cert_path;
-                Print(certPath);
-                var certPassword = GetField(map, "https_cert_password");
-
-                if (File.Exists(certPath))
-                {
-                    serverOptions.ListenAnyIP(httpsPort, listenOptions =>
-                    {
-                        listenOptions.UseHttps(certPath, certPassword);
-                    });
-                }
-                else
-                {
-                    Console.WriteLine($"Certificate file not found at: {certPath}");
-                }
+                //--------cfg https block
+                CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -86,23 +71,16 @@ namespace mdsj.lib
             //拦截请求：
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
-                            try
-                            {
+                            TryNotLgJmpEnd(() => {
                                 jmp2exitFlagInThrd.Value = false;
                                 Print(" start req..."); PrintTimestamp();
                                 //here cant new thrd..beir req close early
                                 //here use call but not calltryAll bcs not want jmp Ex prt
-                                HttpHdlr( context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 Print(" end req..."); Print(" end req..."); Print(" end req...");
                                 PrintTimestamp();
-                            }
-                            catch (jmp2endEx e)
-                            {
-
-                            }catch(Exception e)
-                            {
-                                PrintCatchEx("RequestDelegate",e);
-                            }
+                            });
+                   
                             Print(" end req...");
                             PrintTimestamp();
                         };
@@ -110,7 +88,28 @@ namespace mdsj.lib
             app.Run();
         }
 
-        private static string GetField(Dictionary<string, string> map, string v)
+        private static void CfgHttps(KestrelServerOptions serverOptions, Dictionary<string, string> map)
+        {
+            int httpsPort = GetFieldAsInt526(map, "https_port", 443); // Define your HTTPS port
+            string https_cert_path = GetField(map, "https_cert_path");                                                  // Configure HTTPS
+            var certPath = $"{prjdir}cfg\\" + https_cert_path;
+            Print(certPath);
+            var certPassword = GetField(map, "https_cert_password");
+
+            if (File.Exists(certPath))
+            {
+                serverOptions.ListenAnyIP(httpsPort, listenOptions =>
+                {
+                    listenOptions.UseHttps(certPath, certPassword);
+                });
+            }
+            else
+            {
+                Console.WriteLine($"Certificate file not found at: {certPath}");
+            }
+        }
+
+        public static string GetField(Dictionary<string, string> map, string v)
         {
             if (map == null)
                 return "";

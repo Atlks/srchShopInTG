@@ -66,6 +66,16 @@ namespace mdsj.lib
             dic.Add("pwd", password);
             return dic;
         }
+
+        public static string GetField(Dictionary<string, string> map, string v)
+        {
+            if (map == null)
+                return "";
+            if (map.ContainsKey(v))
+                return map[v];
+            return "";
+
+        }
         public static void wrtLgTypeDate(string logdir, object o)
         {
             // 创建目录

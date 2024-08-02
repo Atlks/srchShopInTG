@@ -968,6 +968,21 @@ namespace mdsj.lib
             }
 
         }
+        public static void TryNotLgJmpEnd(Action value)
+        {
+            try
+            {
+                value();
+            }
+            catch (jmp2endEx e)
+            {
+
+            }
+            catch (Exception e)
+            {
+                PrintCatchEx("RequestDelegate", e);
+            }
+        }
 
 
         public static void CallTryAllV2( string blockName,Action value)
