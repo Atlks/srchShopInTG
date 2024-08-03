@@ -150,25 +150,70 @@ namespace prjx
             Console.WriteLine($"Certificate generated and saved to {certificatePath}");
         }
 
+       public static SortedList<string, object> ConvertToStringObjectSortedList(SortedList  originalList)
+        {
+            var result = new SortedList<string, object>();
+
+            foreach (DictionaryEntry entry in originalList)
+            {
+                string key = entry.Key?.ToString();  // 转换键为字符串
+                object value = entry.Value;          // 保持值不变
+
+                if (key != null)
+                {
+                    result.Add(key, value);
+                }
+            }
+
+            return result;
+        }
+
+    public    static List<SortedList<string, object>> ConvertDicListToSortedList(List<Dictionary<string, string>> listOfDictionaries)
+        {
+            var listOfSortedLists = new List<SortedList<string, object>>();
+
+            foreach (var dictionary in listOfDictionaries)
+            {
+                var sortedList = new SortedList<string, object>();
+
+                foreach (var kvp in dictionary)
+                {
+                    sortedList[kvp.Key] = kvp.Value;
+                }
+
+                listOfSortedLists.Add(sortedList);
+            }
+
+            return listOfSortedLists;
+
+         
+        }
+
         private static async System.Threading.Tasks.Task main1148()
         {
-           // db store cmpr  zip troub
-           // json just ok....sngle json imprv pfm..
-           //sqlt kv mode
-          //   saveZip();
+            // db store cmpr  zip troub
+            // json just ok....sngle json imprv pfm..
+            //sqlt kv mode
+            //   saveZip();
 
             //  geneCert();
-
-            for (int i = 1; i < 5; i++)
+          //  List<Dictionary<string, string>> st = GetListFrmIniFL("mrcht.ini");
+            List< SortedList > li2 = GetListDicFrmIniFL("mrcht.ini");
+            foreach(SortedList  itm in li2)
             {
-                SortedList<string, object> o = new SortedList<string, object>();
-                o.Add("id", i);
-                o.Add("name", 888);
-                Save2SqltKvMd(o, "db1056.db");
-             //   AppendSortedListToZip(o, "db1share2.zip", $"id_{i}.json");
+              //  Save2SqltKvMd(itm, "mchtKv.db");
             }
-            Print(EncodeJsonFmt(GetListFromSqltKv("db1056.db")));
-       
+            //for (int i = 1; i < 5; i++)
+            //{
+            //    SortedList<string, object> o = new SortedList<string, object>();
+            //    o.Add("id", i);
+            //    o.Add("name", 888);
+            //    Save2SqltKvMd(o, "db1056.db");
+            // //   AppendSortedListToZip(o, "db1share2.zip", $"id_{i}.json");
+            //}
+            PrintTimestamp("bf qry kv db");
+            Print(EncodeJsonFmt(GetListFrmSqltKvV2("mchtKvs.db")));
+            PrintTimestamp("end  qry kv db");
 
             Print("\n----------------\n");
             // RenderTableToConsole

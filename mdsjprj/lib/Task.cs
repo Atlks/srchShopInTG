@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace mdsj.lib
 {
-    internal class Task
+    internal class Task1
     {
     }
 }

@@ -23,6 +23,10 @@ namespace mdsj.lib
         {
             return ormIni.qryToDic(dbf);
         }
+        public static List<SortedList> GetListDicFrmIniFL(string dbf)
+        {
+            return ormIni.qryV2(dbf);
+        }
 
         public static Dictionary<string, string> GetDicFromUrl(string url136)
         {

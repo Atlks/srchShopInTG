@@ -63,7 +63,7 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-                CfgHttps(serverOptions, map);
+                //  CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -71,16 +71,18 @@ namespace mdsj.lib
             //拦截请求：
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
-                            TryNotLgJmpEnd(() => {
+                            TryNotLgJmpEnd(async () =>
+                            {
                                 jmp2exitFlagInThrd.Value = false;
                                 Print(" start req..."); PrintTimestamp();
                                 //here cant new thrd..beir req close early
                                 //here use call but not calltryAll bcs not want jmp Ex prt
-                                HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                                // 确保 HttpHdlr 是异步的
+                                await HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 Print(" end req..."); Print(" end req..."); Print(" end req...");
                                 PrintTimestamp();
                             });
-                   
+
                             Print(" end req...");
                             PrintTimestamp();
                         };
@@ -95,7 +97,10 @@ namespace mdsj.lib
             var certPath = $"{prjdir}cfg\\" + https_cert_path;
             Print(certPath);
             var certPassword = GetField(map, "https_cert_password");
-
+            certPassword = $"{prjdir}cfg\\private.key";
+            certPassword = ReadAllText(certPassword);
+            certPassword = "";
+            Print("certPassword=>" + certPassword);
             if (File.Exists(certPath))
             {
                 serverOptions.ListenAnyIP(httpsPort, listenOptions =>
@@ -109,7 +114,7 @@ namespace mdsj.lib
             }
         }
 
-    
+
 
         public static string webrootDir = $"{prjdir}/webroot";
 
@@ -144,16 +149,19 @@ namespace mdsj.lib
         /// <param name="httpHdlrApiSpecl"></param>
         /// <param name="context"></param>
         /// <param name="api_prefixDep"></param>
-        public static void HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
+        public static async Task HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
             PrintTimestamp(" start HttpHdlr()");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             jmp2endCurFunInThrd.Value = __METHOD__;
-            PrintCallFunArgs(__METHOD__, func_get_args("req,resp",api_prefixDep));
+            PrintCallFunArgs(__METHOD__, func_get_args("req,resp", api_prefixDep));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
+            path = path.Replace("//", "/"); path = path.Replace("//", "/");
+            if (path.StartsWith("/api"))
+                path = SubStr(path, 4);// rmv api
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
@@ -161,7 +169,7 @@ namespace mdsj.lib
             string skipFileRdUrlpath = "/getlist";
             HashSet<string> hs = new HashSet<string>();
             hs.Add(skipFileRdUrlpath);
-            if(!hs.Contains(path))
+            if (!hs.Contains(path))
             {
                 //这里为了pfm ,so need jude skip fl hdr
                 //----------------static res
@@ -180,7 +188,7 @@ namespace mdsj.lib
                 if (jmp2exitFlagInThrd.Value == true)
                     return;
             }
-           
+
             //-------------------if spec  api
             // 处理特定API
             httpHdlrApiSpecl(request, response);
@@ -202,33 +210,45 @@ namespace mdsj.lib
             //------------httpHdlrApi--def json api mode
             //----------/XXX GET/POST WBAPI----
             //if (request.Method == HttpMethods.Post)
-        
-            var fn = path.Substring(1);
+
+            var fn = GetFunFromPathUrl(path);
+
             var funname = "" + fn + request.Method + "Wbapi";
-          //tod here maybe 50ms to dync invok ,can chg to delegate mode fast
-          //but if no match method ,just not invk ,also fast..
+            //tod here maybe 50ms to dync invok ,can chg to delegate mode fast
+            //but if no match method ,just not invk ,also fast..
             Callx(funname, request, response);
 
-       //     arr_fltr330()
+            //     arr_fltr330()
             //----dep
             //TODO DEP SHOULD AUTO get post call
             string fnm = api_prefixDep + fn;
             string args931 = Substring(queryString, 1);
 
-          
-         //   object rzt = CallxTryx(fnm, args931);
+
+            //   object rzt = CallxTryx(fnm, args931);
             // 使用表达式树创建委托
-             var f = NewDelegate<Func<string, string>>(fnm);
+            var f = NewDelegate<Func<string, string>>(fnm);
             // 使用委托调用方法
-             string result = f(args931);
+            string result = f(args931);
 
             // 发送响应
             SendResp(result, "application/json; charset=utf-8", response);
             PrintRetx(__METHOD__, "");
+            // 确保在处理完成后可以进行异步操作，如果有必要
+            await Task.CompletedTask;
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
-      
+        private static string GetFunFromPathUrl(string path)
+        {
+            path = path.Replace("//", "/");
+            path = path.Replace("//", "/");
+            path = path.Substring(1);
+            path = path.Replace("/", "");
+            return path;
+        }
+
+
         /// <summary>
         /// 统一查询接口
         /// http://localhost:5000/qry?fromData=闲置
@@ -329,7 +349,7 @@ namespace mdsj.lib
                 PrintRetx(__METHOD__, "");
                 return;
             }
-              
+
             //------------------other ext use down mode
             // 获取文件的实际扩展名
             string fileExtension = Path.GetExtension(path);
