@@ -109,15 +109,7 @@ namespace mdsj.lib
             }
         }
 
-        public static string GetField(Dictionary<string, string> map, string v)
-        {
-            if (map == null)
-                return "";
-            if (map.ContainsKey(v))
-                return map[v];
-            return "";
-
-        }
+    
 
         public static string webrootDir = $"{prjdir}/webroot";
 

@@ -409,6 +409,21 @@ namespace mdsj.lib
                 return ToStr(cfgDic[v]);
             return "";
         }
+
+      
+        public static object GetUuid()
+        {
+            Guid newGuid = Guid.NewGuid();
+            return newGuid.ToString();
+        }
+
+        public static void SetFieldAddRplsKeyV(SortedList<string, object> listIot, string? key, object objSave)
+        {
+            if (listIot.ContainsKey(key))
+                listIot.Remove(key);
+            
+                listIot.Add(key, objSave);
+        }
         public static void SetFieldAddRplsKeyV(Dictionary<string,object> listIot, string? key, object objSave)
         {
             if (listIot.ContainsKey(key))
@@ -850,6 +865,13 @@ namespace mdsj.lib
         }
 
         public static object GetField(SortedList row, string fld, object dfv)
+        {
+            if (row.ContainsKey(fld))
+                return row[fld];
+            return dfv;
+        }
+
+        public static object GetField(SortedList<string,object> row, string fld, object dfv)
         {
             if (row.ContainsKey(fld))
                 return row[fld];

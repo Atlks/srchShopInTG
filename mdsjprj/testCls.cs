@@ -87,6 +87,8 @@ using HtmlAgilityPack;
 using Windows.Storage.Search;
 using System.Runtime.InteropServices;
 using Nustache.Core;
+using System.IO.Compression;
+using System.Runtime.Serialization.Formatters.Binary;
 namespace prjx
 {
     internal class testCls
@@ -150,9 +152,23 @@ namespace prjx
 
         private static async System.Threading.Tasks.Task main1148()
         {
+           // db store cmpr  zip troub
+           // json just ok....sngle json imprv pfm..
+           //sqlt kv mode
+          //   saveZip();
 
-          //  geneCert();
+            //  geneCert();
 
+            for (int i = 1; i < 5; i++)
+            {
+                SortedList<string, object> o = new SortedList<string, object>();
+                o.Add("id", i);
+                o.Add("name", 888);
+                Save2SqltKvMd(o, "db1056.db");
+             //   AppendSortedListToZip(o, "db1share2.zip", $"id_{i}.json");
+            }
+            Print(EncodeJsonFmt(GetListFromSqltKv("db1056.db")));
+       
 
             Print("\n----------------\n");
             // RenderTableToConsole
@@ -493,9 +509,137 @@ namespace prjx
             // 
         }
 
-      
+        public static void saveZip()
+        {
+            for(int i = 1; i < 5; i++)
+            {
+                SortedList<string, object> o = new SortedList<string, object>();
+                o.Add("id", i);
+                o.Add("name", 888);
+                AppendSortedListToZip(o, "db1share2.zip", $"id_{i}.json");
+            }
+           
+        }
 
- 
+        /*
+         创建临时文件: 使用临时文件来创建一个新的 ZIP 文件，该文件包含现有的条目和新的条目。
+读取现有 ZIP 文件内容: 从现有 ZIP 文件中读取条目并将它们复制到新的 ZIP 文件中。
+追加新条目: 将新的数据作为新的条目追加到 ZIP 文件中。
+替换原始文件: 删除原始 ZIP 文件并将临时文件重命名为原始文件名。
+         */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sortedList"></param>
+        /// <param name="zipFilePath"></param>
+        /// <param name="entryName"></param>
+        public static void AppendSortedListToZip(SortedList<string, object> sortedList, string zipFilePath, string entryName)
+        {
+            // Create a temporary file to hold the new ZIP archive
+            var tempFilePath = Path.GetTempFileName();
+
+            try
+            {
+                // Create a memory stream to hold the serialized SortedList
+                using (var memoryStream = new MemoryStream())
+                {
+                    // Serialize the SortedList to JSON and write it to the memory stream
+                    using (var streamWriter = new StreamWriter(memoryStream, leaveOpen: true))
+                    using (var jsonWriter = new JsonTextWriter(streamWriter))
+                    {
+                        var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
+                        jsonSerializer.Serialize(jsonWriter, sortedList);
+                        jsonWriter.Flush();
+                    }
+
+                    // Reset the memory stream position to the beginning
+                    memoryStream.Position = 0;
+
+                    // Create or open the existing ZIP file and append to it
+                    using (var zipFileStream = new FileStream(tempFilePath, FileMode.Create))
+                    using (var zipArchive = new ZipArchive(zipFileStream, ZipArchiveMode.Create))
+                    {
+                        // Copy existing entries from the original ZIP file to the new ZIP file
+                        if (System.IO.File.Exists(zipFilePath))
+                        {
+                            using (var originalZipFileStream = new FileStream(zipFilePath, FileMode.Open))
+                            using (var originalZipArchive = new ZipArchive(originalZipFileStream, ZipArchiveMode.Read))
+                            {
+                                foreach (var entry in originalZipArchive.Entries)
+                                {
+                                    // Copy existing entries to the new archive
+                                    var newEntry = zipArchive.CreateEntry(entry.FullName);
+                                    using (var entryStream = entry.Open())
+                                    using (var newEntryStream = newEntry.Open())
+                                    {
+                                        entryStream.CopyTo(newEntryStream);
+                                    }
+                                }
+                            }
+                        }
+
+                        // Create a new entry in the new ZIP file
+                        var zipEntry = zipArchive.CreateEntry(entryName);
+
+                        // Write the serialized data to the new entry
+                        using (var zipEntryStream = zipEntry.Open())
+                        {
+                            memoryStream.CopyTo(zipEntryStream);
+                        }
+                    }
+
+                    // Replace the original ZIP file with the updated ZIP file
+                    System.IO.File.Delete(zipFilePath);
+                    System.IO.File.Move(tempFilePath, zipFilePath);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions if necessary
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                if (System.IO.File.Exists(tempFilePath))
+                {
+                    System.IO.File.Delete(tempFilePath);
+                }
+            }
+        }
+        public static void SaveSortedListToZip (SortedList<string, object> sortedList, string zipFilePath, string entryName)
+        {
+            // Create a memory stream to hold the serialized SortedList
+            // Create a memory stream to hold the serialized SortedList
+            using (var memoryStream = new MemoryStream())
+            {
+                // Serialize the SortedList to JSON and write it to the memory stream
+                using (var streamWriter = new StreamWriter(memoryStream, leaveOpen: true))
+                using (var jsonWriter = new JsonTextWriter(streamWriter))
+                {
+                    var jsonSerializer = new Newtonsoft.Json.JsonSerializer();
+                    jsonSerializer.Serialize(jsonWriter, sortedList);
+                    jsonWriter.Flush();
+                }
+
+                // Reset the memory stream position to the beginning
+                memoryStream.Position = 0;
+
+                // Create or overwrite the zip file
+                using (var zipFileStream = new FileStream(zipFilePath, FileMode.Create))
+                using (var zipArchive = new ZipArchive(zipFileStream, ZipArchiveMode.Create))
+                {
+                    // Create a new entry in the ZIP file
+                    var zipEntry = zipArchive.CreateEntry(entryName);
+
+                    // Write the serialized data to the entry
+                    using (var zipEntryStream = zipEntry.Open())
+                    {
+                        memoryStream.CopyTo(zipEntryStream);
+                    }
+                }
+            }
+
+        }
+
+
+
         private static void add30xiezhi()
         {
             for (int i = 0; i < 30; i++)

@@ -292,7 +292,7 @@ namespace prjx.lib
 
             //foreach (SortedList rw in list)
             //{
-               
+
             //}
             PrintTimestamp($" endfun  {__METHOD__}()");
             return list22;
@@ -649,7 +649,7 @@ namespace prjx.lib
         {
             if (collection == null)
             {
-                throw new ArgumentNullException(nameof(collection), "Collection cannot be null");
+                return 0;
             }
 
             if (collection is ICollection col)

@@ -436,6 +436,7 @@ namespace mdsj.libBiz
 
         private static void DelParkBtmbtnEvt(string park, Update? update)
         {
+            DelMsg(update, 7);
             //public 判断权限先
             var chtid434 = update.Message.Chat.Id;
             var fromUid = update.Message.From.Id;

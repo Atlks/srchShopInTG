@@ -197,7 +197,7 @@ namespace mdsj.lib
         public static bool IsStartsWithArrcomma(string? text, string arrcomma)
         {
             string[] a = arrcomma.Split(",");
-            foreach(string msg in a)
+            foreach (string msg in a)
             {
                 string msg1 = msg.Trim();
                 if (IsStartsWith(text, msg1))
@@ -391,11 +391,34 @@ namespace mdsj.lib
         }
         public static bool IsArrOrColl(object inputArray)
         {
+            if (IsSortedList(inputArray))
+            {
+                return false;
+            }
+
+            if (IsSortedListOfStringObject(inputArray))
+            {
+                return false;
+            }
             if (IsArray(inputArray))
                 return true;
             if (IsCollection(inputArray))
                 return true;
 
+            return false;
+        }
+
+        static bool IsSortedListOfStringObject(object obj)
+        {
+            return obj is SortedList<string, object>;
+        }
+        public static bool IsSortedList(object sortedList)
+        {
+            // 使用 is 关键字检查对象类型
+            if (sortedList is SortedList)
+            {
+                return true;
+            }
             return false;
         }
 

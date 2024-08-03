@@ -137,6 +137,7 @@ namespace prjx
         //}
         public static void Main(string[] args)
         {
+      //    var nnn=  JsonConvert.DeserializeObject<object>("adfaf");
             GetMethInfo("echo");
             // 设置控制台编码为 UTF-8
             Console.OutputEncoding = Encoding.UTF8;
@@ -154,7 +155,7 @@ namespace prjx
             {
 
 
-                evt_boot(() =>
+                Evtboot(() =>
                 {
                     //   botClient = botClient;
                     获取机器人的信息();

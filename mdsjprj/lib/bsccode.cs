@@ -968,6 +968,15 @@ namespace mdsj.lib
             }
 
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objSave"></param>
+        /// <returns>jobjct</returns>
+        public static JObject DecodeJson(object objSave)
+        {
+            return (JObject)json_decodeObj(ToStr(objSave));
+        }
         public static void TryNotLgJmpEnd(Action value)
         {
             try

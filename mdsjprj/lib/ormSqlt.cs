@@ -83,7 +83,7 @@ namespace prjx.lib
 
         }
 
-        private static object cmd_ExecuteNonQuery(SqliteCommand SqliteCommand1)
+        public static object cmd_ExecuteNonQuery(SqliteCommand SqliteCommand1)
         {
             try
             {
@@ -91,6 +91,7 @@ namespace prjx.lib
             }
             catch (Exception ex)
             {
+                Print(ex);
                 return null;
             }
 

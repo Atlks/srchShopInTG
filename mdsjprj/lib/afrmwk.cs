@@ -42,7 +42,7 @@ namespace mdsj.lib
             }
 
         }
-        public static void evt_boot(Action actBiz)
+        public static void Evtboot(Action actBiz)
         {
             //add all cache db 
             //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
@@ -51,7 +51,7 @@ namespace mdsj.lib
             mdsj.lib.exCls.set_error_handler();
             callTryAll(() =>
             {
-                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver8884");
+                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver8885");
                 Thread.Sleep(3000);
                 PrintLogo();
                 //-------------start boot music

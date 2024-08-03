@@ -184,48 +184,34 @@ namespace mdsj.libBiz
         /// <returns></returns>
         public static string WbapiXgetlist(string qrystr)
         {
-            PrintTimestamp(" start fun WbapiXgetlist()");
-            //  print("Received getlist: " + callGetlistFromDb);
-            //  return Results.Ok("OK");
-            SortedList qryMap = GetHashtableFromQrystr(qrystr);
-
-            //SortedList map = new SortedList();
-            //map.Add("limit", 5);
-
-            const string FromDdataDir = "mercht商家数据";
-
-
-            //   SetKv("a=1", "b", 253);
+            PrintTimestamp(" start fun WbapiXgetlist()"); 
+            const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
             string qrtStr4Srch2 = DelKeys("商家 " + pageprm251, qrystr);
             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
-
-
-            // --------------------  
+            // --------------------  flt 
+            SortedList qryMap = GetHashtableFromQrystr(qrystr);
             var list_aftFltr2 = ArrFltrV2(listFlrted, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
-
                 string mrtKwd = GetFieldAsStr1037(qryMap, "商家").ToUpper();
                 if (mrtKwd.Length > 0)
                     li.Add(GetFieldAsStr1037(row, "商家").ToUpper().Contains(mrtKwd));
                 //   li.Add((IsNotEmptyLianxi(row)));
                 //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
-
             });
 
-
+            //-----------todo block page smp
             int page = GetFieldAsInt(qryMap, "page", 0);
             int pagesize = GetFieldAsInt(qryMap, "pagesize", 10);
             int start = (page - 1) * pagesize;
-
             //todo 
             //  var list_rzt2 = SliceByPageByQrystr(list_aftFltr2, qrystr);
             List<SortedList> list_rzt = SliceX(list_aftFltr2, start, pagesize);
 
 
-            //------------add col
+            //------------block add col
             PrintTimestamp(" start add col");
             ForList("BlkAddCol", list_rzt, (sortedList) =>
             {
@@ -244,27 +230,21 @@ namespace mdsj.libBiz
             });
 
             PrintTimestamp(" end add col");
-            //----------------trans cn2en form--------------
+            //----------------block trans cn2en form--------------
             PrintTimestamp(" start trans cn2en");
             SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
-
-
             //trans key
             List<SortedList> list_rzt_fmt = new List<SortedList>();
             ForList("Blk.transKey", list_rzt, (sortedList) =>
             {
                 //todo fun  transkey
-
                 if (sortedList == null)
                     return;
-
                 SortedList map3 = castKeyToEnName(sortedList, transmap);
-
                 list_rzt_fmt.Add(map3);
             });
-
             PrintTimestamp(" endblock trans cn2en");
-            //--------trans fmt chg int fmt
+            //--------end block trans fmt chg int fmt
             //chg int fmt
             string rsstr = EncodeJson(list_rzt_fmt);
             PrintTimestamp(" end fun WbapiXgetlist()");
