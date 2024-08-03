@@ -71,7 +71,8 @@ namespace mdsj.lib
             //拦截请求：
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
-                            TryNotLgJmpEnd(async () =>
+                            // todo  TryNotLgJmpEndAsync
+                            try
                             {
                                 jmp2exitFlagInThrd.Value = false;
                                 Print(" start req..."); PrintTimestamp();
@@ -81,7 +82,18 @@ namespace mdsj.lib
                                 await HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
                                 Print(" end req..."); Print(" end req..."); Print(" end req...");
                                 PrintTimestamp();
-                            });
+                            }
+                            catch (jmp2endEx e)
+                            {
+
+                            }
+                            catch (Exception e)
+                            {
+                                PrintCatchEx("RequestDelegate", e);
+                                //impt cant find path ,need tips 
+                                context.Response.WriteAsync(e.Message);
+                            }
+                            
 
                             Print(" end req...");
                             PrintTimestamp();
@@ -151,17 +163,15 @@ namespace mdsj.lib
         /// <param name="api_prefixDep"></param>
         public static async Task HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
-            PrintTimestamp(" start HttpHdlr()");
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            var __METHOD__ = "HttpHdlr";
+            PrintTimestamp($"enter {__METHOD__}() ");
             jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(__METHOD__, func_get_args("req,resp", api_prefixDep));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            path = path.Replace("//", "/"); path = path.Replace("//", "/");
-            if (path.StartsWith("/api"))
-                path = SubStr(path, 4);// rmv api
+            path = GetPathReal(path);
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
@@ -239,6 +249,15 @@ namespace mdsj.lib
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
+        private static string GetPathReal(string path)
+        {
+            path = path.Replace("//", "/"); path = path.Replace("//", "/");
+            if (path.StartsWith("/api/"))
+                path = SubStr(path, 4);// rmv api
+            path = DecodeUrl(path);
+            return path;
+        }
+
         private static string GetFunFromPathUrl(string path)
         {
             path = path.Replace("//", "/");
@@ -299,8 +318,10 @@ namespace mdsj.lib
         /// <param name="extnameNhdlrChooser"></param>
         public static void HttpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
-            PrintTimestamp("enter HttpHdlrFil() ");
-            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            var __METHOD__ = "HttpHdlrFil";
+            PrintTimestamp($"enter {__METHOD__}() ");
+      
+                //MethodBase.GetCurrentMethod().Name;
             jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(__METHOD__, func_get_args("req,resp", extnameNhdlrChooser));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
@@ -308,7 +329,8 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            path = DecodeUrl(path);
+          
+            path = GetPathReal(path);
 
             if (path.Contains("analytics"))
                 Print("Dbg2432");
@@ -572,10 +594,19 @@ namespace mdsj.lib
             string path = request.Path;
             // 设置响应内容类型和编码
             response.ContentType = "application/json; charset=utf-8";
-            path = DecodeUrl(path);
+            path = GetPathReal(path);
 
-            object rzt2 = ReadAllText(webrootDir + path);
-            await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+            string pathDsk = webrootDir + path;
+            if(IsExistFil(pathDsk))
+            {
+                object rzt2 = ReadAllText(pathDsk);
+                await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
+            }else
+            {
+                PrintWarn("file not exist!" + pathDsk);
+                await response.WriteAsync("file not exist!"+pathDsk, Encoding.UTF8);
+            }
+         
             //   Print();
 
             PrintTimestamp(" JsonFLhttpHdlrFilJson()...end");
@@ -583,6 +614,11 @@ namespace mdsj.lib
             //  Jmp2end();
             return;
 
+        }
+
+        public static void PrintWarn(string v)
+        {
+            Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️"+v);
         }
 
 

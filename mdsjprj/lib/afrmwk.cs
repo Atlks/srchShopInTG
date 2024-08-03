@@ -51,7 +51,7 @@ namespace mdsj.lib
             mdsj.lib.exCls.set_error_handler();
             callTryAll(() =>
             {
-                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88894");
+                Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88896");
                 Thread.Sleep(3000);
                 PrintLogo();
                 //-------------start boot music

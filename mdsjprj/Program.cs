@@ -135,8 +135,43 @@ namespace prjx
         //        endpoints.MapControllers();
         //    });
         //}
+
+
+        // Regex to match proxy_pass directives
+        private static readonly Regex ProxyPassRegex = new Regex(@"proxy_pass\s+(\S+);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        // Function to parse nginx.conf and extract proxy_pass URLs
+        public static List<string> ExtractProxyPassUrls(string configFilePath)
+        {
+            var proxyPassUrls = new List<string>();
+
+            if (!System.IO.File.Exists(configFilePath))
+            {
+                throw new FileNotFoundException("The specified nginx.conf file was not found.", configFilePath);
+            }
+
+            var fileContent = System.IO.File.ReadAllText(configFilePath);
+
+            // Find all matches of proxy_pass in the file content
+            var matches = ProxyPassRegex.Matches(fileContent);
+
+            foreach (Match match in matches)
+            {
+                if (match.Success && match.Groups.Count > 1)
+                {
+                    // Extract the URL from the match
+                    string url = match.Groups[1].Value.Trim();
+                    proxyPassUrls.Add(url);
+                }
+            }
+
+            return proxyPassUrls;
+        }
         public static void Main(string[] args)
         {
+            var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
+            //  http://localhost:5000;
+         //   List<string> ExtractProxyPassUrls111 = ExtractProxyPassUrls(nginccfg);
       //    var nnn=  JsonConvert.DeserializeObject<object>("adfaf");
             GetMethInfo("echo");
             // 设置控制台编码为 UTF-8

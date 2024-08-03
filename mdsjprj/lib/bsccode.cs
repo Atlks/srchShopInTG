@@ -1,6 +1,7 @@
 ﻿global using static mdsj.lib.bsccode;
 using HtmlAgilityPack;
 using mdsj.libBiz;
+using Microsoft.AspNetCore.Http;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Scripting;
 using Nethereum.Contracts.QueryHandlers.MultiCall;
@@ -1017,11 +1018,11 @@ namespace mdsj.lib
         {
             return (JObject)json_decodeObj(ToStr(objSave));
         }
-        public static void TryNotLgJmpEnd(Action value)
+        public static void TryNotLgJmpEndAsync(Action value)
         {
             try
             {
-                value();
+                  value();
             }
             catch (jmp2endEx e)
             {
