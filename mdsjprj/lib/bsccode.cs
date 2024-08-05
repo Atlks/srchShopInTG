@@ -1022,7 +1022,12 @@ namespace mdsj.lib
         {
             Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️" + v);
         }
-
+        // Base64解码
+        public static string DecodeBase64(string base64)
+        {
+            var bytes = System.Convert.FromBase64String(base64.Replace('-', '+').Replace('_', '/'));
+            return System.Text.Encoding.UTF8.GetString(bytes);
+        }
         public static void TryNotLgJmpEndAsync(Action value)
         {
             try

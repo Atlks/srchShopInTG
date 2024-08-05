@@ -49,25 +49,17 @@ namespace mdsj.lib
             SetConsoleQuickEditMode(false);
 
             //-----------------log
-            DateTime now = DateTime.Now;
-            string formattedDate = now.ToString("yyyy-MM-dd_HH");
-            StreamWriter logFile = new StreamWriter($"log1037_{formattedDate}.log", append: true);
-        
-                // Save the original Console.Out
-                TextWriter originalConsoleOutput = Console.Out;
-
-                // Create a new composite writer that writes to both the console and the log file
-                Console.SetOut(new CompositeTextWriter(originalConsoleOutput, logFile));
-
-           //-----------end log
-                //add all cache db 
-                //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
-                //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
-                // 设置全局异常处理
-                mdsj.lib.exCls.set_error_handler();
+      
+            RunSetRollLogFileV2();
+            //-----------end log
+            //add all cache db 
+            //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
+            //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
+            // 设置全局异常处理
+            mdsj.lib.exCls.set_error_handler();
             callTryAll(() =>
             {
-             
+
                 Thread.Sleep(3000);
                 PrintLogo();
                 //-------------start boot music
@@ -100,19 +92,19 @@ namespace mdsj.lib
                 var cfgf = $"{prjdir}/cfg/cfg.ini";
                 Hashtable cfgDic = GetHashtabFromIniFl(cfgf);
                 //  var  localOsKwd = GetFieldAsStr10(cfgDic, "localOsKwd"); 
-                var   os = GetOSVersion();//os ver:OS: Win32NT, Version: 10.0.22631
+                var os = GetOSVersion();//os ver:OS: Win32NT, Version: 10.0.22631
                 var localOsKwd = GetFieldAsStr10(cfgDic, "localOsKwd");
-                if (os.Contains("Win32NT") && os.Contains("10.0.")) 
+                if (os.Contains("Win32NT") && os.Contains("10.0."))
                 {
                     Thread.Sleep(10000);
-                 
+
                     string url = GetFieldAsStr10(cfgDic, "syncUpldUrl");
 
                     for (int i = 1; i < 10; i++)
                     {
                         string fl = GetFieldAsStr10(cfgDic, "syncUpldFile" + i);
-                        if(fl.Length>0)
-                          UploadFileAsync(fl, url);
+                        if (fl.Length > 0)
+                            UploadFileAsync(fl, url);
                     }
 
                 }
@@ -125,6 +117,9 @@ namespace mdsj.lib
 
 
         }
+
+      
+
         public static void evt_exit()
 
 

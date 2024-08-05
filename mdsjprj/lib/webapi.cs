@@ -56,6 +56,8 @@ namespace mdsj.lib
             var builder = WebApplication.CreateBuilder();
             // Configure Kestrel to listen on a specific port
             ConfigureWebHostBuilder webHost = builder.WebHost;
+            webHost.ConfigureLogging(logging => { });
+           // webHost.UseStaticWebAssets
             webHost.ConfigureKestrel(serverOptions =>
             {
                 Dictionary<string, string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
@@ -63,7 +65,7 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-                   CfgHttps(serverOptions, map);
+               //    CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -72,15 +74,19 @@ namespace mdsj.lib
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
                             // todo  TryNotLgJmpEndAsync
+                            Action< HttpContext> a = async (HttpContext context)=>{
+                               
+                            };
                             try
                             {
+                                //    a(context);
                                 jmp2exitFlagInThrd.Value = false;
                                 Print(" start req..."); PrintTimestamp();
                                 //here cant new thrd..beir req close early
                                 //here use call but not calltryAll bcs not want jmp Ex prt
                                 // 确保 HttpHdlr 是异步的
                                 await HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
-                                Print(" end req..."); Print(" end req..."); Print(" end req...");
+                                Print(" end req...");
                                 PrintTimestamp();
                             }
                             catch (jmp2endEx e)
@@ -167,6 +173,7 @@ namespace mdsj.lib
         /// <param name="api_prefixDep"></param>
         public static async Task HttpHdlr(HttpRequest request, HttpResponse response, string api_prefixDep, Action<HttpRequest, HttpResponse> httpHdlrApiSpecl)
         {
+            dbgpad = 0;
             var __METHOD__ = "HttpHdlr";
             PrintTimestamp($"enter {__METHOD__}() ");
             jmp2endCurFunInThrd.Value = __METHOD__;
@@ -264,24 +271,9 @@ namespace mdsj.lib
             return path;
         }
 
-        private static string CastToPathReal(string path)
-        {
-            path = path.Replace("//", "/"); path = path.Replace("//", "/");
+     
 
-            path = DecodeUrl(path);
-            return path;
-        }
-
-        public static string GetFunFromPathUrl(string path)
-        {
-           
-
-            path = path.Replace("//", "/");
-            path = path.Replace("//", "/");
-            path = path.Substring(1);
-            path = path.Replace("/", "");
-            return path;
-        }
+  
 
 
         /// <summary>

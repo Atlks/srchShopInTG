@@ -25,6 +25,7 @@ using Microsoft.Extensions.Caching.Memory;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Microsoft.Win32;
+using System.Text.RegularExpressions;
 namespace mdsj.lib
 {
     internal class util
@@ -99,6 +100,71 @@ namespace mdsj.lib
 
                 File.WriteAllBytes(certPath, pfxBytes);
             }
+        }
+
+        public static string ExtractCName(string LINE)
+        {
+            if(!LINE.Contains("withdraw"))
+            {
+                return "";
+            }
+
+            string pattern22 = @"\b[A-Z]{2,}\b"; // 匹配连续的大写字母（长度为2或更多）
+
+            Match match33 = Regex.Match(LINE, pattern22);
+
+            if (match33.Success)
+            {
+                return match33.Value;
+              //  Console.WriteLine("Extracted word: " + match.Value);
+            }
+            // 定义正则表达式来匹配币名
+            // 匹配可能的币种名称，例如 ETH、BTC、SOL
+            string pattern = @"\b(ETH|BTC|SOL|USDT|LTC|OP|ARB|LINK|BNB|XRP|DOGE|SHIB|ADA|AVAX|BCH|DOT|MATIC|ICP|UNI)\b";
+
+            // 创建正则表达式对象
+            var regex = new Regex(pattern, RegexOptions.IgnoreCase);
+
+            // 查找匹配项
+            var match = regex.Match(LINE);
+
+            // 如果找到匹配项，返回币名
+            if (match.Success)
+            {
+                return match.Value; // 返回匹配的币名
+            }
+            else
+            {
+                return ""; // 如果没有找到匹配项，返回 null
+            }
+        }
+        public static string ExtractAddress(string line)
+        {
+            // 定义要提取的前缀
+            string prefix = "Withdrawal Address :";
+
+           
+            line = line.ToLower();
+            if (line.Contains("withdrawal") && line.Contains("address"))
+            {
+                // 查找前缀在输入字符串中的位置
+                int startIndex = line.IndexOf(":");
+                if (startIndex == -1)
+                {
+                    // 前缀未找到
+                    return "";
+                }
+
+                // 计算实际提取内容的起始位置
+                startIndex +=1;
+
+                // 提取内容并去掉前导空白字符
+                string extracted = line.Substring(startIndex).Trim();
+
+                return extracted.Trim();
+            }
+            return "";
+
         }
         public static void TransferFileByRdpWmi(string sourceFilePath, string destinationFilePath, string targetHost, string username, string password)
         {

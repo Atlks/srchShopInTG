@@ -1027,6 +1027,17 @@ namespace mdsj.lib
 
             return list;
         }
+
+        public static string GetFunFromPathUrl(string path)
+        {
+
+
+            path = path.Replace("//", "/");
+            path = path.Replace("//", "/");
+            path = path.Substring(1);
+            path = path.Replace("/", "");
+            return path;
+        }
         public static void WriteObj(string f, object obj)
         {
 
@@ -1077,7 +1088,7 @@ namespace mdsj.lib
         }
         public static Dictionary<string, string> GetDicFromQrtstr(string qrystr)
         {
-            return QueryStringToDictionary(qrystr);
+            return ToDictionaryFrmQrystr(qrystr);
         }
         public static void WriteAllText(string f, string txt)
         {
@@ -1363,7 +1374,7 @@ namespace mdsj.lib
 
         public static SortedList GetDicFromJson(string jsonstr)
         {
-            return JsonToSortedList(jsonstr);
+            return ToSortedListFrmJson(jsonstr);
         }
 
      

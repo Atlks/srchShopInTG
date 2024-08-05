@@ -84,6 +84,11 @@ using Microsoft.AspNetCore.Hosting;
 using Windows.UI.Xaml;
 using ClosedXML.Excel.CalcEngine.Functions;
 using System.Text;
+using Google.Apis.Auth.OAuth2;
+using Google.Apis.Gmail.v1;
+using Google.Apis.Util.Store;
+using Google.Apis.Services;
+using System.Security.Cryptography.X509Certificates;
 
 
 namespace prjx
@@ -168,11 +173,55 @@ namespace prjx
             return proxyPassUrls;
         }
 
-  
-        
+        /*
+         .crt 文件通常是一个证书文件，通常用于 SSL/TLS 证书。它包含以下内容：
+1.公钥：用于加密数据或验证签名。
+2.证书颁发机构 (CA) 的签名：CA 用私钥对证书进行签名，证明证书的真实性。
+3.证书的有效期：包含证书的开始和结束日期。
+4.证书持有者的信息：包括持有者的名称、组织和其他识别信息。
+5.证书的使用目的：例如用于加密、签名或身份验证。
+6.证书序列号：唯一标识证书。
+        */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void ParseCertificate(string filePath)
+        {
+            try
+            {
+                // 加载证书
+                X509Certificate2 certificate = new X509Certificate2(filePath);
+
+                WriteAllText("crt.json", certificate);
+                // 提取证书信息
+                string subject = certificate.Subject;
+                string issuer = certificate.Issuer;
+                DateTime notBefore = certificate.NotBefore;
+                DateTime notAfter = certificate.NotAfter;
+                string thumbprint = certificate.Thumbprint;
+
+                // 打印证书信息
+                Console.WriteLine("Subject: " + subject);
+                Console.WriteLine("Issuer: " + issuer);
+                Console.WriteLine("Valid From: " + notBefore);
+                Console.WriteLine("Valid To: " + notAfter);
+                Console.WriteLine("Thumbprint: " + thumbprint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error parsing certificate: " + ex.Message);
+            }
+        }
+
         public static void Main(string[] args)
         {
-         
+            ParseCertificate($"{prjdir}/cfg/certificate.crt");
+            //   ParseCertificate("");
+            var gg_apiky = "AIzaSyD3e-K8bH7-_vt7BYWXlyaAiGe_cIUpWnU";
+            var gmlOauthKeyFl = "C:\\Intel\\Wireless\\client_secret_635470856727-rl5bi02li1aebf0ln04hdm1jpd67j3cs.apps.googleusercontent.com.json";
+            //   gglML(gmlOauthKeyFl, "Withdrawal");
+            GetAddr("EmlDir2");
             var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
             List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
             //  http://localhost:5000;
@@ -186,9 +235,9 @@ namespace prjx
 
             userDictFile = $"{prjdir}/cfg/user_dict.txt";
 
-            var cfgf= $"{prjdir}/cfg/cfg.ini";
+            var cfgf = $"{prjdir}/cfg/cfg.ini";
             Hashtable cfgDic = GetHashtabFromIniFl(cfgf);
-           botClient   = new(cfgDic["bottoken"].ToString());
+            botClient = new(cfgDic["bottoken"].ToString());
             util.botname = cfgDic["botname"].ToString();
             int botEnable = GetFieldAsInt147(cfgDic, "bot", 1);
             if (botEnable == 1)
@@ -200,7 +249,7 @@ namespace prjx
                     //   botClient = botClient;
                     获取机器人的信息();
 
-                   
+
                 });
 
                 System.IO.Directory.CreateDirectory("pinlunDir");
@@ -269,12 +318,12 @@ namespace prjx
                 timerCls.setTimerTask();
                 setTimerTask4prs();
                 setTimerTask4tmr();
-//#warning 循环账号是否过期了
+                //#warning 循环账号是否过期了
                 RunTmrTasksCron();
 
             }
 
- 
+
 
             //     Qunzhushou.main1();
             //    audioBot.main1();
@@ -298,15 +347,62 @@ namespace prjx
                 };
                 StartWebapi(value, "WbapiX");
             }
-             
+
 
 
             //  Console.ReadKey();
             LoopForever();
-          
+
         }
 
-  
+        public static void GetAddr(string dir)
+        {
+            SortedList li = new SortedList();
+            // 获取目录中的所有文件
+            string[] files = Directory.GetFiles(dir);
+
+            // 遍历每一个文件
+            foreach (var filePath in files)
+            {
+                Hashtable hs = new Hashtable();
+                // 读取文件内容
+                string content = System.IO.File.ReadAllText(filePath);
+                if (content.Length == 0)
+                    continue;
+                content = htm_strip_tags(content);
+                string[] lines = content.Split("\n");
+                var add = ExtractAddress310(lines);
+                var name = ExtrctName(lines);
+                if (add.Length == 0)
+                    continue;
+                hs.Add("name", name); hs.Add("add", add);
+                SetField(li, add, hs);
+            //    li.Add(add,hs);
+            }
+            WriteAllText("adds428.json", li);
+        }
+
+        private static string ExtrctName(string[] lines)
+        {
+            foreach (var line in lines)
+            {
+                var add = ExtractCName(line);
+                if (add.Length > 0)
+                    return add;
+            }
+            return "";
+        }
+
+        private static string ExtractAddress310(string[] lines)
+        {
+            foreach (var line in lines)
+            {
+                var add = ExtractAddress(line);
+                if (add.Length > 0)
+                    return add;
+            }
+            return "";
+        }
 
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
@@ -365,7 +461,7 @@ namespace prjx
             //    tts(update?.Message?.Text);
             // print(json_encode(update));
             Print("tag4520");
-          
+
 
 
             CallAsyncNewThrd(() =>
@@ -390,7 +486,7 @@ namespace prjx
             //======================设置地区==============
 
             BtmEvtSetAreaHdlrChk(update);
-          
+
             //======================END 设置地区==============
 
             //-----------/cmd process
@@ -711,7 +807,7 @@ namespace prjx
 
         }
 
-      
+
         public static void CmdHdlrChk(Update update)
         {
             if (!IsStartsWith(update?.Message?.Text, "/"))
@@ -744,15 +840,15 @@ namespace prjx
                             Jmp2endDep(); return;
                         }
                     }
-                        
+
                 }
             }
         }
 
 
 
-  
-     
+
+
 
         public static void MsgHdlr4searchPrejude(ITelegramBotClient botClient, Update update, string reqThreadId)
         {

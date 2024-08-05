@@ -121,7 +121,13 @@ namespace mdsj.lib
 
             return input;
         }
+        public static string CastToPathReal(string path)
+        {
+            path = path.Replace("//", "/"); path = path.Replace("//", "/");
 
+            path = DecodeUrl(path);
+            return path;
+        }
 
         //  WriteAllText
         //我们首先使用 System.IO.Path.GetInvalidFileNameChars 方法获取操作系统支持的非法文件名字符数组
@@ -325,7 +331,7 @@ namespace mdsj.lib
             return encodedBuilder.ToString();
         }
 
-        public static SortedList JsonToSortedList(string json)
+        public static SortedList ToSortedListFrmJson(string json)
         {
             // 解析 JSON 字符串为 JObject
             JObject jObject = JObject.Parse(json);
@@ -350,7 +356,7 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="queryString">The query string to convert.</param>
         /// <returns>A dictionary containing the key-value pairs from the query string.</returns>
-        public static Dictionary<string, string> QueryStringToDictionary(string queryString)
+        public static Dictionary<string, string> ToDictionaryFrmQrystr(string queryString)
         {
             var result = new Dictionary<string, string>();
 

@@ -21,6 +21,44 @@ namespace mdsj.lib
 {
     internal class logCls
     {
+        public static void RunSetRollLogFileV2()
+        {
+            SetLogHr(); RunSetRollLogFile();
+        }
+        public static void RunSetRollLogFile()
+        {
+            NewThrd(() =>
+            {
+                //定时轮换日志文件
+                while (true)
+                {
+                    Thread.Sleep(5 * 1000);
+                    if (DateTime.Now.Minute == 1)
+                    {
+
+                        SetLogHr();
+                        Thread.Sleep(70 * 1000);
+                    }
+
+                }
+
+            });
+        }
+
+        public static TextWriter originalConsoleOutput = Console.Out;
+        public static void SetLogHr()
+        {
+            DateTime now = DateTime.Now;
+            string formattedDate = now.ToString("yyyy-MM-dd_HH");
+            StreamWriter logFile = new StreamWriter($"log1037_{formattedDate}.log", append: true);
+
+            // Save the original Console.Out
+
+
+            // Create a new composite writer that writes to both the console and the log file
+            Console.SetOut(new CompositeTextWriter(originalConsoleOutput, logFile));
+        }
+
         public static void logErr2024(object e, string funName, string logdir,object othInf)
         {
             if (e is jmp2endEx)
