@@ -63,7 +63,7 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-                //  CfgHttps(serverOptions, map);
+                   CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -108,17 +108,21 @@ namespace mdsj.lib
             string https_cert_path = GetField(map, "https_cert_path");                                                  // Configure HTTPS
             var certPath = $"{prjdir}cfg\\" + https_cert_path;
             Print(certPath);
-            var certPassword = GetField(map, "https_cert_password");
-            certPassword = $"{prjdir}cfg\\private.key";
-            certPassword = ReadAllText(certPassword);
-            certPassword = "";
-            Print("certPassword=>" + certPassword);
+            var keypath = GetField(map, "https_cert_password");
+            keypath = $"{prjdir}cfg\\private.key";
+         //   certPassword = ReadAllText(certPassword);
+        //    certPassword = "";
+            Print("certPassword=>" + keypath);
             if (File.Exists(certPath))
             {
-                serverOptions.ListenAnyIP(httpsPort, listenOptions =>
+                serverOptions.ListenAnyIP(443, listenOptions =>
                 {
-                    listenOptions.UseHttps(certPath, certPassword);
+                    listenOptions.UseHttps(certPath, keypath);
                 });
+                //serverOptions.ListenAnyIP(443, listenOptions =>
+                //{
+                //    listenOptions.UseHttps("path/to/your/certificate.crt", "path/to/your/private.key");
+                //});
             }
             else
             {
@@ -171,7 +175,7 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-            path = GetPathReal(path);
+            path = CastPathReal4biz(path);
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
@@ -249,17 +253,29 @@ namespace mdsj.lib
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
-        private static string GetPathReal(string path)
+        public static string CastPathReal4biz(string path)
         {
-            path = path.Replace("//", "/"); path = path.Replace("//", "/");
+            path = CastToPathReal(path);
+
+            var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
+        //    List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
             if (path.StartsWith("/api/"))
                 path = SubStr(path, 4);// rmv api
+            return path;
+        }
+
+        private static string CastToPathReal(string path)
+        {
+            path = path.Replace("//", "/"); path = path.Replace("//", "/");
+
             path = DecodeUrl(path);
             return path;
         }
 
-        private static string GetFunFromPathUrl(string path)
+        public static string GetFunFromPathUrl(string path)
         {
+           
+
             path = path.Replace("//", "/");
             path = path.Replace("//", "/");
             path = path.Substring(1);
@@ -330,7 +346,7 @@ namespace mdsj.lib
             var queryString = request.QueryString.ToString();
             string path = request.Path;
           
-            path = GetPathReal(path);
+            path = CastPathReal4biz(path);
 
             if (path.Contains("analytics"))
                 Print("Dbg2432");
@@ -594,7 +610,7 @@ namespace mdsj.lib
             string path = request.Path;
             // 设置响应内容类型和编码
             response.ContentType = "application/json; charset=utf-8";
-            path = GetPathReal(path);
+            path = CastPathReal4biz(path);
 
             string pathDsk = webrootDir + path;
             if(IsExistFil(pathDsk))
@@ -616,11 +632,7 @@ namespace mdsj.lib
 
         }
 
-        public static void PrintWarn(string v)
-        {
-            Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️"+v);
-        }
-
+     
 
 
         /// <summary>

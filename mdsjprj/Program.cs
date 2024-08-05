@@ -167,12 +167,17 @@ namespace prjx
 
             return proxyPassUrls;
         }
+
+  
+        
         public static void Main(string[] args)
         {
+         
             var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
+            List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
             //  http://localhost:5000;
-         //   List<string> ExtractProxyPassUrls111 = ExtractProxyPassUrls(nginccfg);
-      //    var nnn=  JsonConvert.DeserializeObject<object>("adfaf");
+            //   List<string> ExtractProxyPassUrls111 = ExtractProxyPassUrls(nginccfg);
+            //    var nnn=  JsonConvert.DeserializeObject<object>("adfaf");
             GetMethInfo("echo");
             // 设置控制台编码为 UTF-8
             Console.OutputEncoding = Encoding.UTF8;

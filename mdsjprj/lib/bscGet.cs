@@ -19,6 +19,7 @@ namespace mdsj.lib
 {
     internal class bscGet
     {
+
         public static List<Dictionary<string, string>> GetListFrmIniFL(string dbf)
         {
             return ormIni.qryToDic(dbf);

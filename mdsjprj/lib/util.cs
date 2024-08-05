@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
+using Microsoft.Win32;
 namespace mdsj.lib
 {
     internal class util
@@ -145,6 +146,114 @@ namespace mdsj.lib
                 Console.WriteLine($"Process created with ID {outParams["ProcessId"]}");
             }
         }
+
+
+        public static List<Hashtable> ParseNginxConfigV2(string configContent)
+        {
+            var mappings = new List<Hashtable>();
+            var lines = configContent.Split(new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+
+            string currentLocation = null;
+            string proxyPass = null;
+
+            foreach (var line in lines)
+            {
+                var trimmedLine = line.Trim();
+
+                if (trimmedLine.StartsWith("location"))
+                {
+                    if (currentLocation != null)
+                    {
+                        // Add previous location and its proxy_pass to the list
+                        if (proxyPass != null)
+                        {
+                            var mapping = new Hashtable
+                        {
+                            { currentLocation, proxyPass }
+                        };
+                            mappings.Add(mapping);
+                        }
+                    }
+
+                    // Start new location
+                    currentLocation = trimmedLine.Split(' ')[1].Trim();
+                    proxyPass = null; // Reset proxy_pass for the new location
+                }
+                else if (trimmedLine.StartsWith("proxy_pass"))
+                {
+                    proxyPass = trimmedLine.Split(' ')[1].Trim(';').Trim();
+                }
+            }
+
+            // Add the last location if it has a proxy_pass
+            if (currentLocation != null && proxyPass != null)
+            {
+                var mapping = new Hashtable
+            {
+                { currentLocation, proxyPass }
+            };
+                mappings.Add(mapping);
+            }
+
+            return mappings;
+        }
+
+     public   static void SetConsoleQuickEditMode(bool enable=false)
+        {
+            const string consoleKeyPath = @"HKEY_CURRENT_USER\Console";
+            const string quickEditModeValueName = "QuickEdit";
+
+            try
+            {
+                // Check if the registry key exists
+                using (RegistryKey key = Registry.CurrentUser.OpenSubKey(consoleKeyPath, true))
+                {
+                    if (key != null)
+                    {
+                        // Set the QuickEdit value
+                        key.SetValue(quickEditModeValueName, enable ? 1 : 0, RegistryValueKind.DWord);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Registry key not found.");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while modifying the registry: {ex.Message}");
+            }
+        }
+
+        //dep
+        //public static List<Hashtable> ParseNginxConfig(string configContent)
+        //{
+        //    var mappings = new List<Hashtable>();
+        //    // \S 在正则表达式中表示 非空白字符。
+        //    var locationPattern = new Regex(@"location\s+(\S+)\s*\{(?:[\s\S]*?(proxy_pass\s+(\S+);)?)[\s\S]*?\}", RegexOptions.Multiline);
+        //    var matches = locationPattern.Matches(configContent);
+
+        //    foreach (Match match in matches)
+        //    {
+        //        if (match.Groups.Count >= 4)
+        //        {
+        //            string locationPath = match.Groups[1].Value.Trim();
+        //            string proxyPass = match.Groups[3].Success ? match.Groups[3].Value.Trim() : null;
+
+        //            if (proxyPass != null)
+        //            {
+        //                var mapping = new Hashtable
+        //            {
+        //                { locationPath, proxyPass }
+        //            };
+        //                mappings.Add(mapping);
+        //            }
+        //        }
+        //    }
+
+        //    return mappings;
+        //}
+
 
         /// <summary>
         /// 通过 HTTP POST 请求将文件发送到指定的 URL

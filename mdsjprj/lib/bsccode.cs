@@ -1018,6 +1018,11 @@ namespace mdsj.lib
         {
             return (JObject)json_decodeObj(ToStr(objSave));
         }
+        public static void PrintWarn(string v)
+        {
+            Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️" + v);
+        }
+
         public static void TryNotLgJmpEndAsync(Action value)
         {
             try

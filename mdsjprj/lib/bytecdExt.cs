@@ -445,6 +445,13 @@ namespace mdsj.lib
         {
             System.Console.WriteLine(v);
         }
+        public static void PrintLog(object v)
+        {
+            DateTime now = DateTime.Now;
+            // Format with milliseconds
+            string formattedDate = now.ToString("MMdd HHmmss.fff");
+            System.Console.WriteLine($"{formattedDate} "+v);
+        }
         public static void print(string format, object arg0)
         {
             System.Console.WriteLine(format, arg0);
