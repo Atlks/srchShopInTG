@@ -65,7 +65,7 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-               //    CfgHttps(serverOptions, map);
+                    CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -121,7 +121,7 @@ namespace mdsj.lib
             Print("certPassword=>" + keypath);
             if (File.Exists(certPath))
             {
-                serverOptions.ListenAnyIP(443, listenOptions =>
+                serverOptions.ListenAnyIP(httpsPort, listenOptions =>
                 {
                     listenOptions.UseHttps(certPath, keypath);
                 });

@@ -244,13 +244,7 @@ namespace mdsj.lib
             }
             Print("\n🔚❓❓ENDIF");
         }
-        private static string GetMethodName(Delegate del)
-        {
-            // 使用反射获取方法信息
-            var methodInfo = del.Method;
-            return methodInfo.Name;
-        }
-
+      
         public static void echo(object v)
         {
             Print(v);
@@ -969,65 +963,13 @@ namespace mdsj.lib
             }
 
         }
-        public static SortedList  CastJObjectToSortedList(JObject jObject)
-        {
-            var sortedList = new SortedList ();
-
-            foreach (var property in jObject.Properties())
-            {
-                // 递归处理嵌套的 JObject
-                if (property.Value.Type == JTokenType.Object)
-                {
-                    sortedList.Add(property.Name, ConvertJObjectToSortedList((JObject)property.Value));
-                }
-                else
-                {
-                    sortedList.Add(property.Name, property.Value.ToObject<object>());
-                }
-            }
-
-            return sortedList;
-        }
-
-        public static SortedList<string, object> ConvertJObjectToSortedList(JObject jObject)
-        {
-            var sortedList = new SortedList<string, object>();
-
-            foreach (var property in jObject.Properties())
-            {
-                // 递归处理嵌套的 JObject
-                if (property.Value.Type == JTokenType.Object)
-                {
-                    sortedList.Add(property.Name, ConvertJObjectToSortedList((JObject)property.Value));
-                }
-                else
-                {
-                    sortedList.Add(property.Name, property.Value.ToObject<object>());
-                }
-            }
-
-            return sortedList;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="objSave"></param>
-        /// <returns>jobjct</returns>
-        public static JObject DecodeJson(object objSave)
-        {
-            return (JObject)json_decodeObj(ToStr(objSave));
-        }
+      
+     
         public static void PrintWarn(string v)
         {
             Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️" + v);
         }
-        // Base64解码
-        public static string DecodeBase64(string base64)
-        {
-            var bytes = System.Convert.FromBase64String(base64.Replace('-', '+').Replace('_', '/'));
-            return System.Text.Encoding.UTF8.GetString(bytes);
-        }
+    
         public static void TryNotLgJmpEndAsync(Action value)
         {
             try

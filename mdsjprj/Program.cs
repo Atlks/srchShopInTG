@@ -90,7 +90,6 @@ using Google.Apis.Util.Store;
 using Google.Apis.Services;
 using System.Security.Cryptography.X509Certificates;
 
-
 namespace prjx
 {
     internal class Program
@@ -214,14 +213,29 @@ namespace prjx
             }
         }
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
-            ParseCertificate($"{prjdir}/cfg/certificate.crt");
+            for(int i=0;i<5;i++)
+            {
+                SortedList st = new SortedList();
+                st.Add("id", "id" + i);
+                st.Add("nm", "name" + i);
+                await SaveToJsonSngleFileAsync(st,"datadir127");
+
+            }
+            List<SortedList> li127 =await ListReadDirJsonsAsync("datadir127");
+            Print(EncodeJsonFmt(li127));
+
+         //   ParseCertificate($"{prjdir}/cfg/certificate.crt");
             //   ParseCertificate("");
             var gg_apiky = "AIzaSyD3e-K8bH7-_vt7BYWXlyaAiGe_cIUpWnU";
             var gmlOauthKeyFl = "C:\\Intel\\Wireless\\client_secret_635470856727-rl5bi02li1aebf0ln04hdm1jpd67j3cs.apps.googleusercontent.com.json";
-            //   gglML(gmlOauthKeyFl, "Withdrawal");
-            GetAddr("EmlDir2");
+            NewThrd(() =>
+            {
+           //     gglML(gmlOauthKeyFl, "账单", "EmlDirBill");
+            });
+          
+         //   GetAddr("EmlDir2");
             var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
             List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
             //  http://localhost:5000;
@@ -2611,7 +2625,7 @@ namespace prjx
             var cq = update.CallbackQuery!;
 
 
-            Dictionary<string, StringValues> whereExprsObj = ParseQuery2024(update.CallbackQuery.Data);
+            Dictionary<string, StringValues> whereExprsObj = ToDic941(update.CallbackQuery.Data);
             SortedList Merchant1 = Qe_find(whereExprsObj["id"], "mercht商家数据", null, (dbf) =>
             {
                 return rnd_next4Sqlt(dbf);

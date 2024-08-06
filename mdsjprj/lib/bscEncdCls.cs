@@ -1,5 +1,6 @@
 ﻿global using static mdsj.lib.bscEncdCls;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,17 +18,25 @@ using System.Web;
 namespace mdsj.lib
 {
     internal class bscEncdCls
-    {
+    {   /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="objSave"></param>
+        /// <returns>jobjct</returns>
+        public static JObject DecodeJson(object objSave)
+        {
+            return (JObject)json_decodeObj(ToStr(objSave));
+        }
         public static string EncryptAes(string plainText)
         {
             return ByteArrayToHex(EncryptAesRtBytearr(plainText));
         }
         public static string DecryptAes(string plainText)
         {
-            return DecryptAes(HexStringToByteArray(plainText));
+            return DecryptAes(ToByteArrayFrmHexstr(plainText));
         }
 
-        public static byte[] HexStringToByteArray(string hexString)
+        public static byte[] ToByteArrayFrmHexstr(string hexString)
         {
             // 移除任何可能存在的空格
             hexString = hexString.Replace(" ", string.Empty);
@@ -142,7 +151,14 @@ namespace mdsj.lib
                 return sb.ToString();
             }
         }
-        static string escapeshellarg(string arg)
+
+        // Base64解码
+        public static string DecodeBase64(string base64)
+        {
+            var bytes = System.Convert.FromBase64String(base64.Replace('-', '+').Replace('_', '/'));
+            return System.Text.Encoding.UTF8.GetString(bytes);
+        }
+        public static string escapeshellarg(string arg)
         {
             // Check if the argument contains spaces or quotes
             if (arg.Contains(" ") || arg.Contains("\"") || arg.Contains("\'"))
@@ -172,18 +188,7 @@ namespace mdsj.lib
             }
         }
 
-        public static string RemoveExtraNewlines(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
-
-            // Use regular expression to replace multiple consecutive newline characters with a single newline
-            string result = Regex.Replace(input, @"(\r\n|\r|\n)+", Environment.NewLine);
-
-            return result;
-        }
+    
         /// <summary>
         /// Removes HTML tags from a string.
         /// </summary>
@@ -217,78 +222,9 @@ namespace mdsj.lib
             return result;
         }
 
-        public static string delEmpltyLines(string result)
-        {
-            string[] lines = result.Split("\n", StringSplitOptions.RemoveEmptyEntries);
-            lines = delEmptyLines(lines);
-            //for (int i = 0; i < lines.Length; i++)
-            //{
-            //    if (i < 2)
-            //        continue;
-            //    string line = lines[i];
-            //    line = line.Trim();
-            //    char[] charr= line.ToCharArray();
-
-            //}
-            result = string.Join("\n", lines);
-            return result;
-        }
-
-        /// <summary>
-        /// Trims each element in the input string array and returns a new array.
-        /// </summary>
-        /// <param name="lines">The input string array.</param>
-        /// <returns>A new string array with each element trimmed.</returns>
-        /// <summary>
-        /// Trims non-empty elements in the input string array and returns a new array.
-        /// </summary>
-        /// <param name="lines">The input string array.</param>
-        /// <returns>A new string array with trimmed non-empty elements.</returns>
-        public static string[] delEmptyLines(string[] lines)
-        {
-            if (lines == null)
-            {
-                return new string[0];
-            }
-
-            // Use LINQ Select to trim non-empty elements in the input array
-            string[] trimmedArray = lines
-                .Where(line => !string.IsNullOrWhiteSpace(line)) // Filter out empty or whitespace lines
-                .Select(line => line) // Trim each non-empty line
-                .ToArray();
-
-            return trimmedArray;
-        }
-
-        /// <summary>
-        /// Removes all non-visible characters from the input string except for carriage return, newline, and space.
-        /// </summary>
-        /// <param name="input">The input string.</param>
-        /// <returns>A string with only visible characters, spaces, carriage return, and newline.</returns>
-        public static string RemoveInvisibleCharacters(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-            {
-                return string.Empty;
-            }
-
-            // Define the regular expression pattern to match all non-printable characters
-            // except for space (\x20), carriage return (\x0D), and newline (\x0A).
-            string pattern = @"[^\x20-\x7E\x0A\x0D]";
-
-            // Replace matched characters with an empty string
-            string result = Regex.Replace(input, pattern, string.Empty);
-
-
-            // Define the regular expression pattern to match tab characters (\t)
-            string pattern2 = @"\t";
-
-            // Replace matched tab characters with an empty string
-            result = Regex.Replace(result, pattern2, string.Empty);
-
-            return result;
-        }
-    
+       
+     
+      
         /// <summary>
         /// 将 JSON 格式的字符串反序列化为对象。
         /// </summary>

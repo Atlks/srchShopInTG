@@ -257,6 +257,11 @@ namespace mdsj.lib
             return li;
         }
 
+        /// <summary>
+        ///  merge mode
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
         public static void CopySortedList(SortedList source, SortedList destination)
         {
             foreach (DictionaryEntry entry in source)
@@ -445,6 +450,24 @@ namespace mdsj.lib
         {
             System.Console.WriteLine(v);
         }
+
+        /// <summary>
+        /// overwrt mode,,,note append mode
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="destination"></param>
+        public static void CopySortedListCloneMode(SortedList source, SortedList destination)
+        {
+            // 清空目标 SortedList 以确保它是空的
+            destination.Clear();
+
+            // 复制数据
+            foreach (DictionaryEntry entry in source)
+            {
+                destination.Add(entry.Key, entry.Value);
+            }
+        }
+
         public static void PrintLog(object v)
         {
             DateTime now = DateTime.Now;

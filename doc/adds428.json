@@ -1,0 +1,346 @@
+{
+  "0x018f77e204d884495e15b383f8e2a9735c343ed6": {
+    "add": "0x018f77e204d884495e15b383f8e2a9735c343ed6",
+    "name": "USDT"
+  },
+  "0x0278869b42b3da4d8a803f5e5089e5a1b7a1ca8d": {
+    "add": "0x0278869b42b3da4d8a803f5e5089e5a1b7a1ca8d",
+    "name": "ETH"
+  },
+  "0x031d66bd33a00993517f6d55fe2b398d0bef44e9": {
+    "add": "0x031d66bd33a00993517f6d55fe2b398d0bef44e9",
+    "name": "ETH"
+  },
+  "0x07241dcaade5cda99172e33bb275da8b075f8629": {
+    "add": "0x07241dcaade5cda99172e33bb275da8b075f8629",
+    "name": "USDT"
+  },
+  "0x09b8159e1590b6f682a50ad33df0da7f3e139259": {
+    "add": "0x09b8159e1590b6f682a50ad33df0da7f3e139259",
+    "name": "ETH"
+  },
+  "0x0c9eb2c587de2fd019813c722a029d9b71462977": {
+    "add": "0x0c9eb2c587de2fd019813c722a029d9b71462977",
+    "name": "ETH"
+  },
+  "0x0e9d1439174847e59ddab5c22cd8d6fd654b93f6": {
+    "add": "0x0e9d1439174847e59ddab5c22cd8d6fd654b93f6",
+    "name": "ZIL"
+  },
+  "0x0f5f807a6a256bf1abe6d800d2c69a876daa70fe": {
+    "add": "0x0f5f807a6a256bf1abe6d800d2c69a876daa70fe",
+    "name": "THETA"
+  },
+  "0x14beec891ae0b37f059ebfdc7ac396a075cce3a4": {
+    "add": "0x14beec891ae0b37f059ebfdc7ac396a075cce3a4",
+    "name": "ETH"
+  },
+  "0x298d0042310dc1dc4ea30184fb61073776eb00ed": {
+    "add": "0x298d0042310dc1dc4ea30184fb61073776eb00ed",
+    "name": "ETH"
+  },
+  "0x3912cbfb318bdc0d69e0296f05403de6c03db7e2": {
+    "add": "0x3912cbfb318bdc0d69e0296f05403de6c03db7e2",
+    "name": "ETH"
+  },
+  "0x3c57b11e76e093bb6099e73bc42d7add0bd7fbf6": {
+    "add": "0x3c57b11e76e093bb6099e73bc42d7add0bd7fbf6",
+    "name": "USDT"
+  },
+  "0x5391fcdc1df981d2f97be517232462a94b766f5a": {
+    "add": "0x5391fcdc1df981d2f97be517232462a94b766f5a",
+    "name": "ETH"
+  },
+  "0x6121c2898c390f3f058013dff4a0ee117e936f5c": {
+    "add": "0x6121c2898c390f3f058013dff4a0ee117e936f5c",
+    "name": "UNI"
+  },
+  "0x6b2acb566c18939e700749f04664019c20d72740": {
+    "add": "0x6b2acb566c18939e700749f04664019c20d72740",
+    "name": "ETH"
+  },
+  "0x6dcfc3baf22a61ae22fe0b53b7eefcb91357a59d": {
+    "add": "0x6dcfc3baf22a61ae22fe0b53b7eefcb91357a59d",
+    "name": "FTM"
+  },
+  "0x7d26deb7ffa4b7bbb43cab571cc4cc3d1f36d7a6": {
+    "add": "0x7d26deb7ffa4b7bbb43cab571cc4cc3d1f36d7a6",
+    "name": "FLOW"
+  },
+  "0x7d8a69855ffd1091fbe19722814857a91b8fd004": {
+    "add": "0x7d8a69855ffd1091fbe19722814857a91b8fd004",
+    "name": "VET"
+  },
+  "0x88fd3b6d75049da6d92a6a72c8c16503565e25ba": {
+    "add": "0x88fd3b6d75049da6d92a6a72c8c16503565e25ba",
+    "name": "ETH"
+  },
+  "0x8faa203e18ef92b3ad7be1f72c542df87ac4957f": {
+    "add": "0x8faa203e18ef92b3ad7be1f72c542df87ac4957f",
+    "name": "USDT"
+  },
+  "0x92c27b340c54d2cf789031600c342a0effaa16a9": {
+    "add": "0x92c27b340c54d2cf789031600c342a0effaa16a9",
+    "name": "USDT"
+  },
+  "0x92dbb61ad6682187267296842c2c703257284351": {
+    "add": "0x92dbb61ad6682187267296842c2c703257284351",
+    "name": "USDT"
+  },
+  "0x9708edacbd0303b91df51c911a007345d7cbf924": {
+    "add": "0x9708edacbd0303b91df51c911a007345d7cbf924",
+    "name": "ETH"
+  },
+  "0x9a3a4fcd521fb8db1c5884c40c0a81b0d94eb5a8410c3a208b59c17423e44e1a": {
+    "add": "0x9a3a4fcd521fb8db1c5884c40c0a81b0d94eb5a8410c3a208b59c17423e44e1a",
+    "name": "SUI"
+  },
+  "0xa1085bcab46966dcb1faeab3947d543654e5a80d": {
+    "add": "0xa1085bcab46966dcb1faeab3947d543654e5a80d",
+    "name": "BNB"
+  },
+  "0xa53f956b9213c0e7f7e6428fa9c0881db1ce58d3": {
+    "add": "0xa53f956b9213c0e7f7e6428fa9c0881db1ce58d3",
+    "name": "ETH"
+  },
+  "0xab4789dc60b6657fd097de03d039579a0bb9f697": {
+    "add": "0xab4789dc60b6657fd097de03d039579a0bb9f697",
+    "name": "ETH"
+  },
+  "0xbf86d4c325196d8e8401783b0734891fc7b956b2": {
+    "add": "0xbf86d4c325196d8e8401783b0734891fc7b956b2",
+    "name": "ETH"
+  },
+  "0xc2fe2689d8f8c8d1a6d9aea60a622079d3e3263e": {
+    "add": "0xc2fe2689d8f8c8d1a6d9aea60a622079d3e3263e",
+    "name": ""
+  },
+  "0xc31b0576bb9bfb1df2c5cc3f47b9b58db46d3630": {
+    "add": "0xc31b0576bb9bfb1df2c5cc3f47b9b58db46d3630",
+    "name": "SHIB"
+  },
+  "0xc54931775f7b9f2f9648c38c52b96ccb828bf8af": {
+    "add": "0xc54931775f7b9f2f9648c38c52b96ccb828bf8af",
+    "name": "USDC"
+  },
+  "0xcdf15bb0bf5257a5d2dbd3d858c68227f781b0fb": {
+    "add": "0xcdf15bb0bf5257a5d2dbd3d858c68227f781b0fb",
+    "name": "USDT"
+  },
+  "0xd053a75fffbeaa1a4a605c4b70a3c7571429afb9": {
+    "add": "0xd053a75fffbeaa1a4a605c4b70a3c7571429afb9",
+    "name": "MATIC"
+  },
+  "0xd165273204bf8ffbbfecb88fd6ca40a5ee24f479": {
+    "add": "0xd165273204bf8ffbbfecb88fd6ca40a5ee24f479",
+    "name": "ARB"
+  },
+  "0xd535329f5c925d3007c4c2ff4b0bd70b2ac382b4": {
+    "add": "0xd535329f5c925d3007c4c2ff4b0bd70b2ac382b4",
+    "name": "ETH"
+  },
+  "0xd58e139ad71d590199a1214d2811184eb27f560c": {
+    "add": "0xd58e139ad71d590199a1214d2811184eb27f560c",
+    "name": "ETH"
+  },
+  "0xdee69e9b0f899a21e0b2ffdb75d32eeef7d2a049": {
+    "add": "0xdee69e9b0f899a21e0b2ffdb75d32eeef7d2a049",
+    "name": "WLD"
+  },
+  "0xe38cd3f0aad07088003f955132a31196183a087d": {
+    "add": "0xe38cd3f0aad07088003f955132a31196183a087d",
+    "name": "ETH"
+  },
+  "0xee710c0faa5aecdc0ddf99e26239acef2c82ad04": {
+    "add": "0xee710c0faa5aecdc0ddf99e26239acef2c82ad04",
+    "name": "USDT"
+  },
+  "0xf318e2bc20eb06abb35344b7ec5c961eceef7b00": {
+    "add": "0xf318e2bc20eb06abb35344b7ec5c961eceef7b00",
+    "name": "ETH"
+  },
+  "0xf3da7793fc150c3538a8cc3827ad337a790865b3": {
+    "add": "0xf3da7793fc150c3538a8cc3827ad337a790865b3",
+    "name": "USDT"
+  },
+  "0xf691bcda92145257694769411926d2f2ae48b21c": {
+    "add": "0xf691bcda92145257694769411926d2f2ae48b21c",
+    "name": "TFUEL"
+  },
+  "0xf6ded320ed4fa39df0552286fe6e788896e9b282": {
+    "add": "0xf6ded320ed4fa39df0552286fe6e788896e9b282",
+    "name": "BNB"
+  },
+  "0xfbd6836cf474634572a2266d92aeae4edf435a91": {
+    "add": "0xfbd6836cf474634572a2266d92aeae4edf435a91",
+    "name": "ETH"
+  },
+  "15gnnvjqra1ax1sy9krbu1v8sg5fuwcbewjuede2buudzzxn": {
+    "add": "15gnnvjqra1ax1sy9krbu1v8sg5fuwcbewjuede2buudzzxn",
+    "name": "DOT"
+  },
+  "15vrpndwdt7qstmeaehyqyt22alacqhmgdyttajetp9wm9bu": {
+    "add": "15vrpndwdt7qstmeaehyqyt22alacqhmgdyttajetp9wm9bu",
+    "name": "DOT"
+  },
+  "427bxmcpxv9nk2k29k2ilbci3zf1fawrt7nxp7ketelz": {
+    "add": "427bxmcpxv9nk2k29k2ilbci3zf1fawrt7nxp7ketelz",
+    "name": "SOL"
+  },
+  "4arl4dsuybkpdxxqjak2ih2am9u46zputgddezmiw3pgx2u42q83bb24luxamhxdfvqdwyhzzzgmseur2dxafwrwhr7l72w": {
+    "add": "4arl4dsuybkpdxxqjak2ih2am9u46zputgddezmiw3pgx2u42q83bb24luxamhxdfvqdwyhzzzgmseur2dxafwrwhr7l72w",
+    "name": "XMR"
+  },
+  "7k4j8p6ialfjbg6yio6ckcfbankwzarokue1f4k1loow": {
+    "add": "7k4j8p6ialfjbg6yio6ckcfbankwzarokue1f4k1loow",
+    "name": "SOL"
+  },
+  "8b0352bbccc3b1f83730b887aa04d167d155be1285133cac33114ea166c123d4": {
+    "add": "8b0352bbccc3b1f83730b887aa04d167d155be1285133cac33114ea166c123d4",
+    "name": "ICP"
+  },
+  "8xiax6anzbgexutctrca3ptnedacjm4jnbvehpadqy5g": {
+    "add": "8xiax6anzbgexutctrca3ptnedacjm4jnbvehpadqy5g",
+    "name": "SOL"
+  },
+  "addr1q9uv54jz5jwlwsq3hnywwhu4dtjg0guktpcztllpmyx02tqhfuzaq4uaqjqu2x4qd2waxyr3u6cp0gr7le0e4cz534eqw6klp0": {
+    "add": "addr1q9uv54jz5jwlwsq3hnywwhu4dtjg0guktpcztllpmyx02tqhfuzaq4uaqjqu2x4qd2waxyr3u6cp0gr7le0e4cz534eqw6klp0",
+    "name": "ADA"
+  },
+  "azqrh7avaku7j5su2974kgojc5n6bexyu8": {
+    "add": "azqrh7avaku7j5su2974kgojc5n6bexyu8",
+    "name": "ONG"
+  },
+  "c73cvrx4aecxnhcmxvdmrcl8ld5g2makimx2fgwlfy5n": {
+    "add": "c73cvrx4aecxnhcmxvdmrcl8ld5g2makimx2fgwlfy5n",
+    "name": "SOL"
+  },
+  "cosmos13j04ucadvfz8aa99uucz4n0kchyl959nxaecv4": {
+    "add": "cosmos13j04ucadvfz8aa99uucz4n0kchyl959nxaecv4",
+    "name": "ATOM"
+  },
+  "cosmos175cxsqheyr28ky7e8ezcagspv72qg9xhmvye5q": {
+    "add": "cosmos175cxsqheyr28ky7e8ezcagspv72qg9xhmvye5q",
+    "name": "ATOM"
+  },
+  "d6p5slnmfz7epwpjg96v6nsdeixcmi6vmr": {
+    "add": "d6p5slnmfz7epwpjg96v6nsdeixcmi6vmr",
+    "name": "DOGE"
+  },
+  "dbgaesipownywyzsn1adnsyazv3e8ewfcz": {
+    "add": "dbgaesipownywyzsn1adnsyazv3e8ewfcz",
+    "name": "DOGE"
+  },
+  "e4c3dluksaujkkqhhj26cdj3ctp9qjestqq9lbqetaie": {
+    "add": "e4c3dluksaujkkqhhj26cdj3ctp9qjestqq9lbqetaie",
+    "name": "SOL"
+  },
+  "f12xtplreigdpt3zk3ktrbs54mr5i7kutovqaxc2y": {
+    "add": "f12xtplreigdpt3zk3ktrbs54mr5i7kutovqaxc2y",
+    "name": "FIL"
+  },
+  "f1hjj7wcmnjc2kohtm6dvthbyaaaetq4x7bjtrndi": {
+    "add": "f1hjj7wcmnjc2kohtm6dvthbyaaaetq4x7bjtrndi",
+    "name": "FIL"
+  },
+  "frfsfacq1zgycvzwjxpdkrfbezq3mdsmu9gwknvc8kkk": {
+    "add": "frfsfacq1zgycvzwjxpdkrfbezq3mdsmu9gwknvc8kkk",
+    "name": "BONK"
+  },
+  "gcsuhukbfkzttfnnad17jvuszgbgsh5r4dpsnzafrfrq": {
+    "add": "gcsuhukbfkzttfnnad17jvuszgbgsh5r4dpsnzafrfrq",
+    "name": "SOL"
+  },
+  "hx30f8ea41c80fdd102658db796aa27c5c01d5b900": {
+    "add": "hx30f8ea41c80fdd102658db796aa27c5c01d5b900",
+    "name": "ICX"
+  },
+  "io1nxys9uj7sa0nrnqygs43k23n8vspl65d5du9j2": {
+    "add": "io1nxys9uj7sa0nrnqygs43k23n8vspl65d5du9j2",
+    "name": "IOTX"
+  },
+  "je37xumidnyab7hvtaqjmyt4kajr78eh41mh6etxyr9i": {
+    "add": "je37xumidnyab7hvtaqjmyt4kajr78eh41mh6etxyr9i",
+    "name": "SOL"
+  },
+  "kava1ps2qtayf5fv3mjsz9k5wlhxswmr603mm3rsk5q": {
+    "add": "kava1ps2qtayf5fv3mjsz9k5wlhxswmr603mm3rsk5q",
+    "name": "KAVA"
+  },
+  "lnbc174400n1pnzt5umpp5ssr70wdpccrtqngvklkp7hhr8avws39frsxa5n53l7f7a2xj5atsdq5vdhkjmnnvfjk2tnrdakscqzzsxqrp9wsp5u7dqm9lfr4gxfvlvq944xwwe7pc8xmcu6e6zaw9w34t4gd0gls9s9qyyssq0lsq3full5650q7kw5pqjex4c75fvh4v3wqx4f9q9gjq0z993agkw0yelu2vxd58q5g79pstc3trcl2jw72ey5x4uthd3u0u5mnhj8sp4hdy6j": {
+    "add": "lnbc174400n1pnzt5umpp5ssr70wdpccrtqngvklkp7hhr8avws39frsxa5n53l7f7a2xj5atsdq5vdhkjmnnvfjk2tnrdakscqzzsxqrp9wsp5u7dqm9lfr4gxfvlvq944xwwe7pc8xmcu6e6zaw9w34t4gd0gls9s9qyyssq0lsq3full5650q7kw5pqjex4c75fvh4v3wqx4f9q9gjq0z993agkw0yelu2vxd58q5g79pstc3trcl2jw72ey5x4uthd3u0u5mnhj8sp4hdy6j",
+    "name": "BTC"
+  },
+  "ltc1qpzpy4z9ra3rnpp0ppe28k3rrzwj6ra60n4mal2": {
+    "add": "ltc1qpzpy4z9ra3rnpp0ppe28k3rrzwj6ra60n4mal2",
+    "name": "LTC"
+  },
+  "one144lrw8qc4xlqxz4exzwlldsr2vdd267afww2tr": {
+    "add": "one144lrw8qc4xlqxz4exzwlldsr2vdd267afww2tr",
+    "name": "ONE"
+  },
+  "osmo15p9pp3mjqm58wurxqexrjvpcljw4ztzv3nykca": {
+    "add": "osmo15p9pp3mjqm58wurxqexrjvpcljw4ztzv3nykca",
+    "name": "OSMO"
+  },
+  "qtgtlftnurvbpuxgcyctppdehf1phqk5xh": {
+    "add": "qtgtlftnurvbpuxgcyctppdehf1phqk5xh",
+    "name": "QTUM"
+  },
+  "rj7jwkau3uahru9htdfnx7dcdykuqhq4xy": {
+    "add": "rj7jwkau3uahru9htdfnx7dcdykuqhq4xy",
+    "name": "XRP"
+  },
+  "rmypf27qq1k8um1enxykcjrzqar3lwsazq": {
+    "add": "rmypf27qq1k8um1enxykcjrzqar3lwsazq",
+    "name": "XRP"
+  },
+  "rpwjmmcpm4ynnfvhazfymphbq5fyfdjbzu": {
+    "add": "rpwjmmcpm4ynnfvhazfymphbq5fyfdjbzu",
+    "name": "XRP"
+  },
+  "sei15p9pp3mjqm58wurxqexrjvpcljw4ztzv5yxsgw": {
+    "add": "sei15p9pp3mjqm58wurxqexrjvpcljw4ztzv5yxsgw",
+    "name": "SEI"
+  },
+  "t1tfvympfnzdax53qbx1wgxznntzc87qxnq": {
+    "add": "t1tfvympfnzdax53qbx1wgxznntzc87qxnq",
+    "name": "ZEC"
+  },
+  "tfgr7f5ds3hdpmcmkfsisdrypmc7luccpz": {
+    "add": "tfgr7f5ds3hdpmcmkfsisdrypmc7luccpz",
+    "name": "TRX"
+  },
+  "thor1nm0n7cqxl75ktel5cr9mlu2vudpn9ws9ah0jpe": {
+    "add": "thor1nm0n7cqxl75ktel5cr9mlu2vudpn9ws9ah0jpe",
+    "name": "RUNE"
+  },
+  "tkpaur9nrnfbk2wuy4cqwyt5h9ojrrrrrr": {
+    "add": "tkpaur9nrnfbk2wuy4cqwyt5h9ojrrrrrr",
+    "name": "USDT"
+  },
+  "tm8zcv2grbsvyffiyfiyz9j8cab2ahcxtu": {
+    "add": "tm8zcv2grbsvyffiyfiyz9j8cab2ahcxtu",
+    "name": "USDT"
+  },
+  "tmxagqt1escpalpdjtqgzcf3ccehikhe8x": {
+    "add": "tmxagqt1escpalpdjtqgzcf3ccehikhe8x",
+    "name": "USDT"
+  },
+  "tppfwqqsw5axfgnmxcw7fv9zpfrgxqz2y5": {
+    "add": "tppfwqqsw5axfgnmxcw7fv9zpfrgxqz2y5",
+    "name": "USDT"
+  },
+  "tpyepds43vvatzajt3lybb3f14wdw7n7w3": {
+    "add": "tpyepds43vvatzajt3lybb3f14wdw7n7w3",
+    "name": "TRX"
+  },
+  "tqok2dsrmaf3qgsc6duq24mwacnxs3oz1w": {
+    "add": "tqok2dsrmaf3qgsc6duq24mwacnxs3oz1w",
+    "name": "USDT"
+  },
+  "xrni5un1grtsyjgz2gydl9axqacjepogy7": {
+    "add": "xrni5un1grtsyjgz2gydl9axqacjepogy7",
+    "name": "DASH"
+  }
+}

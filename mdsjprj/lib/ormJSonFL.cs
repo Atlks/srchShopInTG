@@ -376,7 +376,7 @@ namespace prjx.lib
             wriToDbf(saveList_hpmod, Strfile);
         }
 
-        private static void wriToDbf(object lst, string dbfl)
+        public static void wriToDbf(object lst, string dbfl)
         {
             File.WriteAllText(dbfl, JsonConvert.SerializeObject(lst, Formatting.Indented));
         }

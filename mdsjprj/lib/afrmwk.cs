@@ -47,16 +47,19 @@ namespace mdsj.lib
             Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88897");
             PrintLog("ttt");
             SetConsoleQuickEditMode(false);
-
+            Boot4StbltSetting();
             //-----------------log
-      
+
             RunSetRollLogFileV2();
             //-----------end log
             //add all cache db 
+    
+            //------------------ 设置全局异常处理
+            mdsj.lib.exCls.set_error_handler();
             //捕获未处理的同步异常：使用 AppDomain.CurrentDomain.UnhandledException 事件。
             //捕获未处理的异步异常：使用 TaskScheduler.UnobservedTaskException 事件。
-            // 设置全局异常处理
-            mdsj.lib.exCls.set_error_handler();
+
+            //-----------------start music
             callTryAll(() =>
             {
 

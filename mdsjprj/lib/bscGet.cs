@@ -72,6 +72,38 @@ namespace mdsj.lib
             return dic;
         }
 
+        public static void SetElmt(List<SortedList> li127, SortedList SortedList1)
+        {
+            SortedList obj = GetSortedlist(li127, SortedList1["id"].ToString());
+
+            if (obj == null)
+                li127.Add(SortedList1);
+            else
+            {
+                obj.Clear();
+                CopySortedListCloneMode(SortedList1, obj);
+            }
+        }
+
+        public static SortedList GetSortedlist(List<SortedList> li127, string v)
+        {
+            foreach (SortedList obj in li127)
+            {
+                if (GetField(obj, "id") == v)
+                    return obj;
+            }
+            return null;
+        }
+
+        public static object GetField(SortedList  map, string v)
+        {
+            if (map == null)
+                return "";
+            if (map.ContainsKey(v))
+                return map[v];
+            return "";
+
+        }
         public static string GetField(Dictionary<string, string> map, string v)
         {
             if (map == null)
@@ -1026,6 +1058,17 @@ namespace mdsj.lib
             }
 
             return list;
+        }
+
+        public static SortedList GetHashtableFromQrystr(string queryString)
+        {
+            return ToSortedListFrmQrystr(queryString);
+        }
+        public static string GetMethodName(Delegate del)
+        {
+            // 使用反射获取方法信息
+            var methodInfo = del.Method;
+            return methodInfo.Name;
         }
 
         public static string GetFunFromPathUrl(string path)

@@ -1,6 +1,7 @@
 ﻿global using static mdsj.lib.EmlGgl;
 using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
+using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using System;
@@ -14,9 +15,9 @@ namespace mdsj.lib
 {
     internal class EmlGgl
     {
-        public static async Task gglML(string credentialsPath,string subjectQuery)
+        public static async Task gglML(string credentialsPath,string subjectQuery,string saveDir)
         {
-            // OAuth 2.0 Scopes for Gmail API
+            // ----------------------OAuth 2.0 Scopes for Gmail API
             string[] Scopes = { GmailService.Scope.GmailReadonly };
             string ApplicationName = "Gmail API .NET Quickstart";
             //   string credentialsPath = "path/to/your/credentials.json"; // Update the path to your credentials file
@@ -43,16 +44,35 @@ namespace mdsj.lib
                 ApplicationName = ApplicationName,
             });
 
-            // Define request parameters
+            //-------------------------------- Define request parameters
             var request = service.Users.Messages.List("me");
             request.Q = $"subject:{subjectQuery}"; // 搜索标题包含指定内容的邮件
             request.LabelIds = "INBOX";
             request.IncludeSpamTrash = false;
-            request.MaxResults = 888;
+            request.MaxResults = 500;   // Messages.Count def is 100
 
+            string pageToken = null;
+            do
+            {
+                request.PageToken = pageToken;
+                try
+                {
+                    ListMessagesResponse response = await processCurPage(saveDir, service, request);
+                    pageToken = response.NextPageToken;
+                }catch(Exception e)
+                {
+                    Print(e);
+                }             
+
+            } while (pageToken != null); // 继续循环直到没有更多的页码           
+            
+        }
+
+        private static async Task<ListMessagesResponse> processCurPage(string saveDir, GmailService service, UsersResource.MessagesResource.ListRequest request)
+        {
             // Fetch emails
             var response = await request.ExecuteAsync();
-            // Messages.Count def is 100
+
             Console.WriteLine("Messages:");
             if (response.Messages != null && response.Messages.Count > 0)
             {
@@ -60,17 +80,22 @@ namespace mdsj.lib
                 {
                     var emailInfoRequest = service.Users.Messages.Get("me", message.Id);
                     var emailInfoResponse = await emailInfoRequest.ExecuteAsync();
+                    try
+                    {
+                        foreachMessage(message, emailInfoResponse, saveDir);
+                    }
+                    catch (Exception e)
+                    {
+                        Print(e);
+                    }
 
-                    foreachMessage(message, emailInfoResponse);
                 }
             }
-            else
-            {
-                Console.WriteLine("No messages found.");
-            }
+
+            return response;
         }
 
-        public static void foreachMessage(Google.Apis.Gmail.v1.Data.Message? message, Google.Apis.Gmail.v1.Data.Message emailInfoResponse)
+        public static void foreachMessage(Google.Apis.Gmail.v1.Data.Message? message, Google.Apis.Gmail.v1.Data.Message emailInfoResponse, string saveDir)
         {
             Print(EncodeJson(message));
             Console.WriteLine($"Message ID: {message.Id}");
@@ -123,7 +148,7 @@ namespace mdsj.lib
 
             hstb.Add("body", body);//   
 
-            String fname = $"EmlDir2/{ConvertToValidFileName2024(subject)}.htm";
+            String fname = $"{saveDir}/{ConvertToValidFileName2024(subject)}.htm";
             DateTime now = DateTime.Now;
             string customFormat = now.ToString("yyyy-MM-dd.HHmmss.fff");
             if (!IsExistFil(fname))

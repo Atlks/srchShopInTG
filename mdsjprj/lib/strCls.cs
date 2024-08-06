@@ -141,16 +141,7 @@ namespace prjx.lib
 
             return str.Substring(0, len);
         }
-        public static Dictionary<string, StringValues> ParseQuery2024(string qerystr)
-        {
-            if (!qerystr.StartsWith("http"))
-            {
-                //    var uri = new Uri("https://t.me/" + qerystr);  uri.Query
-                var parameters = QueryHelpers.ParseQuery(qerystr);
-                return parameters;
-            }
-            return QueryHelpers.ParseQuery(qerystr); ;
-        }
+    
         public static HashSet<string> SplitTxtByChrs(string content, string spltChrs)
         {
             char[] separators = spltChrs.ToCharArray();// new char[] { ' ', '\r', '\n', ',' };
@@ -321,28 +312,7 @@ namespace prjx.lib
         //    return ChineseConverter.Convert(str, ChineseConversionDirection.TraditionalToSimplified);
         //}
 
-        public static string ConvertToSimplifiedChinese(string traditionalChinese)
-        {
-          //  ChineseConverter
-            Dictionary<char, char> traditionalToSimplifiedMap = new Dictionary<char, char>
-        {
-            {'繁', '繁'},
-            {'體', '体'},
-            {'中', '中'},
-            {'文', '文'}
-            // 这里需要添加所有的繁体到简体的映射
-        };
-
-            char[] simplifiedChars = new char[traditionalChinese.Length];
-            for (int i = 0; i < traditionalChinese.Length; i++)
-            {
-                char ch = traditionalChinese[i];
-                simplifiedChars[i] = traditionalToSimplifiedMap.ContainsKey(ch) ? traditionalToSimplifiedMap[ch] : ch;
-            }
-
-            return new string(simplifiedChars);
-        }
-
+     
 
         //public static string ConvertToSimplifiedChinese(string traditionalChinese)
         //{
@@ -469,28 +439,9 @@ namespace prjx.lib
             HashSet<string> st = LoadHashstWordsFromFile(wdsFromfilePath);
             return (ContainRetMatchWd(text, st));
         }
-        public static SortedList GetHashtableFromQrystr(string queryString)
-        {
-            return ParseQueryStringToSortedList(queryString);
-        }
-            public static SortedList ParseQueryStringToSortedList(string queryString)
-        {
-            // 使用 HttpUtility.ParseQueryString 解析查询字符串
-            NameValueCollection queryParameters = HttpUtility.ParseQueryString(queryString);
 
-            // 创建一个新的 SortedList
-            SortedList sortedList = new SortedList();
-
-            // 将解析后的查询字符串参数添加到 SortedList 中
-            foreach (string key in queryParameters)
-            {
-                string k = key.Trim();
-           //     key = key.Trim();
-                sortedList.Add(k, queryParameters[key]);
-            }
-
-            return sortedList;
-        }
+     
+        
         public static string[] TrimUper(string[] inputArray)
         {
             if (inputArray == null) return [];

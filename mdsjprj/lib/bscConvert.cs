@@ -20,12 +20,85 @@ using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 using Telegram.Bot.Types;
 using static SqlParser.Ast.Expression;
+using Microsoft.AspNetCore.WebUtilities;
 
 namespace mdsj.lib
 {
     public class bscConvert
     {
-    
+        public static Dictionary<string, StringValues> ToDic941(string qerystr)
+        {
+            if (!qerystr.StartsWith("http"))
+            {
+                //    var uri = new Uri("https://t.me/" + qerystr);  uri.Query
+                var parameters = QueryHelpers.ParseQuery(qerystr);
+                return parameters;
+            }
+            return QueryHelpers.ParseQuery(qerystr); ;
+        }
+
+        public static SortedList ToSortedListFrmQrystr(string queryString)
+        {
+            // 使用 HttpUtility.ParseQueryString 解析查询字符串
+            NameValueCollection queryParameters = HttpUtility.ParseQueryString(queryString);
+
+            // 创建一个新的 SortedList
+            SortedList sortedList = new SortedList();
+
+            // 将解析后的查询字符串参数添加到 SortedList 中
+            foreach (string key in queryParameters)
+            {
+                string k = key.Trim();
+                //     key = key.Trim();
+                sortedList.Add(k, queryParameters[key]);
+            }
+
+            return sortedList;
+        }
+
+        public static string ConvertToSimplifiedChinese(string traditionalChinese)
+        {
+            //  ChineseConverter
+            Dictionary<char, char> traditionalToSimplifiedMap = new Dictionary<char, char>
+        {
+            {'繁', '繁'},
+            {'體', '体'},
+            {'中', '中'},
+            {'文', '文'}
+            // 这里需要添加所有的繁体到简体的映射
+        };
+
+            char[] simplifiedChars = new char[traditionalChinese.Length];
+            for (int i = 0; i < traditionalChinese.Length; i++)
+            {
+                char ch = traditionalChinese[i];
+                simplifiedChars[i] = traditionalToSimplifiedMap.ContainsKey(ch) ? traditionalToSimplifiedMap[ch] : ch;
+            }
+
+            return new string(simplifiedChars);
+        }
+
+        public static SortedList CastJObjectToSortedList(JObject jObject)
+        {
+            var sortedList = new SortedList();
+
+            foreach (var property in jObject.Properties())
+            {
+                // 递归处理嵌套的 JObject
+                if (property.Value.Type == JTokenType.Object)
+                {
+                    sortedList.Add(property.Name, ConvertJObjectToSortedList((JObject)property.Value));
+                }
+                else
+                {
+                    sortedList.Add(property.Name, property.Value.ToObject<object>());
+                }
+            }
+
+            return sortedList;
+        }
+
+
         public static SortedList castKeyToEnName(SortedList sortedList, SortedList<string, string> transmap)
         {
             SortedList map3 = new SortedList();
@@ -345,6 +418,25 @@ namespace mdsj.lib
                 // 将 JToken 转换为 .NET 类型
                 object value = property.Value;//.ToObject<object>();
                 sortedList.Add(property.Name, value);
+            }
+
+            return sortedList;
+        }
+        public static SortedList<string, object> ConvertJObjectToSortedList(JObject jObject)
+        {
+            var sortedList = new SortedList<string, object>();
+
+            foreach (var property in jObject.Properties())
+            {
+                // 递归处理嵌套的 JObject
+                if (property.Value.Type == JTokenType.Object)
+                {
+                    sortedList.Add(property.Name, ConvertJObjectToSortedList((JObject)property.Value));
+                }
+                else
+                {
+                    sortedList.Add(property.Name, property.Value.ToObject<object>());
+                }
             }
 
             return sortedList;
