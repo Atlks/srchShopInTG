@@ -215,7 +215,8 @@ namespace prjx
 
         public static async Task Main(string[] args)
         {
-            for(int i=0;i<5;i++)
+            GenerateImageFromHtml("D:\\0prj\\mdsj\\mdsjprj\\cfg\\btns.htm","btns405.jpg");
+            for (int i=0;i<5;i++)
             {
                 SortedList st = new SortedList();
                 st.Add("id", "id" + i);

@@ -18,6 +18,18 @@ namespace prjx.lib
 {
     public class arrCls
     {
+
+        public static void UpdtElmtSqlmode(List<SortedList> li127, SortedList SortedList1)
+        {
+            SortedList obj = GetSortedlist(li127, SortedList1["id"].ToString());
+
+            if (obj == null)
+                li127.Add(SortedList1);
+            else
+            {
+                CopySortedList(SortedList1, obj);
+            }
+        }
         public static void arr_cut()
         {
             // 定义两个 HashSet

@@ -3,16 +3,95 @@ using HtmlAgilityPack;
 using prjx.lib;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using TheArtOfDev.HtmlRenderer.WinForms;
+//using HtmlRenderer.WinForms;
+
 
 namespace mdsj.lib
 {
     internal class htmlCls
     {
+
+      public  static void GenerateImageFromHtml(string htmlFilePath, string outputImagePath)
+        {
+            string wkhtmltoimagePath = @"D:\Program Files\wkhtmltopdf\bin\wkhtmltoimage.exe";
+
+            // 确保 wkhtmltoimage.exe 存在
+            if (!System.IO.File.Exists(wkhtmltoimagePath))
+            {
+                throw new FileNotFoundException("wkhtmltoimage.exe not found.", wkhtmltoimagePath);
+            }
+
+            // 创建进程启动信息
+            var processStartInfo = new ProcessStartInfo
+            {
+                FileName = wkhtmltoimagePath,
+                Arguments = $"\"{htmlFilePath}\" \"{outputImagePath}\"",
+                RedirectStandardError = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+
+            // 启动进程并等待完成
+            using (var process = Process.Start(processStartInfo))
+            {
+                if (process == null)
+                {
+                    throw new InvalidOperationException("Failed to start process.");
+                }
+
+                // 读取标准错误输出（如果有）
+                string error = process.StandardError.ReadToEnd();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0)
+                {
+                    throw new InvalidOperationException($"wkhtmltoimage failed with exit code {process.ExitCode}: {error}");
+                }
+            }
+        }
+        //static void RenderHtmlToImage(string htmlFilePath, string outputImagePath)
+        //{
+        //    // 读取 HTML 文件内容
+        //    string htmlContent = File.ReadAllText(htmlFilePath);
+
+        //    // 使用 HtmlRender 渲染 HTML 内容到图像
+        //    // 创建一个空的 Bitmap 图像
+        //    using (var bitmap = new Bitmap(1000, 1000)) // 使用适当的尺寸
+        //    using (var graphics = Graphics.FromImage(bitmap))
+        //    {
+        //        // 设置图像背景颜色
+        //        graphics.Clear(Color.White);
+
+        //        // 创建一个 Graphics 对象用于渲染 HTML
+        //        var htmlRenderer = new HtmlRenderer.HtmlPanel
+        //        {
+        //            Html = htmlContent,
+        //            AutoSize = true
+        //        };
+
+        //        // 计算 HTML 面板的大小
+        //        var preferredSize = htmlRenderer.GetPreferredSize(new Size(1000, 1000));
+
+        //        // 更新 Bitmap 尺寸
+        //        bitmap = new Bitmap((int)preferredSize.Width, (int)preferredSize.Height);
+        //        graphics = Graphics.FromImage(bitmap);
+
+        //        // 绘制 HTML 内容到图像
+        //        htmlRenderer.DrawToBitmap(bitmap, new Rectangle(0, 0, bitmap.Width, bitmap.Height));
+
+        //        // 保存图像为 JPG 文件
+        //        bitmap.Save(outputImagePath, ImageFormat.Jpeg);
+        //    }
+        //}
 
 
         public static HashSet<string> ExtractWordsFromFilesHtml(string folderPath)
