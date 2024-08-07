@@ -44,7 +44,7 @@ namespace mdsj.lib
         }
         public static void Evtboot(Action actBiz)
         {
-            Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88898");
+            Print("!!!!****⚠️⚠️⚠️⚠️⚠️⚠️⚠️ver88899");
             PrintLog("ttt");
             SetConsoleQuickEditMode(false);
             Boot4StbltSetting();

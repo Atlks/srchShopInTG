@@ -386,6 +386,8 @@ namespace mdsj.lib
         {
             // URL 编码非法字符
             string invalidChars = new string(System.IO.Path.GetInvalidFileNameChars());
+            invalidChars = invalidChars + "/"+"\\"+"|"+ "\"";//syege he shwao inhao
+                invalidChars = invalidChars + "*:?<>&";
             StringBuilder encodedBuilder = new StringBuilder();
             foreach (char c in input)
             {

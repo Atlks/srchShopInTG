@@ -57,7 +57,7 @@ namespace mdsj.lib
             // Configure Kestrel to listen on a specific port
             ConfigureWebHostBuilder webHost = builder.WebHost;
             webHost.ConfigureLogging(logging => { });
-           // webHost.UseStaticWebAssets
+            // webHost.UseStaticWebAssets
             webHost.ConfigureKestrel(serverOptions =>
             {
                 Dictionary<string, string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
@@ -65,7 +65,9 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-              //      CfgHttps(serverOptions, map);
+                int https = GetFieldAsInt526(map, "https", 0);
+                if (https == 1)
+                    CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
@@ -74,8 +76,9 @@ namespace mdsj.lib
             RequestDelegate RequestDelegate1 = async (HttpContext context) =>
                         {
                             // todo  TryNotLgJmpEndAsync
-                            Action< HttpContext> a = async (HttpContext context)=>{
-                               
+                            Action<HttpContext> a = async (HttpContext context) =>
+                            {
+
                             };
                             try
                             {
@@ -99,7 +102,7 @@ namespace mdsj.lib
                                 //impt cant find path ,need tips 
                                 context.Response.WriteAsync(e.Message);
                             }
-                            
+
 
                             Print(" end req...");
                             PrintTimestamp();
@@ -116,13 +119,15 @@ namespace mdsj.lib
             Print(certPath);
             var keypath = GetField(map, "https_cert_password");
             keypath = $"{prjdir}cfg\\private.key";
-         //   certPassword = ReadAllText(certPassword);
-        //    certPassword = "";
+            //   certPassword = ReadAllText(certPassword);
+            //    certPassword = "";
             Print("certPassword=>" + keypath);
             if (File.Exists(certPath))
             {
                 serverOptions.ListenAnyIP(httpsPort, listenOptions =>
                 {
+                    Print("httpsPort=>" + httpsPort);
+                    Print("certPath=>" + certPath); Print("keypath=>" + keypath);
                     listenOptions.UseHttps(certPath, keypath);
                 });
                 //serverOptions.ListenAnyIP(443, listenOptions =>
@@ -132,7 +137,7 @@ namespace mdsj.lib
             }
             else
             {
-                Console.WriteLine($"Certificate file not found at: {certPath}");
+                Console.WriteLine($"!!!Certificate file not found at: {certPath}");
             }
         }
 
@@ -265,15 +270,15 @@ namespace mdsj.lib
             path = CastToPathReal(path);
 
             var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
-        //    List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
+            //    List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
             if (path.StartsWith("/api/"))
                 path = SubStr(path, 4);// rmv api
             return path;
         }
 
-     
 
-  
+
+
 
 
         /// <summary>
@@ -328,8 +333,8 @@ namespace mdsj.lib
         {
             var __METHOD__ = "HttpHdlrFil";
             PrintTimestamp($"enter {__METHOD__}() ");
-      
-                //MethodBase.GetCurrentMethod().Name;
+
+            //MethodBase.GetCurrentMethod().Name;
             jmp2endCurFunInThrd.Value = __METHOD__;
             PrintCallFunArgs(__METHOD__, func_get_args("req,resp", extnameNhdlrChooser));
             var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
@@ -337,7 +342,7 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
-          
+
             path = CastPathReal4biz(path);
 
             if (path.Contains("analytics"))
@@ -605,16 +610,17 @@ namespace mdsj.lib
             path = CastPathReal4biz(path);
 
             string pathDsk = webrootDir + path;
-            if(IsExistFil(pathDsk))
+            if (IsExistFil(pathDsk))
             {
                 object rzt2 = ReadAllText(pathDsk);
                 await response.WriteAsync(rzt2.ToString(), Encoding.UTF8);
-            }else
+            }
+            else
             {
                 PrintWarn("file not exist!" + pathDsk);
-                await response.WriteAsync("file not exist!"+pathDsk, Encoding.UTF8);
+                await response.WriteAsync("file not exist!" + pathDsk, Encoding.UTF8);
             }
-         
+
             //   Print();
 
             PrintTimestamp(" JsonFLhttpHdlrFilJson()...end");
@@ -624,7 +630,7 @@ namespace mdsj.lib
 
         }
 
-     
+
 
 
         /// <summary>
