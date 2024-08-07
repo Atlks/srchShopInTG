@@ -395,6 +395,10 @@ namespace mdsj.lib
             {
                 return false;
             }
+            if (IsHashtable(inputArray))
+            {
+                return false;
+            }
 
             if (IsSortedListOfStringObject(inputArray))
             {
@@ -411,6 +415,15 @@ namespace mdsj.lib
         static bool IsSortedListOfStringObject(object obj)
         {
             return obj is SortedList<string, object>;
+        }
+        public static bool IsHashtable(object sortedList)
+        {
+            // 使用 is 关键字检查对象类型
+            if (sortedList is Hashtable)
+            {
+                return true;
+            }
+            return false;
         }
         public static bool IsSortedList(object sortedList)
         {

@@ -18,6 +18,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace mdsj.lib
 {
@@ -76,11 +77,7 @@ namespace mdsj.lib
         }
 
 
-        public static string DecodeUrl(string path)
-        {
-            string decodedUrl = WebUtility.UrlDecode(path);
-            return decodedUrl;
-        }
+     
         public static void WaitTaskExecFinish(System.Threading.Tasks.Task 结果task)
         {
             结果task.Wait();
@@ -363,11 +360,7 @@ namespace mdsj.lib
             return list;
         }
 
-       // 将 JObject 转换为 Hashtable
-        public static void Encodeurl()
-        {
-        //    encodeJsonNofmt
-        }
+      
         public static string Join(List<string> list)
         {
             var separator = "";

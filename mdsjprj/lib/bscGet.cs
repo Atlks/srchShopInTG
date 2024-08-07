@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -1004,16 +1005,65 @@ namespace mdsj.lib
             {
                 SetProperty(Obj, fld, v);
             }
-
         }
 
-
+        public static string GetFieldAsStr(Hashtable sortedList, string key)
+        {
+            if (sortedList.ContainsKey(key))
+                return sortedList[key].ToString();
+            //      var obj = GetField(sortedList, key, "");
+            //   return ToStr(obj);
+            return "";
+        }
 
         public static string GetFieldAsStr(Dictionary<string, string> sortedList, string key)
         {
             var obj = GetField(sortedList, key, "");
             return ToStr(obj);
         }
+
+        //dep
+        public static string GetOriginalMethodName()
+        {
+            var stackTrace = new StackTrace(true);
+            for (int i = 1; i < stackTrace.FrameCount; i++)
+            {
+                var frame = stackTrace.GetFrame(1);
+                var method = frame.GetMethod();
+
+                if (method.DeclaringType?.Name.EndsWith("MoveNext") == false)
+                {
+                    return method.DeclaringType?.FullName;
+                }
+            }
+            return "Unknown";
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public static string GetFunNameCurrent()
+        {
+            // 获取调用栈   StackTrace(bool fNeedFileInfo)
+            var stackTrace = new StackTrace(true);
+            var frame = stackTrace.GetFrame(1); // 获取调用者的栈帧
+            MethodBase MethodBase1 = frame.GetMethod();
+            var name = MethodBase1.Name;
+            //--process async fun name
+            if (name.EndsWith("MoveNext"))
+            {
+                //MethodBase.DeclaringType 属性返回声明方法的类型（类）的 Type 对象。
+                //但是这里估计会根据方法生成一个动态类，所以命名类似的
+                // mdsj.lib.JsonStore+<ListFromDirJsonsAsync>d__4
+                return ToStrWzDef( MethodBase1.DeclaringType?.FullName,"funxx");
+            }
+
+            //nml method name
+            return name;
+        }
+
+     
 
         //  sortedList
         //todo bsc fun must smple so in foreach is fast..

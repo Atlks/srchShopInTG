@@ -5,6 +5,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Security.Cryptography;
 using System.Text;
@@ -248,7 +249,18 @@ namespace mdsj.lib
         {
             return JsonConvert.DeserializeObject<List<SortedList>>(jsonString);
         }
+        public static string DecodeUrl(string path)
+        {
+            string decodedUrl = WebUtility.UrlDecode(path);
+            return decodedUrl;
+        }
 
+        // 将 JObject 转换为 Hashtable
+        public static string Encodeurl(string originalString)
+        {
+            return HttpUtility.UrlEncode(originalString);
+            //    encodeJsonNofmt
+        }
         public static string EncodeJsonFmt(object results)
         {
             if (results == null)

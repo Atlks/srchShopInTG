@@ -27,7 +27,7 @@ namespace mdsj.lib
         public static ConcurrentDictionary<string, System.Timers.Timer> tmrList = new ConcurrentDictionary<string, System.Timers.Timer>();
         //   private static
 
-        public static System.Timers.Timer TimerStart534(string dataDir)
+        public static System.Timers.Timer TimerStart4zipFls(string dataDir)
         {
             System.Timers.Timer timer;
             timer = new System.Timers.Timer(60000); // 每60秒检查一次
@@ -92,16 +92,19 @@ namespace mdsj.lib
         /// </summary>
         /// <param name="dir"></param>
         /// <returns></returns>
-        public static async Task<List<SortedList>> ListReadDirJsonsAsync(string dir)
+        public static async Task<List<SortedList>> ListFromDirJsonsAsync(string dir)
         {
             //asyn to imprv pfm
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            __METHOD__ = GetOriginalMethodName();
+
             dbgCls.PrintCallFunArgs(__METHOD__, func_get_args(dir));
             //     需要读取的时候，优先读取zip文件内容。然后在加载目录下其他文件。
             //if many file >3w or 5w files..
           //  List<SortedList> arr = new List<SortedList>();
             if (!dbCache.TryGetValue(dir, out List<SortedList> arr))
             {
+                arr = new List<SortedList>();
                 // 获取目录中的所有文件
                 string[] filePaths = Directory.GetFiles(dir);
 
@@ -126,14 +129,14 @@ namespace mdsj.lib
             }
 
 
-                PrintRet(MethodBase.GetCurrentMethod().Name, ArrSlice(arr, 0, 1));
+                PrintRet(__METHOD__, ArrSlice(arr, 0, 1));
 
 
             return dbCache[dir];
         }
 
 
-        public static async Task SaveToJsonSngleFileAsync(SortedList SortedList1, string dir)
+        public static void SaveToJsonSngleFile(SortedList SortedList1, string dir)
         {
             if (LoadFieldFrmStlst(SortedList1, "id", "") == "")
                 SetField938(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
@@ -142,7 +145,7 @@ namespace mdsj.lib
             dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
 
             //------------wrt to cache
-            List<SortedList> li127 = await ListReadDirJsonsAsync(dir);
+            List<SortedList> li127 =   ListFromDirJsonsAsync(dir).Result;
             SetElmt(li127, SortedList1);
 
 
@@ -195,7 +198,7 @@ namespace mdsj.lib
         /// <param name="SortedList1"></param>
         /// <param name="dir"></param>
         /// <returns></returns>
-        public static async Task UpdtSqlmode(SortedList SortedList1, string dir)
+        public static void UpdtSqlmode(SortedList SortedList1, string dir)
         {
             if (LoadFieldFrmStlst(SortedList1, "id", "") == "")
                 SetField938(SortedList1, "id", dtime.uuidYYMMDDhhmmssfff());
@@ -204,7 +207,7 @@ namespace mdsj.lib
             dbgCls.PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(SortedList1, dbfile));
 
             //------------wrt to cache
-            List<SortedList> li127 = await ListReadDirJsonsAsync(dir);
+            List<SortedList> li127 =   ListFromDirJsonsAsync(dir).Result;
             UpdtElmtSqlmode(li127, SortedList1);
 
 
@@ -236,7 +239,7 @@ namespace mdsj.lib
 
                 string id = SortedList1["id"].ToString();
                 //  SetField938(iotTable, key, SortedList1);
-                SortedList obj = await FindOne(dir, id);
+                SortedList obj =  FindOne(dir, id);
                 if (obj != null)
                 {
                     CopySortedList(SortedList1, obj);
@@ -259,7 +262,7 @@ namespace mdsj.lib
 
             PrintRet(__METHOD__, 0);
         }
-        public static async Task<int> Del(string dir, string id)
+        public static int Del(string dir, string id)
         {
             string filePath = dir + "/id_" + id + ".json";
             if (IsExistFil(filePath))
@@ -270,10 +273,10 @@ namespace mdsj.lib
             return 0;
         }
 
-        public static async Task<SortedList> FindOne(string dir, string id)
+        public static SortedList FindOne(string dir, string id)
         {
             string filePath = dir + "/id_" + id + ".json";
-            string txt = await File.ReadAllTextAsync(filePath);
+            string txt =  File.ReadAllText(filePath);
             SortedList obj = null;
             if (txt.Trim().Length > 0)
                 obj = JsonConvert.DeserializeObject<SortedList>(txt);

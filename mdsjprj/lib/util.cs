@@ -186,6 +186,47 @@ namespace mdsj.lib
 
             return result;
         }
+
+        /*
+       .crt 文件通常是一个证书文件，通常用于 SSL/TLS 证书。它包含以下内容：
+1.公钥：用于加密数据或验证签名。
+2.证书颁发机构 (CA) 的签名：CA 用私钥对证书进行签名，证明证书的真实性。
+3.证书的有效期：包含证书的开始和结束日期。
+4.证书持有者的信息：包括持有者的名称、组织和其他识别信息。
+5.证书的使用目的：例如用于加密、签名或身份验证。
+6.证书序列号：唯一标识证书。
+      */
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filePath"></param>
+        public static void ParseCertificate(string filePath)
+        {
+            try
+            {
+                // 加载证书
+                X509Certificate2 certificate = new X509Certificate2(filePath);
+
+                WriteAllText("crt.json", certificate);
+                // 提取证书信息
+                string subject = certificate.Subject;
+                string issuer = certificate.Issuer;
+                DateTime notBefore = certificate.NotBefore;
+                DateTime notAfter = certificate.NotAfter;
+                string thumbprint = certificate.Thumbprint;
+
+                // 打印证书信息
+                Console.WriteLine("Subject: " + subject);
+                Console.WriteLine("Issuer: " + issuer);
+                Console.WriteLine("Valid From: " + notBefore);
+                Console.WriteLine("Valid To: " + notAfter);
+                Console.WriteLine("Thumbprint: " + thumbprint);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error parsing certificate: " + ex.Message);
+            }
+        }
         public static string ExtractCName(string LINE)
         {
             if(!LINE.Contains("withdraw"))

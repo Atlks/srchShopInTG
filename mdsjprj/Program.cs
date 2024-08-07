@@ -31,15 +31,14 @@ using JiebaNet.Segmenter;
 using System.Xml;
 using HtmlAgilityPack;
 using Formatting = Newtonsoft.Json.Formatting;
-using DocumentFormat.OpenXml;
+ 
 using mdsj;
 using System.Runtime.Intrinsics.Arm;
-using Microsoft.Extensions.Primitives;
+ 
 using System.Runtime.CompilerServices;
 using mdsj;
 using mdsj.libBiz;
-
-using DocumentFormat.OpenXml.Bibliography;
+ 
 using mdsj.lib;
 
 using static mdsj.lib.afrmwk;
@@ -64,31 +63,27 @@ using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using static mdsj.lib.afrmwk;
 
-using static SqlParser.Ast.DataType;
-
-using static SqlParser.Ast.CharacterLength;
+ 
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 
 using System.Net.Http.Json;
-using DocumentFormat.OpenXml.Spreadsheet;
+ 
 
 using System.Security.Policy;
-using RG3.PF.Abstractions.Entity;
+ 
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Windows.UI.Xaml;
-using ClosedXML.Excel.CalcEngine.Functions;
+ 
+ 
 using System.Text;
-using Google.Apis.Auth.OAuth2;
-using Google.Apis.Gmail.v1;
-using Google.Apis.Util.Store;
-using Google.Apis.Services;
+ 
 using System.Security.Cryptography.X509Certificates;
+using Microsoft.Extensions.Primitives;
 
 namespace prjx
 {
@@ -172,73 +167,14 @@ namespace prjx
             return proxyPassUrls;
         }
 
-        /*
-         .crt 文件通常是一个证书文件，通常用于 SSL/TLS 证书。它包含以下内容：
-1.公钥：用于加密数据或验证签名。
-2.证书颁发机构 (CA) 的签名：CA 用私钥对证书进行签名，证明证书的真实性。
-3.证书的有效期：包含证书的开始和结束日期。
-4.证书持有者的信息：包括持有者的名称、组织和其他识别信息。
-5.证书的使用目的：例如用于加密、签名或身份验证。
-6.证书序列号：唯一标识证书。
-        */
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="filePath"></param>
-        public static void ParseCertificate(string filePath)
-        {
-            try
-            {
-                // 加载证书
-                X509Certificate2 certificate = new X509Certificate2(filePath);
+      
 
-                WriteAllText("crt.json", certificate);
-                // 提取证书信息
-                string subject = certificate.Subject;
-                string issuer = certificate.Issuer;
-                DateTime notBefore = certificate.NotBefore;
-                DateTime notAfter = certificate.NotAfter;
-                string thumbprint = certificate.Thumbprint;
-
-                // 打印证书信息
-                Console.WriteLine("Subject: " + subject);
-                Console.WriteLine("Issuer: " + issuer);
-                Console.WriteLine("Valid From: " + notBefore);
-                Console.WriteLine("Valid To: " + notAfter);
-                Console.WriteLine("Thumbprint: " + thumbprint);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error parsing certificate: " + ex.Message);
-            }
-        }
+       
 
         public static async Task Main(string[] args)
         {
-            GenerateImageFromHtml("D:\\0prj\\mdsj\\mdsjprj\\cfg\\btns.htm","btns405.jpg");
-            for (int i=0;i<5;i++)
-            {
-                SortedList st = new SortedList();
-                st.Add("id", "id" + i);
-                st.Add("nm", "name" + i);
-                await SaveToJsonSngleFileAsync(st,"datadir127");
-
-            }
-            List<SortedList> li127 =await ListReadDirJsonsAsync("datadir127");
-            Print(EncodeJsonFmt(li127));
-
-         //   ParseCertificate($"{prjdir}/cfg/certificate.crt");
-            //   ParseCertificate("");
-            var gg_apiky = "AIzaSyD3e-K8bH7-_vt7BYWXlyaAiGe_cIUpWnU";
-            var gmlOauthKeyFl = "C:\\Intel\\Wireless\\client_secret_635470856727-rl5bi02li1aebf0ln04hdm1jpd67j3cs.apps.googleusercontent.com.json";
-            NewThrd(() =>
-            {
-           //     gglML(gmlOauthKeyFl, "账单", "EmlDirBill");
-            });
-          
-         //   GetAddr("EmlDir2");
-            var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
-            List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
+            if (System.IO.File.Exists("c:/teststart.txt"))
+                await main10test1030();
             //  http://localhost:5000;
             //   List<string> ExtractProxyPassUrls111 = ExtractProxyPassUrls(nginccfg);
             //    var nnn=  JsonConvert.DeserializeObject<object>("adfaf");
@@ -368,6 +304,64 @@ namespace prjx
             //  Console.ReadKey();
             LoopForever();
 
+        }
+
+        private static async Task main10test1030()
+        {
+            string str = "KK园区,东方园区,金州园区,世纪新城园区";
+            string path1 = "缅甸/妙瓦底/KK园区";
+         
+            string originalString = castToJsonArrstr(path1);
+            Print(Encodeurl(originalString));
+            string bbb = DecodeUrl("%5b%22KK%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%9c%e6%96%b9%e5%9b%ad%e5%8c%ba%22%2c%22%e9%87%91%e5%b7%9e%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%96%e7%ba%aa%e6%96%b0%e5%9f%8e%e5%9b%ad%e5%8c%ba%22%5d");
+
+         //   string bbb = DecodeUrl("%5b%22KK%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%9c%e6%96%b9%e5%9b%ad%e5%8c%ba%22%2c%22%e9%87%91%e5%b7%9e%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%96%e7%ba%aa%e6%96%b0%e5%9f%8e%e5%9b%ad%e5%8c%ba%22%5d");
+
+            string lxfs = "D:\\0prj\\mdsj\\mdsjprj\\cfg\\lxfs.txt";
+            string jsonString = "[[\"Line\",\"123321\"],[\"电话\",\"231231231\"]]";
+            jsonString = "[[\"Telegram\",\"123456\"],[\"Telegram\",\"8888\"]]";
+            Hashtable ht = new Hashtable();
+            ht.Add("Telegram", "4546");
+            string v1006 = GetFieldAsStr(ht, "Telegram");
+            Hashtable hashtable = parseLxfs(jsonString);
+            Print(EncodeJsonFmt(hashtable));
+
+            GenerateImageFromHtml("D:\\0prj\\mdsj\\mdsjprj\\cfg\\btns.htm", "btns405.jpg");
+            for (int i = 0; i < 5; i++)
+            {
+                SortedList st = new SortedList();
+                st.Add("id", "id" + i);
+                st.Add("nm", "name" + i);
+                SaveToJsonSngleFile(st, "datadir127");
+
+            }
+            List<SortedList> li127 = await ListFromDirJsonsAsync("datadir127");
+            Print(EncodeJsonFmt(li127));
+
+            //   ParseCertificate($"{prjdir}/cfg/certificate.crt");
+            //   ParseCertificate("");
+            var gg_apiky = "AIzaSyD3e-K8bH7-_vt7BYWXlyaAiGe_cIUpWnU";
+            var gmlOauthKeyFl = "C:\\Intel\\Wireless\\client_secret_635470856727-rl5bi02li1aebf0ln04hdm1jpd67j3cs.apps.googleusercontent.com.json";
+            NewThrd(() =>
+            {
+                //     gglML(gmlOauthKeyFl, "账单", "EmlDirBill");
+            });
+
+            //   GetAddr("EmlDir2");
+            var nginccfg = "D:\\nginx-1.27.0\\conf\\nginx.conf";
+            List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
+        }
+
+      
+
+        public static Hashtable parseLxfs(string jsonString)
+        {
+            // 将 JSON 字符串解析为数组
+            var array = JsonConvert.DeserializeObject<string[][]>(jsonString);
+
+            // 将数组转换为 Hashtable
+            var hashtable = ConvertArrayToHashtable(array);
+            return hashtable;
         }
 
         public static void GetAddr(string dir)

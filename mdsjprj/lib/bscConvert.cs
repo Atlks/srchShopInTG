@@ -643,6 +643,64 @@ namespace mdsj.lib
 
             return list;
         }
+
+        /// <summary>
+        ///   str def sply by space
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string castToJsonArrstr(string str)
+        {
+            str = str.Replace("/", " "); str = str.Replace(",", " ");
+            string[] a = str.Split(" ");
+            string originalString = EncodeJson(a);
+            return originalString;
+        }
+        public static string castToJsonArrstrFrmCommastr(string str)
+        {
+            str = str.Replace("/", ",");
+            string[] a = str.Split(",");
+            string originalString = EncodeJson(a);
+            return originalString;
+        }
+        public static string ToStrWzDef(string? fullName, string v)
+        {
+            if (fullName == null)
+                return v;
+            return fullName;
+        }
+
+        public static Hashtable ConvertArrayToHashtable(string[][] array)
+        {
+            var hashtable = new Hashtable();
+            try
+            {
+                foreach (var pair in array)
+                {
+                    if (pair.Length == 2)
+                    {
+                        var key = pair[0];
+                        var value = pair[1];
+                        string orival = GetFieldAsStr(hashtable, key);
+                        if(orival=="")
+                        {
+                            hashtable[key] = value;
+                        }else
+                        {
+                            hashtable[key] = orival + "," + value;
+                        }
+                      
+                    }
+                }
+            }catch(Exception e)
+            {
+                PrintExcept("ConvertArrayToHashtable", e);
+            }
+          
+
+            return hashtable;
+        }
+
         public static object CastToSerializableObjsOrSnglobj(object inputArray)
         {
             //todo 

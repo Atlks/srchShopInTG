@@ -399,6 +399,10 @@ namespace mdsj.libBiz
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
+
+            Hashtable hashtable = parseLxfs(GetFieldAsStr(saveOBJ,"联系方式"));
+            CopyHashtableToSortedList(hashtable, saveOBJ);
+
             string token = GetFieldAsStrDep(saveOBJ, "token");
 
 
@@ -421,7 +425,27 @@ namespace mdsj.libBiz
 
 
 
+        public static SortedList CopyHashtableToSortedList(Hashtable hashtable, SortedList sortedList)
+        {
+            // 创建一个新的 SortedList
+           // SortedList sortedList = new SortedList();
 
+            // 遍历 Hashtable 并将每个键值对添加到 SortedList
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                try
+                {
+                    SetField(sortedList, entry.Key.ToString(), entry.Value);
+                   // sortedList.Add(entry.Key, entry.Value);
+                }catch(Exception e)
+                {
+                    PrintExcept("CopyHashtableToSortedList", e);
+                }
+               
+            }
+
+            return sortedList;
+        }
 
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
         public static string Wbapi_getDetail(string qrystr)

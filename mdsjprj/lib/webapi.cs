@@ -65,7 +65,7 @@ namespace mdsj.lib
                 serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
 
                 //--------cfg https block
-                    CfgHttps(serverOptions, map);
+              //      CfgHttps(serverOptions, map);
                 //-----end cfg https
             });
             var app = builder.Build();
