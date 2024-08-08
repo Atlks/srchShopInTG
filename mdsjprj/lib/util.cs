@@ -410,13 +410,13 @@ namespace mdsj.lib
                     }
                     else
                     {
-                        Console.WriteLine("Registry key not found.");
+                        Console.WriteLine("￥SetConsoleQuickEditMode Registry key not found.");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"An error occurred while modifying the registry: {ex.Message}");
+                Console.WriteLine($"￥SetConsoleQuickEditMode An error occurred while modifying the registry: {ex.Message}");
             }
         }
 

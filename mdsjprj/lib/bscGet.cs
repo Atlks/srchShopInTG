@@ -1018,8 +1018,9 @@ namespace mdsj.lib
 
         public static string GetFieldAsStr(Dictionary<string, string> sortedList, string key)
         {
-            var obj = GetField(sortedList, key, "");
-            return ToStr(obj);
+            if(sortedList.ContainsKey(key))
+                return ToStr(sortedList[key]);
+            return "";
         }
 
         //dep

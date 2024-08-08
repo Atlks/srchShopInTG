@@ -118,7 +118,7 @@ namespace mdsj.libBiz
                     ).Result;
                     Jmp2end(nameof(evt_btm_btn_click) + ".BLOCKcfg_btnResp");
                 }
-                catch(jmp2endEx ee)
+                catch (jmp2endEx ee)
                 {
                     throw ee;
                 }
@@ -131,8 +131,8 @@ namespace mdsj.libBiz
 
 
 
-                
-               
+
+
 
                 return;
                 //  tglib.bot_DeleteMessageV2(update.Message.Chat.Id, update.Message.MessageId, 9);
@@ -196,11 +196,11 @@ namespace mdsj.libBiz
             var keyboardJson = JsonConvert.SerializeObject(keyboard);
 
             // Print the JSON string to the console
-           Print(keyboardJson);
+            Print(keyboardJson);
             return keyboard;
         }
 
-     
+
         public static async void evt_shiboBocai_click(Update? update)
         {
             //   RemoveCustomEmojiRendererElement("shiboRaw.htm", "shiboTrm.htm");
@@ -228,7 +228,7 @@ namespace mdsj.libBiz
             //          parseMode: ParseMode.Html,
             //         //   replyMarkup: new InlineKeyboardMarkup(results),
             //         protectContent: false);
-           Print(JsonConvert.SerializeObject(message));
+            Print(JsonConvert.SerializeObject(message));
         }
 
         //dep todo 
@@ -276,7 +276,7 @@ namespace mdsj.libBiz
         public static string zhuli_btn = "🔥 点击助力本群";
         public static void evt_btm_btn_zhuliBenqunAsync(Update update)
         {
-            
+
             var grpUsername = update.Message.Chat.Username;
 
             Message msgNew = sendZhuliGrp(update, zhuli_tips, zhuli_btn, grpUsername);
@@ -303,7 +303,7 @@ namespace mdsj.libBiz
         }
         public static Message sendZhuliGrp(object ChatId, string tips, string btn, string? grpUsername)
         {
-          long  ChatId2 = long.Parse(ChatId.ToString());
+            long ChatId2 = long.Parse(ChatId.ToString());
             var url = $"https://t.me/boost/{grpUsername}";
             InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
 
@@ -312,7 +312,7 @@ namespace mdsj.libBiz
             InlineKeyboardMarkup1 = new InlineKeyboardMarkup(inlineKeyboardRow1);
             var msgNew = botClient.SendTextMessageAsync(
                                    ChatId2, tips,
-                                  replyMarkup: InlineKeyboardMarkup1 
+                                  replyMarkup: InlineKeyboardMarkup1
 
                           ).Result;
             return msgNew;
@@ -385,6 +385,8 @@ namespace mdsj.libBiz
             (Update update, string msg)
         {
             Telegram.Bot.Types.Message msgNew = null;
+
+            //----商家在这里
             string f1 = $"{prjdir}/cfg_btmbtn/{msg}.json";
             //  print_varDump(, " Exists(f1)"+f1)
             if (System.IO.File.Exists(f1))
@@ -392,13 +394,13 @@ namespace mdsj.libBiz
                 print_varDump(nameof(BtmBtnClkinCfgByMsg), " Exists f", f1);
                 SortedList table = ReadAsHashtable(f1);
                 var tips = table["tips"].ToString();
-                if(tips.StartsWith("$"))
+                if (tips.StartsWith("$"))
                 {
-                    string fl = $"{prjdir}/cfg_btmbtn/"+SubStr(tips, 1);
+                    string fl = $"{prjdir}/cfg_btmbtn/" + SubStr(tips, 1);
                     tips = ReadAllText(fl);
                 }
 
-               tips = tips + $"\n\n{plchdTxt}";
+                tips = tips + $"\n\n{plchdTxt}";
                 InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
                 //  ReplyKeyboardMarkup
                 if (table.ContainsKey("url"))
@@ -409,29 +411,7 @@ namespace mdsj.libBiz
                 else
                 {
                     JArray btns = (JArray)table["btns"];
-                    foreach(JObject jo in btns)
-                    {
-                        try
-                        {
-                            // 获取 URL 并转换为字符串
-                            string url = jo.GetValue("url")?.ToString();
-
-                            if (url != null)
-                            {
-                                string token = newToken(ToStr(update.Message.From.Id), 3600 * 24 * 7);
-                                // 替换占位符
-                                url = url.Replace("{token}", token);
-
-                                // 更新 JObject
-                                jo["url"] = url;
-                            }
-                        }catch(Exception e)
-                        {
-                            PrintCatchEx("BtmBtnClkinCfgByMsg",e);
-                        }
-                       
-                    }
-                    PrintObj(btns);
+                    ProcessAppendParksQrystr(update, btns);
                     InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtons(btns);
                 }
 
@@ -454,15 +434,15 @@ namespace mdsj.libBiz
                 }
 
                 //aop  auth where exprs
-                if(update?.Message?.Chat?.Type!=ChatType.Private)
-                     dltMsgDelay(update, msgNew);
+                if (update?.Message?.Chat?.Type != ChatType.Private)
+                    dltMsgDelay(update, msgNew);
                 Jmp2endDep();
 
                 return;
 
             }
 
-
+            //商家
             string htmlf = $"{prjdir}/cfg_btmbtn/{msg}.htm";
             if (System.IO.File.Exists(htmlf))
             {
@@ -480,7 +460,7 @@ namespace mdsj.libBiz
 
                 tips = tips + $"\n\n{plchdTxt}";
                 InlineKeyboardMarkup InlineKeyboardMarkup1 = null;
-                
+
                 {
                     JArray btns = (JArray)table["btns"];
                     InlineKeyboardMarkup1 = castJsonAarrToInlineKeyboardButtonsV2(btns);
@@ -514,5 +494,93 @@ namespace mdsj.libBiz
             }
         }
 
+        private static void ProcessAppendParksQrystr(Update update, JArray btns)
+        {
+            foreach (JObject jo in btns)
+            {
+                try
+                {
+                    // 获取 URL 并转换为字符串
+                    string url = jo.GetValue("url")?.ToString();
+                    if (!url.Contains("startapp"))
+                        break;
+                    if (url == null)
+                        break;
+
+                    var grpid = update.Message.Chat.Id;
+                    string dbfile2 = $"{prjdir}/grpCfgDir/grpcfg{grpid}.json";
+                    SortedList cfg = findOne(dbfile2);
+                    string pk = GetFieldAsStr(cfg, "园区");
+                    string pks = pk.Replace(",", " ");
+                    string[] pksa = pks.Split(" ");
+                    HashSet<string> hs = NewHashsetStr();
+                    string fnlPk = "";
+                    foreach (string p in pksa)
+                    {
+                        Hashtable ht = GetHashtableFromJsonFl($"{prjdir}/webroot/parkcode.json"); ;
+                        Hashtable ht2 = ReverseHashtable(ht);
+                        string pkcode = ht2[p].ToString();
+                        fnlPk = pkcode;
+                        hs.Add(pkcode);
+                    }
+                    string pks938 = string.Join("_", hs);
+                    Print("pks938ss=>"+ pks938);
+                    //   string token = newToken(ToStr(update.Message.From.Id), 3600 * 24 * 7);
+                    // 替换占位符
+                    // url = url.Replace("pks9381148", pks938);
+                    url = url + pks938;
+                    Print("url=>"+url);
+                    // 更新 JObject
+                    jo["url"] = url;
+
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx("BtmBtnClkinCfgByMsg", e);
+                }
+
+            }
+            PrintObj(btns);
         }
+
+        private static Hashtable ReverseHashtable(Hashtable hashtable)
+        {
+            Hashtable reversed = new Hashtable();
+
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                // 确保值在反转后唯一
+                if (reversed.ContainsKey(entry.Value))
+                {
+                    throw new InvalidOperationException("Cannot reverse hashtable: Duplicate values found.");
+                }
+
+                reversed[entry.Value] = entry.Key;
+            }
+
+            return reversed;
+        }
+        private static Hashtable GetHashtableFromJsonFl(string jsonFilePath)
+        {
+            // 读取 JSON 文件内容
+            string jsonContent = System.IO.File.ReadAllText(jsonFilePath);
+
+            // 解析 JSON 为 Dictionary
+            var dictionary = JsonConvert.DeserializeObject<Dictionary<string, object>>(jsonContent);
+
+            // 将 Dictionary 转换为 Hashtable
+            Hashtable hashtable = new Hashtable();
+            foreach (var kvp in dictionary)
+            {
+                hashtable[kvp.Key] = kvp.Value;
+            }
+
+            return hashtable;
+        }
+
+        private static HashSet<string> NewHashsetStr()
+        {
+            return new HashSet<string>();
+        }
+    }
 }

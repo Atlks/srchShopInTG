@@ -308,6 +308,9 @@ namespace prjx
 
         private static async Task main10test1030()
         {
+            string qrystr = "aaa=111&园区=KK园区,东方园区";
+            Dictionary<string, string> qrystrDic = LoadDic4qryCdtn(qrystr);
+         //   Oss.  testOss();
             string str = "KK园区,东方园区,金州园区,世纪新城园区";
             string path1 = "缅甸/妙瓦底/KK园区";
          

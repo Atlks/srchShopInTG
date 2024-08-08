@@ -94,8 +94,14 @@ namespace libx
                 if(v.StartsWith("%") && v.EndsWith("%"))
                 {
                     li.Add((isFldValContain(row, key, qrystrDic)));
+                }                 
+                else if(v.Contains(","))
+                {
+                    object rowVal = GetField(row, key);
+                    string cdtVals = GetField(qrystrDic, key);
+                    bool bool1155 = IsIn4qrycdt(rowVal, cdtVals);
+                    li.Add(bool1155);
                 }
-                 
                 else
                   li.Add((isFldValEq111(row, key, qrystrDic)));
             });

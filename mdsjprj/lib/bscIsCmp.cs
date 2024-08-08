@@ -296,6 +296,20 @@ namespace mdsj.lib
 
             return true;
         }
+
+        //public static bool isIn4Qry(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
+        //{
+        //    //  string Fld = "城市";
+        //    if (hasCondt(whereExprsObj, Fld))
+        //    {
+        //        string commaStr = LoadField232(whereExprsObj, Fld);
+        //     //   IsIn4qrycdt
+        //        if (IsIn(row[Fld], commaStr))   //  cityname not in (citysss) 
+        //            return false;
+        //    }else            
+
+        //    return true;
+        //}
         public static bool isFldValEq111(SortedList row, string Fld, Dictionary<string, string> whereExprsObj)
         {
             //  string Fld = "城市";
