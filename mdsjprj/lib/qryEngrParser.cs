@@ -262,17 +262,8 @@ namespace libx
 
                 List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
 
-                //  li.Add(new Filtr(isNotEmptyLianxi(row)));
-                //   li.Add(new Filtr(isLianxifshValid(row)));
-
-                //li.Add(new Filtr(isFldValEq111(row, "园区", filters)));
-                //li.Add(new Filtr(isFldValEq111(row, "国家", filters)));
-
-                //string dbfile = "parkcfgDir/uid_" + qrystrMap["uid"] + ".json";
-                //SortedList cfg = findOne(dbfile);
-                //Dictionary<string, StringValues> cdtMap = CopySortedListToDictionary(cfg);
-                //   li.Add(new Filtr(str_eq(row["园区"], ldfldDfempty(cdtMap, "park"))));
-
+            //    bool rzt=isxxx（）&isXXX();
+            
                 if (!ChkAllFltrTrue(li))
                     return false;
                 return true;

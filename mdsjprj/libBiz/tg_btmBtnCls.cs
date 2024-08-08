@@ -493,7 +493,94 @@ namespace mdsj.libBiz
 
             }
         }
+        public static string GetParkPath(string parkName, string jsonArrayStr)
+        {
+            // 解析 JSON 数据
+            JArray jsonArray = JArray.Parse(jsonArrayStr);
+            foreach (var item in jsonArray)
+            {
+                string path = FindParkPath(parkName, item);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+            }
+            return string.Empty;
+        }
 
+        private static string FindParkPath(string parkName, JToken token)
+        {
+
+         
+            // 检查当前节点是否是目标园区
+            if (token["name"]?.ToString() == parkName)
+            {
+                return token["id"]?.ToString();
+            }
+
+            // 递归查找子节点
+            if (token["children"] != null)
+            {
+                foreach (var child in token["children"])
+                {
+                    string childPath = FindParkPath(parkName, child);
+                    if (!string.IsNullOrEmpty(childPath))
+                    {
+                        return $"{token["id"]?.ToString()}_{childPath}";
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+        private static string GetParkPath(string jsonArrayStr)
+        {
+            // 解析 JSON 数据
+            JArray jsonArray = JArray.Parse(jsonArrayStr);
+            foreach (var item in jsonArray)
+            {
+                string path = Traverse(item);
+                if (!string.IsNullOrEmpty(path))
+                {
+                    return path;
+                }
+            }
+            return string.Empty;
+        }
+
+        private static string Traverse(JToken token)
+        {
+            // 基本检查
+            if (token == null) return string.Empty;
+
+            // 获取当前节点的 ID 和名称
+            string id = token["id"]?.ToString();
+            string name = token["name"]?.ToString();
+
+            // 如果当前节点没有子节点，返回 ID
+            if (token["children"] == null || !token["children"].HasValues)
+            {
+                return id;
+            }
+
+            // 递归遍历子节点
+            List<string> paths = new List<string>();
+            foreach (var child in token["children"])
+            {
+                string childPath = Traverse(child);
+                if (!string.IsNullOrEmpty(childPath))
+                {
+                    paths.Add(childPath);
+                }
+            }
+
+            // 选择路径最深的一个
+            if (paths.Count > 0)
+            {
+                return $"{id}_{string.Join("_", paths)}";
+            }
+            return string.Empty;
+        }
         private static void ProcessAppendParksQrystr(Update update, JArray btns)
         {
             foreach (JObject jo in btns)
@@ -524,6 +611,8 @@ namespace mdsj.libBiz
                         hs.Add(pkcode);
                     }
                     string pks938 = string.Join("_", hs);
+                    string Fst = hs.Count > 0 ? hs.First() : string.Empty;
+
                     Print("pks938ss=>"+ pks938);
                     //   string token = newToken(ToStr(update.Message.From.Id), 3600 * 24 * 7);
                     // 替换占位符

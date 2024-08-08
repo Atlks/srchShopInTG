@@ -31,14 +31,14 @@ using JiebaNet.Segmenter;
 using System.Xml;
 using HtmlAgilityPack;
 using Formatting = Newtonsoft.Json.Formatting;
- 
+
 using mdsj;
 using System.Runtime.Intrinsics.Arm;
- 
+
 using System.Runtime.CompilerServices;
 using mdsj;
 using mdsj.libBiz;
- 
+
 using mdsj.lib;
 
 using static mdsj.lib.afrmwk;
@@ -63,27 +63,28 @@ using static mdsj.lib.util;
 using static mdsj.libBiz.tgBiz;
 using static mdsj.lib.afrmwk;
 
- 
+
 using static mdsj.lib.avClas;
 using static mdsj.lib.dtime;
 using static mdsj.lib.fulltxtSrch;
 
 using System.Net.Http.Json;
- 
+
 
 using System.Security.Policy;
- 
+
 using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 using System.Security.Cryptography.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
- 
- 
+
+
 using System.Text;
- 
+
 using System.Security.Cryptography.X509Certificates;
 using Microsoft.Extensions.Primitives;
+using Org.BouncyCastle.Utilities.Collections;
 
 namespace prjx
 {
@@ -167,9 +168,9 @@ namespace prjx
             return proxyPassUrls;
         }
 
-      
 
-       
+
+
 
         public static async Task Main(string[] args)
         {
@@ -308,17 +309,33 @@ namespace prjx
 
         private static async Task main10test1030()
         {
+            //rewrt park cdt
+            string url = "园区=KK园区,东方园区,缅甸,妙瓦底";
+            string pkrPrm = "KK园区,东方园区,缅甸,妙瓦底";
+
+            string rzt = ExtParks(pkrPrm);
+
+            rzt = ToSqlPrmMode(rzt);
+
+            Print("rzt=>" + rzt);
+            Thread.Sleep(7000);
+
+            string[] a237 = url.Split(",");
+
+            string f119 = $"{prjdir}/webroot/国家.json";
+
+            Print("GetParkPath=>" + GetParkPath("金州园区", ReadAllText(f119)));
             string qrystr = "aaa=111&园区=KK园区,东方园区";
             Dictionary<string, string> qrystrDic = LoadDic4qryCdtn(qrystr);
-         //   Oss.  testOss();
+            //   Oss.  testOss();
             string str = "KK园区,东方园区,金州园区,世纪新城园区";
             string path1 = "缅甸/妙瓦底/KK园区";
-         
+
             string originalString = castToJsonArrstr(path1);
             Print(Encodeurl(originalString));
             string bbb = DecodeUrl("%5b%22KK%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%9c%e6%96%b9%e5%9b%ad%e5%8c%ba%22%2c%22%e9%87%91%e5%b7%9e%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%96%e7%ba%aa%e6%96%b0%e5%9f%8e%e5%9b%ad%e5%8c%ba%22%5d");
 
-         //   string bbb = DecodeUrl("%5b%22KK%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%9c%e6%96%b9%e5%9b%ad%e5%8c%ba%22%2c%22%e9%87%91%e5%b7%9e%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%96%e7%ba%aa%e6%96%b0%e5%9f%8e%e5%9b%ad%e5%8c%ba%22%5d");
+            //   string bbb = DecodeUrl("%5b%22KK%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%9c%e6%96%b9%e5%9b%ad%e5%8c%ba%22%2c%22%e9%87%91%e5%b7%9e%e5%9b%ad%e5%8c%ba%22%2c%22%e4%b8%96%e7%ba%aa%e6%96%b0%e5%9f%8e%e5%9b%ad%e5%8c%ba%22%5d");
 
             string lxfs = "D:\\0prj\\mdsj\\mdsjprj\\cfg\\lxfs.txt";
             string jsonString = "[[\"Line\",\"123321\"],[\"电话\",\"231231231\"]]";
@@ -355,7 +372,129 @@ namespace prjx
             List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
         }
 
-      
+        private static string ExtParks(string pkrPrm)
+        {
+            HashSet<string> pks = SplitToHashset(pkrPrm);
+            HashSet<string> pksNew = new HashSet<string>();
+            foreach (string pk in pks)
+            {
+                if (ISCtry(pk))
+                {
+                    string pks242 = CastToParksByCtry(pk);
+                    AddElmts2hashset(pksNew, pks242);
+                }
+                if (ISCity(pk))
+                {
+                    string pks242 = CastToParksByCity(pk);
+                    AddElmts2hashset(pksNew, pks242);
+                }
+                pksNew.Add(pk);
+            }
+            string rzt = ToStrFromHashset(pksNew);
+            return rzt;
+        }
+
+        private static string ToSqlPrmMode(string rzt)
+        {
+            return rzt.Replace(" ", ",");
+        }
+
+        private static string ToStrFromHashset(HashSet<string> hashSet)
+        {
+            return string.Join(" ", hashSet);
+        }
+
+        private static string CastToParksByCity(string city)
+        {
+            string f119 = $"{prjdir}/webroot/国家.json";
+            return GetParkNamesFromJson(ReadAllText(f119), city);
+        }
+
+        public static string CastToParksByCtry(string ctry)
+        {
+            try
+            { 
+                //---ctry code mode
+                if(IsExistFil($"{prjdir}/cfg/{ctry}_pks.txt"))
+                {
+                    return ReadAllText($"{prjdir}/cfg/{ctry}_pks.txt").Trim();
+                }
+                //ctry cn name mode
+                //  string f119 = $"{prjdir}/webroot/国家.json";
+                string f119 = $"{prjdir}/cfg/ctrycode.ini";
+                Hashtable ht = GetHashtabFromIniFl(f119);
+                string ctrycode = ht[ctry].ToString();
+                string f119314 = $"{prjdir}/cfg/mmr_pks.txt";
+                return ReadAllText(f119314).Trim();
+
+            }catch(Exception e)
+            {
+                PrintExcept("CastToParksByCtry", e);
+                return "";
+            }
+        
+        }
+
+        private static string GetParkNamesFromJson(string jsonData, string parentName)
+        {
+            // 解析 JSON 数据
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            // 查找并返回园区名称
+            return FindParkNames(jsonArray, parentName);
+        }
+
+        private static string FindParkNames(JArray jsonArray, string parentName)
+        {
+            foreach (var item in jsonArray)
+            {
+                // 查找目标父级名称
+                if (item["name"]?.ToString() == parentName)
+                {
+                    // 获取子节点并提取园区名称
+                    return ExtractParkNames(item);
+                }
+
+                // 递归查找子节点
+                if (item["children"] != null)
+                {
+                    string result = FindParkNames((JArray)item["children"], parentName);
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        private static string ExtractParkNames(JToken parent)
+        {
+            List<string> parkNames = new List<string>();
+
+            if (parent["children"] != null)
+            {
+                foreach (var child in parent["children"])
+                {
+                    string name = child["name"]?.ToString();
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        parkNames.Add(name);
+                    }
+                }
+            }
+
+            return string.Join(" ", parkNames);
+        }
+        private static HashSet<string> SplitToHashset(string input)
+        { // 使用 Split 方法将字符串分割成数组
+            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 将数组转换为 HashSet<string>
+            return new HashSet<string>(items);
+
+        }
 
         public static Hashtable parseLxfs(string jsonString)
         {
@@ -389,7 +528,7 @@ namespace prjx
                     continue;
                 hs.Add("name", name); hs.Add("add", add);
                 SetField(li, add, hs);
-            //    li.Add(add,hs);
+                //    li.Add(add,hs);
             }
             WriteAllText("adds428.json", li);
         }
