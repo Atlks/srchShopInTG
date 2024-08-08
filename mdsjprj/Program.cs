@@ -91,7 +91,7 @@ namespace prjx
     internal class Program
     {
         //prech 4 set msg
-        public const string PreCh = "📍";
+        public const string PreCh = "📍";// ch4selectLocation
 
         //  https://api.telegram.org/bot6999501721:AAFNqa2YZ-lLZMfN8T2tYscKBi33noXhdJA/getMe
         // public const string botname = "LianXin_BianMinBot";
@@ -137,39 +137,7 @@ namespace prjx
         //}
 
 
-        // Regex to match proxy_pass directives
-        private static readonly Regex ProxyPassRegex = new Regex(@"proxy_pass\s+(\S+);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        // Function to parse nginx.conf and extract proxy_pass URLs
-        public static List<string> ExtractProxyPassUrls(string configFilePath)
-        {
-            var proxyPassUrls = new List<string>();
-
-            if (!System.IO.File.Exists(configFilePath))
-            {
-                throw new FileNotFoundException("The specified nginx.conf file was not found.", configFilePath);
-            }
-
-            var fileContent = System.IO.File.ReadAllText(configFilePath);
-
-            // Find all matches of proxy_pass in the file content
-            var matches = ProxyPassRegex.Matches(fileContent);
-
-            foreach (Match match in matches)
-            {
-                if (match.Success && match.Groups.Count > 1)
-                {
-                    // Extract the URL from the match
-                    string url = match.Groups[1].Value.Trim();
-                    proxyPassUrls.Add(url);
-                }
-            }
-
-            return proxyPassUrls;
-        }
-
-
-
+     
 
 
         public static async Task Main(string[] args)
@@ -314,7 +282,6 @@ namespace prjx
             string pkrPrm = "KK园区,东方园区,缅甸,妙瓦底";
 
             string rzt = ExtParks(pkrPrm);
-
             rzt = ToSqlPrmMode(rzt);
 
             Print("rzt=>" + rzt);
@@ -327,7 +294,7 @@ namespace prjx
             Print("GetParkPath=>" + GetParkPath("金州园区", ReadAllText(f119)));
             string qrystr = "aaa=111&园区=KK园区,东方园区";
             Dictionary<string, string> qrystrDic = LoadDic4qryCdtn(qrystr);
-            //   Oss.  testOss();
+               Oss.  testOss();
             string str = "KK园区,东方园区,金州园区,世纪新城园区";
             string path1 = "缅甸/妙瓦底/KK园区";
 
@@ -372,189 +339,16 @@ namespace prjx
             List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
         }
 
-        private static string ExtParks(string pkrPrm)
-        {
-            HashSet<string> pks = SplitToHashset(pkrPrm);
-            HashSet<string> pksNew = new HashSet<string>();
-            foreach (string pk in pks)
-            {
-                if (ISCtry(pk))
-                {
-                    string pks242 = CastToParksByCtry(pk);
-                    AddElmts2hashset(pksNew, pks242);
-                }
-                if (ISCity(pk))
-                {
-                    string pks242 = CastToParksByCity(pk);
-                    AddElmts2hashset(pksNew, pks242);
-                }
-                pksNew.Add(pk);
-            }
-            string rzt = ToStrFromHashset(pksNew);
-            return rzt;
-        }
 
-        private static string ToSqlPrmMode(string rzt)
-        {
-            return rzt.Replace(" ", ",");
-        }
 
-        private static string ToStrFromHashset(HashSet<string> hashSet)
-        {
-            return string.Join(" ", hashSet);
-        }
-
-        private static string CastToParksByCity(string city)
-        {
-            string f119 = $"{prjdir}/webroot/国家.json";
-            return GetParkNamesFromJson(ReadAllText(f119), city);
-        }
-
-        public static string CastToParksByCtry(string ctry)
-        {
-            try
-            { 
-                //---ctry code mode
-                if(IsExistFil($"{prjdir}/cfg/{ctry}_pks.txt"))
-                {
-                    return ReadAllText($"{prjdir}/cfg/{ctry}_pks.txt").Trim();
-                }
-                //ctry cn name mode
-                //  string f119 = $"{prjdir}/webroot/国家.json";
-                string f119 = $"{prjdir}/cfg/ctrycode.ini";
-                Hashtable ht = GetHashtabFromIniFl(f119);
-                string ctrycode = ht[ctry].ToString();
-                string f119314 = $"{prjdir}/cfg/mmr_pks.txt";
-                return ReadAllText(f119314).Trim();
-
-            }catch(Exception e)
-            {
-                PrintExcept("CastToParksByCtry", e);
-                return "";
-            }
+      
+     
         
-        }
+  
 
-        private static string GetParkNamesFromJson(string jsonData, string parentName)
-        {
-            // 解析 JSON 数据
-            JArray jsonArray = JArray.Parse(jsonData);
+    
 
-            // 查找并返回园区名称
-            return FindParkNames(jsonArray, parentName);
-        }
-
-        private static string FindParkNames(JArray jsonArray, string parentName)
-        {
-            foreach (var item in jsonArray)
-            {
-                // 查找目标父级名称
-                if (item["name"]?.ToString() == parentName)
-                {
-                    // 获取子节点并提取园区名称
-                    return ExtractParkNames(item);
-                }
-
-                // 递归查找子节点
-                if (item["children"] != null)
-                {
-                    string result = FindParkNames((JArray)item["children"], parentName);
-                    if (!string.IsNullOrEmpty(result))
-                    {
-                        return result;
-                    }
-                }
-            }
-
-            return string.Empty;
-        }
-
-        private static string ExtractParkNames(JToken parent)
-        {
-            List<string> parkNames = new List<string>();
-
-            if (parent["children"] != null)
-            {
-                foreach (var child in parent["children"])
-                {
-                    string name = child["name"]?.ToString();
-                    if (!string.IsNullOrEmpty(name))
-                    {
-                        parkNames.Add(name);
-                    }
-                }
-            }
-
-            return string.Join(" ", parkNames);
-        }
-        private static HashSet<string> SplitToHashset(string input)
-        { // 使用 Split 方法将字符串分割成数组
-            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // 将数组转换为 HashSet<string>
-            return new HashSet<string>(items);
-
-        }
-
-        public static Hashtable parseLxfs(string jsonString)
-        {
-            // 将 JSON 字符串解析为数组
-            var array = JsonConvert.DeserializeObject<string[][]>(jsonString);
-
-            // 将数组转换为 Hashtable
-            var hashtable = ConvertArrayToHashtable(array);
-            return hashtable;
-        }
-
-        public static void GetAddr(string dir)
-        {
-            SortedList li = new SortedList();
-            // 获取目录中的所有文件
-            string[] files = Directory.GetFiles(dir);
-
-            // 遍历每一个文件
-            foreach (var filePath in files)
-            {
-                Hashtable hs = new Hashtable();
-                // 读取文件内容
-                string content = System.IO.File.ReadAllText(filePath);
-                if (content.Length == 0)
-                    continue;
-                content = htm_strip_tags(content);
-                string[] lines = content.Split("\n");
-                var add = ExtractAddress310(lines);
-                var name = ExtrctName(lines);
-                if (add.Length == 0)
-                    continue;
-                hs.Add("name", name); hs.Add("add", add);
-                SetField(li, add, hs);
-                //    li.Add(add,hs);
-            }
-            WriteAllText("adds428.json", li);
-        }
-
-        private static string ExtrctName(string[] lines)
-        {
-            foreach (var line in lines)
-            {
-                var add = ExtractCName(line);
-                if (add.Length > 0)
-                    return add;
-            }
-            return "";
-        }
-
-        private static string ExtractAddress310(string[] lines)
-        {
-            foreach (var line in lines)
-            {
-                var add = ExtractAddress(line);
-                if (add.Length > 0)
-                    return add;
-            }
-            return "";
-        }
-
+    
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 

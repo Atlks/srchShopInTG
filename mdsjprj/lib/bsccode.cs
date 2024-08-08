@@ -28,7 +28,14 @@ namespace mdsj.lib
 {
     internal class bsccode
     {
+        public static HashSet<string> SplitToHashset(string input)
+        { // 使用 Split 方法将字符串分割成数组
+            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
+            // 将数组转换为 HashSet<string>
+            return new HashSet<string>(items);
+
+        }
 
         // 解析 <%=Print(888)%> 并提取函数和参数
         public static string[] ParseExpression(string expression)

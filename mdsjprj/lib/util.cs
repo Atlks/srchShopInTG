@@ -389,11 +389,70 @@ namespace mdsj.lib
             return mappings;
         }
 
+        // Regex to match proxy_pass directives
+        private static readonly Regex ProxyPassRegex = new Regex(@"proxy_pass\s+(\S+);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        // Function to parse nginx.conf and extract proxy_pass URLs
+        public static List<string> ExtractProxyPassUrls(string configFilePath)
+        {
+            var proxyPassUrls = new List<string>();
+
+            if (!System.IO.File.Exists(configFilePath))
+            {
+                throw new FileNotFoundException("The specified nginx.conf file was not found.", configFilePath);
+            }
+
+            var fileContent = System.IO.File.ReadAllText(configFilePath);
+
+            // Find all matches of proxy_pass in the file content
+            var matches = ProxyPassRegex.Matches(fileContent);
+
+            foreach (Match match in matches)
+            {
+                if (match.Success && match.Groups.Count > 1)
+                {
+                    // Extract the URL from the match
+                    string url = match.Groups[1].Value.Trim();
+                    proxyPassUrls.Add(url);
+                }
+            }
+
+            return proxyPassUrls;
+        }
+
+
+
+        public static string ExtParks(string pkrPrm)
+        {
+            HashSet<string> pks = SplitToHashset(pkrPrm);
+            HashSet<string> pksNew = new HashSet<string>();
+            foreach (string pk in pks)
+            {
+                if (pk.Trim() == "")
+                    continue;
+                if (ISCtry(pk))
+                {
+                    string pks242 = CastToParksByCtry(pk);
+                    AddElmts2hashset(pksNew, pks242);
+                    continue;
+                }
+                if (ISCity(pk))
+                {
+                    string pks242 = CastToParksByCity(pk);
+                    AddElmts2hashset(pksNew, pks242);
+                    continue;
+                }
+                pksNew.Add(pk);
+            }
+            string rzt = ToStrFromHashset(pksNew);
+            return rzt;
+        }
+
         /// <summary>
         /// 
         /// </summary>
         /// <param name="enable"></param>
-     public   static void SetConsoleQuickEditMode(bool enable=false)
+        public static void SetConsoleQuickEditMode(bool enable=false)
         {
             const string consoleKeyPath = @"HKEY_CURRENT_USER\Console";
             const string quickEditModeValueName = "QuickEdit";

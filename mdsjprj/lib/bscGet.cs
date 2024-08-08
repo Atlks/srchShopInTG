@@ -838,6 +838,60 @@ namespace mdsj.lib
             PrintTimestamp(" end fun GetListFltrByQrystr");
             return list;
         }
+
+        public static string GetParkNamesFromJson(string jsonData, string parentName)
+        {
+            // 解析 JSON 数据
+            JArray jsonArray = JArray.Parse(jsonData);
+
+            // 查找并返回园区名称
+            return FindParkNames(jsonArray, parentName);
+        }
+
+        public static string FindParkNames(JArray jsonArray, string parentName)
+        {
+            foreach (var item in jsonArray)
+            {
+                // 查找目标父级名称
+                if (item["name"]?.ToString() == parentName)
+                {
+                    // 获取子节点并提取园区名称
+                    return ExtractParkNames(item);
+                }
+
+                // 递归查找子节点
+                if (item["children"] != null)
+                {
+                    string result = FindParkNames((JArray)item["children"], parentName);
+                    if (!string.IsNullOrEmpty(result))
+                    {
+                        return result;
+                    }
+                }
+            }
+
+            return string.Empty;
+        }
+
+        public static string ExtractParkNames(JToken parent)
+        {
+            List<string> parkNames = new List<string>();
+
+            if (parent["children"] != null)
+            {
+                foreach (var child in parent["children"])
+                {
+                    string name = child["name"]?.ToString();
+                    if (!string.IsNullOrEmpty(name))
+                    {
+                        parkNames.Add(name);
+                    }
+                }
+            }
+
+            return string.Join(" ", parkNames);
+        }
+
         public static SortedList GetHashset
             (string f)
         {

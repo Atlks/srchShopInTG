@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace mdsj.libBiz
 {
@@ -165,7 +166,15 @@ namespace mdsj.libBiz
             return "";
 
         }
+        public static Hashtable parseLxfs(string jsonString)
+        {
+            // 将 JSON 字符串解析为数组
+            var array = JsonConvert.DeserializeObject<string[][]>(jsonString);
 
+            // 将数组转换为 Hashtable
+            var hashtable = ConvertArrayToHashtable(array);
+            return hashtable;
+        }
         /*
          
                //    GetQryStr4srch
@@ -184,11 +193,20 @@ namespace mdsj.libBiz
         /// <returns></returns>
         public static string WbapiXgetlist(string qrystr)
         {
-            PrintTimestamp(" start fun WbapiXgetlist()"); 
+            PrintTimestamp(" start fun WbapiXgetlist()");
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
-            string qrtStr4Srch2 = DelKeys("商家 " + pageprm251, qrystr);
-            var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+            string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
+            //----- qrystr  rwrt  parks
+            string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
+            string rzt = ExtParks(pkrPrm);
+            rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
+            string qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2,"园区", rzt);
+            //----end rwrt
+
+            
+            var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
             // --------------------  flt 
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
             var list_aftFltr2 = ArrFltrV2(listFlrted, (SortedList row) =>

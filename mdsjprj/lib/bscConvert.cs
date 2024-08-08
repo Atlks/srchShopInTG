@@ -238,6 +238,46 @@ namespace mdsj.lib
             return inputOnlineFile;
         }
 
+        public static string ToSqlPrmMode(string rzt)
+        {
+            return rzt.Replace(" ", ",");
+        }
+        public static string CastToParksByCtry(string ctry)
+        {
+            try
+            {
+                //---ctry code mode
+                if (IsExistFil($"{prjdir}/cfg/{ctry}_pks.txt"))
+                {
+                    return ReadAllText($"{prjdir}/cfg/{ctry}_pks.txt").Trim();
+                }
+                //ctry cn name mode
+                //  string f119 = $"{prjdir}/webroot/国家.json";
+                string f119 = $"{prjdir}/cfg/ctrycode.ini";
+                Hashtable ht = GetHashtabFromIniFl(f119);
+                string ctrycode = ht[ctry].ToString();
+                string f119314 = $"{prjdir}/cfg/mmr_pks.txt";
+                return ReadAllText(f119314).Trim();
+
+            }
+            catch (Exception e)
+            {
+                PrintExcept("CastToParksByCtry", e);
+                return "";
+            }
+
+        }
+
+        public static string ToStrFromHashset(HashSet<string> hashSet)
+        {
+            return string.Join(" ", hashSet);
+        }
+
+        public static string CastToParksByCity(string city)
+        {
+            string f119 = $"{prjdir}/webroot/国家.json";
+            return GetParkNamesFromJson(ReadAllText(f119), city);
+        }
         public static string CastHashtableToQuerystringNoEncodeurl(Dictionary<string, StringValues> sortedList)
         {
             if (sortedList == null)
