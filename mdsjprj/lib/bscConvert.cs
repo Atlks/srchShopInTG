@@ -275,6 +275,11 @@ namespace mdsj.lib
 
         public static string CastToParksByCity(string city)
         {
+            //---ctry code mode
+            if (IsExistFil($"{prjdir}/cfg/{city}_pks.txt"))
+            {
+                return ReadAllText($"{prjdir}/cfg/{city}_pks.txt").Trim();
+            }
             string f119 = $"{prjdir}/webroot/国家.json";
             return GetParkNamesFromJson(ReadAllText(f119), city);
         }

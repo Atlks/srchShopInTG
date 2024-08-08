@@ -1,49 +1,104 @@
 [{
+        "id": "mmr",
         "name": "缅甸",
         "children": [{
+                "id": "mwdcity",
                 "name": "妙瓦底",
                 "children": [{
+                        "id": "kk",
                         "name": "KK园区"
                     }, {
+                        "id": "df",
                         "name": "东方园区"
                     },
                     {
-                       "name": "金州园区"
-                   }
-                   , {
-                       "name": "世纪新城园区"
-                   }
-                   , {
-                       "name": "御龙湾"
-                   }, {
-                    "name": "亚太城"
-                }
+                        "id": "jz",
+                        "name": "金州园区"
+                    }, {
+                        "id": "sjxc",
+                        "name": "世纪新城园区"
+                    }, {
+                        "id": "ylw",
+                        "name": "御龙湾"
+                    }, {
+                        "id": "ytc",
+                        "name": "亚太城"
+                    }
 
                 ]
             }, {
+                "id": "RGN",
+
                 "name": "仰光"
             }
 
         ]
     }, {
-        "name": "泰国"
+        "id": "tha",
+        "name": "泰国",
+        "children": [{
+            "id": "bkk",
+            "name": "曼谷"
+        }]
     },
 
     {
-        "name": "老挝"
+        "id": "laos",
+        "name": "老挝",
+        "children": [{
+            "id": "VTE",
+            "name": "万象"
+        }]
+        
     },
 
     {
-        "name": "越南"
+        "id": "VNM",
+        "name": "越南",
+        "children": [{
+            "id": "SGN",
+            "name": "胡志明"
+        }]
     }, {
-        "name": "印度尼西亚"
+        "id": "IDN",
+        "name": "印度尼西亚",
+        "children": [{
+            "id": "CGK",
+            "name": "雅加达"
+        }]
+
     }, {
-        "name": "马来西亚"
+        "id": "MYS",
+        "name": "马来西亚",
+
+        "children": [{
+            "id": "KUL",
+            "name": "雅加达"
+        }]
+        
     }, {
-        "name": "迪拜"
+        "id": "ARE",
+        "name": "阿联酋",
+        "children": [{
+            "id": "DXB",
+            "name": "迪拜"
+        }]
+        
     }, {
-        "name": "柬埔寨"
+        "id": "cam",
+        "name": "柬埔寨",
+
+        "children": [{
+            "id": "PNH",
+            "name": "金边"
+        },{
+            "id": "KOS",
+            "name": "西港"
+        }]
+
+        
     }, {
+        "id": "GEO",
         "name": "格鲁吉亚"
     }
 ]
