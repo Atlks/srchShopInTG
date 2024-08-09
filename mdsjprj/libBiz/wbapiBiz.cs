@@ -19,6 +19,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Utilities.Collections;
 
 namespace mdsj.libBiz
 {
@@ -200,12 +201,18 @@ namespace mdsj.libBiz
             string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
             //----- qrystr  rwrt  parks
             string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
+            pkrPrm = ClrCommaStr(pkrPrm);
             string rzt = ExtParks(pkrPrm);
             rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
-            string qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2,"园区", rzt);
+
+            string qrtStr4Srch525 = qrtStr4Srch2;
+            if (rzt!="")
+              qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2,"园区", rzt);
+
+          //  qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", "");
             //----end rwrt
 
-            
+            PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
             var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
             // --------------------  flt 
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
@@ -269,7 +276,31 @@ namespace mdsj.libBiz
             return rsstr;
         }
 
-     
+        private static string ClrCommaStr(string pkrPrm)
+        {
+            HashSet<string> hs = GetHashsetFrmCommaStr(pkrPrm);
+            return ToStrComma(hs);
+        }
+
+        private static string ToStrComma(HashSet<string> hashSet)
+        {
+            // 使用 string.Join 方法将 HashSet 中的元素连接成一个逗号分隔的字符串
+            return string.Join(",", hashSet);
+        }
+
+        private static HashSet<string> GetHashsetFrmCommaStr(string pkrPrm)
+        {
+            return ConvertCommaSeparatedStringToHashSet(pkrPrm);
+        }
+
+        public static HashSet<string> ConvertCommaSeparatedStringToHashSet(string input)
+        {
+            // 使用 string.Split 方法将逗号分隔的字符串拆分成数组
+            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 创建 HashSet 并将数组元素添加到其中
+            return new HashSet<string>(items);
+        }
 
 
 
@@ -389,6 +420,8 @@ namespace mdsj.libBiz
             //   if (request.Method == HttpMethods.Post)
 
             // Check if the request contains a file
+            PrintLog(" start fun AddMerchtPOSTWbapi()");
+            PrintLog(" start fun request.Form.Files.Count=>"+ request.Form.Files.Count);
             var fil = "";
             if (request.Form.Files.Count > 0)
             {
@@ -434,7 +467,7 @@ namespace mdsj.libBiz
             //SetField(saveOBJ, "uid", uid);
             ormJSonFL.SaveJson(saveOBJ, $"{prjdir}/db/mrchtDt商家数据/" + Guid.NewGuid().ToString() + ".json");
             ormSqlt.Save4Sqlt(saveOBJ, "mercht商家数据/缅甸.db");
-            cache2024.Remove("mercht商家数据/缅甸");
+            cache2024.Remove("mercht商家数据/缅甸");//here move to save4sqlt
             cache2024.Remove("mercht商家数据/缅甸.db");
             SendResp("ok", response);
 

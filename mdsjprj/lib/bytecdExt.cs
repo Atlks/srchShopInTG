@@ -420,7 +420,16 @@ namespace mdsj.lib
 
             return list.GetRange(start, length);
         }
-      
+        public static void ForDicKeys(Dictionary<string, string> dictionary, Func<string,bool> keyAction)
+        {
+            foreach (var key in dictionary.Keys)
+            {
+             bool continueBool=   keyAction(key);
+                if (continueBool == false) ;
+                break;
+            }
+        }
+
         public static void foreach_DictionaryKeys(Dictionary<string, string> dictionary, Action<string> keyAction)
         {
             foreach (var key in dictionary.Keys)

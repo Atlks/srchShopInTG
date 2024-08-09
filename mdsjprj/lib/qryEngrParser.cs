@@ -91,11 +91,14 @@ namespace libx
             foreach_DictionaryKeys(qrystrDic, (string key) =>
             {
                 string v = GetFieldAsStr(qrystrDic, key);
-                if(v.StartsWith("%") && v.EndsWith("%"))
+                if (v == "")
+                    return;   //
+
+                if (v.StartsWith("%") && v.EndsWith("%"))
                 {
                     li.Add((isFldValContain(row, key, qrystrDic)));
-                }                 
-                else if(v.Contains(","))
+                }
+                else if (v.Contains(","))
                 {
                     object rowVal = GetField(row, key);
                     string cdtVals = GetField(qrystrDic, key);
@@ -103,7 +106,10 @@ namespace libx
                     li.Add(bool1155);
                 }
                 else
-                  li.Add((isFldValEq111(row, key, qrystrDic)));
+                    li.Add((isFldValEq111(row, key, qrystrDic)));
+
+
+
             });
             return li;
         }
@@ -189,7 +195,7 @@ namespace libx
                 var CurSharFullpath = fromDdataDir + "/" + shar;
                 string rndFun;
                 SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
-                if(curShareCfg==null)
+                if (curShareCfg == null)
                 {
                     Print("!!!⚠️⚠️wanging... cangt find shareCfg:" + shar);
                     continue;
@@ -202,7 +208,7 @@ namespace libx
                 rztLi = array_merge(rztLi, li);
             }
             PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
-            PrintTimestamp(" start fun "+ __METHOD__);
+            PrintTimestamp(" start fun " + __METHOD__);
             return rztLi;
         }
 
@@ -262,8 +268,8 @@ namespace libx
 
                 List<bool> li = getLstFltrsFrmQrystr(qrystr, row);
 
-            //    bool rzt=isxxx（）&isXXX();
-            
+                //    bool rzt=isxxx（）&isXXX();
+
                 if (!ChkAllFltrTrue(li))
                     return false;
                 return true;
@@ -681,7 +687,7 @@ namespace libx
         /// <returns></returns>
         public static List<SortedList> arr_fltr4ReadShare(string shareName, Func<SortedList, bool> whereFun, string rnd, object dbg)
         {
-            PrintTimestamp($" start arr_fltr4ReadShare() {shareName} *whreFun {rnd} " );
+            PrintTimestamp($" start arr_fltr4ReadShare() {shareName} *whreFun {rnd} ");
             var __METHOD__ = MethodBase.GetCurrentMethod().Name;
             PrintCallFunArgsFast(__METHOD__, func_get_args(shareName, "*whreFun", rnd, dbg));
 
@@ -691,18 +697,18 @@ namespace libx
             //rnd=rnd_next4Sqlt
             // 将静态方法的引用赋值给 Action 委托
             //  Func<string, List<SortedList>> rnd_next4SqltRef = rnd_next4Sqlt;
-           // Func<string, List<SortedList>> fun_rnd1 = rnd_next4Sqlt;
+            // Func<string, List<SortedList>> fun_rnd1 = rnd_next4Sqlt;
             Func<string, List<SortedList>> fun_rnd = (Func<string, List<SortedList>>)map[rnd];
-        //    List<SortedList> li;
+            //    List<SortedList> li;
 
             //-----------cache todo time out 
-     
+
             string key = shareName;
             PrintTimestamp(" bef TryGetValue frm cache");
             // 获取缓存项
             if (cache2024.TryGetValue(key, out List<SortedList> li))
             {
-                Console.WriteLine(" get key from cache ok: key=>"+ key);
+                Console.WriteLine(" get key from cache ok: key=>" + key);
             }
             else
             {
@@ -710,9 +716,9 @@ namespace libx
                 li = fun_rnd(shareName);
                 // 设置一个缓存项，10分钟后过期
                 //note is add data need remove cache key
-              //   cache2024.Set(key, li, TimeSpan.FromMinutes(10));
+                //   cache2024.Set(key, li, TimeSpan.FromMinutes(10));
             }
-         
+
 
             // 从缓存中获取数据，如果不存在则从数据库获取并添加到缓存          
 
@@ -725,8 +731,8 @@ namespace libx
             //{
             //    li = (List<SortedList>)GetField(cache311, shareName,null);
             //}
-               
-        //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
+
+            //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
             if (li.Count > 0 && whereFun != null)
                 li = ArrFltrV2(li, whereFun);
 
