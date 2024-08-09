@@ -156,6 +156,50 @@ namespace libx
             return rztLi;
         }
 
+        public static List<SortedList> GetListFltr(string fromDdataDir, string shanrES,
+      string qrystr
+    )
+        {
+            PrintTimestamp(" start fun GetListFltr");
+            var __METHOD__ = MethodBase.GetCurrentMethod().Name;
+            PrintCallFunArgs(__METHOD__, dbgCls.func_get_args(fromDdataDir, shanrES, "whereFun()"));
+
+ 
+            List<SortedList> rztLi = new List<SortedList>();
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+
+            // string[] shareArr = shanrES.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
+            string shareStr = _calcPatnsV4(fromDdataDir, shanrES);
+            string[] shareArr = shareStr.Split(',');
+            foreach (var shar in shareArr)
+            {
+                var CurSharFullpath = fromDdataDir + "/" + shar;
+                string rndFun;
+                SortedList curShareCfg = ShareDetail(fromDdataDir, shar);
+                if (curShareCfg == null)
+                {
+                    Print("!!!⚠️⚠️wanging... cangt find shareCfg:" + shar);
+                    continue;
+                }
+                rndFun = (string)curShareCfg["rndFun"];
+
+                //    Func<string, List<SortedList>> rndEng_Fun = (Func<string, List<SortedList>>)GetFunc(); ;
+                var dbg = (shar: shar, storeEngr: rndFun, CurSharFullpath: CurSharFullpath);
+                List<SortedList> li = GetListFltr4ReadShare(CurSharFullpath, qrystr, rndFun.ToString(), dbg);
+                rztLi = array_merge(rztLi, li);
+            }
+            PrintRet(__METHOD__, "rztLi.size:" + rztLi.Count);
+            PrintTimestamp(" start fun " + __METHOD__);
+            return rztLi;
+        }
+
+        public static List<SortedList> GetListFltr4ReadShare(string curSharFullpath, string qrystr, string rndFun, (string shar, string? storeEngr, string CurSharFullpath) dbg)
+        {
+            Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrystr);
+            List<SortedList> list = arr_fltr4ReadShare(curSharFullpath,  whereFun, rndFun,dbg);
+            return list;
+        }
 
 
         /// <summary>
@@ -719,20 +763,7 @@ namespace libx
                 //   cache2024.Set(key, li, TimeSpan.FromMinutes(10));
             }
 
-
-            // 从缓存中获取数据，如果不存在则从数据库获取并添加到缓存          
-
-            //if ( GetField( cache311,shareName,null)==null)
-            //{
-            //    li = fun_rnd(shareName);
-            //    SetField(cache311, shareName, li);
-            //}
-            //else
-            //{
-            //    li = (List<SortedList>)GetField(cache311, shareName,null);
-            //}
-
-            //    List<SortedList> li = (List<SortedList>)Callx(rnd, shareName);
+ 
             if (li.Count > 0 && whereFun != null)
                 li = ArrFltrV2(li, whereFun);
 
