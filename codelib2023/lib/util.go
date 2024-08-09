@@ -2,11 +2,11 @@ package lib
 
 import (
 	"fmt"
+	"net/http"
 	"net/url"
 	"strconv"
 	"strings"
 	"time"
-
 )
 
 // 获取配置文件中的值的函数
@@ -22,7 +22,8 @@ func GetFieldAsInt526(config map[string]string, key string, defaultValue int) in
 // 获取配置字典的函数（模拟）
 func GetDicFromIni(filePath string) map[string]string {
 	// 模拟读取配置文件的过程
-	return ReadIniFile(filepath)
+	rzt, _ := ReadIniFile(filePath)
+	return rzt
 }
 
 // PrintTimestamp 打印时间戳
@@ -35,19 +36,15 @@ func PrintLog(message string) {
 	fmt.Println(message)
 }
 
-
-func TestGetWbapi(w http.ResponseWriter, r *http.Request)
-{
+func Test3GetWbapi(w http.ResponseWriter, r *http.Request) {
 	fmt.Print(("....in tet get wapi ()"))
 }
+
 // NewDelegate 示例函数，用于创建函数映射
-func NewDelegate(funname string) func(string) string {
+func NewDelegate(funname string) func(http.ResponseWriter, *http.Request) {
 	// 示例实现，根据函数名称返回实际的函数
-	functions := map[string]any{
-		"TestGetWbapi": TestGetWbapi,
-		"FunctionNameGETWbapi": func(arg string) string {
-			return `{"result": "example"}`
-		},
+	functions := map[string]func(http.ResponseWriter, *http.Request){
+		"TestGetWbapi": Test2GETWbapi,
 	}
 	return functions[funname]
 }

@@ -17,10 +17,10 @@ namespace MauiApp1
 
             builder.Services.AddMauiBlazorWebView();
 
-#if DEBUG
-    		builder.Services.AddBlazorWebViewDeveloperTools();
+           //for dbg
+            builder.Services.AddBlazorWebViewDeveloperTools();
     		builder.Logging.AddDebug();
-#endif
+
             builder.Services.AddScoped<MyService>();
 
             return builder.Build();

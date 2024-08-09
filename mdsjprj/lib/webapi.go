@@ -1,16 +1,18 @@
 package lib
 
+/*
 import (
 	"fmt"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+
 )
 
 func HttpHdlr(w http.ResponseWriter, r *http.Request, apiPrefix string, httpHdlrApiSpecl func(http.ResponseWriter, *http.Request)) {
 	// 获取 URL 和查询字符串
-	url := fmt.Sprintf("%s://%s%s%s", r.URL.Scheme, r.Host, r.URL.Path, r.URL.RawQuery)
+	//url := fmt.Sprintf("%s://%s%s%s", r.URL.Scheme, r.Host, r.URL.Path, r.URL.RawQuery)
 	queryString := r.URL.RawQuery
 	path := r.URL.Path
 
@@ -180,3 +182,4 @@ var (
 	webrootDir = "/path/to/webroot"
 	prjdir     = "/path/to/project"
 )
+*/

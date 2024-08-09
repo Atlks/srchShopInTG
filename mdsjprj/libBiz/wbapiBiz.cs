@@ -188,7 +188,7 @@ namespace mdsj.libBiz
          
          */
         /// <summary>
-        /// 
+        ///   dep   ,,,(req,repos) is bettr
         /// </summary>
         /// <param name="qrystr"></param>
         /// <returns></returns>

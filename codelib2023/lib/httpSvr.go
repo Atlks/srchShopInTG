@@ -5,13 +5,8 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"strings"
-	"time"
-
 )
-
-
 
 // 配置 HTTPS 的函数（模拟）
 func CfgHttps(config map[string]string) *tls.Config {
@@ -21,10 +16,6 @@ func CfgHttps(config map[string]string) *tls.Config {
 		MinVersion: tls.VersionTLS13,
 	}
 }
-
-
-
-
 
 // SendResp 发送响应
 func SendResp(w http.ResponseWriter, result string, contentType string) {
@@ -45,10 +36,12 @@ func HttpHdlr(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-//  http://locaohost:8888/Test?a=1
-func TestGetWbapi(w http.ResponseWriter, r *http.Request)
-{
-	fmt.Print(("....in tet get wapi ()"))
+// http://locaohost:8888/Test2?a=1
+func Test2GETWbapi(w http.ResponseWriter, r *http.Request) {
+	args931 := strings.TrimPrefix(r.URL.RawQuery, "=")
+	fmt.Print("....in tet get wapi ()" + args931)
+	// 发送响应
+	SendResp(w, "rztttttt", "application/json; charset=utf-8")
 }
 
 // HttpHdlrApi 处理 HTTP 请求
@@ -63,41 +56,45 @@ func HttpHdlrApi(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "*")
 
 	fnName := GetFunFromPathUrl(path) + r.Method + "Wbapi"
-	args931 := strings.TrimPrefix(r.URL.RawQuery, "=")
-
+	//	args931 := strings.TrimPrefix(r.URL.RawQuery, "=")
+	fmt.Print("GetFunFromPathUrl:" + fnName)
 	// 使用函数映射调用方法
 	f := NewDelegate(fnName)
 	if f == nil {
 		http.Error(w, "Function not found", http.StatusNotFound)
 		return
 	}
-	result := f(args931)
+	f(w, r)
 
 	// 发送响应
-	SendResp(w, result, "application/json; charset=utf-8")
+	//SendResp(w, result, "application/json; charset=utf-8")
 	PrintTimestamp("end fun HttpHdlrApi()")
 }
 
 func StartWebapiV2() {
-	apiPrefix := "Wapi"
-	config := GetDicFromIni("cfg/cfg.ini")
+	//apiPrefix := "Wapi"
+	// 修复路径分隔符问题
+	configPath := `D:\0prj\mdsj\codelib2023\cfg\cfg.ini`
+	config := GetDicFromIni(configPath)
+	//config := GetDicFromIni("D:\0prj\mdsj\codelib2023\cfg\cfg.ini")
 	port := GetFieldAsInt526(config, "wbsvs_port", 8888)
 	https := GetFieldAsInt526(config, "https", 0)
 
-	address := fmt.Sprintf(":%d", port)
-
+	address_wzPort := fmt.Sprintf(":%d", port)
+	fmt.Print(" add: http://" + address_wzPort)
 	// 配置 HTTPS
 	var server *http.Server
+	//var serverHttps *http.Server
 	if https == 1 {
 		tlsConfig := CfgHttps(config)
 		server = &http.Server{
-			Addr:      address,
+			Addr:      address_wzPort,
 			Handler:   http.HandlerFunc(HttpHdlr),
 			TLSConfig: tlsConfig,
 		}
 	} else {
 		server = &http.Server{
-			Addr:    address,
+			Addr:    address_wzPort,
 			Handler: http.HandlerFunc(HttpHdlrApi),
 		}
 	}
