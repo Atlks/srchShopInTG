@@ -632,6 +632,8 @@ namespace mdsj.lib
 
             return iniData;
         }
+      
+        
         public static SortedList<string, string> LoadSortedListFromIni(string filePath)
         {
             var result = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
@@ -957,6 +959,12 @@ namespace mdsj.lib
         }
 
         public static Dictionary<string, string> GetDicFromIni(string v)
+        {
+            Hashtable li = GetHashtabFromIniFl(v);
+            return ToDictionary(li);
+        }
+
+        public static Dictionary<string, string> GetDicFromIniV2(string v)
         {
             Hashtable li = GetHashtabFromIniFl(v);
             return ToDictionary(li);

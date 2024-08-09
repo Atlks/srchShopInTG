@@ -112,6 +112,70 @@ namespace mdsj.lib
             app.Run();
         }
 
+
+        public static void StartWebapiV2()
+        {
+          //  Action<HttpRequest, HttpResponse> httpHdlrSpel, 
+                string api_fix = "Wapi";
+            var builder = WebApplication.CreateBuilder();
+            // Configure Kestrel to listen on a specific port
+            ConfigureWebHostBuilder webHost = builder.WebHost;
+            webHost.ConfigureLogging(logging => { });
+            // webHost.UseStaticWebAssets
+            webHost.ConfigureKestrel(serverOptions =>
+            {
+                Dictionary<string, string> map = GetDicFromIni($"{prjdir}/cfg/cfg.ini");
+                int port = GetFieldAsInt526(map, "wbsvs_port", 5000);
+                serverOptions.ListenAnyIP(port); // 自定义端口号，例如5001
+
+                //--------cfg https block
+                int https = GetFieldAsInt526(map, "https", 0);
+                serverOptions.Limits.MaxRequestBodySize = 20 * 1024 * 1024; // 20 MB
+                if (https == 1)
+                    CfgHttps(serverOptions, map);
+                //-----end cfg https
+            });
+            var app = builder.Build();
+            //http://localhost:5000/dafen?callGetlistFromDb=yourValue11
+            //拦截请求：
+            RequestDelegate RequestDelegate1 = async (HttpContext context) =>
+            {
+                // todo  TryNotLgJmpEndAsync
+                Action<HttpContext> a = async (HttpContext context) =>
+                {
+
+                };
+                try
+                {
+                    //    a(context);
+                    jmp2exitFlagInThrd.Value = false;
+                    Print(" start req..."); PrintTimestamp();
+                    //here cant new thrd..beir req close early
+                    //here use call but not calltryAll bcs not want jmp Ex prt
+                    // 确保 HttpHdlr 是异步的
+                    await HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                    Print(" end req...");
+                    PrintTimestamp();
+                }
+                catch (jmp2endEx e)
+                {
+
+                }
+                catch (Exception e)
+                {
+                    PrintCatchEx("RequestDelegate", e);
+                    //impt cant find path ,need tips 
+                    context.Response.WriteAsync(e.Message);
+                }
+
+
+                Print(" end req...");
+                PrintTimestamp();
+            };
+            app.Run(RequestDelegate1);
+            app.Run();
+        }
+
         private static void CfgHttps(KestrelServerOptions serverOptions, Dictionary<string, string> map)
         {
             int httpsPort = GetFieldAsInt526(map, "https_port", 443); // Define your HTTPS port
@@ -263,6 +327,44 @@ namespace mdsj.lib
             var f = NewDelegate<Func<string, string>>(fnm);
             // 使用委托调用方法
             string result = f(args931);
+
+            // 发送响应
+            SendResp(result, "application/json; charset=utf-8", response);
+            PrintRetx(__METHOD__, "");
+            // 确保在处理完成后可以进行异步操作，如果有必要
+            await Task.CompletedTask;
+            PrintTimestamp(" end fun HttpHdlr()");
+        }
+
+
+        public static async Task HttpHdlrApi(HttpRequest request, HttpResponse response)
+        {
+            dbgpad = 0;
+            var __METHOD__ = "HttpHdlr";
+            PrintTimestamp($"enter {__METHOD__}() ");
+            jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(__METHOD__, func_get_args("req,resp", api_prefixDep));
+            var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
+            // 获取查询字符串
+            var queryString = request.QueryString.ToString();
+            string path = request.Path;
+            PrintLog(" request.Path =>" + request.Path);
+            path = CastPathReal4biz(path);
+            PrintLog(" CastPathReal4biz =>" + path);
+            // 允许所有域名
+            response.Headers.Add("Access-Control-Allow-Origin", "*");  
+
+        
+            var fn = GetFunFromPathUrl(path);
+
+            var funname = "" + fn + request.Method + "Wbapi";
+
+            string args931 = Substring(queryString, 1);
+            //   object rzt = CallxTryx(fnm, args931);
+            // 使用表达式树创建委托
+            var f = NewDelegate<Func<string, string>>(funname);
+            // 使用委托调用方法
+            string result = f(args931); 
 
             // 发送响应
             SendResp(result, "application/json; charset=utf-8", response);
