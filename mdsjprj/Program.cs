@@ -285,7 +285,7 @@ namespace prjx
             rzt = ToSqlPrmMode(rzt);
 
             Print("rzt=>" + rzt);
-            Thread.Sleep(7000);
+       //     Thread.Sleep(7000);
 
             string[] a237 = url.Split(",");
 

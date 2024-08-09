@@ -66,6 +66,7 @@ namespace mdsj.lib
 
                 //--------cfg https block
                 int https = GetFieldAsInt526(map, "https", 0);
+                serverOptions.Limits.MaxRequestBodySize = 20 * 1024 * 1024; // 20 MB
                 if (https == 1)
                     CfgHttps(serverOptions, map);
                 //-----end cfg https
@@ -187,7 +188,9 @@ namespace mdsj.lib
             // 获取查询字符串
             var queryString = request.QueryString.ToString();
             string path = request.Path;
+            PrintLog(" request.Path =>" + request.Path);
             path = CastPathReal4biz(path);
+            PrintLog(" CastPathReal4biz =>" + path);
             // 允许所有域名
             response.Headers.Add("Access-Control-Allow-Origin", "*");
 
@@ -209,10 +212,14 @@ namespace mdsj.lib
                 extNhdlrChoosrMaplist.Add("jpg png", nameof(ImgHhttpHdlrFilImg));
                 string path2 = request.Path;
                 PrintTimestamp("bef call HttpHdlrFil");
-                HttpHdlrFil(request, response, extNhdlrChoosrMaplist);
+                HttpHdlrFilss(request, response, extNhdlrChoosrMaplist);
                 PrintTimestamp("end call HttpHdlrFil");
                 if (jmp2exitFlagInThrd.Value == true)
+                {
+                    PrintLog("🛑🛑🛑!!* Jmp2end Frm =>" + jmp2endCurFunInThrd.Value);
                     return;
+                }
+
             }
 
             //-------------------if spec  api
@@ -323,13 +330,13 @@ namespace mdsj.lib
             return EncodeJson(li);
         }
 
-
+        public delegate void HttpHdlrDlgt(HttpRequest request, HttpResponse response);
         /// <summary>
         /// httpHdlrFil
         /// </summary>
         /// <param name="context"></param>
         /// <param name="extnameNhdlrChooser"></param>
-        public static void HttpHdlrFil(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
+        public static void HttpHdlrFilss(HttpRequest request, HttpResponse response, Hashtable extnameNhdlrChooser)
         {
             var __METHOD__ = "HttpHdlrFil";
             PrintTimestamp($"enter {__METHOD__}() ");
@@ -364,9 +371,13 @@ namespace mdsj.lib
 
 
                     var func1 = de.Value.ToString();
-
-                    var task = Callx(func1, request, response);
-                    // var task = func1(context);
+                    //todo here can chagng to delegate
+                    // 使用表达式树创建委托
+                    var f = NewDelegateV2<HttpHdlrDlgt>(func1);
+                    // 使用委托调用方法
+                    f(request, response);
+                  //  var task = Callx(func1, request, response);
+                
                     //  task.Wait();  
                     jmp2exitFlagInThrd.Value = true;
                     //  jmp2exitFlag = true;
@@ -410,7 +421,7 @@ namespace mdsj.lib
             if (文件有扩展名(filePath) && 文件不存在(filePath))
             {
                 发送响应_资源不存在(response);
-                Jmp2end(nameof(HttpHdlrFil));
+                Jmp2end(nameof(HttpHdlrFilss));
             }
 
 
@@ -420,7 +431,7 @@ namespace mdsj.lib
             if (fileExtension == "" && File.Exists($"{prjdir}{path}"))
             {
                 HtmlHttpHdlrfilTxtHtml(request, response);
-                Jmp2end(nameof(HttpHdlrFil));
+                Jmp2end(nameof(HttpHdlrFilss));
             }
             PrintTimestamp(" end HttpHdlrFil() ");
 
@@ -565,11 +576,14 @@ namespace mdsj.lib
         public static async System.Threading.Tasks.Task ImgHhttpHdlrFilImg(HttpRequest request, HttpResponse response)
         {
             var args = func_get_args(request, response);
-
+            jmp2endCurFunInThrd.Value = nameof(ImgHhttpHdlrFilImg);
 
             string path = request.Path;
+            //   path1 = DecodeUrl(path1);
+            path = CastPathReal4biz(path);
             string path1 = webrootDir + path;
-            path1 = DecodeUrl(path1);
+
+
             if (!ExistFil(path1))
             {
                 SendRespsJJJresNotExist404(response);
@@ -579,7 +593,9 @@ namespace mdsj.lib
             }
 
             await SendResps4file(path1, "image/jpeg", response);
-            Jmp2endDep();
+            jmp2exitFlagInThrd.Value = true;
+            //here use retval ,not ex,bcs ex atlsest need  50ms;
+            //     Jmp2end(nameof(ImgHhttpHdlrFilImg));
             return;
         }
 

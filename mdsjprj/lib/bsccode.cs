@@ -1068,6 +1068,30 @@ namespace mdsj.lib
             string tkOri = uid + "_" + MRG;
             return tkOri;
         }
+        //public static FuncDlt1 NewDelegate308(string methodName) 
+        //{
+        //    // PrintTimestamp("start CreateDelegate()"+methodName);
+        //    // 获取方法信息
+        //    MethodInfo methodInfo = GetMethInfo(methodName);
+        //    if (methodInfo == null)
+        //    {
+        //        throw new ArgumentException($"Method '{methodName}' not found.");
+        //    }
+
+        //    // 创建参数表达式
+        //    ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
+
+        //    // 创建方法调用表达式
+        //    MethodCallExpression methodCall = Expression.Call(methodInfo, param);
+
+        //    // 创建 Lambda 表达式
+        //    Expression<Func<string, string>> lambda = Expression.Lambda<Func<string, string>>(methodCall, param);
+
+        //    // 编译 Lambda 表达式
+        //    FuncDlt1 func = lambda.Compile();
+        //    // PrintTimestamp(" endfun CreateDelegate()" + methodName);
+        //    return func;
+        //}
 
 
         /// <summary>
@@ -1109,6 +1133,35 @@ namespace mdsj.lib
             // PrintTimestamp(" endfun CreateDelegate()" + methodName);
             return func;
         }
+
+
+        public static T NewDelegateV2<T>(string methodName) where T : Delegate
+        {
+            // PrintTimestamp("start CreateDelegate()"+methodName);
+            // 获取方法信息
+            MethodInfo methodInfo = GetMethInfo(methodName);
+            if (methodInfo == null)
+            {
+                throw new ArgumentException($"Method '{methodName}' not found.");
+            }
+
+            // 创建参数表达式
+            //  ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
+            // 创建参数表达式
+            var parameters = methodInfo.GetParameters().Select(p => Expression.Parameter(p.ParameterType, p.Name)).ToArray();
+
+            // 创建方法调用表达式
+            MethodCallExpression methodCall = Expression.Call(methodInfo, parameters);
+
+            // 创建 Lambda 表达式
+            Expression<T> lambda = Expression.Lambda<T>(methodCall, parameters);
+
+            // 编译 Lambda 表达式
+           T func = lambda.Compile();
+            // PrintTimestamp(" endfun CreateDelegate()" + methodName);
+            return func;
+        }
+
         /// <summary>
         /// 压缩字符串
         /// </summary>
