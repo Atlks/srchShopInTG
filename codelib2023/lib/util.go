@@ -44,7 +44,7 @@ func Test3GetWbapi(w http.ResponseWriter, r *http.Request) {
 func NewDelegate(funname string) func(http.ResponseWriter, *http.Request) {
 	// 示例实现，根据函数名称返回实际的函数
 	functions := map[string]func(http.ResponseWriter, *http.Request){
-		"TestGetWbapi": Test2GETWbapi,
+		"Test2GETWbapi": Test2GETWbapi,
 	}
 	return functions[funname]
 }
