@@ -1145,6 +1145,13 @@ namespace mdsj.lib
                 throw new ArgumentException($"Method '{methodName}' not found.");
             }
 
+            // 确保方法信息的返回类型和参数匹配
+            //if (typeof(T).GetMethod("Invoke").ReturnType != methodInfo.ReturnType ||
+            //    typeof(T).GetMethod("Invoke").GetParameters().Length != methodInfo.GetParameters().Length)
+            //{
+            //    throw new ArgumentException("Method signature does not match delegate.");
+            //}
+
             // 创建参数表达式
             //  ParameterExpression param = Expression.Parameter(typeof(string), "qrystr");
             // 创建参数表达式
@@ -1162,6 +1169,12 @@ namespace mdsj.lib
             return func;
         }
 
+
+        public static string ClrCommaStr(string pkrPrm)
+        {
+            HashSet<string> hs = GetHashsetFrmCommaStr(pkrPrm);
+            return ToStrComma(hs);
+        }
         /// <summary>
         /// 压缩字符串
         /// </summary>

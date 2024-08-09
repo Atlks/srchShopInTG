@@ -830,6 +830,12 @@ namespace mdsj.lib
             HashSet<string> resultSet = new HashSet<string>(stringArray);
             return resultSet;
         }
+
+        public static HashSet<string> GetHashsetFrmCommaStr(string pkrPrm)
+        {
+            return ConvertCommaSeparatedStringToHashSet(pkrPrm);
+        }
+      
         public static List<SortedList> GetListFltrByQrystr(string fromDdataDir, object shares, string qrtStr4Srch)
         {
             PrintTimestamp(" start fun GetListFltrByQrystr");

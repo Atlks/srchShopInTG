@@ -55,6 +55,47 @@ namespace mdsj.lib
 
             return sortedList;
         }
+        public static SortedList CopyHashtableToSortedList(Hashtable hashtable, SortedList sortedList)
+        {
+            // 创建一个新的 SortedList
+            // SortedList sortedList = new SortedList();
+
+            // 遍历 Hashtable 并将每个键值对添加到 SortedList
+            foreach (DictionaryEntry entry in hashtable)
+            {
+                try
+                {
+                    SetField(sortedList, entry.Key.ToString(), entry.Value);
+                    // sortedList.Add(entry.Key, entry.Value);
+                }
+                catch (Exception e)
+                {
+                    PrintExcept("CopyHashtableToSortedList", e);
+                }
+
+            }
+
+            return sortedList;
+        }
+
+
+        private static string ToStrComma(HashSet<string> hashSet)
+        {
+            // 使用 string.Join 方法将 HashSet 中的元素连接成一个逗号分隔的字符串
+            return string.Join(",", hashSet);
+        }
+
+      
+
+        public static HashSet<string> ConvertCommaSeparatedStringToHashSet(string input)
+        {
+            // 使用 string.Split 方法将逗号分隔的字符串拆分成数组
+            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+            // 创建 HashSet 并将数组元素添加到其中
+            return new HashSet<string>(items);
+        }
+
 
         public static string ConvertToSimplifiedChinese(string traditionalChinese)
         {

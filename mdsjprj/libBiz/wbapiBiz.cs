@@ -167,7 +167,7 @@ namespace mdsj.libBiz
             return "";
 
         }
-        public static Hashtable parseLxfs(string jsonString)
+        public static Hashtable CastToHashtbFrmparseLxfs(string jsonString)
         {
             // 将 JSON 字符串解析为数组
             var array = JsonConvert.DeserializeObject<string[][]>(jsonString);
@@ -275,33 +275,6 @@ namespace mdsj.libBiz
             PrintTimestamp(" end fun WbapiXgetlist()");
             return rsstr;
         }
-
-        private static string ClrCommaStr(string pkrPrm)
-        {
-            HashSet<string> hs = GetHashsetFrmCommaStr(pkrPrm);
-            return ToStrComma(hs);
-        }
-
-        private static string ToStrComma(HashSet<string> hashSet)
-        {
-            // 使用 string.Join 方法将 HashSet 中的元素连接成一个逗号分隔的字符串
-            return string.Join(",", hashSet);
-        }
-
-        private static HashSet<string> GetHashsetFrmCommaStr(string pkrPrm)
-        {
-            return ConvertCommaSeparatedStringToHashSet(pkrPrm);
-        }
-
-        public static HashSet<string> ConvertCommaSeparatedStringToHashSet(string input)
-        {
-            // 使用 string.Split 方法将逗号分隔的字符串拆分成数组
-            string[] items = input.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-
-            // 创建 HashSet 并将数组元素添加到其中
-            return new HashSet<string>(items);
-        }
-
 
 
 
@@ -451,7 +424,7 @@ namespace mdsj.libBiz
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
 
-            Hashtable hashtable = parseLxfs(GetFieldAsStr(saveOBJ,"联系方式"));
+            Hashtable hashtable = CastToHashtbFrmparseLxfs(GetFieldAsStr(saveOBJ,"联系方式"));
             CopyHashtableToSortedList(hashtable, saveOBJ);
 
             string token = GetFieldAsStrDep(saveOBJ, "token");
@@ -476,28 +449,7 @@ namespace mdsj.libBiz
 
 
 
-        public static SortedList CopyHashtableToSortedList(Hashtable hashtable, SortedList sortedList)
-        {
-            // 创建一个新的 SortedList
-           // SortedList sortedList = new SortedList();
-
-            // 遍历 Hashtable 并将每个键值对添加到 SortedList
-            foreach (DictionaryEntry entry in hashtable)
-            {
-                try
-                {
-                    SetField(sortedList, entry.Key.ToString(), entry.Value);
-                   // sortedList.Add(entry.Key, entry.Value);
-                }catch(Exception e)
-                {
-                    PrintExcept("CopyHashtableToSortedList", e);
-                }
-               
-            }
-
-            return sortedList;
-        }
-
+      
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
         public static string Wbapi_getDetail(string qrystr)
         {

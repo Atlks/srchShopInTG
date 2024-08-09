@@ -310,7 +310,7 @@ namespace prjx
             Hashtable ht = new Hashtable();
             ht.Add("Telegram", "4546");
             string v1006 = GetFieldAsStr(ht, "Telegram");
-            Hashtable hashtable = parseLxfs(jsonString);
+            Hashtable hashtable = CastToHashtbFrmparseLxfs(jsonString);
             Print(EncodeJsonFmt(hashtable));
 
             GenerateImageFromHtml("D:\\0prj\\mdsj\\mdsjprj\\cfg\\btns.htm", "btns405.jpg");
