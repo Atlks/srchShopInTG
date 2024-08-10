@@ -167,6 +167,7 @@ namespace prjx
                 Evtboot(() =>
                 {
                     //   botClient = botClient;
+                    //todo here should wrt to rot ini therre..not here
                     获取机器人的信息();
 
 
@@ -277,6 +278,7 @@ namespace prjx
 
         private static async Task main10test1030()
         {
+          //  string lxfsTmplt = @"[["Telegram","whveie123"],["微信","1233339"],["WhatsApp","093383"],["Signal","2349jhe"],["电话","1838383939"]]"
             //rewrt park cdt
             string url = "园区=KK园区,东方园区,缅甸,妙瓦底";
             string pkrPrm = "KK园区,东方园区,缅甸,妙瓦底";

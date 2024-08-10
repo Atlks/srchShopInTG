@@ -374,9 +374,10 @@ namespace mdsj.lib
                         { "jpg", nameof(ImgHhttpHdlrFilImg) },
                         { "png", nameof(ImgHhttpHdlrFilImg) }
                     };
+                var extNhdlrChoosrMaplistHstb = ToHashtableFrmDic(extNhdlrChoosrMaplist);
                 string path2 = request.Path;
                 PrintTimestamp("bef call HttpHdlrFil");
-                HttpHdlrFilss(request, response, extNhdlrChoosrMaplist);
+                HttpHdlrFilss(request, response, extNhdlrChoosrMaplistHstb);
                 PrintTimestamp("end call HttpHdlrFil");
                 if (jmp2exitFlagInThrd.Value == true)
                 {
@@ -430,6 +431,20 @@ namespace mdsj.lib
             // 确保在处理完成后可以进行异步操作，如果有必要
             await Task.CompletedTask;
             PrintTimestamp(" end fun HttpHdlr()");
+        }
+
+        public static Hashtable ToHashtableFrmDic(Dictionary<string, string> extNhdlrChoosrMaplist)
+        {
+            
+            Hashtable hashtable = new Hashtable();
+
+            // Iterate through the dictionary and add entries to the hashtable
+            foreach (var kvp in extNhdlrChoosrMaplist)
+            {
+                hashtable.Add(kvp.Key, kvp.Value);
+            }
+
+            return hashtable;
         }
 
         public static async Task HttpHdlrApi(HttpRequest request, HttpResponse response)

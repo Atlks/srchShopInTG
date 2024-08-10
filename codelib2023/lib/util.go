@@ -18,6 +18,11 @@ func GetFieldAsInt526(config map[string]string, key string, defaultValue int) in
 	}
 	return defaultValue
 }
+func CatchPanic() {
+	if r := recover(); r != nil {
+		fmt.Println("Recovered from panic:", r)
+	}
+}
 
 // 获取配置字典的函数（模拟）
 func GetDicFromIni(filePath string) map[string]string {

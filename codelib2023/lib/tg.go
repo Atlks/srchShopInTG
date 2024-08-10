@@ -11,6 +11,28 @@ import (
 
 var botToken string = "" // 替换为你的 Telegram Bot Token
 var chatID string = ""   // 替换为你的聊天 ID 或频道 ID
+
+var botClient *tgbotapi.BotAPI
+
+// 获取机器人的信息 获取Telegram机器人的信息
+func I获取机器人的信息() {
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("An error occurred: %v\n", r)
+		}
+	}()
+
+	me, err := botClient.GetMe()
+	if err != nil {
+		log.Printf("An error occurred: %v\n", err)
+		return
+	}
+
+	fmt.Printf("Bot ID: %d\n", me.ID)
+	fmt.Printf("Bot Name: %s\n", me.FirstName)
+	fmt.Printf("Bot Username: %s\n", me.UserName)
+}
+
 func StartTg(handleMessage func(*tgbotapi.BotAPI, tgbotapi.Update)) {
 	fmt.Print(" GetRealPath=>" + GetRealPath("cfg117.ini"))
 	config := GetDicFromIni("cfg117.ini")
@@ -35,7 +57,8 @@ func StartTg(handleMessage func(*tgbotapi.BotAPI, tgbotapi.Update)) {
 	if err != nil {
 		log.Fatalf("Failed to create bot: %v", err)
 	}
-
+	botClient = bot
+	I获取机器人的信息()
 	// 设置机器人的日志级别
 	bot.Debug = true
 	log.Printf("Authorized on account %s", bot.Self.UserName)

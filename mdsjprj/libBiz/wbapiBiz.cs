@@ -230,7 +230,8 @@ namespace mdsj.libBiz
                 string mrtKwd = GetFieldAsStr1037(qryMap, "商家").ToUpper();
                 if (mrtKwd.Length > 0)
                     li.Add(GetFieldAsStr1037(row, "商家").ToUpper().Contains(mrtKwd));
-                //   li.Add((IsNotEmptyLianxi(row)));
+
+                li.Add((IsNotEmptyLianxi(row)));
                 //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
             });
@@ -247,20 +248,29 @@ namespace mdsj.libBiz
             //------------block add col
             PrintTimestamp(" start add col");
             //todo binxin for
+            var f443 = $"{prjdir}/cfg/lxfsTmplt.txt";
+            var txttmplt = ReadAllText(f443);
             ForList("BlkAddCol", list_rzt, (sortedList) =>
             {
                 var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
                 var list11 = GetListHashtableFromJsonFil(pinlunDtDir);
                 SetField938(sortedList, "NumberOfComments", list11.Count);
                 SetField938(sortedList, "Comments", list11);
-
+                //   SetField938(sortedList, "Comments", list11);
                 var df = "dafenDt打分数据/" + sortedList["id"] + ".json";
                 var list12 = GetListHashtableFromJsonFil(df);
 
 
-                SetField938(sortedList, "Scores", Avg(list12, "dafen"));
+                double score = Avg(list12, "dafen");
+                if (score == 0)
+                    score = 5;
+                SetField938(sortedList, "Scores", score);
                 SetField938(sortedList, "pages", CalculateTotalPages(pagesize, list_aftFltr2.Count));
-
+                //联系方式
+                //   string 
+                var lxfs = GetFieldAsStr(sortedList, "联系方式");
+                if (lxfs == "")
+                    SetField938(sortedList, "联系方式", RendLxsf(txttmplt, sortedList));
             });
 
             PrintTimestamp(" end add col");
@@ -292,6 +302,60 @@ namespace mdsj.libBiz
             string rsstr = EncodeJson(list_rzt_fmt);
             PrintTimestamp(" end fun WbapiXgetlist()");
             return rsstr;
+        }
+
+        public static string RendLxsf(string txttmplt, SortedList sortedList)
+        {
+            try
+            {
+                //  lianxifsh = TrimRemoveUnnecessaryCharacters4tgWhtapExt(lianxifsh);
+                var wcht = TrimRemoveUnnecessaryCharacters4tgWhtapExt( GetFieldAsStr(sortedList, "微信"));
+                var tel = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Tel"));
+                var tg = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Telegram"));
+                var wtap = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "WhatsApp"));
+                var 纸飞机群 = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "纸飞机群"));
+                var line = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Line"));
+                HashSet<String> hs = new HashSet<string>();
+                ArrayList li = new ArrayList();
+                if(tel!="")
+                {
+                    string[] dh = ["电话", tel];
+                    li.Add(dh);
+                }
+                if(tg!="")
+                {
+                    string[] dh = ["Telegram", tg];
+                    li.Add(dh);
+                }
+                if (wtap != "")
+                {
+                    string[] dh = ["WhatsApp", wtap];
+                    li.Add(dh);
+                }
+                if (wcht != "")
+                {
+                    string[] dh = ["微信", wcht];
+                    li.Add(dh);
+                }
+                if (line != "")
+                {
+                    string[] dh = ["Line", line];
+                    li.Add(dh);
+                }
+
+               // txttmplt = txttmplt.Replace("{{line}}", TrimRemoveUnnecessaryCharacters4tgWhtapExt( GetFieldAsStr(sortedList, "Line")));
+              
+                txttmplt = encodeJsonNofmt(li);
+                PrintLog(txttmplt);
+                return txttmplt;
+
+            }
+            catch (Exception e)
+            {
+                PrintExcept(" RendLxsf", e);
+                return "";
+            }
+
         }
 
 

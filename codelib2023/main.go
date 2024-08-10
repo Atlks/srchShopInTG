@@ -6,11 +6,21 @@ import (
 )
 
 func main() {
+	//------------------ 设置全局异常处理
+	defer lib.CatchPanic()
 	fmt.Print(111)
 	fmt.Print(22)
 	lib.Main1()
 	//lib.StartWebapiV2()
 
+	lib.Evtboot(func() {
+		// Call the function to get bot information
+		lib.I获取机器人的信息()
+	})
+
 	lib.Main4daylyRpt()
 	fmt.Print(333)
+
+	// 阻塞主线程
+	select {}
 }

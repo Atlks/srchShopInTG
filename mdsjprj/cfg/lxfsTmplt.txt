@@ -1,0 +1,1 @@
+[["Telegram","{{tg}}"],["微信","{{wcht}}"],["WhatsApp","{{wtap}}"],["Signal","{{sign}}"],["电话","{{tel}}"],["Line","{{line}}"]]

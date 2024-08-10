@@ -697,6 +697,9 @@ namespace mdsj
 
         public static string getLianxifsh(SortedList row)
         {
+          string shj=  LoadFieldDefEmpty(row, "商家");
+            if (shj.Contains("福满多"))
+                Print("dbg415");
             string lianxifsh = LoadFieldDefEmpty(row, "Telegram") + LoadFieldDefEmpty(row, "WhatsApp")
 
              + LoadFieldDefEmpty(row, "微信") + LoadFieldDefEmpty(row, "Tel")
