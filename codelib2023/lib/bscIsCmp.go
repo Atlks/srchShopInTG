@@ -2,8 +2,18 @@ package lib
 
 import (
 	"errors"
+	"os"
 	"time"
 )
+
+// FileExists 判断文件是否存在
+func FileExists(filePath string) bool {
+	_, err := os.Stat(filePath)
+	if os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
 
 // IsExprt checks if the given time string represents a time before the current time.
 // It returns true if the time is before the current time, and false otherwise.
