@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+
 	//	"os"
 	"time"
 
@@ -102,8 +103,6 @@ func Main4daylyRpt() {
 	go scheduleDailyTask(8, 30, sendMessage4daylyrpt)
 	go scheduleDailyTask(11, 30, sendMessage4daylyrpt)
 
-	// 阻塞主线程
-	select {}
 }
 
 func scheduleDailyTask(hour, minute int, task func()) {

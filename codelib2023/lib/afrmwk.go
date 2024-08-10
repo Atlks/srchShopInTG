@@ -109,10 +109,6 @@ func contains(s, substr string) bool {
 	return Contains(s, substr) // Modify as needed
 }
 
-func RunSetRollLogFileV2() {
-	fmt.Println("Running SetRollLogFileV2")
-}
-
 func callTryAll(fn func()) {
 	defer func() {
 		if r := recover(); r != nil {

@@ -15,7 +15,7 @@ func main() {
 
 	lib.Evtboot(func() {
 		// Call the function to get bot information
-		lib.I获取机器人的信息()
+
 	})
 
 	lib.Main4daylyRpt()

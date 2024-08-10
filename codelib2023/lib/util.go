@@ -18,6 +18,7 @@ func GetFieldAsInt526(config map[string]string, key string, defaultValue int) in
 	}
 	return defaultValue
 }
+
 func CatchPanic() {
 	if r := recover(); r != nil {
 		fmt.Println("Recovered from panic:", r)
