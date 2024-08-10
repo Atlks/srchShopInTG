@@ -1377,7 +1377,7 @@ namespace mdsj.lib
             //{
             //    result.Add(list1[i]);
             //}
-
+            //here binxin todo
             for (int i = 0; i < list2.Count; i++)
             {
                 list1.Add(list2[i]);

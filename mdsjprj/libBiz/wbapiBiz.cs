@@ -194,22 +194,30 @@ namespace mdsj.libBiz
         /// <returns></returns>
         public static string WbapiXgetlist(string qrystr)
         {
+            // todo 优化分页处理 cache qry rzt 10 min,
+            //parse qrystr ,del page prm..just ok as cacheKey
+            //todo  使用 Dictionary 替代 SortedList，pfm
             PrintTimestamp(" start fun WbapiXgetlist()");
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
             string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
             //----- qrystr  rwrt  parks
-            string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
+            string pkrPrm = string.Join(",",
+                   GetFieldAsStr(qrystrMap, "园区"),
+                   GetFieldAsStr(qrystrMap, "国家"),
+                   GetFieldAsStr(qrystrMap, "城市")
+           );
+            //    string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
             pkrPrm = ClrCommaStr(pkrPrm);
             string rzt = ExtParks(pkrPrm);
             rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
 
             string qrtStr4Srch525 = qrtStr4Srch2;
-            if (rzt!="")
-              qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2,"园区", rzt);
+            if (rzt != "")
+                qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", rzt);
 
-          //  qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", "");
+            //  qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", "");
             //----end rwrt
 
             PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
@@ -238,6 +246,7 @@ namespace mdsj.libBiz
 
             //------------block add col
             PrintTimestamp(" start add col");
+            //todo binxin for
             ForList("BlkAddCol", list_rzt, (sortedList) =>
             {
                 var pinlunDtDir = "pinlunDir评论数据/" + sortedList["id"] + ".json";
@@ -258,11 +267,20 @@ namespace mdsj.libBiz
             //----------------block trans cn2en form--------------
             PrintTimestamp(" start trans cn2en");
             SortedList<string, string> transmap = LoadSortedListFromIni($"{prjdir}/cfg字段翻译表/字段表.ini");
-            //trans key
+            //trans key  todo binxin trans
+
             List<SortedList> list_rzt_fmt = new List<SortedList>();
+
+            //var list_rzt_fmt = list_rzt.AsParallel().Select(sortedList =>
+            //{
+            //    if (sortedList == null)
+            //        return null;
+            //    return castKeyToEnName(sortedList, transmap);
+            //}).ToList();
             ForList("Blk.transKey", list_rzt, (sortedList) =>
             {
                 //todo fun  transkey
+                //对于 大数据集 或 计算密集型操作，PLINQ 可能会带来显著的性能提升
                 if (sortedList == null)
                     return;
                 SortedList map3 = castKeyToEnName(sortedList, transmap);
@@ -394,7 +412,7 @@ namespace mdsj.libBiz
 
             // Check if the request contains a file
             PrintLog(" start fun AddMerchtPOSTWbapi()");
-            PrintLog(" start fun request.Form.Files.Count=>"+ request.Form.Files.Count);
+            PrintLog(" start fun request.Form.Files.Count=>" + request.Form.Files.Count);
             var fil = "";
             if (request.Form.Files.Count > 0)
             {
@@ -424,7 +442,7 @@ namespace mdsj.libBiz
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
             saveOBJ.Add("照片或视频", fil);
 
-            Hashtable hashtable = CastToHashtbFrmparseLxfs(GetFieldAsStr(saveOBJ,"联系方式"));
+            Hashtable hashtable = CastToHashtbFrmparseLxfs(GetFieldAsStr(saveOBJ, "联系方式"));
             CopyHashtableToSortedList(hashtable, saveOBJ);
 
             string token = GetFieldAsStrDep(saveOBJ, "token");
@@ -449,7 +467,7 @@ namespace mdsj.libBiz
 
 
 
-      
+
         //  http://localhost:5000/getDetail?id=avymrhifuyzkfetlnifryraazk
         public static string Wbapi_getDetail(string qrystr)
         {

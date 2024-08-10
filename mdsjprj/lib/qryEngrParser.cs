@@ -234,6 +234,7 @@ namespace libx
             //zhe 这里不要检测物理文件，全逻辑。。物理检测在存储引擎即可。
             string shareStr = _calcPatnsV4(fromDdataDir, shanrES);
             string[] shareArr = shareStr.Split(',');
+            //todo here can chg to corrent binxin prcs
             foreach (var shar in shareArr)
             {
                 var CurSharFullpath = fromDdataDir + "/" + shar;

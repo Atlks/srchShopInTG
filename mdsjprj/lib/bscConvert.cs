@@ -79,7 +79,7 @@ namespace mdsj.lib
         }
 
 
-        private static string ToStrComma(HashSet<string> hashSet)
+        public static string ToStrComma(HashSet<string> hashSet)
         {
             // 使用 string.Join 方法将 HashSet 中的元素连接成一个逗号分隔的字符串
             return string.Join(",", hashSet);
@@ -142,6 +142,7 @@ namespace mdsj.lib
 
         public static SortedList castKeyToEnName(SortedList sortedList, SortedList<string, string> transmap)
         {
+            //todo chg to prm.each   binxin api
             SortedList map3 = new SortedList();
             // 循环遍历每一个键
             foreach (object key in sortedList.Keys)

@@ -115,8 +115,8 @@ namespace mdsj.lib
 
         public static void StartWebapiV2()
         {
-          //  Action<HttpRequest, HttpResponse> httpHdlrSpel, 
-                string api_fix = "Wapi";
+            //  Action<HttpRequest, HttpResponse> httpHdlrSpel, 
+            string api_fix = "Wapi";
             var builder = WebApplication.CreateBuilder();
             // Configure Kestrel to listen on a specific port
             ConfigureWebHostBuilder webHost = builder.WebHost;
@@ -153,7 +153,7 @@ namespace mdsj.lib
                     //here cant new thrd..beir req close early
                     //here use call but not calltryAll bcs not want jmp Ex prt
                     // 确保 HttpHdlr 是异步的
-                    await HttpHdlr(context.Request, context.Response, api_prefix, httpHdlrSpel);
+                    await HttpHdlrV2(context.Request, context.Response);
                     Print(" end req...");
                     PrintTimestamp();
                 }
@@ -336,9 +336,9 @@ namespace mdsj.lib
             PrintTimestamp(" end fun HttpHdlr()");
         }
 
-
-        public static async Task HttpHdlrApi(HttpRequest request, HttpResponse response)
+        public static async Task HttpHdlrV2(HttpRequest request, HttpResponse response)
         {
+            string api_prefixDep = "Wbapi";
             dbgpad = 0;
             var __METHOD__ = "HttpHdlr";
             PrintTimestamp($"enter {__METHOD__}() ");
@@ -352,9 +352,104 @@ namespace mdsj.lib
             path = CastPathReal4biz(path);
             PrintLog(" CastPathReal4biz =>" + path);
             // 允许所有域名
-            response.Headers.Add("Access-Control-Allow-Origin", "*");  
+            response.Headers.Add("Access-Control-Allow-Origin", "*");
 
-        
+            //-------------whilte list url for pfm
+            string skipFileRdUrlpath = "/getlist";
+            HashSet<string> hs = new HashSet<string>();
+            hs.Add(skipFileRdUrlpath);
+            if (!hs.Contains(path))
+            {
+                //这里为了pfm ,so need jude skip fl hdr
+                //----------------static res
+                //    使用字典代替 Hashtable: Hashtable 是过时的，使用 Dictionary<string, string> 可以提高性能。
+                // 静态资源处理器映射表
+                var extNhdlrChoosrMaplist = new Dictionary<string, string>
+                    {
+                        { "js", nameof(JsHttpHdlr) },
+                        { "css", nameof(CssHttpHdlr) },
+                        { "txt", nameof(TxtHttpHdlr) },
+                        { "html", nameof(HtmlHttpHdlrfilTxtHtml) },
+                        { "json", nameof(JsonFLhttpHdlrFilJson) },
+                        { "jpg", nameof(ImgHhttpHdlrFilImg) },
+                        { "png", nameof(ImgHhttpHdlrFilImg) }
+                    };
+                string path2 = request.Path;
+                PrintTimestamp("bef call HttpHdlrFil");
+                HttpHdlrFilss(request, response, extNhdlrChoosrMaplist);
+                PrintTimestamp("end call HttpHdlrFil");
+                if (jmp2exitFlagInThrd.Value == true)
+                {
+                    PrintLog("🛑🛑🛑!!* Jmp2end Frm =>" + jmp2endCurFunInThrd.Value);
+                    return;
+                }
+
+            }
+
+            //-------------------if spec  api
+            // 处理特定API
+            //httpHdlrApiSpecl(request, response);
+            //if (jmp2exitFlagInThrd.Value == true)
+            //    return;
+
+
+
+
+
+            // upldPOSTWbapi
+            //todo ref is too slow ,chg to delegate
+            //------------httpHdlrApi--def json api mode
+            //----------/XXX GET/POST WBAPI---           
+            //----------doc  swagGetWbapi
+            var fn = GetFunFromPathUrl(path);
+
+            var funname = "" + fn + request.Method + "Wbapi";
+
+            // 使用表达式树创建委托
+            var f933 = NewDelegateV2<HttpHdlrDlgt>(funname);
+            // 使用委托调用方法
+            f933(request, response);
+         //   f?.Invoke(request, response)) 更安全，因为它确保了只有在 f 不为 null 时才会执行 Invoke，从而避免了空引用异常。
+
+            //     arr_fltr330()
+            //----dep
+            //TODO DEP SHOULD AUTO get post call
+            string fnm = api_prefixDep + fn;
+            string args931 = Substring(queryString, 1);
+
+
+            //   object rzt = CallxTryx(fnm, args931);
+            // 使用表达式树创建委托
+            var f = NewDelegate<Func<string, string>>(fnm);
+            // 使用委托调用方法
+            string result = f(args931);
+
+            // 发送响应
+            SendResp(result, "application/json; charset=utf-8", response);
+            PrintRetx(__METHOD__, "");
+            // 确保在处理完成后可以进行异步操作，如果有必要
+            await Task.CompletedTask;
+            PrintTimestamp(" end fun HttpHdlr()");
+        }
+
+        public static async Task HttpHdlrApi(HttpRequest request, HttpResponse response)
+        {
+            dbgpad = 0;
+            var __METHOD__ = "HttpHdlr";
+            PrintTimestamp($"enter {__METHOD__}() ");
+            jmp2endCurFunInThrd.Value = __METHOD__;
+            PrintCallFunArgs(__METHOD__, func_get_args("req,resp"));
+            var url = $"{request.Scheme}://{request.Host}{request.Path}{request.QueryString}";
+            // 获取查询字符串
+            var queryString = request.QueryString.ToString();
+            string path = request.Path;
+            PrintLog(" request.Path =>" + request.Path);
+            path = CastPathReal4biz(path);
+            PrintLog(" CastPathReal4biz =>" + path);
+            // 允许所有域名
+            response.Headers.Add("Access-Control-Allow-Origin", "*");
+
+
             var fn = GetFunFromPathUrl(path);
 
             var funname = "" + fn + request.Method + "Wbapi";
@@ -364,7 +459,7 @@ namespace mdsj.lib
             // 使用表达式树创建委托
             var f = NewDelegate<Func<string, string>>(funname);
             // 使用委托调用方法
-            string result = f(args931); 
+            string result = f(args931);
 
             // 发送响应
             SendResp(result, "application/json; charset=utf-8", response);
@@ -478,8 +573,8 @@ namespace mdsj.lib
                     var f = NewDelegateV2<HttpHdlrDlgt>(func1);
                     // 使用委托调用方法
                     f(request, response);
-                  //  var task = Callx(func1, request, response);
-                
+                    //  var task = Callx(func1, request, response);
+
                     //  task.Wait();  
                     jmp2exitFlagInThrd.Value = true;
                     //  jmp2exitFlag = true;
@@ -626,6 +721,13 @@ namespace mdsj.lib
                 Print(" send finish....");
                 Jmp2endDep(); return;
             }
+        }
+        public static void swagGETWbapi(HttpRequest request, HttpResponse response)
+        {
+            var rzt146 = DocapiHttpHdlrApiSpelDocapi("mdsj.xml", response);
+            SendResp(rzt146, "text/html; charset=utf-8", response);
+            // Jmp2end(nameof(HttpHdlr));
+            Jmp2end(nameof(swagGETWbapi));
         }
 
         public static void upldPOSTWbapi(HttpRequest request, HttpResponse response)
