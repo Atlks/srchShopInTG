@@ -6,42 +6,52 @@
     {
       "id": "mwdcity",
       "name": "妙瓦底",
-      "parent": "mmr"
+      "parent": "缅甸"
     },
     {
       "id": "kk",
       "name": "KK园区",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "df",
       "name": "东方园区",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "jz",
       "name": "金州园区",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "sjxc",
       "name": "世纪新城园区",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "ylw",
       "name": "御龙湾",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "ytc",
       "name": "亚太城",
-      "parent": "mwdcity"
+      "parent": "妙瓦底"
     },
     {
       "id": "RGN",
       "name": "仰光",
-      "parent": "mmr"
+      "parent": "缅甸"
+    },
+    {
+      "id": "Test1",
+      "name": "Test1",
+      "parent": "曼谷"
+    },
+    {
+      "id": "Test2",
+      "name": "Test2",
+      "parent": "曼谷"
     },
     {
       "id": "tha",
@@ -50,7 +60,7 @@
     {
       "id": "bkk",
       "name": "曼谷",
-      "parent": "tha"
+      "parent": "泰国"
     },
     {
       "id": "laos",
@@ -59,7 +69,7 @@
     {
       "id": "vte",
       "name": "万象",
-      "parent": "laos"
+      "parent": "老挝"
     },
     {
       "id": "vnm",
@@ -68,7 +78,7 @@
     {
       "id": "sgn",
       "name": "胡志明",
-      "parent": "vnm"
+      "parent": "越南"
     },
     {
       "id": "idn",
@@ -77,7 +87,7 @@
     {
       "id": "cgk",
       "name": "雅加达",
-      "parent": "idn"
+      "parent": "印度尼西亚"
     },
     {
       "id": "mys",
@@ -90,7 +100,7 @@
     {
       "id": "dxb",
       "name": "迪拜",
-      "parent": "are"
+      "parent": "阿联酋"
     },
     {
       "id": "cam",
@@ -99,12 +109,12 @@
     {
       "id": "pnh",
       "name": "金边",
-      "parent": "cam"
+      "parent": "柬埔寨"
     },
     {
       "id": "kos",
       "name": "西港",
-      "parent": "cam"
+      "parent": "柬埔寨"
     },
     {
       "id": "geo",

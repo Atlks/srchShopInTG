@@ -142,6 +142,7 @@ namespace prjx
 
         public static async Task Main(string[] args)
         {
+       //     rnd4jsonFl
             if (System.IO.File.Exists("c:/teststart.txt"))
                 await main10test1030();
             //  http://localhost:5000;
@@ -215,7 +216,7 @@ namespace prjx
                 tglib.bot_iniChtStrfile();
 
                 testCls.testAsync();
-
+              //  botClient.on
                 //   botClient.OnApiResponseReceived
                 //botClient.OnMessage += Bot_OnMessage;
                 //   botClient. += Bot_OnCallbackQuery;  jeig api outtime

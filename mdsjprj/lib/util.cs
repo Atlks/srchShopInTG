@@ -433,12 +433,16 @@ namespace mdsj.lib
                 if (ISCtry(pk))
                 {
                     string pks242 = CastToParksByCtry(pk);
+                    if (pks242 == "")
+                        pks242 = pk+"emptpk";
                     AddElmts2hashset(pksNew, pks242);
                     continue;
                 }
                 if (ISCity(pk))
                 {
                     string pks242 = CastToParksByCity(pk);
+                    if (pks242 == "")
+                        pks242 = pk + "emptpk";
                     AddElmts2hashset(pksNew, pks242);
                     continue;
                 }

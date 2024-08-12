@@ -298,8 +298,12 @@ namespace mdsj.lib
                 string f119 = $"{prjdir}/cfg/ctrycode.ini";
                 Hashtable ht = GetHashtabFromIniFl(f119);
                 string ctrycode = ht[ctry].ToString();
-                string f119314 = $"{prjdir}/cfg/mmr_pks.txt";
-                return ReadAllText(f119314).Trim();
+                string f119314 = $"{prjdir}/cfg/{ctrycode}_pks.txt";
+                if (!IsExistFil(f119314))
+                {
+                    return "";
+                }
+                    return ReadAllText(f119314).Trim();
 
             }
             catch (Exception e)
@@ -322,8 +326,38 @@ namespace mdsj.lib
             {
                 return ReadAllText($"{prjdir}/cfg/{city}_pks.txt").Trim();
             }
-            string f119 = $"{prjdir}/webroot/国家.json";
-            return GetParkNamesFromJson(ReadAllText(f119), city);
+
+            string f119 = $"{prjdir}/cfg/citycode.ini";
+            //if (!IsExistFil($"{prjdir}/cfg/{city}_pks.txt"))
+            //    return "";
+            Hashtable ht = GetHashtabFromIniFl(f119);
+            Hashtable ht2 = ReverseHashtable(ht);
+            string code = GetFieldAsStr(ht2, city); 
+            string f119314 = $"{prjdir}/cfg/{code}_pks.txt";
+            if (!IsExistFil(f119314))
+                return "";
+            return ReadAllText(f119314).Trim();
+           // string f119 = $"{prjdir}/webroot/国家.json";
+        //    return GetParkNamesFromJson(ReadAllText(f119), city);
+        }
+
+        public static Hashtable ReverseHashtable(Hashtable original)
+        {
+            Hashtable reversed = new Hashtable();
+
+            foreach (DictionaryEntry entry in original)
+            {
+                // 确保值在反转的 Hashtable 中唯一
+                if (reversed.ContainsKey(entry.Value))
+                {
+                  //  throw new InvalidOperationException("Values in the Hashtable must be unique to perform reversal.");
+                }
+
+                // 将值作为键，将键作为值添加到新的 Hashtable
+                reversed.Add(entry.Value, entry.Key);
+            }
+
+            return reversed;
         }
         public static string CastHashtableToQuerystringNoEncodeurl(Dictionary<string, StringValues> sortedList)
         {
