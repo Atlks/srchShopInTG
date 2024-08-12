@@ -201,14 +201,14 @@ namespace mdsj.libBiz
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
-           
+
             string qrtStr4SrchByCountry = DelKeys("商家 城市 园区 " + pageprm251, qrystr);
             List<SortedList> listFlrtedByCountry = new List<SortedList>();
-            if (isNotEmptyVal(qrtStr4SrchByCountry,"城市"))
+            if (isNotEmptyVal(qrtStr4SrchByCountry, "国家"))
                 listFlrtedByCountry = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCountry);
             string qrtStr4SrchByCity = DelKeys("商家 国家 园区 " + pageprm251, qrystr);
             List<SortedList> listFlrtedByCity = new List<SortedList>();
-            if (isNotEmptyVal(qrtStr4SrchByCountry,"城市"))
+            if (isNotEmptyVal(qrtStr4SrchByCountry, "城市"))
                 listFlrtedByCity = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCity);
 
 
@@ -220,27 +220,27 @@ namespace mdsj.libBiz
 
 
             //----- qrystr  rwrt  parks   not need rewrt to pkrs. bcs union query
-           // string pkrPrm = string.Join(",",
-           //        GetFieldAsStr(qrystrMap, "园区"),
-           //        GetFieldAsStr(qrystrMap, "国家"),
-           //        GetFieldAsStr(qrystrMap, "城市")
-           //);
-           // //    string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
-           // pkrPrm = ClrCommaStr(pkrPrm);
-           // string rzt = ExtParks(pkrPrm);
-           // rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
+            // string pkrPrm = string.Join(",",
+            //        GetFieldAsStr(qrystrMap, "园区"),
+            //        GetFieldAsStr(qrystrMap, "国家"),
+            //        GetFieldAsStr(qrystrMap, "城市")
+            //);
+            // //    string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
+            // pkrPrm = ClrCommaStr(pkrPrm);
+            // string rzt = ExtParks(pkrPrm);
+            // rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
 
-           // string qrtStr4Srch525 = qrtStr4Srch2;
-           // if (rzt != "")
-           //     qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", rzt);
+            // string qrtStr4Srch525 = qrtStr4Srch2;
+            // if (rzt != "")
+            //     qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", rzt);
 
             //  qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", "");
             //----end rwrt
 
-          //  PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
-          //  var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
+            //  PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
+            //  var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
 
-            var listMered = MergeListUnion(listFlrtedByCountry, listFlrtedByCity, listFlrted);
+            var listMered = MergeListUnion(listFlrtedByCountry, listFlrtedByCity, listFlrtedByParks);
 
             // --------------------  flt 
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
@@ -328,9 +328,9 @@ namespace mdsj.libBiz
         {
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             string val = GetFieldAsStr(qrystrMap, key);
-                if (val == "")
-                return true;
-            return false;
+            if (val == "")
+                return false;
+            return true;
         }
 
         public static List<SortedList> MergeListUnion(List<SortedList> list4SrchByCountry, List<SortedList> listFlrtedByCity, List<SortedList> listFlrted)
@@ -369,7 +369,7 @@ namespace mdsj.libBiz
             try
             {
                 //  lianxifsh = TrimRemoveUnnecessaryCharacters4tgWhtapExt(lianxifsh);
-                var wcht = TrimRemoveUnnecessaryCharacters4tgWhtapExt( GetFieldAsStr(sortedList, "微信"));
+                var wcht = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "微信"));
                 var tel = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Tel"));
                 var tg = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Telegram"));
                 var wtap = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "WhatsApp"));
@@ -377,12 +377,12 @@ namespace mdsj.libBiz
                 var line = TrimRemoveUnnecessaryCharacters4tgWhtapExt(GetFieldAsStr(sortedList, "Line"));
                 HashSet<String> hs = new HashSet<string>();
                 ArrayList li = new ArrayList();
-                if(tel!="")
+                if (tel != "")
                 {
                     string[] dh = ["电话", tel];
                     li.Add(dh);
                 }
-                if(tg!="")
+                if (tg != "")
                 {
                     string[] dh = ["Telegram", tg];
                     li.Add(dh);
@@ -403,8 +403,8 @@ namespace mdsj.libBiz
                     li.Add(dh);
                 }
 
-               // txttmplt = txttmplt.Replace("{{line}}", TrimRemoveUnnecessaryCharacters4tgWhtapExt( GetFieldAsStr(sortedList, "Line")));
-              
+                // txttmplt = txttmplt.Replace("{{line}}", TrimRemoveUnnecessaryCharacters4tgWhtapExt( GetFieldAsStr(sortedList, "Line")));
+
                 txttmplt = encodeJsonNofmt(li);
                 PrintLog(txttmplt);
                 return txttmplt;
