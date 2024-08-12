@@ -819,7 +819,9 @@ namespace mdsj.lib
             HashSet<string> hs = GetHashsetFromStr(ks);
             foreach (string k in hs)
             {
-                qryMap.Remove(k);
+                if (k == "园区")
+                    Print("dbg544");
+                qryMap.Remove(k); qryMap.Remove(k);
             }
             qryMap.Remove("");
             return CastHashtableToQuerystringNoEncodeurl(qryMap);

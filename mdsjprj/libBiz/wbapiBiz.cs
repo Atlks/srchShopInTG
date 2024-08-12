@@ -201,30 +201,50 @@ namespace mdsj.libBiz
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
             const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
-            string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
-            //----- qrystr  rwrt  parks
-            string pkrPrm = string.Join(",",
-                   GetFieldAsStr(qrystrMap, "园区"),
-                   GetFieldAsStr(qrystrMap, "国家"),
-                   GetFieldAsStr(qrystrMap, "城市")
-           );
-            //    string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
-            pkrPrm = ClrCommaStr(pkrPrm);
-            string rzt = ExtParks(pkrPrm);
-            rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
+           
+            string qrtStr4SrchByCountry = DelKeys("商家 城市 园区 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByCountry = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4SrchByCountry,"城市"))
+                listFlrtedByCountry = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCountry);
+            string qrtStr4SrchByCity = DelKeys("商家 国家 园区 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByCity = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4SrchByCountry,"城市"))
+                listFlrtedByCity = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCity);
 
-            string qrtStr4Srch525 = qrtStr4Srch2;
-            if (rzt != "")
-                qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", rzt);
+
+            //------park 
+            string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByParks = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4Srch2, "园区"))
+                listFlrtedByParks = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+
+
+            //----- qrystr  rwrt  parks   not need rewrt to pkrs. bcs union query
+           // string pkrPrm = string.Join(",",
+           //        GetFieldAsStr(qrystrMap, "园区"),
+           //        GetFieldAsStr(qrystrMap, "国家"),
+           //        GetFieldAsStr(qrystrMap, "城市")
+           //);
+           // //    string pkrPrm = GetFieldAsStr(qrystrMap, "园区")+","+ GetFieldAsStr(qrystrMap, "国家")+"," + GetFieldAsStr(qrystrMap, "城市");    ;// "KK园区,东方园区,缅甸,妙瓦底";
+           // pkrPrm = ClrCommaStr(pkrPrm);
+           // string rzt = ExtParks(pkrPrm);
+           // rzt = ToSqlPrmMode(rzt);  // "KK园区,东方园区,缅甸
+
+           // string qrtStr4Srch525 = qrtStr4Srch2;
+           // if (rzt != "")
+           //     qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", rzt);
 
             //  qrtStr4Srch525 = SetField4qrystr(qrtStr4Srch2, "园区", "");
             //----end rwrt
 
-            PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
-            var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
+          //  PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
+          //  var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
+
+            var listMered = MergeListUnion(listFlrtedByCountry, listFlrtedByCity, listFlrted);
+
             // --------------------  flt 
             SortedList qryMap = GetHashtableFromQrystr(qrystr);
-            var list_aftFltr2 = ArrFltrV2(listFlrted, (SortedList row) =>
+            var list_aftFltr2 = ArrFltrV2(listMered, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
                 string mrtKwd = GetFieldAsStr1037(qryMap, "商家").ToUpper();
@@ -302,6 +322,46 @@ namespace mdsj.libBiz
             string rsstr = EncodeJson(list_rzt_fmt);
             PrintTimestamp(" end fun WbapiXgetlist()");
             return rsstr;
+        }
+
+        private static bool isNotEmptyVal(string qrystr, string key)
+        {
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
+            string val = GetFieldAsStr(qrystrMap, key);
+                if (val == "")
+                return true;
+            return false;
+        }
+
+        public static List<SortedList> MergeListUnion(List<SortedList> list4SrchByCountry, List<SortedList> listFlrtedByCity, List<SortedList> listFlrted)
+        {
+            List<SortedList> countWzCitys = MergeListById(list4SrchByCountry, listFlrtedByCity);
+            List<SortedList> liFnl = MergeListById(countWzCitys, listFlrted);
+            return liFnl;
+        }
+
+        public static List<SortedList> MergeListById(List<SortedList> list4SrchByCountry, List<SortedList> listFlrtedByCity)
+        {
+            List<SortedList> lirzt = new List<SortedList>();
+            HashSet<string> ids = new HashSet<string>();
+            foreach (SortedList itm in list4SrchByCountry)
+            {
+                string id = GetFieldAsStr(itm, "id");
+                if (ids.Contains(id))
+                    continue;
+                ids.Add(id);
+                lirzt.Add(itm);
+            }
+
+            foreach (SortedList itm in listFlrtedByCity)
+            {
+                string id = GetFieldAsStr(itm, "id");
+                if (ids.Contains(id))
+                    continue;
+                ids.Add(id);
+                lirzt.Add(itm);
+            }
+            return lirzt;
         }
 
         public static string RendLxsf(string txttmplt, SortedList sortedList)
