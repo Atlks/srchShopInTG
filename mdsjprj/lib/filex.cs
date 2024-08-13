@@ -16,6 +16,19 @@ namespace prjx.lib
 {
     public class filex
     {
+
+        public static void DelFil(string filePath)
+        {
+            try
+            {
+                System.IO.File.Delete(filePath);
+            }
+            catch (Exception e)
+            {
+                PrintExcept("delfil", e);
+            }
+
+        }
         public static HashSet<string> ProcessFilesDep(string directoryPath)
         {
             var resultSet = new HashSet<string>();

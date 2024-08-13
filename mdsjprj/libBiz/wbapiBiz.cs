@@ -186,38 +186,7 @@ namespace mdsj.libBiz
             //Func<SortedList, bool> whereFun = CastQrystr2FltrCdtFun(qrtStr4Srch);
             //var list = GetListFltr(FromDdataDir, null, whereFun);
          
-         */
-        /// <summary>
-        ///   dep   ,,,(req,repos) is bettr
-        /// </summary>
-        /// <param name="qrystr"></param>
-        /// <returns></returns>
-        public static string WbapiXgetlist(string qrystr)
-        {
-            // todo 优化分页处理 cache qry rzt 10 min,
-            //parse qrystr ,del page prm..just ok as cacheKey
-            //todo  使用 Dictionary 替代 SortedList，pfm
-            PrintTimestamp(" start fun WbapiXgetlist()");
-            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
-            const string FromDdataDir = "mercht商家数据"; ;
-            //todo v2   here qry need abt 50ms
-
-            string qrtStr4SrchByCountry = DelKeys("商家 城市 园区 " + pageprm251, qrystr);
-            List<SortedList> listFlrtedByCountry = new List<SortedList>();
-            if (isNotEmptyVal(qrtStr4SrchByCountry, "国家"))
-                listFlrtedByCountry = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCountry);
-            string qrtStr4SrchByCity = DelKeys("商家 国家 园区 " + pageprm251, qrystr);
-            List<SortedList> listFlrtedByCity = new List<SortedList>();
-            if (isNotEmptyVal(qrtStr4SrchByCountry, "城市"))
-                listFlrtedByCity = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCity);
-
-
-            //------park 
-            string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
-            List<SortedList> listFlrtedByParks = new List<SortedList>();
-            if (isNotEmptyVal(qrtStr4Srch2, "园区"))
-                listFlrtedByParks = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
-
+        
 
             //----- qrystr  rwrt  parks   not need rewrt to pkrs. bcs union query
             // string pkrPrm = string.Join(",",
@@ -240,17 +209,70 @@ namespace mdsj.libBiz
             //  PrintLog("⚠️⚠️true qrtStr4Srch525  => " + qrtStr4Srch525);
             //  var listFlrted = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch525);
 
-            var listMered = MergeListUnion(listFlrtedByCountry, listFlrtedByCity, listFlrtedByParks);
+         */
+        /// <summary>
+        ///   dep   ,,,(req,repos) is bettr
+        /// </summary>
+        /// <param name="qrystr"></param>
+        /// <returns></returns>
+        public static string WbapiXgetlist(string qrystr)
+        {
+            // todo 优化分页处理 cache qry rzt 10 min,
+            //parse qrystr ,del page prm..just ok as cacheKey
+            //todo  使用 Dictionary 替代 SortedList，pfm
+            PrintTimestamp(" start fun WbapiXgetlist()");
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
+            SortedList qryMap = qrystrMap;
+            const string FromDdataDir = "mercht商家数据"; ;
+            //todo v2   here qry need abt 50ms
+            string qrtStr4Srch1007 = DelKeys("商家 城市 园区 国家 " + pageprm251, qrystr);
+             PrintLog("⚠️⚠️true qrtStr4Srch1007  => " + qrtStr4Srch1007);
+            var listMered = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch1007);
+
+            //---------------search mode---------
+            //todo here should wrt in flt block is bttr
+            string qrtStr4SrchByCountry = DelKeys("商家 城市 园区 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByCountry = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4SrchByCountry, "国家"))
+                listFlrtedByCountry = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCountry);
+            string qrtStr4SrchByCity = DelKeys("商家 国家 园区 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByCity = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4SrchByCountry, "城市"))
+                listFlrtedByCity = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchByCity);
+
+
+            //------park 
+            string qrtStr4Srch2 = DelKeys("商家 国家 城市 " + pageprm251, qrystr);
+            List<SortedList> listFlrtedByParks = new List<SortedList>();
+            if (isNotEmptyVal(qrtStr4Srch2, "园区"))
+                listFlrtedByParks = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+
+            var AreaUnion = MergeListUnion(listFlrtedByCountry, listFlrtedByCity, listFlrtedByParks);
+
+            if (isNotEmptyValInKeys(qrystr, "园区 国家 城市"))
+                listMered = JoinInner(listMered, AreaUnion, "id");
+            //-------------------end srach mode 
+
+            // if (!isContainKeys("国家 园区 城市", qrystr))
+            {
+
+            }
+
+
+
+
 
             // --------------------  flt 
-            SortedList qryMap = GetHashtableFromQrystr(qrystr);
+
             var list_aftFltr2 = ArrFltrV2(listMered, (SortedList row) =>
             {
                 List<bool> li = new List<bool>();
                 string mrtKwd = GetFieldAsStr1037(qryMap, "商家").ToUpper();
                 if (mrtKwd.Length > 0)
                     li.Add(GetFieldAsStr1037(row, "商家").ToUpper().Contains(mrtKwd));
-
+                // li.Add((isFldValEq111(row),qrtstr.国家));
+                // li.Add((isFldValEq111(row),qrtstr.城市));
+                // li.Add((isFldValEq111(row),qrtstr.园区));
                 li.Add((IsNotEmptyLianxi(row)));
                 //   li.Add((isLianxifshValid(row)));
                 return IsChkfltrOk(li);
@@ -324,6 +346,80 @@ namespace mdsj.libBiz
             return rsstr;
         }
 
+        /*
+         
+            //------------id detal model
+            //SortedList qryMap = GetHashtableFromQrystr(qrystr);
+            //string id = GetFieldAsStr1037(qryMap, "id");
+            //if (id != "")
+            //{
+            //  //  listMered = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch2);
+            //}
+            //else
+            //{               //------------- other  cdt   //   
+            //剩下的全部需要做交集   不管包不包括园区地段   园区+分类
+            // if (isContainKeys("国家 园区 城市", qrystr))
+
+            //string qrtStr4SrchOther = DelKeys("商家 国家 城市 园区 " + pageprm251, qrystr);
+            //PrintLog("qrtStr4SrchOther:"+ qrtStr4SrchOther);
+            ////  string fenlei = GetFieldAsStr(qrystrMap, "分类");
+            //var fenleiList2 = GetListFltrByQrystr(FromDdataDir, null, qrtStr4SrchOther);
+            //listMered = JoinInner(listMered, fenleiList2, "id");
+            // }
+         
+         */
+
+        private static bool isNotEmptyValInKeys(string qrtStr4Srch2, string kys)
+        {
+            string[] a = kys.Split(" ");
+            foreach (string k in a)
+            {
+                if (isNotEmptyVal(qrtStr4Srch2, k))
+                    return true;
+            }
+            return false;
+        }
+
+        private static List<SortedList> JoinInner(List<SortedList> listMered, List<SortedList> fenleiList, string joinOnField)
+        {
+
+
+            // 结果列表
+            var result = new List<SortedList>();
+
+            foreach (var item in listMered)
+            {
+                // 获取连接字段的值
+                var joinValue = GetFieldAsStr(item, joinOnField);
+                foreach (var itm2 in fenleiList)
+                {
+                    // 如果在 fenleiDict 中找到匹配项，则进行合并
+                    var joinv2 = GetFieldAsStr(itm2, joinOnField);
+                    if (joinValue.ToString() == joinv2)
+                    {
+                        result.Add(itm2);
+                    }
+                }
+
+            }
+
+            return result;
+        }
+
+        public static bool isContainKeys(string keys, string qrystr)
+        {
+            SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
+            string[] a = keys.Split(" ");
+            foreach (string ky in a)
+            {
+                if (ky == "")
+                    continue;
+                if (qrystrMap.ContainsKey(ky))
+                    return true;
+            }
+            return false;
+        }
+
         private static bool isNotEmptyVal(string qrystr, string key)
         {
             SortedList qrystrMap = GetHashtableFromQrystr(qrystr);
@@ -340,6 +436,13 @@ namespace mdsj.libBiz
             return liFnl;
         }
 
+
+        /// <summary>
+        /// 改为双重循环可能更好，这就是join算法  join add
+        /// </summary>
+        /// <param name="list4SrchByCountry"></param>
+        /// <param name="listFlrtedByCity"></param>
+        /// <returns></returns>
         public static List<SortedList> MergeListById(List<SortedList> list4SrchByCountry, List<SortedList> listFlrtedByCity)
         {
             List<SortedList> lirzt = new List<SortedList>();
