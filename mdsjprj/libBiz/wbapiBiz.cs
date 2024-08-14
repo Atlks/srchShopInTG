@@ -692,6 +692,30 @@ namespace mdsj.libBiz
             Jmp2end(nameof(AddMerchtPOSTWbapi));
         }
 
+        /// <summary>
+        ///   信息条数统计        /CountMercht
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        public static void CountMerchtGETWbapi(HttpRequest request, HttpResponse response)
+        {
+            //   if (request.Method == HttpMethods.Post)
+
+            // Check if the request contains a file
+            PrintLog(" start fun CountMerchtGETWbapi()");
+         //   PrintLog(" start fun request.Form.Files.Count=>" + request.Form.Files.Count);
+
+            string FromDdataDir = "mercht商家数据";
+            List < SortedList > li = GetListFltrByQrystr(FromDdataDir, null, "");
+
+            Hashtable tb = new Hashtable();
+            tb.Add("count", li.Count);
+            tb.Add("countView", 36582);
+         //   SendResp(li.Count, response);
+            response.ContentType = "application/json; charset=utf-8";
+            SendResp( EncodeJsonFmt(tb), response.ContentType, response);
+            Jmp2end(nameof(CountMerchtGETWbapi));
+        }
 
 
 
