@@ -414,6 +414,62 @@ namespace mdsj.lib
             return queryString;
         }
 
+        public static string ToQrystrFrmNmlstrDsl(string qryDsl)
+        {
+            // 使用字典来存储键值对
+            SortedList<string, string> queryParameters = new SortedList<string, string>();
+
+            // 分割输入字符串为键值对
+            var parts = qryDsl.Split(' ');
+            foreach (var part in parts)
+            {
+                if (part.Trim() == "")
+                    continue;
+                // 查找键和值的分隔符 '(' 和 ')'
+                int startIndex = part.IndexOf('(');
+                int endIndex = part.IndexOf(')');
+
+                if (startIndex > 0 && endIndex > startIndex)
+                {
+                    // 提取键和值
+                    string key = part.Substring(0, startIndex);
+                    string value = part.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+                    // 添加到字典中
+                    queryParameters[key] = value;
+                }
+            }
+
+            // 构建 query string
+            var queryString = ToQrystrFrmDic(queryParameters);
+            return queryString;
+        }
+
+        public static string ToQrystrFrmDic(SortedList<string, string> sortedList)
+        {
+            if (sortedList == null)
+            {
+                return "";
+            }
+
+            var queryString = "";
+            foreach (var entry in sortedList)
+            {
+                if (queryString.Length > 0)
+                {
+                    queryString += "&";
+                }
+
+                // URL encode the key and value to handle special characters
+                //string key = Uri.EscapeDataString(entry.Key.ToString());
+                //string value = Uri.EscapeDataString(entry.Value.ToString());
+
+                queryString += $"{entry.Key.ToString()}={entry.Value.ToString()}";
+            }
+
+            return queryString;
+        }
+
         public static string CastHashtableToQuerystringNoEncodeurl(SortedList sortedList)
         {
             if (sortedList == null)

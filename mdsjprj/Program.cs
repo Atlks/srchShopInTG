@@ -279,7 +279,11 @@ namespace prjx
 
         private static async Task main10test1030()
         {
-          //  string lxfsTmplt = @"[["Telegram","whveie123"],["微信","1233339"],["WhatsApp","093383"],["Signal","2349jhe"],["电话","1838383939"]]"
+            const string FromDdataDir = "mercht商家数据"; ;
+            var qrystr1005 = "园区(kk园区) 分类(兑换)";
+            List<SortedList> listMered = GetListByQrystrNmldsl(FromDdataDir, qrystr1005);
+            Print(listMered);
+            //  string lxfsTmplt = @"[["Telegram","whveie123"],["微信","1233339"],["WhatsApp","093383"],["Signal","2349jhe"],["电话","1838383939"]]"
             //rewrt park cdt
             string url = "园区=KK园区,东方园区,缅甸,妙瓦底";
             string pkrPrm = "KK园区,东方园区,缅甸,妙瓦底";
@@ -288,7 +292,7 @@ namespace prjx
             rzt = ToSqlPrmMode(rzt);
 
             Print("rzt=>" + rzt);
-       //     Thread.Sleep(7000);
+            //     Thread.Sleep(7000);
 
             string[] a237 = url.Split(",");
 
@@ -297,7 +301,7 @@ namespace prjx
             Print("GetParkPath=>" + GetParkPath("金州园区", ReadAllText(f119)));
             string qrystr = "aaa=111&园区=KK园区,东方园区";
             Dictionary<string, string> qrystrDic = LoadDic4qryCdtn(qrystr);
-               Oss.  testOss();
+            Oss.testOss();
             string str = "KK园区,东方园区,金州园区,世纪新城园区";
             string path1 = "缅甸/妙瓦底/KK园区";
 
@@ -342,16 +346,17 @@ namespace prjx
             List<Hashtable> li = ParseNginxConfigV2(ReadAllText(nginccfg));
         }
 
-
-
-      
      
-        
-  
 
-    
 
-    
+
+
+
+
+
+
+
+
         static async System.Threading.Tasks.Task EvtUpdateHdlrAsyncSafe(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
         {
 

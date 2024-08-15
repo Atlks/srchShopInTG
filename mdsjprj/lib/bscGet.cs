@@ -839,7 +839,13 @@ namespace mdsj.lib
         {
             return ConvertCommaSeparatedStringToHashSet(pkrPrm);
         }
-      
+        public static List<SortedList> GetListByQrystrNmldsl(string FromDdataDir, string qrystr1005)
+        {
+            var qrtStr4Srch1007 = ToQrystrFrmNmlstrDsl(qrystr1005);
+
+            var listMered = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch1007);
+            return listMered;
+        }
         public static List<SortedList> GetListFltrByQrystr(string fromDdataDir, object shares, string qrtStr4Srch)
         {
             PrintTimestamp(" start fun GetListFltrByQrystr");

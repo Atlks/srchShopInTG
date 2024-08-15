@@ -230,7 +230,8 @@ namespace mdsj.libBiz
             var listMered = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch1007);
 
             //---------------search mode---------
-            //todo here should wrt in flt block is bttr
+            // here country park city union relt...not innerjoin relt ,so cant use flt block
+            // 
             string qrtStr4SrchByCountry = DelKeys("商家 城市 园区 " + pageprm251, qrystr);
             List<SortedList> listFlrtedByCountry = new List<SortedList>();
             if (isNotEmptyVal(qrtStr4SrchByCountry, "国家"))
