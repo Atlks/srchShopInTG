@@ -745,17 +745,27 @@ namespace mdsj.lib
             Jmp2end(nameof(swagGETWbapi));
         }
 
+        /// <summary>
+        ///     多图片上传   /upld     （form上传文件模式）   
+        ///     返回：json数组
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
         public static void upldPOSTWbapi(HttpRequest request, HttpResponse response)
         {
             // Check if the request contains a file
             var fil = "";
+            List<string> li = new List<string>();
             if (request.Form.Files.Count > 0)
             {
                 foreach (var file in request.Form.Files)
                 {
                     // Get the file content and save it to a desired location
-                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", file.FileName);
-                    File.Delete(filePath);
+
+                    string newJpgname = GetUuid() + ".jpg";
+                    var filePath = Path.Combine($"{prjdir}/webroot/uploads1016", newJpgname);
+                    //File.Delete(filePath);
+                    li.Add("uploads1016/" + newJpgname); 
                     fil = filePath;
                     Mkdir4File(filePath);
                     using (var stream = new FileStream(filePath, FileMode.Create))
@@ -764,6 +774,9 @@ namespace mdsj.lib
                     }
                 }
             }
+            // 设置响应内容类型和编码
+            response.ContentType = "application/json; charset=utf-8";
+            SendResp(EncodeJsonFmt(li), response);
             Jmp2end("upldPOSTWbapi");
         }
         public static async System.Threading.Tasks.Task FildownHttpHdlrFilDown(HttpRequest request, HttpResponse response)
