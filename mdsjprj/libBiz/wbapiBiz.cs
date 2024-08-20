@@ -226,7 +226,7 @@ namespace mdsj.libBiz
             const string FromDdataDir = "mercht商家数据"; ;
             //todo v2   here qry need abt 50ms
             string qrtStr4Srch1007 = DelKeys("商家 城市 园区 国家 " + pageprm251, qrystr);
-             PrintLog("⚠️⚠️true qrtStr4Srch1007  => " + qrtStr4Srch1007);
+            PrintLog("⚠️⚠️true qrtStr4Srch1007  => " + qrtStr4Srch1007);
             var listMered = GetListFltrByQrystr(FromDdataDir, null, qrtStr4Srch1007);
 
             //---------------search mode---------
@@ -668,7 +668,13 @@ namespace mdsj.libBiz
 
 
             SortedList saveOBJ = ConvertFormToSortedList(request.Form);
-            saveOBJ.Add("照片或视频", fil);
+            try
+            {
+                saveOBJ.Add("照片或视频", fil);
+            }
+            catch (Exception e)
+            { PrintExcept("saveOBJ.addBlk", e); }
+
 
             Hashtable hashtable = CastToHashtbFrmparseLxfs(GetFieldAsStr(saveOBJ, "联系方式"));
             CopyHashtableToSortedList(hashtable, saveOBJ);
@@ -704,17 +710,17 @@ namespace mdsj.libBiz
 
             // Check if the request contains a file
             PrintLog(" start fun CountMerchtGETWbapi()");
-         //   PrintLog(" start fun request.Form.Files.Count=>" + request.Form.Files.Count);
+            //   PrintLog(" start fun request.Form.Files.Count=>" + request.Form.Files.Count);
 
             string FromDdataDir = "mercht商家数据";
-            List < SortedList > li = GetListFltrByQrystr(FromDdataDir, null, "");
+            List<SortedList> li = GetListFltrByQrystr(FromDdataDir, null, "");
 
             Hashtable tb = new Hashtable();
             tb.Add("count", li.Count);
             tb.Add("countView", 36582);
-         //   SendResp(li.Count, response);
+            //   SendResp(li.Count, response);
             response.ContentType = "application/json; charset=utf-8";
-            SendResp( EncodeJsonFmt(tb), response.ContentType, response);
+            SendResp(EncodeJsonFmt(tb), response.ContentType, response);
             Jmp2end(nameof(CountMerchtGETWbapi));
         }
 

@@ -763,6 +763,18 @@ namespace mdsj.lib
             return obj;
         }
 
+        public static string ToStrDfEmpty(object val)
+        {
+
+            if (val == null)
+                return "";
+            if (val is bool boolVal)
+            {
+                return boolVal ? "TRUE" : "FALSE";
+            }
+            //  // 对象是 long 类型，转换为字符串
+            return val.ToString();
+        }
         public static string ToStr(object val)
         {
 

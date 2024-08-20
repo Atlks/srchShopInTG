@@ -808,6 +808,9 @@ namespace prjx
             string __METHOD__ = MethodBase.GetCurrentMethod().Name;
             #region sezrch
             string msgx2024 = tglib.bot_getTxtMsgDep(update);
+            msgx2024 = ToStrDfEmpty(msgx2024);
+            if (msgx2024 == "")
+                return;
             string msg2056 = str_trim_tolower(msgx2024);
             if (msg2056.StartsWith("/"))
                 return;
@@ -820,6 +823,7 @@ namespace prjx
                 return;
             if (IsStartsWithArrcomma(msg2056, noTrigSrchMsgs))
                 return;
+            //todo chg name ,,is stat with emoji   ,ret 
             HashSet<string> 商品与服务词库2 = GetHashset商品与服务词库();
             string fuwuci = GetFuwuci(update?.Message?.Text, 商品与服务词库2);
             //whereMap2 = new SortedList();

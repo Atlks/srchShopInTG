@@ -50,7 +50,9 @@ namespace mdsj.lib
         {
             DateTime now = DateTime.Now;
             string formattedDate = now.ToString("yyyy-MM-dd_HH");
-            StreamWriter logFile = new StreamWriter($"log1037_{formattedDate}.log", append: true);
+            string path = $"logrollBydate/log1037_{formattedDate}.log";
+            Mkdir4File(path);
+            StreamWriter logFile = new StreamWriter(path, append: true);
 
             // Save the original Console.Out
 

@@ -256,7 +256,7 @@ namespace prjx
             var listFlrted = GetListFltrByQrystr("mercht商家数据", null, "");
             Print(listFlrted.Count);
             //username:password@hostname/resource
-            string url136 = "administrator:gy5NLU0MJ4yv@206.119.166.120:3389";
+            string url136 = "administrator:@206.119.166.120:3389";
             Dictionary<string, string> dic = GetDicFromUrl(url136);
             //  TransferFileByRdpWmi("mdsj.exe", "d:/upldir", dic["host"], dic["u"], dic["pwd"]);
 
